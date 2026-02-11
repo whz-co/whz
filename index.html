@@ -15,10 +15,12 @@
         .logout-btn { background: #dc3545; color: white; border: none; border-radius: 4px; }
         .user-info { background: #f8f9fa; padding: 20px; border-radius: 8px; margin: 20px 0; }
         .hidden { display: none; }
+        .error { color: red; margin: 10px 0; }
     </style>
 </head>
 <body>
     <h1>🔐 Firebase Authentication</h1>
+    <div id="error-message" class="error hidden"></div>
     <p>Login with your GitHub or Google account</p>
     
     <!-- Login Buttons -->
@@ -37,18 +39,28 @@
     </div>
     
     <script>
-        // PASTE YOUR FIREBASE CONFIG HERE
+        // YOUR FIREBASE CONFIGURATION
         const firebaseConfig = {
-            apiKey: "AIzaSyB...", // Replace with your API Key
+            apiKey: "AIzaSyAE8wf24HXrfmpMluaFOv1OHPrf_YFfqTQ",
             authDomain: "whaai-c388e.firebaseapp.com",
             projectId: "whaai-c388e",
-            storageBucket: "whaai-c388e.appspot.com",
-            messagingSenderId: "123456789", // Replace with yours
-            appId: "1:123456789:web:abc123def456" // Replace with yours
+            storageBucket: "whaai-c388e.firebasestorage.app",
+            messagingSenderId: "640598205524",
+            appId: "1:640598205524:web:c975f5e8b371b1043e39c1",
+            measurementId: "G-1MHE0JBZJR"
         };
         
         // Initialize Firebase
-        firebase.initializeApp(firebaseConfig);
+        try {
+            firebase.initializeApp(firebaseConfig);
+            console.log("✅ Firebase initialized successfully");
+        } catch (error) {
+            console.error("❌ Firebase initialization error:", error);
+            document.getElementById('error-message').textContent = 
+                "Firebase error: " + error.message;
+            document.getElementById('error-message').classList.remove('hidden');
+        }
+        
         const auth = firebase.auth();
         const db = firebase.firestore();
         
@@ -62,6 +74,7 @@
         const userEmail = document.getElementById('user-email');
         const userProvider = document.getElementById('user-provider');
         const userPhoto = document.getElementById('user-photo');
+        const errorMessage = document.getElementById('error-message');
         
         // Google Login
         googleLoginBtn.addEventListener('click', () => {
@@ -71,13 +84,14 @@
             
             auth.signInWithPopup(provider)
                 .then((result) => {
-                    console.log('Google login successful:', result.user);
+                    console.log('✅ Google login successful:', result.user);
                     updateUI(result.user);
                     saveUserToFirestore(result.user);
+                    errorMessage.classList.add('hidden');
                 })
                 .catch((error) => {
-                    console.error('Google login error:', error);
-                    alert('Login failed: ' + error.message);
+                    console.error('❌ Google login error:', error);
+                    showError('Google login failed: ' + error.message);
                 });
         });
         
@@ -88,13 +102,14 @@
             
             auth.signInWithPopup(provider)
                 .then((result) => {
-                    console.log('GitHub login successful:', result.user);
+                    console.log('✅ GitHub login successful:', result.user);
                     updateUI(result.user);
                     saveUserToFirestore(result.user);
+                    errorMessage.classList.add('hidden');
                 })
                 .catch((error) => {
-                    console.error('GitHub login error:', error);
-                    alert('Login failed: ' + error.message);
+                    console.error('❌ GitHub login error:', error);
+                    showError('GitHub login failed: ' + error.message);
                 });
         });
         
@@ -104,9 +119,11 @@
                 .then(() => {
                     loginSection.classList.remove('hidden');
                     userInfoSection.classList.add('hidden');
+                    console.log('✅ Logged out successfully');
                 })
                 .catch((error) => {
-                    console.error('Logout error:', error);
+                    console.error('❌ Logout error:', error);
+                    showError('Logout failed: ' + error.message);
                 });
         });
         
@@ -121,19 +138,25 @@
                 lastLogin: firebase.firestore.FieldValue.serverTimestamp(),
                 createdAt: firebase.firestore.FieldValue.serverTimestamp()
             }, { merge: true })
-            .then(() => console.log('User saved to Firestore'))
-            .catch(error => console.error('Error saving user:', error));
+            .then(() => console.log('✅ User saved to Firestore'))
+            .catch(error => console.error('❌ Error saving user:', error));
         }
         
         // Update UI after login
         function updateUI(user) {
             userName.textContent = user.displayName || user.email;
             userEmail.textContent = user.email;
-            userProvider.textContent = user.providerData[0].providerId;
+            userProvider.textContent = user.providerData[0].providerId || 'Unknown';
             userPhoto.src = user.photoURL || 'https://via.placeholder.com/80';
             
             loginSection.classList.add('hidden');
             userInfoSection.classList.remove('hidden');
+        }
+        
+        // Show error message
+        function showError(message) {
+            errorMessage.textContent = message;
+            errorMessage.classList.remove('hidden');
         }
         
         // Check auth state on page load
@@ -145,6 +168,11 @@
                 userInfoSection.classList.add('hidden');
             }
         });
+        
+        // Test Firebase connection
+        console.log("Testing Firebase connection...");
+        console.log("Project ID:", firebaseConfig.projectId);
+        console.log("Auth Domain:", firebaseConfig.authDomain);
     </script>
 </body>
 </html>

@@ -1,0 +1,40 @@
+name: Jekyll Build and Deploy to Firebase
+
+on:
+  push:
+    branches: ["main"]  # Trigger on push to main branch
+
+jobs:
+  build_and_deploy:
+    runs-on: ubuntu-latest
+    
+    steps:
+    # 1. Checkout repository
+    - name: Checkout
+      uses: actions/checkout@v3
+      
+    # 2. Build Jekyll site using Docker
+    - name: Build with Jekyll
+      uses: docker://jekyll/jekyll:latest
+      with:
+        args: jekyll build --destination ./_site
+    
+    # 3. Verify the build output
+    - name: List build output
+      run: ls -la ./_site
+    
+    # 4. Setup Node.js (required for Firebase CLI)
+    - name: Setup Node.js
+      uses: actions/setup-node@v3
+      with:
+        node-version: '18'
+    
+    # 5. Install Firebase CLI
+    - name: Install Firebase Tools
+      run: npm install -g firebase-tools
+    
+    # 6. Deploy to Firebase
+    - name: Deploy to Firebase
+      run: firebase deploy --project whaai-c388e --token ${{ secrets.FIREBASE_TOKEN }}
+      env:
+        FIREBASE_TOKEN: ${{ secrets.FIREBASE_TOKEN }}

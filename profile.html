@@ -1,0 +1,90 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Profile - Firebase Auth Demo</title>
+    <link rel="stylesheet" href="style.css">
+    <script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-app-compat.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-auth-compat.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-firestore-compat.js"></script>
+</head>
+<body>
+    <div class="container">
+        <h1>👤 Your Profile</h1>
+        <p class="subtitle">Manage your account</p>
+        
+        <div id="alert" class="alert hidden"></div>
+        
+        <div id="profile-content" class="hidden">
+            <img id="user-photo" src="" alt="Profile" class="profile-photo">
+            
+            <div class="profile-info">
+                <p><strong>Name:</strong> <span id="user-name"></span></p>
+                <p><strong>Email:</strong> <span id="user-email"></span></p>
+                <p><strong>Provider:</strong> <span id="user-provider"></span></p>
+                <p><strong>Account Created:</strong> <span id="user-created"></span></p>
+                <p><strong>Last Login:</strong> <span id="user-last-login"></span></p>
+                <p><strong>User ID:</strong> <span id="user-id" style="font-size: 12px; color: #666;"></span></p>
+            </div>
+            
+            <button onclick="window.location.href='index.html'" class="btn btn-primary">
+                🏠 Home
+            </button>
+            <button onclick="window.location.href='logout.html'" class="btn btn-danger">
+                🚪 Logout
+            </button>
+        </div>
+        
+        <div id="loading">
+            <p class="text-center">Loading profile...</p>
+        </div>
+        
+        <div class="nav-links">
+            <a href="index.html" class="nav-link">Home</a>
+            <a href="login.html" class="nav-link">Login</a>
+            <a href="signup.html" class="nav-link">Sign Up</a>
+            <a href="logout.html" class="nav-link">Logout</a>
+        </div>
+    </div>
+
+    <script src="auth.js"></script>
+    <script>
+        // Redirect if not logged in
+        redirectIfNotAuthenticated('login.html');
+        
+        // Load profile data
+        async function loadProfile() {
+            const user = await checkAuth();
+            const userData = await getCurrentUserData();
+            
+            if (user && userData) {
+                document.getElementById('user-name').textContent = user.displayName || user.email;
+                document.getElementById('user-email').textContent = user.email;
+                document.getElementById('user-provider').textContent = userData.provider || 'email';
+                document.getElementById('user-id').textContent = user.uid;
+                document.getElementById('user-photo').src = user.photoURL || `https://ui-avatars.com/api/?name=${encodeURIComponent(user.displayName || user.email)}&background=667eea&color=fff`;
+                
+                // Format dates
+                if (userData.createdAt) {
+                    const created = userData.createdAt.toDate();
+                    document.getElementById('user-created').textContent = created.toLocaleString();
+                }
+                
+                if (userData.lastLogin) {
+                    const lastLogin = userData.lastLogin.toDate();
+                    document.getElementById('user-last-login').textContent = lastLogin.toLocaleString();
+                }
+                
+                document.getElementById('loading').classList.add('hidden');
+                document.getElementById('profile-content').classList.remove('hidden');
+            } else {
+                window.location.href = 'login.html';
+            }
+        }
+        
+        // Initialize
+        loadProfile();
+    </script>
+</body>
+</html>

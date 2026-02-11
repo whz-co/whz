@@ -1,0 +1,64 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Logout - Firebase Auth Demo</title>
+    <link rel="stylesheet" href="style.css">
+    <script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-app-compat.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-auth-compat.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-firestore-compat.js"></script>
+</head>
+<body>
+    <div class="container">
+        <h1>👋 Logout</h1>
+        
+        <div id="logout-content" class="hidden">
+            <p class="text-center">You have been successfully logged out.</p>
+            <button onclick="window.location.href='index.html'" class="btn btn-primary">
+                ← Back to Home
+            </button>
+            <button onclick="window.location.href='login.html'" class="btn btn-secondary">
+                🔑 Login Again
+            </button>
+        </div>
+        
+        <div id="loading">
+            <p class="text-center">Logging out...</p>
+        </div>
+    </div>
+
+    <script src="auth.js"></script>
+    <script>
+        // Perform logout
+        async function performLogout() {
+            const result = await logoutUser();
+            
+            document.getElementById('loading').classList.add('hidden');
+            document.getElementById('logout-content').classList.remove('hidden');
+            
+            if (!result.success) {
+                alert('Logout error: ' + result.error);
+            }
+        }
+        
+        // Check if user is logged in
+        async function checkAndLogout() {
+            const user = await checkAuth();
+            
+            if (user) {
+                // User is logged in, perform logout
+                performLogout();
+            } else {
+                // User is already logged out
+                document.getElementById('loading').innerHTML = 
+                    '<p class="text-center">You are already logged out.</p>' +
+                    '<button onclick="window.location.href=\'index.html\'" class="btn btn-primary">← Back to Home</button>';
+            }
+        }
+        
+        // Initialize
+        checkAndLogout();
+    </script>
+</body>
+</html>

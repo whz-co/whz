@@ -3,103 +3,1244 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Home - Firebase Auth Demo</title>
-    <link rel="stylesheet" href="style.css">
-    <script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-app-compat.js"></script>
-    <script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-auth-compat.js"></script>
-    <script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-firestore-compat.js"></script>
+    <title>Zakhourani | Dr. Waleed Hussien Zakhourani</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        /* Reset & Base */
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        }
+
+        :root {
+            --primary: #2c3e50;
+            --secondary: #3498db;
+            --accent: #e74c3c;
+            --light: #ecf0f1;
+            --dark: #2c3e50;
+            --success: #27ae60;
+            --warning: #f39c12;
+        }
+
+        body {
+            background: linear-gradient(135deg, #f5f7fa 0%, #c3cfe2 100%);
+            color: #333;
+            min-height: 100vh;
+        }
+
+        /* Header & Navigation */
+        header {
+            background: white;
+            box-shadow: 0 4px 20px rgba(0,0,0,0.1);
+            position: sticky;
+            top: 0;
+            z-index: 1000;
+        }
+
+        .header-top {
+            background: var(--primary);
+            color: white;
+            padding: 10px 40px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .logo {
+            display: flex;
+            align-items: center;
+            gap: 15px;
+        }
+
+        .logo h1 {
+            font-size: 28px;
+            font-weight: 700;
+            background: linear-gradient(45deg, #3498db, #9b59b6);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+
+        .auth-buttons {
+            display: flex;
+            gap: 10px;
+        }
+
+        .auth-btn {
+            padding: 8px 20px;
+            border-radius: 25px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s;
+            border: none;
+        }
+
+        .login-btn {
+            background: transparent;
+            color: white;
+            border: 2px solid white;
+        }
+
+        .login-btn:hover {
+            background: white;
+            color: var(--primary);
+        }
+
+        .signup-btn {
+            background: var(--secondary);
+            color: white;
+            border: 2px solid var(--secondary);
+        }
+
+        .signup-btn:hover {
+            background: #2980b9;
+            border-color: #2980b9;
+        }
+
+        .user-menu {
+            display: flex;
+            align-items: center;
+            gap: 15px;
+            color: white;
+        }
+
+        .user-avatar {
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            object-fit: cover;
+            border: 2px solid white;
+        }
+
+        .logout-btn {
+            background: var(--accent);
+            color: white;
+            border: none;
+            padding: 8px 15px;
+            border-radius: 20px;
+            cursor: pointer;
+        }
+
+        /* Main Navigation */
+        nav {
+            padding: 0 40px;
+            background: white;
+        }
+
+        .nav-container {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 15px 0;
+        }
+
+        .nav-links {
+            display: flex;
+            list-style: none;
+            gap: 30px;
+        }
+
+        .nav-links a {
+            text-decoration: none;
+            color: var(--dark);
+            font-weight: 600;
+            font-size: 16px;
+            padding: 10px 15px;
+            border-radius: 8px;
+            transition: all 0.3s;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .nav-links a:hover {
+            background: var(--light);
+            color: var(--secondary);
+            transform: translateY(-2px);
+        }
+
+        .nav-links a.active {
+            background: var(--secondary);
+            color: white;
+        }
+
+        .mobile-menu-btn {
+            display: none;
+            font-size: 24px;
+            background: none;
+            border: none;
+            color: var(--dark);
+            cursor: pointer;
+        }
+
+        /* Main Content */
+        .content {
+            max-width: 1200px;
+            margin: 40px auto;
+            padding: 0 20px;
+        }
+
+        .page {
+            display: none;
+            animation: fadeIn 0.5s ease;
+        }
+
+        .page.active {
+            display: block;
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(20px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        /* Hero Section */
+        .hero {
+            background: linear-gradient(135deg, var(--primary) 0%, #34495e 100%);
+            color: white;
+            border-radius: 20px;
+            padding: 60px;
+            margin-bottom: 40px;
+            text-align: center;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .hero::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: url('https://images.unsplash.com/photo-1516321318423-f06f85e504b3?q=80&w=2070') center/cover;
+            opacity: 0.1;
+        }
+
+        .hero-content {
+            position: relative;
+            z-index: 1;
+        }
+
+        .hero h2 {
+            font-size: 48px;
+            margin-bottom: 20px;
+            background: linear-gradient(45deg, #fff, #3498db);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+
+        .hero p {
+            font-size: 20px;
+            margin-bottom: 30px;
+            max-width: 800px;
+            margin-left: auto;
+            margin-right: auto;
+            line-height: 1.6;
+        }
+
+        .cta-buttons {
+            display: flex;
+            gap: 20px;
+            justify-content: center;
+            margin-top: 30px;
+        }
+
+        .cta-btn {
+            padding: 15px 30px;
+            border-radius: 50px;
+            font-size: 18px;
+            font-weight: 600;
+            text-decoration: none;
+            transition: all 0.3s;
+            display: inline-flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .cta-primary {
+            background: var(--secondary);
+            color: white;
+            border: 2px solid var(--secondary);
+        }
+
+        .cta-primary:hover {
+            background: #2980b9;
+            transform: translateY(-3px);
+            box-shadow: 0 10px 20px rgba(52, 152, 219, 0.3);
+        }
+
+        .cta-secondary {
+            background: transparent;
+            color: white;
+            border: 2px solid white;
+        }
+
+        .cta-secondary:hover {
+            background: white;
+            color: var(--primary);
+            transform: translateY(-3px);
+        }
+
+        /* Services Grid */
+        .services-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+            gap: 30px;
+            margin: 40px 0;
+        }
+
+        .service-card {
+            background: white;
+            border-radius: 15px;
+            padding: 30px;
+            text-align: center;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.1);
+            transition: all 0.3s;
+            border: 2px solid transparent;
+        }
+
+        .service-card:hover {
+            transform: translateY(-10px);
+            border-color: var(--secondary);
+            box-shadow: 0 20px 40px rgba(52, 152, 219, 0.2);
+        }
+
+        .service-icon {
+            font-size: 48px;
+            color: var(--secondary);
+            margin-bottom: 20px;
+        }
+
+        .service-card h3 {
+            font-size: 24px;
+            margin-bottom: 15px;
+            color: var(--dark);
+        }
+
+        .service-card p {
+            color: #666;
+            line-height: 1.6;
+        }
+
+        /* Auth Modal */
+        .auth-modal {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0,0,0,0.8);
+            z-index: 2000;
+            justify-content: center;
+            align-items: center;
+        }
+
+        .auth-modal.active {
+            display: flex;
+            animation: fadeIn 0.3s ease;
+        }
+
+        .auth-container {
+            background: white;
+            border-radius: 20px;
+            padding: 40px;
+            width: 90%;
+            max-width: 400px;
+            position: relative;
+        }
+
+        .close-modal {
+            position: absolute;
+            top: 20px;
+            right: 20px;
+            font-size: 24px;
+            background: none;
+            border: none;
+            cursor: pointer;
+            color: #666;
+        }
+
+        .auth-tabs {
+            display: flex;
+            margin-bottom: 30px;
+            border-bottom: 2px solid #eee;
+        }
+
+        .auth-tab {
+            flex: 1;
+            padding: 15px;
+            text-align: center;
+            background: none;
+            border: none;
+            font-size: 18px;
+            font-weight: 600;
+            color: #666;
+            cursor: pointer;
+            border-bottom: 3px solid transparent;
+        }
+
+        .auth-tab.active {
+            color: var(--secondary);
+            border-bottom-color: var(--secondary);
+        }
+
+        .auth-form {
+            display: none;
+        }
+
+        .auth-form.active {
+            display: block;
+        }
+
+        .form-group {
+            margin-bottom: 20px;
+        }
+
+        .form-group label {
+            display: block;
+            margin-bottom: 8px;
+            color: #333;
+            font-weight: 500;
+        }
+
+        .form-group input {
+            width: 100%;
+            padding: 12px 15px;
+            border: 2px solid #ddd;
+            border-radius: 10px;
+            font-size: 16px;
+            transition: all 0.3s;
+        }
+
+        .form-group input:focus {
+            outline: none;
+            border-color: var(--secondary);
+        }
+
+        .auth-btn {
+            width: 100%;
+            padding: 15px;
+            background: var(--secondary);
+            color: white;
+            border: none;
+            border-radius: 10px;
+            font-size: 18px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s;
+        }
+
+        .auth-btn:hover {
+            background: #2980b9;
+        }
+
+        .social-login {
+            margin-top: 20px;
+            text-align: center;
+        }
+
+        .social-btn {
+            width: 100%;
+            padding: 12px;
+            margin: 5px 0;
+            border-radius: 10px;
+            border: 2px solid #ddd;
+            background: white;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 10px;
+            font-weight: 500;
+            transition: all 0.3s;
+        }
+
+        .google-btn:hover {
+            background: #f8f9fa;
+            border-color: #db4437;
+            color: #db4437;
+        }
+
+        .github-btn:hover {
+            background: #f8f9fa;
+            border-color: #333;
+            color: #333;
+        }
+
+        .alert {
+            padding: 15px;
+            border-radius: 10px;
+            margin-bottom: 20px;
+            display: none;
+        }
+
+        .alert-error {
+            background: #fde8e8;
+            color: #c53030;
+            border: 2px solid #fed7d7;
+        }
+
+        .alert-success {
+            background: #e6fffa;
+            color: #234e52;
+            border: 2px solid #b2f5ea;
+        }
+
+        /* Footer */
+        footer {
+            background: var(--primary);
+            color: white;
+            padding: 40px;
+            margin-top: 60px;
+        }
+
+        .footer-content {
+            max-width: 1200px;
+            margin: 0 auto;
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 40px;
+        }
+
+        .footer-section h3 {
+            font-size: 20px;
+            margin-bottom: 20px;
+            color: var(--secondary);
+        }
+
+        .footer-links {
+            list-style: none;
+        }
+
+        .footer-links li {
+            margin-bottom: 10px;
+        }
+
+        .footer-links a {
+            color: #ddd;
+            text-decoration: none;
+            transition: color 0.3s;
+        }
+
+        .footer-links a:hover {
+            color: var(--secondary);
+        }
+
+        /* Responsive */
+        @media (max-width: 768px) {
+            .header-top, nav {
+                padding: 10px 20px;
+            }
+            
+            .nav-links {
+                display: none;
+                position: absolute;
+                top: 100%;
+                left: 0;
+                right: 0;
+                background: white;
+                flex-direction: column;
+                padding: 20px;
+                box-shadow: 0 10px 30px rgba(0,0,0,0.1);
+            }
+            
+            .nav-links.active {
+                display: flex;
+            }
+            
+            .mobile-menu-btn {
+                display: block;
+            }
+            
+            .hero {
+                padding: 40px 20px;
+            }
+            
+            .hero h2 {
+                font-size: 32px;
+            }
+            
+            .cta-buttons {
+                flex-direction: column;
+                align-items: center;
+            }
+        }
+    </style>
 </head>
 <body>
-    <div class="container">
-        <h1>🏠 Welcome</h1>
-        <p class="subtitle">Firebase Authentication Demo</p>
-        
-        <div id="user-info" class="hidden">
-            <img id="user-photo" src="" alt="Profile" class="profile-photo">
-            <div class="profile-info">
-                <p><strong>Name:</strong> <span id="user-name"></span></p>
-                <p><strong>Email:</strong> <span id="user-email"></span></p>
-                <p><strong>Provider:</strong> <span id="user-provider"></span></p>
+    <!-- Header -->
+    <header>
+        <div class="header-top">
+            <div class="logo">
+                <i class="fas fa-graduation-cap" style="font-size: 32px; color: #3498db;"></i>
+                <h1>Zakhourani</h1>
             </div>
             
-            <button onclick="window.location.href='profile.html'" class="btn btn-primary">
-                👤 View Profile
-            </button>
-            <button onclick="window.location.href='logout.html'" class="btn btn-danger">
-                🚪 Logout
-            </button>
+            <div class="auth-buttons" id="authButtons">
+                <!-- This will be populated by JavaScript -->
+            </div>
         </div>
         
-        <div id="guest-info">
-            <p class="text-center">Please login to access your account</p>
-            <button onclick="window.location.href='login.html'" class="btn btn-primary">
-                🔑 Login
-            </button>
-            <button onclick="window.location.href='signup.html'" class="btn btn-secondary">
-                📝 Sign Up
-            </button>
+        <nav>
+            <div class="nav-container">
+                <button class="mobile-menu-btn" id="mobileMenuBtn">
+                    <i class="fas fa-bars"></i>
+                </button>
+                
+                <ul class="nav-links" id="navLinks">
+                    <li><a href="#" class="nav-link active" data-page="home"><i class="fas fa-home"></i> Home</a></li>
+                    <li><a href="#" class="nav-link" data-page="ai"><i class="fas fa-robot"></i> AI Assistant</a></li>
+                    <li><a href="#" class="nav-link" data-page="dictionary"><i class="fas fa-book"></i> Dictionary</a></li>
+                    <li><a href="#" class="nav-link" data-page="ielts"><i class="fas fa-language"></i> IELTS</a></li>
+                    <li><a href="#" class="nav-link" data-page="toefl"><i class="fas fa-globe-americas"></i> TOEFL</a></li>
+                    <li><a href="#" class="nav-link" data-page="about"><i class="fas fa-user-md"></i> About Dr. Waleed</a></li>
+                    <li><a href="#" class="nav-link" data-page="contact"><i class="fas fa-envelope"></i> Contact</a></li>
+                    <li><a href="#" class="nav-link" data-page="profile"><i class="fas fa-user-circle"></i> Profile</a></li>
+                </ul>
+            </div>
+        </nav>
+    </header>
+
+    <!-- Main Content -->
+    <main class="content">
+        <!-- Home Page -->
+        <section id="home" class="page active">
+            <div class="hero">
+                <div class="hero-content">
+                    <h2>Welcome to Zakhourani</h2>
+                    <p>Comprehensive English language learning platform founded by Dr. Waleed Hussien Zakhourani. Master IELTS, TOEFL, and expand your vocabulary with our AI-powered tools.</p>
+                    
+                    <div class="cta-buttons">
+                        <a href="#" class="cta-btn cta-primary" data-page="ai">
+                            <i class="fas fa-robot"></i> Try AI Assistant
+                        </a>
+                        <a href="#" class="cta-btn cta-secondary" data-page="ielts">
+                            <i class="fas fa-chart-line"></i> Start IELTS Prep
+                        </a>
+                    </div>
+                </div>
+            </div>
+
+            <div class="services-grid">
+                <div class="service-card">
+                    <div class="service-icon">
+                        <i class="fas fa-robot"></i>
+                    </div>
+                    <h3>AI English Assistant</h3>
+                    <p>Get instant feedback on your writing, speaking, and grammar with our advanced AI tutor.</p>
+                </div>
+
+                <div class="service-card">
+                    <div class="service-icon">
+                        <i class="fas fa-book"></i>
+                    </div>
+                    <h3>Smart Dictionary</h3>
+                    <p>Access definitions, synonyms, antonyms, and example sentences for over 100,000 words.</p>
+                </div>
+
+                <div class="service-card">
+                    <div class="service-icon">
+                        <i class="fas fa-language"></i>
+                    </div>
+                    <h3>IELTS Preparation</h3>
+                    <p>Complete IELTS course with practice tests, speaking simulations, and writing evaluation.</p>
+                </div>
+
+                <div class="service-card">
+                    <div class="service-icon">
+                        <i class="fas fa-globe-americas"></i>
+                    </div>
+                    <h3>TOEFL Training</h3>
+                    <p>Structured TOEFL preparation with full-length practice tests and speaking assessments.</p>
+                </div>
+            </div>
+        </section>
+
+        <!-- AI Assistant Page -->
+        <section id="ai" class="page">
+            <h2>🤖 AI English Assistant</h2>
+            <p>Coming soon - AI-powered language learning assistant.</p>
+        </section>
+
+        <!-- Dictionary Page -->
+        <section id="dictionary" class="page">
+            <h2>📚 Smart Dictionary</h2>
+            <p>Coming soon - Advanced English dictionary.</p>
+        </section>
+
+        <!-- IELTS Page -->
+        <section id="ielts" class="page">
+            <h2>📝 IELTS Preparation</h2>
+            <p>Coming soon - Complete IELTS course.</p>
+        </section>
+
+        <!-- TOEFL Page -->
+        <section id="toefl" class="page">
+            <h2>🌎 TOEFL Training</h2>
+            <p>Coming soon - TOEFL preparation materials.</p>
+        </section>
+
+        <!-- About Page -->
+        <section id="about" class="page">
+            <h2>👨‍🏫 About Dr. Waleed Hussien Zakhourani</h2>
+            <p>Coming soon - Professional background and achievements.</p>
+        </section>
+
+        <!-- Contact Page -->
+        <section id="contact" class="page">
+            <h2>📞 Contact Us</h2>
+            <p>Coming soon - Contact form and information.</p>
+        </section>
+
+        <!-- Profile Page -->
+        <section id="profile" class="page">
+            <h2>👤 Your Profile</h2>
+            <div id="profileContent">
+                <!-- Will be populated by JavaScript -->
+            </div>
+        </section>
+    </main>
+
+    <!-- Footer -->
+    <footer>
+        <div class="footer-content">
+            <div class="footer-section">
+                <h3>Zakhourani</h3>
+                <p>English language learning platform founded by Dr. Waleed Hussien Zakhourani.</p>
+            </div>
             
-            <div class="divider">or continue with</div>
+            <div class="footer-section">
+                <h3>Quick Links</h3>
+                <ul class="footer-links">
+                    <li><a href="#" data-page="home">Home</a></li>
+                    <li><a href="#" data-page="ai">AI Assistant</a></li>
+                    <li><a href="#" data-page="ielts">IELTS</a></li>
+                    <li><a href="#" data-page="toefl">TOEFL</a></li>
+                </ul>
+            </div>
             
-            <button id="googleLogin" class="btn btn-google">
-                <img src="https://img.icons8.com/color/16/000000/google-logo.png" alt="Google">
-                Continue with Google
-            </button>
-            <button id="githubLogin" class="btn btn-github">
-                <img src="https://img.icons8.com/ios-filled/16/ffffff/github.png" alt="GitHub">
-                Continue with GitHub
-            </button>
+            <div class="footer-section">
+                <h3>Contact</h3>
+                <ul class="footer-links">
+                    <li><a href="#" data-page="contact">Contact Form</a></li>
+                    <li><a href="#" data-page="about">About Dr. Waleed</a></li>
+                </ul>
+            </div>
         </div>
-        
-        <div class="nav-links">
-            <a href="login.html" class="nav-link">Login</a>
-            <a href="signup.html" class="nav-link">Sign Up</a>
-            <a href="profile.html" class="nav-link">Profile</a>
-            <a href="logout.html" class="nav-link">Logout</a>
+    </footer>
+
+    <!-- Auth Modal -->
+    <div class="auth-modal" id="authModal">
+        <div class="auth-container">
+            <button class="close-modal" id="closeModal">&times;</button>
+            
+            <div class="auth-tabs">
+                <button class="auth-tab active" data-tab="login">Login</button>
+                <button class="auth-tab" data-tab="signup">Sign Up</button>
+            </div>
+            
+            <div class="alert" id="authAlert"></div>
+            
+            <!-- Login Form -->
+            <form class="auth-form active" id="loginForm">
+                <div class="form-group">
+                    <label for="loginEmail">Email</label>
+                    <input type="email" id="loginEmail" required>
+                </div>
+                
+                <div class="form-group">
+                    <label for="loginPassword">Password</label>
+                    <input type="password" id="loginPassword" required>
+                </div>
+                
+                <button type="submit" class="auth-btn">Login</button>
+                
+                <div class="social-login">
+                    <button type="button" class="social-btn google-btn" id="googleLogin">
+                        <i class="fab fa-google"></i> Continue with Google
+                    </button>
+                    <button type="button" class="social-btn github-btn" id="githubLogin">
+                        <i class="fab fa-github"></i> Continue with GitHub
+                    </button>
+                </div>
+            </form>
+            
+            <!-- Signup Form -->
+            <form class="auth-form" id="signupForm">
+                <div class="form-group">
+                    <label for="signupName">Full Name</label>
+                    <input type="text" id="signupName" required>
+                </div>
+                
+                <div class="form-group">
+                    <label for="signupEmail">Email</label>
+                    <input type="email" id="signupEmail" required>
+                </div>
+                
+                <div class="form-group">
+                    <label for="signupPassword">Password</label>
+                    <input type="password" id="signupPassword" required minlength="6">
+                </div>
+                
+                <div class="form-group">
+                    <label for="confirmPassword">Confirm Password</label>
+                    <input type="password" id="confirmPassword" required>
+                </div>
+                
+                <button type="submit" class="auth-btn">Create Account</button>
+                
+                <div class="social-login">
+                    <button type="button" class="social-btn google-btn" id="googleSignup">
+                        <i class="fab fa-google"></i> Sign up with Google
+                    </button>
+                    <button type="button" class="social-btn github-btn" id="githubSignup">
+                        <i class="fab fa-github"></i> Sign up with GitHub
+                    </button>
+                </div>
+            </form>
         </div>
     </div>
 
-    <script src="auth.js"></script>
+    <!-- Firebase & App Script -->
+    <script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-app-compat.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-auth-compat.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-firestore-compat.js"></script>
+    
     <script>
-        // Initialize auth
-        initAuth((user) => {
-            const userInfo = document.getElementById('user-info');
-            const guestInfo = document.getElementById('guest-info');
+        // Firebase Configuration
+        const firebaseConfig = {
+            apiKey: "AIzaSyAE8wf24HXrfmpMluaFOv1OHPrf_YFfqTQ",
+            authDomain: "whaai-c388e.firebaseapp.com",
+            projectId: "whaai-c388e",
+            storageBucket: "whaai-c388e.firebasestorage.app",
+            messagingSenderId: "640598205524",
+            appId: "1:640598205524:web:c975f5e8b371b1043e39c1",
+            measurementId: "G-1MHE0JBZJR"
+        };
+
+        // Initialize Firebase
+        if (!firebase.apps.length) {
+            firebase.initializeApp(firebaseConfig);
+        }
+
+        const auth = firebase.auth();
+        const db = firebase.firestore();
+
+        // DOM Elements
+        const authModal = document.getElementById('authModal');
+        const closeModal = document.getElementById('closeModal');
+        const authTabs = document.querySelectorAll('.auth-tab');
+        const authForms = document.querySelectorAll('.auth-form');
+        const authAlert = document.getElementById('authAlert');
+        const authButtons = document.getElementById('authButtons');
+        const navLinks = document.querySelectorAll('.nav-link');
+        const pages = document.querySelectorAll('.page');
+        const mobileMenuBtn = document.getElementById('mobileMenuBtn');
+        const navLinksContainer = document.getElementById('navLinks');
+        const profileContent = document.getElementById('profileContent');
+
+        // Navigation
+        navLinks.forEach(link => {
+            link.addEventListener('click', (e) => {
+                e.preventDefault();
+                const pageId = link.getAttribute('data-page');
+                
+                // Update active nav link
+                navLinks.forEach(l => l.classList.remove('active'));
+                link.classList.add('active');
+                
+                // Show selected page
+                pages.forEach(page => {
+                    page.classList.remove('active');
+                    if (page.id === pageId) {
+                        page.classList.add('active');
+                    }
+                });
+                
+                // Close mobile menu
+                navLinksContainer.classList.remove('active');
+            });
+        });
+
+        // Mobile Menu
+        mobileMenuBtn.addEventListener('click', () => {
+            navLinksContainer.classList.toggle('active');
+        });
+
+        // Auth Modal
+        function showAuthModal(tab = 'login') {
+            authModal.classList.add('active');
+            switchTab(tab);
+        }
+
+        function hideAuthModal() {
+            authModal.classList.remove('active');
+            clearAuthForms();
+        }
+
+        closeModal.addEventListener('click', hideAuthModal);
+        authModal.addEventListener('click', (e) => {
+            if (e.target === authModal) hideAuthModal();
+        });
+
+        // Tab Switching
+        authTabs.forEach(tab => {
+            tab.addEventListener('click', () => {
+                const tabId = tab.getAttribute('data-tab');
+                switchTab(tabId);
+            });
+        });
+
+        function switchTab(tabId) {
+            authTabs.forEach(tab => {
+                tab.classList.toggle('active', tab.getAttribute('data-tab') === tabId);
+            });
             
+            authForms.forEach(form => {
+                form.classList.toggle('active', form.id === `${tabId}Form`);
+            });
+            
+            hideAlert();
+        }
+
+        // Alert Functions
+        function showAlert(message, type = 'error') {
+            authAlert.textContent = message;
+            authAlert.className = `alert alert-${type}`;
+            authAlert.style.display = 'block';
+        }
+
+        function hideAlert() {
+            authAlert.style.display = 'none';
+        }
+
+        function clearAuthForms() {
+            document.getElementById('loginForm').reset();
+            document.getElementById('signupForm').reset();
+            hideAlert();
+        }
+
+        // Auth Functions
+        async function signUpWithEmail(name, email, password) {
+            try {
+                const userCredential = await auth.createUserWithEmailAndPassword(email, password);
+                await userCredential.user.updateProfile({ displayName: name });
+                await saveUserToFirestore(userCredential.user, 'email');
+                return { success: true, user: userCredential.user };
+            } catch (error) {
+                return { success: false, error: error.message };
+            }
+        }
+
+        async function loginWithEmail(email, password) {
+            try {
+                const userCredential = await auth.signInWithEmailAndPassword(email, password);
+                await updateLastLogin(userCredential.user);
+                return { success: true, user: userCredential.user };
+            } catch (error) {
+                return { success: false, error: error.message };
+            }
+        }
+
+        async function loginWithGoogle() {
+            try {
+                const provider = new firebase.auth.GoogleAuthProvider();
+                const userCredential = await auth.signInWithPopup(provider);
+                await saveUserToFirestore(userCredential.user, 'google');
+                return { success: true, user: userCredential.user };
+            } catch (error) {
+                return { success: false, error: error.message };
+            }
+        }
+
+        async function loginWithGitHub() {
+            try {
+                const provider = new firebase.auth.GithubAuthProvider();
+                const userCredential = await auth.signInWithPopup(provider);
+                await saveUserToFirestore(userCredential.user, 'github');
+                return { success: true, user: userCredential.user };
+            } catch (error) {
+                return { success: false, error: error.message };
+            }
+        }
+
+        async function logoutUser() {
+            try {
+                await auth.signOut();
+                return { success: true };
+            } catch (error) {
+                return { success: false, error: error.message };
+            }
+        }
+
+        async function saveUserToFirestore(user, provider) {
+            try {
+                await db.collection('users').doc(user.uid).set({
+                    uid: user.uid,
+                    email: user.email,
+                    displayName: user.displayName || user.email.split('@')[0],
+                    photoURL: user.photoURL || `https://ui-avatars.com/api/?name=${encodeURIComponent(user.displayName || user.email)}&background=3498db&color=fff`,
+                    provider: provider,
+                    lastLogin: firebase.firestore.FieldValue.serverTimestamp(),
+                    createdAt: firebase.firestore.FieldValue.serverTimestamp()
+                }, { merge: true });
+            } catch (error) {
+                console.error('Error saving user:', error);
+            }
+        }
+
+        async function updateLastLogin(user) {
+            try {
+                await db.collection('users').doc(user.uid).update({
+                    lastLogin: firebase.firestore.FieldValue.serverTimestamp()
+                });
+            } catch (error) {
+                console.error('Error updating last login:', error);
+            }
+        }
+
+        async function getCurrentUserData() {
+            const user = auth.currentUser;
+            if (!user) return null;
+            
+            try {
+                const doc = await db.collection('users').doc(user.uid).get();
+                return doc.exists ? doc.data() : null;
+            } catch (error) {
+                console.error('Error getting user data:', error);
+                return null;
+            }
+        }
+
+        // Update UI based on auth state
+        function updateAuthUI(user) {
             if (user) {
                 // User is logged in
-                document.getElementById('user-name').textContent = user.displayName || user.email;
-                document.getElementById('user-email').textContent = user.email;
-                document.getElementById('user-provider').textContent = user.providerData[0]?.providerId || 'email';
-                document.getElementById('user-photo').src = user.photoURL || `https://ui-avatars.com/api/?name=${encodeURIComponent(user.displayName || user.email)}&background=667eea&color=fff`;
+                authButtons.innerHTML = `
+                    <div class="user-menu">
+                        <img src="${user.photoURL || `https://ui-avatars.com/api/?name=${encodeURIComponent(user.displayName || user.email)}&background=3498db&color=fff`}" 
+                             alt="Profile" class="user-avatar">
+                        <span>${user.displayName || user.email}</span>
+                        <button class="logout-btn" id="logoutBtn">
+                            <i class="fas fa-sign-out-alt"></i> Logout
+                        </button>
+                    </div>
+                `;
                 
-                userInfo.classList.remove('hidden');
-                guestInfo.classList.add('hidden');
+                // Add logout event
+                document.getElementById('logoutBtn').addEventListener('click', async () => {
+                    const result = await logoutUser();
+                    if (result.success) {
+                        updateAuthUI(null);
+                        // Navigate to home page
+                        document.querySelector('[data-page="home"]').click();
+                    }
+                });
+                
+                // Update profile page if active
+                if (document.getElementById('profile').classList.contains('active')) {
+                    loadProfilePage();
+                }
             } else {
                 // User is not logged in
-                userInfo.classList.add('hidden');
-                guestInfo.classList.remove('hidden');
+                authButtons.innerHTML = `
+                    <button class="auth-btn login-btn" id="showLoginBtn">
+                        <i class="fas fa-sign-in-alt"></i> Login
+                    </button>
+                    <button class="auth-btn signup-btn" id="showSignupBtn">
+                        <i class="fas fa-user-plus"></i> Sign Up
+                    </button>
+                `;
+                
+                // Add auth modal events
+                document.getElementById('showLoginBtn').addEventListener('click', () => showAuthModal('login'));
+                document.getElementById('showSignupBtn').addEventListener('click', () => showAuthModal('signup'));
+                
+                // Clear profile page
+                if (profileContent) {
+                    profileContent.innerHTML = '<p>Please login to view your profile.</p>';
+                }
+            }
+        }
+
+        // Load Profile Page
+        async function loadProfilePage() {
+            const user = auth.currentUser;
+            const userData = await getCurrentUserData();
+            
+            if (user && userData) {
+                profileContent.innerHTML = `
+                    <div style="background: white; padding: 30px; border-radius: 15px; box-shadow: 0 10px 30px rgba(0,0,0,0.1);">
+                        <div style="text-align: center; margin-bottom: 30px;">
+                            <img src="${user.photoURL || `https://ui-avatars.com/api/?name=${encodeURIComponent(user.displayName || user.email)}&background=3498db&color=fff`}" 
+                                 alt="Profile" style="width: 120px; height: 120px; border-radius: 50%; border: 4px solid #3498db; margin-bottom: 20px;">
+                            <h3 style="color: #2c3e50; margin-bottom: 10px;">${user.displayName || user.email}</h3>
+                            <p style="color: #666; margin-bottom: 5px;">${user.email}</p>
+                            <p style="color: #3498db; font-weight: 500;">${userData.provider || 'email'} account</p>
+                        </div>
+                        
+                        <div style="background: #f8f9fa; padding: 20px; border-radius: 10px; margin-bottom: 20px;">
+                            <h4 style="color: #2c3e50; margin-bottom: 15px;">Account Information</h4>
+                            <p><strong>User ID:</strong> <span style="font-family: monospace; color: #666;">${user.uid.substring(0, 16)}...</span></p>
+                            ${userData.createdAt ? `<p><strong>Member Since:</strong> ${userData.createdAt.toDate().toLocaleDateString()}</p>` : ''}
+                            ${userData.lastLogin ? `<p><strong>Last Login:</strong> ${userData.lastLogin.toDate().toLocaleString()}</p>` : ''}
+                        </div>
+                        
+                        <div style="display: flex; gap: 15px; margin-top: 30px;">
+                            <button onclick="document.querySelector('[data-page=\\'home\\']').click()" 
+                                    style="flex: 1; padding: 12px; background: #3498db; color: white; border: none; border-radius: 8px; cursor: pointer;">
+                                <i class="fas fa-home"></i> Go Home
+                            </button>
+                            <button id="profileLogoutBtn" 
+                                    style="flex: 1; padding: 12px; background: #e74c3c; color: white; border: none; border-radius: 8px; cursor: pointer;">
+                                <i class="fas fa-sign-out-alt"></i> Logout
+                            </button>
+                        </div>
+                    </div>
+                `;
+                
+                // Add logout event for profile page
+                document.getElementById('profileLogoutBtn').addEventListener('click', async () => {
+                    const result = await logoutUser();
+                    if (result.success) {
+                        updateAuthUI(null);
+                        document.querySelector('[data-page="home"]').click();
+                    }
+                });
+            } else {
+                profileContent.innerHTML = `
+                    <div style="text-align: center; padding: 40px; background: white; border-radius: 15px; box-shadow: 0 10px 30px rgba(0,0,0,0.1);">
+                        <i class="fas fa-user-circle" style="font-size: 64px; color: #3498db; margin-bottom: 20px;"></i>
+                        <h3 style="color: #2c3e50; margin-bottom: 10px;">Please Login</h3>
+                        <p style="color: #666; margin-bottom: 30px;">You need to login to view your profile.</p>
+                        <button onclick="showAuthModal('login')" 
+                                style="padding: 12px 30px; background: #3498db; color: white; border: none; border-radius: 8px; cursor: pointer; font-size: 16px;">
+                            <i class="fas fa-sign-in-alt"></i> Login Now
+                        </button>
+                    </div>
+                `;
+            }
+        }
+
+        // Form Submissions
+        document.getElementById('loginForm').addEventListener('submit', async (e) => {
+            e.preventDefault();
+            hideAlert();
+            
+            const email = document.getElementById('loginEmail').value;
+            const password = document.getElementById('loginPassword').value;
+            
+            const result = await loginWithEmail(email, password);
+            
+            if (result.success) {
+                showAlert('Login successful! Redirecting...', 'success');
+                setTimeout(() => {
+                    hideAuthModal();
+                    updateAuthUI(result.user);
+                    // Navigate to home page after login
+                    document.querySelector('[data-page="home"]').click();
+                }, 1500);
+            } else {
+                showAlert('Login failed: ' + result.error);
             }
         });
 
-        // Google Login
+        document.getElementById('signupForm').addEventListener('submit', async (e) => {
+            e.preventDefault();
+            hideAlert();
+            
+            const name = document.getElementById('signupName').value;
+            const email = document.getElementById('signupEmail').value;
+            const password = document.getElementById('signupPassword').value;
+            const confirmPassword = document.getElementById('confirmPassword').value;
+            
+            if (password !== confirmPassword) {
+                showAlert('Passwords do not match');
+                return;
+            }
+            
+            if (password.length < 6) {
+                showAlert('Password must be at least 6 characters');
+                return;
+            }
+            
+            const result = await signUpWithEmail(name, email, password);
+            
+            if (result.success) {
+                showAlert('Account created successfully!', 'success');
+                setTimeout(() => {
+                    hideAuthModal();
+                    updateAuthUI(result.user);
+                    // Navigate to home page after signup
+                    document.querySelector('[data-page="home"]').click();
+                }, 1500);
+            } else {
+                showAlert('Signup failed: ' + result.error);
+            }
+        });
+
+        // Social Login Buttons
         document.getElementById('googleLogin').addEventListener('click', async () => {
             const result = await loginWithGoogle();
-            if (result.success) {
-                window.location.href = 'profile.html';
-            } else {
-                alert('Error: ' + result.error);
-            }
+            handleSocialAuthResult(result);
         });
 
-        // GitHub Login
         document.getElementById('githubLogin').addEventListener('click', async () => {
             const result = await loginWithGitHub();
+            handleSocialAuthResult(result);
+        });
+
+        document.getElementById('googleSignup').addEventListener('click', async () => {
+            const result = await loginWithGoogle();
+            handleSocialAuthResult(result);
+        });
+
+        document.getElementById('githubSignup').addEventListener('click', async () => {
+            const result = await loginWithGitHub();
+            handleSocialAuthResult(result);
+        });
+
+        function handleSocialAuthResult(result) {
             if (result.success) {
-                window.location.href = 'profile.html';
+                hideAuthModal();
+                updateAuthUI(result.user);
+                // Navigate to home page after social login
+                document.querySelector('[data-page="home"]').click();
             } else {
-                alert('Error: ' + result.error);
+                showAlert('Authentication failed: ' + result.error);
             }
+        }
+
+        // Footer Links
+        document.querySelectorAll('.footer-links a').forEach(link => {
+            link.addEventListener('click', (e) => {
+                e.preventDefault();
+                const pageId = link.getAttribute('data-page');
+                document.querySelector(`[data-page="${pageId}"]`).click();
+            });
+        });
+
+        // CTA Buttons
+        document.querySelectorAll('.cta-btn').forEach(btn => {
+            btn.addEventListener('click', (e) => {
+                e.preventDefault();
+                const pageId = btn.getAttribute('data-page');
+                document.querySelector(`[data-page="${pageId}"]`).click();
+            });
+        });
+
+        // Initialize
+        auth.onAuthStateChanged((user) => {
+            updateAuthUI(user);
+        });
+
+        // Auto-login check (for demo)
+        window.addEventListener('load', () => {
+            console.log('Zakhourani Website Loaded');
+            console.log('Firebase Project:', firebaseConfig.projectId);
         });
     </script>
 </body>

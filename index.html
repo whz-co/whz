@@ -1,178 +1,106 @@
 <!DOCTYPE html>
-<html>
+<html lang="en">
 <head>
-    <title>My Website - Login with GitHub & Google</title>
-    <!-- Firebase SDK -->
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Home - Firebase Auth Demo</title>
+    <link rel="stylesheet" href="style.css">
     <script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-app-compat.js"></script>
     <script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-auth-compat.js"></script>
     <script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-firestore-compat.js"></script>
-    
-    <style>
-        body { font-family: Arial, sans-serif; max-width: 600px; margin: 50px auto; padding: 20px; }
-        button { padding: 10px 20px; margin: 10px; font-size: 16px; cursor: pointer; }
-        .login-btn { background: #4285f4; color: white; border: none; border-radius: 4px; }
-        .github-btn { background: #333; color: white; border: none; border-radius: 4px; }
-        .logout-btn { background: #dc3545; color: white; border: none; border-radius: 4px; }
-        .user-info { background: #f8f9fa; padding: 20px; border-radius: 8px; margin: 20px 0; }
-        .hidden { display: none; }
-        .error { color: red; margin: 10px 0; }
-    </style>
 </head>
 <body>
-    <h1>🔐 Firebase Authentication</h1>
-    <div id="error-message" class="error hidden"></div>
-    <p>Login with your GitHub or Google account</p>
-    
-    <!-- Login Buttons -->
-    <div id="login-section">
-        <button id="googleLogin" class="login-btn">Sign in with Google</button>
-        <button id="githubLogin" class="github-btn">Sign in with GitHub</button>
+    <div class="container">
+        <h1>🏠 Welcome</h1>
+        <p class="subtitle">Firebase Authentication Demo</p>
+        
+        <div id="user-info" class="hidden">
+            <img id="user-photo" src="" alt="Profile" class="profile-photo">
+            <div class="profile-info">
+                <p><strong>Name:</strong> <span id="user-name"></span></p>
+                <p><strong>Email:</strong> <span id="user-email"></span></p>
+                <p><strong>Provider:</strong> <span id="user-provider"></span></p>
+            </div>
+            
+            <button onclick="window.location.href='profile.html'" class="btn btn-primary">
+                👤 View Profile
+            </button>
+            <button onclick="window.location.href='logout.html'" class="btn btn-danger">
+                🚪 Logout
+            </button>
+        </div>
+        
+        <div id="guest-info">
+            <p class="text-center">Please login to access your account</p>
+            <button onclick="window.location.href='login.html'" class="btn btn-primary">
+                🔑 Login
+            </button>
+            <button onclick="window.location.href='signup.html'" class="btn btn-secondary">
+                📝 Sign Up
+            </button>
+            
+            <div class="divider">or continue with</div>
+            
+            <button id="googleLogin" class="btn btn-google">
+                <img src="https://img.icons8.com/color/16/000000/google-logo.png" alt="Google">
+                Continue with Google
+            </button>
+            <button id="githubLogin" class="btn btn-github">
+                <img src="https://img.icons8.com/ios-filled/16/ffffff/github.png" alt="GitHub">
+                Continue with GitHub
+            </button>
+        </div>
+        
+        <div class="nav-links">
+            <a href="login.html" class="nav-link">Login</a>
+            <a href="signup.html" class="nav-link">Sign Up</a>
+            <a href="profile.html" class="nav-link">Profile</a>
+            <a href="logout.html" class="nav-link">Logout</a>
+        </div>
     </div>
-    
-    <!-- User Info (shown after login) -->
-    <div id="user-info" class="user-info hidden">
-        <h2>Welcome, <span id="user-name"></span>!</h2>
-        <p><strong>Email:</strong> <span id="user-email"></span></p>
-        <p><strong>Provider:</strong> <span id="user-provider"></span></p>
-        <p><img id="user-photo" src="" alt="Profile" style="width: 80px; border-radius: 50%;"></p>
-        <button id="logout" class="logout-btn">Logout</button>
-    </div>
-    
+
+    <script src="auth.js"></script>
     <script>
-        // YOUR FIREBASE CONFIGURATION
-        const firebaseConfig = {
-            apiKey: "AIzaSyAE8wf24HXrfmpMluaFOv1OHPrf_YFfqTQ",
-            authDomain: "whaai-c388e.firebaseapp.com",
-            projectId: "whaai-c388e",
-            storageBucket: "whaai-c388e.firebasestorage.app",
-            messagingSenderId: "640598205524",
-            appId: "1:640598205524:web:c975f5e8b371b1043e39c1",
-            measurementId: "G-1MHE0JBZJR"
-        };
-        
-        // Initialize Firebase
-        try {
-            firebase.initializeApp(firebaseConfig);
-            console.log("✅ Firebase initialized successfully");
-        } catch (error) {
-            console.error("❌ Firebase initialization error:", error);
-            document.getElementById('error-message').textContent = 
-                "Firebase error: " + error.message;
-            document.getElementById('error-message').classList.remove('hidden');
-        }
-        
-        const auth = firebase.auth();
-        const db = firebase.firestore();
-        
-        // DOM Elements
-        const googleLoginBtn = document.getElementById('googleLogin');
-        const githubLoginBtn = document.getElementById('githubLogin');
-        const logoutBtn = document.getElementById('logout');
-        const loginSection = document.getElementById('login-section');
-        const userInfoSection = document.getElementById('user-info');
-        const userName = document.getElementById('user-name');
-        const userEmail = document.getElementById('user-email');
-        const userProvider = document.getElementById('user-provider');
-        const userPhoto = document.getElementById('user-photo');
-        const errorMessage = document.getElementById('error-message');
-        
-        // Google Login
-        googleLoginBtn.addEventListener('click', () => {
-            const provider = new firebase.auth.GoogleAuthProvider();
-            provider.addScope('email');
-            provider.addScope('profile');
+        // Initialize auth
+        initAuth((user) => {
+            const userInfo = document.getElementById('user-info');
+            const guestInfo = document.getElementById('guest-info');
             
-            auth.signInWithPopup(provider)
-                .then((result) => {
-                    console.log('✅ Google login successful:', result.user);
-                    updateUI(result.user);
-                    saveUserToFirestore(result.user);
-                    errorMessage.classList.add('hidden');
-                })
-                .catch((error) => {
-                    console.error('❌ Google login error:', error);
-                    showError('Google login failed: ' + error.message);
-                });
-        });
-        
-        // GitHub Login
-        githubLoginBtn.addEventListener('click', () => {
-            const provider = new firebase.auth.GithubAuthProvider();
-            provider.addScope('user:email');
-            
-            auth.signInWithPopup(provider)
-                .then((result) => {
-                    console.log('✅ GitHub login successful:', result.user);
-                    updateUI(result.user);
-                    saveUserToFirestore(result.user);
-                    errorMessage.classList.add('hidden');
-                })
-                .catch((error) => {
-                    console.error('❌ GitHub login error:', error);
-                    showError('GitHub login failed: ' + error.message);
-                });
-        });
-        
-        // Logout
-        logoutBtn.addEventListener('click', () => {
-            auth.signOut()
-                .then(() => {
-                    loginSection.classList.remove('hidden');
-                    userInfoSection.classList.add('hidden');
-                    console.log('✅ Logged out successfully');
-                })
-                .catch((error) => {
-                    console.error('❌ Logout error:', error);
-                    showError('Logout failed: ' + error.message);
-                });
-        });
-        
-        // Save user to Firestore
-        function saveUserToFirestore(user) {
-            db.collection('users').doc(user.uid).set({
-                uid: user.uid,
-                email: user.email,
-                displayName: user.displayName,
-                photoURL: user.photoURL,
-                provider: user.providerData[0].providerId,
-                lastLogin: firebase.firestore.FieldValue.serverTimestamp(),
-                createdAt: firebase.firestore.FieldValue.serverTimestamp()
-            }, { merge: true })
-            .then(() => console.log('✅ User saved to Firestore'))
-            .catch(error => console.error('❌ Error saving user:', error));
-        }
-        
-        // Update UI after login
-        function updateUI(user) {
-            userName.textContent = user.displayName || user.email;
-            userEmail.textContent = user.email;
-            userProvider.textContent = user.providerData[0].providerId || 'Unknown';
-            userPhoto.src = user.photoURL || 'https://via.placeholder.com/80';
-            
-            loginSection.classList.add('hidden');
-            userInfoSection.classList.remove('hidden');
-        }
-        
-        // Show error message
-        function showError(message) {
-            errorMessage.textContent = message;
-            errorMessage.classList.remove('hidden');
-        }
-        
-        // Check auth state on page load
-        auth.onAuthStateChanged((user) => {
             if (user) {
-                updateUI(user);
+                // User is logged in
+                document.getElementById('user-name').textContent = user.displayName || user.email;
+                document.getElementById('user-email').textContent = user.email;
+                document.getElementById('user-provider').textContent = user.providerData[0]?.providerId || 'email';
+                document.getElementById('user-photo').src = user.photoURL || `https://ui-avatars.com/api/?name=${encodeURIComponent(user.displayName || user.email)}&background=667eea&color=fff`;
+                
+                userInfo.classList.remove('hidden');
+                guestInfo.classList.add('hidden');
             } else {
-                loginSection.classList.remove('hidden');
-                userInfoSection.classList.add('hidden');
+                // User is not logged in
+                userInfo.classList.add('hidden');
+                guestInfo.classList.remove('hidden');
             }
         });
-        
-        // Test Firebase connection
-        console.log("Testing Firebase connection...");
-        console.log("Project ID:", firebaseConfig.projectId);
-        console.log("Auth Domain:", firebaseConfig.authDomain);
+
+        // Google Login
+        document.getElementById('googleLogin').addEventListener('click', async () => {
+            const result = await loginWithGoogle();
+            if (result.success) {
+                window.location.href = 'profile.html';
+            } else {
+                alert('Error: ' + result.error);
+            }
+        });
+
+        // GitHub Login
+        document.getElementById('githubLogin').addEventListener('click', async () => {
+            const result = await loginWithGitHub();
+            if (result.success) {
+                window.location.href = 'profile.html';
+            } else {
+                alert('Error: ' + result.error);
+            }
+        });
     </script>
 </body>
 </html>

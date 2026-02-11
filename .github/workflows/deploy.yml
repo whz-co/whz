@@ -1,50 +1,19 @@
-name: Deploy to Firebase
+name: Deploy to Firebase Hosting
 
 on:
   push:
-    branches: ["main"]
+    branches: [main]
 
 jobs:
-  deploy:
+  build_and_deploy:
     runs-on: ubuntu-latest
     steps:
-      # 1. Checkout
-      - name: Checkout code
-        uses: actions/checkout@v3
+      - uses: actions/checkout@v3
       
-      # 2. Debug: Show files
-      - name: Debug - List files
-        run: |
-          echo "=== Current directory ==="
-          pwd
-          ls -la
-          echo "=== Firebase config ==="
-          cat firebase.json || echo "No firebase.json"
-          cat .firebaserc || echo "No .firebaserc"
-      
-      # 3. Setup Node.js
-      - name: Setup Node.js
-        uses: actions/setup-node@v3
-        with:
-          node-version: '18'
-      
-      # 4. Install Firebase CLI
-      - name: Install Firebase CLI
-        run: npm install -g firebase-tools
-      
-      # 5. Debug: Test Firebase
-      - name: Debug - Test Firebase
-        run: |
-          echo "Firebase version:"
-          firebase --version || echo "Firebase not installed"
-          echo "Listing projects:"
-          firebase projects:list --token ${{ secrets.FIREBASE_TOKEN }} 2>&1 || echo "Token test failed"
-      
-      # 6. Deploy
       - name: Deploy to Firebase
-        run: |
-          firebase deploy \
-            --project whaai-c388e \
-            --token "${{ secrets.FIREBASE_TOKEN }}" \
-            --only hosting \
-            --non-interactive
+        uses: FirebaseExtended/action-hosting-deploy@v0
+        with:
+          repoToken: '${{ secrets.GITHUB_TOKEN }}'
+          firebaseServiceAccount: '${{ secrets.FIREBASE_SERVICE_ACCOUNT }}'
+          projectId: whaai-c388e
+          channelId: live

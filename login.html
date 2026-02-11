@@ -1,0 +1,100 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Login - Firebase Auth Demo</title>
+    <link rel="stylesheet" href="style.css">
+    <script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-app-compat.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-auth-compat.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-firestore-compat.js"></script>
+</head>
+<body>
+    <div class="container">
+        <h1>🔑 Login</h1>
+        <p class="subtitle">Access your account</p>
+        
+        <div id="alert" class="alert hidden"></div>
+        
+        <form id="loginForm">
+            <div class="form-group">
+                <label for="email">Email Address</label>
+                <input type="email" id="email" required placeholder="your@email.com">
+            </div>
+            
+            <div class="form-group">
+                <label for="password">Password</label>
+                <input type="password" id="password" required placeholder="••••••••">
+            </div>
+            
+            <button type="submit" class="btn btn-primary">Login</button>
+        </form>
+        
+        <div class="divider">or login with</div>
+        
+        <button id="googleLogin" class="btn btn-google">
+            <img src="https://img.icons8.com/color/16/000000/google-logo.png" alt="Google">
+            Continue with Google
+        </button>
+        <button id="githubLogin" class="btn btn-github">
+            <img src="https://img.icons8.com/ios-filled/16/ffffff/github.png" alt="GitHub">
+            Continue with GitHub
+        </button>
+        
+        <div class="mt-3 text-center">
+            <p>Don't have an account? <a href="signup.html" class="nav-link">Sign up here</a></p>
+            <p><a href="index.html" class="nav-link">← Back to Home</a></p>
+        </div>
+    </div>
+
+    <script src="auth.js"></script>
+    <script>
+        // Redirect if already logged in
+        redirectIfAuthenticated('index.html');
+
+        // Email/Password Login
+        document.getElementById('loginForm').addEventListener('submit', async (e) => {
+            e.preventDefault();
+            
+            const email = document.getElementById('email').value;
+            const password = document.getElementById('password').value;
+            const alert = document.getElementById('alert');
+            
+            alert.classList.add('hidden');
+            
+            const result = await loginWithEmail(email, password);
+            
+            if (result.success) {
+                alert.textContent = 'Login successful! Redirecting...';
+                alert.className = 'alert alert-success';
+                alert.classList.remove('hidden');
+                setTimeout(() => window.location.href = 'profile.html', 1000);
+            } else {
+                alert.textContent = 'Error: ' + result.error;
+                alert.className = 'alert alert-error';
+                alert.classList.remove('hidden');
+            }
+        });
+
+        // Google Login
+        document.getElementById('googleLogin').addEventListener('click', async () => {
+            const result = await loginWithGoogle();
+            if (result.success) {
+                window.location.href = 'profile.html';
+            } else {
+                alert('Error: ' + result.error);
+            }
+        });
+
+        // GitHub Login
+        document.getElementById('githubLogin').addEventListener('click', async () => {
+            const result = await loginWithGitHub();
+            if (result.success) {
+                window.location.href = 'profile.html';
+            } else {
+                alert('Error: ' + result.error);
+            }
+        });
+    </script>
+</body>
+</html>

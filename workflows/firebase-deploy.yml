@@ -2,23 +2,25 @@ name: Deploy to Firebase Hosting
 
 on:
   push:
-    branches: [ "main" ]
+    branches: ["main"]
 
 jobs:
   build_and_deploy:
     runs-on: ubuntu-latest
     steps:
-      # 1. Check out your repository code
-      - uses: actions/checkout@v3
-
-      # 2. Set up Node.js environment (required for Firebase CLI)
-      - name: Use Node.js
-        uses: actions/setup-node@v3
-        with:
-          node-version: '18'
-
-      # 3. Install Firebase CLI globally
-      - run: npm install -g firebase-tools
-
-      # 4. Deploy to Firebase using your secret token
-      - run: firebase deploy --project w haai-c388e --token ${{ secrets.FIREBASE_TOKEN }}
+    - name: Checkout
+      uses: actions/checkout@v3
+    
+    # Build Jekyll locally and commit _site directory
+    - name: Build Jekyll site
+      run: |
+        docker run --rm -v ${{ github.workspace }}:/srv/jekyll jekyll/jekyll:latest \
+          jekyll build --destination ./_site
+    
+    - name: Deploy to Firebase
+      uses: FirebaseExtended/action-hosting-deploy@v0
+      with:
+        repoToken: '${{ secrets.GITHUB_TOKEN }}'
+        firebaseServiceAccount: '${{ secrets.FIREBASE_SERVICE_ACCOUNT }}' # Alternative to token
+        projectId: whaai-c388e
+        channelId: live

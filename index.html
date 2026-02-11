@@ -1,52 +1,150 @@
 <!DOCTYPE html>
 <html>
 <head>
-    <title>My Website</title>
+    <title>My Website - Login with GitHub & Google</title>
     <!-- Firebase SDK -->
-    <script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-app.js"></script>
-    <script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-firestore.js"></script>
-    <script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-auth.js"></script>
-    <!-- Your config -->
+    <script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-app-compat.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-auth-compat.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-firestore-compat.js"></script>
+    
+    <style>
+        body { font-family: Arial, sans-serif; max-width: 600px; margin: 50px auto; padding: 20px; }
+        button { padding: 10px 20px; margin: 10px; font-size: 16px; cursor: pointer; }
+        .login-btn { background: #4285f4; color: white; border: none; border-radius: 4px; }
+        .github-btn { background: #333; color: white; border: none; border-radius: 4px; }
+        .logout-btn { background: #dc3545; color: white; border: none; border-radius: 4px; }
+        .user-info { background: #f8f9fa; padding: 20px; border-radius: 8px; margin: 20px 0; }
+        .hidden { display: none; }
+    </style>
+</head>
+<body>
+    <h1>🔐 Firebase Authentication</h1>
+    <p>Login with your GitHub or Google account</p>
+    
+    <!-- Login Buttons -->
+    <div id="login-section">
+        <button id="googleLogin" class="login-btn">Sign in with Google</button>
+        <button id="githubLogin" class="github-btn">Sign in with GitHub</button>
+    </div>
+    
+    <!-- User Info (shown after login) -->
+    <div id="user-info" class="user-info hidden">
+        <h2>Welcome, <span id="user-name"></span>!</h2>
+        <p><strong>Email:</strong> <span id="user-email"></span></p>
+        <p><strong>Provider:</strong> <span id="user-provider"></span></p>
+        <p><img id="user-photo" src="" alt="Profile" style="width: 80px; border-radius: 50%;"></p>
+        <button id="logout" class="logout-btn">Logout</button>
+    </div>
+    
     <script>
+        // PASTE YOUR FIREBASE CONFIG HERE
         const firebaseConfig = {
-            apiKey: "YOUR_API_KEY",
+            apiKey: "AIzaSyB...", // Replace with your API Key
             authDomain: "whaai-c388e.firebaseapp.com",
             projectId: "whaai-c388e",
             storageBucket: "whaai-c388e.appspot.com",
-            messagingSenderId: "YOUR_SENDER_ID",
-            appId: "YOUR_APP_ID"
+            messagingSenderId: "123456789", // Replace with yours
+            appId: "1:123456789:web:abc123def456" // Replace with yours
         };
         
         // Initialize Firebase
         firebase.initializeApp(firebaseConfig);
-        const db = firebase.firestore();
         const auth = firebase.auth();
-    </script>
-</head>
-<body>
-    <h1>My Website with Firebase Database</h1>
-    
-    <script>
-        // Example: Save data to Firestore
-        async function saveData() {
-            await db.collection("users").add({
-                name: "John",
-                email: "john@example.com",
-                timestamp: firebase.firestore.FieldValue.serverTimestamp()
-            });
-            alert("Data saved to Firebase!");
+        const db = firebase.firestore();
+        
+        // DOM Elements
+        const googleLoginBtn = document.getElementById('googleLogin');
+        const githubLoginBtn = document.getElementById('githubLogin');
+        const logoutBtn = document.getElementById('logout');
+        const loginSection = document.getElementById('login-section');
+        const userInfoSection = document.getElementById('user-info');
+        const userName = document.getElementById('user-name');
+        const userEmail = document.getElementById('user-email');
+        const userProvider = document.getElementById('user-provider');
+        const userPhoto = document.getElementById('user-photo');
+        
+        // Google Login
+        googleLoginBtn.addEventListener('click', () => {
+            const provider = new firebase.auth.GoogleAuthProvider();
+            provider.addScope('email');
+            provider.addScope('profile');
+            
+            auth.signInWithPopup(provider)
+                .then((result) => {
+                    console.log('Google login successful:', result.user);
+                    updateUI(result.user);
+                    saveUserToFirestore(result.user);
+                })
+                .catch((error) => {
+                    console.error('Google login error:', error);
+                    alert('Login failed: ' + error.message);
+                });
+        });
+        
+        // GitHub Login
+        githubLoginBtn.addEventListener('click', () => {
+            const provider = new firebase.auth.GithubAuthProvider();
+            provider.addScope('user:email');
+            
+            auth.signInWithPopup(provider)
+                .then((result) => {
+                    console.log('GitHub login successful:', result.user);
+                    updateUI(result.user);
+                    saveUserToFirestore(result.user);
+                })
+                .catch((error) => {
+                    console.error('GitHub login error:', error);
+                    alert('Login failed: ' + error.message);
+                });
+        });
+        
+        // Logout
+        logoutBtn.addEventListener('click', () => {
+            auth.signOut()
+                .then(() => {
+                    loginSection.classList.remove('hidden');
+                    userInfoSection.classList.add('hidden');
+                })
+                .catch((error) => {
+                    console.error('Logout error:', error);
+                });
+        });
+        
+        // Save user to Firestore
+        function saveUserToFirestore(user) {
+            db.collection('users').doc(user.uid).set({
+                uid: user.uid,
+                email: user.email,
+                displayName: user.displayName,
+                photoURL: user.photoURL,
+                provider: user.providerData[0].providerId,
+                lastLogin: firebase.firestore.FieldValue.serverTimestamp(),
+                createdAt: firebase.firestore.FieldValue.serverTimestamp()
+            }, { merge: true })
+            .then(() => console.log('User saved to Firestore'))
+            .catch(error => console.error('Error saving user:', error));
         }
         
-        // Example: Read data from Firestore
-        async function loadData() {
-            const snapshot = await db.collection("users").get();
-            snapshot.forEach(doc => {
-                console.log(doc.data());
-            });
+        // Update UI after login
+        function updateUI(user) {
+            userName.textContent = user.displayName || user.email;
+            userEmail.textContent = user.email;
+            userProvider.textContent = user.providerData[0].providerId;
+            userPhoto.src = user.photoURL || 'https://via.placeholder.com/80';
+            
+            loginSection.classList.add('hidden');
+            userInfoSection.classList.remove('hidden');
         }
+        
+        // Check auth state on page load
+        auth.onAuthStateChanged((user) => {
+            if (user) {
+                updateUI(user);
+            } else {
+                loginSection.classList.remove('hidden');
+                userInfoSection.classList.add('hidden');
+            }
+        });
     </script>
-    
-    <button onclick="saveData()">Save to Firebase</button>
-    <button onclick="loadData()">Load from Firebase</button>
 </body>
 </html>

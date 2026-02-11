@@ -1,1 +1,52 @@
-h1
+<!DOCTYPE html>
+<html>
+<head>
+    <title>My Website</title>
+    <!-- Firebase SDK -->
+    <script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-app.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-firestore.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-auth.js"></script>
+    <!-- Your config -->
+    <script>
+        const firebaseConfig = {
+            apiKey: "YOUR_API_KEY",
+            authDomain: "whaai-c388e.firebaseapp.com",
+            projectId: "whaai-c388e",
+            storageBucket: "whaai-c388e.appspot.com",
+            messagingSenderId: "YOUR_SENDER_ID",
+            appId: "YOUR_APP_ID"
+        };
+        
+        // Initialize Firebase
+        firebase.initializeApp(firebaseConfig);
+        const db = firebase.firestore();
+        const auth = firebase.auth();
+    </script>
+</head>
+<body>
+    <h1>My Website with Firebase Database</h1>
+    
+    <script>
+        // Example: Save data to Firestore
+        async function saveData() {
+            await db.collection("users").add({
+                name: "John",
+                email: "john@example.com",
+                timestamp: firebase.firestore.FieldValue.serverTimestamp()
+            });
+            alert("Data saved to Firebase!");
+        }
+        
+        // Example: Read data from Firestore
+        async function loadData() {
+            const snapshot = await db.collection("users").get();
+            snapshot.forEach(doc => {
+                console.log(doc.data());
+            });
+        }
+    </script>
+    
+    <button onclick="saveData()">Save to Firebase</button>
+    <button onclick="loadData()">Load from Firebase</button>
+</body>
+</html>

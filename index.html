@@ -3,25 +3,20 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=yes">
-    <title>Zakhourani - Master English with AI</title>
+    <title>Zakhourani - English Platform</title>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <style>
-        /* ===== ZAKHOURANI MAIN STYLES ===== */
-        * { margin: 0; padding: 0; box-sizing: border-box; font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; }
-        
+        /* ===== Your existing Zakhourani styles here ===== */
+        * { margin: 0; padding: 0; box-sizing: border-box; font-family: 'Segoe UI', sans-serif; }
         :root {
             --primary: #2c3e50;
             --secondary: #3498db;
             --accent: #e74c3c;
             --light: #ecf0f1;
-            --dark: #2c3e50;
         }
-        
         body { background: linear-gradient(135deg, #f5f7fa 0%, #c3cfe2 100%); min-height: 100vh; }
         
-        /* Header */
         header { background: white; box-shadow: 0 4px 20px rgba(0,0,0,0.1); position: sticky; top: 0; z-index: 1000; }
-        
         .header-top {
             background: var(--primary);
             color: white;
@@ -30,32 +25,19 @@
             justify-content: space-between;
             align-items: center;
         }
-        
         .logo { display: flex; align-items: center; gap: 15px; }
         .logo h1 { font-size: 28px; font-weight: 700; color: white; }
         
         .auth-buttons { display: flex; gap: 10px; }
-        .auth-btn { padding: 8px 20px; border-radius: 25px; font-weight: 600; cursor: pointer; transition: 0.3s; text-decoration: none; display: inline-block; }
+        .auth-btn { padding: 8px 20px; border-radius: 25px; font-weight: 600; text-decoration: none; display: inline-block; }
         .login-btn { background: transparent; color: white; border: 2px solid white; }
-        .login-btn:hover { background: white; color: var(--primary); }
         .signup-btn { background: var(--secondary); color: white; border: 2px solid var(--secondary); }
-        .signup-btn:hover { background: #2980b9; border-color: #2980b9; }
         
-        .user-menu { display: flex; align-items: center; gap: 15px; color: white; }
-        .user-avatar { width: 35px; height: 35px; border-radius: 50%; object-fit: cover; border: 2px solid white; }
-        .user-name { font-size: 14px; font-weight: 600; }
-        .logout-btn { background: var(--accent); color: white; border: none; padding: 8px 16px; border-radius: 20px; cursor: pointer; text-decoration: none; font-size: 14px; display: flex; align-items: center; gap: 5px; }
-        .logout-btn:hover { background: #c0392b; }
+        nav { padding: 0 40px; background: white; }
+        .nav-links { display: flex; list-style: none; gap: 20px; padding: 15px 0; justify-content: center; }
+        .nav-links a { text-decoration: none; color: var(--dark); font-weight: 600; padding: 8px 16px; }
+        .nav-links a.active { background: var(--secondary); color: white; border-radius: 8px; }
         
-        /* Navigation */
-        nav { padding: 0 40px; background: white; border-bottom: 1px solid #eee; }
-        .nav-container { display: flex; justify-content: space-between; align-items: center; padding: 15px 0; }
-        .nav-links { display: flex; list-style: none; gap: 20px; }
-        .nav-links a { text-decoration: none; color: var(--dark); font-weight: 600; font-size: 16px; padding: 8px 16px; border-radius: 8px; transition: 0.3s; display: flex; align-items: center; gap: 6px; }
-        .nav-links a:hover { background: var(--light); color: var(--secondary); }
-        .nav-links a.active { background: var(--secondary); color: white; }
-        
-        /* Hero Section */
         .hero {
             background: linear-gradient(135deg, var(--primary) 0%, #34495e 100%);
             color: white;
@@ -65,18 +47,14 @@
             max-width: 1200px;
             text-align: center;
         }
-        
         .hero h2 { font-size: 48px; margin-bottom: 20px; }
-        .hero p { font-size: 20px; margin-bottom: 30px; max-width: 800px; margin-left: auto; margin-right: auto; line-height: 1.6; }
+        .hero p { font-size: 20px; max-width: 800px; margin: 0 auto; line-height: 1.6; }
         
         .cta-buttons { display: flex; gap: 20px; justify-content: center; margin-top: 40px; }
-        .cta-btn { padding: 15px 40px; border-radius: 50px; font-size: 18px; font-weight: 600; text-decoration: none; transition: 0.3s; }
-        .cta-primary { background: var(--secondary); color: white; border: 2px solid var(--secondary); }
-        .cta-primary:hover { background: #2980b9; transform: translateY(-3px); box-shadow: 0 10px 20px rgba(52, 152, 219, 0.3); }
+        .cta-btn { padding: 15px 40px; border-radius: 50px; font-size: 18px; font-weight: 600; text-decoration: none; }
+        .cta-primary { background: var(--secondary); color: white; }
         .cta-secondary { background: transparent; color: white; border: 2px solid white; }
-        .cta-secondary:hover { background: white; color: var(--primary); transform: translateY(-3px); }
         
-        /* Services */
         .services-grid {
             display: grid;
             grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
@@ -85,22 +63,15 @@
             margin: 60px auto;
             padding: 0 20px;
         }
-        
         .service-card {
             background: white;
             border-radius: 15px;
             padding: 40px;
             text-align: center;
             box-shadow: 0 10px 30px rgba(0,0,0,0.1);
-            transition: 0.3s;
         }
-        
-        .service-card:hover { transform: translateY(-10px); box-shadow: 0 20px 40px rgba(52, 152, 219, 0.2); }
         .service-icon { font-size: 48px; color: var(--secondary); margin-bottom: 20px; }
-        .service-card h3 { font-size: 24px; margin-bottom: 15px; color: var(--dark); }
-        .service-card p { color: #666; line-height: 1.6; }
         
-        /* Footer */
         footer {
             background: var(--primary);
             color: white;
@@ -108,19 +79,16 @@
             margin-top: 60px;
             text-align: center;
         }
-        
         .footer-links { list-style: none; display: flex; justify-content: center; gap: 30px; margin: 20px 0; }
         .footer-links a { color: white; text-decoration: none; }
-        .footer-links a:hover { color: var(--secondary); }
         
-        /* ===== CHAT WIDGET - PRODUCTION VERSION ===== */
-        /* Clean, no debug, no test buttons, only icon and form */
+        /* ===== CHAT WIDGET - FIREBASE REAL-TIME ===== */
         #chatWidget {
             position: fixed;
             bottom: 20px;
             right: 20px;
             z-index: 10000;
-            font-family: 'Segoe UI', Arial, sans-serif;
+            font-family: 'Segoe UI', sans-serif;
         }
         
         #chatIcon {
@@ -133,26 +101,21 @@
             justify-content: center;
             cursor: pointer;
             box-shadow: 0 6px 16px rgba(0,0,0,0.2);
-            transition: transform 0.2s, background 0.2s;
+            transition: transform 0.2s;
         }
-        #chatIcon:hover { 
-            transform: scale(1.1); 
-            background: #0069d9;
-        }
-        #chatIcon:active { transform: scale(0.95); }
+        #chatIcon:hover { transform: scale(1.1); }
         
         #chatBox {
             display: none;
             position: absolute;
             bottom: 80px;
             right: 0;
-            width: 320px;
+            width: 350px;
             background: white;
             border-radius: 16px;
             box-shadow: 0 12px 32px rgba(0,0,0,0.25);
             overflow: hidden;
-            animation: slideIn 0.25s ease;
-            border: 1px solid rgba(255,255,255,0.1);
+            animation: slideIn 0.3s ease;
         }
         
         @keyframes slideIn {
@@ -160,7 +123,7 @@
             to { opacity: 1; transform: translateY(0); }
         }
         
-        #chatBox .chat-header {
+        .chat-header {
             background: #007bff;
             color: white;
             padding: 16px 18px;
@@ -168,29 +131,10 @@
             justify-content: space-between;
             align-items: center;
         }
-        #chatBox .chat-header span {
-            font-weight: 600;
-            font-size: 16px;
-            display: flex;
-            align-items: center;
-            gap: 8px;
-        }
-        #closeChat {
-            cursor: pointer;
-            font-size: 26px;
-            line-height: 1;
-            padding: 0 6px;
-            border-radius: 50%;
-            transition: background 0.2s;
-        }
-        #closeChat:hover {
-            background: rgba(255,255,255,0.2);
-        }
+        .chat-header span { font-weight: 600; display: flex; align-items: center; gap: 8px; }
+        #closeChat { cursor: pointer; font-size: 26px; padding: 0 6px; }
         
-        #chatBox .chat-body {
-            padding: 20px;
-            background: #fefefe;
-        }
+        .chat-body { padding: 20px; }
         
         #messageForm input,
         #messageForm textarea {
@@ -199,78 +143,43 @@
             margin-bottom: 14px;
             border: 1px solid #e0e0e0;
             border-radius: 12px;
-            box-sizing: border-box;
             font-size: 15px;
-            transition: 0.2s;
-            font-family: inherit;
         }
-        #messageForm input:focus,
-        #messageForm textarea:focus {
-            border-color: #007bff;
-            outline: none;
-            box-shadow: 0 0 0 3px rgba(0,123,255,0.1);
-        }
-        
         #messageForm textarea {
             resize: vertical;
             min-height: 100px;
         }
-        
         #messageForm button {
             width: 100%;
-            padding: 14px 12px;
+            padding: 14px;
             background: #28a745;
             color: white;
             border: none;
             border-radius: 50px;
-            cursor: pointer;
             font-size: 16px;
             font-weight: 600;
             display: flex;
             align-items: center;
             justify-content: center;
             gap: 8px;
-            transition: background 0.2s, transform 0.1s;
-            box-shadow: 0 4px 12px rgba(40,167,69,0.3);
+            cursor: pointer;
+            transition: 0.2s;
         }
-        #messageForm button:hover {
-            background: #218838;
-        }
-        #messageForm button:active {
-            transform: scale(0.98);
-        }
+        #messageForm button:hover { background: #218838; }
         
         #formFeedback {
             margin-top: 15px;
             font-size: 14px;
-            min-height: 24px;
             text-align: center;
             font-weight: 500;
             color: #28a745;
         }
         
-        /* Mobile Optimizations */
-        @media (max-width: 1024px) {
-            .nav-container { flex-direction: column; gap: 15px; }
-            .nav-links { flex-wrap: wrap; justify-content: center; }
-        }
-        
-        @media (max-width: 768px) {
-            .header-top, nav { padding: 10px 20px; }
-            .logo h1 { font-size: 22px; }
-            .nav-links { flex-direction: column; gap: 10px; text-align: center; }
-            .hero { padding: 40px 20px; margin: 20px; }
-            .hero h2 { font-size: 32px; }
-            .cta-buttons { flex-direction: column; align-items: center; gap: 15px; }
-            .footer-links { flex-direction: column; gap: 10px; }
-            .user-menu span { display: none; }
-            .user-menu { gap: 8px; }
-        }
-        
         @media (max-width: 480px) {
-            #chatWidget { bottom: 16px; right: 16px; }
             #chatBox { width: 90vw; right: 0; bottom: 75px; }
             #chatIcon { width: 56px; height: 56px; }
+            .hero { padding: 40px 20px; }
+            .hero h2 { font-size: 32px; }
         }
     </style>
 </head>
@@ -282,49 +191,33 @@
                 <i class="fas fa-graduation-cap" style="font-size: 32px; color: #3498db;"></i>
                 <h1>Zakhourani</h1>
             </div>
-            
             <div class="auth-buttons" id="authButtons">
-                <a href="login.html" class="auth-btn login-btn">
-                    <i class="fas fa-sign-in-alt"></i> Login
-                </a>
-                <a href="signup.html" class="auth-btn signup-btn">
-                    <i class="fas fa-user-plus"></i> Sign Up
-                </a>
+                <a href="login.html" class="auth-btn login-btn"><i class="fas fa-sign-in-alt"></i> Login</a>
+                <a href="signup.html" class="auth-btn signup-btn"><i class="fas fa-user-plus"></i> Sign Up</a>
             </div>
         </div>
-        
         <nav>
-            <div class="nav-container">
-                <ul class="nav-links">
-                    <li><a href="index.html" class="active"><i class="fas fa-home"></i> Home</a></li>
-                    <li><a href="AI.html"><i class="fas fa-robot"></i> AI</a></li>
-                    <li><a href="di.html"><i class="fas fa-book"></i> Dictionary</a></li>
-                    <li><a href="products.html"><i class="fas fa-box"></i> Products</a></li>
-                    <li><a href="Drwaleed.html"><i class="fas fa-user-md"></i> Dr. Waleed</a></li>
-                    <li><a href="aboutus.html"><i class="fas fa-info-circle"></i> About Us</a></li>
-                    <li><a href="profile.html"><i class="fas fa-user-circle"></i> Profile</a></li>
-                    <li><a href="chat.html"><i class="fas fa-comment-dots"></i> Admin</a></li>
-                </ul>
-            </div>
+            <ul class="nav-links">
+                <li><a href="index.html" class="active"><i class="fas fa-home"></i> Home</a></li>
+                <li><a href="#"><i class="fas fa-robot"></i> AI</a></li>
+                <li><a href="#"><i class="fas fa-book"></i> Dictionary</a></li>
+                <li><a href="#"><i class="fas fa-user-md"></i> Dr. Waleed</a></li>
+                <li><a href="#"><i class="fas fa-info-circle"></i> About</a></li>
+            </ul>
         </nav>
     </header>
 
-    <!-- ===== HERO SECTION ===== -->
+    <!-- ===== HERO ===== -->
     <div class="hero">
         <h2>Welcome to Zakhourani</h2>
         <p>Founded by Dr. Waleed Hussien Zakhourani. Master English with our AI-powered platform featuring IELTS, TOEFL preparation, smart dictionary, and personalized learning.</p>
-        
         <div class="cta-buttons">
-            <a href="signup.html" class="cta-btn cta-primary">
-                <i class="fas fa-user-plus"></i> Get Started Free
-            </a>
-            <a href="login.html" class="cta-btn cta-secondary">
-                <i class="fas fa-sign-in-alt"></i> Existing User? Login
-            </a>
+            <a href="signup.html" class="cta-btn cta-primary"><i class="fas fa-user-plus"></i> Get Started Free</a>
+            <a href="login.html" class="cta-btn cta-secondary"><i class="fas fa-sign-in-alt"></i> Existing User? Login</a>
         </div>
     </div>
 
-    <!-- ===== SERVICES SECTION ===== -->
+    <!-- ===== SERVICES ===== -->
     <div class="services-grid">
         <div class="service-card">
             <div class="service-icon"><i class="fas fa-robot"></i></div>
@@ -357,28 +250,21 @@
         <p>English language learning platform by Dr. Waleed Hussien Zakhourani</p>
         <ul class="footer-links">
             <li><a href="index.html">Home</a></li>
-            <li><a href="AI.html">AI</a></li>
-            <li><a href="di.html">Dictionary</a></li>
-            <li><a href="products.html">Products</a></li>
-            <li><a href="Drwaleed.html">Dr. Waleed</a></li>
-            <li><a href="aboutus.html">About Us</a></li>
-            <li><a href="profile.html">Profile</a></li>
-            <li><a href="chat.html">Admin</a></li>
+            <li><a href="#">AI</a></li>
+            <li><a href="#">Dictionary</a></li>
+            <li><a href="#">Dr. Waleed</a></li>
+            <li><a href="#">About</a></li>
         </ul>
         <p style="margin-top: 30px; color: #ccc;">© 2024 Zakhourani. All rights reserved.</p>
     </footer>
 
-    <!-- ===== CHAT WIDGET - PRODUCTION READY ===== -->
-    <!-- No debug, no test buttons, clean user experience -->
+    <!-- ===== CHAT WIDGET - FIREBASE REAL-TIME ===== -->
     <div id="chatWidget">
-        <!-- Chat Icon -->
         <div id="chatIcon">
             <svg xmlns="http://www.w3.org/2000/svg" width="30" height="30" viewBox="0 0 24 24" fill="white">
                 <path d="M20 2H4c-1.1 0-2 .9-2 2v18l4-4h14c1.1 0 2-.9 2-2V4c0-1.1-.9-2-2-2z"/>
             </svg>
         </div>
-
-        <!-- Chat Box (Hidden by default) -->
         <div id="chatBox">
             <div class="chat-header">
                 <span><i class="fas fa-headset"></i> Chat Support</span>
@@ -386,7 +272,8 @@
             </div>
             <div class="chat-body">
                 <form id="messageForm">
-                    <input type="text" id="customerName" placeholder="Your name" required autocomplete="name">
+                    <input type="text" id="customerName" placeholder="Your name" required>
+                    <input type="email" id="customerEmail" placeholder="Your email (optional)">
                     <textarea id="customerMessage" placeholder="Your message..." rows="4" required></textarea>
                     <button type="submit">
                         <i class="fas fa-paper-plane"></i> Send Message
@@ -399,12 +286,12 @@
 
     <!-- ===== FIREBASE SDK ===== -->
     <script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-app-compat.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-firestore-compat.js"></script>
     <script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-auth-compat.js"></script>
-    
-    <!-- ===== MAIN SCRIPT - PRODUCTION ===== -->
+
     <script>
         // ===========================================
-        // FIREBASE CONFIGURATION
+        // FIREBASE CONFIGURATION - YOUR EXISTING ONE
         // ===========================================
         const firebaseConfig = {
             apiKey: "AIzaSyAE8wf24HXrfmpMluaFOv1OHPrf_YFfqTQ",
@@ -412,143 +299,38 @@
             projectId: "whaai-c388e",
             storageBucket: "whaai-c388e.firebasestorage.app",
             messagingSenderId: "640598205524",
-            appId: "1:640598205524:web:c975f5e8b371b1043e39c1",
-            measurementId: "G-1MHE0JBZJR"
+            appId: "1:640598205524:web:c975f5e8b371b1043e39c1"
         };
 
         // Initialize Firebase
-        if (!firebase.apps.length) {
-            firebase.initializeApp(firebaseConfig);
-        }
+        firebase.initializeApp(firebaseConfig);
+        const db = firebase.firestore();
         const auth = firebase.auth();
 
-        // Update UI based on auth state
-        function updateAuthUI(user) {
-            const authButtons = document.getElementById('authButtons');
-            if (!authButtons) return;
-            
-            if (user) {
-                const displayName = user.displayName || user.email || 'User';
-                const nameForAvatar = encodeURIComponent(displayName);
-                authButtons.innerHTML = `
-                    <div class="user-menu">
-                        <img src="${user.photoURL || `https://ui-avatars.com/api/?name=${nameForAvatar}&background=3498db&color=fff`}" 
-                             alt="Profile" class="user-avatar">
-                        <span class="user-name">${displayName.split('@')[0]}</span>
-                        <a href="logout.html" class="logout-btn">
-                            <i class="fas fa-sign-out-alt"></i> Logout
-                        </a>
-                    </div>
-                `;
-            } else {
-                authButtons.innerHTML = `
-                    <a href="login.html" class="auth-btn login-btn">
-                        <i class="fas fa-sign-in-alt"></i> Login
-                    </a>
-                    <a href="signup.html" class="auth-btn signup-btn">
-                        <i class="fas fa-user-plus"></i> Sign Up
-                    </a>
-                `;
-            }
-        }
-
-        // Listen for auth changes
-        auth.onAuthStateChanged((user) => {
-            updateAuthUI(user);
-            
-            // Auto-fill chat name if user is logged in
-            if (user) {
-                const nameInput = document.getElementById('customerName');
-                if (nameInput) {
-                    let displayName = user.displayName || user.email || 'User';
-                    if (displayName.includes('@')) displayName = displayName.split('@')[0];
-                    nameInput.value = displayName;
-                    nameInput.readOnly = true;
-                    nameInput.style.background = '#f8f9fa';
-                }
-            }
-        });
-
         // ===========================================
-        // CHAT WIDGET - PRODUCTION VERSION
-        // No debug, no test buttons, clean UX
+        // CHAT WIDGET - REAL-TIME FIREBASE
         // ===========================================
         (function() {
-            "use strict";
-            
-            const STORAGE_KEY = 'chat_messages';
-            
-            // Initialize storage
-            if (!localStorage.getItem(STORAGE_KEY)) {
-                localStorage.setItem(STORAGE_KEY, JSON.stringify([]));
-            }
-            
-            // DOM Elements
             const chatIcon = document.getElementById('chatIcon');
             const chatBox = document.getElementById('chatBox');
             const closeChat = document.getElementById('closeChat');
             const messageForm = document.getElementById('messageForm');
             const formFeedback = document.getElementById('formFeedback');
-            
-            // Guard
-            if (!chatIcon || !chatBox || !closeChat || !messageForm) return;
-            
+
             // Open chat
-            chatIcon.addEventListener('click', function() {
+            chatIcon.addEventListener('click', () => {
                 chatBox.style.display = 'block';
                 chatIcon.style.display = 'none';
             });
-            
+
             // Close chat
-            closeChat.addEventListener('click', function() {
+            closeChat.addEventListener('click', () => {
                 chatBox.style.display = 'none';
                 chatIcon.style.display = 'flex';
             });
-            
-            // Send message
-            messageForm.addEventListener('submit', function(e) {
-                e.preventDefault();
-                
-                const nameInput = document.getElementById('customerName');
-                const messageInput = document.getElementById('customerMessage');
-                
-                const name = nameInput.value.trim();
-                const message = messageInput.value.trim();
-                
-                if (name && message) {
-                    const newMessage = {
-                        id: Date.now(),
-                        name: name,
-                        message: message,
-                        timestamp: new Date().toLocaleString(),
-                        status: 'pending',
-                        read: false
-                    };
-                    
-                    try {
-                        const messages = JSON.parse(localStorage.getItem(STORAGE_KEY)) || [];
-                        messages.push(newMessage);
-                        localStorage.setItem(STORAGE_KEY, JSON.stringify(messages));
-                        
-                        // Show success feedback
-                        formFeedback.innerHTML = '<span style="color: #28a745;"><i class="fas fa-check-circle"></i> Message sent! We\'ll respond soon.</span>';
-                        
-                        // Clear message field
-                        messageInput.value = '';
-                        
-                        // Clear feedback after 3 seconds
-                        setTimeout(() => {
-                            formFeedback.innerHTML = '';
-                        }, 3000);
-                        
-                    } catch (error) {
-                        formFeedback.innerHTML = '<span style="color: #dc3545;"><i class="fas fa-exclamation-circle"></i> Error sending message</span>';
-                    }
-                }
-            });
-            
+
             // Click outside to close
-            document.addEventListener('click', function(e) {
+            document.addEventListener('click', (e) => {
                 if (chatBox.style.display === 'block' && 
                     !chatBox.contains(e.target) && 
                     !chatIcon.contains(e.target)) {
@@ -556,10 +338,82 @@
                     chatIcon.style.display = 'flex';
                 }
             });
-            
-            // Prevent closing when clicking inside
-            chatBox.addEventListener('click', function(e) {
-                e.stopPropagation();
+
+            // Send message to Firebase
+            messageForm.addEventListener('submit', async (e) => {
+                e.preventDefault();
+                
+                const name = document.getElementById('customerName').value.trim();
+                const email = document.getElementById('customerEmail').value.trim();
+                const message = document.getElementById('customerMessage').value.trim();
+
+                if (!name || !message) {
+                    formFeedback.innerHTML = '<span style="color: #dc3545;">Name and message are required</span>';
+                    return;
+                }
+
+                // Show sending state
+                const submitBtn = messageForm.querySelector('button[type="submit"]');
+                const originalText = submitBtn.innerHTML;
+                submitBtn.innerHTML = '<i class="fas fa-spinner fa-spin"></i> Sending...';
+                submitBtn.disabled = true;
+
+                try {
+                    // Generate a unique conversation ID based on email or name
+                    const conversationId = email || `guest_${Date.now()}`;
+                    
+                    // Save to Firestore
+                    await db.collection('chats').add({
+                        conversationId: conversationId,
+                        userName: name,
+                        userEmail: email || null,
+                        message: message,
+                        timestamp: firebase.firestore.FieldValue.serverTimestamp(),
+                        status: 'unread',
+                        type: 'user',
+                        replied: false,
+                        replyMessage: null,
+                        replyTime: null,
+                        repliedBy: null
+                    });
+
+                    // Success feedback
+                    formFeedback.innerHTML = '<span style="color: #28a745;"><i class="fas fa-check-circle"></i> Message sent! Admin will reply soon.</span>';
+                    
+                    // Clear message field only
+                    document.getElementById('customerMessage').value = '';
+                    
+                    setTimeout(() => {
+                        formFeedback.innerHTML = '';
+                    }, 4000);
+
+                } catch (error) {
+                    console.error('Error sending message:', error);
+                    formFeedback.innerHTML = '<span style="color: #dc3545;">Failed to send. Please try again.</span>';
+                }
+
+                // Restore button
+                submitBtn.innerHTML = originalText;
+                submitBtn.disabled = false;
+            });
+
+            // Auto-fill if user is logged in
+            auth.onAuthStateChanged((user) => {
+                if (user) {
+                    const nameInput = document.getElementById('customerName');
+                    const emailInput = document.getElementById('customerEmail');
+                    
+                    let displayName = user.displayName || user.email?.split('@')[0] || 'User';
+                    nameInput.value = displayName;
+                    nameInput.readOnly = true;
+                    nameInput.style.background = '#f8f9fa';
+                    
+                    if (user.email) {
+                        emailInput.value = user.email;
+                        emailInput.readOnly = true;
+                        emailInput.style.background = '#f8f9fa';
+                    }
+                }
             });
         })();
     </script>

@@ -1,543 +1,938 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Employee Chat Panel - Secure Access</title>
-  <style>
-    * {
-      margin: 0;
-      padding: 0;
-      box-sizing: border-box;
-    }
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Employee Chat Panel - Secure</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        }
 
-    body {
-      font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-      background: #f0f2f5;
-      padding: 20px;
-    }
+        body {
+            background: #f0f2f5;
+            min-height: 100vh;
+        }
 
-    .container {
-      max-width: 1200px;
-      margin: 0 auto;
-    }
+        .container {
+            max-width: 1400px;
+            margin: 0 auto;
+            padding: 20px;
+        }
 
-    /* PIN Login Styles */
-    .login-container {
-      display: flex;
-      justify-content: center;
-      align-items: center;
-      min-height: 100vh;
-      background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
-      margin: -20px;
-    }
+        /* PIN Login Screen */
+        .login-container {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            min-height: 100vh;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            z-index: 9999;
+        }
 
-    .login-box {
-      background: white;
-      padding: 40px;
-      border-radius: 16px;
-      box-shadow: 0 20px 60px rgba(0,0,0,0.3);
-      width: 100%;
-      max-width: 400px;
-      text-align: center;
-    }
+        .login-box {
+            background: white;
+            padding: 40px;
+            border-radius: 20px;
+            box-shadow: 0 20px 60px rgba(0,0,0,0.3);
+            width: 100%;
+            max-width: 400px;
+            text-align: center;
+        }
 
-    .lock-icon {
-      font-size: 48px;
-      color: #007bff;
-      margin-bottom: 20px;
-    }
+        .lock-icon {
+            font-size: 48px;
+            color: #007bff;
+            margin-bottom: 20px;
+        }
 
-    .login-box h2 {
-      color: #333;
-      margin-bottom: 10px;
-      font-size: 28px;
-    }
+        .login-box h2 {
+            color: #333;
+            margin-bottom: 10px;
+            font-size: 28px;
+        }
 
-    .login-box p {
-      color: #666;
-      margin-bottom: 30px;
-    }
+        .login-box p {
+            color: #666;
+            margin-bottom: 30px;
+        }
 
-    .pin-input {
-      width: 100%;
-      padding: 15px;
-      font-size: 24px;
-      text-align: center;
-      letter-spacing: 8px;
-      border: 2px solid #ddd;
-      border-radius: 8px;
-      margin-bottom: 20px;
-      font-weight: bold;
-    }
+        .pin-input {
+            width: 100%;
+            padding: 15px;
+            font-size: 24px;
+            text-align: center;
+            letter-spacing: 8px;
+            border: 2px solid #ddd;
+            border-radius: 12px;
+            margin-bottom: 20px;
+            font-weight: bold;
+        }
 
-    .pin-input:focus {
-      outline: none;
-      border-color: #007bff;
-      box-shadow: 0 0 0 3px rgba(0,123,255,0.1);
-    }
+        .pin-input:focus {
+            outline: none;
+            border-color: #007bff;
+            box-shadow: 0 0 0 3px rgba(0,123,255,0.1);
+        }
 
-    .pin-btn {
-      width: 100%;
-      padding: 15px;
-      background: #007bff;
-      color: white;
-      border: none;
-      border-radius: 8px;
-      font-size: 18px;
-      font-weight: bold;
-      cursor: pointer;
-      transition: background 0.3s;
-    }
+        .pin-btn {
+            width: 100%;
+            padding: 15px;
+            background: #007bff;
+            color: white;
+            border: none;
+            border-radius: 12px;
+            font-size: 18px;
+            font-weight: bold;
+            cursor: pointer;
+            transition: all 0.3s;
+        }
 
-    .pin-btn:hover {
-      background: #0056b3;
-    }
+        .pin-btn:hover {
+            background: #0056b3;
+            transform: translateY(-2px);
+        }
 
-    .pin-error {
-      color: #dc3545;
-      margin-top: 15px;
-      font-size: 14px;
-      min-height: 20px;
-    }
+        .pin-error {
+            color: #dc3545;
+            margin-top: 15px;
+            font-size: 14px;
+            min-height: 20px;
+        }
 
-    /* Main Panel Styles (Hidden by default) */
-    .main-panel {
-      display: none;
-    }
+        /* Main Panel */
+        .main-panel {
+            display: none;
+        }
 
-    .main-panel.visible {
-      display: block;
-    }
+        .main-panel.visible {
+            display: block;
+        }
 
-    header {
-      background: white;
-      padding: 25px;
-      border-radius: 12px;
-      margin-bottom: 25px;
-      box-shadow: 0 2px 8px rgba(0,0,0,0.1);
-    }
+        header {
+            background: white;
+            padding: 25px;
+            border-radius: 16px;
+            margin-bottom: 25px;
+            box-shadow: 0 2px 12px rgba(0,0,0,0.08);
+        }
 
-    h1 {
-      color: #1a1a1a;
-      font-size: 28px;
-    }
+        h1 {
+            color: #1a1a1a;
+            font-size: 28px;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
 
-    .stats {
-      color: #666;
-      margin-top: 8px;
-    }
+        .stats {
+            color: #666;
+            margin-top: 8px;
+            font-size: 16px;
+        }
 
-    .messages-grid {
-      display: grid;
-      grid-template-columns: repeat(auto-fill, minmax(350px, 1fr));
-      gap: 20px;
-    }
+        .debug-panel {
+            background: #e3f2fd;
+            border-left: 4px solid #2196f3;
+            padding: 15px 20px;
+            margin-top: 15px;
+            border-radius: 8px;
+            font-size: 14px;
+            line-height: 1.6;
+        }
 
-    .message-card {
-      background: white;
-      border-radius: 12px;
-      padding: 20px;
-      box-shadow: 0 2px 8px rgba(0,0,0,0.1);
-      transition: transform 0.2s;
-    }
+        .storage-info {
+            background: #fff3cd;
+            border-left: 4px solid #ffc107;
+            padding: 15px 20px;
+            margin-top: 15px;
+            border-radius: 8px;
+            font-size: 14px;
+        }
 
-    .message-card:hover {
-      transform: translateY(-2px);
-      box-shadow: 0 4px 12px rgba(0,0,0,0.15);
-    }
+        .messages-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(380px, 1fr));
+            gap: 25px;
+        }
 
-    .message-header {
-      display: flex;
-      justify-content: space-between;
-      align-items: center;
-      margin-bottom: 12px;
-      padding-bottom: 12px;
-      border-bottom: 1px solid #eee;
-    }
+        .message-card {
+            background: white;
+            border-radius: 16px;
+            padding: 20px;
+            box-shadow: 0 2px 12px rgba(0,0,0,0.08);
+            transition: all 0.2s;
+            border: 1px solid #eee;
+        }
 
-    .customer-name {
-      font-weight: bold;
-      color: #007bff;
-      font-size: 18px;
-    }
+        .message-card:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 8px 24px rgba(0,0,0,0.12);
+        }
 
-    .timestamp {
-      color: #999;
-      font-size: 12px;
-    }
+        .message-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 15px;
+            padding-bottom: 12px;
+            border-bottom: 2px solid #f0f2f5;
+        }
 
-    .message-text {
-      color: #333;
-      line-height: 1.5;
-      margin-bottom: 16px;
-      padding: 8px 0;
-      font-size: 15px;
-    }
+        .customer-name {
+            font-weight: bold;
+            color: #007bff;
+            font-size: 18px;
+        }
 
-    .status-badge {
-      display: inline-block;
-      padding: 4px 12px;
-      border-radius: 20px;
-      font-size: 12px;
-      font-weight: bold;
-      text-transform: uppercase;
-      margin-bottom: 12px;
-    }
+        .timestamp {
+            color: #999;
+            font-size: 12px;
+        }
 
-    .status-pending {
-      background: #fff3cd;
-      color: #856404;
-    }
+        .message-text {
+            color: #333;
+            line-height: 1.6;
+            margin-bottom: 16px;
+            padding: 15px;
+            background: #f8f9fa;
+            border-radius: 12px;
+            font-size: 15px;
+            border: 1px solid #e9ecef;
+        }
 
-    .status-answered {
-      background: #d4edda;
-      color: #155724;
-    }
+        .status-badge {
+            display: inline-block;
+            padding: 6px 16px;
+            border-radius: 30px;
+            font-size: 12px;
+            font-weight: bold;
+            text-transform: uppercase;
+            margin-bottom: 15px;
+        }
 
-    .answer-section {
-      background: #f8f9fa;
-      border-radius: 8px;
-      padding: 15px;
-      margin-top: 10px;
-    }
+        .status-pending {
+            background: #fff3cd;
+            color: #856404;
+        }
 
-    .answer-text {
-      color: #333;
-      margin-bottom: 8px;
-      font-style: italic;
-    }
+        .status-answered {
+            background: #d4edda;
+            color: #155724;
+        }
 
-    .answer-time {
-      color: #999;
-      font-size: 11px;
-    }
+        .answer-section {
+            background: #f8f9fa;
+            border-radius: 12px;
+            padding: 15px;
+            margin-top: 10px;
+            border: 1px solid #e9ecef;
+        }
 
-    textarea {
-      width: 100%;
-      padding: 12px;
-      border: 1px solid #ddd;
-      border-radius: 8px;
-      margin: 12px 0;
-      font-family: inherit;
-      resize: vertical;
-      min-height: 80px;
-    }
+        .answer-text {
+            color: #333;
+            margin-bottom: 8px;
+            font-style: italic;
+        }
 
-    textarea:focus {
-      outline: none;
-      border-color: #007bff;
-      box-shadow: 0 0 0 3px rgba(0,123,255,0.1);
-    }
+        .answer-time {
+            color: #999;
+            font-size: 11px;
+        }
 
-    .btn {
-      padding: 10px 20px;
-      border: none;
-      border-radius: 6px;
-      cursor: pointer;
-      font-weight: 600;
-      font-size: 14px;
-      transition: all 0.2s;
-    }
+        textarea {
+            width: 100%;
+            padding: 12px 15px;
+            border: 2px solid #e9ecef;
+            border-radius: 12px;
+            margin: 15px 0 12px;
+            font-family: inherit;
+            resize: vertical;
+            min-height: 100px;
+            font-size: 14px;
+        }
 
-    .btn-primary {
-      background: #007bff;
-      color: white;
-    }
+        textarea:focus {
+            outline: none;
+            border-color: #007bff;
+            box-shadow: 0 0 0 3px rgba(0,123,255,0.1);
+        }
 
-    .btn-primary:hover {
-      background: #0056b3;
-    }
+        .btn {
+            padding: 12px 24px;
+            border: none;
+            border-radius: 10px;
+            cursor: pointer;
+            font-weight: 600;
+            font-size: 14px;
+            transition: all 0.2s;
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+        }
 
-    .btn-logout {
-      background: #dc3545;
-      color: white;
-      margin-left: 10px;
-    }
+        .btn-primary {
+            background: #007bff;
+            color: white;
+        }
 
-    .btn-logout:hover {
-      background: #c82333;
-    }
+        .btn-primary:hover {
+            background: #0056b3;
+        }
 
-    .no-messages {
-      text-align: center;
-      padding: 60px;
-      background: white;
-      border-radius: 12px;
-      color: #666;
-    }
+        .btn-success {
+            background: #28a745;
+            color: white;
+        }
 
-    .refresh-btn {
-      position: fixed;
-      bottom: 30px;
-      right: 30px;
-      width: 50px;
-      height: 50px;
-      border-radius: 50%;
-      background: #007bff;
-      color: white;
-      border: none;
-      cursor: pointer;
-      box-shadow: 0 4px 12px rgba(0,123,255,0.3);
-      font-size: 24px;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      transition: transform 0.2s;
-    }
+        .btn-danger {
+            background: #dc3545;
+            color: white;
+        }
 
-    .refresh-btn:hover {
-      transform: rotate(180deg);
-      background: #0056b3;
-    }
+        .btn-danger:hover {
+            background: #c82333;
+        }
 
-    .logout-section {
-      display: flex;
-      justify-content: flex-end;
-      align-items: center;
-    }
-  </style>
+        .btn-warning {
+            background: #ffc107;
+            color: #333;
+        }
+
+        .btn-warning:hover {
+            background: #e0a800;
+        }
+
+        .btn-secondary {
+            background: #6c757d;
+            color: white;
+        }
+
+        .btn-secondary:hover {
+            background: #5a6268;
+        }
+
+        .no-messages {
+            text-align: center;
+            padding: 80px 40px;
+            background: white;
+            border-radius: 16px;
+            color: #666;
+            font-size: 18px;
+            grid-column: 1 / -1;
+        }
+
+        .refresh-btn {
+            position: fixed;
+            bottom: 30px;
+            right: 30px;
+            width: 56px;
+            height: 56px;
+            border-radius: 50%;
+            background: #007bff;
+            color: white;
+            border: none;
+            cursor: pointer;
+            box-shadow: 0 4px 16px rgba(0,123,255,0.4);
+            font-size: 24px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            transition: all 0.3s;
+            z-index: 100;
+        }
+
+        .refresh-btn:hover {
+            transform: rotate(180deg);
+            background: #0056b3;
+        }
+
+        .header-actions {
+            display: flex;
+            justify-content: space-between;
+            align-items: flex-start;
+        }
+
+        .user-info {
+            display: flex;
+            align-items: center;
+            gap: 15px;
+        }
+
+        .pin-badge {
+            background: #28a745;
+            color: white;
+            padding: 6px 14px;
+            border-radius: 30px;
+            font-size: 13px;
+            font-weight: 600;
+        }
+
+        .action-buttons {
+            margin-top: 20px;
+            display: flex;
+            gap: 12px;
+            flex-wrap: wrap;
+        }
+
+        @keyframes shake {
+            0%, 100% { transform: translateX(0); }
+            10%, 30%, 50%, 70%, 90% { transform: translateX(-5px); }
+            20%, 40%, 60%, 80% { transform: translateX(5px); }
+        }
+
+        .shake {
+            animation: shake 0.5s;
+        }
+
+        .success-message {
+            background: #d4edda;
+            color: #155724;
+            padding: 10px;
+            border-radius: 6px;
+            margin-top: 10px;
+            display: none;
+        }
+    </style>
 </head>
 <body>
-  <!-- PIN Login Screen -->
-  <div id="loginScreen" class="login-container">
-    <div class="login-box">
-      <div class="lock-icon">🔒</div>
-      <h2>Secure Access</h2>
-      <p>Enter PIN to access employee panel</p>
-      <input type="password" id="pinInput" class="pin-input" maxlength="8" placeholder="****" inputmode="numeric">
-      <button onclick="verifyPin()" class="pin-btn">Unlock Panel</button>
-      <div id="pinError" class="pin-error"></div>
-    </div>
-  </div>
-
-  <!-- Main Employee Panel (Hidden by default) -->
-  <div id="mainPanel" class="main-panel">
-    <div class="container">
-      <header>
-        <div style="display: flex; justify-content: space-between; align-items: center;">
-          <div>
-            <h1>📨 Customer Messages Panel</h1>
-            <div class="stats" id="stats">Loading messages...</div>
-          </div>
-          <div class="logout-section">
-            <span style="color: #28a745; margin-right: 15px;" id="accessBadge">✓ Secure Access</span>
-            <button onclick="logout()" class="btn btn-logout">Logout</button>
-          </div>
+    <!-- PIN Login Screen -->
+    <div id="loginScreen" class="login-container">
+        <div class="login-box">
+            <div class="lock-icon">🔒</div>
+            <h2>Secure Access</h2>
+            <p>Enter PIN to access employee panel</p>
+            <input type="password" id="pinInput" class="pin-input" maxlength="8" placeholder="********" inputmode="numeric" autofocus>
+            <button onclick="verifyPin()" class="pin-btn">
+                <i class="fas fa-unlock-alt"></i> Unlock Panel
+            </button>
+            <div id="pinError" class="pin-error"></div>
         </div>
-      </header>
-
-      <div id="messagesContainer" class="messages-grid">
-        <!-- Messages will be loaded here -->
-      </div>
     </div>
 
-    <button class="refresh-btn" onclick="loadMessages()" title="Refresh messages">↻</button>
-  </div>
+    <!-- Main Employee Panel -->
+    <div id="mainPanel" class="main-panel">
+        <div class="container">
+            <header>
+                <div class="header-actions">
+                    <div>
+                        <h1>
+                            <i class="fas fa-comments"></i> 
+                            Customer Messages Panel
+                        </h1>
+                        <div class="stats" id="stats">Loading messages...</div>
+                    </div>
+                    <div class="user-info">
+                        <span class="pin-badge">
+                            <i class="fas fa-check-circle"></i> PIN: 19961996
+                        </span>
+                        <button onclick="logout()" class="btn btn-danger">
+                            <i class="fas fa-sign-out-alt"></i> Logout
+                        </button>
+                    </div>
+                </div>
+                
+                <!-- Storage Debug Panel -->
+                <div id="debugPanel" class="debug-panel">
+                    <strong><i class="fas fa-info-circle"></i> Storage Debug:</strong> Checking localStorage...
+                </div>
+                
+                <!-- Storage Info Panel -->
+                <div id="storageInfo" class="storage-info">
+                    <strong><i class="fas fa-database"></i> Storage Status:</strong> Initializing...
+                </div>
+                
+                <!-- Action Buttons -->
+                <div class="action-buttons">
+                    <button onclick="forceRefresh()" class="btn btn-secondary">
+                        <i class="fas fa-sync-alt"></i> Refresh Now
+                    </button>
+                    <button onclick="testStorage()" class="btn btn-warning">
+                        <i class="fas fa-vial"></i> Test Storage
+                    </button>
+                    <button onclick="createTestMessage()" class="btn btn-success">
+                        <i class="fas fa-plus-circle"></i> Add Test Message
+                    </button>
+                    <button onclick="fixStorage()" class="btn btn-primary">
+                        <i class="fas fa-tools"></i> Fix Storage
+                    </button>
+                    <button onclick="clearAllMessages()" class="btn btn-danger">
+                        <i class="fas fa-trash-alt"></i> Clear All
+                    </button>
+                </div>
+                
+                <div id="actionFeedback" class="success-message"></div>
+            </header>
 
-  <script>
-    // CORRECT PIN - 19961996
-    const CORRECT_PIN = "19961996";
-    
-    // Check if already authenticated in this session
-    let isAuthenticated = sessionStorage.getItem('chatPanelAuth') === 'true';
-
-    // Initialize based on authentication status
-    function init() {
-      if (isAuthenticated) {
-        // Show main panel, hide login
-        document.getElementById('loginScreen').style.display = 'none';
-        document.getElementById('mainPanel').classList.add('visible');
-        loadMessages();
-        
-        // Start auto-refresh
-        setInterval(loadMessages, 10000);
-      } else {
-        // Show login screen
-        document.getElementById('loginScreen').style.display = 'flex';
-        document.getElementById('mainPanel').classList.remove('visible');
-        
-        // Clear any existing auth
-        sessionStorage.removeItem('chatPanelAuth');
-      }
-    }
-
-    // Verify PIN function
-    function verifyPin() {
-      const pinInput = document.getElementById('pinInput');
-      const pinError = document.getElementById('pinError');
-      const enteredPin = pinInput.value.trim();
-
-      if (enteredPin === CORRECT_PIN) {
-        // Correct PIN - Grant access
-        sessionStorage.setItem('chatPanelAuth', 'true');
-        isAuthenticated = true;
-        
-        // Hide login, show panel
-        document.getElementById('loginScreen').style.display = 'none';
-        document.getElementById('mainPanel').classList.add('visible');
-        
-        // Clear any error
-        pinError.textContent = '';
-        pinInput.value = '';
-        
-        // Load messages
-        loadMessages();
-        
-        // Start auto-refresh
-        setInterval(loadMessages, 10000);
-      } else {
-        // Wrong PIN - Show error
-        pinError.textContent = '❌ Incorrect PIN. Access denied.';
-        pinInput.value = '';
-        pinInput.focus();
-        
-        // Shake animation for error
-        document.querySelector('.login-box').style.animation = 'shake 0.5s';
-        setTimeout(() => {
-          document.querySelector('.login-box').style.animation = '';
-        }, 500);
-      }
-    }
-
-    // Logout function
-    function logout() {
-      // Clear authentication
-      sessionStorage.removeItem('chatPanelAuth');
-      isAuthenticated = false;
-      
-      // Show login screen, hide panel
-      document.getElementById('loginScreen').style.display = 'flex';
-      document.getElementById('mainPanel').classList.remove('visible');
-      
-      // Clear PIN input
-      document.getElementById('pinInput').value = '';
-    }
-
-    // Add shake animation
-    const style = document.createElement('style');
-    style.textContent = `
-      @keyframes shake {
-        0%, 100% { transform: translateX(0); }
-        10%, 30%, 50%, 70%, 90% { transform: translateX(-5px); }
-        20%, 40%, 60%, 80% { transform: translateX(5px); }
-      }
-    `;
-    document.head.appendChild(style);
-
-    // Load messages from localStorage
-    function loadMessages() {
-      if (!isAuthenticated) return;
-      
-      const messages = JSON.parse(localStorage.getItem('chatMessages')) || [];
-      const container = document.getElementById('messagesContainer');
-      const stats = document.getElementById('stats');
-      
-      const pendingCount = messages.filter(m => m.status === 'pending').length;
-      const answeredCount = messages.filter(m => m.status === 'answered').length;
-      
-      stats.innerHTML = `Pending: ${pendingCount} | Answered: ${answeredCount} | Total: ${messages.length}`;
-
-      if (messages.length === 0) {
-        container.innerHTML = '<div class="no-messages">✨ No messages yet. Your customers will appear here.</div>';
-        return;
-      }
-
-      // Sort by newest first and pending first
-      const sortedMessages = messages.sort((a, b) => {
-        if (a.status === 'pending' && b.status === 'answered') return -1;
-        if (a.status === 'answered' && b.status === 'pending') return 1;
-        return b.id - a.id;
-      });
-
-      let html = '';
-      sortedMessages.forEach(msg => {
-        const isPending = msg.status === 'pending';
-        
-        html += `
-          <div class="message-card" data-message-id="${msg.id}">
-            <div class="message-header">
-              <span class="customer-name">${escapeHtml(msg.name)}</span>
-              <span class="timestamp">${msg.timestamp}</span>
+            <!-- Messages Container -->
+            <div id="messagesContainer" class="messages-grid">
+                <!-- Messages will be loaded here -->
             </div>
-            
-            <div class="message-text">
-              ${escapeHtml(msg.message)}
-            </div>
-            
-            <span class="status-badge ${isPending ? 'status-pending' : 'status-answered'}">
-              ${msg.status}
-            </span>
-            
-            ${msg.answer ? `
-              <div class="answer-section">
-                <div class="answer-text">📝 ${escapeHtml(msg.answer)}</div>
-                <div class="answer-time">Answered: ${msg.answerTime}</div>
-              </div>
-            ` : ''}
-            
-            ${isPending ? `
-              <div style="margin-top: 15px;">
-                <textarea id="answer-${msg.id}" placeholder="Type your answer here..." rows="2"></textarea>
-                <button onclick="submitAnswer(${msg.id})" class="btn btn-primary" style="width: 100%;">
-                  Send Reply
-                </button>
-              </div>
-            ` : ''}
-          </div>
-        `;
-      });
+        </div>
 
-      container.innerHTML = html;
-    }
+        <!-- Floating Refresh Button -->
+        <button class="refresh-btn" onclick="forceRefresh()" title="Refresh messages">
+            <i class="fas fa-sync-alt"></i>
+        </button>
+    </div>
 
-    // Escape HTML to prevent XSS
-    function escapeHtml(unsafe) {
-      return unsafe
-        .replace(/&/g, "&amp;")
-        .replace(/</g, "&lt;")
-        .replace(/>/g, "&gt;")
-        .replace(/"/g, "&quot;")
-        .replace(/'/g, "&#039;");
-    }
-
-    // Submit answer to a message
-    function submitAnswer(messageId) {
-      if (!isAuthenticated) {
-        logout();
-        return;
-      }
-      
-      const answerTextarea = document.getElementById(`answer-${messageId}`);
-      const answer = answerTextarea.value.trim();
-      
-      if (!answer) {
-        alert('Please type an answer before sending.');
-        return;
-      }
-
-      const messages = JSON.parse(localStorage.getItem('chatMessages')) || [];
-      const messageIndex = messages.findIndex(m => m.id === messageId);
-
-      if (messageIndex !== -1) {
-        messages[messageIndex].status = 'answered';
-        messages[messageIndex].answer = answer;
-        messages[messageIndex].answerTime = new Date().toLocaleString();
+    <script>
+        // ===========================================
+        // EMPLOYEE PANEL - FULLY FIXED VERSION
+        // PIN: 19961996
+        // Storage Key: chat_messages (MUST MATCH WIDGET)
+        // ===========================================
         
-        localStorage.setItem('chatMessages', JSON.stringify(messages));
-        loadMessages(); // Reload the display
-      }
-    }
-
-    // Allow Enter key to submit PIN
-    document.addEventListener('keypress', function(e) {
-      if (e.key === 'Enter' && document.getElementById('loginScreen').style.display !== 'none') {
-        verifyPin();
-      }
-    });
-
-    // Initialize on page load
-    window.onload = init;
-  </script>
+        "use strict";
+        
+        // CONFIGURATION - MUST MATCH WIDGET
+        const CORRECT_PIN = "19961996";
+        const STORAGE_KEY = 'chat_messages'; // IMPORTANT: This MUST match the widget key
+        
+        // State
+        let isAuthenticated = sessionStorage.getItem('chatPanelAuth') === 'true';
+        let refreshInterval = null;
+        
+        // ===== INITIALIZATION =====
+        window.onload = function() {
+            init();
+        };
+        
+        function init() {
+            if (isAuthenticated) {
+                showMainPanel();
+            } else {
+                showLoginScreen();
+            }
+        }
+        
+        // ===== LOGIN FUNCTIONS =====
+        function showMainPanel() {
+            document.getElementById('loginScreen').style.display = 'none';
+            document.getElementById('mainPanel').classList.add('visible');
+            
+            // Clear any existing interval
+            if (refreshInterval) clearInterval(refreshInterval);
+            
+            // Load messages immediately
+            loadMessages();
+            
+            // Auto-refresh every 2 seconds for real-time updates
+            refreshInterval = setInterval(loadMessages, 2000);
+        }
+        
+        function showLoginScreen() {
+            document.getElementById('loginScreen').style.display = 'flex';
+            document.getElementById('mainPanel').classList.remove('visible');
+            sessionStorage.removeItem('chatPanelAuth');
+            if (refreshInterval) {
+                clearInterval(refreshInterval);
+                refreshInterval = null;
+            }
+        }
+        
+        // ===== PIN VERIFICATION =====
+        function verifyPin() {
+            const pinInput = document.getElementById('pinInput');
+            const pinError = document.getElementById('pinError');
+            const enteredPin = pinInput.value.trim();
+            
+            if (enteredPin === CORRECT_PIN) {
+                // Grant access
+                sessionStorage.setItem('chatPanelAuth', 'true');
+                isAuthenticated = true;
+                showMainPanel();
+                pinError.textContent = '';
+                pinInput.value = '';
+            } else {
+                // Show error
+                pinError.textContent = '❌ Incorrect PIN. Access denied.';
+                pinInput.value = '';
+                pinInput.focus();
+                
+                // Shake animation
+                document.querySelector('.login-box').classList.add('shake');
+                setTimeout(() => {
+                    document.querySelector('.login-box').classList.remove('shake');
+                }, 500);
+            }
+        }
+        
+        // ===== LOGOUT =====
+        function logout() {
+            sessionStorage.removeItem('chatPanelAuth');
+            isAuthenticated = false;
+            showLoginScreen();
+        }
+        
+        // ===== MESSAGE MANAGEMENT =====
+        function loadMessages() {
+            if (!isAuthenticated) return;
+            
+            try {
+                // Get messages from localStorage
+                let messages = [];
+                const storedData = localStorage.getItem(STORAGE_KEY);
+                
+                // Debug logging
+                console.log('Loading messages. Key:', STORAGE_KEY);
+                console.log('Raw storage data:', storedData);
+                
+                if (storedData) {
+                    messages = JSON.parse(storedData);
+                    if (!Array.isArray(messages)) {
+                        console.warn('Storage data is not an array, resetting');
+                        messages = [];
+                        localStorage.setItem(STORAGE_KEY, JSON.stringify([]));
+                    }
+                } else {
+                    console.log('No data found, initializing empty array');
+                    localStorage.setItem(STORAGE_KEY, JSON.stringify([]));
+                }
+                
+                // Update debug panels
+                updateDebugInfo(messages);
+                updateStorageInfo(messages);
+                
+                // Update stats
+                updateStats(messages);
+                
+                // Display messages
+                displayMessages(messages);
+                
+            } catch (error) {
+                console.error('Error loading messages:', error);
+                document.getElementById('debugPanel').innerHTML = `
+                    <strong style="color: #dc3545;"><i class="fas fa-exclamation-triangle"></i> Error:</strong> 
+                    ${error.message}<br>
+                    <small>Click "Fix Storage" to reset.</small>
+                `;
+            }
+        }
+        
+        function updateDebugInfo(messages) {
+            const debugEl = document.getElementById('debugPanel');
+            debugEl.innerHTML = `
+                <strong><i class="fas fa-info-circle"></i> Storage Debug:</strong><br>
+                • Storage Key: <code style="background: #dee2e6; padding: 2px 6px; border-radius: 4px;">${STORAGE_KEY}</code><br>
+                • Data Type: ${Array.isArray(messages) ? 'Array ✓' : 'Invalid!'}<br>
+                • Total Items: ${messages.length}<br>
+                • Last Updated: ${new Date().toLocaleTimeString()}
+            `;
+        }
+        
+        function updateStorageInfo(messages) {
+            const storageEl = document.getElementById('storageInfo');
+            const pendingCount = messages.filter(m => m.status === 'pending').length;
+            const answeredCount = messages.filter(m => m.status === 'answered').length;
+            
+            storageEl.innerHTML = `
+                <strong><i class="fas fa-database"></i> Storage Status:</strong><br>
+                • Total Messages: <strong>${messages.length}</strong><br>
+                • Pending: <span style="color: #856404; font-weight: bold;">${pendingCount}</span><br>
+                • Answered: <span style="color: #155724; font-weight: bold;">${answeredCount}</span><br>
+                • Auto-Refresh: Every 2 seconds
+            `;
+        }
+        
+        function updateStats(messages) {
+            const stats = document.getElementById('stats');
+            const pendingCount = messages.filter(m => m.status === 'pending').length;
+            const answeredCount = messages.filter(m => m.status === 'answered').length;
+            
+            stats.innerHTML = `
+                <i class="fas fa-chart-bar"></i> 
+                Pending: ${pendingCount} | Answered: ${answeredCount} | Total: ${messages.length}
+            `;
+        }
+        
+        function displayMessages(messages) {
+            const container = document.getElementById('messagesContainer');
+            
+            if (!messages || messages.length === 0) {
+                container.innerHTML = `
+                    <div class="no-messages">
+                        <i class="fas fa-inbox" style="font-size: 48px; color: #ccc; margin-bottom: 20px;"></i>
+                        <h3>No Messages Yet</h3>
+                        <p>Your customers will appear here when they send messages.</p>
+                        <p style="margin-top: 20px; color: #999; font-size: 14px;">
+                            <i class="fas fa-lightbulb"></i> 
+                            Try clicking "Add Test Message" to verify the display is working.
+                        </p>
+                    </div>
+                `;
+                return;
+            }
+            
+            // Sort messages: pending first, then newest
+            const sortedMessages = [...messages].sort((a, b) => {
+                if (a.status === 'pending' && b.status !== 'pending') return -1;
+                if (a.status !== 'pending' && b.status === 'pending') return 1;
+                return b.id - a.id;
+            });
+            
+            let html = '';
+            sortedMessages.forEach(msg => {
+                const isPending = msg.status === 'pending';
+                const customerName = escapeHtml(msg.name || 'Anonymous');
+                const messageText = escapeHtml(msg.message || 'No message');
+                const timestamp = msg.timestamp || 'Unknown time';
+                const answer = msg.answer ? escapeHtml(msg.answer) : '';
+                const answerTime = msg.answerTime || '';
+                
+                html += `
+                    <div class="message-card" data-message-id="${msg.id}">
+                        <div class="message-header">
+                            <span class="customer-name">
+                                <i class="fas fa-user-circle"></i> ${customerName}
+                            </span>
+                            <span class="timestamp">
+                                <i class="fas fa-clock"></i> ${timestamp}
+                            </span>
+                        </div>
+                        
+                        <div class="message-text">
+                            ${messageText}
+                        </div>
+                        
+                        <span class="status-badge ${isPending ? 'status-pending' : 'status-answered'}">
+                            <i class="fas ${isPending ? 'fa-hourglass-half' : 'fa-check-circle'}"></i>
+                            ${msg.status || 'pending'}
+                        </span>
+                        
+                        ${msg.answer ? `
+                            <div class="answer-section">
+                                <div style="display: flex; align-items: center; gap: 6px; margin-bottom: 8px;">
+                                    <span style="background: #28a745; color: white; padding: 2px 12px; border-radius: 20px; font-size: 11px; font-weight: bold;">
+                                        <i class="fas fa-reply"></i> REPLIED
+                                    </span>
+                                </div>
+                                <div class="answer-text">${answer}</div>
+                                <div class="answer-time">
+                                    <i class="fas fa-calendar-alt"></i> ${answerTime}
+                                </div>
+                            </div>
+                        ` : ''}
+                        
+                        ${isPending ? `
+                            <div style="margin-top: 15px;">
+                                <textarea id="answer-${msg.id}" placeholder="Type your reply here..." rows="3"></textarea>
+                                <button onclick="submitAnswer(${msg.id})" class="btn btn-primary" style="width: 100%;">
+                                    <i class="fas fa-paper-plane"></i> Send Reply
+                                </button>
+                            </div>
+                        ` : ''}
+                    </div>
+                `;
+            });
+            
+            container.innerHTML = html;
+        }
+        
+        // ===== ANSWER FUNCTIONS =====
+        function submitAnswer(messageId) {
+            if (!isAuthenticated) {
+                logout();
+                return;
+            }
+            
+            const answerTextarea = document.getElementById(`answer-${messageId}`);
+            if (!answerTextarea) {
+                showFeedback('Error: Reply field not found', 'danger');
+                return;
+            }
+            
+            const answer = answerTextarea.value.trim();
+            
+            if (!answer) {
+                showFeedback('Please type a reply before sending.', 'warning');
+                return;
+            }
+            
+            const messages = JSON.parse(localStorage.getItem(STORAGE_KEY)) || [];
+            const messageIndex = messages.findIndex(m => m.id === messageId);
+            
+            if (messageIndex !== -1) {
+                messages[messageIndex].status = 'answered';
+                messages[messageIndex].answer = answer;
+                messages[messageIndex].answerTime = new Date().toLocaleString();
+                
+                localStorage.setItem(STORAGE_KEY, JSON.stringify(messages));
+                loadMessages(); // Reload display
+                
+                showFeedback('✓ Reply sent successfully!', 'success');
+            } else {
+                showFeedback('Message not found!', 'danger');
+            }
+        }
+        
+        // ===== UTILITY FUNCTIONS =====
+        function forceRefresh() {
+            loadMessages();
+            showFeedback('✓ Messages refreshed', 'success');
+        }
+        
+        function testStorage() {
+            try {
+                // Check all possible storage keys
+                const possibleKeys = ['chat_messages', 'chatMessages_v1', 'messages', 'chatMessages'];
+                let found = false;
+                
+                let output = 'Storage Test Results:\n\n';
+                
+                possibleKeys.forEach(key => {
+                    const data = localStorage.getItem(key);
+                    if (data) {
+                        try {
+                            const parsed = JSON.parse(data);
+                            output += `✅ Key "${key}": ${parsed.length} messages\n`;
+                            found = true;
+                        } catch (e) {
+                            output += `❌ Key "${key}": Invalid JSON\n`;
+                        }
+                    } else {
+                        output += `⚠️ Key "${key}": Not found\n`;
+                    }
+                });
+                
+                // Show current key data
+                const currentData = localStorage.getItem(STORAGE_KEY);
+                output += `\nCurrent Key "${STORAGE_KEY}": `;
+                if (currentData) {
+                    try {
+                        const parsed = JSON.parse(currentData);
+                        output += `${parsed.length} messages`;
+                    } catch (e) {
+                        output += 'Invalid JSON';
+                    }
+                } else {
+                    output += 'Empty';
+                }
+                
+                alert(output);
+                console.log('Storage test:', output);
+                
+            } catch (e) {
+                alert(`Error testing storage: ${e.message}`);
+            }
+            
+            loadMessages();
+        }
+        
+        function fixStorage() {
+            try {
+                // Check if there's data in other keys
+                const oldKey = 'chatMessages_v1';
+                const oldData = localStorage.getItem(oldKey);
+                
+                if (oldData) {
+                    try {
+                        const parsed = JSON.parse(oldData);
+                        if (Array.isArray(parsed) && parsed.length > 0) {
+                            localStorage.setItem(STORAGE_KEY, oldData);
+                            showFeedback(`✓ Migrated ${parsed.length} messages from old storage`, 'success');
+                        }
+                    } catch (e) {
+                        // Ignore
+                    }
+                }
+                
+                // Initialize if empty
+                if (!localStorage.getItem(STORAGE_KEY)) {
+                    localStorage.setItem(STORAGE_KEY, JSON.stringify([]));
+                    showFeedback('✓ Storage initialized', 'success');
+                }
+                
+                loadMessages();
+                
+            } catch (e) {
+                showFeedback(`Error: ${e.message}`, 'danger');
+            }
+        }
+        
+        function createTestMessage() {
+            const testMessage = {
+                id: Date.now(),
+                name: "Test Customer",
+                message: "This is a test message to verify the system is working correctly.",
+                timestamp: new Date().toLocaleString(),
+                status: 'pending',
+                answer: null,
+                answerTime: null
+            };
+            
+            const messages = JSON.parse(localStorage.getItem(STORAGE_KEY)) || [];
+            messages.push(testMessage);
+            localStorage.setItem(STORAGE_KEY, JSON.stringify(messages));
+            
+            showFeedback('✅ Test message created!', 'success');
+            loadMessages();
+        }
+        
+        function clearAllMessages() {
+            if (confirm('⚠️ Are you sure you want to delete ALL messages? This cannot be undone.')) {
+                localStorage.setItem(STORAGE_KEY, JSON.stringify([]));
+                loadMessages();
+                showFeedback('🗑️ All messages cleared.', 'warning');
+            }
+        }
+        
+        function showFeedback(message, type = 'success') {
+            const feedback = document.getElementById('actionFeedback');
+            feedback.style.display = 'block';
+            feedback.className = 'success-message';
+            
+            if (type === 'success') {
+                feedback.style.background = '#d4edda';
+                feedback.style.color = '#155724';
+                feedback.innerHTML = `<i class="fas fa-check-circle"></i> ${message}`;
+            } else if (type === 'warning') {
+                feedback.style.background = '#fff3cd';
+                feedback.style.color = '#856404';
+                feedback.innerHTML = `<i class="fas fa-exclamation-triangle"></i> ${message}`;
+            } else {
+                feedback.style.background = '#f8d7da';
+                feedback.style.color = '#721c24';
+                feedback.innerHTML = `<i class="fas fa-times-circle"></i> ${message}`;
+            }
+            
+            setTimeout(() => {
+                feedback.style.display = 'none';
+            }, 3000);
+        }
+        
+        function escapeHtml(unsafe) {
+            if (!unsafe) return '';
+            return String(unsafe)
+                .replace(/&/g, "&amp;")
+                .replace(/</g, "&lt;")
+                .replace(/>/g, "&gt;")
+                .replace(/"/g, "&quot;")
+                .replace(/'/g, "&#039;");
+        }
+        
+        // ===== EVENT LISTENERS =====
+        document.addEventListener('keypress', function(e) {
+            if (e.key === 'Enter' && document.getElementById('loginScreen').style.display !== 'none') {
+                verifyPin();
+            }
+        });
+        
+        // Clean up on page unload
+        window.addEventListener('beforeunload', function() {
+            if (refreshInterval) {
+                clearInterval(refreshInterval);
+            }
+        });
+    </script>
 </body>
 </html>

@@ -2,11 +2,10 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=yes">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Zakhourani | Home</title>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <style>
-        /* === Original Zakhourani styles — untouched === */
         * { margin: 0; padding: 0; box-sizing: border-box; font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; }
         
         :root {
@@ -19,12 +18,13 @@
         
         body { background: linear-gradient(135deg, #f5f7fa 0%, #c3cfe2 100%); min-height: 100vh; }
         
+        /* Header */
         header { background: white; box-shadow: 0 4px 20px rgba(0,0,0,0.1); position: sticky; top: 0; z-index: 1000; }
         
         .header-top {
             background: var(--primary);
             color: white;
-            padding: 15px 40px;
+            padding: 10px 40px;
             display: flex;
             justify-content: space-between;
             align-items: center;
@@ -34,23 +34,27 @@
         .logo h1 { font-size: 28px; font-weight: 700; color: white; }
         
         .auth-buttons { display: flex; gap: 10px; }
-        .auth-btn { padding: 10px 25px; border-radius: 25px; font-weight: 600; cursor: pointer; transition: 0.3s; text-decoration: none; display: inline-block; }
+        .auth-btn { padding: 8px 20px; border-radius: 25px; font-weight: 600; cursor: pointer; transition: 0.3s; text-decoration: none; display: inline-block; }
         .login-btn { background: transparent; color: white; border: 2px solid white; }
         .login-btn:hover { background: white; color: var(--primary); }
         .signup-btn { background: var(--secondary); color: white; border: 2px solid var(--secondary); }
         .signup-btn:hover { background: #2980b9; border-color: #2980b9; }
         
         .user-menu { display: flex; align-items: center; gap: 15px; color: white; }
-        .user-avatar { width: 40px; height: 40px; border-radius: 50%; object-fit: cover; border: 2px solid white; }
-        .logout-btn { background: var(--accent); color: white; border: none; padding: 10px 20px; border-radius: 20px; cursor: pointer; text-decoration: none; }
+        .user-avatar { width: 35px; height: 35px; border-radius: 50%; object-fit: cover; border: 2px solid white; }
+        .user-name { font-size: 14px; font-weight: 600; }
+        .logout-btn { background: var(--accent); color: white; border: none; padding: 8px 16px; border-radius: 20px; cursor: pointer; text-decoration: none; font-size: 14px; display: flex; align-items: center; gap: 5px; }
+        .logout-btn:hover { background: #c0392b; }
         
-        nav { padding: 0 40px; background: white; }
-        .nav-container { display: flex; justify-content: center; padding: 20px 0; }
-        .nav-links { display: flex; list-style: none; gap: 40px; }
-        .nav-links a { text-decoration: none; color: var(--dark); font-weight: 600; font-size: 18px; padding: 10px 20px; border-radius: 8px; transition: 0.3s; }
+        /* Navigation */
+        nav { padding: 0 40px; background: white; border-bottom: 1px solid #eee; }
+        .nav-container { display: flex; justify-content: space-between; align-items: center; padding: 15px 0; }
+        .nav-links { display: flex; list-style: none; gap: 20px; }
+        .nav-links a { text-decoration: none; color: var(--dark); font-weight: 600; font-size: 16px; padding: 8px 16px; border-radius: 8px; transition: 0.3s; display: flex; align-items: center; gap: 6px; }
         .nav-links a:hover { background: var(--light); color: var(--secondary); }
         .nav-links a.active { background: var(--secondary); color: white; }
         
+        /* Hero Section */
         .hero {
             background: linear-gradient(135deg, var(--primary) 0%, #34495e 100%);
             color: white;
@@ -71,6 +75,7 @@
         .cta-secondary { background: transparent; color: white; border: 2px solid white; }
         .cta-secondary:hover { background: white; color: var(--primary); transform: translateY(-3px); }
         
+        /* Services */
         .services-grid {
             display: grid;
             grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
@@ -94,6 +99,7 @@
         .service-card h3 { font-size: 24px; margin-bottom: 15px; color: var(--dark); }
         .service-card p { color: #666; line-height: 1.6; }
         
+        /* Footer */
         footer {
             background: var(--primary);
             color: white;
@@ -106,186 +112,47 @@
         .footer-links a { color: white; text-decoration: none; }
         .footer-links a:hover { color: var(--secondary); }
         
-        /* === MOBILE-FRIENDLY OVERRIDES (keep original spirit, enhance chat on small screens) === */
+        /* Responsive */
+        @media (max-width: 1024px) {
+            .nav-container { flex-direction: column; gap: 15px; }
+            .nav-links { flex-wrap: wrap; justify-content: center; }
+        }
+        
         @media (max-width: 768px) {
             .header-top, nav { padding: 10px 20px; }
-            .logo h1 { font-size: 22px; }
             .nav-links { flex-direction: column; gap: 10px; text-align: center; }
-            .hero { padding: 40px 20px; margin: 20px; }
+            .hero { padding: 40px 20px; }
             .hero h2 { font-size: 32px; }
-            .cta-buttons { flex-direction: column; align-items: center; gap: 15px; }
+            .cta-buttons { flex-direction: column; align-items: center; }
             .footer-links { flex-direction: column; gap: 10px; }
+            .user-menu { flex-wrap: wrap; justify-content: flex-end; }
         }
 
-        /* === CHAT WIDGET — 100% WORKABLE, MOBILE OPTIMIZED === */
-        /* integrated with original styles, fully responsive */
-        #chatWidget {
-            position: fixed;
-            bottom: 20px;
-            right: 20px;
-            z-index: 10000;
-            font-family: 'Segoe UI', Arial, sans-serif;
-        }
-
-        /* chat icon bubble – perfect tap target */
-        #chatIcon {
-            width: 60px;
-            height: 60px;
-            background: #007bff;
-            border-radius: 50%;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            cursor: pointer;
-            box-shadow: 0 6px 16px rgba(0,0,0,0.2);
-            transition: transform 0.2s ease, background 0.2s;
-        }
+        /* Chat Widget Styles - Integrated */
         #chatIcon:hover {
             transform: scale(1.1);
-            background: #0069d9;
         }
-        /* mobile tap feedback */
-        #chatIcon:active {
-            transform: scale(0.95);
-        }
-
-        /* chat box – perfectly sized for mobile, edge-to-edge on small screens */
-        #chatBox {
-            display: none;
-            position: absolute;
-            bottom: 80px;
-            right: 0;
-            width: 320px;
-            max-width: 85vw;  /* flexible for small devices */
-            background: white;
-            border-radius: 18px;
-            box-shadow: 0 12px 32px rgba(0,0,0,0.25);
-            overflow: hidden;
-            border: 1px solid rgba(255,255,255,0.2);
-        }
-
-        /* make chat box almost full width on very narrow phones */
-        @media (max-width: 480px) {
-            #chatWidget {
-                bottom: 16px;
-                right: 16px;
-            }
-            #chatBox {
-                width: 90vw;
-                right: 0;
-                bottom: 75px;
-                border-radius: 20px;
-            }
-            #chatIcon {
-                width: 56px;
-                height: 56px;
-            }
-        }
-
-        #chatBox .chat-header {
-            background: #007bff;
-            color: white;
-            padding: 16px 18px;
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-        }
-        #chatBox .chat-header span {
-            font-weight: 600;
-            font-size: 16px;
-        }
-        #closeChat {
-            cursor: pointer;
-            font-size: 26px;
-            line-height: 1;
-            padding: 0 6px;
-        }
-        #closeChat:hover {
-            opacity: 0.8;
-        }
-
-        #chatBox .chat-body {
-            padding: 20px;
-            background: #fefefe;
-        }
-
-        #messageForm input,
-        #messageForm textarea {
-            width: 100%;
-            padding: 12px 14px;
-            margin-bottom: 14px;
-            border: 1px solid #e0e0e0;
-            border-radius: 12px;
-            box-sizing: border-box;
-            font-size: 15px;
-            transition: 0.2s;
+        #chatBox textarea {
+            resize: vertical;
             font-family: inherit;
         }
-        #messageForm input:focus,
-        #messageForm textarea:focus {
-            border-color: #007bff;
-            outline: none;
-            box-shadow: 0 0 0 3px rgba(0,123,255,0.1);
+        #chatBox {
+            animation: slideIn 0.3s ease;
         }
-
-        #messageForm textarea {
-            resize: vertical;
-            min-height: 100px;
-        }
-
-        #messageForm button {
-            width: 100%;
-            padding: 14px 12px;
-            background: #28a745;
-            color: white;
-            border: none;
-            border-radius: 50px; /* pill shape, modern */
-            cursor: pointer;
-            font-size: 16px;
-            font-weight: 600;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            gap: 8px;
-            transition: background 0.2s, transform 0.1s;
-            box-shadow: 0 4px 10px rgba(40,167,69,0.3);
-        }
-        #messageForm button:hover {
-            background: #218838;
-        }
-        #messageForm button:active {
-            transform: scale(0.98);
-        }
-
-        #formFeedback {
-            margin-top: 12px;
-            font-size: 14px;
-            color: #28a745;
-            text-align: center;
-            font-weight: 500;
-        }
-
-        /* make avatar and user-menu fit better on small header */
-        @media (max-width: 600px) {
-            .header-top {
-                flex-wrap: wrap;
-                gap: 10px;
+        @keyframes slideIn {
+            from {
+                opacity: 0;
+                transform: translateY(20px);
             }
-            .user-menu span {
-                display: none; /* save space on small screens, avatar + logout visible */
-            }
-            .user-menu {
-                gap: 8px;
-            }
-            .logout-btn {
-                padding: 8px 14px;
-                font-size: 14px;
+            to {
+                opacity: 1;
+                transform: translateY(0);
             }
         }
     </style>
 </head>
 <body>
-    <!-- Header (unchanged) -->
+    <!-- Header -->
     <header>
         <div class="header-top">
             <div class="logo">
@@ -302,12 +169,11 @@
             <div class="nav-container">
                 <ul class="nav-links">
                     <li><a href="index.html" class="active"><i class="fas fa-home"></i> Home</a></li>
-                    <li><a href="#"><i class="fas fa-robot"></i> AI Assistant</a></li>
-                    <li><a href="#"><i class="fas fa-book"></i> Dictionary</a></li>
-                    <li><a href="#"><i class="fas fa-language"></i> IELTS</a></li>
-                    <li><a href="#"><i class="fas fa-globe-americas"></i> TOEFL</a></li>
-                    <li><a href="#"><i class="fas fa-user-md"></i> About Dr. Waleed</a></li>
-                    <li><a href="#"><i class="fas fa-envelope"></i> Contact</a></li>
+                    <li><a href="AI.html"><i class="fas fa-robot"></i> AI</a></li>
+                    <li><a href="di.html"><i class="fas fa-book"></i> Dictionary</a></li>
+                    <li><a href="products.html"><i class="fas fa-box"></i> Products</a></li>
+                    <li><a href="Drwaleed.html"><i class="fas fa-user-md"></i> Dr. Waleed</a></li>
+                    <li><a href="aboutus.html"><i class="fas fa-info-circle"></i> About Us</a></li>
                     <li><a href="profile.html"><i class="fas fa-user-circle"></i> Profile</a></li>
                 </ul>
             </div>
@@ -375,52 +241,60 @@
         
         <ul class="footer-links">
             <li><a href="index.html">Home</a></li>
+            <li><a href="AI.html">AI</a></li>
+            <li><a href="di.html">Dictionary</a></li>
+            <li><a href="products.html">Products</a></li>
+            <li><a href="Drwaleed.html">Dr. Waleed</a></li>
+            <li><a href="aboutus.html">About Us</a></li>
+            <li><a href="profile.html">Profile</a></li>
             <li><a href="login.html">Login</a></li>
             <li><a href="signup.html">Sign Up</a></li>
-            <li><a href="profile.html">Profile</a></li>
-            <li><a href="logout.html">Logout</a></li>
         </ul>
         
         <p style="margin-top: 30px; color: #ccc;">© 2024 Zakhourani. All rights reserved.</p>
     </footer>
 
-    <!-- ============================================= -->
-    <!--   CHAT WIDGET — FULLY WORKABLE, MOBILE READY  -->
-    <!-- ============================================= -->
-    <div id="chatWidget">
-        <!-- Chat Icon (bubble) -->
-        <div id="chatIcon">
+    <!-- =========================================== -->
+    <!-- CHAT WIDGET - Customer Support System       -->
+    <!-- =========================================== -->
+    <div id="chatWidget" style="position: fixed; bottom: 20px; right: 20px; z-index: 10000; font-family: Arial, sans-serif;">
+        <!-- Chat Icon -->
+        <div id="chatIcon" style="width: 60px; height: 60px; background: #007bff; border-radius: 50%; display: flex; align-items: center; justify-content: center; cursor: pointer; box-shadow: 0 4px 12px rgba(0,0,0,0.15); transition: transform 0.2s;">
             <svg xmlns="http://www.w3.org/2000/svg" width="30" height="30" viewBox="0 0 24 24" fill="white">
                 <path d="M20 2H4c-1.1 0-2 .9-2 2v18l4-4h14c1.1 0 2-.9 2-2V4c0-1.1-.9-2-2-2z"/>
             </svg>
         </div>
 
-        <!-- Chat Box (initially hidden) -->
-        <div id="chatBox">
-            <div class="chat-header">
-                <span><i class="fas fa-comment-dots" style="margin-right: 8px;"></i> Chat Support</span>
-                <span id="closeChat" style="cursor: pointer; font-size: 24px;">&times;</span>
+        <!-- Chat Box (Hidden by default) -->
+        <div id="chatBox" style="display: none; position: absolute; bottom: 80px; right: 0; width: 320px; background: white; border-radius: 12px; box-shadow: 0 8px 24px rgba(0,0,0,0.2); overflow: hidden;">
+            <div style="background: #007bff; color: white; padding: 15px; display: flex; justify-content: space-between; align-items: center;">
+                <span style="font-weight: bold;"><i class="fas fa-headset"></i> Chat Support</span>
+                <span id="closeChat" style="cursor: pointer; font-size: 20px;">&times;</span>
             </div>
-            <div class="chat-body">
+            
+            <div style="padding: 15px;">
                 <form id="messageForm">
-                    <input type="text" id="customerName" placeholder="Your name" required autocomplete="name">
-                    <textarea id="customerMessage" placeholder="Your message..." rows="4" required></textarea>
-                    <button type="submit">
-                        <i class="fas fa-paper-plane" style="font-size: 16px;"></i> Send Message
+                    <input type="text" id="customerName" placeholder="Your name" required style="width: 100%; padding: 10px; margin-bottom: 10px; border: 1px solid #ddd; border-radius: 6px; box-sizing: border-box;">
+                    <textarea id="customerMessage" placeholder="Your message..." rows="4" required style="width: 100%; padding: 10px; margin-bottom: 10px; border: 1px solid #ddd; border-radius: 6px; box-sizing: border-box;"></textarea>
+                    <button type="submit" style="width: 100%; padding: 12px; background: #28a745; color: white; border: none; border-radius: 6px; cursor: pointer; font-size: 16px; font-weight: bold;">
+                        <i class="fas fa-paper-plane"></i> Send Message
                     </button>
                 </form>
-                <div id="formFeedback"></div>
+                <div id="formFeedback" style="margin-top: 10px; font-size: 14px; min-height: 20px;"></div>
             </div>
         </div>
     </div>
 
-    <!-- Firebase & Auth Script (original) -->
+    <!-- Firebase & Auth Script -->
     <script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-app-compat.js"></script>
     <script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-auth-compat.js"></script>
     <script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-firestore-compat.js"></script>
     
-    <!-- Main auth script (original, plus chat widget initialization integrated) -->
     <script>
+        // ===========================================
+        // FIREBASE CONFIGURATION & AUTH
+        // ===========================================
+        
         // Firebase Configuration
         const firebaseConfig = {
             apiKey: "AIzaSyAE8wf24HXrfmpMluaFOv1OHPrf_YFfqTQ",
@@ -445,12 +319,18 @@
             const authButtons = document.getElementById('authButtons');
             
             if (user) {
-                // User is logged in
+                // Get user display name
+                let displayName = user.displayName || user.email || 'User';
+                if (displayName.includes('@')) {
+                    displayName = displayName.split('@')[0];
+                }
+                
+                // User is logged in - show profile and logout
                 authButtons.innerHTML = `
                     <div class="user-menu">
-                        <img src="${user.photoURL || `https://ui-avatars.com/api/?name=${encodeURIComponent(user.displayName || user.email)}&background=3498db&color=fff`}" 
+                        <img src="${user.photoURL || `https://ui-avatars.com/api/?name=${encodeURIComponent(displayName)}&background=3498db&color=fff&size=35`}" 
                              alt="Profile" class="user-avatar">
-                        <span>${user.displayName || user.email}</span>
+                        <span class="user-name">${displayName}</span>
                         <a href="logout.html" class="logout-btn">
                             <i class="fas fa-sign-out-alt"></i> Logout
                         </a>
@@ -469,51 +349,52 @@
             }
         }
 
-        // Initialize auth state listener
-        auth.onAuthStateChanged((user) => {
-            updateAuthUI(user);
-        });
-
-        // -------------------------------------------------------------
-        //  CHAT WIDGET SCRIPT — 100% functional, mobile-optimized
-        //  Integrated with localStorage, smooth UX
-        // -------------------------------------------------------------
+        // ===========================================
+        // CHAT WIDGET - CUSTOMER SUPPORT SYSTEM
+        // ===========================================
+        
         (function() {
-            // Initialize localStorage for chat messages if not exists
-            if (!localStorage.getItem('chatMessages')) {
-                localStorage.setItem('chatMessages', JSON.stringify([]));
+            "use strict";
+            
+            // Storage key MUST match chat.html
+            const STORAGE_KEY = 'chatMessages_v1';
+            
+            // Initialize storage
+            if (!localStorage.getItem(STORAGE_KEY)) {
+                localStorage.setItem(STORAGE_KEY, JSON.stringify([]));
             }
 
-            // DOM elements
+            // DOM Elements
             const chatIcon = document.getElementById('chatIcon');
             const chatBox = document.getElementById('chatBox');
             const closeChat = document.getElementById('closeChat');
             const messageForm = document.getElementById('messageForm');
             const formFeedback = document.getElementById('formFeedback');
 
-            // make sure elements exist (they do)
-            if (chatIcon && chatBox && closeChat && messageForm) {
-                
-                // Open chat: hide icon, show chat box
-                chatIcon.addEventListener('click', function(e) {
-                    e.stopPropagation();
+            // Open chat
+            if (chatIcon) {
+                chatIcon.addEventListener('click', function() {
                     chatBox.style.display = 'block';
                     chatIcon.style.display = 'none';
                 });
+            }
 
-                // Close chat: hide chat box, show icon
-                closeChat.addEventListener('click', function(e) {
-                    e.stopPropagation();
+            // Close chat
+            if (closeChat) {
+                closeChat.addEventListener('click', function() {
                     chatBox.style.display = 'none';
-                    chatIcon.style.display = 'flex';  // restore icon
+                    chatIcon.style.display = 'flex';
                 });
+            }
 
-                // Send message form handler
+            // Send message
+            if (messageForm) {
                 messageForm.addEventListener('submit', function(e) {
                     e.preventDefault();
                     
                     const nameInput = document.getElementById('customerName');
                     const messageInput = document.getElementById('customerMessage');
+                    
                     const name = nameInput.value.trim();
                     const message = messageInput.value.trim();
 
@@ -529,46 +410,60 @@
                             answerTime: null
                         };
 
-                        // Save to localStorage
-                        const messages = JSON.parse(localStorage.getItem('chatMessages'));
+                        // Get existing messages
+                        const messages = JSON.parse(localStorage.getItem(STORAGE_KEY)) || [];
+                        
+                        // Add new message
                         messages.push(newMessage);
-                        localStorage.setItem('chatMessages', JSON.stringify(messages));
+                        
+                        // Save back to localStorage
+                        localStorage.setItem(STORAGE_KEY, JSON.stringify(messages));
+                        
+                        // Show success message
+                        formFeedback.innerHTML = '<i class="fas fa-check-circle"></i> ✓ Message sent! We will respond soon.';
+                        formFeedback.style.color = '#28a745';
+                        
+                        // Reset form
+                        nameInput.value = '';
+                        messageInput.value = '';
 
-                        // Show success feedback
-                        formFeedback.innerHTML = '<i class="fas fa-check-circle"></i> Message sent! We’ll respond soon.';
-                        messageForm.reset();
-
-                        // Hide feedback after 4 seconds
+                        // Hide feedback after 3 seconds
                         setTimeout(() => {
                             formFeedback.innerHTML = '';
-                        }, 4000);
+                        }, 3000);
                     }
                 });
-
-                // Optional: Clicking outside chat box on mobile? We'll keep it simple.
-                // Prevent accidental close when clicking inside chatBox
-                chatBox.addEventListener('click', function(e) {
-                    e.stopPropagation();
-                });
             }
-        })();
-    </script>
 
-    <!-- tiny style tweak to ensure chat icon uses flex display properly after reopening -->
-    <style>
-        /* ensure chat icon always uses flex when visible */
-        #chatIcon { display: flex; }
-        #chatBox { display: none; }
-        /* additional polish for mobile tap targets */
-        #closeChat {
-            padding: 4px 8px;
-            border-radius: 50%;
-        }
-        #closeChat:hover {
-            background: rgba(255,255,255,0.2);
-        }
-        /* smooth transitions */
-        #chatIcon, #chatBox { transition: all 0.2s ease; }
-    </style>
+            // Click outside to close
+            document.addEventListener('click', function(e) {
+                if (chatBox && chatIcon) {
+                    if (!chatBox.contains(e.target) && !chatIcon.contains(e.target) && chatBox.style.display === 'block') {
+                        chatBox.style.display = 'none';
+                        chatIcon.style.display = 'flex';
+                    }
+                }
+            });
+        })();
+
+        // Initialize auth listener
+        auth.onAuthStateChanged((user) => {
+            updateAuthUI(user);
+            
+            // Auto-fill customer name if user is logged in
+            if (user) {
+                const nameInput = document.getElementById('customerName');
+                if (nameInput) {
+                    let displayName = user.displayName || user.email || '';
+                    if (displayName.includes('@')) {
+                        displayName = displayName.split('@')[0];
+                    }
+                    nameInput.value = displayName;
+                    nameInput.readOnly = true;
+                    nameInput.style.background = '#f8f9fa';
+                }
+            }
+        });
+    </script>
 </body>
 </html>

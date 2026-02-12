@@ -1,79 +1,47 @@
 import os
 from openai import OpenAI
-from dotenv import load_dotenv
 import streamlit as st
 
-# Load environment variables from .env file
-load_dotenv()
+# Get API key from Streamlit secrets (NOT from .env on GitHub!)
+client = OpenAI(api_key=st.secrets["OPENAI_API_KEY"])
 
-# Initialize OpenAI - will read from .env automatically
-client = OpenAI()
+st.set_page_config(page_title="Dr. Walled", page_icon="🏥")
+st.title("🏥 Dr. Walled - AI Medical Assistant")
+st.caption("Your compassionate AI health companion")
 
-class DrWalled:
-    def __init__(self):
-        self.system_prompt = """You are Dr. Walled, a compassionate and knowledgeable medical AI assistant. 
-        Your characteristics:
-        - Professional, warm, and empathetic MD
-        - Provide clear, accurate health information
-        - Always include: "Remember, I'm an AI assistant - please consult a real doctor for medical advice"
-        - Never give definitive diagnoses
-        - Focus on general wellness and health education
-        - Respond in simple, caring language
-        - Ask follow-up questions when appropriate"""
+# Initialize chat
+if "messages" not in st.session_state:
+    st.session_state.messages = []
+
+# Show chat history
+for msg in st.session_state.messages:
+    with st.chat_message(msg["role"]):
+        st.write(msg["content"])
+
+# Chat input
+if question := st.chat_input("Ask Dr. Walled anything about your health..."):
+    with st.chat_message("user"):
+        st.write(question)
     
-    def get_response(self, messages):
-        """Get response from Dr. Walled"""
-        try:
-            full_messages = [{"role": "system", "content": self.system_prompt}] + messages
-            
+    with st.chat_message("assistant"):
+        with st.spinner("Dr. Walled is thinking..."):
             response = client.chat.completions.create(
                 model="gpt-3.5-turbo",
-                messages=full_messages,
-                temperature=0.7,
-                max_tokens=500
+                messages=[
+                    {"role": "system", "content": "You are Dr. Walled, a caring medical AI. Be warm, professional, and always remind users to consult real doctors."},
+                    {"role": "user", "content": question}
+                ]
             )
-            return response.choices[0].message.content
-        except Exception as e:
-            return f"Dr. Walled is temporarily unavailable. Error: {str(e)}"
+            answer = response.choices[0].message.content
+            st.write(answer)
+            st.caption("⚠️ I'm AI - please see a real doctor for medical advice")
+    
+    st.session_state.messages.append({"role": "user", "content": question})
+    st.session_state.messages.append({"role": "assistant", "content": answer})
 
-# Streamlit UI
-def main():
-    st.set_page_config(
-        page_title="Dr. Walled - AI Medical Assistant",
-        page_icon="🏥",
-        layout="centered"
-    )
-    
-    st.title("🏥 Dr. Walled")
-    st.caption("Your AI Medical Assistant - For informational purposes only")
-    
-    # Initialize chat history
-    if "messages" not in st.session_state:
+with st.sidebar:
+    st.header("About")
+    st.write("Dr. Walled - 24/7 AI Health Assistant")
+    if st.button("Clear Chat"):
         st.session_state.messages = []
-    
-    # Display chat messages
-    for message in st.session_state.messages:
-        with st.chat_message(message["role"]):
-            st.markdown(message["content"])
-    
-    # Chat input
-    if prompt := st.chat_input("Ask Dr. Walled about your health concerns..."):
-        # Add user message
-        st.session_state.messages.append({"role": "user", "content": prompt})
-        with st.chat_message("user"):
-            st.markdown(prompt)
-        
-        # Get AI response
-        with st.chat_message("assistant"):
-            with st.spinner("Dr. Walled is thinking..."):
-                doctor = DrWalled()
-                response = doctor.get_response(st.session_state.messages[-10:])  # Last 10 for context
-                st.markdown(response)
-                
-                # Add disclaimer
-                st.caption("⚠️ This is AI-generated information. Always consult a healthcare professional.")
-                
-        st.session_state.messages.append({"role": "assistant", "content": response})
-
-if __name__ == "__main__":
-    main()
+        st.rerun()

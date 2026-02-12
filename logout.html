@@ -3,62 +3,299 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Logout - Firebase Auth Demo</title>
-    <link rel="stylesheet" href="style.css">
-    <script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-app-compat.js"></script>
-    <script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-auth-compat.js"></script>
-    <script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-firestore-compat.js"></script>
+    <title>Zakhourani | Logout</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; }
+        
+        :root {
+            --primary: #2c3e50;
+            --secondary: #3498db;
+            --accent: #e74c3c;
+            --light: #ecf0f1;
+            --dark: #2c3e50;
+        }
+        
+        body {
+            background: linear-gradient(135deg, #f5f7fa 0%, #c3cfe2 100%);
+            min-height: 100vh;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            padding: 20px;
+        }
+        
+        .container {
+            background: white;
+            border-radius: 20px;
+            box-shadow: 0 20px 60px rgba(0,0,0,0.1);
+            padding: 60px;
+            width: 100%;
+            max-width: 600px;
+            text-align: center;
+            animation: fadeIn 0.5s ease;
+        }
+        
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(20px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+        
+        .logo {
+            margin-bottom: 30px;
+        }
+        
+        .logo h1 {
+            font-size: 32px;
+            color: var(--primary);
+            margin-top: 10px;
+        }
+        
+        .icon {
+            font-size: 80px;
+            color: var(--accent);
+            margin-bottom: 30px;
+            animation: pulse 2s infinite;
+        }
+        
+        @keyframes pulse {
+            0% { transform: scale(1); }
+            50% { transform: scale(1.1); }
+            100% { transform: scale(1); }
+        }
+        
+        h2 {
+            color: var(--dark);
+            margin-bottom: 20px;
+            font-size: 32px;
+        }
+        
+        p {
+            color: #666;
+            font-size: 18px;
+            line-height: 1.6;
+            margin-bottom: 40px;
+        }
+        
+        /* Buttons */
+        .buttons {
+            display: flex;
+            gap: 20px;
+            justify-content: center;
+            margin-top: 40px;
+        }
+        
+        .btn {
+            padding: 16px 40px;
+            border-radius: 50px;
+            font-size: 18px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s;
+            text-decoration: none;
+            display: inline-flex;
+            align-items: center;
+            gap: 10px;
+        }
+        
+        .btn-home {
+            background: var(--secondary);
+            color: white;
+            border: 2px solid var(--secondary);
+        }
+        
+        .btn-home:hover {
+            background: #2980b9;
+            transform: translateY(-2px);
+            box-shadow: 0 10px 20px rgba(52, 152, 219, 0.3);
+        }
+        
+        .btn-login {
+            background: transparent;
+            color: var(--secondary);
+            border: 2px solid var(--secondary);
+        }
+        
+        .btn-login:hover {
+            background: var(--secondary);
+            color: white;
+            transform: translateY(-2px);
+        }
+        
+        /* Status Messages */
+        .status {
+            padding: 20px;
+            border-radius: 10px;
+            margin: 30px 0;
+            font-size: 18px;
+            display: none;
+        }
+        
+        .status-success {
+            background: #e6fffa;
+            color: #234e52;
+            border: 2px solid #b2f5ea;
+        }
+        
+        .status-error {
+            background: #fde8e8;
+            color: #c53030;
+            border: 2px solid #fed7d7;
+        }
+        
+        /* Loading */
+        .loading {
+            display: none;
+            margin: 30px 0;
+        }
+        
+        .spinner {
+            width: 50px;
+            height: 50px;
+            border: 5px solid #f3f3f3;
+            border-top: 5px solid var(--secondary);
+            border-radius: 50%;
+            animation: spin 1s linear infinite;
+            margin: 0 auto 20px;
+        }
+        
+        @keyframes spin {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
+        }
+        
+        @media (max-width: 768px) {
+            .container { padding: 40px 20px; }
+            .buttons { flex-direction: column; }
+            .btn { width: 100%; justify-content: center; }
+        }
+    </style>
 </head>
 <body>
     <div class="container">
-        <h1>👋 Logout</h1>
-        
-        <div id="logout-content" class="hidden">
-            <p class="text-center">You have been successfully logged out.</p>
-            <button onclick="window.location.href='index.html'" class="btn btn-primary">
-                ← Back to Home
-            </button>
-            <button onclick="window.location.href='login.html'" class="btn btn-secondary">
-                🔑 Login Again
-            </button>
+        <div class="logo">
+            <i class="fas fa-graduation-cap" style="font-size: 48px; color: #3498db;"></i>
+            <h1>Zakhourani</h1>
         </div>
         
-        <div id="loading">
-            <p class="text-center">Logging out...</p>
+        <div class="icon">
+            <i class="fas fa-sign-out-alt"></i>
+        </div>
+        
+        <h2>Logging Out</h2>
+        
+        <div id="status" class="status"></div>
+        
+        <div id="loading" class="loading">
+            <div class="spinner"></div>
+            <p>Logging you out...</p>
+        </div>
+        
+        <div id="successMessage" style="display: none;">
+            <p>You have been successfully logged out.</p>
+            <p>Thank you for using Zakhourani!</p>
+        </div>
+        
+        <div id="alreadyLoggedOut" style="display: none;">
+            <p>You are already logged out.</p>
+            <p>Would you like to login again?</p>
+        </div>
+        
+        <div class="buttons">
+            <a href="index.html" class="btn btn-home" id="homeBtn" style="display: none;">
+                <i class="fas fa-home"></i> Back to Home
+            </a>
+            <a href="login.html" class="btn btn-login" id="loginBtn" style="display: none;">
+                <i class="fas fa-sign-in-alt"></i> Login Again
+            </a>
         </div>
     </div>
 
-    <script src="auth.js"></script>
+    <!-- Firebase -->
+    <script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-app-compat.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-auth-compat.js"></script>
+    
     <script>
+        // Firebase Configuration
+        const firebaseConfig = {
+            apiKey: "AIzaSyAE8wf24HXrfmpMluaFOv1OHPrf_YFfqTQ",
+            authDomain: "whaai-c388e.firebaseapp.com",
+            projectId: "whaai-c388e",
+            storageBucket: "whaai-c388e.firebasestorage.app",
+            messagingSenderId: "640598205524",
+            appId: "1:640598205524:web:c975f5e8b371b1043e39c1",
+            measurementId: "G-1MHE0JBZJR"
+        };
+
+        // Initialize Firebase
+        if (!firebase.apps.length) {
+            firebase.initializeApp(firebaseConfig);
+        }
+
+        const auth = firebase.auth();
+        const statusDiv = document.getElementById('status');
+        const loadingDiv = document.getElementById('loading');
+        const successMessage = document.getElementById('successMessage');
+        const alreadyLoggedOut = document.getElementById('alreadyLoggedOut');
+        const homeBtn = document.getElementById('homeBtn');
+        const loginBtn = document.getElementById('loginBtn');
+
+        // Show status message
+        function showStatus(message, type = 'success') {
+            statusDiv.textContent = message;
+            statusDiv.className = `status status-${type}`;
+            statusDiv.style.display = 'block';
+        }
+
+        // Hide status message
+        function hideStatus() {
+            statusDiv.style.display = 'none';
+        }
+
         // Perform logout
         async function performLogout() {
-            const result = await logoutUser();
+            loadingDiv.style.display = 'block';
+            hideStatus();
             
-            document.getElementById('loading').classList.add('hidden');
-            document.getElementById('logout-content').classList.remove('hidden');
-            
-            if (!result.success) {
-                alert('Logout error: ' + result.error);
+            try {
+                await auth.signOut();
+                
+                // Show success
+                loadingDiv.style.display = 'none';
+                successMessage.style.display = 'block';
+                homeBtn.style.display = 'flex';
+                loginBtn.style.display = 'flex';
+                
+                // Clear any existing status
+                hideStatus();
+                
+            } catch (error) {
+                loadingDiv.style.display = 'none';
+                showStatus('Logout failed: ' + error.message, 'error');
+                homeBtn.style.display = 'flex';
             }
         }
-        
-        // Check if user is logged in
-        async function checkAndLogout() {
-            const user = await checkAuth();
-            
+
+        // Check auth state and handle accordingly
+        auth.onAuthStateChanged((user) => {
             if (user) {
                 // User is logged in, perform logout
                 performLogout();
             } else {
                 // User is already logged out
-                document.getElementById('loading').innerHTML = 
-                    '<p class="text-center">You are already logged out.</p>' +
-                    '<button onclick="window.location.href=\'index.html\'" class="btn btn-primary">← Back to Home</button>';
+                loadingDiv.style.display = 'none';
+                alreadyLoggedOut.style.display = 'block';
+                homeBtn.style.display = 'flex';
+                loginBtn.style.display = 'flex';
             }
-        }
-        
-        // Initialize
-        checkAndLogout();
+        });
+
+        // Auto-redirect after 5 seconds if user doesn't click anything
+        setTimeout(() => {
+            if (!auth.currentUser) {
+                window.location.href = 'index.html';
+            }
+        }, 5000);
     </script>
 </body>
 </html>

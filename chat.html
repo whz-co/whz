@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Employee Chat Panel</title>
+  <title>Employee Chat Panel - Secure Access</title>
   <style>
     * {
       margin: 0;
@@ -20,6 +20,94 @@
     .container {
       max-width: 1200px;
       margin: 0 auto;
+    }
+
+    /* PIN Login Styles */
+    .login-container {
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      min-height: 100vh;
+      background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+      margin: -20px;
+    }
+
+    .login-box {
+      background: white;
+      padding: 40px;
+      border-radius: 16px;
+      box-shadow: 0 20px 60px rgba(0,0,0,0.3);
+      width: 100%;
+      max-width: 400px;
+      text-align: center;
+    }
+
+    .lock-icon {
+      font-size: 48px;
+      color: #007bff;
+      margin-bottom: 20px;
+    }
+
+    .login-box h2 {
+      color: #333;
+      margin-bottom: 10px;
+      font-size: 28px;
+    }
+
+    .login-box p {
+      color: #666;
+      margin-bottom: 30px;
+    }
+
+    .pin-input {
+      width: 100%;
+      padding: 15px;
+      font-size: 24px;
+      text-align: center;
+      letter-spacing: 8px;
+      border: 2px solid #ddd;
+      border-radius: 8px;
+      margin-bottom: 20px;
+      font-weight: bold;
+    }
+
+    .pin-input:focus {
+      outline: none;
+      border-color: #007bff;
+      box-shadow: 0 0 0 3px rgba(0,123,255,0.1);
+    }
+
+    .pin-btn {
+      width: 100%;
+      padding: 15px;
+      background: #007bff;
+      color: white;
+      border: none;
+      border-radius: 8px;
+      font-size: 18px;
+      font-weight: bold;
+      cursor: pointer;
+      transition: background 0.3s;
+    }
+
+    .pin-btn:hover {
+      background: #0056b3;
+    }
+
+    .pin-error {
+      color: #dc3545;
+      margin-top: 15px;
+      font-size: 14px;
+      min-height: 20px;
+    }
+
+    /* Main Panel Styles (Hidden by default) */
+    .main-panel {
+      display: none;
+    }
+
+    .main-panel.visible {
+      display: block;
     }
 
     header {
@@ -161,6 +249,16 @@
       background: #0056b3;
     }
 
+    .btn-logout {
+      background: #dc3545;
+      color: white;
+      margin-left: 10px;
+    }
+
+    .btn-logout:hover {
+      background: #c82333;
+    }
+
     .no-messages {
       text-align: center;
       padding: 60px;
@@ -192,25 +290,145 @@
       transform: rotate(180deg);
       background: #0056b3;
     }
+
+    .logout-section {
+      display: flex;
+      justify-content: flex-end;
+      align-items: center;
+    }
   </style>
 </head>
 <body>
-  <div class="container">
-    <header>
-      <h1>📨 Customer Messages Panel</h1>
-      <div class="stats" id="stats">Loading messages...</div>
-    </header>
-
-    <div id="messagesContainer" class="messages-grid">
-      <!-- Messages will be loaded here -->
+  <!-- PIN Login Screen -->
+  <div id="loginScreen" class="login-container">
+    <div class="login-box">
+      <div class="lock-icon">🔒</div>
+      <h2>Secure Access</h2>
+      <p>Enter PIN to access employee panel</p>
+      <input type="password" id="pinInput" class="pin-input" maxlength="8" placeholder="****" inputmode="numeric">
+      <button onclick="verifyPin()" class="pin-btn">Unlock Panel</button>
+      <div id="pinError" class="pin-error"></div>
     </div>
   </div>
 
-  <button class="refresh-btn" onclick="loadMessages()" title="Refresh messages">↻</button>
+  <!-- Main Employee Panel (Hidden by default) -->
+  <div id="mainPanel" class="main-panel">
+    <div class="container">
+      <header>
+        <div style="display: flex; justify-content: space-between; align-items: center;">
+          <div>
+            <h1>📨 Customer Messages Panel</h1>
+            <div class="stats" id="stats">Loading messages...</div>
+          </div>
+          <div class="logout-section">
+            <span style="color: #28a745; margin-right: 15px;" id="accessBadge">✓ Secure Access</span>
+            <button onclick="logout()" class="btn btn-logout">Logout</button>
+          </div>
+        </div>
+      </header>
+
+      <div id="messagesContainer" class="messages-grid">
+        <!-- Messages will be loaded here -->
+      </div>
+    </div>
+
+    <button class="refresh-btn" onclick="loadMessages()" title="Refresh messages">↻</button>
+  </div>
 
   <script>
+    // CORRECT PIN - 19961996
+    const CORRECT_PIN = "19961996";
+    
+    // Check if already authenticated in this session
+    let isAuthenticated = sessionStorage.getItem('chatPanelAuth') === 'true';
+
+    // Initialize based on authentication status
+    function init() {
+      if (isAuthenticated) {
+        // Show main panel, hide login
+        document.getElementById('loginScreen').style.display = 'none';
+        document.getElementById('mainPanel').classList.add('visible');
+        loadMessages();
+        
+        // Start auto-refresh
+        setInterval(loadMessages, 10000);
+      } else {
+        // Show login screen
+        document.getElementById('loginScreen').style.display = 'flex';
+        document.getElementById('mainPanel').classList.remove('visible');
+        
+        // Clear any existing auth
+        sessionStorage.removeItem('chatPanelAuth');
+      }
+    }
+
+    // Verify PIN function
+    function verifyPin() {
+      const pinInput = document.getElementById('pinInput');
+      const pinError = document.getElementById('pinError');
+      const enteredPin = pinInput.value.trim();
+
+      if (enteredPin === CORRECT_PIN) {
+        // Correct PIN - Grant access
+        sessionStorage.setItem('chatPanelAuth', 'true');
+        isAuthenticated = true;
+        
+        // Hide login, show panel
+        document.getElementById('loginScreen').style.display = 'none';
+        document.getElementById('mainPanel').classList.add('visible');
+        
+        // Clear any error
+        pinError.textContent = '';
+        pinInput.value = '';
+        
+        // Load messages
+        loadMessages();
+        
+        // Start auto-refresh
+        setInterval(loadMessages, 10000);
+      } else {
+        // Wrong PIN - Show error
+        pinError.textContent = '❌ Incorrect PIN. Access denied.';
+        pinInput.value = '';
+        pinInput.focus();
+        
+        // Shake animation for error
+        document.querySelector('.login-box').style.animation = 'shake 0.5s';
+        setTimeout(() => {
+          document.querySelector('.login-box').style.animation = '';
+        }, 500);
+      }
+    }
+
+    // Logout function
+    function logout() {
+      // Clear authentication
+      sessionStorage.removeItem('chatPanelAuth');
+      isAuthenticated = false;
+      
+      // Show login screen, hide panel
+      document.getElementById('loginScreen').style.display = 'flex';
+      document.getElementById('mainPanel').classList.remove('visible');
+      
+      // Clear PIN input
+      document.getElementById('pinInput').value = '';
+    }
+
+    // Add shake animation
+    const style = document.createElement('style');
+    style.textContent = `
+      @keyframes shake {
+        0%, 100% { transform: translateX(0); }
+        10%, 30%, 50%, 70%, 90% { transform: translateX(-5px); }
+        20%, 40%, 60%, 80% { transform: translateX(5px); }
+      }
+    `;
+    document.head.appendChild(style);
+
     // Load messages from localStorage
     function loadMessages() {
+      if (!isAuthenticated) return;
+      
       const messages = JSON.parse(localStorage.getItem('chatMessages')) || [];
       const container = document.getElementById('messagesContainer');
       const stats = document.getElementById('stats');
@@ -285,6 +503,11 @@
 
     // Submit answer to a message
     function submitAnswer(messageId) {
+      if (!isAuthenticated) {
+        logout();
+        return;
+      }
+      
       const answerTextarea = document.getElementById(`answer-${messageId}`);
       const answer = answerTextarea.value.trim();
       
@@ -306,11 +529,15 @@
       }
     }
 
-    // Check for new messages every 10 seconds
-    setInterval(loadMessages, 10000);
+    // Allow Enter key to submit PIN
+    document.addEventListener('keypress', function(e) {
+      if (e.key === 'Enter' && document.getElementById('loginScreen').style.display !== 'none') {
+        verifyPin();
+      }
+    });
 
-    // Load messages when page opens
-    window.onload = loadMessages;
+    // Initialize on page load
+    window.onload = init;
   </script>
 </body>
 </html>

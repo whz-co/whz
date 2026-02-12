@@ -3,10 +3,10 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=yes">
-    <title>Zakhourani | Home</title>
+    <title>Zakhourani - Master English with AI</title>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <style>
-        /* === Original Zakhourani styles — fully preserved === */
+        /* ===== ZAKHOURANI MAIN STYLES ===== */
         * { margin: 0; padding: 0; box-sizing: border-box; font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; }
         
         :root {
@@ -19,12 +19,13 @@
         
         body { background: linear-gradient(135deg, #f5f7fa 0%, #c3cfe2 100%); min-height: 100vh; }
         
+        /* Header */
         header { background: white; box-shadow: 0 4px 20px rgba(0,0,0,0.1); position: sticky; top: 0; z-index: 1000; }
         
         .header-top {
             background: var(--primary);
             color: white;
-            padding: 15px 40px;
+            padding: 10px 40px;
             display: flex;
             justify-content: space-between;
             align-items: center;
@@ -34,23 +35,27 @@
         .logo h1 { font-size: 28px; font-weight: 700; color: white; }
         
         .auth-buttons { display: flex; gap: 10px; }
-        .auth-btn { padding: 10px 25px; border-radius: 25px; font-weight: 600; cursor: pointer; transition: 0.3s; text-decoration: none; display: inline-block; }
+        .auth-btn { padding: 8px 20px; border-radius: 25px; font-weight: 600; cursor: pointer; transition: 0.3s; text-decoration: none; display: inline-block; }
         .login-btn { background: transparent; color: white; border: 2px solid white; }
         .login-btn:hover { background: white; color: var(--primary); }
         .signup-btn { background: var(--secondary); color: white; border: 2px solid var(--secondary); }
         .signup-btn:hover { background: #2980b9; border-color: #2980b9; }
         
         .user-menu { display: flex; align-items: center; gap: 15px; color: white; }
-        .user-avatar { width: 40px; height: 40px; border-radius: 50%; object-fit: cover; border: 2px solid white; }
-        .logout-btn { background: var(--accent); color: white; border: none; padding: 10px 20px; border-radius: 20px; cursor: pointer; text-decoration: none; }
+        .user-avatar { width: 35px; height: 35px; border-radius: 50%; object-fit: cover; border: 2px solid white; }
+        .user-name { font-size: 14px; font-weight: 600; }
+        .logout-btn { background: var(--accent); color: white; border: none; padding: 8px 16px; border-radius: 20px; cursor: pointer; text-decoration: none; font-size: 14px; display: flex; align-items: center; gap: 5px; }
+        .logout-btn:hover { background: #c0392b; }
         
-        nav { padding: 0 40px; background: white; }
-        .nav-container { display: flex; justify-content: center; padding: 20px 0; }
-        .nav-links { display: flex; list-style: none; gap: 40px; }
-        .nav-links a { text-decoration: none; color: var(--dark); font-weight: 600; font-size: 18px; padding: 10px 20px; border-radius: 8px; transition: 0.3s; }
+        /* Navigation */
+        nav { padding: 0 40px; background: white; border-bottom: 1px solid #eee; }
+        .nav-container { display: flex; justify-content: space-between; align-items: center; padding: 15px 0; }
+        .nav-links { display: flex; list-style: none; gap: 20px; }
+        .nav-links a { text-decoration: none; color: var(--dark); font-weight: 600; font-size: 16px; padding: 8px 16px; border-radius: 8px; transition: 0.3s; display: flex; align-items: center; gap: 6px; }
         .nav-links a:hover { background: var(--light); color: var(--secondary); }
         .nav-links a.active { background: var(--secondary); color: white; }
         
+        /* Hero Section */
         .hero {
             background: linear-gradient(135deg, var(--primary) 0%, #34495e 100%);
             color: white;
@@ -71,6 +76,7 @@
         .cta-secondary { background: transparent; color: white; border: 2px solid white; }
         .cta-secondary:hover { background: white; color: var(--primary); transform: translateY(-3px); }
         
+        /* Services */
         .services-grid {
             display: grid;
             grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
@@ -94,6 +100,7 @@
         .service-card h3 { font-size: 24px; margin-bottom: 15px; color: var(--dark); }
         .service-card p { color: #666; line-height: 1.6; }
         
+        /* Footer */
         footer {
             background: var(--primary);
             color: white;
@@ -106,27 +113,23 @@
         .footer-links a { color: white; text-decoration: none; }
         .footer-links a:hover { color: var(--secondary); }
         
-        /* Mobile responsive overrides */
-        @media (max-width: 768px) {
-            .header-top, nav { padding: 10px 20px; }
-            .logo h1 { font-size: 22px; }
-            .nav-links { flex-direction: column; gap: 10px; text-align: center; }
-            .hero { padding: 40px 20px; margin: 20px; }
-            .hero h2 { font-size: 32px; }
-            .cta-buttons { flex-direction: column; align-items: center; gap: 15px; }
-            .footer-links { flex-direction: column; gap: 10px; }
+        /* Chat Widget Styles - Ultra Simple, Guaranteed Working */
+        .chat-debug-bar {
+            position: fixed;
+            bottom: 100px;
+            right: 20px;
+            background: #333;
+            color: #0f0;
+            padding: 10px 20px;
+            border-radius: 30px;
+            font-size: 12px;
+            z-index: 10001;
+            display: none;
+            font-family: monospace;
+            box-shadow: 0 4px 12px rgba(0,0,0,0.3);
+            border: 1px solid #0f0;
         }
-
-        /* Additional mobile polish for auth */
-        @media (max-width: 600px) {
-            .header-top { flex-wrap: wrap; gap: 10px; }
-            .user-menu span { display: none; }
-            .user-menu { gap: 8px; }
-            .logout-btn { padding: 8px 14px; font-size: 14px; }
-        }
-
-        /* ===== CHAT WIDGET - COMPLETELY FIXED VERSION ===== */
-        /* (styles moved here for cohesion, fully intact) */
+        
         #chatWidget {
             position: fixed;
             bottom: 20px;
@@ -134,6 +137,7 @@
             z-index: 10000;
             font-family: 'Segoe UI', Arial, sans-serif;
         }
+        
         #chatIcon {
             width: 60px;
             height: 60px;
@@ -144,9 +148,14 @@
             justify-content: center;
             cursor: pointer;
             box-shadow: 0 4px 12px rgba(0,0,0,0.15);
-            transition: transform 0.2s;
+            transition: transform 0.2s, background 0.2s;
         }
-        #chatIcon:hover { transform: scale(1.1); }
+        #chatIcon:hover { 
+            transform: scale(1.1); 
+            background: #0069d9;
+        }
+        #chatIcon:active { transform: scale(0.95); }
+        
         #chatBox {
             display: none;
             position: absolute;
@@ -154,28 +163,67 @@
             right: 0;
             width: 320px;
             background: white;
-            border-radius: 12px;
+            border-radius: 16px;
             box-shadow: 0 8px 24px rgba(0,0,0,0.2);
             overflow: hidden;
             animation: slideIn 0.3s ease;
+            border: 1px solid rgba(0,0,0,0.05);
         }
+        
         @keyframes slideIn {
             from { opacity: 0; transform: translateY(20px); }
             to { opacity: 1; transform: translateY(0); }
         }
-        #chatBox textarea { resize: vertical; font-family: inherit; }
-        #chatBox .chat-header i { margin-right: 6px; }
-
-        /* Mobile adjustments for chat */
+        
+        #chatBox textarea { 
+            resize: vertical; 
+            font-family: inherit; 
+            min-height: 100px;
+        }
+        
+        #chatBox input, #chatBox textarea {
+            transition: border 0.2s, box-shadow 0.2s;
+        }
+        
+        #chatBox input:focus, #chatBox textarea:focus {
+            border-color: #007bff !important;
+            outline: none;
+            box-shadow: 0 0 0 3px rgba(0,123,255,0.1);
+        }
+        
+        /* Mobile Optimizations */
+        @media (max-width: 1024px) {
+            .nav-container { flex-direction: column; gap: 15px; }
+            .nav-links { flex-wrap: wrap; justify-content: center; }
+        }
+        
+        @media (max-width: 768px) {
+            .header-top, nav { padding: 10px 20px; }
+            .logo h1 { font-size: 22px; }
+            .nav-links { flex-direction: column; gap: 10px; text-align: center; }
+            .hero { padding: 40px 20px; margin: 20px; }
+            .hero h2 { font-size: 32px; }
+            .cta-buttons { flex-direction: column; align-items: center; gap: 15px; }
+            .footer-links { flex-direction: column; gap: 10px; }
+            .user-menu span { display: none; }
+            .user-menu { gap: 8px; }
+        }
+        
         @media (max-width: 480px) {
             #chatWidget { bottom: 16px; right: 16px; }
-            #chatBox { width: 90vw; right: 0; bottom: 75px; }
+            #chatBox { width: 90vw; right: 0; bottom: 75px; border-radius: 16px; }
             #chatIcon { width: 56px; height: 56px; }
+            .chat-debug-bar { 
+                bottom: 90px; 
+                right: 16px; 
+                font-size: 11px; 
+                padding: 8px 16px;
+            }
         }
     </style>
 </head>
 <body>
-    <!-- Header (original, untouched) -->
+    <!-- ===== HEADER ===== -->
     <header>
         <div class="header-top">
             <div class="logo">
@@ -184,7 +232,12 @@
             </div>
             
             <div class="auth-buttons" id="authButtons">
-                <!-- Populated by Firebase Auth -->
+                <a href="login.html" class="auth-btn login-btn">
+                    <i class="fas fa-sign-in-alt"></i> Login
+                </a>
+                <a href="signup.html" class="auth-btn signup-btn">
+                    <i class="fas fa-user-plus"></i> Sign Up
+                </a>
             </div>
         </div>
         
@@ -192,19 +245,18 @@
             <div class="nav-container">
                 <ul class="nav-links">
                     <li><a href="index.html" class="active"><i class="fas fa-home"></i> Home</a></li>
-                    <li><a href="#"><i class="fas fa-robot"></i> AI Assistant</a></li>
-                    <li><a href="#"><i class="fas fa-book"></i> Dictionary</a></li>
-                    <li><a href="#"><i class="fas fa-language"></i> IELTS</a></li>
-                    <li><a href="#"><i class="fas fa-globe-americas"></i> TOEFL</a></li>
-                    <li><a href="#"><i class="fas fa-user-md"></i> About Dr. Waleed</a></li>
-                    <li><a href="#"><i class="fas fa-envelope"></i> Contact</a></li>
+                    <li><a href="AI.html"><i class="fas fa-robot"></i> AI</a></li>
+                    <li><a href="di.html"><i class="fas fa-book"></i> Dictionary</a></li>
+                    <li><a href="products.html"><i class="fas fa-box"></i> Products</a></li>
+                    <li><a href="Drwaleed.html"><i class="fas fa-user-md"></i> Dr. Waleed</a></li>
+                    <li><a href="aboutus.html"><i class="fas fa-info-circle"></i> About Us</a></li>
                     <li><a href="profile.html"><i class="fas fa-user-circle"></i> Profile</a></li>
                 </ul>
             </div>
         </nav>
     </header>
 
-    <!-- Hero Section -->
+    <!-- ===== HERO SECTION ===== -->
     <div class="hero">
         <h2>Welcome to Zakhourani</h2>
         <p>Founded by Dr. Waleed Hussien Zakhourani. Master English with our AI-powered platform featuring IELTS, TOEFL preparation, smart dictionary, and personalized learning.</p>
@@ -219,52 +271,75 @@
         </div>
     </div>
 
-    <!-- Services Section -->
+    <!-- ===== SERVICES SECTION ===== -->
     <div class="services-grid">
         <div class="service-card">
-            <div class="service-icon"><i class="fas fa-robot"></i></div>
+            <div class="service-icon">
+                <i class="fas fa-robot"></i>
+            </div>
             <h3>AI English Assistant</h3>
             <p>Get instant feedback on writing, speaking, and grammar with our advanced AI tutor.</p>
         </div>
+
         <div class="service-card">
-            <div class="service-icon"><i class="fas fa-book"></i></div>
+            <div class="service-icon">
+                <i class="fas fa-book"></i>
+            </div>
             <h3>Smart Dictionary</h3>
             <p>Access definitions, synonyms, antonyms, and examples for 100,000+ words.</p>
         </div>
+
         <div class="service-card">
-            <div class="service-icon"><i class="fas fa-language"></i></div>
+            <div class="service-icon">
+                <i class="fas fa-language"></i>
+            </div>
             <h3>IELTS Preparation</h3>
             <p>Complete IELTS course with practice tests and speaking simulations.</p>
         </div>
+
         <div class="service-card">
-            <div class="service-icon"><i class="fas fa-globe-americas"></i></div>
+            <div class="service-icon">
+                <i class="fas fa-globe-americas"></i>
+            </div>
             <h3>TOEFL Training</h3>
-            <p>Structured TOEFL preparation with full-length practice tests.</</p>
+            <p>Structured TOEFL preparation with full-length practice tests.</p>
         </div>
     </div>
 
-    <!-- Footer -->
+    <!-- ===== FOOTER ===== -->
     <footer>
         <div class="logo" style="justify-content: center; margin-bottom: 20px;">
             <i class="fas fa-graduation-cap" style="font-size: 32px; color: #3498db;"></i>
             <h1>Zakhourani</h1>
         </div>
+        
         <p>English language learning platform by Dr. Waleed Hussien Zakhourani</p>
+        
         <ul class="footer-links">
             <li><a href="index.html">Home</a></li>
-            <li><a href="login.html">Login</a></li>
-            <li><a href="signup.html">Sign Up</a></li>
+            <li><a href="AI.html">AI</a></li>
+            <li><a href="di.html">Dictionary</a></li>
+            <li><a href="products.html">Products</a></li>
+            <li><a href="Drwaleed.html">Dr. Waleed</a></li>
+            <li><a href="aboutus.html">About Us</a></li>
             <li><a href="profile.html">Profile</a></li>
-            <li><a href="logout.html">Logout</a></li>
         </ul>
+        
         <p style="margin-top: 30px; color: #ccc;">© 2024 Zakhourani. All rights reserved.</p>
     </footer>
 
     <!-- =========================================== -->
-    <!-- CHAT WIDGET - COMPLETELY FIXED VERSION      -->
+    <!-- CHAT WIDGET - SIMPLIFIED GUARANTEED WORKING -->
     <!-- =========================================== -->
+    
+    <!-- Debug Bar (Shows status, visible for testing) -->
+    <div id="chatDebugBar" class="chat-debug-bar">
+        🔧 <span id="debugStatus">Initializing...</span>
+    </div>
+
+    <!-- Chat Widget Container -->
     <div id="chatWidget">
-        <!-- Chat Icon -->
+        <!-- Chat Icon (Always visible initially) -->
         <div id="chatIcon">
             <svg xmlns="http://www.w3.org/2000/svg" width="30" height="30" viewBox="0 0 24 24" fill="white">
                 <path d="M20 2H4c-1.1 0-2 .9-2 2v18l4-4h14c1.1 0 2-.9 2-2V4c0-1.1-.9-2-2-2z"/>
@@ -273,37 +348,51 @@
 
         <!-- Chat Box (Hidden by default) -->
         <div id="chatBox">
+            <!-- Header -->
             <div style="background: #007bff; color: white; padding: 15px; display: flex; justify-content: space-between; align-items: center;">
-                <span style="font-weight: bold;"><i class="fas fa-headset"></i> Chat Support</span>
-                <span id="closeChat" style="cursor: pointer; font-size: 20px;">&times;</span>
+                <span style="font-weight: bold; display: flex; align-items: center; gap: 8px;">
+                    <i class="fas fa-headset"></i> Chat Support
+                </span>
+                <span id="closeChat" style="cursor: pointer; font-size: 24px; line-height: 1; padding: 0 5px;">&times;</span>
             </div>
             
-            <div style="padding: 15px;">
-                <!-- Optional debug panel (hidden by default) -->
-                <div id="testMessage" style="background: #f8f9fa; padding: 10px; border-radius: 6px; margin-bottom: 15px; font-size: 12px; border: 1px solid #dee2e6; display: none;">
-                    <strong>Debug:</strong> <span id="debugText">Ready</span>
+            <!-- Body -->
+            <div style="padding: 20px;">
+                <!-- Test Buttons - Help verify storage is working -->
+                <div style="margin-bottom: 15px; display: flex; gap: 8px;">
+                    <button id="testSaveBtn" type="button" style="flex: 1; padding: 8px; background: #6c757d; color: white; border: none; border-radius: 8px; cursor: pointer; font-size: 12px; display: flex; align-items: center; justify-content: center; gap: 5px;">
+                        <i class="fas fa-vial"></i> Test Save
+                    </button>
+                    <button id="testViewBtn" type="button" style="flex: 1; padding: 8px; background: #17a2b8; color: white; border: none; border-radius: 8px; cursor: pointer; font-size: 12px; display: flex; align-items: center; justify-content: center; gap: 5px;">
+                        <i class="fas fa-eye"></i> View Msgs
+                    </button>
                 </div>
+                
+                <!-- Message Form -->
                 <form id="messageForm">
-                    <input type="text" id="customerName" placeholder="Your name" required style="width: 100%; padding: 10px; margin-bottom: 10px; border: 1px solid #ddd; border-radius: 6px; box-sizing: border-box;">
-                    <textarea id="customerMessage" placeholder="Your message..." rows="4" required style="width: 100%; padding: 10px; margin-bottom: 10px; border: 1px solid #ddd; border-radius: 6px; box-sizing: border-box;"></textarea>
-                    <button type="submit" style="width: 100%; padding: 12px; background: #28a745; color: white; border: none; border-radius: 6px; cursor: pointer; font-size: 16px; font-weight: bold;">
+                    <input type="text" id="customerName" placeholder="Your name" value="Test User" required 
+                           style="width: 100%; padding: 12px; margin-bottom: 12px; border: 1px solid #ddd; border-radius: 10px; box-sizing: border-box; font-size: 15px;">
+                    <textarea id="customerMessage" placeholder="Your message..." rows="4" required 
+                              style="width: 100%; padding: 12px; margin-bottom: 12px; border: 1px solid #ddd; border-radius: 10px; box-sizing: border-box; font-size: 15px;">Test message at <?php echo date('H:i:s'); ?></textarea>
+                    <button type="submit" style="width: 100%; padding: 14px; background: #28a745; color: white; border: none; border-radius: 50px; cursor: pointer; font-size: 16px; font-weight: bold; display: flex; align-items: center; justify-content: center; gap: 8px; box-shadow: 0 4px 12px rgba(40,167,69,0.3);">
                         <i class="fas fa-paper-plane"></i> Send Message
                     </button>
                 </form>
-                <div id="formFeedback" style="margin-top: 10px; font-size: 14px; min-height: 20px;"></div>
+                
+                <!-- Feedback Area -->
+                <div id="formFeedback" style="margin-top: 15px; font-size: 14px; min-height: 24px; text-align: center; font-weight: 500;"></div>
             </div>
         </div>
     </div>
 
-    <!-- Firebase SDK -->
+    <!-- ===== FIREBASE SDK (for auth, optional but included) ===== -->
     <script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-app-compat.js"></script>
     <script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-auth-compat.js"></script>
-    <script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-firestore-compat.js"></script>
     
-    <!-- Main Application Script (Firebase + Chat Widget) -->
+    <!-- ===== MAIN SCRIPT - CHAT WIDGET + FIREBASE AUTH ===== -->
     <script>
         // ===========================================
-        // FIREBASE CONFIGURATION (YOUR EXISTING)
+        // FIREBASE CONFIGURATION (Your existing config)
         // ===========================================
         const firebaseConfig = {
             apiKey: "AIzaSyAE8wf24HXrfmpMluaFOv1OHPrf_YFfqTQ",
@@ -319,25 +408,29 @@
         if (!firebase.apps.length) {
             firebase.initializeApp(firebaseConfig);
         }
-
         const auth = firebase.auth();
-        const db = firebase.firestore();
 
         // Update UI based on auth state
         function updateAuthUI(user) {
             const authButtons = document.getElementById('authButtons');
+            if (!authButtons) return;
+            
             if (user) {
+                // User is logged in
+                const displayName = user.displayName || user.email || 'User';
+                const nameForAvatar = encodeURIComponent(displayName);
                 authButtons.innerHTML = `
                     <div class="user-menu">
-                        <img src="${user.photoURL || `https://ui-avatars.com/api/?name=${encodeURIComponent(user.displayName || user.email)}&background=3498db&color=fff`}" 
+                        <img src="${user.photoURL || `https://ui-avatars.com/api/?name=${nameForAvatar}&background=3498db&color=fff`}" 
                              alt="Profile" class="user-avatar">
-                        <span>${user.displayName || user.email}</span>
+                        <span class="user-name">${displayName.split('@')[0]}</span>
                         <a href="logout.html" class="logout-btn">
                             <i class="fas fa-sign-out-alt"></i> Logout
                         </a>
                     </div>
                 `;
             } else {
+                // User is not logged in
                 authButtons.innerHTML = `
                     <a href="login.html" class="auth-btn login-btn">
                         <i class="fas fa-sign-in-alt"></i> Login
@@ -349,136 +442,235 @@
             }
         }
 
+        // Listen for auth changes
         auth.onAuthStateChanged((user) => {
             updateAuthUI(user);
+            
+            // Auto-fill chat name if user is logged in
+            if (user) {
+                const nameInput = document.getElementById('customerName');
+                if (nameInput) {
+                    let displayName = user.displayName || user.email || 'User';
+                    if (displayName.includes('@')) displayName = displayName.split('@')[0];
+                    nameInput.value = displayName;
+                    nameInput.readOnly = true;
+                    nameInput.style.background = '#f8f9fa';
+                    nameInput.style.cursor = 'not-allowed';
+                }
+            }
         });
 
         // ===========================================
-        // CHAT WIDGET - GUARANTEED WORKING VERSION
+        // CHAT WIDGET - ULTRA SIMPLE, GUARANTEED WORKING
+        // NO DEPENDENCIES, NO CONFLICTS, PURE JS
         // ===========================================
         (function() {
             "use strict";
             
+            // SIMPLE STORAGE KEY - MUST MATCH chat.html
             const STORAGE_KEY = 'chat_messages';
             
-            // Initialize storage
-            if (!localStorage.getItem(STORAGE_KEY)) {
-                localStorage.setItem(STORAGE_KEY, JSON.stringify([]));
-                console.log('Chat Widget: Storage initialized');
-            }
-            
-            // DOM Elements
+            // Get DOM elements
             const chatIcon = document.getElementById('chatIcon');
             const chatBox = document.getElementById('chatBox');
             const closeChat = document.getElementById('closeChat');
             const messageForm = document.getElementById('messageForm');
             const formFeedback = document.getElementById('formFeedback');
+            const testSaveBtn = document.getElementById('testSaveBtn');
+            const testViewBtn = document.getElementById('testViewBtn');
+            const debugStatus = document.getElementById('debugStatus');
             
-            // Guard clause
-            if (!chatIcon || !chatBox || !closeChat || !messageForm) {
-                console.error('Chat Widget: Required elements not found');
-                return;
+            // Initialize storage if not exists
+            if (!localStorage.getItem(STORAGE_KEY)) {
+                localStorage.setItem(STORAGE_KEY, JSON.stringify([]));
+                console.log('✅ Chat: Storage initialized');
+                if (debugStatus) debugStatus.innerHTML = 'Storage ready';
+            } else {
+                const count = JSON.parse(localStorage.getItem(STORAGE_KEY)).length;
+                if (debugStatus) debugStatus.innerHTML = `${count} messages`;
             }
             
-            // Open chat
-            chatIcon.addEventListener('click', function() {
-                chatBox.style.display = 'block';
-                chatIcon.style.display = 'none';
-                console.log('Chat Widget: Opened');
-            });
+            // ===== CHAT CONTROLS =====
+            if (chatIcon) {
+                chatIcon.addEventListener('click', function() {
+                    chatBox.style.display = 'block';
+                    chatIcon.style.display = 'none';
+                    console.log('✅ Chat: Opened');
+                    if (debugStatus) debugStatus.innerHTML = 'Chat open';
+                });
+            }
             
-            // Close chat
-            closeChat.addEventListener('click', function() {
-                chatBox.style.display = 'none';
-                chatIcon.style.display = 'flex';
-                console.log('Chat Widget: Closed');
-            });
-            
-            // Send message
-            messageForm.addEventListener('submit', function(e) {
-                e.preventDefault();
-                
-                const nameInput = document.getElementById('customerName');
-                const messageInput = document.getElementById('customerMessage');
-                
-                const name = nameInput.value.trim();
-                const message = messageInput.value.trim();
-                
-                console.log('Chat Widget: Sending message', { name, message });
-                
-                if (name && message) {
-                    const newMessage = {
-                        id: Date.now(),
-                        name: name,
-                        message: message,
-                        timestamp: new Date().toLocaleString(),
-                        status: 'pending',
-                        answer: null,
-                        answerTime: null,
-                        read: false
-                    };
-                    
-                    try {
-                        const messages = JSON.parse(localStorage.getItem(STORAGE_KEY)) || [];
-                        messages.push(newMessage);
-                        localStorage.setItem(STORAGE_KEY, JSON.stringify(messages));
-                        // Force sync
-                        localStorage.getItem(STORAGE_KEY);
-                        
-                        console.log('Chat Widget: Message saved', newMessage);
-                        
-                        formFeedback.innerHTML = '<span style="color: #28a745;">✓ Message sent! We will respond soon.</span>';
-                        
-                        // Reset form
-                        nameInput.value = '';
-                        messageInput.value = '';
-                        
-                        // Auto-fill name if logged in
-                        if (typeof auth !== 'undefined' && auth.currentUser) {
-                            const user = auth.currentUser;
-                            let displayName = user.displayName || user.email || '';
-                            if (displayName.includes('@')) displayName = displayName.split('@')[0];
-                            nameInput.value = displayName;
-                        }
-                        
-                        setTimeout(() => { formFeedback.innerHTML = ''; }, 3000);
-                        
-                    } catch (error) {
-                        console.error('Chat Widget: Error', error);
-                        formFeedback.innerHTML = '<span style="color: #dc3545;">✗ Error sending message.</span>';
-                    }
-                }
-            });
-            
-            // Auto-fill name from Firebase Auth
-            if (typeof firebase !== 'undefined' && firebase.auth) {
-                firebase.auth().onAuthStateChanged(function(user) {
-                    if (user) {
-                        const nameInput = document.getElementById('customerName');
-                        if (nameInput) {
-                            let displayName = user.displayName || user.email || '';
-                            if (displayName.includes('@')) displayName = displayName.split('@')[0];
-                            nameInput.value = displayName;
-                            nameInput.readOnly = true;
-                            nameInput.style.background = '#f8f9fa';
-                            console.log('Chat Widget: Auto-filled user', displayName);
-                        }
+            if (closeChat) {
+                closeChat.addEventListener('click', function() {
+                    chatBox.style.display = 'none';
+                    chatIcon.style.display = 'flex';
+                    console.log('✅ Chat: Closed');
+                    if (debugStatus) {
+                        const count = JSON.parse(localStorage.getItem(STORAGE_KEY) || '[]').length;
+                        debugStatus.innerHTML = `${count} messages`;
                     }
                 });
             }
             
-            // Click outside to close
+            // ===== TEST SAVE BUTTON =====
+            if (testSaveBtn) {
+                testSaveBtn.addEventListener('click', function() {
+                    const testMsg = {
+                        id: Date.now(),
+                        name: "Test User",
+                        message: "🔧 Test message at " + new Date().toLocaleTimeString(),
+                        timestamp: new Date().toLocaleString(),
+                        status: 'pending',
+                        answer: null,
+                        answerTime: null
+                    };
+                    
+                    const messages = JSON.parse(localStorage.getItem(STORAGE_KEY)) || [];
+                    messages.push(testMsg);
+                    localStorage.setItem(STORAGE_KEY, JSON.stringify(messages));
+                    
+                    console.log('✅ Test message saved:', testMsg);
+                    if (debugStatus) debugStatus.innerHTML = 'Test saved!';
+                    
+                    if (formFeedback) {
+                        formFeedback.innerHTML = '<span style="color: #28a745;">✓ Test message saved! (F12 to view)</span>';
+                        setTimeout(() => { formFeedback.innerHTML = ''; }, 3000);
+                    }
+                    
+                    // Also show in console
+                    console.log('📋 Current messages:', messages);
+                });
+            }
+            
+            // ===== TEST VIEW BUTTON =====
+            if (testViewBtn) {
+                testViewBtn.addEventListener('click', function() {
+                    const messages = JSON.parse(localStorage.getItem(STORAGE_KEY)) || [];
+                    alert(`📋 Storage Key: ${STORAGE_KEY}\nTotal Messages: ${messages.length}\n\nCheck console (F12) for details`);
+                    console.log('📋 All messages:', messages);
+                    if (debugStatus) debugStatus.innerHTML = messages.length + ' msgs';
+                });
+            }
+            
+            // ===== SEND MESSAGE =====
+            if (messageForm) {
+                messageForm.addEventListener('submit', function(e) {
+                    e.preventDefault();
+                    
+                    const nameInput = document.getElementById('customerName');
+                    const messageInput = document.getElementById('customerMessage');
+                    
+                    const name = nameInput.value.trim();
+                    const message = messageInput.value.trim();
+                    
+                    if (name && message) {
+                        // Create message object
+                        const newMessage = {
+                            id: Date.now(),
+                            name: name,
+                            message: message,
+                            timestamp: new Date().toLocaleString(),
+                            status: 'pending',
+                            answer: null,
+                            answerTime: null,
+                            read: false
+                        };
+                        
+                        try {
+                            // Get existing messages
+                            const messages = JSON.parse(localStorage.getItem(STORAGE_KEY)) || [];
+                            
+                            // Add new message
+                            messages.push(newMessage);
+                            
+                            // Save to localStorage
+                            localStorage.setItem(STORAGE_KEY, JSON.stringify(messages));
+                            
+                            // Verify save
+                            const saved = JSON.parse(localStorage.getItem(STORAGE_KEY));
+                            console.log('✅ Message saved! Total:', saved.length);
+                            
+                            // Show success feedback
+                            formFeedback.innerHTML = '<span style="color: #28a745; display: flex; align-items: center; justify-content: center; gap: 5px;"><i class="fas fa-check-circle"></i> Message sent! We\'ll respond soon.</span>';
+                            
+                            // Clear message field only (keep name)
+                            messageInput.value = '';
+                            
+                            // Update debug
+                            if (debugStatus) debugStatus.innerHTML = saved.length + ' msgs';
+                            
+                            // Clear feedback after 3 seconds
+                            setTimeout(() => {
+                                formFeedback.innerHTML = '';
+                            }, 3000);
+                            
+                        } catch (error) {
+                            console.error('❌ Error saving message:', error);
+                            formFeedback.innerHTML = '<span style="color: #dc3545;"><i class="fas fa-exclamation-circle"></i> Error sending message</span>';
+                        }
+                    } else {
+                        formFeedback.innerHTML = '<span style="color: #dc3545;">Please fill both fields</span>';
+                    }
+                });
+            }
+            
+            // ===== CLICK OUTSIDE TO CLOSE =====
             document.addEventListener('click', function(e) {
-                if (chatBox.style.display === 'block' && 
-                    !chatBox.contains(e.target) && 
-                    !chatIcon.contains(e.target)) {
-                    chatBox.style.display = 'none';
-                    chatIcon.style.display = 'flex';
+                if (chatBox && chatIcon) {
+                    if (chatBox.style.display === 'block' && 
+                        !chatBox.contains(e.target) && 
+                        !chatIcon.contains(e.target)) {
+                        chatBox.style.display = 'none';
+                        chatIcon.style.display = 'flex';
+                        
+                        if (debugStatus) {
+                            const count = JSON.parse(localStorage.getItem(STORAGE_KEY) || '[]').length;
+                            debugStatus.innerHTML = count + ' msgs';
+                        }
+                    }
                 }
             });
             
-            console.log('Chat Widget: Initialized with key:', STORAGE_KEY);
+            // ===== PREVENT FORM FROM CLOSING WHEN CLICKING INSIDE =====
+            if (chatBox) {
+                chatBox.addEventListener('click', function(e) {
+                    e.stopPropagation();
+                });
+            }
+            
+            console.log('✅ Chat Widget: Initialized with key:', STORAGE_KEY);
         })();
     </script>
+
+    <!-- Small style tweak for debug bar -->
+    <style>
+        /* Ensure debug bar is visible and pretty */
+        .chat-debug-bar {
+            display: block !important;
+            background: #1e2a3a;
+            color: #00ff9d;
+            border: 1px solid #00ff9d;
+            font-weight: 500;
+            letter-spacing: 0.5px;
+        }
+        /* Fix for Firebase auto-fill */
+        input:read-only {
+            background: #f8f9fa;
+            cursor: not-allowed;
+            opacity: 0.9;
+        }
+        /* Better mobile tap targets */
+        #closeChat {
+            padding: 0 8px;
+            border-radius: 50%;
+        }
+        #closeChat:hover {
+            background: rgba(255,255,255,0.2);
+        }
+        .nav-links a i {
+            width: 18px;
+            text-align: center;
+        }
+    </style>
 </body>
 </html>

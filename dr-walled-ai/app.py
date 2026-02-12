@@ -1,44 +1,31 @@
 import os
-from openai import OpenAI
 import streamlit as st
+from openai import OpenAI
 
-# ============ FIXED: Better secrets handling ============
-# Try multiple ways to get the API key
+# ============ FIXED: OpenAI Initialization ============
+# Get API key from secrets
 api_key = None
-
-# Method 1: Streamlit secrets (for cloud deployment)
 try:
     api_key = st.secrets["OPENAI_API_KEY"]
 except:
-    pass
-
-# Method 2: Environment variable (for local testing)
-if not api_key:
     api_key = os.getenv("OPENAI_API_KEY")
 
-# Method 3: Show helpful error if no key found
 if not api_key:
     st.error("""
     🚨 **API Key Not Found!** 
-    
-    Please add your OpenAI API key in one of these ways:
-    
-    1. **For Streamlit Cloud:** 
-       - Go to app settings → Secrets
-       - Add: `OPENAI_API_KEY = "sk-your-key-here"`
-    
-    2. **For local testing:**
-       - Create `.env` file with: `OPENAI_API_KEY=sk-your-key-here`
+    Please add your OpenAI API key in Streamlit Secrets:
+    `OPENAI_API_KEY = "sk-your-key-here"`
     """)
     st.stop()
 
-# Initialize OpenAI client
+# FIXED: Initialize client WITHOUT any extra parameters
 try:
-    client = OpenAI(api_key=api_key)
+    client = OpenAI(api_key=api_key)  # NO proxies, NO http_client, just api_key
 except Exception as e:
     st.error(f"Error initializing OpenAI: {e}")
+    st.info("💡 Make sure you have the latest openai package: `pip install --upgrade openai`")
     st.stop()
-# ========================================================
+# ======================================================
 
 # Page setup
 st.set_page_config(page_title="Dr. Walled", page_icon="🏥")
@@ -67,18 +54,16 @@ if question := st.chat_input("Ask Dr. Walled anything about your health..."):
                 response = client.chat.completions.create(
                     model="gpt-3.5-turbo",
                     messages=[
-                        {"role": "system", "content": "You are Dr. Walled, a caring medical AI. Be warm, professional, and always remind users to consult real doctors. Use simple language."},
+                        {"role": "system", "content": "You are Dr. Walled, a caring medical AI assistant. Be warm, professional, and always remind users to consult real doctors. Use simple, clear language."},
                         {"role": "user", "content": question}
-                    ],
-                    max_tokens=500,
-                    temperature=0.7
+                    ]
                 )
                 answer = response.choices[0].message.content
                 st.write(answer)
                 st.caption("⚠️ Remember: I'm AI - please see a real doctor for medical advice")
             except Exception as e:
                 st.error(f"Error getting response: {e}")
-                answer = "I'm having trouble responding right now. Please try again."
+                answer = "I'm having trouble responding. Please try again."
                 st.write(answer)
     
     # Save conversation
@@ -90,7 +75,9 @@ with st.sidebar:
     st.header("About Dr. Walled")
     st.write("Your 24/7 AI health assistant for general wellness information.")
     
-    # Show API status
+    # Show version info
+    st.caption(f"OpenAI version: {openai.__version__}")
+    
     if api_key:
         st.success("✅ API Connected")
     else:

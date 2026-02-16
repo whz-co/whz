@@ -7,16 +7,15 @@
     <!-- Firebase SDKs -->
     <script src="https://www.gstatic.com/firebasejs/10.8.0/firebase-app-compat.js"></script>
     <script src="https://www.gstatic.com/firebasejs/10.8.0/firebase-firestore-compat.js"></script>
-
+    
     <style>
-        /* === STYLES (Keep all your existing styles - they are perfect) === */
         * {
             margin: 0;
             padding: 0;
             box-sizing: border-box;
             font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
         }
-
+        
         body {
             background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
             min-height: 100vh;
@@ -25,7 +24,7 @@
             justify-content: center;
             padding: 20px;
         }
-
+        
         #app {
             width: 100%;
             max-width: 900px;
@@ -37,7 +36,7 @@
             flex-direction: column;
             height: 80vh;
         }
-
+        
         header {
             background: linear-gradient(135deg, #1e3c72 0%, #2a5298 100%);
             color: white;
@@ -47,13 +46,13 @@
             justify-content: space-between;
             border-bottom: 1px solid rgba(255,255,255,0.1);
         }
-
+        
         .header-content {
             display: flex;
             align-items: center;
             gap: 15px;
         }
-
+        
         .doctor-avatar {
             width: 50px;
             height: 50px;
@@ -67,17 +66,17 @@
             color: #1e3c72;
             border: 3px solid white;
         }
-
+        
         .title h1 {
             font-size: 1.8rem;
             margin-bottom: 5px;
         }
-
+        
         .title p {
             font-size: 0.9rem;
             opacity: 0.9;
         }
-
+        
         .status {
             background: rgba(255,255,255,0.2);
             padding: 8px 15px;
@@ -87,7 +86,7 @@
             align-items: center;
             gap: 8px;
         }
-
+        
         .status-dot {
             width: 10px;
             height: 10px;
@@ -95,24 +94,24 @@
             border-radius: 50%;
             animation: pulse 2s infinite;
         }
-
+        
         .status-dot.error {
             background: #ef4444;
         }
-
+        
         @keyframes pulse {
             0% { opacity: 1; }
             50% { opacity: 0.5; }
             100% { opacity: 1; }
         }
-
+        
         #chat-container {
             flex: 1;
             overflow-y: auto;
             padding: 30px;
             background: #f8fafc;
         }
-
+        
         .welcome-message {
             text-align: center;
             margin-bottom: 30px;
@@ -120,16 +119,16 @@
             background: linear-gradient(135deg, #667eea15 0%, #764ba215 100%);
             border-radius: 15px;
         }
-
+        
         .welcome-message h2 {
             color: #1e3c72;
             margin-bottom: 10px;
         }
-
+        
         .welcome-message p {
             color: #64748b;
         }
-
+        
         .message {
             margin: 15px 0;
             padding: 12px 18px;
@@ -140,19 +139,19 @@
             position: relative;
             animation: fadeIn 0.3s ease;
         }
-
+        
         @keyframes fadeIn {
             from { opacity: 0; transform: translateY(10px); }
             to { opacity: 1; transform: translateY(0); }
         }
-
+        
         .user-message {
             background: linear-gradient(135deg, #1e3c72 0%, #2a5298 100%);
             color: white;
             margin-left: auto;
             border-bottom-right-radius: 5px;
         }
-
+        
         .ai-message {
             background: white;
             color: #1e293b;
@@ -160,7 +159,7 @@
             border-bottom-left-radius: 5px;
             box-shadow: 0 2px 10px rgba(0,0,0,0.05);
         }
-
+        
         .loading {
             background: #e2e8f0;
             color: #475569;
@@ -170,13 +169,13 @@
             align-items: center;
             gap: 10px;
         }
-
+        
         .typing-indicator {
             display: flex;
             gap: 5px;
             padding: 5px 0;
         }
-
+        
         .typing-indicator span {
             width: 8px;
             height: 8px;
@@ -184,28 +183,28 @@
             border-radius: 50%;
             animation: typing 1s infinite ease-in-out;
         }
-
+        
         .typing-indicator span:nth-child(2) { animation-delay: 0.2s; }
         .typing-indicator span:nth-child(3) { animation-delay: 0.4s; }
-
+        
         @keyframes typing {
             0%, 60%, 100% { transform: translateY(0); }
             30% { transform: translateY(-10px); }
         }
-
+        
         .message-time {
             font-size: 0.7rem;
             opacity: 0.7;
             margin-top: 5px;
             text-align: right;
         }
-
+        
         #input-area {
             padding: 20px 30px;
             background: white;
             border-top: 1px solid #e2e8f0;
         }
-
+        
         .input-wrapper {
             display: flex;
             gap: 15px;
@@ -215,12 +214,12 @@
             border: 2px solid transparent;
             transition: all 0.3s;
         }
-
+        
         .input-wrapper:focus-within {
             border-color: #1e3c72;
             background: white;
         }
-
+        
         #message-input {
             flex: 1;
             border: none;
@@ -230,11 +229,11 @@
             outline: none;
             color: #1e293b;
         }
-
+        
         #message-input::placeholder {
             color: #94a3b8;
         }
-
+        
         #send-button {
             background: linear-gradient(135deg, #1e3c72 0%, #2a5298 100%);
             color: white;
@@ -249,18 +248,18 @@
             align-items: center;
             gap: 8px;
         }
-
+        
         #send-button:hover:not(:disabled) {
             transform: translateY(-2px);
             box-shadow: 0 5px 15px rgba(30, 60, 114, 0.4);
         }
-
+        
         #send-button:disabled {
             background: #94a3b8;
             cursor: not-allowed;
             opacity: 0.7;
         }
-
+        
         #error-display {
             margin: 10px 30px 0;
             padding: 12px 20px;
@@ -270,12 +269,12 @@
             display: none;
             animation: slideIn 0.3s ease;
         }
-
+        
         @keyframes slideIn {
             from { opacity: 0; transform: translateY(-10px); }
             to { opacity: 1; transform: translateY(0); }
         }
-
+        
         .footer {
             padding: 10px 30px;
             background: white;
@@ -286,26 +285,26 @@
             color: #64748b;
             font-size: 0.85rem;
         }
-
+        
         .powered-by {
             display: flex;
             align-items: center;
             gap: 15px;
         }
-
+        
         .powered-by span {
             display: flex;
             align-items: center;
             gap: 5px;
         }
-
+        
         .suggestion-chips {
             display: flex;
             gap: 10px;
             margin-top: 15px;
             flex-wrap: wrap;
         }
-
+        
         .chip {
             background: #f1f5f9;
             padding: 8px 15px;
@@ -316,13 +315,13 @@
             transition: all 0.3s;
             border: 1px solid #e2e8f0;
         }
-
+        
         .chip:hover {
             background: #1e3c72;
             color: white;
             border-color: #1e3c72;
         }
-
+        
         .admin-badge {
             background: #ffd700;
             color: #1e3c72;
@@ -331,7 +330,7 @@
             font-size: 0.8rem;
             font-weight: 600;
         }
-
+        
         @media (max-width: 768px) {
             body { padding: 10px; }
             #app { height: 95vh; }
@@ -361,7 +360,7 @@
                 <h2>👋 Welcome to Dr. Waleed's AI Assistant</h2>
                 <p>Ask me ANYTHING! I can help with:</p>
                 <p style="font-size: 0.9rem; margin-top: 10px;">
-                    💊 Health & Medical | 💻 Technology | 📚 Education | 🎨 Arts & Culture |
+                    💊 Health & Medical | 💻 Technology | 📚 Education | 🎨 Arts & Culture | 
                     🌍 General Knowledge | 🍳 Recipes | ✈️ Travel | 💼 Business | 🎮 Entertainment | 🔬 Science
                 </p>
             </div>
@@ -371,9 +370,9 @@
 
         <div id="input-area">
             <div class="input-wrapper">
-                <input
-                    type="text"
-                    id="message-input"
+                <input 
+                    type="text" 
+                    id="message-input" 
                     placeholder="Ask me anything about any topic..."
                     autocomplete="off"
                 >
@@ -384,7 +383,7 @@
                     </svg>
                 </button>
             </div>
-
+            
             <div class="suggestion-chips">
                 <div class="chip" onclick="useSuggestion('What is artificial intelligence?')">🤖 What is AI?</div>
                 <div class="chip" onclick="useSuggestion('Tell me a joke')">😄 Tell me a joke</div>
@@ -408,7 +407,7 @@
 
     <script>
         // ============================================
-        // FIREBASE CONFIGURATION
+        // FIREBASE CONFIGURATION - YOUR EXACT CONFIG
         // ============================================
         const firebaseConfig = {
             apiKey: "AIzaSyAE8wf24HXrfmpMluaFOv1OHPrf_YFfqTQ",
@@ -471,19 +470,19 @@
         function addMessage(content, type) {
             const messageDiv = document.createElement('div');
             messageDiv.className = `message ${type}-message`;
-
+            
             const contentDiv = document.createElement('div');
             contentDiv.textContent = content;
             messageDiv.appendChild(contentDiv);
-
+            
             const timeDiv = document.createElement('div');
             timeDiv.className = 'message-time';
             timeDiv.textContent = getCurrentTime();
             messageDiv.appendChild(timeDiv);
-
+            
             chatContainer.appendChild(messageDiv);
             chatContainer.scrollTop = chatContainer.scrollHeight;
-
+            
             // Save to conversation history
             if (type === 'user' || type === 'ai') {
                 conversationHistory.push({
@@ -492,7 +491,7 @@
                 });
                 if (conversationHistory.length > 10) conversationHistory = conversationHistory.slice(-10);
             }
-
+            
             // Save to Firestore
             if (type === 'user' || type === 'ai') {
                 db.collection('chats').add({
@@ -509,14 +508,14 @@
             const loadingDiv = document.createElement('div');
             loadingDiv.className = 'message loading';
             loadingDiv.id = 'loading-message';
-
+            
             const typingIndicator = document.createElement('div');
             typingIndicator.className = 'typing-indicator';
             typingIndicator.innerHTML = '<span></span><span></span><span></span>';
-
+            
             const textDiv = document.createElement('div');
             textDiv.textContent = 'Thinking';
-
+            
             loadingDiv.appendChild(typingIndicator);
             loadingDiv.appendChild(textDiv);
             chatContainer.appendChild(loadingDiv);
@@ -529,28 +528,29 @@
         }
 
         // ============================================
-        // OPENROUTER API CALL - FIXED USING OFFICIAL STRUCTURE
+        // OPENROUTER API CALL - SIMPLIFIED AND RELIABLE
         // ============================================
         async function callDeepSeek(userMessage) {
-            // Following the OpenAI SDK pattern from the official docs
-            const requestBody = {
-                model: 'deepseek/deepseek-chat-v3-0324:free',
-                messages: [
-                    {
-                        role: 'system',
-                        content: 'You are Dr. Waleed\'s helpful AI assistant. You provide accurate, detailed, and helpful answers about ANY topic including health, technology, science, history, entertainment, cooking, travel, business, education, and general knowledge. Be friendly, thorough, and always give complete responses.'
-                    },
-                    ...conversationHistory.filter(msg => msg.role !== 'system'),
-                    {
-                        role: 'user',
-                        content: userMessage
-                    }
-                ],
-                temperature: 0.7,
-                max_tokens: 2000,
-                top_p: 0.9,
-                stream: false
-            };
+            // Prepare messages with system prompt and history
+            const messages = [
+                {
+                    role: 'system',
+                    content: 'You are Dr. Waleed\'s helpful AI assistant. You provide accurate, detailed answers about ANY topic including health, technology, science, history, entertainment, cooking, travel, business, education, and general knowledge. Be friendly and thorough.'
+                }
+            ];
+            
+            // Add conversation history
+            for (let msg of conversationHistory) {
+                messages.push(msg);
+            }
+            
+            // Add current message
+            messages.push({
+                role: 'user',
+                content: userMessage
+            });
+
+            console.log('Sending request with', messages.length, 'messages');
 
             try {
                 const response = await fetch('https://openrouter.ai/api/v1/chat/completions', {
@@ -558,20 +558,28 @@
                     headers: {
                         'Content-Type': 'application/json',
                         'Authorization': `Bearer ${OPENROUTER_API_KEY}`,
-                        // Adding the optional headers as shown in the docs
                         'HTTP-Referer': window.location.origin,
                         'X-Title': 'Dr. Waleed AI'
                     },
-                    body: JSON.stringify(requestBody)
+                    body: JSON.stringify({
+                        model: 'deepseek/deepseek-chat-v3-0324:free',
+                        messages: messages,
+                        temperature: 0.7,
+                        max_tokens: 1000
+                    })
                 });
 
+                console.log('Response status:', response.status);
+
                 if (!response.ok) {
-                    const errorData = await response.text();
-                    console.error('API Error Response:', errorData);
-                    throw new Error(`API error: ${response.status}`);
+                    const errorText = await response.text();
+                    console.error('API Error:', errorText);
+                    throw new Error(`HTTP ${response.status}: ${errorText.substring(0, 100)}`);
                 }
 
                 const data = await response.json();
+                console.log('API Response received');
+                
                 if (data.choices && data.choices[0] && data.choices[0].message) {
                     return data.choices[0].message.content;
                 } else {
@@ -591,37 +599,49 @@
             const message = messageInput.value.trim();
             if (!message) return;
 
+            // Clear input
             messageInput.value = '';
+
+            // Add user message to chat
             addMessage(message, 'user');
 
+            // Disable input
             sendButton.disabled = true;
             messageInput.disabled = true;
+
+            // Show loading
             addLoadingMessage();
 
             try {
+                // Call API
                 const aiResponse = await callDeepSeek(message);
+                
+                // Remove loading and add AI response
                 removeLoadingMessage();
                 addMessage(aiResponse, 'ai');
                 updateStatus(true, 'AI Ready');
 
             } catch (error) {
                 removeLoadingMessage();
-
+                
                 let errorMessage = 'I apologize, but I encountered an error. ';
-
-                if (error.message.includes('502')) {
-                    errorMessage += 'The service is temporarily unavailable. Please try again in a moment.';
-                } else if (error.message.includes('401')) {
-                    errorMessage += 'API key issue. Please check your configuration.';
+                
+                if (error.message.includes('401')) {
+                    errorMessage += 'API key issue. Please check configuration.';
+                } else if (error.message.includes('429')) {
+                    errorMessage += 'Rate limit reached. Please wait a moment.';
+                } else if (error.message.includes('502')) {
+                    errorMessage += 'Service temporarily unavailable. Please try again.';
                 } else {
                     errorMessage += 'Please try again.';
                 }
-
+                
                 addMessage(errorMessage, 'ai');
                 showError(error.message);
                 updateStatus(false, 'Error');
 
             } finally {
+                // Re-enable input
                 sendButton.disabled = false;
                 messageInput.disabled = false;
                 messageInput.focus();
@@ -637,11 +657,13 @@
         };
 
         // ============================================
-        // TEST API CONNECTION
+        // TEST API CONNECTION ON LOAD
         // ============================================
         async function testConnection() {
-            updateStatus(false, 'Testing...');
+            updateStatus(false, 'Testing connection...');
+            
             try {
+                // Simple test request
                 const response = await fetch('https://openrouter.ai/api/v1/chat/completions', {
                     method: 'POST',
                     headers: {
@@ -652,29 +674,36 @@
                     },
                     body: JSON.stringify({
                         model: 'deepseek/deepseek-chat-v3-0324:free',
-                        messages: [{ role: 'user', content: 'Say "OK" if you can hear me' }],
-                        max_tokens: 5
+                        messages: [
+                            { role: 'user', content: 'Say hello' }
+                        ],
+                        max_tokens: 10
                     })
                 });
 
                 if (response.ok) {
+                    const data = await response.json();
+                    console.log('Connection test successful:', data);
                     updateStatus(true, 'AI Ready');
+                    
                     setTimeout(() => {
-                        addMessage('Hello! I am Dr. Waleed\'s AI assistant. I can help you with ANY topic - health, technology, science, history, entertainment, and more! What would you like to know today?', 'ai');
+                        addMessage('Hello! I am Dr. Waleed\'s AI assistant. I can help you with ANY topic! What would you like to know?', 'ai');
                     }, 500);
                 } else {
                     const errorText = await response.text();
                     console.error('Connection test failed:', response.status, errorText);
                     updateStatus(false, 'Connection Failed');
+                    
                     setTimeout(() => {
-                        addMessage(`⚠️ Having trouble connecting to the AI service. Error: ${response.status}`, 'ai');
+                        addMessage(`⚠️ Connection issue. Status: ${response.status}`, 'ai');
                     }, 500);
                 }
             } catch (error) {
                 console.error('Connection test error:', error);
-                updateStatus(false, 'Connection Error');
+                updateStatus(false, 'Network Error');
+                
                 setTimeout(() => {
-                    addMessage('⚠️ Unable to connect to the AI service. Please check your internet connection.', 'ai');
+                    addMessage('⚠️ Network error. Please check your internet connection.', 'ai');
                 }, 500);
             }
         }
@@ -683,6 +712,7 @@
         // EVENT LISTENERS
         // ============================================
         sendButton.addEventListener('click', sendMessage);
+
         messageInput.addEventListener('keypress', (e) => {
             if (e.key === 'Enter' && !e.shiftKey) {
                 e.preventDefault();
@@ -693,9 +723,10 @@
         // ============================================
         // INITIALIZATION
         // ============================================
+        // Test connection when page loads
         testConnection();
 
-        console.log('✅ Dr. Waleed\'s AI Assistant - Rebuilt with correct API structure');
+        console.log('✅ Dr. Waleed\'s AI Assistant initialized');
         console.log('📡 Firebase Project:', firebaseConfig.projectId);
         console.log('🔑 API Key configured:', OPENROUTER_API_KEY.substring(0, 15) + '...');
     </script>

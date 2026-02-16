@@ -4,8 +4,9 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Dr. Waleed's AI Assistant</title>
+    <!-- Puter.js - No API key needed! -->
+    <script src="https://js.puter.com/v2/"></script>
     <style>
-        /* Keep all your existing styles exactly as before */
         * {
             margin: 0;
             padding: 0;
@@ -383,7 +384,7 @@
 
         <div class="footer">
             <div class="powered-by">
-                <span>⚡ Powered by OpenRouter (Free DeepSeek)</span>
+                <span>⚡ Powered by DeepSeek + Puter.js</span>
                 <span>🔒 Secure Firebase</span>
             </div>
             <div class="admin-badge">Dr. Waleed's Practice</div>
@@ -393,10 +394,11 @@
     <!-- Firebase SDKs -->
     <script src="https://www.gstatic.com/firebasejs/10.8.0/firebase-app-compat.js"></script>
     <script src="https://www.gstatic.com/firebasejs/10.8.0/firebase-firestore-compat.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/10.8.0/firebase-auth-compat.js"></script>
 
     <script>
         // ============================================
-        // FIREBASE CONFIG (YOURS)
+        // FIREBASE CONFIGURATION (YOUR EXACT CONFIG)
         // ============================================
         const firebaseConfig = {
             apiKey: "AIzaSyAE8wf24HXrfmpMluaFOv1OHPrf_YFfqTQ",
@@ -408,23 +410,22 @@
             measurementId: "G-1MHE0JBZJR"
         };
 
+        // Initialize Firebase
         firebase.initializeApp(firebaseConfig);
         const db = firebase.firestore();
-
-        // ============================================
-        // OPENROUTER API (FREE DEEPSEEK - NO BALANCE NEEDED)
-        // ============================================
-        const OPENROUTER_API_KEY = "sk-or-v1-64f9d8a7c5b3e2f1a4d7g8h9j0k1l2m3n4b5v6c7x8z9w0y1"; // Free tier key
-        const API_URL = "https://openrouter.ai/api/v1/chat/completions";
 
         // DOM Elements
         const chatContainer = document.getElementById('chat-container');
         const messageInput = document.getElementById('message-input');
         const sendButton = document.getElementById('send-button');
         const errorDisplay = document.getElementById('error-display');
+
+        // Session ID for this chat session
         const sessionId = 'session_' + Date.now();
 
-        // Helper Functions
+        // ============================================
+        // HELPER FUNCTIONS
+        // ============================================
         function showError(message) {
             errorDisplay.textContent = message;
             errorDisplay.style.display = 'block';
@@ -437,14 +438,19 @@
             return new Date().toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' });
         }
 
+        // ============================================
+        // MESSAGE HANDLING
+        // ============================================
         function addMessage(content, type) {
             const messageDiv = document.createElement('div');
             messageDiv.className = `message ${type}-message`;
             
+            // Add message content
             const contentDiv = document.createElement('div');
             contentDiv.textContent = content;
             messageDiv.appendChild(contentDiv);
             
+            // Add timestamp
             const timeDiv = document.createElement('div');
             timeDiv.className = 'message-time';
             timeDiv.textContent = getCurrentTime();
@@ -452,6 +458,19 @@
             
             chatContainer.appendChild(messageDiv);
             chatContainer.scrollTop = chatContainer.scrollHeight;
+            
+            // Save to Firestore (matches your rules: allow create if true)
+            if (type === 'user' || type === 'ai') {
+                db.collection('chats').add({
+                    content: content,
+                    type: type,
+                    sessionId: sessionId,
+                    timestamp: firebase.firestore.FieldValue.serverTimestamp(),
+                    userAgent: navigator.userAgent
+                }).catch(err => {
+                    console.log('Firestore save error (non-critical):', err);
+                });
+            }
         }
 
         function addLoadingMessage() {
@@ -463,99 +482,116 @@
             typingIndicator.className = 'typing-indicator';
             typingIndicator.innerHTML = '<span></span><span></span><span></span>';
             
+            const textDiv = document.createElement('div');
+            textDiv.textContent = 'Dr. Waleed\'s AI is thinking';
+            
             loadingDiv.appendChild(typingIndicator);
+            loadingDiv.appendChild(textDiv);
+            
             chatContainer.appendChild(loadingDiv);
             chatContainer.scrollTop = chatContainer.scrollHeight;
         }
 
         function removeLoadingMessage() {
             const loadingMsg = document.getElementById('loading-message');
-            if (loadingMsg) loadingMsg.remove();
-        }
-
-        // ============================================
-        // API CALL USING OPENROUTER (FREE!)
-        // ============================================
-        async function callAI(userMessage) {
-            try {
-                const response = await fetch(API_URL, {
-                    method: 'POST',
-                    headers: {
-                        'Content-Type': 'application/json',
-                        'Authorization': `Bearer ${OPENROUTER_API_KEY}`,
-                        'HTTP-Referer': window.location.origin,
-                        'X-Title': 'Dr. Waleed AI'
-                    },
-                    body: JSON.stringify({
-                        model: 'deepseek/deepseek-chat-v3-0324:free', // This is FREE!
-                        messages: [
-                            {
-                                role: 'system',
-                                content: 'You are Dr. Waleed\'s AI medical assistant. Provide helpful, accurate, and compassionate responses about health and wellness. Always remind users to consult with Dr. Waleed for personal medical advice.'
-                            },
-                            {
-                                role: 'user',
-                                content: userMessage
-                            }
-                        ],
-                        temperature: 0.7,
-                        max_tokens: 500
-                    })
-                });
-
-                if (!response.ok) {
-                    const errorData = await response.text();
-                    console.error('API Error Response:', errorData);
-                    throw new Error(`API error: ${response.status}`);
-                }
-
-                const data = await response.json();
-                return data.choices[0].message.content;
-
-            } catch (error) {
-                console.error('API Call Failed:', error);
-                throw error;
+            if (loadingMsg) {
+                loadingMsg.remove();
             }
         }
 
         // ============================================
-        // SEND MESSAGE
+        // PUTER.JS DEEPSEEK API CALL (COMPLETELY FREE!)
+        // ============================================
+        async function callDeepSeekWithPuter(userMessage) {
+            try {
+                // Using Puter.js - no API key needed!
+                const response = await puter.ai.chat(userMessage, {
+                    model: 'deepseek/deepseek-chat-v3-0324', // DeepSeek V3 model
+                    system: 'You are Dr. Waleed\'s AI medical assistant. Provide helpful, accurate, and compassionate responses about health and wellness. Always remind users to consult with Dr. Waleed for personal medical advice.',
+                    temperature: 0.7,
+                    max_tokens: 1000
+                });
+                
+                // Puter.js returns the response directly
+                return response.message.content;
+
+            } catch (error) {
+                console.error('Puter.js DeepSeek Error:', error);
+                throw error;
+            }
+        }
+
+        // Alternative models you can use:
+        // - 'deepseek/deepseek-chat' (standard DeepSeek)
+        // - 'deepseek/deepseek-chat-v3-0324' (latest DeepSeek V3)
+        // - 'deepseek/deepseek-r1' (DeepSeek R1 reasoning model)
+        // - 'deepseek/deepseek-reasoner' (DeepSeek Reasoner)
+
+        // ============================================
+        // MAIN SEND MESSAGE FUNCTION
         // ============================================
         async function sendMessage() {
             const message = messageInput.value.trim();
             if (!message) return;
 
+            // Clear input
             messageInput.value = '';
+
+            // Add user message to chat
             addMessage(message, 'user');
-            
+
+            // Disable input
             sendButton.disabled = true;
             messageInput.disabled = true;
+
+            // Show loading
             addLoadingMessage();
 
             try {
-                const aiResponse = await callAI(message);
+                // Call DeepSeek via Puter.js (FREE - no API key needed!)
+                const aiResponse = await callDeepSeekWithPuter(message);
+                
+                // Remove loading and add AI response
                 removeLoadingMessage();
                 addMessage(aiResponse, 'ai');
+
             } catch (error) {
                 removeLoadingMessage();
-                addMessage('I apologize, but I am having trouble connecting. Please try again in a moment.', 'ai');
+                
+                // More specific error messages
+                let errorMessage = 'I apologize, but I am having trouble connecting. ';
+                
+                if (error.message.includes('network')) {
+                    errorMessage += 'Please check your internet connection.';
+                } else if (error.message.includes('model')) {
+                    errorMessage += 'The AI model is temporarily unavailable.';
+                } else {
+                    errorMessage += 'Please try again in a moment.';
+                }
+                
+                addMessage(errorMessage, 'ai');
                 showError(error.message);
             } finally {
+                // Re-enable input
                 sendButton.disabled = false;
                 messageInput.disabled = false;
                 messageInput.focus();
             }
         }
 
-        // Suggestion chips
+        // ============================================
+        // SUGGESTION CHIPS
+        // ============================================
         window.useSuggestion = function(suggestion) {
             messageInput.value = suggestion;
             sendMessage();
         };
 
-        // Event listeners
+        // ============================================
+        // EVENT LISTENERS
+        // ============================================
         sendButton.addEventListener('click', sendMessage);
-        
+
         messageInput.addEventListener('keypress', (e) => {
             if (e.key === 'Enter' && !e.shiftKey) {
                 e.preventDefault();
@@ -563,12 +599,33 @@
             }
         });
 
-        // Welcome message
+        // ============================================
+        // INITIALIZATION
+        // ============================================
+        // Add welcome message
         setTimeout(() => {
-            addMessage('Hello! I am Dr. Waleed\'s AI assistant. How can I help you with your health and wellness questions today?', 'ai');
+            addMessage('Hello! I am Dr. Waleed\'s AI assistant, powered by DeepSeek through Puter.js. How can I help you with your health and wellness questions today?', 'ai');
         }, 500);
 
-        console.log('✅ Dr. Waleed\'s AI Assistant ready with FREE OpenRouter API!');
+        // Test Puter.js connection
+        async function testPuterConnection() {
+            try {
+                const test = await puter.ai.chat('Say "Connected!" if you can hear me', {
+                    model: 'deepseek/deepseek-chat-v3-0324',
+                    max_tokens: 10
+                });
+                console.log('✅ Puter.js DeepSeek connection successful!', test);
+            } catch (error) {
+                console.log('⚠️ Puter.js test failed, but will retry on actual messages:', error);
+            }
+        }
+        
+        // Test connection (silent, won't show to user)
+        testPuterConnection();
+
+        console.log('✅ Dr. Waleed\'s AI Assistant is ready with Puter.js!');
+        console.log('📡 Connected to Firebase:', firebaseConfig.projectId);
+        console.log('🤖 Using DeepSeek AI through Puter.js (COMPLETELY FREE!)');
     </script>
 </body>
 </html>

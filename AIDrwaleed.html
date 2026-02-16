@@ -99,6 +99,10 @@
             background: #ef4444;
         }
         
+        .status-dot.warning {
+            background: #f59e0b;
+        }
+        
         @keyframes pulse {
             0% { opacity: 1; }
             50% { opacity: 0.5; }
@@ -158,6 +162,15 @@
             margin-right: auto;
             border-bottom-left-radius: 5px;
             box-shadow: 0 2px 10px rgba(0,0,0,0.05);
+        }
+        
+        .system-message {
+            background: #fef3c7;
+            color: #92400e;
+            margin: 10px auto;
+            text-align: center;
+            max-width: 90%;
+            border: 1px solid #fbbf24;
         }
         
         .loading {
@@ -331,6 +344,14 @@
             font-weight: 600;
         }
         
+        .api-status {
+            font-size: 0.8rem;
+            padding: 4px 8px;
+            border-radius: 4px;
+            background: #1e293b;
+            color: white;
+        }
+        
         @media (max-width: 768px) {
             body { padding: 10px; }
             #app { height: 95vh; }
@@ -351,18 +372,15 @@
             </div>
             <div class="status">
                 <span class="status-dot" id="status-dot"></span>
-                <span id="status-text">Initializing...</span>
+                <span id="status-text">Testing APIs...</span>
             </div>
         </header>
 
         <div id="chat-container">
             <div class="welcome-message">
                 <h2>👋 Welcome to Dr. Waleed's AI Assistant</h2>
-                <p>Ask me ANYTHING! I can help with:</p>
-                <p style="font-size: 0.9rem; margin-top: 10px;">
-                    💊 Health & Medical | 💻 Technology | 📚 Education | 🎨 Arts & Culture | 
-                    🌍 General Knowledge | 🍳 Recipes | ✈️ Travel | 💼 Business | 🎮 Entertainment | 🔬 Science
-                </p>
+                <p>Testing multiple API keys to find a working connection...</p>
+                <div id="api-test-results" style="margin-top: 15px; font-size: 0.9rem;"></div>
             </div>
         </div>
 
@@ -375,8 +393,9 @@
                     id="message-input" 
                     placeholder="Ask me anything about any topic..."
                     autocomplete="off"
+                    disabled
                 >
-                <button id="send-button">
+                <button id="send-button" disabled>
                     <span>Send</span>
                     <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
                         <path d="M22 2L11 13M22 2l-7 20-4-9-9-4 20-7z"/>
@@ -398,7 +417,7 @@
 
         <div class="footer">
             <div class="powered-by">
-                <span>⚡ Powered by DeepSeek + OpenRouter</span>
+                <span>⚡ Testing Multiple API Keys</span>
                 <span>🔒 Secure Firebase</span>
             </div>
             <div class="admin-badge">Dr. Waleed's Assistant</div>
@@ -430,25 +449,37 @@
         const errorDisplay = document.getElementById('error-display');
         const statusDot = document.getElementById('status-dot');
         const statusText = document.getElementById('status-text');
+        const apiTestResults = document.getElementById('api-test-results');
 
         // Session ID
         const sessionId = 'session_' + Date.now();
 
         // ============================================
-        // YOUR NEW OPENROUTER API KEY (WORKING)
+        // YOUR OPENROUTER API KEYS TO TEST
         // ============================================
-        const OPENROUTER_API_KEY = "d01a95c392bf3da6f93b828cb60234630b0d0f8a0b9b2eed4ea92fd3aa42e5e8 ";
+        const API_KEYS = [
+            { key: "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", name: "Key 1" },
+            { key: "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", name: "Key 2" }
+        ];
+        
         const API_URL = "https://openrouter.ai/api/v1/chat/completions";
+        
+        // This will hold the working API key
+        let workingApiKey = null;
 
-        // Track conversation history for context
+        // Track conversation history
         let conversationHistory = [];
 
-        function updateStatus(connected, message) {
+        function updateStatus(connected, message, type = 'error') {
             if (connected) {
                 statusDot.className = 'status-dot';
                 statusText.textContent = message || 'AI Ready';
             } else {
-                statusDot.className = 'status-dot error';
+                if (type === 'warning') {
+                    statusDot.className = 'status-dot warning';
+                } else {
+                    statusDot.className = 'status-dot error';
+                }
                 statusText.textContent = message || 'Connection Error';
             }
         }
@@ -488,7 +519,6 @@
                     content: content
                 });
                 
-                // Keep history manageable (last 10 messages)
                 if (conversationHistory.length > 10) {
                     conversationHistory = conversationHistory.slice(-10);
                 }
@@ -506,6 +536,14 @@
                     console.log('Firestore save error:', err);
                 });
             }
+        }
+
+        function addSystemMessage(content) {
+            const messageDiv = document.createElement('div');
+            messageDiv.className = 'message system-message';
+            messageDiv.textContent = content;
+            chatContainer.appendChild(messageDiv);
+            chatContainer.scrollTop = chatContainer.scrollHeight;
         }
 
         function addLoadingMessage() {
@@ -535,11 +573,97 @@
         }
 
         // ============================================
-        // OPENROUTER DEEPSEEK API CALL
+        // TEST INDIVIDUAL API KEY
+        // ============================================
+        async function testApiKey(apiKey, keyName) {
+            try {
+                console.log(`Testing ${keyName}...`);
+                
+                const response = await fetch(API_URL, {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                        'Authorization': `Bearer ${apiKey}`,
+                        'HTTP-Referer': window.location.origin,
+                        'X-Title': 'Dr. Waleed AI'
+                    },
+                    body: JSON.stringify({
+                        model: 'deepseek/deepseek-chat-v3-0324:free',
+                        messages: [
+                            { role: 'user', content: 'Say "OK" if you can hear me' }
+                        ],
+                        max_tokens: 10
+                    })
+                });
+                
+                if (response.ok) {
+                    const data = await response.json();
+                    console.log(`✅ ${keyName} works!`, data);
+                    return { success: true, key: apiKey, name: keyName };
+                } else {
+                    const errorText = await response.text();
+                    console.log(`❌ ${keyName} failed:`, response.status, errorText);
+                    return { success: false, key: apiKey, name: keyName, status: response.status };
+                }
+            } catch (error) {
+                console.log(`❌ ${keyName} error:`, error.message);
+                return { success: false, key: apiKey, name: keyName, error: error.message };
+            }
+        }
+
+        // ============================================
+        // TEST ALL API KEYS
+        // ============================================
+        async function testAllApiKeys() {
+            updateStatus(false, 'Testing APIs...', 'warning');
+            
+            let results = '<h3>🔍 Testing API Keys:</h3>';
+            
+            for (const {key, name} of API_KEYS) {
+                const result = await testApiKey(key, name);
+                
+                if (result.success) {
+                    results += `<p style="color: green;">✅ ${name}: Working!</p>`;
+                    workingApiKey = key;
+                    
+                    // Found a working key, stop testing
+                    break;
+                } else {
+                    results += `<p style="color: red;">❌ ${name}: Failed (${result.status || result.error})</p>`;
+                }
+            }
+            
+            apiTestResults.innerHTML = results;
+            
+            if (workingApiKey) {
+                updateStatus(true, 'AI Ready');
+                addSystemMessage(`✅ Connected using a working API key! You can now ask questions.`);
+                
+                // Enable input
+                messageInput.disabled = false;
+                sendButton.disabled = false;
+                messageInput.focus();
+                
+                // Add welcome message
+                setTimeout(() => {
+                    addMessage('Hello! I am Dr. Waleed\'s AI assistant. I can help you with ANY topic - health, technology, science, history, entertainment, and more! What would you like to know today?', 'ai');
+                }, 500);
+            } else {
+                updateStatus(false, 'No Working Keys');
+                apiTestResults.innerHTML += '<p style="color: orange; margin-top: 10px;">⚠️ No working API keys found. Please check your OpenRouter account.</p>';
+                addSystemMessage('⚠️ Could not find a working API key. Please visit https://openrouter.ai to create a new key, then update the API_KEYS array in the code.');
+            }
+        }
+
+        // ============================================
+        // CALL DEEPSEEK WITH WORKING API KEY
         // ============================================
         async function callDeepSeekWithOpenRouter(userMessage) {
+            if (!workingApiKey) {
+                throw new Error('No working API key available');
+            }
+            
             try {
-                // Prepare messages array with system prompt and conversation history
                 const messages = [
                     {
                         role: 'system',
@@ -547,7 +671,7 @@
                     }
                 ];
                 
-                // Add conversation history for context
+                // Add conversation history
                 const historyWithoutSystem = conversationHistory.filter(msg => msg.role !== 'system');
                 messages.push(...historyWithoutSystem);
                 
@@ -557,13 +681,11 @@
                     content: userMessage
                 });
 
-                console.log('Sending request to OpenRouter...');
-                
                 const response = await fetch(API_URL, {
                     method: 'POST',
                     headers: {
                         'Content-Type': 'application/json',
-                        'Authorization': `Bearer ${OPENROUTER_API_KEY}`,
+                        'Authorization': `Bearer ${workingApiKey}`,
                         'HTTP-Referer': window.location.origin,
                         'X-Title': 'Dr. Waleed AI'
                     },
@@ -576,35 +698,29 @@
                     })
                 });
 
-                console.log('Response status:', response.status);
-
                 if (!response.ok) {
                     const errorText = await response.text();
-                    console.error('API Error Response:', errorText);
                     
                     if (response.status === 401) {
-                        throw new Error('Invalid API key - please check your OpenRouter API key');
-                    } else if (response.status === 403) {
-                        throw new Error('Access forbidden - your API key may not have permission');
-                    } else if (response.status === 429) {
-                        throw new Error('Rate limit exceeded - please wait a moment');
-                    } else {
-                        throw new Error(`API error: ${response.status} - ${errorText}`);
+                        // Key might have expired, retest
+                        workingApiKey = null;
+                        testAllApiKeys();
+                        throw new Error('API key expired, retesting...');
                     }
+                    
+                    throw new Error(`API error: ${response.status}`);
                 }
 
                 const data = await response.json();
-                console.log('API Response:', data);
                 
-                // Check if we got a valid response
                 if (data.choices && data.choices[0] && data.choices[0].message) {
                     return data.choices[0].message.content;
                 } else {
-                    throw new Error('Invalid response format from API');
+                    throw new Error('Invalid response format');
                 }
 
             } catch (error) {
-                console.error('OpenRouter API Error:', error);
+                console.error('API Call Error:', error);
                 throw error;
             }
         }
@@ -614,26 +730,17 @@
         // ============================================
         async function sendMessage() {
             const message = messageInput.value.trim();
-            if (!message) return;
+            if (!message || !workingApiKey) return;
 
-            // Clear input
             messageInput.value = '';
-
-            // Add user message to chat
             addMessage(message, 'user');
-
-            // Disable input
+            
             sendButton.disabled = true;
             messageInput.disabled = true;
-
-            // Show loading
             addLoadingMessage();
 
             try {
-                // Call OpenRouter API
                 const aiResponse = await callDeepSeekWithOpenRouter(message);
-                
-                // Remove loading and add AI response
                 removeLoadingMessage();
                 addMessage(aiResponse, 'ai');
                 updateStatus(true, 'AI Ready');
@@ -643,24 +750,20 @@
                 
                 let errorMessage = 'I apologize, but I encountered an error. ';
                 
-                if (error.message.includes('Invalid API key')) {
-                    errorMessage += 'The API key is invalid. Please check your OpenRouter API key.';
-                    updateStatus(false, 'Invalid API Key');
-                } else if (error.message.includes('Rate limit')) {
-                    errorMessage += 'Too many requests. Please wait a moment and try again.';
-                    updateStatus(false, 'Rate Limited');
+                if (error.message.includes('expired')) {
+                    errorMessage += 'Testing for new API key...';
                 } else {
-                    errorMessage += 'Please try again. Error: ' + error.message;
-                    updateStatus(false, 'Error');
+                    errorMessage += 'Please try again.';
                 }
                 
                 addMessage(errorMessage, 'ai');
                 showError(error.message);
             } finally {
-                // Re-enable input
-                sendButton.disabled = false;
-                messageInput.disabled = false;
-                messageInput.focus();
+                if (workingApiKey) {
+                    sendButton.disabled = false;
+                    messageInput.disabled = false;
+                    messageInput.focus();
+                }
             }
         }
 
@@ -668,73 +771,13 @@
         // SUGGESTION CHIPS
         // ============================================
         window.useSuggestion = function(suggestion) {
+            if (!workingApiKey) {
+                addSystemMessage('⚠️ Please wait for API key test to complete.');
+                return;
+            }
             messageInput.value = suggestion;
             sendMessage();
         };
-
-        // ============================================
-        // TEST API CONNECTION
-        // ============================================
-        async function testAPIConnection() {
-            try {
-                console.log('Testing OpenRouter API connection...');
-                
-                const response = await fetch(API_URL, {
-                    method: 'POST',
-                    headers: {
-                        'Content-Type': 'application/json',
-                        'Authorization': `Bearer ${OPENROUTER_API_KEY}`,
-                        'HTTP-Referer': window.location.origin,
-                        'X-Title': 'Dr. Waleed AI'
-                    },
-                    body: JSON.stringify({
-                        model: 'deepseek/deepseek-chat-v3-0324:free',
-                        messages: [
-                            { role: 'user', content: 'Say "Connected!" if you can hear me' }
-                        ],
-                        max_tokens: 20
-                    })
-                });
-                
-                if (response.ok) {
-                    const data = await response.json();
-                    console.log('✅ OpenRouter API connected successfully!', data);
-                    updateStatus(true, 'AI Ready');
-                    
-                    // Add success message
-                    setTimeout(() => {
-                        addMessage('Hello! I am Dr. Waleed\'s AI assistant, powered by DeepSeek through OpenRouter. I can help you with ANY topic - health, technology, science, history, entertainment, and more! What would you like to know today?', 'ai');
-                    }, 500);
-                    
-                    return true;
-                } else {
-                    const errorText = await response.text();
-                    console.log('❌ OpenRouter API connection failed:', response.status, errorText);
-                    
-                    if (response.status === 401) {
-                        updateStatus(false, 'Invalid API Key');
-                        setTimeout(() => {
-                            addMessage('⚠️ The API key is invalid. Please check your OpenRouter API key.', 'ai');
-                        }, 500);
-                    } else {
-                        updateStatus(false, 'Connection Failed');
-                        setTimeout(() => {
-                            addMessage('Hello! I am Dr. Waleed\'s AI assistant. I\'m having trouble connecting to the AI service. Error: ' + response.status, 'ai');
-                        }, 500);
-                    }
-                    return false;
-                }
-            } catch (error) {
-                console.log('❌ OpenRouter API connection error:', error);
-                updateStatus(false, 'Connection Error');
-                
-                setTimeout(() => {
-                    addMessage('Hello! I am Dr. Waleed\'s AI assistant. I\'m having trouble connecting to the AI service. Please check your internet connection and refresh the page.', 'ai');
-                }, 500);
-                
-                return false;
-            }
-        }
 
         // ============================================
         // EVENT LISTENERS
@@ -751,12 +794,11 @@
         // ============================================
         // INITIALIZATION
         // ============================================
-        // Test API connection immediately
-        testAPIConnection();
+        // Start testing all API keys
+        testAllApiKeys();
 
-        console.log('✅ Dr. Waleed\'s AI Assistant initialized with OpenRouter');
+        console.log('✅ Dr. Waleed\'s AI Assistant - Testing API Keys');
         console.log('📡 Firebase Project:', firebaseConfig.projectId);
-        console.log('🔑 OpenRouter API Key:', OPENROUTER_API_KEY.substring(0, 15) + '...');
     </script>
 </body>
 </html>

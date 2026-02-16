@@ -4,12 +4,12 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Dr. Waleed's AI Assistant</title>
-    <!-- Try multiple CDN sources for Puter.js -->
-    <script src="https://js.puter.com/v2/"></script>
-    <!-- Fallback to another CDN if the first fails -->
-    <script>window.puter || document.write('<script src="https://cdn.jsdelivr.net/npm/puter-js@2.0.1/dist/puter.min.js"><\/script>');</script>
+    <!-- Firebase SDKs -->
+    <script src="https://www.gstatic.com/firebasejs/10.8.0/firebase-app-compat.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/10.8.0/firebase-firestore-compat.js"></script>
     
     <style>
+        /* Copy all your existing styles here - they remain the same */
         * {
             margin: 0;
             padding: 0;
@@ -332,23 +332,6 @@
             font-weight: 600;
         }
         
-        .connection-status {
-            font-size: 0.8rem;
-            padding: 4px 8px;
-            border-radius: 4px;
-            margin-left: 10px;
-        }
-        
-        .connection-status.connected {
-            background: #4ade80;
-            color: white;
-        }
-        
-        .connection-status.disconnected {
-            background: #ef4444;
-            color: white;
-        }
-        
         @media (max-width: 768px) {
             body { padding: 10px; }
             #app { height: 95vh; }
@@ -414,16 +397,12 @@
 
         <div class="footer">
             <div class="powered-by">
-                <span>⚡ Powered by DeepSeek + Puter.js</span>
+                <span>⚡ Powered by DeepSeek + OpenRouter</span>
                 <span>🔒 Secure Firebase</span>
             </div>
             <div class="admin-badge">Dr. Waleed's Assistant</div>
         </div>
     </div>
-
-    <!-- Firebase SDKs -->
-    <script src="https://www.gstatic.com/firebasejs/10.8.0/firebase-app-compat.js"></script>
-    <script src="https://www.gstatic.com/firebasejs/10.8.0/firebase-firestore-compat.js"></script>
 
     <script>
         // ============================================
@@ -455,8 +434,13 @@
         const sessionId = 'session_' + Date.now();
 
         // ============================================
-        // STATUS UPDATE FUNCTION
+        // OPENROUTER API CONFIGURATION (FREE DEEPSEEK)
         // ============================================
+        // You need to sign up at https://openrouter.ai to get a free API key
+        // It's completely free and takes 2 minutes
+        const OPENROUTER_API_KEY = "YOUR_OPENROUTER_API_KEY"; // Replace with your actual key
+        const API_URL = "https://openrouter.ai/api/v1/chat/completions";
+
         function updateStatus(connected, message) {
             if (connected) {
                 statusDot.className = 'status-dot';
@@ -467,9 +451,6 @@
             }
         }
 
-        // ============================================
-        // HELPER FUNCTIONS
-        // ============================================
         function showError(message) {
             errorDisplay.textContent = message;
             errorDisplay.style.display = 'block';
@@ -482,9 +463,6 @@
             return new Date().toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' });
         }
 
-        // ============================================
-        // MESSAGE HANDLING
-        // ============================================
         function addMessage(content, type) {
             const messageDiv = document.createElement('div');
             messageDiv.className = `message ${type}-message`;
@@ -542,93 +520,54 @@
         }
 
         // ============================================
-        // PUTER.JS CHECK AND FALLBACK
+        // OPENROUTER DEEPSEEK API CALL (ACCURATE ANSWERS!)
         // ============================================
-        function checkPuterJS() {
-            return new Promise((resolve) => {
-                // Check if puter is already defined
-                if (typeof puter !== 'undefined' && puter && puter.ai) {
-                    console.log('✅ Puter.js loaded successfully');
-                    updateStatus(true, 'AI Ready');
-                    resolve(true);
-                    return;
-                }
-                
-                // Wait for puter to load (up to 5 seconds)
-                let attempts = 0;
-                const maxAttempts = 10;
-                
-                const checkInterval = setInterval(() => {
-                    attempts++;
-                    if (typeof puter !== 'undefined' && puter && puter.ai) {
-                        clearInterval(checkInterval);
-                        console.log('✅ Puter.js loaded after check');
-                        updateStatus(true, 'AI Ready');
-                        resolve(true);
-                    } else if (attempts >= maxAttempts) {
-                        clearInterval(checkInterval);
-                        console.log('❌ Puter.js failed to load');
-                        updateStatus(false, 'Using Fallback Mode');
-                        
-                        // Show fallback message
-                        addMessage('⚠️ AI service is using fallback mode. Some features may be limited.', 'ai');
-                        resolve(false);
-                    }
-                }, 500);
-            });
-        }
-
-        // ============================================
-        // DEEPSEEK API CALL WITH PUTER.JS - FIXED FOR GENERAL QUESTIONS
-        // ============================================
-        async function callDeepSeekWithPuter(userMessage) {
+        async function callDeepSeekWithOpenRouter(userMessage) {
             try {
-                // Double-check puter is available
-                if (typeof puter === 'undefined' || !puter || !puter.ai) {
-                    throw new Error('Puter.js not loaded');
-                }
-                
-                // FIXED: Removed medical-specific system prompt to make it general
-                const response = await puter.ai.chat(userMessage, {
-                    model: 'deepseek/deepseek-chat-v3-0324',
-                    system: 'You are Dr. Waleed\'s helpful AI assistant. You can answer questions about ANY topic including health, technology, science, history, entertainment, cooking, travel, business, education, and general knowledge. Be friendly, accurate, and provide detailed responses. If you don\'t know something, say so honestly.',
-                    temperature: 0.7,
-                    max_tokens: 2000
+                const response = await fetch(API_URL, {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                        'Authorization': `Bearer ${OPENROUTER_API_KEY}`,
+                        'HTTP-Referer': window.location.origin,
+                        'X-Title': 'Dr. Waleed AI'
+                    },
+                    body: JSON.stringify({
+                        model: 'deepseek/deepseek-chat-v3-0324:free', // Free DeepSeek model
+                        messages: [
+                            {
+                                role: 'system',
+                                content: 'You are Dr. Waleed\'s helpful AI assistant. You provide accurate, detailed, and helpful answers about ANY topic including health, technology, science, history, entertainment, cooking, travel, business, education, and general knowledge. Be friendly, thorough, and always give complete responses.'
+                            },
+                            {
+                                role: 'user',
+                                content: userMessage
+                            }
+                        ],
+                        temperature: 0.7, // Balanced between creativity and accuracy
+                        max_tokens: 2000, // Allow detailed responses
+                        top_p: 0.9 // Nucleus sampling for better quality
+                    })
                 });
-                
-                return response.message.content;
 
-            } catch (error) {
-                console.error('Puter.js DeepSeek Error:', error);
-                throw error;
-            }
-        }
-
-        // ============================================
-        // FALLBACK API - Also made general
-        // ============================================
-        async function callFallbackAPI(userMessage) {
-            try {
-                // Simple rule-based fallback for common questions
-                const lowerMessage = userMessage.toLowerCase();
-                
-                if (lowerMessage.includes('hello') || lowerMessage.includes('hi')) {
-                    return "Hello! How can I help you today?";
-                } else if (lowerMessage.includes('how are you')) {
-                    return "I'm doing well, thank you for asking! How can I assist you?";
-                } else if (lowerMessage.includes('joke')) {
-                    return "Why don't scientists trust atoms? Because they make up everything! 😄";
-                } else if (lowerMessage.includes('capital of france')) {
-                    return "The capital of France is Paris. It's known as the 'City of Light' and is famous for the Eiffel Tower.";
-                } else if (lowerMessage.includes('what is ai') || lowerMessage.includes('artificial intelligence')) {
-                    return "Artificial Intelligence (AI) is the simulation of human intelligence in machines that are programmed to think and learn. It includes machine learning, natural language processing, and computer vision.";
-                } else {
-                    // For other questions, return a helpful response
-                    return `I understand you're asking about: "${userMessage}". As Dr. Waleed's AI assistant, I'm here to help with any topic! For the most accurate and detailed response, please ensure Puter.js loads properly. In the meantime, feel free to ask me something else!`;
+                if (!response.ok) {
+                    const errorData = await response.text();
+                    console.error('API Error Response:', errorData);
+                    throw new Error(`API error: ${response.status}`);
                 }
+
+                const data = await response.json();
                 
+                // Check if we got a valid response
+                if (data.choices && data.choices[0] && data.choices[0].message) {
+                    return data.choices[0].message.content;
+                } else {
+                    throw new Error('Invalid response format');
+                }
+
             } catch (error) {
-                return `I received your question about "${userMessage}". I'm here to help with any topic - just ask!`;
+                console.error('OpenRouter API Error:', error);
+                throw error;
             }
         }
 
@@ -655,32 +594,37 @@
             try {
                 let aiResponse;
                 
-                // Try Puter.js first, fall back to alternative if needed
-                try {
-                    aiResponse = await callDeepSeekWithPuter(message);
-                } catch (puterError) {
-                    console.log('Puter.js failed, using fallback:', puterError);
-                    aiResponse = await callFallbackAPI(message);
-                    updateStatus(false, 'Fallback Mode');
+                // Check if API key is configured
+                if (OPENROUTER_API_KEY === "YOUR_OPENROUTER_API_KEY") {
+                    removeLoadingMessage();
+                    addMessage("⚠️ Please configure your OpenRouter API key first. Sign up at https://openrouter.ai to get a free key - it takes 2 minutes!", 'ai');
+                    updateStatus(false, 'API Key Needed');
+                } else {
+                    // Call OpenRouter API
+                    aiResponse = await callDeepSeekWithOpenRouter(message);
+                    
+                    // Remove loading and add AI response
+                    removeLoadingMessage();
+                    addMessage(aiResponse, 'ai');
+                    updateStatus(true, 'AI Ready');
                 }
-                
-                // Remove loading and add AI response
-                removeLoadingMessage();
-                addMessage(aiResponse, 'ai');
 
             } catch (error) {
                 removeLoadingMessage();
                 
-                let errorMessage = 'I apologize, but I am having trouble connecting. ';
+                let errorMessage = 'I apologize, but I encountered an error. ';
                 
-                if (error.message.includes('puter')) {
-                    errorMessage += 'Please refresh the page.';
+                if (error.message.includes('401')) {
+                    errorMessage += 'Invalid API key. Please check your OpenRouter API key.';
+                } else if (error.message.includes('429')) {
+                    errorMessage += 'Rate limit exceeded. Please try again in a moment.';
                 } else {
-                    errorMessage += 'Please try again in a moment.';
+                    errorMessage += 'Please try again.';
                 }
                 
                 addMessage(errorMessage, 'ai');
                 showError(error.message);
+                updateStatus(false, 'Error');
             } finally {
                 // Re-enable input
                 sendButton.disabled = false;
@@ -712,24 +656,21 @@
         // ============================================
         // INITIALIZATION
         // ============================================
-        async function initialize() {
-            // Check Puter.js status
-            const puterLoaded = await checkPuterJS();
-            
-            // Add welcome message
-            setTimeout(() => {
-                if (puterLoaded) {
-                    addMessage('Hello! I am Dr. Waleed\'s AI assistant. I can help you with ANY topic - health, technology, science, history, entertainment, and more! What would you like to know today?', 'ai');
-                } else {
-                    addMessage('Hello! I am Dr. Waleed\'s AI assistant. I\'m currently in fallback mode, but I can still help with many questions. Feel free to ask me anything!', 'ai');
-                }
-            }, 1000);
+        function initialize() {
+            // Check if API key is configured
+            if (OPENROUTER_API_KEY === "YOUR_OPENROUTER_API_KEY") {
+                updateStatus(false, 'API Key Needed');
+                addMessage('⚠️ To get accurate answers, you need to set up a free OpenRouter API key. Sign up at https://openrouter.ai (takes 2 minutes), then replace "YOUR_OPENROUTER_API_KEY" in the code with your actual key.', 'ai');
+            } else {
+                updateStatus(true, 'AI Ready');
+                addMessage('Hello! I am Dr. Waleed\'s AI assistant. I can help you with ANY topic - health, technology, science, history, entertainment, and more! What would you like to know today?', 'ai');
+            }
         }
 
         // Start initialization
-        initialize();
+        setTimeout(initialize, 500);
 
-        console.log('✅ Dr. Waleed\'s AI Assistant initialized - Now answering ANY question!');
+        console.log('✅ Dr. Waleed\'s AI Assistant initialized');
         console.log('📡 Firebase Project:', firebaseConfig.projectId);
     </script>
 </body>

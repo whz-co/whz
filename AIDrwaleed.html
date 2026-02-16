@@ -435,9 +435,9 @@
         const sessionId = 'session_' + Date.now();
 
         // ============================================
-        // YOUR OPENROUTER API KEY (ACTIVE)
+        // YOUR NEW OPENROUTER API KEY (WORKING)
         // ============================================
-        const OPENROUTER_API_KEY = "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";
+        const OPENROUTER_API_KEY = "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";
         const API_URL = "https://openrouter.ai/api/v1/chat/completions";
 
         // Track conversation history for context
@@ -535,7 +535,7 @@
         }
 
         // ============================================
-        // OPENROUTER DEEPSEEK API CALL (ACCURATE ANSWERS!)
+        // OPENROUTER DEEPSEEK API CALL
         // ============================================
         async function callDeepSeekWithOpenRouter(userMessage) {
             try {
@@ -547,7 +547,7 @@
                     }
                 ];
                 
-                // Add conversation history for context (except system message)
+                // Add conversation history for context
                 const historyWithoutSystem = conversationHistory.filter(msg => msg.role !== 'system');
                 messages.push(...historyWithoutSystem);
                 
@@ -557,6 +557,8 @@
                     content: userMessage
                 });
 
+                console.log('Sending request to OpenRouter...');
+                
                 const response = await fetch(API_URL, {
                     method: 'POST',
                     headers: {
@@ -566,7 +568,7 @@
                         'X-Title': 'Dr. Waleed AI'
                     },
                     body: JSON.stringify({
-                        model: 'deepseek/deepseek-chat-v3-0324:free', // Free DeepSeek model
+                        model: 'deepseek/deepseek-chat-v3-0324:free',
                         messages: messages,
                         temperature: 0.7,
                         max_tokens: 2000,
@@ -574,26 +576,31 @@
                     })
                 });
 
+                console.log('Response status:', response.status);
+
                 if (!response.ok) {
-                    const errorData = await response.text();
-                    console.error('API Error Response:', errorData);
+                    const errorText = await response.text();
+                    console.error('API Error Response:', errorText);
                     
                     if (response.status === 401) {
-                        throw new Error('Invalid API key');
+                        throw new Error('Invalid API key - please check your OpenRouter API key');
+                    } else if (response.status === 403) {
+                        throw new Error('Access forbidden - your API key may not have permission');
                     } else if (response.status === 429) {
-                        throw new Error('Rate limit exceeded');
+                        throw new Error('Rate limit exceeded - please wait a moment');
                     } else {
-                        throw new Error(`API error: ${response.status}`);
+                        throw new Error(`API error: ${response.status} - ${errorText}`);
                     }
                 }
 
                 const data = await response.json();
+                console.log('API Response:', data);
                 
                 // Check if we got a valid response
                 if (data.choices && data.choices[0] && data.choices[0].message) {
                     return data.choices[0].message.content;
                 } else {
-                    throw new Error('Invalid response format');
+                    throw new Error('Invalid response format from API');
                 }
 
             } catch (error) {
@@ -643,7 +650,7 @@
                     errorMessage += 'Too many requests. Please wait a moment and try again.';
                     updateStatus(false, 'Rate Limited');
                 } else {
-                    errorMessage += 'Please try again.';
+                    errorMessage += 'Please try again. Error: ' + error.message;
                     updateStatus(false, 'Error');
                 }
                 
@@ -670,6 +677,8 @@
         // ============================================
         async function testAPIConnection() {
             try {
+                console.log('Testing OpenRouter API connection...');
+                
                 const response = await fetch(API_URL, {
                     method: 'POST',
                     headers: {
@@ -681,25 +690,48 @@
                     body: JSON.stringify({
                         model: 'deepseek/deepseek-chat-v3-0324:free',
                         messages: [
-                            { role: 'system', content: 'You are a helpful assistant.' },
                             { role: 'user', content: 'Say "Connected!" if you can hear me' }
                         ],
-                        max_tokens: 10
+                        max_tokens: 20
                     })
                 });
                 
                 if (response.ok) {
-                    console.log('✅ OpenRouter API connected successfully!');
+                    const data = await response.json();
+                    console.log('✅ OpenRouter API connected successfully!', data);
                     updateStatus(true, 'AI Ready');
+                    
+                    // Add success message
+                    setTimeout(() => {
+                        addMessage('Hello! I am Dr. Waleed\'s AI assistant, powered by DeepSeek through OpenRouter. I can help you with ANY topic - health, technology, science, history, entertainment, and more! What would you like to know today?', 'ai');
+                    }, 500);
+                    
                     return true;
                 } else {
-                    console.log('❌ OpenRouter API connection failed');
-                    updateStatus(false, 'Connection Failed');
+                    const errorText = await response.text();
+                    console.log('❌ OpenRouter API connection failed:', response.status, errorText);
+                    
+                    if (response.status === 401) {
+                        updateStatus(false, 'Invalid API Key');
+                        setTimeout(() => {
+                            addMessage('⚠️ The API key is invalid. Please check your OpenRouter API key.', 'ai');
+                        }, 500);
+                    } else {
+                        updateStatus(false, 'Connection Failed');
+                        setTimeout(() => {
+                            addMessage('Hello! I am Dr. Waleed\'s AI assistant. I\'m having trouble connecting to the AI service. Error: ' + response.status, 'ai');
+                        }, 500);
+                    }
                     return false;
                 }
             } catch (error) {
                 console.log('❌ OpenRouter API connection error:', error);
                 updateStatus(false, 'Connection Error');
+                
+                setTimeout(() => {
+                    addMessage('Hello! I am Dr. Waleed\'s AI assistant. I\'m having trouble connecting to the AI service. Please check your internet connection and refresh the page.', 'ai');
+                }, 500);
+                
                 return false;
             }
         }
@@ -719,26 +751,12 @@
         // ============================================
         // INITIALIZATION
         // ============================================
-        async function initialize() {
-            // Test API connection
-            const connected = await testAPIConnection();
-            
-            // Add welcome message
-            setTimeout(() => {
-                if (connected) {
-                    addMessage('Hello! I am Dr. Waleed\'s AI assistant, powered by DeepSeek through OpenRouter. I can help you with ANY topic - health, technology, science, history, entertainment, and more! What would you like to know today?', 'ai');
-                } else {
-                    addMessage('Hello! I am Dr. Waleed\'s AI assistant. I\'m having trouble connecting to the AI service. Please check your internet connection and refresh the page.', 'ai');
-                }
-            }, 1000);
-        }
-
-        // Start initialization
-        initialize();
+        // Test API connection immediately
+        testAPIConnection();
 
         console.log('✅ Dr. Waleed\'s AI Assistant initialized with OpenRouter');
         console.log('📡 Firebase Project:', firebaseConfig.projectId);
-        console.log('🔑 OpenRouter API Key: Configured');
+        console.log('🔑 OpenRouter API Key:', OPENROUTER_API_KEY.substring(0, 15) + '...');
     </script>
 </body>
 </html>

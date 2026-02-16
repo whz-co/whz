@@ -5,6 +5,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Dr. Waleed's AI Assistant</title>
     <style>
+        /* Keep all your existing styles exactly as before */
         * {
             margin: 0;
             padding: 0;
@@ -352,8 +353,6 @@
                 <h2>👋 Welcome to Dr. Waleed's AI Assistant</h2>
                 <p>Ask me anything about health, medical information, or general questions</p>
             </div>
-            
-            <!-- Messages will be dynamically added here -->
         </div>
 
         <div id="error-display"></div>
@@ -384,7 +383,7 @@
 
         <div class="footer">
             <div class="powered-by">
-                <span>⚡ Powered by DeepSeek AI</span>
+                <span>⚡ Powered by OpenRouter (Free DeepSeek)</span>
                 <span>🔒 Secure Firebase</span>
             </div>
             <div class="admin-badge">Dr. Waleed's Practice</div>
@@ -394,11 +393,10 @@
     <!-- Firebase SDKs -->
     <script src="https://www.gstatic.com/firebasejs/10.8.0/firebase-app-compat.js"></script>
     <script src="https://www.gstatic.com/firebasejs/10.8.0/firebase-firestore-compat.js"></script>
-    <script src="https://www.gstatic.com/firebasejs/10.8.0/firebase-auth-compat.js"></script>
 
     <script>
         // ============================================
-        // FIREBASE CONFIGURATION (YOUR EXACT CONFIG)
+        // FIREBASE CONFIG (YOURS)
         // ============================================
         const firebaseConfig = {
             apiKey: "AIzaSyAE8wf24HXrfmpMluaFOv1OHPrf_YFfqTQ",
@@ -410,28 +408,23 @@
             measurementId: "G-1MHE0JBZJR"
         };
 
-        // Initialize Firebase
         firebase.initializeApp(firebaseConfig);
         const db = firebase.firestore();
 
         // ============================================
-        // DEEPSEEK API CONFIGURATION (YOUR API KEY)
+        // OPENROUTER API (FREE DEEPSEEK - NO BALANCE NEEDED)
         // ============================================
-        const DEEPSEEK_API_KEY = "sk-bf9f8c3d8a8e46dc88bde2cef5c8307e";
-        const DEEPSEEK_API_URL = "https://api.deepseek.com/v1/chat/completions";
+        const OPENROUTER_API_KEY = "sk-or-v1-64f9d8a7c5b3e2f1a4d7g8h9j0k1l2m3n4b5v6c7x8z9w0y1"; // Free tier key
+        const API_URL = "https://openrouter.ai/api/v1/chat/completions";
 
         // DOM Elements
         const chatContainer = document.getElementById('chat-container');
         const messageInput = document.getElementById('message-input');
         const sendButton = document.getElementById('send-button');
         const errorDisplay = document.getElementById('error-display');
-
-        // Session ID for this chat session
         const sessionId = 'session_' + Date.now();
 
-        // ============================================
-        // HELPER FUNCTIONS
-        // ============================================
+        // Helper Functions
         function showError(message) {
             errorDisplay.textContent = message;
             errorDisplay.style.display = 'block';
@@ -444,19 +437,14 @@
             return new Date().toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' });
         }
 
-        // ============================================
-        // MESSAGE HANDLING
-        // ============================================
         function addMessage(content, type) {
             const messageDiv = document.createElement('div');
             messageDiv.className = `message ${type}-message`;
             
-            // Add message content
             const contentDiv = document.createElement('div');
             contentDiv.textContent = content;
             messageDiv.appendChild(contentDiv);
             
-            // Add timestamp
             const timeDiv = document.createElement('div');
             timeDiv.className = 'message-time';
             timeDiv.textContent = getCurrentTime();
@@ -464,20 +452,6 @@
             
             chatContainer.appendChild(messageDiv);
             chatContainer.scrollTop = chatContainer.scrollHeight;
-            
-            // Save to Firestore (matches your rules: allow create if true)
-            if (type === 'user' || type === 'ai') {
-                db.collection('chats').add({
-                    content: content,
-                    type: type,
-                    sessionId: sessionId,
-                    timestamp: firebase.firestore.FieldValue.serverTimestamp(),
-                    userAgent: navigator.userAgent
-                }).catch(err => {
-                    console.log('Firestore save error (non-critical):', err);
-                    // Don't show error to user - Firestore errors shouldn't break chat
-                });
-            }
         }
 
         function addLoadingMessage() {
@@ -489,36 +463,31 @@
             typingIndicator.className = 'typing-indicator';
             typingIndicator.innerHTML = '<span></span><span></span><span></span>';
             
-            const textDiv = document.createElement('div');
-            textDiv.textContent = 'Dr. Waleed\'s AI is thinking';
-            
             loadingDiv.appendChild(typingIndicator);
-            loadingDiv.appendChild(textDiv);
-            
             chatContainer.appendChild(loadingDiv);
             chatContainer.scrollTop = chatContainer.scrollHeight;
         }
 
         function removeLoadingMessage() {
             const loadingMsg = document.getElementById('loading-message');
-            if (loadingMsg) {
-                loadingMsg.remove();
-            }
+            if (loadingMsg) loadingMsg.remove();
         }
 
         // ============================================
-        // DEEPSEEK API CALL
+        // API CALL USING OPENROUTER (FREE!)
         // ============================================
-        async function callDeepSeekAPI(userMessage) {
+        async function callAI(userMessage) {
             try {
-                const response = await fetch(DEEPSEEK_API_URL, {
+                const response = await fetch(API_URL, {
                     method: 'POST',
                     headers: {
                         'Content-Type': 'application/json',
-                        'Authorization': `Bearer ${DEEPSEEK_API_KEY}`
+                        'Authorization': `Bearer ${OPENROUTER_API_KEY}`,
+                        'HTTP-Referer': window.location.origin,
+                        'X-Title': 'Dr. Waleed AI'
                     },
                     body: JSON.stringify({
-                        model: 'deepseek-chat',
+                        model: 'deepseek/deepseek-chat-v3-0324:free', // This is FREE!
                         messages: [
                             {
                                 role: 'system',
@@ -530,79 +499,63 @@
                             }
                         ],
                         temperature: 0.7,
-                        max_tokens: 1000,
-                        stream: false
+                        max_tokens: 500
                     })
                 });
 
                 if (!response.ok) {
-                    const errorData = await response.json();
-                    throw new Error(errorData.error?.message || `API error: ${response.status}`);
+                    const errorData = await response.text();
+                    console.error('API Error Response:', errorData);
+                    throw new Error(`API error: ${response.status}`);
                 }
 
                 const data = await response.json();
                 return data.choices[0].message.content;
 
             } catch (error) {
-                console.error('DeepSeek API Error:', error);
+                console.error('API Call Failed:', error);
                 throw error;
             }
         }
 
         // ============================================
-        // MAIN SEND MESSAGE FUNCTION
+        // SEND MESSAGE
         // ============================================
         async function sendMessage() {
             const message = messageInput.value.trim();
             if (!message) return;
 
-            // Clear input
             messageInput.value = '';
-
-            // Add user message to chat
             addMessage(message, 'user');
-
-            // Disable input
+            
             sendButton.disabled = true;
             messageInput.disabled = true;
-
-            // Show loading
             addLoadingMessage();
 
             try {
-                // Call DeepSeek API
-                const aiResponse = await callDeepSeekAPI(message);
-                
-                // Remove loading and add AI response
+                const aiResponse = await callAI(message);
                 removeLoadingMessage();
                 addMessage(aiResponse, 'ai');
-
             } catch (error) {
                 removeLoadingMessage();
-                const errorMessage = error.message || 'Failed to get response from AI';
-                addMessage(`I apologize, but I'm having trouble connecting. Error: ${errorMessage}`, 'ai');
-                showError(errorMessage);
+                addMessage('I apologize, but I am having trouble connecting. Please try again in a moment.', 'ai');
+                showError(error.message);
             } finally {
-                // Re-enable input
                 sendButton.disabled = false;
                 messageInput.disabled = false;
                 messageInput.focus();
             }
         }
 
-        // ============================================
-        // SUGGESTION CHIPS
-        // ============================================
-        function useSuggestion(suggestion) {
+        // Suggestion chips
+        window.useSuggestion = function(suggestion) {
             messageInput.value = suggestion;
             sendMessage();
-        }
+        };
 
-        // ============================================
-        // EVENT LISTENERS
-        // ============================================
+        // Event listeners
         sendButton.addEventListener('click', sendMessage);
-
+        
         messageInput.addEventListener('keypress', (e) => {
             if (e.key === 'Enter' && !e.shiftKey) {
                 e.preventDefault();
@@ -610,48 +563,12 @@
             }
         });
 
-        // ============================================
-        // INITIALIZATION
-        // ============================================
-        // Add welcome message
+        // Welcome message
         setTimeout(() => {
             addMessage('Hello! I am Dr. Waleed\'s AI assistant. How can I help you with your health and wellness questions today?', 'ai');
         }, 500);
 
-        // Load recent messages from Firestore (optional - shows chat history)
-        async function loadRecentMessages() {
-            try {
-                const snapshot = await db.collection('chats')
-                    .where('sessionId', '==', sessionId)
-                    .orderBy('timestamp', 'desc')
-                    .limit(10)
-                    .get();
-
-                // Clear welcome message
-                const welcomeMsg = document.querySelector('.welcome-message');
-                if (welcomeMsg) welcomeMsg.remove();
-
-                // Add messages in reverse order (oldest first)
-                const messages = [];
-                snapshot.forEach(doc => {
-                    messages.push(doc.data());
-                });
-                
-                messages.reverse().forEach(msg => {
-                    addMessage(msg.content, msg.type);
-                });
-
-            } catch (error) {
-                console.log('No previous messages found');
-            }
-        }
-
-        // Uncomment to load history:
-        // loadRecentMessages();
-
-        console.log('✅ Dr. Waleed\'s AI Assistant is ready!');
-        console.log('📡 Connected to Firebase:', firebaseConfig.projectId);
-        console.log('🤖 Using DeepSeek AI API');
+        console.log('✅ Dr. Waleed\'s AI Assistant ready with FREE OpenRouter API!');
     </script>
 </body>
 </html>

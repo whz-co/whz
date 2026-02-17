@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Dr. Waleed's AI Assistant - GitHub Models</title>
+    <title>Dr. Waleed's AI - GitHub Models</title>
     <!-- Firebase SDKs -->
     <script src="https://www.gstatic.com/firebasejs/10.8.0/firebase-app-compat.js"></script>
     <script src="https://www.gstatic.com/firebasejs/10.8.0/firebase-firestore-compat.js"></script>
@@ -268,6 +268,7 @@
             gap: 8px;
             flex-wrap: wrap;
             font-size: 0.85rem;
+            align-items: center;
         }
         
         .model-badge {
@@ -376,7 +377,8 @@
             <div class="model-select">
                 <span class="model-option active" data-model="gpt-4o-mini">GPT-4o-mini</span>
                 <span class="model-option" data-model="gpt-4o">GPT-4o</span>
-                <span class="model-option" data-model="deepseek-r1">DeepSeek</span>
+                <span class="model-option" data-model="deepseek-r1">DeepSeek-R1</span>
+                <span class="model-option" data-model="meta-llama-3.1-8b-instruct">Llama 3.1</span>
             </div>
         </div>
 
@@ -423,7 +425,7 @@
 
     <script>
         // ============================================
-        // CONFIGURATION
+        // FIREBASE CONFIGURATION
         // ============================================
         const firebaseConfig = {
             apiKey: "AIzaSyAE8wf24HXrfmpMluaFOv1OHPrf_YFfqTQ",
@@ -449,12 +451,22 @@
         const modelOptions = document.querySelectorAll('.model-option');
 
         // ============================================
-        // GITHUB MODELS - YOUR WORKING TOKEN
+        // GITHUB MODELS - CORRECT CONFIGURATION
         // ============================================
         const GITHUB_TOKEN = "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";
-        const API_URL = "https://models.inference.ai.azure.com/v1/chat/completions";
         
-        let currentModel = "gpt-4o-mini";
+        // CORRECT ENDPOINT - using the proper Azure inference endpoint [citation:8]
+        const API_URL = "https://models.inference.ai.azure.com/chat/completions";
+        
+        // Available models with correct naming format [citation:3]
+        const MODELS = {
+            GPT4O_MINI: "gpt-4o-mini",
+            GPT4O: "gpt-4o",
+            DEEPSEEK_R1: "deepseek-r1",
+            LLAMA: "meta-llama-3.1-8b-instruct"
+        };
+        
+        let currentModel = MODELS.GPT4O_MINI;
         let conversationHistory = [];
         let estimatedTokens = 0;
 
@@ -475,7 +487,7 @@
                         'Authorization': `Bearer ${GITHUB_TOKEN}`
                     },
                     body: JSON.stringify({
-                        model: "gpt-4o-mini",
+                        model: MODELS.GPT4O_MINI,
                         messages: [{ role: "user", content: "Hello" }],
                         max_tokens: 5
                     })
@@ -486,12 +498,15 @@
                     statusText.textContent = 'Ready';
                     addMessage("✅ **Connected!** I'm Dr. Waleed, powered by GitHub Models. Ask me anything!", 'ai');
                 } else {
-                    throw new Error(`HTTP ${response.status}`);
+                    const error = await response.json();
+                    console.error('Connection error:', error);
+                    throw new Error(`HTTP ${response.status}: ${error.error?.message || 'Unknown error'}`);
                 }
             } catch (error) {
+                console.error('Init error:', error);
                 statusDot.className = 'status-dot error';
                 statusText.textContent = 'Error';
-                addMessage("⚠️ Connection issue. Please refresh.", 'ai');
+                addMessage(`⚠️ Connection issue: ${error.message}. Please refresh.`, 'ai');
             }
         }
 
@@ -505,6 +520,8 @@
                 { role: 'user', content: userMessage }
             ];
 
+            console.log('Sending request with model:', currentModel);
+            
             const response = await fetch(API_URL, {
                 method: 'POST',
                 headers: {
@@ -515,13 +532,14 @@
                     model: currentModel,
                     messages: messages,
                     temperature: 0.7,
-                    max_tokens: 100
+                    max_tokens: 150
                 })
             });
 
             if (!response.ok) {
-                const error = await response.json();
-                throw new Error(error.error?.message || `Error ${response.status}`);
+                const errorData = await response.json();
+                console.error('API Error Response:', errorData);
+                throw new Error(errorData.error?.message || `Error ${response.status}`);
             }
 
             const data = await response.json();
@@ -624,11 +642,12 @@
                 addMessage(response, 'ai');
 
             } catch (error) {
+                console.error('Send error:', error);
                 removeLoading();
                 addMessage(`⚠️ Error: ${error.message}`, 'ai');
                 errorDisplay.textContent = error.message;
                 errorDisplay.style.display = 'block';
-                setTimeout(() => { errorDisplay.style.display = 'none'; }, 3000);
+                setTimeout(() => { errorDisplay.style.display = 'none'; }, 5000);
             } finally {
                 sendButton.disabled = false;
                 messageInput.disabled = false;
@@ -643,7 +662,23 @@
             opt.addEventListener('click', () => {
                 modelOptions.forEach(o => o.classList.remove('active'));
                 opt.classList.add('active');
-                currentModel = opt.dataset.model;
+                
+                const model = opt.dataset.model;
+                // Map to correct model names
+                switch(model) {
+                    case 'gpt-4o-mini':
+                        currentModel = MODELS.GPT4O_MINI;
+                        break;
+                    case 'gpt-4o':
+                        currentModel = MODELS.GPT4O;
+                        break;
+                    case 'deepseek-r1':
+                        currentModel = MODELS.DEEPSEEK_R1;
+                        break;
+                    case 'meta-llama-3.1-8b-instruct':
+                        currentModel = MODELS.LLAMA;
+                        break;
+                }
                 addMessage(`🔄 Switched to ${currentModel}`, 'ai');
             });
         });

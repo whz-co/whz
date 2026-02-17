@@ -3,13 +3,12 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Dr. Waleed's AI Assistant - Optimized</title>
+    <title>Dr. Waleed's AI Assistant - DeepSeek</title>
     <!-- Firebase SDKs -->
     <script src="https://www.gstatic.com/firebasejs/10.8.0/firebase-app-compat.js"></script>
     <script src="https://www.gstatic.com/firebasejs/10.8.0/firebase-firestore-compat.js"></script>
     
     <style>
-        /* Keep all your existing styles */
         * {
             margin: 0;
             padding: 0;
@@ -345,6 +344,26 @@
             header { flex-direction: column; gap: 10px; }
             .message { max-width: 85%; }
         }
+
+        .api-info {
+            padding: 10px 30px;
+            background: #e8f0fe;
+            color: #1e3c72;
+            font-size: 0.85rem;
+            border-bottom: 1px solid #e2e8f0;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .api-badge {
+            background: #1e3c72;
+            color: white;
+            padding: 4px 12px;
+            border-radius: 20px;
+            font-weight: 600;
+            font-size: 0.8rem;
+        }
     </style>
 </head>
 <body>
@@ -354,7 +373,7 @@
                 <div class="doctor-avatar">DW</div>
                 <div class="title">
                     <h1>Dr. Waleed's AI Assistant</h1>
-                    <p>Quick, Concise Answers</p>
+                    <p>Powered by DeepSeek AI</p>
                 </div>
             </div>
             <div class="status">
@@ -363,11 +382,19 @@
             </div>
         </header>
 
+        <div class="api-info">
+            <span class="api-badge">DeepSeek AI</span>
+            <span>Using DeepSeek API directly - No OpenRouter needed</span>
+        </div>
+
         <div id="chat-container">
             <div class="welcome-message">
                 <h2>👋 Welcome to Dr. Waleed's AI Assistant</h2>
-                <p>⚡ **Quick & Concise Mode** - Getting you answers fast with minimal tokens</p>
-                <p style="font-size: 0.9rem; margin-top: 10px;">
+                <p>⚡ Powered by <strong>DeepSeek AI</strong> - Fast, concise answers</p>
+                <p style="font-size: 0.9rem; margin-top: 10px; color: #1e3c72;">
+                    🔑 Using API Key: <strong>sk-241c22199d454ce2be3c5d9309c166db</strong>
+                </p>
+                <p style="font-size: 0.9rem; margin-top: 5px;">
                     💊 Health | 💻 Tech | 📚 Education | 🌍 General Knowledge | 🍳 Recipes
                 </p>
             </div>
@@ -381,7 +408,7 @@
                 <input 
                     type="text" 
                     id="message-input" 
-                    placeholder="Ask me anything (getting quick answers)..."
+                    placeholder="Ask me anything... (Using DeepSeek AI)"
                     autocomplete="off"
                 >
                 <button id="send-button">
@@ -404,7 +431,7 @@
 
         <div class="footer">
             <div class="powered-by">
-                <span>⚡ Optimized Mode - 10x More Conversations</span>
+                <span>⚡ DeepSeek AI - Direct Integration</span>
                 <span>🔒 Firebase</span>
             </div>
             <div class="admin-badge">Dr. Waleed's Assistant</div>
@@ -442,48 +469,31 @@
         const sessionId = 'session_' + Date.now();
 
         // ============================================
-        // OPENROUTER CONFIGURATION - YOUR NEW API KEY
+        // DEEPSEEK CONFIGURATION
         // ============================================
-        // YOUR NEW API KEY ADDED HERE
-        const OPENROUTER_API_KEY = "sk-241c22199d454ce2be3c5d9309c166db";
-        const OPENROUTER_API_URL = "https://openrouter.ai/api/v1/chat/completions";
-        const cleanApiKey = OPENROUTER_API_KEY.trim();
-
-        // ============================================
-        // TOKEN OPTIMIZATION STRATEGIES
-        // ============================================
+        const DEEPSEEK_API_KEY = "sk-241c22199d454ce2be3c5d9309c166db";
+        const DEEPSEEK_API_URL = "https://api.deepseek.com/v1/chat/completions";
         
-        // Strategy 1: Response Length Control
-        const RESPONSE_MODES = {
-            CONCISE: 'concise',     // 50-100 tokens - BEST for most queries
-            BALANCED: 'balanced',   // 100-200 tokens
-            DETAILED: 'detailed'    // 200-400 tokens
-        };
-        
-        // Default to CONCISE mode for maximum conversations
-        let currentMode = RESPONSE_MODES.CONCISE;
+        // System prompt for concise answers
+        const systemPrompt = 'You are Dr. Waleed, a helpful AI assistant. Give VERY BRIEF, direct answers. 1-3 sentences max. Be friendly, helpful, and concise.';
 
-        // Strategy 2: Short System Prompt (only 25 tokens vs 50+ before)
-        const systemPrompt = 'You are Dr. Waleed. Give VERY BRIEF, direct answers. 1-3 sentences max. Be helpful but concise.';
-
-        // Strategy 3: FAQ Cache (0 tokens used!)
+        // FAQ Cache for 0-token responses
         const faqCache = {
-            "what is ai": "AI is machines mimicking human intelligence. It powers chatbots, recommendations, and automation.",
-            "tell me a joke": "Why don't scientists trust atoms? They make up everything! 😄",
-            "capital of france": "Paris is the capital of France.",
-            "how to start coding": "Start with Python. It's beginner-friendly. Use free resources like Codecademy.",
-            "healthy breakfast": "Oatmeal with fruits, Greek yogurt, or eggs on whole-grain toast. Quick and nutritious!",
-            "quantum physics": "Study of matter/energy at atomic scale. Things can be in multiple states until observed.",
-            "love poem": "Roses are red, violets are blue, sugar is sweet, and so are you. 💕"
+            "what is ai": "AI (Artificial Intelligence) is machines mimicking human intelligence to perform tasks like learning, problem-solving, and decision-making. It powers things like chatbots, recommendations, and self-driving cars! 🤖",
+            "tell me a joke": "Why don't scientists trust atoms? Because they make up everything! 😄 Here's another: What do you call a fake noodle? An impasta! 🍝",
+            "capital of france": "Paris is the capital of France! It's known as the City of Light and is famous for the Eiffel Tower. 🗼",
+            "how to start coding": "Start with Python - it's beginner-friendly! Use free resources like Codecademy, freeCodeCamp, or YouTube tutorials. Practice daily! 💻",
+            "healthy breakfast": "Quick healthy breakfast: Oatmeal with berries, Greek yogurt with honey, or eggs on whole-grain toast. Fast and nutritious! 🥣",
+            "quantum physics": "Quantum physics studies matter/energy at atomic scale. Crazy fact: particles can be in multiple places until observed! ⚛️",
+            "love poem": "Roses are red, violets are blue, sugar is sweet, and so are you! 💕 Here's another: In your smile, I find my sun, my heart dances, my soul's won.",
+            "what is deepseek": "DeepSeek is an advanced AI model created by DeepSeek company. I'm powered by it to give you quick, helpful answers! 🚀"
         };
 
-        // Strategy 4: Conversation History Limiter
+        // Conversation history (limited to save tokens)
         let conversationHistory = [];
-        const MAX_HISTORY = 3; // Only remember last 3 exchanges (was 10)
-
-        // Token tracking
+        const MAX_HISTORY = 3;
         let estimatedTokensUsed = 0;
-        const MAX_TOKENS_PER_RESPONSE = 75; // Hard limit for concise answers
+        const MAX_TOKENS_PER_RESPONSE = 100;
 
         // ============================================
         // HELPER FUNCTIONS
@@ -491,7 +501,7 @@
         function updateStatus(connected, message) {
             if (connected) {
                 statusDot.className = 'status-dot';
-                statusText.textContent = message || 'AI Ready';
+                statusText.textContent = message || 'DeepSeek Ready';
             } else {
                 statusDot.className = 'status-dot error';
                 statusText.textContent = message || 'Connection Error';
@@ -523,7 +533,6 @@
             timeDiv.textContent = getCurrentTime();
             messageDiv.appendChild(timeDiv);
 
-            // Add token count for AI messages (for monitoring)
             if (type === 'ai' && tokens > 0) {
                 const tokenDiv = document.createElement('div');
                 tokenDiv.className = 'token-counter';
@@ -537,18 +546,17 @@
             chatContainer.appendChild(messageDiv);
             chatContainer.scrollTop = chatContainer.scrollHeight;
             
-            // Save to conversation history (limited to MAX_HISTORY)
             if (type === 'user' || type === 'ai') {
                 conversationHistory.push({
                     role: type === 'user' ? 'user' : 'assistant',
                     content: content
                 });
-                if (conversationHistory.length > MAX_HISTORY * 2) { // *2 for both user and assistant
+                if (conversationHistory.length > MAX_HISTORY * 2) {
                     conversationHistory = conversationHistory.slice(-MAX_HISTORY * 2);
                 }
             }
             
-            // Save to Firestore (optional)
+            // Save to Firestore
             if (type === 'user' || type === 'ai') {
                 db.collection('chats').add({
                     content: content,
@@ -561,7 +569,7 @@
 
         function updateTokenDisplay() {
             const conversationsPossible = Math.floor(1000000 / (estimatedTokensUsed || 1));
-            tokenUsage.textContent = `📊 Session tokens: ~${estimatedTokensUsed} | 1M tokens serves ~${conversationsPossible} conversations`;
+            tokenUsage.textContent = `📊 Session tokens: ~${estimatedTokensUsed} | DeepSeek AI - Efficient Mode`;
         }
 
         function addLoadingMessage() {
@@ -574,7 +582,7 @@
             typingIndicator.innerHTML = '<span></span><span></span><span></span>';
             
             const textDiv = document.createElement('div');
-            textDiv.textContent = 'Getting quick answer...';
+            textDiv.textContent = 'DeepSeek is thinking...';
             
             loadingDiv.appendChild(typingIndicator);
             loadingDiv.appendChild(textDiv);
@@ -588,12 +596,12 @@
         }
 
         // ============================================
-        // SMART API CALL - WITH CACHING & LENGTH CONTROL
+        // DEEPSEEK API CALL
         // ============================================
-        async function getAIResponse(userMessage) {
+        async function getDeepSeekResponse(userMessage) {
             const lowercaseMsg = userMessage.toLowerCase().trim();
             
-            // Strategy 3: Check FAQ cache first (0 tokens!)
+            // Check FAQ cache first (0 tokens!)
             for (let [key, value] of Object.entries(faqCache)) {
                 if (lowercaseMsg.includes(key)) {
                     console.log('✅ Cache hit! 0 tokens used');
@@ -605,53 +613,53 @@
                 }
             }
 
-            console.log('Cache miss, calling API with concise mode');
+            console.log('Calling DeepSeek API directly...');
 
-            // Strategy 1 & 5: Force short responses with max_tokens
             const messages = [
                 { role: 'system', content: systemPrompt },
-                ...conversationHistory.slice(-2), // Only last exchange for context
+                ...conversationHistory.slice(-2),
                 { role: 'user', content: userMessage }
             ];
 
             try {
-                const response = await fetch(OPENROUTER_API_URL, {
+                const response = await fetch(DEEPSEEK_API_URL, {
                     method: 'POST',
                     headers: {
                         'Content-Type': 'application/json',
-                        'Authorization': `Bearer ${cleanApiKey}`,
-                        'HTTP-Referer': window.location.origin,
-                        'X-Title': 'Dr. Waleed AI'
+                        'Authorization': `Bearer ${DEEPSEEK_API_KEY}`
                     },
                     body: JSON.stringify({
-                        model: 'deepseek/deepseek-chat-v3-0324:free',
+                        model: 'deepseek-chat',
                         messages: messages,
-                        temperature: 0.5, // Lower temperature = more predictable
-                        max_tokens: MAX_TOKENS_PER_RESPONSE, // HARD LIMIT: 75 tokens max!
-                        top_p: 0.9
+                        temperature: 0.7,
+                        max_tokens: MAX_TOKENS_PER_RESPONSE,
+                        top_p: 0.9,
+                        frequency_penalty: 0,
+                        presence_penalty: 0
                     })
                 });
 
                 if (!response.ok) {
-                    const errorData = await response.text();
-                    console.error('API Error Response:', errorData);
-                    throw new Error(`API error: ${response.status} - ${errorData}`);
+                    const errorData = await response.json();
+                    console.error('DeepSeek API Error:', errorData);
+                    throw new Error(errorData.error?.message || `API error: ${response.status}`);
                 }
 
                 const data = await response.json();
-                
-                // Estimate tokens used (rough calculation)
                 const responseText = data.choices[0].message.content;
-                const estimatedTokens = Math.ceil(responseText.length / 4); // Rough estimate
+                
+                // Rough token estimation
+                const estimatedTokens = Math.ceil(responseText.length / 4);
                 
                 return {
                     content: responseText,
                     tokens: estimatedTokens,
-                    cached: false
+                    cached: false,
+                    model: data.model
                 };
 
             } catch (error) {
-                console.error('API Error:', error);
+                console.error('DeepSeek API Error:', error);
                 throw error;
             }
         }
@@ -677,35 +685,39 @@
             addLoadingMessage();
 
             try {
-                // Get AI response (with caching & length control)
-                const result = await getAIResponse(message);
+                // Get response from DeepSeek
+                const result = await getDeepSeekResponse(message);
                 
                 // Remove loading
                 removeLoadingMessage();
                 
-                // Add AI response with token count
+                // Add AI response
                 addMessage(result.content, 'ai', result.tokens);
                 
                 if (result.cached) {
-                    // Show cache indicator
                     const cacheMsg = document.createElement('div');
                     cacheMsg.style.cssText = 'font-size:0.7rem; color:#94a3b8; text-align:right; margin-top:-10px; margin-bottom:10px;';
                     cacheMsg.textContent = '⚡ Response from cache (0 tokens)';
                     chatContainer.appendChild(cacheMsg);
                 }
                 
-                updateStatus(true, 'AI Ready');
+                updateStatus(true, 'DeepSeek Ready');
 
             } catch (error) {
                 removeLoadingMessage();
                 
-                let errorMessage = 'Sorry, error. ';
+                let errorMessage = 'Sorry, DeepSeek error. ';
+                
                 if (error.message.includes('401')) {
-                    errorMessage += 'Invalid API key. Please check your OpenRouter API key.';
+                    errorMessage = '⚠️ **Invalid API Key**\n\nThe DeepSeek API key is invalid. Please check your key.';
+                } else if (error.message.includes('402')) {
+                    errorMessage = '⚠️ **Payment Required**\n\nYour DeepSeek account needs credits.';
                 } else if (error.message.includes('429')) {
-                    errorMessage += 'Rate limit exceeded. Please try again in a moment.';
+                    errorMessage = '⚠️ **Rate Limited**\n\nToo many requests. Please wait a moment.';
+                } else if (error.message.includes('500')) {
+                    errorMessage = '⚠️ **DeepSeek Server Error**\n\nThe DeepSeek API is temporarily unavailable.';
                 } else {
-                    errorMessage += 'Please try again.';
+                    errorMessage += error.message;
                 }
                 
                 addMessage(errorMessage, 'ai', 5);
@@ -728,45 +740,49 @@
         };
 
         // ============================================
-        // TEST CONNECTION
+        // TEST DEEPSEEK CONNECTION
         // ============================================
-        async function testConnection() {
-            updateStatus(false, 'Testing...');
-            
-            if (!cleanApiKey || cleanApiKey === 'YOUR_OPENROUTER_API_KEY_HERE') {
-                updateStatus(false, 'Add API Key');
-                addMessage('⚠️ **Add your OpenRouter API key**\n\n1. Go to openrouter.ai\n2. Sign up\n3. Get free key\n4. Add to code', 'ai');
-                return;
-            }
+        async function testDeepSeekConnection() {
+            updateStatus(false, 'Connecting to DeepSeek...');
             
             try {
-                const response = await fetch(OPENROUTER_API_URL, {
+                // Simple test call
+                const response = await fetch(DEEPSEEK_API_URL, {
                     method: 'POST',
                     headers: {
                         'Content-Type': 'application/json',
-                        'Authorization': `Bearer ${cleanApiKey}`,
-                        'HTTP-Referer': window.location.origin
+                        'Authorization': `Bearer ${DEEPSEEK_API_KEY}`
                     },
                     body: JSON.stringify({
-                        model: 'deepseek/deepseek-chat-v3-0324:free',
-                        messages: [{ role: 'user', content: 'Hello' }],
-                        max_tokens: 5
+                        model: 'deepseek-chat',
+                        messages: [
+                            { role: 'system', content: 'You are a helpful assistant.' },
+                            { role: 'user', content: 'Say "DeepSeek connected!" in one line.' }
+                        ],
+                        max_tokens: 20
                     })
                 });
 
                 if (response.ok) {
-                    updateStatus(true, 'Ready');
-                    addMessage('✅ Dr. Waleed here! I give **very brief answers** to save tokens. Ask me anything!', 'ai', 15);
+                    const data = await response.json();
+                    updateStatus(true, 'DeepSeek Ready');
+                    addMessage('✅ **DeepSeek AI Connected!**\n\nI\'m Dr. Waleed, powered by DeepSeek. Ask me anything and I\'ll give you quick, concise answers!', 'ai', 15);
                 } else {
-                    const errorText = await response.text();
-                    console.error('Test connection error:', errorText);
-                    updateStatus(false, 'API Error');
-                    addMessage(`⚠️ API Connection Error: ${response.status}. Please check your API key.`, 'ai', 5);
+                    const errorData = await response.json();
+                    console.error('Connection test failed:', errorData);
+                    
+                    if (response.status === 401) {
+                        updateStatus(false, 'Invalid Key');
+                        addMessage('⚠️ **DeepSeek API Key Issue**\n\nThe API key format looks correct but authentication failed. This could mean:\n\n1. The key is invalid\n2. The key doesn\'t have permissions\n3. You need to add credits to your DeepSeek account\n\nPlease check your DeepSeek account at platform.deepseek.com', 'ai', 10);
+                    } else {
+                        updateStatus(false, 'API Error');
+                        addMessage(`⚠️ DeepSeek API Error: ${response.status} - ${errorData.error?.message || 'Unknown error'}`, 'ai', 5);
+                    }
                 }
             } catch (error) {
                 console.error('Network error:', error);
                 updateStatus(false, 'Network Error');
-                addMessage('⚠️ Network Error: Cannot connect to API. Please check your internet connection.', 'ai', 5);
+                addMessage('⚠️ **Network Error**\n\nCannot connect to DeepSeek API. Please check:\n1. Your internet connection\n2. If DeepSeek API is accessible from your region\n3. If you need to use a proxy/VPN', 'ai', 10);
             }
         }
 
@@ -784,8 +800,12 @@
         // ============================================
         // INITIALIZATION
         // ============================================
-        setTimeout(testConnection, 1000);
-        console.log('✅ Optimized Dr. Waleed initialized with new API key');
+        // Test connection after a short delay
+        setTimeout(testDeepSeekConnection, 1500);
+        
+        console.log('✅ Dr. Waleed initialized with DeepSeek AI');
+        console.log('Using API Key:', DEEPSEEK_API_KEY);
+        console.log('DeepSeek API URL:', DEEPSEEK_API_URL);
     </script>
 </body>
 </html>

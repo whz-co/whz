@@ -357,23 +357,34 @@
         }
 
         .token-section {
-            padding: 10px 30px;
+            padding: 15px 30px;
             background: #f0f9ff;
             border-bottom: 1px solid #e2e8f0;
+        }
+        
+        .token-label {
+            font-weight: 600;
+            color: #1e3c72;
+            margin-bottom: 8px;
             display: flex;
             align-items: center;
-            gap: 15px;
-            flex-wrap: wrap;
+            gap: 10px;
+        }
+        
+        .token-input-group {
+            display: flex;
+            gap: 10px;
+            margin-bottom: 10px;
         }
         
         .token-input {
             flex: 1;
-            min-width: 300px;
-            padding: 8px 15px;
+            padding: 10px 15px;
             border: 2px solid #e2e8f0;
-            border-radius: 20px;
+            border-radius: 30px;
             font-size: 0.9rem;
             outline: none;
+            font-family: monospace;
         }
         
         .token-input:focus {
@@ -384,20 +395,107 @@
             background: #1e3c72;
             color: white;
             border: none;
-            border-radius: 20px;
-            padding: 8px 20px;
+            border-radius: 30px;
+            padding: 10px 25px;
             cursor: pointer;
             font-size: 0.9rem;
+            font-weight: 600;
+        }
+        
+        .token-button:hover {
+            background: #2a5298;
+        }
+        
+        .token-status {
+            padding: 10px 15px;
+            border-radius: 10px;
+            font-size: 0.9rem;
+            display: none;
+            margin-top: 10px;
+        }
+        
+        .token-status.success {
+            background: #d4edda;
+            color: #155724;
+            display: block;
+        }
+        
+        .token-status.error {
+            background: #f8d7da;
+            color: #721c24;
+            display: block;
+        }
+        
+        .token-status.warning {
+            background: #fff3cd;
+            color: #856404;
+            display: block;
         }
         
         .token-help {
-            font-size: 0.8rem;
-            color: #059669;
-            padding: 0 30px 10px;
+            background: white;
+            border-radius: 10px;
+            padding: 15px;
+            margin-top: 15px;
+            border: 1px solid #e2e8f0;
         }
         
-        .token-help a {
+        .token-help h4 {
             color: #1e3c72;
+            margin-bottom: 10px;
+        }
+        
+        .token-help ol {
+            margin-left: 20px;
+            color: #475569;
+        }
+        
+        .token-help li {
+            margin-bottom: 8px;
+        }
+        
+        .token-help code {
+            background: #f1f5f9;
+            padding: 2px 6px;
+            border-radius: 4px;
+            font-size: 0.8rem;
+        }
+        
+        .token-help .step-highlight {
+            background: #f0f9ff;
+            padding: 5px 10px;
+            border-radius: 5px;
+            margin: 5px 0;
+        }
+        
+        .model-selector {
+            padding: 10px 30px;
+            background: white;
+            border-bottom: 1px solid #e2e8f0;
+            display: flex;
+            gap: 10px;
+            flex-wrap: wrap;
+            align-items: center;
+        }
+        
+        .model-chip {
+            background: #f1f5f9;
+            border: 2px solid #e2e8f0;
+            padding: 5px 15px;
+            border-radius: 30px;
+            font-size: 0.85rem;
+            cursor: pointer;
+            transition: all 0.3s;
+        }
+        
+        .model-chip.active {
+            background: #1e3c72;
+            color: white;
+            border-color: #1e3c72;
+        }
+        
+        .model-chip:hover {
+            border-color: #1e3c72;
         }
     </style>
 </head>
@@ -417,32 +515,86 @@
             </div>
         </header>
 
-        <!-- GitHub Token Input Section -->
+        <!-- GitHub Token Section -->
         <div class="token-section">
-            <span class="github-badge">GitHub Models</span>
-            <input 
-                type="text" 
-                id="github-token" 
-                class="token-input" 
-                placeholder="Enter your GitHub Personal Access Token (PAT)"
-                value=""
-            >
-            <button id="update-token" class="token-button">Connect</button>
+            <div class="token-label">
+                <span class="github-badge">GitHub Models</span>
+                <span>Enter your GitHub Personal Access Token</span>
+            </div>
+            
+            <div class="token-input-group">
+                <input 
+                    type="text" 
+                    id="github-token" 
+                    class="token-input" 
+                    placeholder="github_pat_..."
+                    value="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"
+                >
+                <button id="update-token" class="token-button">Connect</button>
+            </div>
+            
+            <div id="token-status" class="token-status error">
+                ❌ API Error: Your token doesn't have the required permissions
+            </div>
+
+            <!-- Step-by-step help guide -->
+            <div class="token-help">
+                <h4>🔑 How to create a valid GitHub token:</h4>
+                <ol>
+                    <li>
+                        <strong>Go to GitHub Settings:</strong> 
+                        <a href="https://github.com/settings/tokens" target="_blank">github.com/settings/tokens</a>
+                    </li>
+                    <li>
+                        <strong>Click "Generate new token" → "Fine-grained tokens"</strong>
+                        <div class="step-highlight">✅ This is important! Classic tokens won't work for Models.</div>
+                    </li>
+                    <li>
+                        <strong>Set token name:</strong> "Dr. Waleed AI Assistant"
+                    </li>
+                    <li>
+                        <strong>Set expiration:</strong> Choose "No expiration" or 90+ days
+                    </li>
+                    <li>
+                        <strong>Repository access:</strong> Select "Public repositories (read-only)"
+                    </li>
+                    <li>
+                        <strong>Permissions:</strong> Scroll down to <code>Models</code> section and select <strong>"Read"</strong>
+                        <div class="step-highlight">⚠️ This is the most important step! Must select "Read" under Models.</div>
+                    </li>
+                    <li>
+                        <strong>Generate and copy the token</strong> (starts with <code>github_pat_</code>)
+                    </li>
+                    <li>
+                        <strong>Paste it above and click "Connect"</strong>
+                    </li>
+                </ol>
+                <p style="margin-top: 10px; color: #059669;">
+                    ✅ Your token is almost correct - it just needs the <strong>read:models</strong> permission!
+                </p>
+            </div>
         </div>
-        <div class="token-help">
-            🔑 <strong>How to get your free GitHub token:</strong> 
-            <a href="https://github.com/settings/tokens" target="_blank">github.com/settings/tokens</a> → 
-            Generate new token → Select <strong>read:models</strong> scope → Copy and paste above
+
+        <!-- Model Selector -->
+        <div class="model-selector">
+            <span style="color: #64748b;">Select Model:</span>
+            <div class="model-chip active" data-model="gpt-4o-mini">GPT-4o-mini (Fast)</div>
+            <div class="model-chip" data-model="gpt-4o">GPT-4o (Powerful)</div>
+            <div class="model-chip" data-model="deepseek-r1">DeepSeek-R1</div>
+            <div class="model-chip" data-model="meta-llama-3.1-8b-instruct">Llama 3.1</div>
         </div>
 
         <div id="chat-container">
             <div class="welcome-message">
                 <h2>👋 Welcome to Dr. Waleed's AI Assistant</h2>
-                <p>⚡ Powered by <strong>GitHub Models</strong> - Completely free for all GitHub users!</p>
-                <p style="font-size: 0.9rem; margin-top: 10px; color: #059669;">
-                    ✅ Available models: GPT-4o, DeepSeek-R1, Llama 3, Mistral, and more
+                <p style="color: #dc2626; font-weight: 600; margin: 10px 0;">
+                    ⚠️ Token Permission Error Detected
                 </p>
-                <p style="font-size: 0.9rem; margin-top: 5px;">
+                <p style="font-size: 0.95rem; margin: 10px 0; background: #fee2e2; padding: 10px; border-radius: 10px;">
+                    Your GitHub token needs the <strong>"read:models"</strong> permission. 
+                    Please follow the steps above to create a new token with the correct permissions.
+                </p>
+                <p style="font-size: 0.9rem; margin-top: 10px;">
                     💊 Health | 💻 Tech | 📚 Education | 🌍 General Knowledge | 🍳 Recipes
                 </p>
             </div>
@@ -456,10 +608,11 @@
                 <input 
                     type="text" 
                     id="message-input" 
-                    placeholder="Ask me anything... (Using GitHub Models)"
+                    placeholder="Ask me anything... (Connect token first)"
                     autocomplete="off"
+                    disabled
                 >
-                <button id="send-button">
+                <button id="send-button" disabled>
                     <span>Send</span>
                     <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
                         <path d="M22 2L11 13M22 2l-7 20-4-9-9-4 20-7z"/>
@@ -473,8 +626,6 @@
                 <div class="chip" onclick="useSuggestion('How to start coding? Briefly')">💻 Quick coding tip</div>
                 <div class="chip" onclick="useSuggestion('What is the capital of France?')">🗼 Quick fact</div>
                 <div class="chip" onclick="useSuggestion('Explain quantum physics simply')">⚛️ Simple explanation</div>
-                <div class="chip" onclick="useSuggestion('Quick healthy breakfast idea')">🥗 Fast recipe</div>
-                <div class="chip" onclick="useSuggestion('What is DeepSeek?')">🤔 About DeepSeek</div>
             </div>
         </div>
 
@@ -515,6 +666,8 @@
         const tokenUsage = document.getElementById('token-usage');
         const githubTokenInput = document.getElementById('github-token');
         const updateTokenButton = document.getElementById('update-token');
+        const tokenStatus = document.getElementById('token-status');
+        const modelChips = document.querySelectorAll('.model-chip');
 
         // Session ID
         const sessionId = 'session_' + Date.now();
@@ -522,30 +675,22 @@
         // ============================================
         // GITHUB MODELS CONFIGURATION
         // ============================================
-        // GitHub Models endpoint (OpenAI-compatible) [citation:2][citation:4]
         const GITHUB_MODELS_URL = "https://models.inference.ai.azure.com/v1/chat/completions";
         
-        // Available free models on GitHub Models [citation:2][citation:5]
-        const AVAILABLE_MODELS = {
-            GPT4O: "gpt-4o",                 // OpenAI's GPT-4o
-            GPT4O_MINI: "gpt-4o-mini",       // OpenAI's GPT-4o-mini
-            DEEPSEEK_R1: "deepseek-r1",      // DeepSeek-R1
-            LLAMA: "meta-llama-3.1-8b-instruct", // Meta's Llama
-            MISTRAL: "mistral-large",        // Mistral Large
-            COHERE: "cohere-command-r",       // Cohere Command R
-            MINISTRAL: "ministral-3b"         // Ministral 3B
+        const MODELS = {
+            GPT4O_MINI: "gpt-4o-mini",
+            GPT4O: "gpt-4o",
+            DEEPSEEK_R1: "deepseek-r1",
+            LLAMA: "meta-llama-3.1-8b-instruct"
         };
         
-        // Default to GPT-4o-mini (fastest and most efficient) [citation:5]
-        let currentModel = AVAILABLE_MODELS.GPT4O_MINI;
-        
-        // GitHub token - will be set by user input
-        let GITHUB_TOKEN = "";
+        let GITHUB_TOKEN = githubTokenInput.value.trim();
+        let currentModel = MODELS.GPT4O_MINI;
+        let isTokenValid = false;
 
-        // System prompt for concise answers
         const systemPrompt = 'You are Dr. Waleed, a helpful AI assistant. Give VERY BRIEF, direct answers. 1-3 sentences max. Be friendly, helpful, and concise.';
 
-        // FAQ Cache for 0-token responses
+        // FAQ Cache
         const faqCache = {
             "what is ai": "🤖 AI (Artificial Intelligence) is machines mimicking human intelligence to perform tasks like learning and problem-solving. It powers chatbots, recommendations, and automation!",
             "tell me a joke": "😄 Why don't scientists trust atoms? Because they make up everything! Here's another: What do you call a fake noodle? An impasta!",
@@ -553,26 +698,17 @@
             "how to start coding": "💻 Start with Python - it's beginner-friendly! Use free resources like Codecademy, freeCodeCamp, or YouTube tutorials. Practice daily!",
             "healthy breakfast": "🥣 Quick healthy breakfast: Oatmeal with berries, Greek yogurt with honey, or eggs on whole-grain toast. Fast and nutritious!",
             "quantum physics": "⚛️ Quantum physics studies matter/energy at atomic scale. Crazy fact: particles can be in multiple places until observed!",
-            "what is deepseek": "🤔 DeepSeek is an advanced AI model created by DeepSeek company. You can use it for free through GitHub Models!",
-            "love poem": "💕 Roses are red, violets are blue, sugar is sweet, and so are you! In your smile, I find my sun, my heart dances, my soul's won.",
-            "github models": "GitHub Models is a free AI inference service for all GitHub users. Just use your GitHub token to access models like GPT-4o, DeepSeek, and Llama for free! [citation:4]"
+            "what is deepseek": "🤔 DeepSeek is an advanced AI model created by DeepSeek company. You can use DeepSeek-R1 for free through GitHub Models!",
+            "what is github models": "GitHub Models is a free AI inference service for all GitHub users. Just use your GitHub token to access models like GPT-4o, DeepSeek, and Llama for free! 🚀"
         };
 
-        // Conversation history (limited to save tokens)
         let conversationHistory = [];
         const MAX_HISTORY = 3;
         let estimatedTokensUsed = 0;
         const MAX_TOKENS_PER_RESPONSE = 100;
 
-        // Rate limits for GitHub Models free tier [citation:9]
-        const RATE_LIMITS = {
-            requestsPerMinute: 15,
-            requestsPerDay: 150,
-            tokensPerRequest: 8000
-        };
-
         // ============================================
-        // HELPER FUNCTIONS
+        // UI UPDATE FUNCTIONS
         // ============================================
         function updateStatus(connected, message) {
             if (connected) {
@@ -612,7 +748,7 @@
             if (type === 'ai' && tokens > 0) {
                 const tokenDiv = document.createElement('div');
                 tokenDiv.className = 'token-counter';
-                tokenDiv.textContent = `~${tokens} tokens`;
+                tokenDiv.textContent = `~${tokens} tokens (${currentModel})`;
                 messageDiv.appendChild(tokenDiv);
                 
                 estimatedTokensUsed += tokens;
@@ -631,16 +767,6 @@
                     conversationHistory = conversationHistory.slice(-MAX_HISTORY * 2);
                 }
             }
-            
-            // Save to Firestore
-            if (type === 'user' || type === 'ai') {
-                db.collection('chats').add({
-                    content: content,
-                    type: type,
-                    sessionId: sessionId,
-                    timestamp: firebase.firestore.FieldValue.serverTimestamp()
-                }).catch(err => console.log('Firestore save error:', err));
-            }
         }
 
         function updateTokenDisplay() {
@@ -657,7 +783,7 @@
             typingIndicator.innerHTML = '<span></span><span></span><span></span>';
             
             const textDiv = document.createElement('div');
-            textDiv.textContent = 'GitHub Models is thinking...';
+            textDiv.textContent = `GitHub Models (${currentModel}) is thinking...`;
             
             loadingDiv.appendChild(typingIndicator);
             loadingDiv.appendChild(textDiv);
@@ -670,30 +796,129 @@
             if (loadingMsg) loadingMsg.remove();
         }
 
-        // Update GitHub token
-        function updateGitHubToken() {
-            const newToken = githubTokenInput.value.trim();
-            if (newToken) {
-                GITHUB_TOKEN = newToken;
-                addMessage(`🔑 GitHub token updated. Testing connection...`, 'ai', 1);
-                testGitHubConnection();
+        function enableChat(enable) {
+            messageInput.disabled = !enable;
+            sendButton.disabled = !enable;
+            if (enable) {
+                messageInput.placeholder = "Ask me anything... (Using GitHub Models)";
             } else {
-                showError('Please enter a GitHub token');
+                messageInput.placeholder = "Connect your token first...";
             }
         }
 
-        updateTokenButton.addEventListener('click', updateGitHubToken);
+        // Model selection
+        modelChips.forEach(chip => {
+            chip.addEventListener('click', () => {
+                modelChips.forEach(c => c.classList.remove('active'));
+                chip.classList.add('active');
+                
+                const model = chip.getAttribute('data-model');
+                currentModel = model;
+                
+                if (isTokenValid) {
+                    addMessage(`🔄 Switched to **${model}** model`, 'ai', 1);
+                }
+            });
+        });
 
         // ============================================
-        // GITHUB MODELS API CALL [citation:2][citation:8]
+        // TOKEN VALIDATION
+        // ============================================
+        async function validateToken(token) {
+            try {
+                const response = await fetch(GITHUB_MODELS_URL, {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                        'Authorization': `Bearer ${token}`
+                    },
+                    body: JSON.stringify({
+                        model: MODELS.GPT4O_MINI,
+                        messages: [
+                            { role: 'user', content: 'test' }
+                        ],
+                        max_tokens: 1
+                    })
+                });
+
+                if (response.ok) {
+                    return { valid: true, status: response.status };
+                } else {
+                    const error = await response.json();
+                    return { valid: false, status: response.status, error };
+                }
+            } catch (error) {
+                return { valid: false, error: error.message };
+            }
+        }
+
+        // ============================================
+        // UPDATE TOKEN FUNCTION
+        // ============================================
+        async function updateGitHubToken() {
+            const token = githubTokenInput.value.trim();
+            
+            if (!token) {
+                tokenStatus.className = 'token-status error';
+                tokenStatus.textContent = '❌ Please enter a token';
+                return;
+            }
+
+            tokenStatus.className = 'token-status';
+            tokenStatus.textContent = '⏳ Validating token...';
+            
+            const result = await validateToken(token);
+            
+            if (result.valid) {
+                GITHUB_TOKEN = token;
+                isTokenValid = true;
+                localStorage.setItem('github_token', token);
+                
+                tokenStatus.className = 'token-status success';
+                tokenStatus.textContent = '✅ Token valid! GitHub Models connected successfully!';
+                
+                enableChat(true);
+                updateStatus(true, 'Connected');
+                
+                addMessage('✅ **GitHub Models Connected!**\n\n' +
+                    'Your token is valid and working! 🎉\n\n' +
+                    '🔹 **Current Model:** ' + currentModel + '\n' +
+                    '🔹 **Free Tier:** 15 requests/min, 150 requests/day\n' +
+                    '🔹 **Ask me anything!**', 'ai', 15);
+            } else {
+                isTokenValid = false;
+                enableChat(false);
+                
+                if (result.status === 401 || result.status === 403) {
+                    tokenStatus.className = 'token-status error';
+                    tokenStatus.textContent = '❌ Token missing "read:models" permission. Please create a new token with the correct scope.';
+                    
+                    addMessage('⚠️ **Token Permission Error**\n\n' +
+                        'Your GitHub token needs the **read:models** permission.\n\n' +
+                        '**Quick fix:**\n' +
+                        '1. Go to https://github.com/settings/tokens\n' +
+                        '2. Click "Generate new token" → "Fine-grained tokens"\n' +
+                        '3. Under "Permissions", find **Models** and select **Read**\n' +
+                        '4. Generate and copy the new token\n' +
+                        '5. Paste it above and click Connect', 'ai', 10);
+                } else {
+                    tokenStatus.className = 'token-status error';
+                    tokenStatus.textContent = `❌ API Error: ${result.error || 'Unknown error'}`;
+                }
+                
+                updateStatus(false, 'Invalid Token');
+            }
+        }
+
+        // ============================================
+        // API CALL
         // ============================================
         async function getGitHubModelsResponse(userMessage) {
             const lowercaseMsg = userMessage.toLowerCase().trim();
             
-            // Check FAQ cache first (0 tokens!)
+            // Check cache
             for (let [key, value] of Object.entries(faqCache)) {
                 if (lowercaseMsg.includes(key)) {
-                    console.log('✅ Cache hit! 0 tokens used');
                     return {
                         content: value,
                         tokens: 0,
@@ -702,94 +927,65 @@
                 }
             }
 
-            if (!GITHUB_TOKEN) {
-                throw new Error('No GitHub token provided. Please enter your GitHub Personal Access Token above.');
-            }
-
-            console.log('Calling GitHub Models API...');
-
             const messages = [
                 { role: 'system', content: systemPrompt },
                 ...conversationHistory.slice(-2),
                 { role: 'user', content: userMessage }
             ];
 
-            try {
-                const response = await fetch(GITHUB_MODELS_URL, {
-                    method: 'POST',
-                    headers: {
-                        'Content-Type': 'application/json',
-                        'Authorization': `Bearer ${GITHUB_TOKEN}`
-                    },
-                    body: JSON.stringify({
-                        model: currentModel,
-                        messages: messages,
-                        temperature: 0.7,
-                        max_tokens: MAX_TOKENS_PER_RESPONSE,
-                        top_p: 0.9
-                    })
-                });
+            const response = await fetch(GITHUB_MODELS_URL, {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                    'Authorization': `Bearer ${GITHUB_TOKEN}`
+                },
+                body: JSON.stringify({
+                    model: currentModel,
+                    messages: messages,
+                    temperature: 0.7,
+                    max_tokens: MAX_TOKENS_PER_RESPONSE,
+                    top_p: 0.9
+                })
+            });
 
-                if (!response.ok) {
-                    const errorData = await response.json();
-                    console.error('GitHub Models API Error:', errorData);
-                    
-                    if (response.status === 401) {
-                        throw new Error('Invalid GitHub token. Please check your token and make sure it has the "read:models" scope. [citation:2]');
-                    } else if (response.status === 429) {
-                        throw new Error(`Rate limit exceeded. GitHub Models free tier allows ${RATE_LIMITS.requestsPerMinute} requests per minute. Please wait. [citation:9]`);
-                    } else {
-                        throw new Error(errorData.error?.message || `API error: ${response.status}`);
-                    }
-                }
-
-                const data = await response.json();
-                const responseText = data.choices[0].message.content;
-                
-                // Rough token estimation
-                const estimatedTokens = Math.ceil(responseText.length / 4);
-                
-                return {
-                    content: responseText,
-                    tokens: estimatedTokens,
-                    cached: false,
-                    model: data.model
-                };
-
-            } catch (error) {
-                console.error('GitHub Models Error:', error);
-                throw error;
+            if (!response.ok) {
+                const errorData = await response.json();
+                throw new Error(errorData.error?.message || `API error: ${response.status}`);
             }
+
+            const data = await response.json();
+            const responseText = data.choices[0].message.content;
+            const estimatedTokens = Math.ceil(responseText.length / 4);
+            
+            return {
+                content: responseText,
+                tokens: estimatedTokens,
+                cached: false,
+                model: data.model
+            };
         }
 
         // ============================================
-        // MAIN SEND MESSAGE FUNCTION
+        // SEND MESSAGE
         // ============================================
         async function sendMessage() {
+            if (!isTokenValid) {
+                showError('Please connect your GitHub token first');
+                return;
+            }
+
             const message = messageInput.value.trim();
             if (!message) return;
 
-            // Clear input
             messageInput.value = '';
-
-            // Add user message
             addMessage(message, 'user');
-
-            // Disable input
             sendButton.disabled = true;
             messageInput.disabled = true;
-
-            // Show loading
             addLoadingMessage();
 
             try {
-                // Get response from GitHub Models
                 const result = await getGitHubModelsResponse(message);
-                
-                // Remove loading
                 removeLoadingMessage();
-                
-                // Add AI response
                 addMessage(result.content, 'ai', result.tokens);
                 
                 if (result.cached) {
@@ -799,106 +995,26 @@
                     chatContainer.appendChild(cacheMsg);
                 }
                 
-                updateStatus(true, 'GitHub Models Ready');
+                updateStatus(true, 'Ready');
 
             } catch (error) {
                 removeLoadingMessage();
-                
-                let errorMessage = 'Sorry, error. ';
-                
-                if (error.message.includes('No GitHub token')) {
-                    errorMessage = '⚠️ **GitHub Token Required**\n\nPlease enter your GitHub Personal Access Token in the field above.\n\n';
-                    errorMessage += '**How to get one:**\n';
-                    errorMessage += '1. Go to https://github.com/settings/tokens\n';
-                    errorMessage += '2. Click "Generate new token" → "Fine-grained tokens"\n';
-                    errorMessage += '3. Give it a name and select **read:models** scope\n';
-                    errorMessage += '4. Generate and copy the token\n';
-                    errorMessage += '5. Paste it above and click "Connect"';
-                } else if (error.message.includes('Invalid GitHub token')) {
-                    errorMessage = '⚠️ **Invalid GitHub Token**\n\nYour token is invalid or missing the required "read:models" scope.\n\n';
-                    errorMessage += 'Please create a new token with the **read:models** permission. [citation:2]';
-                } else if (error.message.includes('Rate limit')) {
-                    errorMessage = `⚠️ **Rate Limit Reached**\n\n${error.message}\n\nGitHub Models free tier allows ${RATE_LIMITS.requestsPerMinute} requests per minute and ${RATE_LIMITS.requestsPerDay} per day. [citation:9]`;
-                } else {
-                    errorMessage += error.message;
-                }
-                
-                addMessage(errorMessage, 'ai', 5);
+                addMessage(`⚠️ Error: ${error.message}`, 'ai', 5);
                 showError(error.message);
-                updateStatus(false, 'Error');
-
+                
+                // If token becomes invalid, disable chat
+                if (error.message.includes('401') || error.message.includes('403')) {
+                    isTokenValid = false;
+                    enableChat(false);
+                    tokenStatus.className = 'token-status error';
+                    tokenStatus.textContent = '❌ Token expired or invalid. Please reconnect.';
+                }
             } finally {
                 sendButton.disabled = false;
                 messageInput.disabled = false;
                 messageInput.focus();
             }
         }
-
-        // ============================================
-        // TEST GITHUB MODELS CONNECTION [citation:8]
-        // ============================================
-        async function testGitHubConnection() {
-            if (!GITHUB_TOKEN) {
-                updateStatus(false, 'No Token');
-                return;
-            }
-            
-            updateStatus(false, 'Testing GitHub...');
-            
-            try {
-                // Simple test call
-                const response = await fetch(GITHUB_MODELS_URL, {
-                    method: 'POST',
-                    headers: {
-                        'Content-Type': 'application/json',
-                        'Authorization': `Bearer ${GITHUB_TOKEN}`
-                    },
-                    body: JSON.stringify({
-                        model: currentModel,
-                        messages: [
-                            { role: 'user', content: 'Say "GitHub Models connected!" in one line.' }
-                        ],
-                        max_tokens: 20
-                    })
-                });
-
-                if (response.ok) {
-                    const data = await response.json();
-                    updateStatus(true, 'Connected');
-                    addMessage('✅ **GitHub Models Connected!**\n\nI\'m Dr. Waleed, now powered by **GitHub Models** (100% free). Ask me anything and I\'ll give you quick, concise answers!\n\n' +
-                        '🔹 Using model: **' + currentModel + '**\n' +
-                        '🔹 Rate limits: ' + RATE_LIMITS.requestsPerMinute + ' req/min, ' + RATE_LIMITS.requestsPerDay + ' req/day\n' +
-                        '🔹 Available models: GPT-4o, DeepSeek-R1, Llama, Mistral, and more [citation:4]', 'ai', 15);
-                } else {
-                    const errorData = await response.json();
-                    console.error('Connection test failed:', errorData);
-                    
-                    if (response.status === 401) {
-                        updateStatus(false, 'Invalid Token');
-                        addMessage('⚠️ **GitHub Token Invalid**\n\nYour token is not working. Please make sure:\n\n' +
-                            '1. You created a token at github.com/settings/tokens\n' +
-                            '2. You selected the **read:models** scope\n' +
-                            '3. You copied the full token correctly\n\n' +
-                            'Try generating a new token and click "Connect" again. [citation:2]', 'ai', 10);
-                    } else {
-                        updateStatus(false, 'API Error');
-                        addMessage(`⚠️ GitHub Models Error: ${response.status} - ${errorData.error?.message || 'Unknown error'}`, 'ai', 5);
-                    }
-                }
-            } catch (error) {
-                console.error('Network error:', error);
-                updateStatus(false, 'Network Error');
-                addMessage('⚠️ **Network Error**\n\nCannot connect to GitHub Models API. Please check your internet connection.', 'ai', 10);
-            }
-        }
-
-        // ============================================
-        // SUGGESTION CHIPS
-        // ============================================
-        window.useSuggestion = function(suggestion) {
-            messageInput.value = suggestion;
-            sendMessage();
-        };
 
         // ============================================
         // EVENT LISTENERS
@@ -910,32 +1026,37 @@
                 sendMessage();
             }
         });
-
-        // Try to load token from localStorage if available
-        const savedToken = localStorage.getItem('github_token');
-        if (savedToken) {
-            githubTokenInput.value = savedToken;
-            GITHUB_TOKEN = savedToken;
-        }
-
-        // Save token to localStorage when updated
-        const originalUpdateToken = updateGitHubToken;
-        updateGitHubToken = function() {
-            const newToken = githubTokenInput.value.trim();
-            if (newToken) {
-                localStorage.setItem('github_token', newToken);
-            }
-            originalUpdateToken();
-        };
+        
         updateTokenButton.addEventListener('click', updateGitHubToken);
+
+        // Suggestion chips
+        window.useSuggestion = function(suggestion) {
+            if (!isTokenValid) {
+                showError('Please connect your GitHub token first');
+                return;
+            }
+            messageInput.value = suggestion;
+            sendMessage();
+        };
 
         // ============================================
         // INITIALIZATION
         // ============================================
-        console.log('✅ Dr. Waleed initialized with GitHub Models');
-        console.log('Available models:', AVAILABLE_MODELS);
-        console.log('Current model:', currentModel);
-        console.log('Rate limits:', RATE_LIMITS);
+        // Disable chat initially
+        enableChat(false);
+        
+        // Check for saved token
+        const savedToken = localStorage.getItem('github_token');
+        if (savedToken) {
+            githubTokenInput.value = savedToken;
+            // Auto-validate saved token
+            setTimeout(updateGitHubToken, 1000);
+        } else {
+            tokenStatus.className = 'token-status warning';
+            tokenStatus.textContent = '⌛ Enter your GitHub token and click Connect';
+        }
+        
+        console.log('✅ Dr. Waleed initialized');
     </script>
 </body>
 </html>

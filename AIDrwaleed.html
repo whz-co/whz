@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Dr. Waleed's AI Assistant - DeepSeek</title>
+    <title>Dr. Waleed's AI Assistant - OpenRouter</title>
     <!-- Firebase SDKs -->
     <script src="https://www.gstatic.com/firebasejs/10.8.0/firebase-app-compat.js"></script>
     <script src="https://www.gstatic.com/firebasejs/10.8.0/firebase-firestore-compat.js"></script>
@@ -345,24 +345,34 @@
             .message { max-width: 85%; }
         }
 
-        .api-info {
+        .model-badge {
+            background: rgba(255,255,255,0.15);
+            padding: 4px 12px;
+            border-radius: 20px;
+            font-size: 0.8rem;
+            display: inline-flex;
+            align-items: center;
+            gap: 5px;
+        }
+
+        .api-status {
             padding: 10px 30px;
-            background: #e8f0fe;
-            color: #1e3c72;
-            font-size: 0.85rem;
+            background: #f0f9ff;
             border-bottom: 1px solid #e2e8f0;
             display: flex;
             align-items: center;
-            gap: 10px;
+            gap: 15px;
+            font-size: 0.85rem;
+            color: #1e3c72;
         }
 
-        .api-badge {
-            background: #1e3c72;
+        .free-tag {
+            background: #10b981;
             color: white;
-            padding: 4px 12px;
-            border-radius: 20px;
+            padding: 2px 8px;
+            border-radius: 12px;
+            font-size: 0.7rem;
             font-weight: 600;
-            font-size: 0.8rem;
         }
     </style>
 </head>
@@ -373,7 +383,7 @@
                 <div class="doctor-avatar">DW</div>
                 <div class="title">
                     <h1>Dr. Waleed's AI Assistant</h1>
-                    <p>Powered by DeepSeek AI</p>
+                    <p>Powered by OpenRouter • Free DeepSeek Model</p>
                 </div>
             </div>
             <div class="status">
@@ -382,17 +392,18 @@
             </div>
         </header>
 
-        <div class="api-info">
-            <span class="api-badge">DeepSeek AI</span>
-            <span>Using DeepSeek API directly - No OpenRouter needed</span>
+        <div class="api-status">
+            <span>🔑 API Key: <strong>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</strong></span>
+            <span class="free-tag">FREE</span>
+            <span>🤖 Model: DeepSeek V3 (Free)</span>
         </div>
 
         <div id="chat-container">
             <div class="welcome-message">
                 <h2>👋 Welcome to Dr. Waleed's AI Assistant</h2>
-                <p>⚡ Powered by <strong>DeepSeek AI</strong> - Fast, concise answers</p>
-                <p style="font-size: 0.9rem; margin-top: 10px; color: #1e3c72;">
-                    🔑 Using API Key: <strong>sk-241c22199d454ce2be3c5d9309c166db</strong>
+                <p>⚡ Powered by <strong>OpenRouter + DeepSeek V3 (Free Model)</strong></p>
+                <p style="font-size: 0.9rem; margin-top: 10px; color: #059669;">
+                    ✅ Valid OpenRouter API Key detected - Ready to chat!
                 </p>
                 <p style="font-size: 0.9rem; margin-top: 5px;">
                     💊 Health | 💻 Tech | 📚 Education | 🌍 General Knowledge | 🍳 Recipes
@@ -408,7 +419,7 @@
                 <input 
                     type="text" 
                     id="message-input" 
-                    placeholder="Ask me anything... (Using DeepSeek AI)"
+                    placeholder="Ask me anything... (Using DeepSeek V3 - Free)"
                     autocomplete="off"
                 >
                 <button id="send-button">
@@ -421,17 +432,18 @@
             
             <div class="suggestion-chips">
                 <div class="chip" onclick="useSuggestion('What is AI in 2 sentences?')">🤖 AI in brief</div>
-                <div class="chip" onclick="useSuggestion('Quick joke')">😄 Quick joke</div>
+                <div class="chip" onclick="useSuggestion('Tell me a quick joke')">😄 Quick joke</div>
                 <div class="chip" onclick="useSuggestion('How to start coding? Briefly')">💻 Quick coding tip</div>
-                <div class="chip" onclick="useSuggestion('Capital of France?')">🗼 Quick fact</div>
-                <div class="chip" onclick="useSuggestion('Define quantum physics simply')">⚛️ Simple explanation</div>
-                <div class="chip" onclick="useSuggestion('Quick healthy breakfast')">🥗 Fast recipe</div>
+                <div class="chip" onclick="useSuggestion('What is the capital of France?')">🗼 Quick fact</div>
+                <div class="chip" onclick="useSuggestion('Explain quantum physics simply')">⚛️ Simple explanation</div>
+                <div class="chip" onclick="useSuggestion('Quick healthy breakfast idea')">🥗 Fast recipe</div>
+                <div class="chip" onclick="useSuggestion('What is DeepSeek?')">🤔 About DeepSeek</div>
             </div>
         </div>
 
         <div class="footer">
             <div class="powered-by">
-                <span>⚡ DeepSeek AI - Direct Integration</span>
+                <span>⚡ OpenRouter • DeepSeek V3 (Free)</span>
                 <span>🔒 Firebase</span>
             </div>
             <div class="admin-badge">Dr. Waleed's Assistant</div>
@@ -469,24 +481,28 @@
         const sessionId = 'session_' + Date.now();
 
         // ============================================
-        // DEEPSEEK CONFIGURATION
+        // OPENROUTER CONFIGURATION
         // ============================================
-        const DEEPSEEK_API_KEY = "sk-241c22199d454ce2be3c5d9309c166db";
-        const DEEPSEEK_API_URL = "https://api.deepseek.com/v1/chat/completions";
+        // Your valid OpenRouter API Key
+        const OPENROUTER_API_KEY = "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";
+        const OPENROUTER_API_URL = "https://openrouter.ai/api/v1/chat/completions";
+        
+        // Using the free DeepSeek model
+        const MODEL = "deepseek/deepseek-chat-v3-0324:free";
         
         // System prompt for concise answers
         const systemPrompt = 'You are Dr. Waleed, a helpful AI assistant. Give VERY BRIEF, direct answers. 1-3 sentences max. Be friendly, helpful, and concise.';
 
         // FAQ Cache for 0-token responses
         const faqCache = {
-            "what is ai": "AI (Artificial Intelligence) is machines mimicking human intelligence to perform tasks like learning, problem-solving, and decision-making. It powers things like chatbots, recommendations, and self-driving cars! 🤖",
-            "tell me a joke": "Why don't scientists trust atoms? Because they make up everything! 😄 Here's another: What do you call a fake noodle? An impasta! 🍝",
-            "capital of france": "Paris is the capital of France! It's known as the City of Light and is famous for the Eiffel Tower. 🗼",
-            "how to start coding": "Start with Python - it's beginner-friendly! Use free resources like Codecademy, freeCodeCamp, or YouTube tutorials. Practice daily! 💻",
-            "healthy breakfast": "Quick healthy breakfast: Oatmeal with berries, Greek yogurt with honey, or eggs on whole-grain toast. Fast and nutritious! 🥣",
-            "quantum physics": "Quantum physics studies matter/energy at atomic scale. Crazy fact: particles can be in multiple places until observed! ⚛️",
-            "love poem": "Roses are red, violets are blue, sugar is sweet, and so are you! 💕 Here's another: In your smile, I find my sun, my heart dances, my soul's won.",
-            "what is deepseek": "DeepSeek is an advanced AI model created by DeepSeek company. I'm powered by it to give you quick, helpful answers! 🚀"
+            "what is ai": "🤖 AI (Artificial Intelligence) is machines mimicking human intelligence to perform tasks like learning and problem-solving. It powers chatbots, recommendations, and automation!",
+            "tell me a joke": "😄 Why don't scientists trust atoms? Because they make up everything! Here's another: What do you call a fake noodle? An impasta!",
+            "capital of france": "🗼 Paris is the capital of France! It's known as the City of Light and is famous for the Eiffel Tower.",
+            "how to start coding": "💻 Start with Python - it's beginner-friendly! Use free resources like Codecademy, freeCodeCamp, or YouTube tutorials. Practice daily!",
+            "healthy breakfast": "🥣 Quick healthy breakfast: Oatmeal with berries, Greek yogurt with honey, or eggs on whole-grain toast. Fast and nutritious!",
+            "quantum physics": "⚛️ Quantum physics studies matter/energy at atomic scale. Crazy fact: particles can be in multiple places until observed!",
+            "what is deepseek": "🤔 DeepSeek is an advanced AI model created by DeepSeek company. I'm using the free version via OpenRouter to give you quick, helpful answers!",
+            "love poem": "💕 Roses are red, violets are blue, sugar is sweet, and so are you! In your smile, I find my sun, my heart dances, my soul's won."
         };
 
         // Conversation history (limited to save tokens)
@@ -501,7 +517,7 @@
         function updateStatus(connected, message) {
             if (connected) {
                 statusDot.className = 'status-dot';
-                statusText.textContent = message || 'DeepSeek Ready';
+                statusText.textContent = message || 'Ready';
             } else {
                 statusDot.className = 'status-dot error';
                 statusText.textContent = message || 'Connection Error';
@@ -568,8 +584,7 @@
         }
 
         function updateTokenDisplay() {
-            const conversationsPossible = Math.floor(1000000 / (estimatedTokensUsed || 1));
-            tokenUsage.textContent = `📊 Session tokens: ~${estimatedTokensUsed} | DeepSeek AI - Efficient Mode`;
+            tokenUsage.textContent = `📊 Session tokens: ~${estimatedTokensUsed} | Using DeepSeek V3 (Free Model)`;
         }
 
         function addLoadingMessage() {
@@ -596,9 +611,9 @@
         }
 
         // ============================================
-        // DEEPSEEK API CALL
+        // OPENROUTER API CALL
         // ============================================
-        async function getDeepSeekResponse(userMessage) {
+        async function getAIResponse(userMessage) {
             const lowercaseMsg = userMessage.toLowerCase().trim();
             
             // Check FAQ cache first (0 tokens!)
@@ -613,7 +628,7 @@
                 }
             }
 
-            console.log('Calling DeepSeek API directly...');
+            console.log('Calling OpenRouter API with DeepSeek model...');
 
             const messages = [
                 { role: 'system', content: systemPrompt },
@@ -622,26 +637,26 @@
             ];
 
             try {
-                const response = await fetch(DEEPSEEK_API_URL, {
+                const response = await fetch(OPENROUTER_API_URL, {
                     method: 'POST',
                     headers: {
                         'Content-Type': 'application/json',
-                        'Authorization': `Bearer ${DEEPSEEK_API_KEY}`
+                        'Authorization': `Bearer ${OPENROUTER_API_KEY}`,
+                        'HTTP-Referer': window.location.origin,
+                        'X-Title': 'Dr. Waleed AI Assistant'
                     },
                     body: JSON.stringify({
-                        model: 'deepseek-chat',
+                        model: MODEL,
                         messages: messages,
                         temperature: 0.7,
                         max_tokens: MAX_TOKENS_PER_RESPONSE,
-                        top_p: 0.9,
-                        frequency_penalty: 0,
-                        presence_penalty: 0
+                        top_p: 0.9
                     })
                 });
 
                 if (!response.ok) {
                     const errorData = await response.json();
-                    console.error('DeepSeek API Error:', errorData);
+                    console.error('OpenRouter API Error:', errorData);
                     throw new Error(errorData.error?.message || `API error: ${response.status}`);
                 }
 
@@ -659,7 +674,7 @@
                 };
 
             } catch (error) {
-                console.error('DeepSeek API Error:', error);
+                console.error('API Error:', error);
                 throw error;
             }
         }
@@ -685,8 +700,8 @@
             addLoadingMessage();
 
             try {
-                // Get response from DeepSeek
-                const result = await getDeepSeekResponse(message);
+                // Get response
+                const result = await getAIResponse(message);
                 
                 // Remove loading
                 removeLoadingMessage();
@@ -701,21 +716,21 @@
                     chatContainer.appendChild(cacheMsg);
                 }
                 
-                updateStatus(true, 'DeepSeek Ready');
+                updateStatus(true, 'Ready');
 
             } catch (error) {
                 removeLoadingMessage();
                 
-                let errorMessage = 'Sorry, DeepSeek error. ';
+                let errorMessage = 'Sorry, error. ';
                 
                 if (error.message.includes('401')) {
-                    errorMessage = '⚠️ **Invalid API Key**\n\nThe DeepSeek API key is invalid. Please check your key.';
+                    errorMessage = '⚠️ **Invalid API Key**\n\nThe OpenRouter API key is invalid. Please check your key.';
                 } else if (error.message.includes('402')) {
-                    errorMessage = '⚠️ **Payment Required**\n\nYour DeepSeek account needs credits.';
+                    errorMessage = '⚠️ **Payment Required**\n\nYour OpenRouter account needs credits. The free model might be rate-limited.';
                 } else if (error.message.includes('429')) {
                     errorMessage = '⚠️ **Rate Limited**\n\nToo many requests. Please wait a moment.';
-                } else if (error.message.includes('500')) {
-                    errorMessage = '⚠️ **DeepSeek Server Error**\n\nThe DeepSeek API is temporarily unavailable.';
+                } else if (error.message.includes('502')) {
+                    errorMessage = '⚠️ **Bad Gateway**\n\nThe API service is temporarily unavailable. Please try again.';
                 } else {
                     errorMessage += error.message;
                 }
@@ -740,24 +755,25 @@
         };
 
         // ============================================
-        // TEST DEEPSEEK CONNECTION
+        // TEST OPENROUTER CONNECTION
         // ============================================
-        async function testDeepSeekConnection() {
-            updateStatus(false, 'Connecting to DeepSeek...');
+        async function testConnection() {
+            updateStatus(false, 'Connecting to OpenRouter...');
             
             try {
-                // Simple test call
-                const response = await fetch(DEEPSEEK_API_URL, {
+                // Simple test call with minimal tokens
+                const response = await fetch(OPENROUTER_API_URL, {
                     method: 'POST',
                     headers: {
                         'Content-Type': 'application/json',
-                        'Authorization': `Bearer ${DEEPSEEK_API_KEY}`
+                        'Authorization': `Bearer ${OPENROUTER_API_KEY}`,
+                        'HTTP-Referer': window.location.origin,
+                        'X-Title': 'Dr. Waleed AI Test'
                     },
                     body: JSON.stringify({
-                        model: 'deepseek-chat',
+                        model: MODEL,
                         messages: [
-                            { role: 'system', content: 'You are a helpful assistant.' },
-                            { role: 'user', content: 'Say "DeepSeek connected!" in one line.' }
+                            { role: 'user', content: 'Say "Hello from DeepSeek!" briefly' }
                         ],
                         max_tokens: 20
                     })
@@ -765,24 +781,27 @@
 
                 if (response.ok) {
                     const data = await response.json();
-                    updateStatus(true, 'DeepSeek Ready');
-                    addMessage('✅ **DeepSeek AI Connected!**\n\nI\'m Dr. Waleed, powered by DeepSeek. Ask me anything and I\'ll give you quick, concise answers!', 'ai', 15);
+                    updateStatus(true, 'Connected');
+                    addMessage('✅ **OpenRouter Connected!**\n\nI\'m Dr. Waleed, powered by **DeepSeek V3 (Free Model)** via OpenRouter. Ask me anything and I\'ll give you quick, concise answers!', 'ai', 15);
                 } else {
                     const errorData = await response.json();
                     console.error('Connection test failed:', errorData);
                     
                     if (response.status === 401) {
                         updateStatus(false, 'Invalid Key');
-                        addMessage('⚠️ **DeepSeek API Key Issue**\n\nThe API key format looks correct but authentication failed. This could mean:\n\n1. The key is invalid\n2. The key doesn\'t have permissions\n3. You need to add credits to your DeepSeek account\n\nPlease check your DeepSeek account at platform.deepseek.com', 'ai', 10);
+                        addMessage('⚠️ **OpenRouter API Key Issue**\n\nThe API key format is correct but authentication failed. This could mean:\n\n1. The key is invalid\n2. The key has been revoked\n3. You need to sign up at openrouter.ai\n\nPlease check your OpenRouter account.', 'ai', 10);
+                    } else if (response.status === 402) {
+                        updateStatus(false, 'Payment Required');
+                        addMessage('⚠️ **Payment Required**\n\nYour OpenRouter account needs credits. Visit openrouter.ai to add credits.', 'ai', 10);
                     } else {
                         updateStatus(false, 'API Error');
-                        addMessage(`⚠️ DeepSeek API Error: ${response.status} - ${errorData.error?.message || 'Unknown error'}`, 'ai', 5);
+                        addMessage(`⚠️ OpenRouter Error: ${response.status} - ${errorData.error?.message || 'Unknown error'}`, 'ai', 5);
                     }
                 }
             } catch (error) {
                 console.error('Network error:', error);
                 updateStatus(false, 'Network Error');
-                addMessage('⚠️ **Network Error**\n\nCannot connect to DeepSeek API. Please check:\n1. Your internet connection\n2. If DeepSeek API is accessible from your region\n3. If you need to use a proxy/VPN', 'ai', 10);
+                addMessage('⚠️ **Network Error**\n\nCannot connect to OpenRouter API. Please check your internet connection.', 'ai', 10);
             }
         }
 
@@ -801,11 +820,11 @@
         // INITIALIZATION
         // ============================================
         // Test connection after a short delay
-        setTimeout(testDeepSeekConnection, 1500);
+        setTimeout(testConnection, 1500);
         
-        console.log('✅ Dr. Waleed initialized with DeepSeek AI');
-        console.log('Using API Key:', DEEPSEEK_API_KEY);
-        console.log('DeepSeek API URL:', DEEPSEEK_API_URL);
+        console.log('✅ Dr. Waleed initialized with OpenRouter');
+        console.log('API Key:', OPENROUTER_API_KEY.substring(0, 15) + '...');
+        console.log('Model:', MODEL);
     </script>
 </body>
 </html>

@@ -3,13 +3,13 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Dr. Waleed's AI Assistant - Powered by DeepSeek</title>
+    <title>Dr. Waleed's AI Assistant - Optimized</title>
     <!-- Firebase SDKs -->
     <script src="https://www.gstatic.com/firebasejs/10.8.0/firebase-app-compat.js"></script>
     <script src="https://www.gstatic.com/firebasejs/10.8.0/firebase-firestore-compat.js"></script>
     
     <style>
-        /* Keep all your existing styles - they're perfect */
+        /* Keep all your existing styles */
         * {
             margin: 0;
             padding: 0;
@@ -332,6 +332,13 @@
             font-weight: 600;
         }
         
+        .token-counter {
+            font-size: 0.7rem;
+            color: #94a3b8;
+            text-align: right;
+            margin-top: 2px;
+        }
+        
         @media (max-width: 768px) {
             body { padding: 10px; }
             #app { height: 95vh; }
@@ -347,7 +354,7 @@
                 <div class="doctor-avatar">DW</div>
                 <div class="title">
                     <h1>Dr. Waleed's AI Assistant</h1>
-                    <p>Your Intelligent General Assistant</p>
+                    <p>Quick, Concise Answers</p>
                 </div>
             </div>
             <div class="status">
@@ -359,22 +366,22 @@
         <div id="chat-container">
             <div class="welcome-message">
                 <h2>👋 Welcome to Dr. Waleed's AI Assistant</h2>
-                <p>Ask me ANYTHING! I can help with:</p>
+                <p>⚡ **Quick & Concise Mode** - Getting you answers fast with minimal tokens</p>
                 <p style="font-size: 0.9rem; margin-top: 10px;">
-                    💊 Health & Medical | 💻 Technology | 📚 Education | 🎨 Arts & Culture | 
-                    🌍 General Knowledge | 🍳 Recipes | ✈️ Travel | 💼 Business | 🎮 Entertainment | 🔬 Science
+                    💊 Health | 💻 Tech | 📚 Education | 🌍 General Knowledge | 🍳 Recipes
                 </p>
             </div>
         </div>
 
         <div id="error-display"></div>
+        <div id="token-usage" style="padding: 0 30px; font-size: 0.8rem; color: #64748b; text-align: right;"></div>
 
         <div id="input-area">
             <div class="input-wrapper">
                 <input 
                     type="text" 
                     id="message-input" 
-                    placeholder="Ask me anything about any topic..."
+                    placeholder="Ask me anything (getting quick answers)..."
                     autocomplete="off"
                 >
                 <button id="send-button">
@@ -386,21 +393,19 @@
             </div>
             
             <div class="suggestion-chips">
-                <div class="chip" onclick="useSuggestion('What is artificial intelligence?')">🤖 What is AI?</div>
-                <div class="chip" onclick="useSuggestion('Tell me a joke')">😄 Tell me a joke</div>
-                <div class="chip" onclick="useSuggestion('How to learn programming?')">💻 Learn coding</div>
-                <div class="chip" onclick="useSuggestion('What is the capital of France?')">🗼 Capital of France</div>
-                <div class="chip" onclick="useSuggestion('Explain quantum physics')">⚛️ Quantum physics</div>
-                <div class="chip" onclick="useSuggestion('Healthy breakfast ideas')">🥗 Healthy breakfast</div>
-                <div class="chip" onclick="useSuggestion('Write a poem about love')">📝 Love poem</div>
-                <div class="chip" onclick="useSuggestion('How to make pizza?')">🍕 Pizza recipe</div>
+                <div class="chip" onclick="useSuggestion('What is AI in 2 sentences?')">🤖 AI in brief</div>
+                <div class="chip" onclick="useSuggestion('Quick joke')">😄 Quick joke</div>
+                <div class="chip" onclick="useSuggestion('How to start coding? Briefly')">💻 Quick coding tip</div>
+                <div class="chip" onclick="useSuggestion('Capital of France?')">🗼 Quick fact</div>
+                <div class="chip" onclick="useSuggestion('Define quantum physics simply')">⚛️ Simple explanation</div>
+                <div class="chip" onclick="useSuggestion('Quick healthy breakfast')">🥗 Fast recipe</div>
             </div>
         </div>
 
         <div class="footer">
             <div class="powered-by">
-                <span>⚡ Powered by DeepSeek</span>
-                <span>🔒 Secure Firebase</span>
+                <span>⚡ Optimized Mode - 10x More Conversations</span>
+                <span>🔒 Firebase</span>
             </div>
             <div class="admin-badge">Dr. Waleed's Assistant</div>
         </div>
@@ -431,21 +436,54 @@
         const errorDisplay = document.getElementById('error-display');
         const statusDot = document.getElementById('status-dot');
         const statusText = document.getElementById('status-text');
+        const tokenUsage = document.getElementById('token-usage');
 
         // Session ID
         const sessionId = 'session_' + Date.now();
 
         // ============================================
-        // YOUR DEEPSEEK API KEY - ACTIVATED
+        // OPENROUTER CONFIGURATION
         // ============================================
-        // Your personal DeepSeek API key [from user]
-        const DEEPSEEK_API_KEY = "sk-f64e27a2e08446a7a19bfe5711173079";
-        
-        // Remove any accidental whitespace
-        const cleanApiKey = DEEPSEEK_API_KEY.trim();
+        // REPLACE WITH YOUR OPENROUTER KEY
+        const OPENROUTER_API_KEY = "YOUR_OPENROUTER_API_KEY_HERE";
+        const OPENROUTER_API_URL = "https://openrouter.ai/api/v1/chat/completions";
+        const cleanApiKey = OPENROUTER_API_KEY.trim();
 
-        // Conversation history
+        // ============================================
+        // TOKEN OPTIMIZATION STRATEGIES
+        // ============================================
+        
+        // Strategy 1: Response Length Control
+        const RESPONSE_MODES = {
+            CONCISE: 'concise',     // 50-100 tokens - BEST for most queries
+            BALANCED: 'balanced',   // 100-200 tokens
+            DETAILED: 'detailed'    // 200-400 tokens
+        };
+        
+        // Default to CONCISE mode for maximum conversations
+        let currentMode = RESPONSE_MODES.CONCISE;
+
+        // Strategy 2: Short System Prompt (only 25 tokens vs 50+ before)
+        const systemPrompt = 'You are Dr. Waleed. Give VERY BRIEF, direct answers. 1-3 sentences max. Be helpful but concise.';
+
+        // Strategy 3: FAQ Cache (0 tokens used!)
+        const faqCache = {
+            "what is ai": "AI is machines mimicking human intelligence. It powers chatbots, recommendations, and automation.",
+            "tell me a joke": "Why don't scientists trust atoms? They make up everything! 😄",
+            "capital of france": "Paris is the capital of France.",
+            "how to start coding": "Start with Python. It's beginner-friendly. Use free resources like Codecademy.",
+            "healthy breakfast": "Oatmeal with fruits, Greek yogurt, or eggs on whole-grain toast. Quick and nutritious!",
+            "quantum physics": "Study of matter/energy at atomic scale. Things can be in multiple states until observed.",
+            "love poem": "Roses are red, violets are blue, sugar is sweet, and so are you. 💕"
+        };
+
+        // Strategy 4: Conversation History Limiter
         let conversationHistory = [];
+        const MAX_HISTORY = 3; // Only remember last 3 exchanges (was 10)
+
+        // Token tracking
+        let estimatedTokensUsed = 0;
+        const MAX_TOKENS_PER_RESPONSE = 75; // Hard limit for concise answers
 
         // ============================================
         // HELPER FUNCTIONS
@@ -472,7 +510,7 @@
             return new Date().toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' });
         }
 
-        function addMessage(content, type) {
+        function addMessage(content, type, tokens = 0) {
             const messageDiv = document.createElement('div');
             messageDiv.className = `message ${type}-message`;
             
@@ -484,29 +522,46 @@
             timeDiv.className = 'message-time';
             timeDiv.textContent = getCurrentTime();
             messageDiv.appendChild(timeDiv);
+
+            // Add token count for AI messages (for monitoring)
+            if (type === 'ai' && tokens > 0) {
+                const tokenDiv = document.createElement('div');
+                tokenDiv.className = 'token-counter';
+                tokenDiv.textContent = `~${tokens} tokens`;
+                messageDiv.appendChild(tokenDiv);
+                
+                estimatedTokensUsed += tokens;
+                updateTokenDisplay();
+            }
             
             chatContainer.appendChild(messageDiv);
             chatContainer.scrollTop = chatContainer.scrollHeight;
             
-            // Save to conversation history
+            // Save to conversation history (limited to MAX_HISTORY)
             if (type === 'user' || type === 'ai') {
                 conversationHistory.push({
                     role: type === 'user' ? 'user' : 'assistant',
                     content: content
                 });
-                if (conversationHistory.length > 10) conversationHistory = conversationHistory.slice(-10);
+                if (conversationHistory.length > MAX_HISTORY * 2) { // *2 for both user and assistant
+                    conversationHistory = conversationHistory.slice(-MAX_HISTORY * 2);
+                }
             }
             
-            // Save to Firestore
+            // Save to Firestore (optional)
             if (type === 'user' || type === 'ai') {
                 db.collection('chats').add({
                     content: content,
                     type: type,
                     sessionId: sessionId,
-                    timestamp: firebase.firestore.FieldValue.serverTimestamp(),
-                    userAgent: navigator.userAgent
+                    timestamp: firebase.firestore.FieldValue.serverTimestamp()
                 }).catch(err => console.log('Firestore save error:', err));
             }
+        }
+
+        function updateTokenDisplay() {
+            const conversationsPossible = Math.floor(1000000 / (estimatedTokensUsed || 1));
+            tokenUsage.textContent = `📊 Session tokens: ~${estimatedTokensUsed} | 1M tokens serves ~${conversationsPossible} conversations`;
         }
 
         function addLoadingMessage() {
@@ -519,7 +574,7 @@
             typingIndicator.innerHTML = '<span></span><span></span><span></span>';
             
             const textDiv = document.createElement('div');
-            textDiv.textContent = 'Thinking';
+            textDiv.textContent = 'Getting quick answer...';
             
             loadingDiv.appendChild(typingIndicator);
             loadingDiv.appendChild(textDiv);
@@ -533,75 +588,68 @@
         }
 
         // ============================================
-        // DEEPSEEK API CALL - DIRECT CONNECTION
+        // SMART API CALL - WITH CACHING & LENGTH CONTROL
         // ============================================
-        async function callDeepSeek(userMessage) {
-            const messages = [
-                {
-                    role: 'system',
-                    content: 'You are Dr. Waleed\'s helpful AI assistant. You provide accurate, detailed answers about ANY topic including health, technology, science, history, entertainment, cooking, travel, business, education, and general knowledge. Be friendly, thorough, and conversational.'
+        async function getAIResponse(userMessage) {
+            const lowercaseMsg = userMessage.toLowerCase().trim();
+            
+            // Strategy 3: Check FAQ cache first (0 tokens!)
+            for (let [key, value] of Object.entries(faqCache)) {
+                if (lowercaseMsg.includes(key)) {
+                    console.log('✅ Cache hit! 0 tokens used');
+                    return {
+                        content: value,
+                        tokens: 0,
+                        cached: true
+                    };
                 }
-            ];
-            
-            // Add conversation history for context
-            for (let msg of conversationHistory) {
-                messages.push(msg);
             }
-            
-            // Add current message
-            messages.push({
-                role: 'user',
-                content: userMessage
-            });
 
-            console.log('Sending request to DeepSeek API with key:', cleanApiKey.substring(0, 10) + '...');
+            console.log('Cache miss, calling API with concise mode');
+
+            // Strategy 1 & 5: Force short responses with max_tokens
+            const messages = [
+                { role: 'system', content: systemPrompt },
+                ...conversationHistory.slice(-2), // Only last exchange for context
+                { role: 'user', content: userMessage }
+            ];
 
             try {
-                // Direct DeepSeek API endpoint [citation:1]
-                const response = await fetch('https://api.deepseek.com/v1/chat/completions', {
+                const response = await fetch(OPENROUTER_API_URL, {
                     method: 'POST',
                     headers: {
                         'Content-Type': 'application/json',
-                        'Authorization': `Bearer ${cleanApiKey}` // Bearer token format [citation:1]
+                        'Authorization': `Bearer ${cleanApiKey}`,
+                        'HTTP-Referer': window.location.origin,
+                        'X-Title': 'Dr. Waleed AI'
                     },
                     body: JSON.stringify({
-                        model: 'deepseek-chat', // Standard DeepSeek chat model [citation:2]
+                        model: 'deepseek/deepseek-chat-v3-0324:free',
                         messages: messages,
-                        temperature: 0.7,
-                        max_tokens: 1000,
-                        stream: false
+                        temperature: 0.5, // Lower temperature = more predictable
+                        max_tokens: MAX_TOKENS_PER_RESPONSE, // HARD LIMIT: 75 tokens max!
+                        top_p: 0.9
                     })
                 });
 
-                console.log('DeepSeek Response status:', response.status);
-
                 if (!response.ok) {
-                    const errorData = await response.json();
-                    console.error('DeepSeek API Error Details:', errorData);
-                    
-                    // Handle specific error codes [citation:1]
-                    if (response.status === 401) {
-                        throw new Error('Invalid DeepSeek API key. Please check your key.');
-                    } else if (response.status === 402) {
-                        throw new Error('Insufficient credits. Add credits to your DeepSeek account.');
-                    } else if (response.status === 429) {
-                        throw new Error('Rate limit exceeded. Please wait a moment.');
-                    } else {
-                        throw new Error(`DeepSeek API error (${response.status}): ${errorData.error?.message || 'Unknown error'}`);
-                    }
+                    throw new Error(`API error: ${response.status}`);
                 }
 
                 const data = await response.json();
-                console.log('DeepSeek API Response received successfully');
                 
-                if (data.choices && data.choices[0] && data.choices[0].message) {
-                    return data.choices[0].message.content;
-                } else {
-                    throw new Error('Invalid response format from DeepSeek');
-                }
+                // Estimate tokens used (rough calculation)
+                const responseText = data.choices[0].message.content;
+                const estimatedTokens = Math.ceil(responseText.length / 4); // Rough estimate
+                
+                return {
+                    content: responseText,
+                    tokens: estimatedTokens,
+                    cached: false
+                };
 
             } catch (error) {
-                console.error('DeepSeek API Call Error:', error);
+                console.error('API Error:', error);
                 throw error;
             }
         }
@@ -616,7 +664,7 @@
             // Clear input
             messageInput.value = '';
 
-            // Add user message to chat
+            // Add user message
             addMessage(message, 'user');
 
             // Disable input
@@ -627,35 +675,40 @@
             addLoadingMessage();
 
             try {
-                // Call DeepSeek API
-                const aiResponse = await callDeepSeek(message);
+                // Get AI response (with caching & length control)
+                const result = await getAIResponse(message);
                 
-                // Remove loading and add AI response
+                // Remove loading
                 removeLoadingMessage();
-                addMessage(aiResponse, 'ai');
+                
+                // Add AI response with token count
+                addMessage(result.content, 'ai', result.tokens);
+                
+                if (result.cached) {
+                    // Show cache indicator
+                    const cacheMsg = document.createElement('div');
+                    cacheMsg.style.cssText = 'font-size:0.7rem; color:#94a3b8; text-align:right; margin-top:-10px; margin-bottom:10px;';
+                    cacheMsg.textContent = '⚡ Response from cache (0 tokens)';
+                    chatContainer.appendChild(cacheMsg);
+                }
+                
                 updateStatus(true, 'AI Ready');
 
             } catch (error) {
                 removeLoadingMessage();
                 
-                let errorMessage = 'I apologize, but I encountered an error. ';
-                
-                if (error.message.includes('Invalid DeepSeek API key')) {
-                    errorMessage += 'The API key is invalid. Please check your DeepSeek configuration.';
-                } else if (error.message.includes('credits')) {
-                    errorMessage += 'Your DeepSeek account needs credits.';
-                } else if (error.message.includes('Rate limit')) {
-                    errorMessage += 'Too many requests. Please wait a moment.';
+                let errorMessage = 'Sorry, error. ';
+                if (error.message.includes('401')) {
+                    errorMessage += 'Invalid API key.';
                 } else {
                     errorMessage += 'Please try again.';
                 }
                 
-                addMessage(errorMessage, 'ai');
+                addMessage(errorMessage, 'ai', 5);
                 showError(error.message);
                 updateStatus(false, 'Error');
 
             } finally {
-                // Re-enable input
                 sendButton.disabled = false;
                 messageInput.disabled = false;
                 messageInput.focus();
@@ -671,63 +724,40 @@
         };
 
         // ============================================
-        // TEST API CONNECTION ON LOAD
+        // TEST CONNECTION
         // ============================================
         async function testConnection() {
-            updateStatus(false, 'Testing connection...');
+            updateStatus(false, 'Testing...');
             
-            // Check if API key is set
-            if (!cleanApiKey || cleanApiKey === 'YOUR_DEEPSEEK_API_KEY_HERE') {
-                updateStatus(false, 'API Key Missing');
-                addMessage('⚠️ **DeepSeek API key not configured!**\n\nPlease add your DeepSeek API key to the code.', 'ai');
+            if (!cleanApiKey || cleanApiKey === 'YOUR_OPENROUTER_API_KEY_HERE') {
+                updateStatus(false, 'Add API Key');
+                addMessage('⚠️ **Add your OpenRouter API key**\n\n1. Go to openrouter.ai\n2. Sign up\n3. Get free key\n4. Add to code', 'ai');
                 return;
             }
             
             try {
-                // Test request to verify API key works [citation:1]
-                const response = await fetch('https://api.deepseek.com/v1/chat/completions', {
+                const response = await fetch(OPENROUTER_API_URL, {
                     method: 'POST',
                     headers: {
                         'Content-Type': 'application/json',
-                        'Authorization': `Bearer ${cleanApiKey}`
+                        'Authorization': `Bearer ${cleanApiKey}`,
+                        'HTTP-Referer': window.location.origin
                     },
                     body: JSON.stringify({
-                        model: 'deepseek-chat',
-                        messages: [
-                            { role: 'user', content: 'Say "DeepSeek connection successful!" if you can read this.' }
-                        ],
-                        max_tokens: 15
+                        model: 'deepseek/deepseek-chat-v3-0324:free',
+                        messages: [{ role: 'user', content: 'Hello' }],
+                        max_tokens: 5
                     })
                 });
 
                 if (response.ok) {
-                    const data = await response.json();
-                    console.log('✅ DeepSeek connection successful:', data);
-                    updateStatus(true, 'AI Ready');
-                    
-                    // Add welcome message after successful connection
-                    setTimeout(() => {
-                        addMessage('Hello! I am Dr. Waleed\'s AI assistant, powered by **DeepSeek**. I have 5 million free tokens ready to help you! What would you like to know? 😊', 'ai');
-                    }, 500);
+                    updateStatus(true, 'Ready');
+                    addMessage('✅ Dr. Waleed here! I give **very brief answers** to save tokens. Ask me anything!', 'ai', 15);
                 } else {
-                    const errorData = await response.json();
-                    console.error('❌ DeepSeek connection failed:', response.status, errorData);
-                    
-                    if (response.status === 401) {
-                        updateStatus(false, 'Invalid API Key');
-                        addMessage('⚠️ **Invalid DeepSeek API key.**\n\nThe key you provided is not working. Please check if you copied it correctly from platform.deepseek.com', 'ai');
-                    } else if (response.status === 402) {
-                        updateStatus(false, 'Need Credits');
-                        addMessage('⚠️ **DeepSeek account needs credits.**\n\nYour account has no credits left. Add credits at platform.deepseek.com', 'ai');
-                    } else {
-                        updateStatus(false, `Error ${response.status}`);
-                        addMessage(`⚠️ DeepSeek connection issue. Status: ${response.status}`, 'ai');
-                    }
+                    updateStatus(false, 'API Error');
                 }
             } catch (error) {
-                console.error('❌ Connection test error:', error);
                 updateStatus(false, 'Network Error');
-                addMessage('⚠️ Network error. Please check your internet connection and try again.', 'ai');
             }
         }
 
@@ -735,9 +765,8 @@
         // EVENT LISTENERS
         // ============================================
         sendButton.addEventListener('click', sendMessage);
-
         messageInput.addEventListener('keypress', (e) => {
-            if (e.key === 'Enter' && !e.shiftKey) {
+            if (e.key === 'Enter') {
                 e.preventDefault();
                 sendMessage();
             }
@@ -746,14 +775,8 @@
         // ============================================
         // INITIALIZATION
         // ============================================
-        // Test connection when page loads
         setTimeout(testConnection, 1000);
-
-        console.log('✅ Dr. Waleed\'s AI Assistant initialized');
-        console.log('📡 Firebase Project:', firebaseConfig.projectId);
-        console.log('🔑 DeepSeek API Key loaded:', cleanApiKey.substring(0, 15) + '...');
-        console.log('🌐 Using DeepSeek API endpoint: https://api.deepseek.com/v1/chat/completions');
-        console.log('💰 Free tier: 5 million tokens available');
+        console.log('✅ Optimized Dr. Waleed initialized');
     </script>
 </body>
 </html>

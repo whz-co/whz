@@ -442,10 +442,10 @@
         const sessionId = 'session_' + Date.now();
 
         // ============================================
-        // OPENROUTER CONFIGURATION
+        // OPENROUTER CONFIGURATION - YOUR NEW API KEY
         // ============================================
-        // REPLACE WITH YOUR OPENROUTER KEY
-        const OPENROUTER_API_KEY = "YOUR_OPENROUTER_API_KEY_HERE";
+        // YOUR NEW API KEY ADDED HERE
+        const OPENROUTER_API_KEY = "sk-241c22199d454ce2be3c5d9309c166db";
         const OPENROUTER_API_URL = "https://openrouter.ai/api/v1/chat/completions";
         const cleanApiKey = OPENROUTER_API_KEY.trim();
 
@@ -633,7 +633,9 @@
                 });
 
                 if (!response.ok) {
-                    throw new Error(`API error: ${response.status}`);
+                    const errorData = await response.text();
+                    console.error('API Error Response:', errorData);
+                    throw new Error(`API error: ${response.status} - ${errorData}`);
                 }
 
                 const data = await response.json();
@@ -699,7 +701,9 @@
                 
                 let errorMessage = 'Sorry, error. ';
                 if (error.message.includes('401')) {
-                    errorMessage += 'Invalid API key.';
+                    errorMessage += 'Invalid API key. Please check your OpenRouter API key.';
+                } else if (error.message.includes('429')) {
+                    errorMessage += 'Rate limit exceeded. Please try again in a moment.';
                 } else {
                     errorMessage += 'Please try again.';
                 }
@@ -754,10 +758,15 @@
                     updateStatus(true, 'Ready');
                     addMessage('✅ Dr. Waleed here! I give **very brief answers** to save tokens. Ask me anything!', 'ai', 15);
                 } else {
+                    const errorText = await response.text();
+                    console.error('Test connection error:', errorText);
                     updateStatus(false, 'API Error');
+                    addMessage(`⚠️ API Connection Error: ${response.status}. Please check your API key.`, 'ai', 5);
                 }
             } catch (error) {
+                console.error('Network error:', error);
                 updateStatus(false, 'Network Error');
+                addMessage('⚠️ Network Error: Cannot connect to API. Please check your internet connection.', 'ai', 5);
             }
         }
 
@@ -776,7 +785,7 @@
         // INITIALIZATION
         // ============================================
         setTimeout(testConnection, 1000);
-        console.log('✅ Optimized Dr. Waleed initialized');
+        console.log('✅ Optimized Dr. Waleed initialized with new API key');
     </script>
 </body>
 </html>

@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Dr. Waleed's AI Assistant - OpenRouter</title>
+    <title>Dr. Waleed's AI Assistant - GitHub Models</title>
     <!-- Firebase SDKs -->
     <script src="https://www.gstatic.com/firebasejs/10.8.0/firebase-app-compat.js"></script>
     <script src="https://www.gstatic.com/firebasejs/10.8.0/firebase-firestore-compat.js"></script>
@@ -345,8 +345,9 @@
             .message { max-width: 85%; }
         }
 
-        .model-badge {
-            background: rgba(255,255,255,0.15);
+        .github-badge {
+            background: #24292e;
+            color: white;
             padding: 4px 12px;
             border-radius: 20px;
             font-size: 0.8rem;
@@ -355,24 +356,48 @@
             gap: 5px;
         }
 
-        .api-status {
+        .token-section {
             padding: 10px 30px;
             background: #f0f9ff;
             border-bottom: 1px solid #e2e8f0;
             display: flex;
             align-items: center;
             gap: 15px;
-            font-size: 0.85rem;
-            color: #1e3c72;
+            flex-wrap: wrap;
         }
-
-        .free-tag {
-            background: #10b981;
+        
+        .token-input {
+            flex: 1;
+            min-width: 300px;
+            padding: 8px 15px;
+            border: 2px solid #e2e8f0;
+            border-radius: 20px;
+            font-size: 0.9rem;
+            outline: none;
+        }
+        
+        .token-input:focus {
+            border-color: #1e3c72;
+        }
+        
+        .token-button {
+            background: #1e3c72;
             color: white;
-            padding: 2px 8px;
-            border-radius: 12px;
-            font-size: 0.7rem;
-            font-weight: 600;
+            border: none;
+            border-radius: 20px;
+            padding: 8px 20px;
+            cursor: pointer;
+            font-size: 0.9rem;
+        }
+        
+        .token-help {
+            font-size: 0.8rem;
+            color: #059669;
+            padding: 0 30px 10px;
+        }
+        
+        .token-help a {
+            color: #1e3c72;
         }
     </style>
 </head>
@@ -383,7 +408,7 @@
                 <div class="doctor-avatar">DW</div>
                 <div class="title">
                     <h1>Dr. Waleed's AI Assistant</h1>
-                    <p>Powered by OpenRouter • Free DeepSeek Model</p>
+                    <p>Powered by GitHub Models (100% Free)</p>
                 </div>
             </div>
             <div class="status">
@@ -392,18 +417,30 @@
             </div>
         </header>
 
-        <div class="api-status">
-            <span>🔑 API Key: <strong>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</strong></span>
-            <span class="free-tag">FREE</span>
-            <span>🤖 Model: DeepSeek V3 (Free)</span>
+        <!-- GitHub Token Input Section -->
+        <div class="token-section">
+            <span class="github-badge">GitHub Models</span>
+            <input 
+                type="text" 
+                id="github-token" 
+                class="token-input" 
+                placeholder="Enter your GitHub Personal Access Token (PAT)"
+                value=""
+            >
+            <button id="update-token" class="token-button">Connect</button>
+        </div>
+        <div class="token-help">
+            🔑 <strong>How to get your free GitHub token:</strong> 
+            <a href="https://github.com/settings/tokens" target="_blank">github.com/settings/tokens</a> → 
+            Generate new token → Select <strong>read:models</strong> scope → Copy and paste above
         </div>
 
         <div id="chat-container">
             <div class="welcome-message">
                 <h2>👋 Welcome to Dr. Waleed's AI Assistant</h2>
-                <p>⚡ Powered by <strong>OpenRouter + DeepSeek V3 (Free Model)</strong></p>
+                <p>⚡ Powered by <strong>GitHub Models</strong> - Completely free for all GitHub users!</p>
                 <p style="font-size: 0.9rem; margin-top: 10px; color: #059669;">
-                    ✅ Valid OpenRouter API Key detected - Ready to chat!
+                    ✅ Available models: GPT-4o, DeepSeek-R1, Llama 3, Mistral, and more
                 </p>
                 <p style="font-size: 0.9rem; margin-top: 5px;">
                     💊 Health | 💻 Tech | 📚 Education | 🌍 General Knowledge | 🍳 Recipes
@@ -419,7 +456,7 @@
                 <input 
                     type="text" 
                     id="message-input" 
-                    placeholder="Ask me anything... (Using DeepSeek V3 - Free)"
+                    placeholder="Ask me anything... (Using GitHub Models)"
                     autocomplete="off"
                 >
                 <button id="send-button">
@@ -443,7 +480,7 @@
 
         <div class="footer">
             <div class="powered-by">
-                <span>⚡ OpenRouter • DeepSeek V3 (Free)</span>
+                <span>⚡ GitHub Models • Free Tier</span>
                 <span>🔒 Firebase</span>
             </div>
             <div class="admin-badge">Dr. Waleed's Assistant</div>
@@ -476,20 +513,35 @@
         const statusDot = document.getElementById('status-dot');
         const statusText = document.getElementById('status-text');
         const tokenUsage = document.getElementById('token-usage');
+        const githubTokenInput = document.getElementById('github-token');
+        const updateTokenButton = document.getElementById('update-token');
 
         // Session ID
         const sessionId = 'session_' + Date.now();
 
         // ============================================
-        // OPENROUTER CONFIGURATION
+        // GITHUB MODELS CONFIGURATION
         // ============================================
-        // Your valid OpenRouter API Key
-        const OPENROUTER_API_KEY = "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";
-        const OPENROUTER_API_URL = "https://openrouter.ai/api/v1/chat/completions";
+        // GitHub Models endpoint (OpenAI-compatible) [citation:2][citation:4]
+        const GITHUB_MODELS_URL = "https://models.inference.ai.azure.com/v1/chat/completions";
         
-        // Using the free DeepSeek model
-        const MODEL = "deepseek/deepseek-chat-v3-0324:free";
+        // Available free models on GitHub Models [citation:2][citation:5]
+        const AVAILABLE_MODELS = {
+            GPT4O: "gpt-4o",                 // OpenAI's GPT-4o
+            GPT4O_MINI: "gpt-4o-mini",       // OpenAI's GPT-4o-mini
+            DEEPSEEK_R1: "deepseek-r1",      // DeepSeek-R1
+            LLAMA: "meta-llama-3.1-8b-instruct", // Meta's Llama
+            MISTRAL: "mistral-large",        // Mistral Large
+            COHERE: "cohere-command-r",       // Cohere Command R
+            MINISTRAL: "ministral-3b"         // Ministral 3B
+        };
         
+        // Default to GPT-4o-mini (fastest and most efficient) [citation:5]
+        let currentModel = AVAILABLE_MODELS.GPT4O_MINI;
+        
+        // GitHub token - will be set by user input
+        let GITHUB_TOKEN = "";
+
         // System prompt for concise answers
         const systemPrompt = 'You are Dr. Waleed, a helpful AI assistant. Give VERY BRIEF, direct answers. 1-3 sentences max. Be friendly, helpful, and concise.';
 
@@ -501,8 +553,9 @@
             "how to start coding": "💻 Start with Python - it's beginner-friendly! Use free resources like Codecademy, freeCodeCamp, or YouTube tutorials. Practice daily!",
             "healthy breakfast": "🥣 Quick healthy breakfast: Oatmeal with berries, Greek yogurt with honey, or eggs on whole-grain toast. Fast and nutritious!",
             "quantum physics": "⚛️ Quantum physics studies matter/energy at atomic scale. Crazy fact: particles can be in multiple places until observed!",
-            "what is deepseek": "🤔 DeepSeek is an advanced AI model created by DeepSeek company. I'm using the free version via OpenRouter to give you quick, helpful answers!",
-            "love poem": "💕 Roses are red, violets are blue, sugar is sweet, and so are you! In your smile, I find my sun, my heart dances, my soul's won."
+            "what is deepseek": "🤔 DeepSeek is an advanced AI model created by DeepSeek company. You can use it for free through GitHub Models!",
+            "love poem": "💕 Roses are red, violets are blue, sugar is sweet, and so are you! In your smile, I find my sun, my heart dances, my soul's won.",
+            "github models": "GitHub Models is a free AI inference service for all GitHub users. Just use your GitHub token to access models like GPT-4o, DeepSeek, and Llama for free! [citation:4]"
         };
 
         // Conversation history (limited to save tokens)
@@ -510,6 +563,13 @@
         const MAX_HISTORY = 3;
         let estimatedTokensUsed = 0;
         const MAX_TOKENS_PER_RESPONSE = 100;
+
+        // Rate limits for GitHub Models free tier [citation:9]
+        const RATE_LIMITS = {
+            requestsPerMinute: 15,
+            requestsPerDay: 150,
+            tokensPerRequest: 8000
+        };
 
         // ============================================
         // HELPER FUNCTIONS
@@ -584,7 +644,7 @@
         }
 
         function updateTokenDisplay() {
-            tokenUsage.textContent = `📊 Session tokens: ~${estimatedTokensUsed} | Using DeepSeek V3 (Free Model)`;
+            tokenUsage.textContent = `📊 Session tokens: ~${estimatedTokensUsed} | Using GitHub Models (Free Tier)`;
         }
 
         function addLoadingMessage() {
@@ -597,7 +657,7 @@
             typingIndicator.innerHTML = '<span></span><span></span><span></span>';
             
             const textDiv = document.createElement('div');
-            textDiv.textContent = 'DeepSeek is thinking...';
+            textDiv.textContent = 'GitHub Models is thinking...';
             
             loadingDiv.appendChild(typingIndicator);
             loadingDiv.appendChild(textDiv);
@@ -610,10 +670,24 @@
             if (loadingMsg) loadingMsg.remove();
         }
 
+        // Update GitHub token
+        function updateGitHubToken() {
+            const newToken = githubTokenInput.value.trim();
+            if (newToken) {
+                GITHUB_TOKEN = newToken;
+                addMessage(`🔑 GitHub token updated. Testing connection...`, 'ai', 1);
+                testGitHubConnection();
+            } else {
+                showError('Please enter a GitHub token');
+            }
+        }
+
+        updateTokenButton.addEventListener('click', updateGitHubToken);
+
         // ============================================
-        // OPENROUTER API CALL
+        // GITHUB MODELS API CALL [citation:2][citation:8]
         // ============================================
-        async function getAIResponse(userMessage) {
+        async function getGitHubModelsResponse(userMessage) {
             const lowercaseMsg = userMessage.toLowerCase().trim();
             
             // Check FAQ cache first (0 tokens!)
@@ -628,7 +702,11 @@
                 }
             }
 
-            console.log('Calling OpenRouter API with DeepSeek model...');
+            if (!GITHUB_TOKEN) {
+                throw new Error('No GitHub token provided. Please enter your GitHub Personal Access Token above.');
+            }
+
+            console.log('Calling GitHub Models API...');
 
             const messages = [
                 { role: 'system', content: systemPrompt },
@@ -637,16 +715,14 @@
             ];
 
             try {
-                const response = await fetch(OPENROUTER_API_URL, {
+                const response = await fetch(GITHUB_MODELS_URL, {
                     method: 'POST',
                     headers: {
                         'Content-Type': 'application/json',
-                        'Authorization': `Bearer ${OPENROUTER_API_KEY}`,
-                        'HTTP-Referer': window.location.origin,
-                        'X-Title': 'Dr. Waleed AI Assistant'
+                        'Authorization': `Bearer ${GITHUB_TOKEN}`
                     },
                     body: JSON.stringify({
-                        model: MODEL,
+                        model: currentModel,
                         messages: messages,
                         temperature: 0.7,
                         max_tokens: MAX_TOKENS_PER_RESPONSE,
@@ -656,8 +732,15 @@
 
                 if (!response.ok) {
                     const errorData = await response.json();
-                    console.error('OpenRouter API Error:', errorData);
-                    throw new Error(errorData.error?.message || `API error: ${response.status}`);
+                    console.error('GitHub Models API Error:', errorData);
+                    
+                    if (response.status === 401) {
+                        throw new Error('Invalid GitHub token. Please check your token and make sure it has the "read:models" scope. [citation:2]');
+                    } else if (response.status === 429) {
+                        throw new Error(`Rate limit exceeded. GitHub Models free tier allows ${RATE_LIMITS.requestsPerMinute} requests per minute. Please wait. [citation:9]`);
+                    } else {
+                        throw new Error(errorData.error?.message || `API error: ${response.status}`);
+                    }
                 }
 
                 const data = await response.json();
@@ -674,7 +757,7 @@
                 };
 
             } catch (error) {
-                console.error('API Error:', error);
+                console.error('GitHub Models Error:', error);
                 throw error;
             }
         }
@@ -700,8 +783,8 @@
             addLoadingMessage();
 
             try {
-                // Get response
-                const result = await getAIResponse(message);
+                // Get response from GitHub Models
+                const result = await getGitHubModelsResponse(message);
                 
                 // Remove loading
                 removeLoadingMessage();
@@ -716,21 +799,26 @@
                     chatContainer.appendChild(cacheMsg);
                 }
                 
-                updateStatus(true, 'Ready');
+                updateStatus(true, 'GitHub Models Ready');
 
             } catch (error) {
                 removeLoadingMessage();
                 
                 let errorMessage = 'Sorry, error. ';
                 
-                if (error.message.includes('401')) {
-                    errorMessage = '⚠️ **Invalid API Key**\n\nThe OpenRouter API key is invalid. Please check your key.';
-                } else if (error.message.includes('402')) {
-                    errorMessage = '⚠️ **Payment Required**\n\nYour OpenRouter account needs credits. The free model might be rate-limited.';
-                } else if (error.message.includes('429')) {
-                    errorMessage = '⚠️ **Rate Limited**\n\nToo many requests. Please wait a moment.';
-                } else if (error.message.includes('502')) {
-                    errorMessage = '⚠️ **Bad Gateway**\n\nThe API service is temporarily unavailable. Please try again.';
+                if (error.message.includes('No GitHub token')) {
+                    errorMessage = '⚠️ **GitHub Token Required**\n\nPlease enter your GitHub Personal Access Token in the field above.\n\n';
+                    errorMessage += '**How to get one:**\n';
+                    errorMessage += '1. Go to https://github.com/settings/tokens\n';
+                    errorMessage += '2. Click "Generate new token" → "Fine-grained tokens"\n';
+                    errorMessage += '3. Give it a name and select **read:models** scope\n';
+                    errorMessage += '4. Generate and copy the token\n';
+                    errorMessage += '5. Paste it above and click "Connect"';
+                } else if (error.message.includes('Invalid GitHub token')) {
+                    errorMessage = '⚠️ **Invalid GitHub Token**\n\nYour token is invalid or missing the required "read:models" scope.\n\n';
+                    errorMessage += 'Please create a new token with the **read:models** permission. [citation:2]';
+                } else if (error.message.includes('Rate limit')) {
+                    errorMessage = `⚠️ **Rate Limit Reached**\n\n${error.message}\n\nGitHub Models free tier allows ${RATE_LIMITS.requestsPerMinute} requests per minute and ${RATE_LIMITS.requestsPerDay} per day. [citation:9]`;
                 } else {
                     errorMessage += error.message;
                 }
@@ -747,33 +835,28 @@
         }
 
         // ============================================
-        // SUGGESTION CHIPS
+        // TEST GITHUB MODELS CONNECTION [citation:8]
         // ============================================
-        window.useSuggestion = function(suggestion) {
-            messageInput.value = suggestion;
-            sendMessage();
-        };
-
-        // ============================================
-        // TEST OPENROUTER CONNECTION
-        // ============================================
-        async function testConnection() {
-            updateStatus(false, 'Connecting to OpenRouter...');
+        async function testGitHubConnection() {
+            if (!GITHUB_TOKEN) {
+                updateStatus(false, 'No Token');
+                return;
+            }
+            
+            updateStatus(false, 'Testing GitHub...');
             
             try {
-                // Simple test call with minimal tokens
-                const response = await fetch(OPENROUTER_API_URL, {
+                // Simple test call
+                const response = await fetch(GITHUB_MODELS_URL, {
                     method: 'POST',
                     headers: {
                         'Content-Type': 'application/json',
-                        'Authorization': `Bearer ${OPENROUTER_API_KEY}`,
-                        'HTTP-Referer': window.location.origin,
-                        'X-Title': 'Dr. Waleed AI Test'
+                        'Authorization': `Bearer ${GITHUB_TOKEN}`
                     },
                     body: JSON.stringify({
-                        model: MODEL,
+                        model: currentModel,
                         messages: [
-                            { role: 'user', content: 'Say "Hello from DeepSeek!" briefly' }
+                            { role: 'user', content: 'Say "GitHub Models connected!" in one line.' }
                         ],
                         max_tokens: 20
                     })
@@ -782,28 +865,40 @@
                 if (response.ok) {
                     const data = await response.json();
                     updateStatus(true, 'Connected');
-                    addMessage('✅ **OpenRouter Connected!**\n\nI\'m Dr. Waleed, powered by **DeepSeek V3 (Free Model)** via OpenRouter. Ask me anything and I\'ll give you quick, concise answers!', 'ai', 15);
+                    addMessage('✅ **GitHub Models Connected!**\n\nI\'m Dr. Waleed, now powered by **GitHub Models** (100% free). Ask me anything and I\'ll give you quick, concise answers!\n\n' +
+                        '🔹 Using model: **' + currentModel + '**\n' +
+                        '🔹 Rate limits: ' + RATE_LIMITS.requestsPerMinute + ' req/min, ' + RATE_LIMITS.requestsPerDay + ' req/day\n' +
+                        '🔹 Available models: GPT-4o, DeepSeek-R1, Llama, Mistral, and more [citation:4]', 'ai', 15);
                 } else {
                     const errorData = await response.json();
                     console.error('Connection test failed:', errorData);
                     
                     if (response.status === 401) {
-                        updateStatus(false, 'Invalid Key');
-                        addMessage('⚠️ **OpenRouter API Key Issue**\n\nThe API key format is correct but authentication failed. This could mean:\n\n1. The key is invalid\n2. The key has been revoked\n3. You need to sign up at openrouter.ai\n\nPlease check your OpenRouter account.', 'ai', 10);
-                    } else if (response.status === 402) {
-                        updateStatus(false, 'Payment Required');
-                        addMessage('⚠️ **Payment Required**\n\nYour OpenRouter account needs credits. Visit openrouter.ai to add credits.', 'ai', 10);
+                        updateStatus(false, 'Invalid Token');
+                        addMessage('⚠️ **GitHub Token Invalid**\n\nYour token is not working. Please make sure:\n\n' +
+                            '1. You created a token at github.com/settings/tokens\n' +
+                            '2. You selected the **read:models** scope\n' +
+                            '3. You copied the full token correctly\n\n' +
+                            'Try generating a new token and click "Connect" again. [citation:2]', 'ai', 10);
                     } else {
                         updateStatus(false, 'API Error');
-                        addMessage(`⚠️ OpenRouter Error: ${response.status} - ${errorData.error?.message || 'Unknown error'}`, 'ai', 5);
+                        addMessage(`⚠️ GitHub Models Error: ${response.status} - ${errorData.error?.message || 'Unknown error'}`, 'ai', 5);
                     }
                 }
             } catch (error) {
                 console.error('Network error:', error);
                 updateStatus(false, 'Network Error');
-                addMessage('⚠️ **Network Error**\n\nCannot connect to OpenRouter API. Please check your internet connection.', 'ai', 10);
+                addMessage('⚠️ **Network Error**\n\nCannot connect to GitHub Models API. Please check your internet connection.', 'ai', 10);
             }
         }
+
+        // ============================================
+        // SUGGESTION CHIPS
+        // ============================================
+        window.useSuggestion = function(suggestion) {
+            messageInput.value = suggestion;
+            sendMessage();
+        };
 
         // ============================================
         // EVENT LISTENERS
@@ -816,15 +911,31 @@
             }
         });
 
+        // Try to load token from localStorage if available
+        const savedToken = localStorage.getItem('github_token');
+        if (savedToken) {
+            githubTokenInput.value = savedToken;
+            GITHUB_TOKEN = savedToken;
+        }
+
+        // Save token to localStorage when updated
+        const originalUpdateToken = updateGitHubToken;
+        updateGitHubToken = function() {
+            const newToken = githubTokenInput.value.trim();
+            if (newToken) {
+                localStorage.setItem('github_token', newToken);
+            }
+            originalUpdateToken();
+        };
+        updateTokenButton.addEventListener('click', updateGitHubToken);
+
         // ============================================
         // INITIALIZATION
         // ============================================
-        // Test connection after a short delay
-        setTimeout(testConnection, 1500);
-        
-        console.log('✅ Dr. Waleed initialized with OpenRouter');
-        console.log('API Key:', OPENROUTER_API_KEY.substring(0, 15) + '...');
-        console.log('Model:', MODEL);
+        console.log('✅ Dr. Waleed initialized with GitHub Models');
+        console.log('Available models:', AVAILABLE_MODELS);
+        console.log('Current model:', currentModel);
+        console.log('Rate limits:', RATE_LIMITS);
     </script>
 </body>
 </html>

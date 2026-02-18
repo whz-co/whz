@@ -1,1 +1,940 @@
-
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Token Controller - Admin Panel</title>
+    <!-- Firebase -->
+    <script src="https://www.gstatic.com/firebasejs/10.8.0/firebase-app-compat.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/10.8.0/firebase-firestore-compat.js"></script>
+    <!-- Chart.js -->
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <!-- Font Awesome -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        }
+        
+        :root {
+            --primary: #1e3c72;
+            --secondary: #2a5298;
+            --accent: #ffd700;
+            --success: #4ade80;
+            --warning: #fbbf24;
+            --danger: #ef4444;
+            --dark: #1e293b;
+            --light: #f8fafc;
+        }
+        
+        body {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+            padding: 20px;
+        }
+        
+        .container {
+            max-width: 1400px;
+            margin: 0 auto;
+        }
+        
+        /* Login Panel */
+        .login-panel {
+            max-width: 400px;
+            margin: 100px auto;
+            background: white;
+            border-radius: 30px;
+            padding: 40px;
+            box-shadow: 0 30px 60px rgba(0,0,0,0.3);
+            animation: slideUp 0.5s;
+        }
+        
+        @keyframes slideUp {
+            from { transform: translateY(30px); opacity: 0; }
+            to { transform: translateY(0); opacity: 1; }
+        }
+        
+        .login-panel h2 {
+            color: var(--primary);
+            margin-bottom: 10px;
+            font-size: 28px;
+        }
+        
+        .login-panel p {
+            color: #64748b;
+            margin-bottom: 30px;
+        }
+        
+        .login-input {
+            width: 100%;
+            padding: 16px;
+            border: 2px solid #e2e8f0;
+            border-radius: 15px;
+            font-size: 16px;
+            margin-bottom: 20px;
+            transition: all 0.3s;
+        }
+        
+        .login-input:focus {
+            outline: none;
+            border-color: var(--primary);
+            box-shadow: 0 0 0 4px rgba(30, 60, 114, 0.1);
+        }
+        
+        .login-btn {
+            width: 100%;
+            padding: 16px;
+            background: linear-gradient(135deg, var(--primary), var(--secondary));
+            color: white;
+            border: none;
+            border-radius: 15px;
+            font-size: 18px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s;
+        }
+        
+        .login-btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 10px 20px rgba(30, 60, 114, 0.3);
+        }
+        
+        /* Dashboard */
+        .dashboard {
+            display: none;
+        }
+        
+        .header {
+            background: white;
+            border-radius: 20px;
+            padding: 20px 30px;
+            margin-bottom: 30px;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.1);
+        }
+        
+        .header h1 {
+            color: var(--primary);
+            font-size: 28px;
+            display: flex;
+            align-items: center;
+            gap: 15px;
+        }
+        
+        .header h1 i {
+            color: var(--accent);
+        }
+        
+        .stats-grid {
+            display: flex;
+            gap: 20px;
+        }
+        
+        .stat-card {
+            background: var(--light);
+            padding: 15px 25px;
+            border-radius: 15px;
+            text-align: center;
+        }
+        
+        .stat-card h3 {
+            color: #64748b;
+            font-size: 14px;
+            margin-bottom: 5px;
+        }
+        
+        .stat-card .value {
+            color: var(--primary);
+            font-size: 24px;
+            font-weight: 700;
+        }
+        
+        /* Charts */
+        .charts-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(400px, 1fr));
+            gap: 30px;
+            margin-bottom: 30px;
+        }
+        
+        .chart-card {
+            background: white;
+            border-radius: 20px;
+            padding: 20px;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.1);
+        }
+        
+        .chart-card h3 {
+            color: var(--dark);
+            margin-bottom: 20px;
+            font-size: 18px;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+        
+        .chart-container {
+            height: 300px;
+            position: relative;
+        }
+        
+        /* Tables */
+        .table-card {
+            background: white;
+            border-radius: 20px;
+            padding: 20px;
+            margin-bottom: 30px;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.1);
+        }
+        
+        .table-header {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            margin-bottom: 20px;
+        }
+        
+        .table-header h3 {
+            color: var(--dark);
+            font-size: 20px;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+        
+        .refresh-btn {
+            background: var(--light);
+            border: none;
+            padding: 10px 20px;
+            border-radius: 10px;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            transition: all 0.3s;
+        }
+        
+        .refresh-btn:hover {
+            background: #e2e8f0;
+            transform: rotate(180deg);
+        }
+        
+        table {
+            width: 100%;
+            border-collapse: collapse;
+        }
+        
+        th {
+            text-align: left;
+            padding: 15px 10px;
+            background: var(--light);
+            color: var(--dark);
+            font-weight: 600;
+        }
+        
+        td {
+            padding: 15px 10px;
+            border-bottom: 1px solid #e2e8f0;
+        }
+        
+        .user-email {
+            font-weight: 600;
+            color: var(--primary);
+        }
+        
+        .usage-bar {
+            width: 100px;
+            height: 8px;
+            background: #e2e8f0;
+            border-radius: 4px;
+            overflow: hidden;
+        }
+        
+        .usage-fill {
+            height: 100%;
+            background: linear-gradient(90deg, var(--success), var(--warning));
+            border-radius: 4px;
+        }
+        
+        .badge {
+            padding: 5px 10px;
+            border-radius: 20px;
+            font-size: 12px;
+            font-weight: 600;
+        }
+        
+        .badge-success {
+            background: #d1fae5;
+            color: #065f46;
+        }
+        
+        .badge-warning {
+            background: #fed7aa;
+            color: #92400e;
+        }
+        
+        .badge-danger {
+            background: #fee2e2;
+            color: #991b1b;
+        }
+        
+        .token-text {
+            font-family: monospace;
+            font-size: 12px;
+            color: #64748b;
+        }
+        
+        .action-btn {
+            padding: 8px 12px;
+            border: none;
+            border-radius: 8px;
+            cursor: pointer;
+            transition: all 0.3s;
+            margin: 0 5px;
+        }
+        
+        .view-btn {
+            background: var(--primary);
+            color: white;
+        }
+        
+        .view-btn:hover {
+            background: var(--secondary);
+        }
+        
+        .modal {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: rgba(0,0,0,0.7);
+            align-items: center;
+            justify-content: center;
+            z-index: 1000;
+            padding: 20px;
+        }
+        
+        .modal-content {
+            background: white;
+            border-radius: 30px;
+            padding: 30px;
+            max-width: 800px;
+            width: 100%;
+            max-height: 80vh;
+            overflow-y: auto;
+        }
+        
+        .modal-header {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            margin-bottom: 20px;
+        }
+        
+        .close-modal {
+            font-size: 24px;
+            cursor: pointer;
+            color: #64748b;
+        }
+        
+        .close-modal:hover {
+            color: var(--danger);
+        }
+        
+        .message-history {
+            background: var(--light);
+            border-radius: 15px;
+            padding: 20px;
+            margin: 20px 0;
+        }
+        
+        .history-item {
+            padding: 15px;
+            border-left: 4px solid;
+            margin-bottom: 15px;
+            background: white;
+            border-radius: 10px;
+        }
+        
+        .history-item.user {
+            border-left-color: var(--primary);
+        }
+        
+        .history-item.ai {
+            border-left-color: var(--accent);
+        }
+        
+        .history-header {
+            display: flex;
+            justify-content: space-between;
+            margin-bottom: 8px;
+            font-size: 13px;
+            color: #64748b;
+        }
+        
+        @media (max-width: 768px) {
+            .charts-grid {
+                grid-template-columns: 1fr;
+            }
+            
+            .stats-grid {
+                flex-direction: column;
+            }
+            
+            table {
+                display: block;
+                overflow-x: auto;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <!-- Login Panel -->
+        <div class="login-panel" id="loginPanel">
+            <h2><i class="fas fa-lock"></i> Admin Access</h2>
+            <p>Enter token controller password to continue</p>
+            <input type="password" id="adminPassword" class="login-input" placeholder="Enter password">
+            <button class="login-btn" onclick="checkPassword()">
+                <i class="fas fa-sign-in-alt"></i> Access Dashboard
+            </button>
+            <p style="text-align: center; margin-top: 20px; color: #94a3b8;">
+                <i class="fas fa-shield-alt"></i> Secure Area
+            </p>
+        </div>
+        
+        <!-- Dashboard -->
+        <div class="dashboard" id="dashboard">
+            <!-- Header -->
+            <div class="header">
+                <h1>
+                    <i class="fas fa-chart-line"></i>
+                    Token Controller Dashboard
+                </h1>
+                <div class="stats-grid" id="statsGrid">
+                    <!-- Filled by JS -->
+                </div>
+            </div>
+            
+            <!-- Charts -->
+            <div class="charts-grid">
+                <div class="chart-card">
+                    <h3><i class="fas fa-clock"></i> Usage by Hour</h3>
+                    <div class="chart-container">
+                        <canvas id="hourlyChart"></canvas>
+                    </div>
+                </div>
+                <div class="chart-card">
+                    <h3><i class="fas fa-users"></i> Top Users</h3>
+                    <div class="chart-container">
+                        <canvas id="topUsersChart"></canvas>
+                    </div>
+                </div>
+            </div>
+            
+            <!-- Users Table -->
+            <div class="table-card">
+                <div class="table-header">
+                    <h3><i class="fas fa-users"></i> User Usage Overview</h3>
+                    <button class="refresh-btn" onclick="loadAllData()">
+                        <i class="fas fa-sync-alt"></i> Refresh
+                    </button>
+                </div>
+                <table id="usersTable">
+                    <thead>
+                        <tr>
+                            <th>User</th>
+                            <th>Email</th>
+                            <th>Today's Usage</th>
+                            <th>% of Limit</th>
+                            <th>Last Active</th>
+                            <th>Total Messages</th>
+                            <th>Actions</th>
+                        </tr>
+                    </thead>
+                    <tbody id="usersTableBody">
+                        <tr>
+                            <td colspan="7" style="text-align: center; padding: 40px;">
+                                <i class="fas fa-spinner fa-spin"></i> Loading...
+                            </td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+            
+            <!-- Token Usage Table -->
+            <div class="table-card">
+                <div class="table-header">
+                    <h3><i class="fas fa-key"></i> Token Consumption</h3>
+                </div>
+                <table>
+                    <thead>
+                        <tr>
+                            <th>Time</th>
+                            <th>User</th>
+                            <th>Conversation</th>
+                            <th>Tokens Used</th>
+                            <th>Model</th>
+                        </tr>
+                    </thead>
+                    <tbody id="tokenTableBody">
+                        <tr>
+                            <td colspan="5" style="text-align: center; padding: 40px;">
+                                <i class="fas fa-spinner fa-spin"></i> Loading...
+                            </td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+    
+    <!-- Message History Modal -->
+    <div class="modal" id="messageModal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h2><i class="fas fa-history"></i> <span id="modalUserName">User</span>'s Messages</h2>
+                <span class="close-modal" onclick="closeModal()">&times;</span>
+            </div>
+            <div id="modalStats" style="display: flex; gap: 15px; margin-bottom: 20px;">
+                <!-- Filled by JS -->
+            </div>
+            <div class="message-history" id="messageHistory">
+                <!-- Filled by JS -->
+            </div>
+        </div>
+    </div>
+    
+    <script>
+        // ============================================
+        // FIREBASE CONFIG
+        // ============================================
+        const firebaseConfig = {
+            apiKey: "AIzaSyAE8wf24HXrfmpMluaFOv1OHPrf_YFfqTQ",
+            authDomain: "whaai-c388e.firebaseapp.com",
+            projectId: "whaai-c388e",
+            storageBucket: "whaai-c388e.firebasestorage.app",
+            messagingSenderId: "640598205524",
+            appId: "1:640598205524:web:c975f5e8b371b1043e39c1"
+        };
+        
+        // Initialize Firebase
+        firebase.initializeApp(firebaseConfig);
+        const db = firebase.firestore();
+        
+        // ============================================
+        // ADMIN PASSWORD
+        // ============================================
+        const ADMIN_PASSWORD = "DrWaleed2024"; // Change this to your desired password
+        
+        // ============================================
+        // CHECK PASSWORD
+        // ============================================
+        function checkPassword() {
+            const password = document.getElementById('adminPassword').value;
+            
+            if (password === ADMIN_PASSWORD) {
+                document.getElementById('loginPanel').style.display = 'none';
+                document.getElementById('dashboard').style.display = 'block';
+                loadAllData();
+            } else {
+                alert('Incorrect password!');
+            }
+        }
+        
+        // ============================================
+        // LOAD ALL DATA
+        // ============================================
+        async function loadAllData() {
+            try {
+                await Promise.all([
+                    loadUsers(),
+                    loadTokenUsage(),
+                    loadHourlyChart(),
+                    loadTopUsersChart(),
+                    updateStats()
+                ]);
+            } catch (error) {
+                console.error('Error loading data:', error);
+            }
+        }
+        
+        // ============================================
+        // LOAD USERS
+        // ============================================
+        async function loadUsers() {
+            const usersSnapshot = await db.collection('users').get();
+            const today = new Date().setHours(0,0,0,0);
+            
+            let html = '';
+            
+            for (const userDoc of usersSnapshot.docs) {
+                const user = userDoc.data();
+                
+                // Get today's usage
+                const usageRef = db.collection('usage').doc(`${user.uid}_${today}`);
+                const usageDoc = await usageRef.get();
+                const usage = usageDoc.exists ? usageDoc.data().totalSeconds || 0 : 0;
+                
+                // Get message count
+                const messagesSnapshot = await db.collection('chats')
+                    .where('userId', '==', user.uid)
+                    .orderBy('timestamp', 'desc')
+                    .limit(500)
+                    .get();
+                
+                const messageCount = messagesSnapshot.size;
+                
+                // Get last active
+                let lastActive = 'Never';
+                if (messagesSnapshot.docs.length > 0) {
+                    const lastMsg = messagesSnapshot.docs[0].data();
+                    if (lastMsg.timestamp) {
+                        const date = lastMsg.timestamp.toDate();
+                        lastActive = date.toLocaleString();
+                    }
+                }
+                
+                const usagePercentage = (usage / (2 * 60 * 60)) * 100;
+                const usageHours = (usage / 3600).toFixed(1);
+                
+                html += `
+                    <tr>
+                        <td>
+                            <div style="display: flex; align-items: center; gap: 10px;">
+                                <img src="${user.photoURL || `https://ui-avatars.com/api/?name=${encodeURIComponent(user.displayName || user.email)}`}" 
+                                     style="width: 35px; height: 35px; border-radius: 50%;">
+                                <span class="user-email">${user.displayName || 'N/A'}</span>
+                            </div>
+                        </td>
+                        <td>${user.email}</td>
+                        <td>
+                            <div style="display: flex; align-items: center; gap: 10px;">
+                                <div class="usage-bar">
+                                    <div class="usage-fill" style="width: ${usagePercentage}%"></div>
+                                </div>
+                                <span>${usageHours}h</span>
+                            </div>
+                        </td>
+                        <td>
+                            <span class="badge ${usagePercentage > 90 ? 'badge-danger' : usagePercentage > 60 ? 'badge-warning' : 'badge-success'}">
+                                ${usagePercentage.toFixed(1)}%
+                            </span>
+                        </td>
+                        <td>${lastActive}</td>
+                        <td>${messageCount}</td>
+                        <td>
+                            <button class="action-btn view-btn" onclick="viewUserMessages('${user.uid}', '${user.displayName || user.email}')">
+                                <i class="fas fa-eye"></i>
+                            </button>
+                        </td>
+                    </tr>
+                `;
+            }
+            
+            if (html === '') {
+                html = '<tr><td colspan="7" style="text-align: center; padding: 40px;">No users found</td></tr>';
+            }
+            
+            document.getElementById('usersTableBody').innerHTML = html;
+        }
+        
+        // ============================================
+        // LOAD TOKEN USAGE
+        // ============================================
+        async function loadTokenUsage() {
+            const snapshot = await db.collection('chats')
+                .orderBy('timestamp', 'desc')
+                .limit(50)
+                .get();
+            
+            let html = '';
+            
+            snapshot.forEach(doc => {
+                const data = doc.data();
+                const time = data.timestamp ? data.timestamp.toDate().toLocaleString() : 'N/A';
+                
+                // Estimate tokens (roughly 1 token per 4 characters)
+                const tokens = Math.ceil(data.content.length / 4);
+                
+                html += `
+                    <tr>
+                        <td>${time}</td>
+                        <td>${data.userId ? data.userId.substring(0,8) + '...' : 'Unknown'}</td>
+                        <td>${data.conversationId || 'Default'}</td>
+                        <td><span class="badge badge-success">~${tokens}</span></td>
+                        <td>GPT-4o-mini</td>
+                    </tr>
+                `;
+            });
+            
+            if (html === '') {
+                html = '<tr><td colspan="5" style="text-align: center; padding: 40px;">No token usage found</td></tr>';
+            }
+            
+            document.getElementById('tokenTableBody').innerHTML = html;
+        }
+        
+        // ============================================
+        // UPDATE STATS
+        // ============================================
+        async function updateStats() {
+            const usersSnapshot = await db.collection('users').get();
+            const chatsSnapshot = await db.collection('chats').get();
+            const conversationsSnapshot = await db.collection('conversations').get();
+            
+            // Calculate total usage today
+            const today = new Date().setHours(0,0,0,0);
+            let totalUsageToday = 0;
+            
+            const usageSnapshot = await db.collection('usage').get();
+            usageSnapshot.forEach(doc => {
+                if (doc.id.includes(today)) {
+                    totalUsageToday += doc.data().totalSeconds || 0;
+                }
+            });
+            
+            document.getElementById('statsGrid').innerHTML = `
+                <div class="stat-card">
+                    <h3>Total Users</h3>
+                    <div class="value">${usersSnapshot.size}</div>
+                </div>
+                <div class="stat-card">
+                    <h3>Messages Today</h3>
+                    <div class="value">${chatsSnapshot.size}</div>
+                </div>
+                <div class="stat-card">
+                    <h3>Active Today</h3>
+                    <div class="value">${await getActiveUsersCount()}</div>
+                </div>
+                <div class="stat-card">
+                    <h3>Total Usage</h3>
+                    <div class="value">${Math.round(totalUsageToday / 3600)}h</div>
+                </div>
+            `;
+        }
+        
+        async function getActiveUsersCount() {
+            const today = new Date();
+            today.setHours(0,0,0,0);
+            
+            const snapshot = await db.collection('chats')
+                .where('timestamp', '>=', today)
+                .get();
+            
+            const userIds = new Set();
+            snapshot.forEach(doc => {
+                if (doc.data().userId) {
+                    userIds.add(doc.data().userId);
+                }
+            });
+            
+            return userIds.size;
+        }
+        
+        // ============================================
+        // LOAD HOURLY CHART
+        // ============================================
+        let hourlyChart = null;
+        
+        async function loadHourlyChart() {
+            const hours = Array.from({length: 24}, (_, i) => `${i}:00`);
+            const counts = new Array(24).fill(0);
+            
+            const today = new Date();
+            today.setHours(0,0,0,0);
+            const tomorrow = new Date(today);
+            tomorrow.setDate(tomorrow.getDate() + 1);
+            
+            const snapshot = await db.collection('chats')
+                .where('timestamp', '>=', today)
+                .where('timestamp', '<', tomorrow)
+                .get();
+            
+            snapshot.forEach(doc => {
+                const data = doc.data();
+                if (data.timestamp) {
+                    const hour = data.timestamp.toDate().getHours();
+                    counts[hour]++;
+                }
+            });
+            
+            const ctx = document.getElementById('hourlyChart').getContext('2d');
+            
+            if (hourlyChart) {
+                hourlyChart.destroy();
+            }
+            
+            hourlyChart = new Chart(ctx, {
+                type: 'line',
+                data: {
+                    labels: hours,
+                    datasets: [{
+                        label: 'Messages per Hour',
+                        data: counts,
+                        borderColor: '#1e3c72',
+                        backgroundColor: 'rgba(30, 60, 114, 0.1)',
+                        tension: 0.4,
+                        fill: true
+                    }]
+                },
+                options: {
+                    responsive: true,
+                    maintainAspectRatio: false,
+                    plugins: {
+                        legend: {
+                            display: false
+                        }
+                    }
+                }
+            });
+        }
+        
+        // ============================================
+        // LOAD TOP USERS CHART
+        // ============================================
+        let topUsersChart = null;
+        
+        async function loadTopUsersChart() {
+            const userMessages = new Map();
+            
+            const snapshot = await db.collection('chats')
+                .orderBy('timestamp', 'desc')
+                .limit(1000)
+                .get();
+            
+            snapshot.forEach(doc => {
+                const data = doc.data();
+                if (data.userId) {
+                    const count = userMessages.get(data.userId) || 0;
+                    userMessages.set(data.userId, count + 1);
+                }
+            });
+            
+            // Sort and get top 5
+            const topUsers = Array.from(userMessages.entries())
+                .sort((a, b) => b[1] - a[1])
+                .slice(0, 5);
+            
+            // Get user emails
+            const labels = [];
+            const data = [];
+            
+            for (const [userId, count] of topUsers) {
+                const userDoc = await db.collection('users').doc(userId).get();
+                const user = userDoc.data();
+                labels.push(user?.email?.split('@')[0] || userId.substring(0, 6));
+                data.push(count);
+            }
+            
+            const ctx = document.getElementById('topUsersChart').getContext('2d');
+            
+            if (topUsersChart) {
+                topUsersChart.destroy();
+            }
+            
+            topUsersChart = new Chart(ctx, {
+                type: 'doughnut',
+                data: {
+                    labels: labels,
+                    datasets: [{
+                        data: data,
+                        backgroundColor: [
+                            '#1e3c72',
+                            '#2a5298',
+                            '#3498db',
+                            '#5dade2',
+                            '#85c1e9'
+                        ]
+                    }]
+                },
+                options: {
+                    responsive: true,
+                    maintainAspectRatio: false,
+                    plugins: {
+                        legend: {
+                            position: 'bottom'
+                        }
+                    }
+                }
+            });
+        }
+        
+        // ============================================
+        // VIEW USER MESSAGES
+        // ============================================
+        async function viewUserMessages(userId, userName) {
+            document.getElementById('modalUserName').textContent = userName;
+            
+            const snapshot = await db.collection('chats')
+                .where('userId', '==', userId)
+                .orderBy('timestamp', 'desc')
+                .limit(50)
+                .get();
+            
+            let stats = {
+                total: snapshot.size,
+                user: 0,
+                ai: 0
+            };
+            
+            let historyHtml = '';
+            
+            snapshot.forEach(doc => {
+                const msg = doc.data();
+                if (msg.type === 'user') stats.user++;
+                if (msg.type === 'ai') stats.ai++;
+                
+                const time = msg.timestamp ? msg.timestamp.toDate().toLocaleString() : 'N/A';
+                
+                historyHtml += `
+                    <div class="history-item ${msg.type}">
+                        <div class="history-header">
+                            <span><i class="fas fa-${msg.type === 'user' ? 'user' : 'robot'}"></i> ${msg.type === 'user' ? 'User' : 'Dr. Waleed'}</span>
+                            <span>${time}</span>
+                        </div>
+                        <div>${msg.content}</div>
+                    </div>
+                `;
+            });
+            
+            if (historyHtml === '') {
+                historyHtml = '<p style="text-align: center; color: #64748b;">No messages found</p>';
+            }
+            
+            document.getElementById('modalStats').innerHTML = `
+                <div class="stat-card" style="flex: 1;">
+                    <h3>Total</h3>
+                    <div class="value">${stats.total}</div>
+                </div>
+                <div class="stat-card" style="flex: 1;">
+                    <h3>User</h3>
+                    <div class="value">${stats.user}</div>
+                </div>
+                <div class="stat-card" style="flex: 1;">
+                    <h3>AI</h3>
+                    <div class="value">${stats.ai}</div>
+                </div>
+            `;
+            
+            document.getElementById('messageHistory').innerHTML = historyHtml;
+            document.getElementById('messageModal').style.display = 'flex';
+        }
+        
+        function closeModal() {
+            document.getElementById('messageModal').style.display = 'none';
+        }
+        
+        // Auto-refresh every 30 seconds
+        setInterval(loadAllData, 30000);
+    </script>
+</body>
+</html>

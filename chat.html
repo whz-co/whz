@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=yes">
-    <title>Dr. Waleed's AI - Smart Assistant</title>
+    <title>Dr. Waleed's AI - Ask Me Anything</title>
     <!-- Firebase SDKs -->
     <script src="https://www.gstatic.com/firebasejs/10.8.0/firebase-app-compat.js"></script>
     <script src="https://www.gstatic.com/firebasejs/10.8.0/firebase-auth-compat.js"></script>
@@ -162,12 +162,12 @@
             50% { opacity: 0.5; transform: scale(1.1); }
         }
         
-        /* Time Usage Bar */
+        /* Time Usage Bar - Client Side Only */
         .time-usage {
             background: rgba(255,255,255,0.1);
             border-radius: 20px;
-            padding: 10px 16px;
-            margin: 10px 0 5px;
+            padding: 8px 16px;
+            margin: 8px 0 5px;
             display: flex;
             align-items: center;
             gap: 12px;
@@ -175,12 +175,12 @@
         
         .time-icon {
             color: var(--accent);
-            font-size: 1.2rem;
+            font-size: 1rem;
         }
         
         .time-progress {
             flex: 1;
-            height: 8px;
+            height: 6px;
             background: rgba(255,255,255,0.2);
             border-radius: 10px;
             overflow: hidden;
@@ -195,7 +195,7 @@
         }
         
         .time-text {
-            font-size: 0.8rem;
+            font-size: 0.75rem;
             font-weight: 600;
             white-space: nowrap;
         }
@@ -217,8 +217,8 @@
         .nav-item {
             color: white;
             text-decoration: none;
-            font-size: 0.75rem;
-            padding: 6px 14px;
+            font-size: 0.7rem;
+            padding: 5px 12px;
             background: rgba(255,255,255,0.15);
             border-radius: 30px;
             transition: all 0.3s;
@@ -272,6 +272,7 @@
         .tab .close-tab {
             opacity: 0.5;
             transition: opacity 0.2s;
+            margin-left: 4px;
         }
         
         .tab .close-tab:hover {
@@ -513,7 +514,7 @@
             font-size: 0.75rem;
         }
         
-        /* Limit Modal */
+        /* Limit Modal - Client Side Only */
         .modal-overlay {
             position: fixed;
             top: 0;
@@ -593,6 +594,7 @@
             .user-badge .user-name { display: none; }
             .chip { padding: 6px 12px; font-size: 0.8rem; }
             #send-button { padding: 10px 20px; }
+            #send-button .send-text { display: none; }
             .welcome-message h2 { font-size: 1.3rem; }
             .modal { padding: 30px 20px; }
         }
@@ -617,20 +619,23 @@
                 </div>
                 
                 <div class="user-info" id="userInfo">
-                    <!-- Will be populated by JS -->
+                    <div class="status">
+                        <span class="status-dot" id="statusDot"></span>
+                        <span id="statusText">Loading...</span>
+                    </div>
                 </div>
             </div>
             
-            <!-- Time Usage Bar -->
+            <!-- Time Usage Bar - Client Side Only -->
             <div class="time-usage" id="timeUsage">
                 <i class="fas fa-clock time-icon"></i>
                 <div class="time-progress">
                     <div class="time-progress-fill" id="timeProgressFill" style="width: 0%"></div>
                 </div>
-                <span class="time-text" id="timeText">Loading...</span>
+                <span class="time-text" id="timeText">2h available</span>
             </div>
             
-            <!-- Navigation -->
+            <!-- Navigation Menu -->
             <div class="nav-menu">
                 <a href="https://whz-co.github.io/whz/index.html" class="nav-item"><i class="fas fa-home"></i> Home</a>
                 <a href="https://whz-co.github.io/whz/chat.html" class="nav-item active"><i class="fas fa-robot"></i> AI</a>
@@ -646,7 +651,7 @@
         
         <!-- Conversation Tabs -->
         <div class="conversation-tabs" id="tabContainer">
-            <div class="tab active" data-tab="default">
+            <div class="tab active" data-tab="default" id="defaultTab">
                 <i class="fas fa-comment"></i>
                 <span>Main Chat</span>
             </div>
@@ -658,6 +663,11 @@
         
         <!-- Chat Container -->
         <div id="chat-container">
+            <!-- Welcome Message -->
+            <div class="welcome-message" id="welcomeMessage">
+                <h2>ASK <span>Dr. Waleed</span></h2>
+                <p>I'm here to help you with anything you need!</p>
+            </div>
             <!-- Messages will be loaded here -->
         </div>
         
@@ -711,14 +721,14 @@
             <i class="fas fa-hourglass-half"></i>
             <h3>Daily Limit Reached</h3>
             <p>You've used your 2 hours of AI assistance for today.</p>
-            <div class="time-left" id="modalTimeLeft">--:--:--</div>
+            <div class="time-left" id="modalTimeLeft">00:00:00</div>
             <p>Your time will reset at midnight. You can still browse other sections!</p>
             <button class="modal-btn" onclick="document.getElementById('limitModal').style.display='none'">
                 <i class="fas fa-check"></i> Got It
             </button>
         </div>
     </div>
-    
+
     <script>
         // ============================================
         // FIREBASE CONFIGURATION
@@ -733,21 +743,26 @@
         };
 
         // Initialize Firebase
-        firebase.initializeApp(firebaseConfig);
+        if (!firebase.apps.length) {
+            firebase.initializeApp(firebaseConfig);
+            console.log('🔥 Firebase initialized successfully');
+        }
+
         const auth = firebase.auth();
         const db = firebase.firestore();
         
         // ============================================
-        // GITHUB MODELS CONFIG - NEW TOKEN
+        // GITHUB MODELS CONFIGURATION - NEW TOKEN
         // ============================================
         const GITHUB_TOKEN = "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";
         const API_URL = "https://models.inference.ai.azure.com/chat/completions";
         const currentModel = "gpt-4o-mini";
         
-        // System prompt
+        // System prompt for Dr. Waleed AI
         const systemPrompt = `You are Dr. Waleed, a friendly and knowledgeable AI assistant. 
         Give clear, helpful answers in 2-4 sentences. Be warm, professional, and encouraging. 
-        If asked about complex topics, explain simply. Always maintain a supportive tone.`;
+        If asked about complex topics, explain simply. Always maintain a supportive tone.
+        You help with English learning, IELTS, TOEFL, dictionary, and general knowledge.`;
         
         // ============================================
         // GLOBAL VARIABLES
@@ -755,14 +770,16 @@
         let currentUser = null;
         let currentConversationId = 'default';
         let conversations = {};
-        let dailyUsage = {
-            totalSeconds: 0,
-            lastReset: new Date().setHours(0,0,0,0)
-        };
+        
+        // Client-side usage tracking (no Firestore)
+        let usageStartTime = Date.now();
+        let usageElapsedSeconds = 0;
         const MAX_DAILY_SECONDS = 2 * 60 * 60; // 2 hours in seconds
+        let usageInterval = null;
         
         // DOM Elements
         const chatContainer = document.getElementById('chat-container');
+        const welcomeMessage = document.getElementById('welcomeMessage');
         const messageInput = document.getElementById('message-input');
         const sendButton = document.getElementById('send-button');
         const inputWrapper = document.getElementById('inputWrapper');
@@ -770,25 +787,75 @@
         const timeText = document.getElementById('timeText');
         const usageCounter = document.getElementById('usageCounter');
         const userInfo = document.getElementById('userInfo');
+        const statusDot = document.getElementById('statusDot');
+        const statusText = document.getElementById('statusText');
         const limitModal = document.getElementById('limitModal');
         const modalTimeLeft = document.getElementById('modalTimeLeft');
-        const suggestionChips = document.getElementById('suggestionChips');
+        const newTabBtn = document.getElementById('newTabBtn');
+        const defaultTab = document.getElementById('defaultTab');
+        const tabContainer = document.getElementById('tabContainer');
         
         // ============================================
-        // AUTH CHECK - MUST BE LOGGED IN
+        // INITIALIZE - CHECK AUTHENTICATION
         // ============================================
         auth.onAuthStateChanged(async (user) => {
             if (user) {
                 currentUser = user;
+                console.log('✅ User authenticated:', user.email);
                 updateUserUI(user);
-                await loadUserUsage(user.uid);
-                await loadConversations(user.uid);
+                await loadUserConversations();
+                checkGitHubConnection();
                 startUsageTracking();
+                updateStatus('online', 'Ready');
             } else {
-                // Redirect to login if not authenticated
+                console.log('❌ No user, redirecting to login');
                 window.location.href = 'https://whz-co.github.io/whz/singin.html';
             }
         });
+        
+        // ============================================
+        // UPDATE STATUS
+        // ============================================
+        function updateStatus(state, text) {
+            statusText.textContent = text;
+            if (state === 'online') {
+                statusDot.className = 'status-dot';
+            } else if (state === 'offline') {
+                statusDot.className = 'status-dot error';
+            } else {
+                statusDot.className = 'status-dot warning';
+            }
+        }
+        
+        // ============================================
+        // CHECK GITHUB CONNECTION
+        // ============================================
+        async function checkGitHubConnection() {
+            try {
+                const response = await fetch(API_URL, {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                        'Authorization': `Bearer ${GITHUB_TOKEN}`
+                    },
+                    body: JSON.stringify({
+                        model: currentModel,
+                        messages: [{ role: "user", content: "Hello" }],
+                        max_tokens: 5
+                    })
+                });
+                
+                if (response.ok) {
+                    console.log('✅ GitHub API connected');
+                    updateStatus('online', 'Ready');
+                } else {
+                    throw new Error('Connection failed');
+                }
+            } catch (error) {
+                console.error('❌ GitHub API error:', error);
+                updateStatus('offline', 'Offline');
+            }
+        }
         
         // ============================================
         // UPDATE USER UI
@@ -797,184 +864,119 @@
             const photoURL = user.photoURL || `https://ui-avatars.com/api/?name=${encodeURIComponent(user.displayName || user.email)}&background=ffd700&color=1e3c72&bold=true`;
             const displayName = user.displayName || user.email.split('@')[0];
             
-            userInfo.innerHTML = `
-                <div class="user-badge">
-                    <i class="fas fa-user"></i>
-                    <span class="user-name">${displayName}</span>
-                </div>
-                <img src="${photoURL}" alt="User" class="user-avatar">
-            `;
+            const existingUserInfo = document.querySelector('.user-info');
+            if (existingUserInfo) {
+                existingUserInfo.innerHTML = `
+                    <div class="user-badge">
+                        <i class="fas fa-user"></i>
+                        <span class="user-name">${displayName}</span>
+                    </div>
+                    <img src="${photoURL}" alt="User" class="user-avatar" onerror="this.src='https://ui-avatars.com/api/?name=${encodeURIComponent(displayName)}&background=ffd700&color=1e3c72'">
+                    <div class="status">
+                        <span class="status-dot" id="statusDot"></span>
+                        <span id="statusText">Connecting...</span>
+                    </div>
+                `;
+            }
         }
         
         // ============================================
-        // LOAD USER USAGE FROM FIRESTORE
+        // LOAD USER CONVERSATIONS FROM FIRESTORE
         // ============================================
-        async function loadUserUsage(userId) {
+        async function loadUserConversations() {
             try {
-                const today = new Date().setHours(0,0,0,0);
-                const usageRef = db.collection('usage').doc(`${userId}_${today}`);
-                const usageDoc = await usageRef.get();
-                
-                if (usageDoc.exists) {
-                    dailyUsage = usageDoc.data();
-                } else {
-                    dailyUsage = {
-                        userId: userId,
-                        date: today,
-                        totalSeconds: 0,
-                        lastReset: today
-                    };
-                    await usageRef.set(dailyUsage);
-                }
-                
-                updateUsageDisplay();
-            } catch (error) {
-                console.error('Error loading usage:', error);
-            }
-        }
-        
-        // ============================================
-        // UPDATE USAGE DISPLAY
-        // ============================================
-        function updateUsageDisplay() {
-            const usedSeconds = dailyUsage.totalSeconds || 0;
-            const usedHours = usedSeconds / 3600;
-            const percentage = (usedSeconds / MAX_DAILY_SECONDS) * 100;
-            
-            timeProgressFill.style.width = `${Math.min(percentage, 100)}%`;
-            
-            const remaining = MAX_DAILY_SECONDS - usedSeconds;
-            if (remaining <= 0) {
-                timeText.innerHTML = '<i class="fas fa-ban"></i> Limit reached';
-                usageCounter.innerHTML = '0h remaining';
-                disableChat(true);
-            } else {
-                const hours = Math.floor(remaining / 3600);
-                const minutes = Math.floor((remaining % 3600) / 60);
-                timeText.innerHTML = `${hours}h ${minutes}m left`;
-                usageCounter.innerHTML = `${Math.floor(usedSeconds / 3600)}h used`;
-                disableChat(false);
-            }
-            
-            // Update modal time
-            if (remaining > 0) {
-                const hours = Math.floor(remaining / 3600);
-                const minutes = Math.floor((remaining % 3600) / 60);
-                const seconds = remaining % 60;
-                modalTimeLeft.textContent = `${hours.toString().padStart(2,'0')}:${minutes.toString().padStart(2,'0')}:${seconds.toString().padStart(2,'0')}`;
-            }
-        }
-        
-        // ============================================
-        // DISABLE CHAT WHEN LIMIT REACHED
-        // ============================================
-        function disableChat(disabled) {
-            messageInput.disabled = disabled;
-            sendButton.disabled = disabled;
-            
-            if (disabled) {
-                inputWrapper.classList.add('disabled');
-                messageInput.placeholder = 'Daily limit reached - try tomorrow';
-                suggestionChips.classList.add('disabled');
-                document.querySelectorAll('.chip').forEach(chip => {
-                    chip.classList.add('disabled');
-                    chip.removeAttribute('onclick');
-                });
-            } else {
-                inputWrapper.classList.remove('disabled');
-                messageInput.placeholder = 'Ask Dr. Waleed anything...';
-                suggestionChips.classList.remove('disabled');
-            }
-        }
-        
-        // ============================================
-        // TRACK USAGE TIME
-        // ============================================
-        function startUsageTracking() {
-            let sessionStart = Date.now();
-            
-            setInterval(async () => {
-                if (messageInput.disabled) return;
-                
-                const sessionSeconds = Math.floor((Date.now() - sessionStart) / 1000);
-                if (sessionSeconds >= 60) { // Update every minute
-                    dailyUsage.totalSeconds += sessionSeconds;
-                    sessionStart = Date.now();
-                    
-                    // Save to Firestore
-                    const today = new Date().setHours(0,0,0,0);
-                    const usageRef = db.collection('usage').doc(`${currentUser.uid}_${today}`);
-                    await usageRef.set(dailyUsage, { merge: true });
-                    
-                    updateUsageDisplay();
-                    
-                    // Check if limit reached
-                    if (dailyUsage.totalSeconds >= MAX_DAILY_SECONDS) {
-                        limitModal.style.display = 'flex';
-                        disableChat(true);
-                    }
-                }
-            }, 60000);
-        }
-        
-        // ============================================
-        // LOAD CONVERSATIONS FROM FIRESTORE
-        // ============================================
-        async function loadConversations(userId) {
-            try {
-                const snapshot = await db.collection('conversations')
-                    .where('userId', '==', userId)
-                    .orderBy('lastUpdated', 'desc')
-                    .limit(10)
+                // Try to load from Firestore (if allowed by rules)
+                const snapshot = await db.collection('chats')
+                    .where('userId', '==', currentUser.uid)
+                    .orderBy('timestamp', 'desc')
+                    .limit(100)
                     .get();
                 
-                if (!snapshot.empty) {
-                    snapshot.forEach(doc => {
-                        const data = doc.data();
-                        conversations[doc.id] = data;
-                    });
-                }
+                // Group by conversation ID (using date as simple grouping)
+                const convGroups = {};
                 
-                // Create default if none exist
+                snapshot.forEach(doc => {
+                    const data = doc.data();
+                    const date = data.timestamp ? data.timestamp.toDate().toDateString() : 'Today';
+                    const convId = `conv_${date.replace(/\s/g, '_')}`;
+                    
+                    if (!convGroups[convId]) {
+                        convGroups[convId] = {
+                            id: convId,
+                            name: date === new Date().toDateString() ? 'Today' : date,
+                            messages: [],
+                            count: 0
+                        };
+                    }
+                    
+                    convGroups[convId].messages.push({
+                        content: data.content,
+                        type: data.type,
+                        timestamp: data.timestamp
+                    });
+                    convGroups[convId].count++;
+                });
+                
+                // Convert to conversations object
+                Object.keys(convGroups).forEach(key => {
+                    conversations[key] = {
+                        id: key,
+                        name: convGroups[key].name,
+                        messages: convGroups[key].messages.sort((a, b) => {
+                            if (!a.timestamp) return 1;
+                            if (!b.timestamp) return -1;
+                            return a.timestamp.toDate() - b.timestamp.toDate();
+                        })
+                    };
+                });
+                
+                // Always have default conversation
                 if (!conversations['default']) {
                     conversations['default'] = {
                         id: 'default',
                         name: 'Main Chat',
-                        messages: [],
-                        userId: userId,
-                        createdAt: new Date(),
-                        lastUpdated: new Date()
+                        messages: []
                     };
                 }
                 
-                loadConversationTabs();
-                loadMessages(currentConversationId);
+                // Update tabs
+                updateConversationTabs();
+                
+                // Load current conversation
+                loadConversation(currentConversationId);
+                
             } catch (error) {
-                console.error('Error loading conversations:', error);
+                console.log('Using local conversations only:', error);
+                // If Firestore fails, use local only
+                conversations['default'] = {
+                    id: 'default',
+                    name: 'Main Chat',
+                    messages: []
+                };
+                loadConversation('default');
             }
         }
         
         // ============================================
-        // LOAD CONVERSATION TABS
+        // UPDATE CONVERSATION TABS
         // ============================================
-        function loadConversationTabs() {
-            const tabContainer = document.getElementById('tabContainer');
-            const newTabBtn = document.getElementById('newTabBtn');
-            
-            // Clear existing tabs except new tab button
-            while (tabContainer.children.length > 1) {
-                tabContainer.removeChild(tabContainer.firstChild);
-            }
+        function updateConversationTabs() {
+            // Clear all tabs except default and new
+            const tabs = document.querySelectorAll('.tab:not(#defaultTab):not(#newTabBtn)');
+            tabs.forEach(tab => tab.remove());
             
             // Add conversation tabs
             Object.keys(conversations).forEach(convId => {
+                if (convId === 'default') return;
+                
+                const conv = conversations[convId];
                 const tab = document.createElement('div');
                 tab.className = `tab ${convId === currentConversationId ? 'active' : ''}`;
                 tab.dataset.tab = convId;
                 tab.innerHTML = `
                     <i class="fas fa-comment"></i>
-                    <span>${conversations[convId].name || 'Chat'}</span>
-                    ${convId !== 'default' ? '<i class="fas fa-times close-tab"></i>' : ''}
+                    <span>${conv.name || 'Chat'}</span>
+                    <i class="fas fa-times close-tab" data-convid="${convId}"></i>
                 `;
                 
                 tab.addEventListener('click', (e) => {
@@ -983,99 +985,113 @@
                     }
                 });
                 
-                if (convId !== 'default') {
-                    tab.querySelector('.fa-times')?.addEventListener('click', (e) => {
-                        e.stopPropagation();
-                        deleteConversation(convId);
-                    });
-                }
-                
+                // Insert before new tab button
                 tabContainer.insertBefore(tab, newTabBtn);
             });
+            
+            // Add close button handlers
+            document.querySelectorAll('.close-tab').forEach(btn => {
+                btn.addEventListener('click', (e) => {
+                    e.stopPropagation();
+                    const convId = btn.dataset.convid;
+                    deleteConversation(convId);
+                });
+            });
+            
+            // Update default tab active state
+            if (currentConversationId === 'default') {
+                defaultTab.classList.add('active');
+            } else {
+                defaultTab.classList.remove('active');
+            }
         }
-        
-        // ============================================
-        // CREATE NEW CONVERSATION
-        // ============================================
-        document.getElementById('newTabBtn').addEventListener('click', async () => {
-            if (!currentUser) return;
-            
-            const convId = `conv_${Date.now()}`;
-            const newConv = {
-                id: convId,
-                name: `Chat ${Object.keys(conversations).length + 1}`,
-                messages: [],
-                userId: currentUser.uid,
-                createdAt: new Date(),
-                lastUpdated: new Date()
-            };
-            
-            conversations[convId] = newConv;
-            
-            // Save to Firestore
-            await db.collection('conversations').doc(convId).set(newConv);
-            
-            loadConversationTabs();
-            switchConversation(convId);
-        });
         
         // ============================================
         // SWITCH CONVERSATION
         // ============================================
         function switchConversation(convId) {
             currentConversationId = convId;
-            loadConversationTabs();
-            loadMessages(convId);
+            updateConversationTabs();
+            loadConversation(convId);
+        }
+        
+        // ============================================
+        // LOAD CONVERSATION
+        // ============================================
+        function loadConversation(convId) {
+            const conversation = conversations[convId];
+            if (!conversation) return;
+            
+            // Clear chat container
+            chatContainer.innerHTML = '';
+            
+            if (!conversation.messages || conversation.messages.length === 0) {
+                // Show welcome message
+                const welcomeClone = welcomeMessage.cloneNode(true);
+                welcomeClone.style.display = 'block';
+                chatContainer.appendChild(welcomeClone);
+            } else {
+                // Hide welcome message
+                welcomeMessage.style.display = 'none';
+                
+                // Add messages
+                conversation.messages.forEach(msg => {
+                    displayMessage(msg.content, msg.type, msg.timestamp);
+                });
+            }
+            
+            // Scroll to bottom
+            chatContainer.scrollTop = chatContainer.scrollHeight;
+        }
+        
+        // ============================================
+        // CREATE NEW CONVERSATION
+        // ============================================
+        newTabBtn.addEventListener('click', () => {
+            createNewConversation();
+        });
+        
+        function createNewConversation() {
+            const convId = `conv_${Date.now()}`;
+            const date = new Date();
+            const convName = `Chat ${Object.keys(conversations).length}`;
+            
+            conversations[convId] = {
+                id: convId,
+                name: convName,
+                messages: [],
+                createdAt: date
+            };
+            
+            updateConversationTabs();
+            switchConversation(convId);
         }
         
         // ============================================
         // DELETE CONVERSATION
         // ============================================
-        async function deleteConversation(convId) {
-            if (convId === 'default' || !confirm('Delete this conversation?')) return;
-            
-            // Delete from Firestore
-            await db.collection('conversations').doc(convId).delete();
-            
-            delete conversations[convId];
-            
-            if (currentConversationId === convId) {
-                currentConversationId = 'default';
+        function deleteConversation(convId) {
+            if (convId === 'default') {
+                alert('Cannot delete main chat');
+                return;
             }
             
-            loadConversationTabs();
-            loadMessages(currentConversationId);
+            if (confirm('Delete this conversation?')) {
+                delete conversations[convId];
+                
+                if (currentConversationId === convId) {
+                    currentConversationId = 'default';
+                }
+                
+                updateConversationTabs();
+                loadConversation(currentConversationId);
+            }
         }
         
         // ============================================
-        // LOAD MESSAGES FOR CONVERSATION
+        // DISPLAY MESSAGE
         // ============================================
-        function loadMessages(convId) {
-            const conversation = conversations[convId];
-            if (!conversation) return;
-            
-            chatContainer.innerHTML = '';
-            
-            if (!conversation.messages || conversation.messages.length === 0) {
-                chatContainer.innerHTML = `
-                    <div class="welcome-message">
-                        <h2>ASK <span>Dr. Waleed</span></h2>
-                        <p>I'm here to help you with anything you need!</p>
-                    </div>
-                `;
-            } else {
-                conversation.messages.forEach(msg => {
-                    addMessageToUI(msg.content, msg.type, msg.timestamp);
-                });
-            }
-            
-            chatContainer.scrollTop = chatContainer.scrollHeight;
-        }
-        
-        // ============================================
-        // ADD MESSAGE TO UI
-        // ============================================
-        function addMessageToUI(content, type, timestamp = null) {
+        function displayMessage(content, type, timestamp = null) {
             const messageDiv = document.createElement('div');
             messageDiv.className = `message ${type}-message`;
             
@@ -1087,94 +1103,238 @@
             timeDiv.className = 'message-time';
             
             if (timestamp) {
-                const date = timestamp.toDate ? timestamp.toDate() : new Date(timestamp);
-                timeDiv.textContent = date.toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' });
+                if (timestamp.toDate) {
+                    const date = timestamp.toDate();
+                    timeDiv.textContent = date.toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' });
+                } else if (timestamp instanceof Date) {
+                    timeDiv.textContent = timestamp.toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' });
+                } else {
+                    timeDiv.textContent = new Date().toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' });
+                }
             } else {
                 timeDiv.textContent = new Date().toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' });
             }
             
             messageDiv.appendChild(timeDiv);
             chatContainer.appendChild(messageDiv);
+            chatContainer.scrollTop = chatContainer.scrollHeight;
         }
         
         // ============================================
-        // SAVE MESSAGE TO CONVERSATION
+        // SAVE MESSAGE TO FIRESTORE
         // ============================================
         async function saveMessage(content, type) {
+            // Display message immediately
+            displayMessage(content, type);
+            
+            // Hide welcome message if this is first message
+            if (welcomeMessage.style.display !== 'none') {
+                welcomeMessage.style.display = 'none';
+            }
+            
+            // Save to conversation object
             const conversation = conversations[currentConversationId];
-            if (!conversation) return;
-            
-            const message = {
-                content: content,
-                type: type,
-                timestamp: new Date()
-            };
-            
-            if (!conversation.messages) {
-                conversation.messages = [];
+            if (conversation) {
+                if (!conversation.messages) {
+                    conversation.messages = [];
+                }
+                
+                const messageObj = {
+                    content: content,
+                    type: type,
+                    timestamp: new Date()
+                };
+                
+                conversation.messages.push(messageObj);
+                
+                // Keep only last 50 messages
+                if (conversation.messages.length > 50) {
+                    conversation.messages = conversation.messages.slice(-50);
+                }
             }
             
-            conversation.messages.push(message);
-            conversation.lastUpdated = new Date();
-            
-            // Keep only last 50 messages
-            if (conversation.messages.length > 50) {
-                conversation.messages = conversation.messages.slice(-50);
+            // Save to Firestore (chats collection only - allowed by rules)
+            if (currentUser) {
+                try {
+                    await db.collection('chats').add({
+                        userId: currentUser.uid,
+                        userEmail: currentUser.email,
+                        userName: currentUser.displayName || currentUser.email.split('@')[0],
+                        conversationId: currentConversationId,
+                        content: content,
+                        type: type,
+                        timestamp: firebase.firestore.FieldValue.serverTimestamp()
+                    });
+                    console.log('✅ Message saved to Firestore');
+                } catch (error) {
+                    console.error('Error saving to Firestore:', error);
+                    // Continue anyway - message already displayed
+                }
+            }
+        }
+        
+        // ============================================
+        // CLIENT-SIDE USAGE TRACKING (No Firestore)
+        // ============================================
+        function startUsageTracking() {
+            // Load saved usage from localStorage
+            const savedUsage = localStorage.getItem('drWaleedUsage');
+            if (savedUsage) {
+                const usage = JSON.parse(savedUsage);
+                const today = new Date().toDateString();
+                
+                if (usage.date === today) {
+                    usageElapsedSeconds = usage.seconds;
+                } else {
+                    usageElapsedSeconds = 0;
+                    localStorage.setItem('drWaleedUsage', JSON.stringify({
+                        date: today,
+                        seconds: 0
+                    }));
+                }
+            } else {
+                const today = new Date().toDateString();
+                localStorage.setItem('drWaleedUsage', JSON.stringify({
+                    date: today,
+                    seconds: 0
+                }));
             }
             
-            // Save to Firestore
-            await db.collection('conversations').doc(currentConversationId).set({
-                messages: conversation.messages,
-                lastUpdated: conversation.lastUpdated
-            }, { merge: true });
+            // Update display
+            updateUsageDisplay();
             
-            // Also save to chats collection for history
-            await db.collection('chats').add({
-                userId: currentUser.uid,
-                conversationId: currentConversationId,
-                content: content,
-                type: type,
-                timestamp: firebase.firestore.FieldValue.serverTimestamp()
-            });
+            // Start interval to track time
+            usageStartTime = Date.now();
             
-            addMessageToUI(content, type);
+            if (usageInterval) {
+                clearInterval(usageInterval);
+            }
+            
+            usageInterval = setInterval(() => {
+                if (messageInput.disabled) return; // Don't count if disabled
+                
+                const sessionSeconds = Math.floor((Date.now() - usageStartTime) / 10); // Update more frequently
+                if (sessionSeconds >= 1) {
+                    usageElapsedSeconds += sessionSeconds;
+                    usageStartTime = Date.now();
+                    
+                    // Save to localStorage
+                    const today = new Date().toDateString();
+                    localStorage.setItem('drWaleedUsage', JSON.stringify({
+                        date: today,
+                        seconds: usageElapsedSeconds
+                    }));
+                    
+                    updateUsageDisplay();
+                    
+                    // Check if limit reached
+                    if (usageElapsedSeconds >= MAX_DAILY_SECONDS) {
+                        disableChat(true);
+                        limitModal.style.display = 'flex';
+                    }
+                }
+            }, 1000);
+        }
+        
+        function updateUsageDisplay() {
+            const usedSeconds = usageElapsedSeconds || 0;
+            const percentage = (usedSeconds / MAX_DAILY_SECONDS) * 100;
+            
+            timeProgressFill.style.width = `${Math.min(percentage, 100)}%`;
+            
+            const remaining = MAX_DAILY_SECONDS - usedSeconds;
+            
+            if (remaining <= 0) {
+                timeText.innerHTML = '<i class="fas fa-ban"></i> Limit reached';
+                usageCounter.innerHTML = '0h available';
+                modalTimeLeft.textContent = '00:00:00';
+            } else {
+                const hours = Math.floor(remaining / 3600);
+                const minutes = Math.floor((remaining % 3600) / 60);
+                const seconds = remaining % 60;
+                
+                timeText.innerHTML = `${hours}h ${minutes}m left`;
+                usageCounter.innerHTML = `${Math.floor(usedSeconds / 3600)}h used`;
+                modalTimeLeft.textContent = `${hours.toString().padStart(2,'0')}:${minutes.toString().padStart(2,'0')}:${seconds.toString().padStart(2,'0')}`;
+            }
+        }
+        
+        function disableChat(disabled) {
+            messageInput.disabled = disabled;
+            sendButton.disabled = disabled;
+            
+            if (disabled) {
+                inputWrapper.classList.add('disabled');
+                messageInput.placeholder = 'Daily limit reached - try tomorrow';
+                document.querySelectorAll('.chip').forEach(chip => {
+                    chip.style.opacity = '0.5';
+                    chip.style.pointerEvents = 'none';
+                });
+            } else {
+                inputWrapper.classList.remove('disabled');
+                messageInput.placeholder = 'Ask Dr. Waleed anything...';
+                document.querySelectorAll('.chip').forEach(chip => {
+                    chip.style.opacity = '1';
+                    chip.style.pointerEvents = 'auto';
+                });
+            }
         }
         
         // ============================================
         // SEND TO GITHUB AI
         // ============================================
-        async function sendToGitHub(userMessage, history) {
+        async function sendToGitHub(userMessage) {
+            // Get conversation history for context
+            const conversation = conversations[currentConversationId];
+            const history = [];
+            
+            if (conversation && conversation.messages) {
+                const lastMessages = conversation.messages.slice(-6); // Last 3 exchanges
+                lastMessages.forEach(msg => {
+                    history.push({
+                        role: msg.type === 'user' ? 'user' : 'assistant',
+                        content: msg.content
+                    });
+                });
+            }
+            
             const messages = [
                 { role: 'system', content: systemPrompt },
-                ...history.slice(-6), // Last 3 exchanges for context
+                ...history,
                 { role: 'user', content: userMessage }
             ];
             
-            const response = await fetch(API_URL, {
-                method: 'POST',
-                headers: {
-                    'Content-Type': 'application/json',
-                    'Authorization': `Bearer ${GITHUB_TOKEN}`
-                },
-                body: JSON.stringify({
-                    model: currentModel,
-                    messages: messages,
-                    temperature: 0.7,
-                    max_tokens: 250
-                })
-            });
-            
-            if (!response.ok) {
-                const error = await response.json();
-                throw new Error(error.error?.message || `Error ${response.status}`);
+            try {
+                const response = await fetch(API_URL, {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                        'Authorization': `Bearer ${GITHUB_TOKEN}`
+                    },
+                    body: JSON.stringify({
+                        model: currentModel,
+                        messages: messages,
+                        temperature: 0.7,
+                        max_tokens: 300
+                    })
+                });
+                
+                if (!response.ok) {
+                    const errorData = await response.json();
+                    throw new Error(errorData.error?.message || `Error ${response.status}`);
+                }
+                
+                const data = await response.json();
+                return data.choices[0].message.content;
+                
+            } catch (error) {
+                console.error('GitHub API error:', error);
+                throw error;
             }
-            
-            const data = await response.json();
-            return data.choices[0].message.content;
         }
         
         // ============================================
-        // SHOW LOADING
+        // SHOW LOADING INDICATOR
         // ============================================
         function showLoading() {
             const loadingDiv = document.createElement('div');
@@ -1196,11 +1356,20 @@
         }
         
         // ============================================
-        // SEND MESSAGE
+        // SEND MESSAGE HANDLER
         // ============================================
         async function sendMessage() {
             const message = messageInput.value.trim();
-            if (!message || messageInput.disabled) return;
+            
+            if (!message || messageInput.disabled || sendButton.disabled) {
+                return;
+            }
+            
+            // Check usage limit
+            if (usageElapsedSeconds >= MAX_DAILY_SECONDS) {
+                limitModal.style.display = 'flex';
+                return;
+            }
             
             // Clear input
             messageInput.value = '';
@@ -1208,7 +1377,7 @@
             // Save user message
             await saveMessage(message, 'user');
             
-            // Disable input
+            // Disable input during processing
             sendButton.disabled = true;
             messageInput.disabled = true;
             
@@ -1216,17 +1385,8 @@
             showLoading();
             
             try {
-                // Get conversation history for context
-                const conversation = conversations[currentConversationId];
-                const history = conversation.messages
-                    .slice(-10, -1) // Last 5 exchanges, excluding current message
-                    .map(msg => ({
-                        role: msg.type === 'user' ? 'user' : 'assistant',
-                        content: msg.content
-                    }));
-                
-                // Get response
-                const response = await sendToGitHub(message, history);
+                // Get AI response
+                const response = await sendToGitHub(message);
                 
                 // Remove loading
                 removeLoading();
@@ -1234,10 +1394,14 @@
                 // Save AI response
                 await saveMessage(response, 'ai');
                 
+                // Update status
+                updateStatus('online', 'Ready');
+                
             } catch (error) {
                 console.error('Send error:', error);
                 removeLoading();
-                await saveMessage("I'm having trouble connecting. Please try again in a moment.", 'ai');
+                await saveMessage("I'm having trouble connecting right now. Please try again in a moment.", 'ai');
+                updateStatus('offline', 'Error');
             } finally {
                 sendButton.disabled = false;
                 messageInput.disabled = false;
@@ -1260,7 +1424,7 @@
         // Suggestion chips
         document.querySelectorAll('.chip').forEach(chip => {
             chip.addEventListener('click', () => {
-                if (!chip.classList.contains('disabled')) {
+                if (!chip.classList.contains('disabled') && !messageInput.disabled) {
                     const suggestion = chip.dataset.suggestion;
                     if (suggestion) {
                         messageInput.value = suggestion;
@@ -1270,10 +1434,39 @@
             });
         });
         
+        // Default tab click
+        defaultTab.addEventListener('click', () => {
+            switchConversation('default');
+        });
+        
+        // Close modal when clicking outside
+        limitModal.addEventListener('click', (e) => {
+            if (e.target === limitModal) {
+                limitModal.style.display = 'none';
+            }
+        });
+        
+        // ============================================
+        // CLEANUP
+        // ============================================
+        window.addEventListener('beforeunload', () => {
+            if (usageInterval) {
+                clearInterval(usageInterval);
+            }
+        });
+        
         // ============================================
         // INITIALIZATION
         // ============================================
-        console.log('🚀 Dr. Waleed AI initialized');
+        console.log('🚀 Dr. Waleed AI initialized - Version 2.0');
+        console.log('📱 Mobile ready - Using chats collection only');
+        
+        // Test Firestore connection
+        setTimeout(() => {
+            if (currentUser) {
+                console.log('👤 Logged in as:', currentUser.email);
+            }
+        }, 1000);
     </script>
 </body>
 </html>

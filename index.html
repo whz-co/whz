@@ -2,297 +2,753 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=yes">
-    <title>Zakhourani - English Platform</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Zakhourani | Home - English Learning Platform by Dr. Waleed</title>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <style>
-        /* ===== Your existing Zakhourani styles here ===== */
-        * { margin: 0; padding: 0; box-sizing: border-box; font-family: 'Segoe UI', sans-serif; }
-        :root {
-            --primary: #2c3e50;
-            --secondary: #3498db;
-            --accent: #e74c3c;
-            --light: #ecf0f1;
-        }
-        body { background: linear-gradient(135deg, #f5f7fa 0%, #c3cfe2 100%); min-height: 100vh; }
+        * { margin: 0; padding: 0; box-sizing: border-box; font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; }
         
-        header { background: white; box-shadow: 0 4px 20px rgba(0,0,0,0.1); position: sticky; top: 0; z-index: 1000; }
+        :root {
+            --primary: #1e3c72;
+            --secondary: #2a5298;
+            --accent: #ffd700;
+            --light: #f8fafc;
+            --dark: #1e293b;
+            --success: #4ade80;
+            --warning: #fbbf24;
+            --danger: #ef4444;
+        }
+        
+        body { 
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh; 
+        }
+        
+        /* Header */
+        header { 
+            background: white; 
+            box-shadow: 0 4px 30px rgba(0,0,0,0.1); 
+            position: sticky; 
+            top: 0; 
+            z-index: 1000; 
+        }
+        
         .header-top {
-            background: var(--primary);
+            background: linear-gradient(135deg, var(--primary) 0%, var(--secondary) 100%);
             color: white;
-            padding: 10px 40px;
+            padding: 15px 40px;
             display: flex;
             justify-content: space-between;
             align-items: center;
         }
-        .logo { display: flex; align-items: center; gap: 15px; }
-        .logo h1 { font-size: 28px; font-weight: 700; color: white; }
         
-        .auth-buttons { display: flex; gap: 10px; }
-        .auth-btn { padding: 8px 20px; border-radius: 25px; font-weight: 600; text-decoration: none; display: inline-block; }
-        .login-btn { background: transparent; color: white; border: 2px solid white; }
-        .signup-btn { background: var(--secondary); color: white; border: 2px solid var(--secondary); }
+        .logo { 
+            display: flex; 
+            align-items: center; 
+            gap: 15px; 
+        }
         
-        nav { padding: 0 40px; background: white; }
-        .nav-links { display: flex; list-style: none; gap: 20px; padding: 15px 0; justify-content: center; }
-        .nav-links a { text-decoration: none; color: var(--dark); font-weight: 600; padding: 8px 16px; }
-        .nav-links a.active { background: var(--secondary); color: white; border-radius: 8px; }
+        .logo i {
+            font-size: 32px;
+            color: var(--accent);
+            animation: pulse 2s infinite;
+        }
         
+        @keyframes pulse {
+            0% { transform: scale(1); }
+            50% { transform: scale(1.1); }
+            100% { transform: scale(1); }
+        }
+        
+        .logo h1 { 
+            font-size: 28px; 
+            font-weight: 700; 
+            color: white; 
+            letter-spacing: 1px;
+        }
+        
+        .logo h1 span {
+            color: var(--accent);
+        }
+        
+        .auth-buttons { 
+            display: flex; 
+            gap: 10px; 
+        }
+        
+        .auth-btn { 
+            padding: 10px 25px; 
+            border-radius: 50px; 
+            font-weight: 600; 
+            cursor: pointer; 
+            transition: 0.3s; 
+            text-decoration: none; 
+            display: inline-block; 
+            font-size: 14px;
+        }
+        
+        .login-btn { 
+            background: transparent; 
+            color: white; 
+            border: 2px solid white; 
+        }
+        
+        .login-btn:hover { 
+            background: white; 
+            color: var(--primary); 
+            transform: translateY(-2px);
+        }
+        
+        .signup-btn { 
+            background: var(--accent); 
+            color: var(--primary); 
+            border: 2px solid var(--accent); 
+            font-weight: 700;
+        }
+        
+        .signup-btn:hover { 
+            background: #ffed4a; 
+            border-color: #ffed4a;
+            transform: translateY(-2px);
+            box-shadow: 0 10px 20px rgba(255, 215, 0, 0.3);
+        }
+        
+        .user-menu { 
+            display: flex; 
+            align-items: center; 
+            gap: 15px; 
+            color: white; 
+        }
+        
+        .user-menu span {
+            font-weight: 600;
+        }
+        
+        .user-avatar { 
+            width: 40px; 
+            height: 40px; 
+            border-radius: 50%; 
+            object-fit: cover; 
+            border: 2px solid var(--accent); 
+        }
+        
+        .logout-btn { 
+            background: var(--danger); 
+            color: white; 
+            border: none; 
+            padding: 8px 20px; 
+            border-radius: 20px; 
+            cursor: pointer; 
+            text-decoration: none; 
+            font-size: 14px;
+            transition: 0.3s;
+        }
+        
+        .logout-btn:hover {
+            background: #dc2626;
+            transform: translateY(-2px);
+        }
+        
+        /* Navigation */
+        nav { 
+            padding: 0 40px; 
+            background: white; 
+            border-bottom: 3px solid var(--accent);
+        }
+        
+        .nav-container { 
+            display: flex; 
+            justify-content: center; 
+            padding: 15px 0; 
+        }
+        
+        .nav-links { 
+            display: flex; 
+            list-style: none; 
+            gap: 5px; 
+            flex-wrap: wrap;
+            justify-content: center;
+        }
+        
+        .nav-links a { 
+            text-decoration: none; 
+            color: var(--dark); 
+            font-weight: 600; 
+            font-size: 15px; 
+            padding: 10px 18px; 
+            border-radius: 50px; 
+            transition: 0.3s; 
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            white-space: nowrap;
+        }
+        
+        .nav-links a:hover { 
+            background: var(--light); 
+            color: var(--primary); 
+            transform: translateY(-2px);
+        }
+        
+        .nav-links a.active { 
+            background: linear-gradient(135deg, var(--primary), var(--secondary));
+            color: white; 
+            box-shadow: 0 5px 15px rgba(30, 60, 114, 0.3);
+        }
+        
+        .nav-links a i {
+            font-size: 16px;
+        }
+        
+        /* Hero Section */
         .hero {
-            background: linear-gradient(135deg, var(--primary) 0%, #34495e 100%);
+            background: linear-gradient(135deg, rgba(30, 60, 114, 0.95) 0%, rgba(42, 82, 152, 0.95) 100%),
+                        url('https://images.unsplash.com/photo-1522202176988-66273c2fd55f?ixlib=rb-4.0.3&auto=format&fit=crop&w=1950&q=80');
+            background-size: cover;
+            background-position: center;
             color: white;
-            border-radius: 20px;
+            border-radius: 30px;
             padding: 80px 60px;
             margin: 40px auto;
             max-width: 1200px;
             text-align: center;
+            box-shadow: 0 20px 50px rgba(0,0,0,0.2);
+            animation: fadeIn 1s;
         }
-        .hero h2 { font-size: 48px; margin-bottom: 20px; }
-        .hero p { font-size: 20px; max-width: 800px; margin: 0 auto; line-height: 1.6; }
         
-        .cta-buttons { display: flex; gap: 20px; justify-content: center; margin-top: 40px; }
-        .cta-btn { padding: 15px 40px; border-radius: 50px; font-size: 18px; font-weight: 600; text-decoration: none; }
-        .cta-primary { background: var(--secondary); color: white; }
-        .cta-secondary { background: transparent; color: white; border: 2px solid white; }
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(20px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
         
+        .hero h2 { 
+            font-size: 52px; 
+            margin-bottom: 20px; 
+            font-weight: 800;
+            text-shadow: 2px 2px 4px rgba(0,0,0,0.3);
+        }
+        
+        .hero h2 span {
+            color: var(--accent);
+            background: linear-gradient(45deg, #ffd700, #ffb347);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+        
+        .hero p { 
+            font-size: 20px; 
+            margin-bottom: 30px; 
+            max-width: 800px; 
+            margin-left: auto; 
+            margin-right: auto; 
+            line-height: 1.8; 
+            opacity: 0.95;
+        }
+        
+        .cta-buttons { 
+            display: flex; 
+            gap: 20px; 
+            justify-content: center; 
+            margin-top: 40px; 
+        }
+        
+        .cta-btn { 
+            padding: 16px 45px; 
+            border-radius: 50px; 
+            font-size: 18px; 
+            font-weight: 700; 
+            text-decoration: none; 
+            transition: 0.3s; 
+            display: inline-flex;
+            align-items: center;
+            gap: 10px;
+        }
+        
+        .cta-primary { 
+            background: var(--accent); 
+            color: var(--primary); 
+            border: 2px solid var(--accent); 
+        }
+        
+        .cta-primary:hover { 
+            background: #ffed4a; 
+            transform: translateY(-3px); 
+            box-shadow: 0 15px 30px rgba(255, 215, 0, 0.4);
+        }
+        
+        .cta-secondary { 
+            background: transparent; 
+            color: white; 
+            border: 2px solid white; 
+        }
+        
+        .cta-secondary:hover { 
+            background: white; 
+            color: var(--primary); 
+            transform: translateY(-3px); 
+            box-shadow: 0 15px 30px rgba(255,255,255,0.2);
+        }
+        
+        /* Services */
         .services-grid {
             display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
             gap: 30px;
             max-width: 1200px;
             margin: 60px auto;
             padding: 0 20px;
         }
+        
         .service-card {
             background: white;
-            border-radius: 15px;
-            padding: 40px;
+            border-radius: 25px;
+            padding: 40px 30px;
             text-align: center;
-            box-shadow: 0 10px 30px rgba(0,0,0,0.1);
+            box-shadow: 0 15px 40px rgba(0,0,0,0.1);
+            transition: 0.4s;
+            position: relative;
+            overflow: hidden;
         }
-        .service-icon { font-size: 48px; color: var(--secondary); margin-bottom: 20px; }
         
+        .service-card::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            height: 5px;
+            background: linear-gradient(90deg, var(--primary), var(--accent));
+        }
+        
+        .service-card:hover { 
+            transform: translateY(-15px); 
+            box-shadow: 0 30px 60px rgba(30, 60, 114, 0.2); 
+        }
+        
+        .service-icon { 
+            font-size: 60px; 
+            color: var(--primary); 
+            margin-bottom: 25px; 
+            transition: 0.3s;
+        }
+        
+        .service-card:hover .service-icon {
+            transform: scale(1.1);
+            color: var(--secondary);
+        }
+        
+        .service-card h3 { 
+            font-size: 24px; 
+            margin-bottom: 15px; 
+            color: var(--dark); 
+        }
+        
+        .service-card p { 
+            color: #64748b; 
+            line-height: 1.7; 
+        }
+        
+        .service-link {
+            display: inline-block;
+            margin-top: 20px;
+            color: var(--primary);
+            text-decoration: none;
+            font-weight: 600;
+            transition: 0.3s;
+        }
+        
+        .service-link:hover {
+            color: var(--accent);
+            transform: translateX(5px);
+        }
+        
+        /* Features Section */
+        .features-section {
+            background: white;
+            padding: 80px 20px;
+            margin: 60px 0;
+        }
+        
+        .section-title {
+            text-align: center;
+            margin-bottom: 50px;
+        }
+        
+        .section-title h2 {
+            font-size: 40px;
+            color: var(--primary);
+            margin-bottom: 15px;
+        }
+        
+        .section-title p {
+            color: #64748b;
+            font-size: 18px;
+            max-width: 600px;
+            margin: 0 auto;
+        }
+        
+        .features-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 30px;
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+        
+        .feature-item {
+            text-align: center;
+            padding: 30px;
+        }
+        
+        .feature-item i {
+            font-size: 40px;
+            color: var(--accent);
+            margin-bottom: 20px;
+        }
+        
+        .feature-item h4 {
+            font-size: 20px;
+            color: var(--dark);
+            margin-bottom: 10px;
+        }
+        
+        .feature-item p {
+            color: #64748b;
+        }
+        
+        /* Footer */
         footer {
-            background: var(--primary);
+            background: linear-gradient(135deg, var(--primary) 0%, var(--secondary) 100%);
             color: white;
-            padding: 40px;
+            padding: 60px 40px 30px;
             margin-top: 60px;
-            text-align: center;
-        }
-        .footer-links { list-style: none; display: flex; justify-content: center; gap: 30px; margin: 20px 0; }
-        .footer-links a { color: white; text-decoration: none; }
-        
-        /* ===== CHAT WIDGET - FIREBASE REAL-TIME ===== */
-        #chatWidget {
-            position: fixed;
-            bottom: 20px;
-            right: 20px;
-            z-index: 10000;
-            font-family: 'Segoe UI', sans-serif;
         }
         
-        #chatIcon {
-            width: 60px;
-            height: 60px;
-            background: #007bff;
+        .footer-content {
+            max-width: 1200px;
+            margin: 0 auto;
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 40px;
+        }
+        
+        .footer-section h3 {
+            font-size: 20px;
+            margin-bottom: 20px;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+        
+        .footer-section h3 i {
+            color: var(--accent);
+        }
+        
+        .footer-section p {
+            line-height: 1.8;
+            opacity: 0.9;
+            margin-bottom: 20px;
+        }
+        
+        .social-links {
+            display: flex;
+            gap: 15px;
+        }
+        
+        .social-links a {
+            color: white;
+            background: rgba(255,255,255,0.1);
+            width: 40px;
+            height: 40px;
             border-radius: 50%;
             display: flex;
             align-items: center;
             justify-content: center;
-            cursor: pointer;
-            box-shadow: 0 6px 16px rgba(0,0,0,0.2);
-            transition: transform 0.2s;
-        }
-        #chatIcon:hover { transform: scale(1.1); }
-        
-        #chatBox {
-            display: none;
-            position: absolute;
-            bottom: 80px;
-            right: 0;
-            width: 350px;
-            background: white;
-            border-radius: 16px;
-            box-shadow: 0 12px 32px rgba(0,0,0,0.25);
-            overflow: hidden;
-            animation: slideIn 0.3s ease;
+            transition: 0.3s;
         }
         
-        @keyframes slideIn {
-            from { opacity: 0; transform: translateY(20px); }
-            to { opacity: 1; transform: translateY(0); }
+        .social-links a:hover {
+            background: var(--accent);
+            color: var(--primary);
+            transform: translateY(-3px);
         }
         
-        .chat-header {
-            background: #007bff;
-            color: white;
-            padding: 16px 18px;
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
+        .footer-links { 
+            list-style: none; 
         }
-        .chat-header span { font-weight: 600; display: flex; align-items: center; gap: 8px; }
-        #closeChat { cursor: pointer; font-size: 26px; padding: 0 6px; }
         
-        .chat-body { padding: 20px; }
+        .footer-links li { 
+            margin-bottom: 12px; 
+        }
         
-        #messageForm input,
-        #messageForm textarea {
-            width: 100%;
-            padding: 12px 14px;
-            margin-bottom: 14px;
-            border: 1px solid #e0e0e0;
-            border-radius: 12px;
-            font-size: 15px;
-        }
-        #messageForm textarea {
-            resize: vertical;
-            min-height: 100px;
-        }
-        #messageForm button {
-            width: 100%;
-            padding: 14px;
-            background: #28a745;
-            color: white;
-            border: none;
-            border-radius: 50px;
-            font-size: 16px;
-            font-weight: 600;
+        .footer-links a { 
+            color: white; 
+            text-decoration: none; 
+            opacity: 0.9;
+            transition: 0.3s;
             display: flex;
             align-items: center;
-            justify-content: center;
             gap: 8px;
-            cursor: pointer;
-            transition: 0.2s;
         }
-        #messageForm button:hover { background: #218838; }
         
-        #formFeedback {
-            margin-top: 15px;
-            font-size: 14px;
+        .footer-links a:hover { 
+            opacity: 1;
+            color: var(--accent);
+            transform: translateX(5px);
+        }
+        
+        .footer-bottom {
             text-align: center;
-            font-weight: 500;
-            color: #28a745;
+            padding-top: 40px;
+            margin-top: 40px;
+            border-top: 1px solid rgba(255,255,255,0.1);
         }
         
-        @media (max-width: 480px) {
-            #chatBox { width: 90vw; right: 0; bottom: 75px; }
-            #chatIcon { width: 56px; height: 56px; }
-            .hero { padding: 40px 20px; }
-            .hero h2 { font-size: 32px; }
+        .footer-bottom p {
+            opacity: 0.8;
+            font-size: 14px;
+        }
+        
+        /* Responsive */
+        @media (max-width: 768px) {
+            .header-top, nav { padding: 10px 20px; }
+            
+            .nav-links { 
+                flex-direction: column; 
+                gap: 10px; 
+                text-align: center; 
+                width: 100%;
+            }
+            
+            .nav-links a {
+                justify-content: center;
+            }
+            
+            .hero { 
+                padding: 40px 20px; 
+                margin: 20px;
+            }
+            
+            .hero h2 { 
+                font-size: 32px; 
+            }
+            
+            .cta-buttons { 
+                flex-direction: column; 
+                align-items: center; 
+            }
+            
+            .cta-btn {
+                width: 100%;
+                justify-content: center;
+            }
+            
+            .footer-content {
+                grid-template-columns: 1fr;
+            }
+            
+            .user-menu {
+                flex-direction: column;
+                align-items: flex-end;
+            }
+        }
+        
+        /* Loading Animation */
+        .loading-spinner {
+            display: inline-block;
+            width: 20px;
+            height: 20px;
+            border: 3px solid rgba(255,255,255,0.3);
+            border-radius: 50%;
+            border-top-color: white;
+            animation: spin 1s ease-in-out infinite;
+        }
+        
+        @keyframes spin {
+            to { transform: rotate(360deg); }
         }
     </style>
 </head>
 <body>
-    <!-- ===== HEADER ===== -->
+    <!-- Header -->
     <header>
         <div class="header-top">
-            <div class="logo">
-                <i class="fas fa-graduation-cap" style="font-size: 32px; color: #3498db;"></i>
-                <h1>Zakhourani</h1>
-            </div>
+            <a href="https://whz-co.github.io/whz/index.html" class="logo" style="text-decoration: none;">
+                <i class="fas fa-graduation-cap"></i>
+                <h1>Zakhourani <span>✦</span></h1>
+            </a>
+            
             <div class="auth-buttons" id="authButtons">
-                <a href="login.html" class="auth-btn login-btn"><i class="fas fa-sign-in-alt"></i> Login</a>
-                <a href="signup.html" class="auth-btn signup-btn"><i class="fas fa-user-plus"></i> Sign Up</a>
+                <div class="loading-spinner"></div>
             </div>
         </div>
+        
+        <!-- Navigation Menu with ALL your links -->
         <nav>
-            <ul class="nav-links">
-                <li><a href="index.html" class="active"><i class="fas fa-home"></i> Home</a></li>
-                <li><a href="#"><i class="fas fa-robot"></i> AI</a></li>
-                <li><a href="#"><i class="fas fa-book"></i> Dictionary</a></li>
-                <li><a href="#"><i class="fas fa-user-md"></i> Dr. Waleed</a></li>
-                <li><a href="#"><i class="fas fa-info-circle"></i> About</a></li>
-            </ul>
+            <div class="nav-container">
+                <ul class="nav-links">
+                    <li><a href="https://whz-co.github.io/whz/index.html" class="active"><i class="fas fa-home"></i> Home</a></li>
+                    <li><a href="https://whz-co.github.io/whz/chat.html"><i class="fas fa-robot"></i> AI Assistant</a></li>
+                    <li><a href="https://whz-co.github.io/whz/Jihan.Dictionary.html"><i class="fas fa-book"></i> Dictionary</a></li>
+                    <li><a href="https://whz-co.github.io/whz/IELTS.html"><i class="fas fa-language"></i> IELTS</a></li>
+                    <li><a href="https://whz-co.github.io/whz/TOFEL.html"><i class="fas fa-globe-americas"></i> TOEFL</a></li>
+                    <li><a href="https://whz-co.github.io/whz/Drwaleed.html"><i class="fas fa-user-md"></i> Dr. Waleed</a></li>
+                    <li><a href="https://whz-co.github.io/whz/products.html"><i class="fas fa-shopping-bag"></i> Products</a></li>
+                    <li><a href="https://whz-co.github.io/whz/contact.html"><i class="fas fa-envelope"></i> Contact</a></li>
+                    <li><a href="https://whz-co.github.io/whz/profile.html"><i class="fas fa-user-circle"></i> Profile</a></li>
+                </ul>
+            </div>
         </nav>
     </header>
 
-    <!-- ===== HERO ===== -->
+    <!-- Hero Section -->
     <div class="hero">
-        <h2>Welcome to Zakhourani</h2>
-        <p>Founded by Dr. Waleed Hussien Zakhourani. Master English with our AI-powered platform featuring IELTS, TOEFL preparation, smart dictionary, and personalized learning.</p>
-        <div class="cta-buttons">
-            <a href="signup.html" class="cta-btn cta-primary"><i class="fas fa-user-plus"></i> Get Started Free</a>
-            <a href="login.html" class="cta-btn cta-secondary"><i class="fas fa-sign-in-alt"></i> Existing User? Login</a>
+        <h2>Welcome to <span>Zakhourani</span></h2>
+        <p>Founded by Dr. Waleed Hussien Zakhourani. Master English with our AI-powered platform featuring IELTS, TOEFL preparation, smart dictionary, and personalized learning paths.</p>
+        
+        <div class="cta-buttons" id="heroButtons">
+            <!-- Will be populated by JS -->
         </div>
     </div>
 
-    <!-- ===== SERVICES ===== -->
+    <!-- Services Grid -->
     <div class="services-grid">
         <div class="service-card">
-            <div class="service-icon"><i class="fas fa-robot"></i></div>
+            <div class="service-icon">
+                <i class="fas fa-robot"></i>
+            </div>
             <h3>AI English Assistant</h3>
-            <p>Get instant feedback on writing, speaking, and grammar with our advanced AI tutor.</p>
+            <p>Get instant feedback on writing, speaking, and grammar with our advanced AI tutor powered by GPT-4.</p>
+            <a href="https://whz-co.github.io/whz/chat.html" class="service-link">
+                Try AI Assistant <i class="fas fa-arrow-right"></i>
+            </a>
         </div>
+
         <div class="service-card">
-            <div class="service-icon"><i class="fas fa-book"></i></div>
+            <div class="service-icon">
+                <i class="fas fa-book"></i>
+            </div>
             <h3>Smart Dictionary</h3>
-            <p>Access definitions, synonyms, antonyms, and examples for 100,000+ words.</p>
+            <p>Access definitions, synonyms, antonyms, and examples for 100,000+ words with audio pronunciation.</p>
+            <a href="https://whz-co.github.io/whz/Jihan.Dictionary.html" class="service-link">
+                Search Dictionary <i class="fas fa-arrow-right"></i>
+            </a>
         </div>
+
         <div class="service-card">
-            <div class="service-icon"><i class="fas fa-language"></i></div>
+            <div class="service-icon">
+                <i class="fas fa-language"></i>
+            </div>
             <h3>IELTS Preparation</h3>
-            <p>Complete IELTS course with practice tests and speaking simulations.</p>
+            <p>Complete IELTS course with practice tests, writing evaluation, and speaking simulations.</p>
+            <a href="https://whz-co.github.io/whz/IELTS.html" class="service-link">
+                Start IELTS <i class="fas fa-arrow-right"></i>
+            </a>
         </div>
+
         <div class="service-card">
-            <div class="service-icon"><i class="fas fa-globe-americas"></i></div>
+            <div class="service-icon">
+                <i class="fas fa-globe-americas"></i>
+            </div>
             <h3>TOEFL Training</h3>
-            <p>Structured TOEFL preparation with full-length practice tests.</p>
+            <p>Structured TOEFL preparation with full-length practice tests and score analysis.</p>
+            <a href="https://whz-co.github.io/whz/TOFEL.html" class="service-link">
+                Start TOEFL <i class="fas fa-arrow-right"></i>
+            </a>
         </div>
     </div>
 
-    <!-- ===== FOOTER ===== -->
-    <footer>
-        <div class="logo" style="justify-content: center; margin-bottom: 20px;">
-            <i class="fas fa-graduation-cap" style="font-size: 32px; color: #3498db;"></i>
-            <h1>Zakhourani</h1>
+    <!-- Features Section -->
+    <div class="features-section">
+        <div class="section-title">
+            <h2>Why Choose Zakhourani?</h2>
+            <p>Everything you need to master English in one platform</p>
         </div>
-        <p>English language learning platform by Dr. Waleed Hussien Zakhourani</p>
-        <ul class="footer-links">
-            <li><a href="index.html">Home</a></li>
-            <li><a href="#">AI</a></li>
-            <li><a href="#">Dictionary</a></li>
-            <li><a href="#">Dr. Waleed</a></li>
-            <li><a href="#">About</a></li>
-        </ul>
-        <p style="margin-top: 30px; color: #ccc;">© 2024 Zakhourani. All rights reserved.</p>
+        
+        <div class="features-grid">
+            <div class="feature-item">
+                <i class="fas fa-infinity"></i>
+                <h4>Unlimited Practice</h4>
+                <p>Practice as much as you want with our AI tutor</p>
+            </div>
+            <div class="feature-item">
+                <i class="fas fa-chart-line"></i>
+                <h4>Progress Tracking</h4>
+                <p>Monitor your improvement with detailed analytics</p>
+            </div>
+            <div class="feature-item">
+                <i class="fas fa-mobile-alt"></i>
+                <h4>Mobile Friendly</h4>
+                <p>Learn anywhere, anytime on any device</p>
+            </div>
+            <div class="feature-item">
+                <i class="fas fa-certificate"></i>
+                <h4>Expert Guidance</h4>
+                <p>Created by Dr. Waleed, IELTS/TOEFL expert</p>
+            </div>
+        </div>
+    </div>
+
+    <!-- Footer -->
+    <footer>
+        <div class="footer-content">
+            <div class="footer-section">
+                <h3><i class="fas fa-graduation-cap"></i> Zakhourani</h3>
+                <p>English language learning platform by Dr. Waleed Hussien Zakhourani. Helping students master English since 2020.</p>
+                <div class="social-links">
+                    <a href="#"><i class="fab fa-facebook-f"></i></a>
+                    <a href="#"><i class="fab fa-twitter"></i></a>
+                    <a href="#"><i class="fab fa-instagram"></i></a>
+                    <a href="#"><i class="fab fa-youtube"></i></a>
+                </div>
+            </div>
+            
+            <div class="footer-section">
+                <h3><i class="fas fa-link"></i> Quick Links</h3>
+                <ul class="footer-links">
+                    <li><a href="https://whz-co.github.io/whz/index.html"><i class="fas fa-home"></i> Home</a></li>
+                    <li><a href="https://whz-co.github.io/whz/chat.html"><i class="fas fa-robot"></i> AI Assistant</a></li>
+                    <li><a href="https://whz-co.github.io/whz/Jihan.Dictionary.html"><i class="fas fa-book"></i> Dictionary</a></li>
+                    <li><a href="https://whz-co.github.io/whz/IELTS.html"><i class="fas fa-language"></i> IELTS</a></li>
+                    <li><a href="https://whz-co.github.io/whz/TOFEL.html"><i class="fas fa-globe"></i> TOEFL</a></li>
+                </ul>
+            </div>
+            
+            <div class="footer-section">
+                <h3><i class="fas fa-info-circle"></i> Information</h3>
+                <ul class="footer-links">
+                    <li><a href="https://whz-co.github.io/whz/Drwaleed.html"><i class="fas fa-user-md"></i> About Dr. Waleed</a></li>
+                    <li><a href="https://whz-co.github.io/whz/products.html"><i class="fas fa-shopping-bag"></i> Products</a></li>
+                    <li><a href="https://whz-co.github.io/whz/contact.html"><i class="fas fa-envelope"></i> Contact</a></li>
+                    <li><a href="https://whz-co.github.io/whz/profile.html"><i class="fas fa-user-circle"></i> Profile</a></li>
+                </ul>
+            </div>
+            
+            <div class="footer-section">
+                <h3><i class="fas fa-user-lock"></i> Account</h3>
+                <ul class="footer-links">
+                    <li><a href="https://whz-co.github.io/whz/singin.html"><i class="fas fa-sign-in-alt"></i> Login</a></li>
+                    <li><a href="https://whz-co.github.io/whz/singup.html"><i class="fas fa-user-plus"></i> Sign Up</a></li>
+                    <li><a href="https://whz-co.github.io/whz/profile.html"><i class="fas fa-user-cog"></i> Settings</a></li>
+                    <li><a href="#" id="footerLogout"><i class="fas fa-sign-out-alt"></i> Logout</a></li>
+                </ul>
+            </div>
+        </div>
+        
+        <div class="footer-bottom">
+            <p>© 2024 Zakhourani. All rights reserved. Created by Dr. Waleed Hussien Zakhourani</p>
+        </div>
     </footer>
 
-    <!-- ===== CHAT WIDGET - FIREBASE REAL-TIME ===== -->
-    <div id="chatWidget">
-        <div id="chatIcon">
-            <svg xmlns="http://www.w3.org/2000/svg" width="30" height="30" viewBox="0 0 24 24" fill="white">
-                <path d="M20 2H4c-1.1 0-2 .9-2 2v18l4-4h14c1.1 0 2-.9 2-2V4c0-1.1-.9-2-2-2z"/>
-            </svg>
-        </div>
-        <div id="chatBox">
-            <div class="chat-header">
-                <span><i class="fas fa-headset"></i> Chat Support</span>
-                <span id="closeChat">&times;</span>
-            </div>
-            <div class="chat-body">
-                <form id="messageForm">
-                    <input type="text" id="customerName" placeholder="Your name" required>
-                    <input type="email" id="customerEmail" placeholder="Your email (optional)">
-                    <textarea id="customerMessage" placeholder="Your message..." rows="4" required></textarea>
-                    <button type="submit">
-                        <i class="fas fa-paper-plane"></i> Send Message
-                    </button>
-                </form>
-                <div id="formFeedback"></div>
-            </div>
-        </div>
-    </div>
-
-    <!-- ===== FIREBASE SDK ===== -->
+    <!-- Firebase & Auth Script -->
     <script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-app-compat.js"></script>
-    <script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-firestore-compat.js"></script>
     <script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-auth-compat.js"></script>
-
+    <script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-firestore-compat.js"></script>
+    
     <script>
-        // ===========================================
-        // FIREBASE CONFIGURATION - YOUR EXISTING ONE
-        // ===========================================
+        // ============================================
+        // FIREBASE CONFIGURATION
+        // ============================================
         const firebaseConfig = {
             apiKey: "AIzaSyAE8wf24HXrfmpMluaFOv1OHPrf_YFfqTQ",
             authDomain: "whaai-c388e.firebaseapp.com",
@@ -303,119 +759,133 @@
         };
 
         // Initialize Firebase
-        firebase.initializeApp(firebaseConfig);
-        const db = firebase.firestore();
+        if (!firebase.apps.length) {
+            firebase.initializeApp(firebaseConfig);
+            console.log('🔥 Firebase initialized');
+        }
+
         const auth = firebase.auth();
+        const db = firebase.firestore();
 
-        // ===========================================
-        // CHAT WIDGET - REAL-TIME FIREBASE
-        // ===========================================
-        (function() {
-            const chatIcon = document.getElementById('chatIcon');
-            const chatBox = document.getElementById('chatBox');
-            const closeChat = document.getElementById('closeChat');
-            const messageForm = document.getElementById('messageForm');
-            const formFeedback = document.getElementById('formFeedback');
+        // ============================================
+        // DOM ELEMENTS
+        // ============================================
+        const authButtons = document.getElementById('authButtons');
+        const heroButtons = document.getElementById('heroButtons');
 
-            // Open chat
-            chatIcon.addEventListener('click', () => {
-                chatBox.style.display = 'block';
-                chatIcon.style.display = 'none';
-            });
-
-            // Close chat
-            closeChat.addEventListener('click', () => {
-                chatBox.style.display = 'none';
-                chatIcon.style.display = 'flex';
-            });
-
-            // Click outside to close
-            document.addEventListener('click', (e) => {
-                if (chatBox.style.display === 'block' && 
-                    !chatBox.contains(e.target) && 
-                    !chatIcon.contains(e.target)) {
-                    chatBox.style.display = 'none';
-                    chatIcon.style.display = 'flex';
-                }
-            });
-
-            // Send message to Firebase
-            messageForm.addEventListener('submit', async (e) => {
-                e.preventDefault();
+        // ============================================
+        // UPDATE UI BASED ON AUTH STATE
+        // ============================================
+        function updateAuthUI(user) {
+            if (user) {
+                // User is logged in
+                const photoURL = user.photoURL || `https://ui-avatars.com/api/?name=${encodeURIComponent(user.displayName || user.email)}&background=ffd700&color=1e3c72&bold=true`;
+                const displayName = user.displayName || user.email.split('@')[0];
                 
-                const name = document.getElementById('customerName').value.trim();
-                const email = document.getElementById('customerEmail').value.trim();
-                const message = document.getElementById('customerMessage').value.trim();
+                authButtons.innerHTML = `
+                    <div class="user-menu">
+                        <span>👋 ${displayName}</span>
+                        <img src="${photoURL}" alt="Profile" class="user-avatar">
+                        <a href="https://whz-co.github.io/whz/logout.html" class="logout-btn">
+                            <i class="fas fa-sign-out-alt"></i> Logout
+                        </a>
+                    </div>
+                `;
+                
+                heroButtons.innerHTML = `
+                    <a href="https://whz-co.github.io/whz/chat.html" class="cta-btn cta-primary">
+                        <i class="fas fa-robot"></i> Try AI Assistant
+                    </a>
+                    <a href="https://whz-co.github.io/whz/profile.html" class="cta-btn cta-secondary">
+                        <i class="fas fa-user-circle"></i> Your Profile
+                    </a>
+                `;
+            } else {
+                // User is not logged in
+                authButtons.innerHTML = `
+                    <a href="https://whz-co.github.io/whz/singin.html" class="auth-btn login-btn">
+                        <i class="fas fa-sign-in-alt"></i> Login
+                    </a>
+                    <a href="https://whz-co.github.io/whz/singup.html" class="auth-btn signup-btn">
+                        <i class="fas fa-user-plus"></i> Sign Up Free
+                    </a>
+                `;
+                
+                heroButtons.innerHTML = `
+                    <a href="https://whz-co.github.io/whz/singup.html" class="cta-btn cta-primary">
+                        <i class="fas fa-user-plus"></i> Get Started Free
+                    </a>
+                    <a href="https://whz-co.github.io/whz/singin.html" class="cta-btn cta-secondary">
+                        <i class="fas fa-sign-in-alt"></i> Existing User? Login
+                    </a>
+                `;
+            }
+        }
 
-                if (!name || !message) {
-                    formFeedback.innerHTML = '<span style="color: #dc3545;">Name and message are required</span>';
-                    return;
-                }
+        // ============================================
+        // SAVE USER TO FIRESTORE WHEN LOGGED IN
+        // ============================================
+        async function saveUserToFirestore(user) {
+            try {
+                await db.collection('users').doc(user.uid).set({
+                    uid: user.uid,
+                    email: user.email,
+                    displayName: user.displayName || user.email.split('@')[0],
+                    photoURL: user.photoURL || `https://ui-avatars.com/api/?name=${encodeURIComponent(user.displayName || user.email)}&background=3498db&color=fff`,
+                    lastSeen: firebase.firestore.FieldValue.serverTimestamp(),
+                    lastLogin: firebase.firestore.FieldValue.serverTimestamp()
+                }, { merge: true });
+                
+                console.log('✅ User saved to Firestore');
+            } catch (error) {
+                console.error('Error saving user:', error);
+            }
+        }
 
-                // Show sending state
-                const submitBtn = messageForm.querySelector('button[type="submit"]');
-                const originalText = submitBtn.innerHTML;
-                submitBtn.innerHTML = '<i class="fas fa-spinner fa-spin"></i> Sending...';
-                submitBtn.disabled = true;
+        // ============================================
+        // AUTH STATE OBSERVER
+        // ============================================
+        auth.onAuthStateChanged((user) => {
+            updateAuthUI(user);
+            
+            if (user) {
+                saveUserToFirestore(user);
+            }
+        });
 
-                try {
-                    // Generate a unique conversation ID based on email or name
-                    const conversationId = email || `guest_${Date.now()}`;
-                    
-                    // Save to Firestore
-                    await db.collection('chats').add({
-                        conversationId: conversationId,
-                        userName: name,
-                        userEmail: email || null,
-                        message: message,
-                        timestamp: firebase.firestore.FieldValue.serverTimestamp(),
-                        status: 'unread',
-                        type: 'user',
-                        replied: false,
-                        replyMessage: null,
-                        replyTime: null,
-                        repliedBy: null
-                    });
-
-                    // Success feedback
-                    formFeedback.innerHTML = '<span style="color: #28a745;"><i class="fas fa-check-circle"></i> Message sent! Admin will reply soon.</span>';
-                    
-                    // Clear message field only
-                    document.getElementById('customerMessage').value = '';
-                    
-                    setTimeout(() => {
-                        formFeedback.innerHTML = '';
-                    }, 4000);
-
-                } catch (error) {
-                    console.error('Error sending message:', error);
-                    formFeedback.innerHTML = '<span style="color: #dc3545;">Failed to send. Please try again.</span>';
-                }
-
-                // Restore button
-                submitBtn.innerHTML = originalText;
-                submitBtn.disabled = false;
+        // ============================================
+        // FOOTER LOGOUT HANDLER
+        // ============================================
+        document.getElementById('footerLogout')?.addEventListener('click', (e) => {
+            e.preventDefault();
+            auth.signOut().then(() => {
+                window.location.href = 'https://whz-co.github.io/whz/index.html';
             });
+        });
 
-            // Auto-fill if user is logged in
-            auth.onAuthStateChanged((user) => {
-                if (user) {
-                    const nameInput = document.getElementById('customerName');
-                    const emailInput = document.getElementById('customerEmail');
-                    
-                    let displayName = user.displayName || user.email?.split('@')[0] || 'User';
-                    nameInput.value = displayName;
-                    nameInput.readOnly = true;
-                    nameInput.style.background = '#f8f9fa';
-                    
-                    if (user.email) {
-                        emailInput.value = user.email;
-                        emailInput.readOnly = true;
-                        emailInput.style.background = '#f8f9fa';
-                    }
+        // ============================================
+        // SET ACTIVE NAV LINK BASED ON CURRENT URL
+        // ============================================
+        function setActiveNavLink() {
+            const currentUrl = window.location.href;
+            const navLinks = document.querySelectorAll('.nav-links a');
+            
+            navLinks.forEach(link => {
+                if (currentUrl.includes(link.getAttribute('href'))) {
+                    link.classList.add('active');
+                } else {
+                    link.classList.remove('active');
                 }
             });
-        })();
+        }
+
+        // Run on load
+        setActiveNavLink();
+
+        // ============================================
+        // INITIALIZATION
+        // ============================================
+        console.log('✅ Zakhourani homepage loaded');
     </script>
 </body>
 </html>

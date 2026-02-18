@@ -2,9 +2,12 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Zakhourani - Admin Chat Inbox</title>
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=yes">
+    <title>Dr. Waleed's AI - Ask Me Anything</title>
+    <!-- Firebase SDKs -->
+    <script src="https://www.gstatic.com/firebasejs/10.8.0/firebase-app-compat.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/10.8.0/firebase-firestore-compat.js"></script>
+    
     <style>
         * {
             margin: 0;
@@ -14,551 +17,674 @@
         }
         
         body {
-            background: #f0f2f5;
-            padding: 20px;
-        }
-        
-        .container {
-            max-width: 1200px;
-            margin: 0 auto;
-        }
-        
-        header {
-            background: white;
-            padding: 25px 30px;
-            border-radius: 16px;
-            box-shadow: 0 2px 10px rgba(0,0,0,0.05);
-            margin-bottom: 30px;
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-        }
-        
-        .logo {
-            display: flex;
-            align-items: center;
-            gap: 12px;
-        }
-        
-        .logo h1 {
-            font-size: 24px;
-            color: #2c3e50;
-        }
-        
-        .stats {
-            display: flex;
-            gap: 20px;
-        }
-        
-        .stat-card {
-            background: #f8f9fa;
-            padding: 10px 20px;
-            border-radius: 12px;
-            text-align: center;
-        }
-        
-        .stat-number {
-            font-size: 24px;
-            font-weight: bold;
-            color: #007bff;
-        }
-        
-        .stat-label {
-            font-size: 12px;
-            color: #666;
-        }
-        
-        .inbox {
-            background: white;
-            border-radius: 16px;
-            box-shadow: 0 2px 10px rgba(0,0,0,0.05);
-            overflow: hidden;
-        }
-        
-        .inbox-header {
-            padding: 20px 25px;
-            background: #f8f9fa;
-            border-bottom: 1px solid #eee;
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-        }
-        
-        .inbox-header h2 {
-            font-size: 20px;
-            color: #2c3e50;
-            display: flex;
-            align-items: center;
-            gap: 10px;
-        }
-        
-        .refresh-btn {
-            background: #007bff;
-            color: white;
-            border: none;
-            padding: 10px 20px;
-            border-radius: 30px;
-            cursor: pointer;
-            display: flex;
-            align-items: center;
-            gap: 8px;
-            font-weight: 600;
-            transition: 0.2s;
-        }
-        
-        .refresh-btn:hover {
-            background: #0069d9;
-            transform: scale(1.02);
-        }
-        
-        .messages-list {
-            padding: 20px;
-        }
-        
-        .message-card {
-            background: white;
-            border: 1px solid #eee;
-            border-radius: 12px;
-            padding: 20px;
-            margin-bottom: 15px;
-            transition: 0.2s;
-            position: relative;
-        }
-        
-        .message-card:hover {
-            box-shadow: 0 5px 15px rgba(0,0,0,0.08);
-            border-color: #ddd;
-        }
-        
-        .message-card.unread {
-            background: #f0f7ff;
-            border-left: 4px solid #007bff;
-        }
-        
-        .message-header {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            margin-bottom: 12px;
-        }
-        
-        .user-info {
-            display: flex;
-            align-items: center;
-            gap: 12px;
-        }
-        
-        .user-avatar {
-            width: 45px;
-            height: 45px;
-            border-radius: 50%;
-            background: #3498db;
-            color: white;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
             display: flex;
             align-items: center;
             justify-content: center;
-            font-weight: bold;
-            font-size: 18px;
+            padding: 10px;
         }
         
-        .user-details h4 {
-            font-size: 16px;
-            color: #2c3e50;
-            margin-bottom: 4px;
+        #app {
+            width: 100%;
+            max-width: 900px;
+            background: white;
+            border-radius: 24px;
+            box-shadow: 0 20px 60px rgba(0,0,0,0.3);
+            overflow: hidden;
+            display: flex;
+            flex-direction: column;
+            height: 90vh;
         }
         
-        .user-details span {
-            font-size: 12px;
-            color: #666;
+        header {
+            background: linear-gradient(135deg, #1e3c72 0%, #2a5298 100%);
+            color: white;
+            padding: 12px 16px;
         }
         
-        .message-status {
+        .header-top {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            margin-bottom: 10px;
+        }
+        
+        .header-content {
             display: flex;
             align-items: center;
             gap: 10px;
         }
         
-        .status-badge {
-            padding: 5px 12px;
-            border-radius: 20px;
-            font-size: 12px;
-            font-weight: 600;
-        }
-        
-        .status-pending {
-            background: #fff3cd;
-            color: #856404;
-        }
-        
-        .status-answered {
-            background: #d4edda;
-            color: #155724;
-        }
-        
-        .message-content {
-            margin: 15px 0;
-            padding: 15px;
-            background: #f8f9fa;
-            border-radius: 10px;
-            font-size: 15px;
-            line-height: 1.5;
-            color: #444;
-        }
-        
-        .message-actions {
-            display: flex;
-            gap: 12px;
-            justify-content: flex-end;
-            margin-top: 15px;
-        }
-        
-        .btn {
-            padding: 8px 20px;
-            border-radius: 30px;
-            border: none;
-            cursor: pointer;
-            font-weight: 600;
+        .doctor-avatar {
+            width: 40px;
+            height: 40px;
+            background: #ffd700;
+            border-radius: 50%;
             display: flex;
             align-items: center;
+            justify-content: center;
+            font-size: 20px;
+            font-weight: bold;
+            color: #1e3c72;
+            border: 2px solid white;
+        }
+        
+        .title h1 {
+            font-size: 1.3rem;
+            margin-bottom: 2px;
+        }
+        
+        .title p {
+            font-size: 0.7rem;
+            opacity: 0.9;
+        }
+        
+        .status {
+            background: rgba(255,255,255,0.2);
+            padding: 5px 10px;
+            border-radius: 30px;
+            font-size: 0.7rem;
+            display: flex;
+            align-items: center;
+            gap: 4px;
+        }
+        
+        .status-dot {
+            width: 6px;
+            height: 6px;
+            background: #4ade80;
+            border-radius: 50%;
+            animation: pulse 2s infinite;
+        }
+        
+        .status-dot.error {
+            background: #ef4444;
+        }
+        
+        @keyframes pulse {
+            0%, 100% { opacity: 1; }
+            50% { opacity: 0.5; }
+        }
+        
+        /* Navigation Menu */
+        .nav-menu {
+            display: flex;
             gap: 8px;
-            transition: 0.2s;
+            overflow-x: auto;
+            padding: 8px 0 4px;
+            -webkit-overflow-scrolling: touch;
+            scrollbar-width: none;
+            white-space: nowrap;
         }
         
-        .btn-mark-read {
-            background: #6c757d;
-            color: white;
-        }
-        
-        .btn-mark-read:hover {
-            background: #5a6268;
-        }
-        
-        .btn-delete {
-            background: #dc3545;
-            color: white;
-        }
-        
-        .btn-delete:hover {
-            background: #c82333;
-        }
-        
-        .btn-answer {
-            background: #28a745;
-            color: white;
-        }
-        
-        .btn-answer:hover {
-            background: #218838;
-        }
-        
-        .empty-state {
-            text-align: center;
-            padding: 60px 20px;
-            color: #666;
-        }
-        
-        .empty-state i {
-            font-size: 64px;
-            color: #ccc;
-            margin-bottom: 20px;
-        }
-        
-        .answer-form {
-            margin-top: 15px;
-            padding: 15px;
-            background: #f8f9fa;
-            border-radius: 10px;
+        .nav-menu::-webkit-scrollbar {
             display: none;
         }
         
-        .answer-form.show {
-            display: block;
+        .nav-item {
+            color: white;
+            text-decoration: none;
+            font-size: 0.8rem;
+            padding: 4px 12px;
+            background: rgba(255,255,255,0.15);
+            border-radius: 30px;
+            transition: all 0.3s;
+            display: inline-block;
         }
         
-        .answer-form textarea {
-            width: 100%;
-            padding: 12px;
-            border: 1px solid #ddd;
-            border-radius: 8px;
+        .nav-item:hover {
+            background: rgba(255,255,255,0.3);
+        }
+        
+        /* Model Bar - HIDDEN from users */
+        .model-bar {
+            display: none;
+        }
+        
+        /* Token success banner - HIDDEN */
+        .token-success {
+            display: none;
+        }
+        
+        #chat-container {
+            flex: 1;
+            overflow-y: auto;
+            padding: 16px;
+            background: #f8fafc;
+        }
+        
+        .welcome-message {
+            text-align: center;
+            margin-bottom: 20px;
+            padding: 30px 20px;
+            background: white;
+            border-radius: 20px;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.05);
+        }
+        
+        .welcome-message h2 {
+            color: #1e3c72;
             margin-bottom: 10px;
-            resize: vertical;
+            font-size: 1.5rem;
         }
         
-        .answer-form button {
-            background: #007bff;
+        .welcome-message h2 span {
+            color: #ffd700;
+        }
+        
+        .welcome-message p {
+            color: #475569;
+            font-size: 1rem;
+        }
+        
+        .message {
+            margin: 12px 0;
+            padding: 12px 16px;
+            border-radius: 18px;
+            max-width: 85%;
+            word-wrap: break-word;
+            line-height: 1.4;
+            animation: fadeIn 0.3s ease;
+            font-size: 0.95rem;
+        }
+        
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(5px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+        
+        .user-message {
+            background: linear-gradient(135deg, #1e3c72 0%, #2a5298 100%);
+            color: white;
+            margin-left: auto;
+            border-bottom-right-radius: 5px;
+        }
+        
+        .ai-message {
+            background: white;
+            color: #1e293b;
+            margin-right: auto;
+            border-bottom-left-radius: 5px;
+            box-shadow: 0 2px 5px rgba(0,0,0,0.05);
+        }
+        
+        .loading {
+            background: #e2e8f0;
+            color: #475569;
+            font-style: italic;
+            margin-right: auto;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+        
+        .typing-indicator {
+            display: flex;
+            gap: 4px;
+            padding: 3px 0;
+        }
+        
+        .typing-indicator span {
+            width: 6px;
+            height: 6px;
+            background: #475569;
+            border-radius: 50%;
+            animation: typing 1s infinite;
+        }
+        
+        .typing-indicator span:nth-child(2) { animation-delay: 0.2s; }
+        .typing-indicator span:nth-child(3) { animation-delay: 0.4s; }
+        
+        @keyframes typing {
+            0%, 60%, 100% { transform: translateY(0); }
+            30% { transform: translateY(-6px); }
+        }
+        
+        .message-time {
+            font-size: 0.6rem;
+            opacity: 0.7;
+            margin-top: 4px;
+            text-align: right;
+        }
+        
+        #input-area {
+            padding: 12px 16px;
+            background: white;
+            border-top: 1px solid #e2e8f0;
+        }
+        
+        .input-wrapper {
+            display: flex;
+            gap: 8px;
+            background: #f1f5f9;
+            border-radius: 40px;
+            padding: 4px 4px 4px 16px;
+            border: 2px solid transparent;
+        }
+        
+        .input-wrapper:focus-within {
+            border-color: #1e3c72;
+            background: white;
+        }
+        
+        #message-input {
+            flex: 1;
+            border: none;
+            background: transparent;
+            padding: 12px 0;
+            font-size: 0.95rem;
+            outline: none;
+            min-width: 0;
+        }
+        
+        #message-input::placeholder {
+            color: #94a3b8;
+        }
+        
+        #send-button {
+            background: linear-gradient(135deg, #1e3c72 0%, #2a5298 100%);
             color: white;
             border: none;
+            border-radius: 40px;
             padding: 10px 20px;
-            border-radius: 30px;
             cursor: pointer;
+            font-size: 0.9rem;
+            font-weight: 600;
+            transition: all 0.3s;
+            white-space: nowrap;
         }
         
-        @media (max-width: 768px) {
-            header {
-                flex-direction: column;
-                gap: 15px;
-                text-align: center;
-            }
-            .stats {
-                width: 100%;
-                justify-content: center;
-            }
-            .message-header {
-                flex-direction: column;
-                align-items: flex-start;
-                gap: 10px;
-            }
+        #send-button:hover:not(:disabled) {
+            transform: translateY(-1px);
+            box-shadow: 0 4px 10px rgba(30, 60, 114, 0.3);
+        }
+        
+        #send-button:disabled {
+            background: #94a3b8;
+            cursor: not-allowed;
+            opacity: 0.7;
+        }
+        
+        .suggestion-chips {
+            display: flex;
+            gap: 8px;
+            margin-top: 12px;
+            flex-wrap: wrap;
+            justify-content: center;
+        }
+        
+        .chip {
+            background: #f1f5f9;
+            padding: 8px 16px;
+            border-radius: 40px;
+            font-size: 0.85rem;
+            color: #1e3c72;
+            cursor: pointer;
+            border: 1px solid #e2e8f0;
+            white-space: nowrap;
+            transition: all 0.3s;
+            flex: 0 1 auto;
+        }
+        
+        .chip:hover {
+            background: #1e3c72;
+            color: white;
+        }
+        
+        .footer {
+            padding: 10px 16px;
+            background: white;
+            border-top: 1px solid #e2e8f0;
+            display: flex;
+            justify-content: space-between;
+            color: #64748b;
+            font-size: 0.7rem;
+        }
+        
+        /* Hidden elements */
+        .model-badge,
+        .model-select,
+        .model-option,
+        .token-counter,
+        #token-usage,
+        .error-banner {
+            display: none !important;
+        }
+        
+        /* Mobile optimizations */
+        @media (max-width: 480px) {
+            body { padding: 5px; }
+            #app { height: 95vh; border-radius: 20px; }
+            .message { max-width: 90%; font-size: 0.9rem; }
+            .header-top { margin-bottom: 8px; }
+            .doctor-avatar { width: 35px; height: 35px; font-size: 18px; }
+            .title h1 { font-size: 1.1rem; }
+            .nav-item { font-size: 0.7rem; padding: 3px 10px; }
+            .chip { padding: 6px 12px; font-size: 0.8rem; }
+            #message-input { padding: 10px 0; font-size: 0.9rem; }
+            #send-button { padding: 8px 16px; font-size: 0.85rem; }
+            .welcome-message h2 { font-size: 1.3rem; }
+            .welcome-message p { font-size: 0.9rem; }
+        }
+        
+        /* Touch-friendly improvements */
+        .chip, .nav-item, #send-button {
+            -webkit-tap-highlight-color: transparent;
+            touch-action: manipulation;
+        }
+        
+        /* Prevent zoom on input for iOS */
+        #message-input {
+            font-size: 16px;
         }
     </style>
 </head>
 <body>
-    <div class="container">
-        <!-- Header -->
+    <div id="app">
         <header>
-            <div class="logo">
-                <i class="fas fa-graduation-cap" style="font-size: 32px; color: #3498db;"></i>
-                <h1>Zakhourani - Admin Inbox</h1>
+            <div class="header-top">
+                <div class="header-content">
+                    <div class="doctor-avatar">DW</div>
+                    <div class="title">
+                        <h1>Dr. Waleed's AI</h1>
+                        <p>Ask me anything</p>
+                    </div>
+                </div>
+                <div class="status">
+                    <span class="status-dot" id="status-dot"></span>
+                    <span id="status-text">Ready</span>
+                </div>
             </div>
-            <div class="stats">
-                <div class="stat-card">
-                    <div class="stat-number" id="totalMessages">0</div>
-                    <div class="stat-label">Total</div>
-                </div>
-                <div class="stat-card">
-                    <div class="stat-number" id="unreadMessages">0</div>
-                    <div class="stat-label">Unread</div>
-                </div>
-                <div class="stat-card">
-                    <div class="stat-number" id="pendingMessages">0</div>
-                    <div class="stat-label">Pending</div>
-                </div>
+            
+            <!-- Navigation Menu -->
+            <div class="nav-menu">
+                <a href="index.html" class="nav-item">🏠 Home</a>
+                <a href="dictionary.html" class="nav-item">📚 Dictionary</a>
+                <a href="ielts.html" class="nav-item">📝 IELTS</a>
+                <a href="tofel.html" class="nav-item">🗽 TOEFL</a>
+                <a href="dr.waleed.html" class="nav-item">👨‍⚕️ About Dr.Waleed</a>
+                <a href="products.html" class="nav-item">🛍️ Products</a>
             </div>
         </header>
 
-        <!-- Inbox -->
-        <div class="inbox">
-            <div class="inbox-header">
-                <h2>
-                    <i class="fas fa-inbox"></i>
-                    Customer Messages
-                </h2>
-                <button id="refreshBtn" class="refresh-btn">
-                    <i class="fas fa-sync-alt"></i>
-                    Refresh
+        <!-- Hidden model bar - not shown to users -->
+        <div class="model-bar"></div>
+
+        <div id="chat-container">
+            <div class="welcome-message">
+                <h2>ASK <span>Dr. Waleed</span> any question</h2>
+                <p>I'm here to help you with anything you need!</p>
+            </div>
+        </div>
+
+        <!-- Hidden error banner -->
+        <div class="error-banner" id="error-display"></div>
+        <!-- Hidden token usage -->
+        <div id="token-usage"></div>
+
+        <div id="input-area">
+            <div class="input-wrapper">
+                <input 
+                    type="text" 
+                    id="message-input" 
+                    placeholder="Type your question here..."
+                    autocomplete="off"
+                >
+                <button id="send-button">
+                    Send
                 </button>
             </div>
             
-            <div id="messagesContainer" class="messages-list">
-                <!-- Messages will be loaded here -->
-                <div class="empty-state">
-                    <i class="fas fa-comments"></i>
-                    <h3>No messages yet</h3>
-                    <p>Messages from users will appear here</p>
-                </div>
+            <div class="suggestion-chips">
+                <div class="chip" onclick="useSuggestion('What is AI?')">🤖 What is AI?</div>
+                <div class="chip" onclick="useSuggestion('Tell me a joke')">😄 Joke</div>
+                <div class="chip" onclick="useSuggestion('How to start coding?')">💻 Coding</div>
+                <div class="chip" onclick="useSuggestion('Capital of France')">🗼 Paris</div>
+                <div class="chip" onclick="useSuggestion('Healthy breakfast ideas')">🥗 Breakfast</div>
+                <div class="chip" onclick="useSuggestion('What is the meaning of life?')">🌍 Life</div>
             </div>
+        </div>
+
+        <div class="footer">
+            <span>⚡ GitHub Models • Free</span>
+            <span>© Dr. Waleed's Assistant</span>
         </div>
     </div>
 
     <script>
-        // ===========================================
-        // ADMIN CHAT - RECEIVE MESSAGES FROM USERS
-        // MUST MATCH SAME STORAGE KEY AS INDEX.HTML
-        // ===========================================
-        const STORAGE_KEY = 'chat_messages';
-        
+        // ============================================
+        // FIREBASE CONFIGURATION
+        // ============================================
+        const firebaseConfig = {
+            apiKey: "AIzaSyAE8wf24HXrfmpMluaFOv1OHPrf_YFfqTQ",
+            authDomain: "whaai-c388e.firebaseapp.com",
+            projectId: "whaai-c388e",
+            storageBucket: "whaai-c388e.firebasestorage.app",
+            messagingSenderId: "640598205524",
+            appId: "1:640598205524:web:c975f5e8b371b1043e39c1"
+        };
+
+        // Initialize Firebase
+        firebase.initializeApp(firebaseConfig);
+        const db = firebase.firestore();
+
         // DOM Elements
-        const messagesContainer = document.getElementById('messagesContainer');
-        const refreshBtn = document.getElementById('refreshBtn');
-        const totalEl = document.getElementById('totalMessages');
-        const unreadEl = document.getElementById('unreadMessages');
-        const pendingEl = document.getElementById('pendingMessages');
+        const chatContainer = document.getElementById('chat-container');
+        const messageInput = document.getElementById('message-input');
+        const sendButton = document.getElementById('send-button');
+        const errorDisplay = document.getElementById('error-display');
+        const statusDot = document.getElementById('status-dot');
+        const statusText = document.getElementById('status-text');
+
+        // ============================================
+        // GITHUB MODELS CONFIGURATION
+        // ============================================
+        const GITHUB_TOKEN = "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";
+        const API_URL = "https://models.inference.ai.azure.com/chat/completions";
         
-        // Load and display messages
-        function loadMessages() {
-            const messages = JSON.parse(localStorage.getItem(STORAGE_KEY)) || [];
-            
-            // Update stats
-            const unread = messages.filter(m => !m.read).length;
-            const pending = messages.filter(m => m.status === 'pending').length;
-            
-            totalEl.textContent = messages.length;
-            unreadEl.textContent = unread;
-            pendingEl.textContent = pending;
-            
-            if (messages.length === 0) {
-                messagesContainer.innerHTML = `
-                    <div class="empty-state">
-                        <i class="fas fa-comments"></i>
-                        <h3>No messages yet</h3>
-                        <p>Messages from users will appear here</p>
-                    </div>
-                `;
-                return;
+        // Using GPT-4o-mini as default (fast and efficient)
+        const currentModel = "gpt-4o-mini";
+        let conversationHistory = [];
+
+        // System prompt for helpful answers
+        const systemPrompt = "You are Dr. Waleed, a friendly and helpful AI assistant. Give clear, concise answers (2-4 sentences). Be warm and encouraging.";
+
+        // ============================================
+        // INITIALIZE - TEST CONNECTION
+        // ============================================
+        async function init() {
+            try {
+                const response = await fetch(API_URL, {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                        'Authorization': `Bearer ${GITHUB_TOKEN}`
+                    },
+                    body: JSON.stringify({
+                        model: currentModel,
+                        messages: [{ role: "user", content: "Hello" }],
+                        max_tokens: 5
+                    })
+                });
+
+                if (response.ok) {
+                    statusDot.className = 'status-dot';
+                    statusText.textContent = 'Ready';
+                } else {
+                    throw new Error('Connection issue');
+                }
+            } catch (error) {
+                console.error('Init error:', error);
+                statusDot.className = 'status-dot error';
+                statusText.textContent = 'Offline';
             }
-            
-            // Sort by newest first
-            messages.sort((a, b) => b.id - a.id);
-            
-            let html = '';
-            messages.forEach(msg => {
-                const isUnread = !msg.read;
-                const initials = msg.name.charAt(0).toUpperCase();
-                const date = new Date(msg.timestamp).toLocaleString() || msg.timestamp;
-                
-                html += `
-                    <div class="message-card ${isUnread ? 'unread' : ''}" data-id="${msg.id}">
-                        <div class="message-header">
-                            <div class="user-info">
-                                <div class="user-avatar" style="background: #${Math.floor(Math.random()*16777215).toString(16).slice(0,6)}">
-                                    ${initials}
-                                </div>
-                                <div class="user-details">
-                                    <h4>${escapeHTML(msg.name)}</h4>
-                                    <span><i class="far fa-clock"></i> ${date}</span>
-                                </div>
-                            </div>
-                            <div class="message-status">
-                                <span class="status-badge status-${msg.status}">
-                                    ${msg.status === 'pending' ? '⏳ Pending' : '✓ Answered'}
-                                </span>
-                            </div>
-                        </div>
-                        
-                        <div class="message-content">
-                            ${escapeHTML(msg.message)}
-                        </div>
-                        
-                        ${msg.answer ? `
-                            <div style="margin-top: 15px; padding: 15px; background: #e8f5e9; border-radius: 10px; border-left: 4px solid #28a745;">
-                                <strong><i class="fas fa-reply"></i> Your reply:</strong>
-                                <p style="margin-top: 8px; color: #155724;">${escapeHTML(msg.answer)}</p>
-                                <small style="color: #666;">${msg.answerTime || ''}</small>
-                            </div>
-                        ` : ''}
-                        
-                        <div class="message-actions">
-                            ${!msg.read ? `
-                                <button onclick="markAsRead(${msg.id})" class="btn btn-mark-read">
-                                    <i class="fas fa-check"></i> Mark Read
-                                </button>
-                            ` : ''}
-                            
-                            ${msg.status === 'pending' ? `
-                                <button onclick="showAnswerForm(${msg.id})" class="btn btn-answer">
-                                    <i class="fas fa-reply"></i> Reply
-                                </button>
-                            ` : ''}
-                            
-                            <button onclick="deleteMessage(${msg.id})" class="btn btn-delete">
-                                <i class="fas fa-trash"></i> Delete
-                            </button>
-                        </div>
-                        
-                        <!-- Answer Form (hidden by default) -->
-                        <div id="answerForm-${msg.id}" class="answer-form">
-                            <textarea id="answerText-${msg.id}" placeholder="Type your reply..." rows="3"></textarea>
-                            <div style="display: flex; gap: 10px;">
-                                <button onclick="submitAnswer(${msg.id})" style="background: #28a745;">
-                                    <i class="fas fa-paper-plane"></i> Send Reply
-                                </button>
-                                <button onclick="hideAnswerForm(${msg.id})" style="background: #6c757d;">
-                                    Cancel
-                                </button>
-                            </div>
-                        </div>
-                    </div>
-                `;
-            });
-            
-            messagesContainer.innerHTML = html;
         }
-        
-        // Helper: Escape HTML to prevent XSS
-        function escapeHTML(str) {
-            return String(str).replace(/[&<>"]/g, function(c) {
-                return {
-                    '&': '&amp;',
-                    '<': '&lt;',
-                    '>': '&gt;',
-                    '"': '&quot;'
-                }[c];
+
+        // ============================================
+        // SEND MESSAGE TO GITHUB MODELS
+        // ============================================
+        async function sendToGitHub(userMessage) {
+            const messages = [
+                { role: 'system', content: systemPrompt },
+                ...conversationHistory.slice(-4),
+                { role: 'user', content: userMessage }
+            ];
+            
+            const response = await fetch(API_URL, {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                    'Authorization': `Bearer ${GITHUB_TOKEN}`
+                },
+                body: JSON.stringify({
+                    model: currentModel,
+                    messages: messages,
+                    temperature: 0.7,
+                    max_tokens: 150
+                })
             });
+
+            if (!response.ok) {
+                const errorData = await response.json();
+                throw new Error(errorData.error?.message || `Error ${response.status}`);
+            }
+
+            const data = await response.json();
+            return data.choices[0].message.content;
         }
-        
-        // Mark message as read
-        window.markAsRead = function(id) {
-            const messages = JSON.parse(localStorage.getItem(STORAGE_KEY)) || [];
-            const index = messages.findIndex(m => m.id === id);
-            if (index !== -1) {
-                messages[index].read = true;
-                localStorage.setItem(STORAGE_KEY, JSON.stringify(messages));
-                loadMessages();
-            }
-        };
-        
-        // Show answer form
-        window.showAnswerForm = function(id) {
-            // Hide all other forms first
-            document.querySelectorAll('[id^="answerForm-"]').forEach(form => {
-                form.classList.remove('show');
+
+        // ============================================
+        // ADD MESSAGE TO CHAT
+        // ============================================
+        function addMessage(content, type) {
+            const messageDiv = document.createElement('div');
+            messageDiv.className = `message ${type}-message`;
+            
+            const contentDiv = document.createElement('div');
+            contentDiv.textContent = content;
+            messageDiv.appendChild(contentDiv);
+            
+            const timeDiv = document.createElement('div');
+            timeDiv.className = 'message-time';
+            timeDiv.textContent = new Date().toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' });
+            messageDiv.appendChild(timeDiv);
+            
+            chatContainer.appendChild(messageDiv);
+            chatContainer.scrollTop = chatContainer.scrollHeight;
+            
+            // Save to history
+            conversationHistory.push({
+                role: type === 'user' ? 'user' : 'assistant',
+                content: content
             });
-            const form = document.getElementById(`answerForm-${id}`);
-            if (form) form.classList.add('show');
-        };
-        
-        // Hide answer form
-        window.hideAnswerForm = function(id) {
-            const form = document.getElementById(`answerForm-${id}`);
-            if (form) form.classList.remove('show');
-        };
-        
-        // Submit answer
-        window.submitAnswer = function(id) {
-            const answerInput = document.getElementById(`answerText-${id}`);
-            const answer = answerInput.value.trim();
+            if (conversationHistory.length > 10) conversationHistory = conversationHistory.slice(-10);
             
-            if (!answer) {
-                alert('Please type a reply');
-                return;
-            }
+            // Save to Firebase (silent fail)
+            db.collection('chats').add({
+                content: content,
+                type: type,
+                timestamp: firebase.firestore.FieldValue.serverTimestamp()
+            }).catch(() => {});
+        }
+
+        // ============================================
+        // SHOW LOADING
+        // ============================================
+        function showLoading() {
+            const loadingDiv = document.createElement('div');
+            loadingDiv.className = 'message loading';
+            loadingDiv.id = 'loading-message';
             
-            const messages = JSON.parse(localStorage.getItem(STORAGE_KEY)) || [];
-            const index = messages.findIndex(m => m.id === id);
+            const typing = document.createElement('div');
+            typing.className = 'typing-indicator';
+            typing.innerHTML = '<span></span><span></span><span></span>';
             
-            if (index !== -1) {
-                messages[index].status = 'answered';
-                messages[index].answer = answer;
-                messages[index].answerTime = new Date().toLocaleString();
-                messages[index].read = true;
+            const text = document.createElement('div');
+            text.textContent = 'Dr. Waleed is thinking...';
+            
+            loadingDiv.appendChild(typing);
+            loadingDiv.appendChild(text);
+            chatContainer.appendChild(loadingDiv);
+            chatContainer.scrollTop = chatContainer.scrollHeight;
+        }
+
+        function removeLoading() {
+            const loading = document.getElementById('loading-message');
+            if (loading) loading.remove();
+        }
+
+        // ============================================
+        // SEND MESSAGE HANDLER
+        // ============================================
+        async function sendMessage() {
+            const message = messageInput.value.trim();
+            if (!message) return;
+
+            // Clear input
+            messageInput.value = '';
+            
+            // Add user message
+            addMessage(message, 'user');
+            
+            // Disable input
+            sendButton.disabled = true;
+            messageInput.disabled = true;
+            
+            // Show loading
+            showLoading();
+
+            try {
+                // Get response from GitHub
+                const response = await sendToGitHub(message);
                 
-                localStorage.setItem(STORAGE_KEY, JSON.stringify(messages));
-                loadMessages();
+                // Remove loading
+                removeLoading();
+                
+                // Add AI response
+                addMessage(response, 'ai');
+
+            } catch (error) {
+                console.error('Send error:', error);
+                removeLoading();
+                addMessage("I'm having trouble connecting right now. Please try again in a moment.", 'ai');
+            } finally {
+                sendButton.disabled = false;
+                messageInput.disabled = false;
+                messageInput.focus();
             }
+        }
+
+        // ============================================
+        // SUGGESTION CHIPS
+        // ============================================
+        window.useSuggestion = function(suggestion) {
+            messageInput.value = suggestion;
+            sendMessage();
         };
-        
-        // Delete message
-        window.deleteMessage = function(id) {
-            if (confirm('Delete this message?')) {
-                const messages = JSON.parse(localStorage.getItem(STORAGE_KEY)) || [];
-                const filtered = messages.filter(m => m.id !== id);
-                localStorage.setItem(STORAGE_KEY, JSON.stringify(filtered));
-                loadMessages();
-            }
-        };
-        
-        // Refresh button
-        refreshBtn.addEventListener('click', loadMessages);
-        
-        // Auto-refresh every 5 seconds
-        loadMessages();
-        setInterval(loadMessages, 5000);
-        
-        // Also listen for storage changes from other tabs
-        window.addEventListener('storage', function(e) {
-            if (e.key === STORAGE_KEY) {
-                loadMessages();
+
+        // ============================================
+        // EVENT LISTENERS
+        // ============================================
+        sendButton.addEventListener('click', sendMessage);
+        messageInput.addEventListener('keypress', (e) => {
+            if (e.key === 'Enter') {
+                e.preventDefault();
+                sendMessage();
             }
         });
+
+        // Handle touch events for mobile
+        document.querySelectorAll('.chip, .nav-item, #send-button').forEach(el => {
+            el.addEventListener('touchstart', function(e) {
+                // Just to improve touch response
+            }, { passive: true });
+        });
+
+        // ============================================
+        // START
+        // ============================================
+        init();
     </script>
 </body>
 </html>

@@ -162,7 +162,7 @@
             50% { opacity: 0.5; transform: scale(1.1); }
         }
         
-        /* Time Usage Bar - Client Side Only */
+        /* Time Usage Bar */
         .time-usage {
             background: rgba(255,255,255,0.1);
             border-radius: 20px;
@@ -180,7 +180,7 @@
         
         .time-progress {
             flex: 1;
-            height: 6px;
+            height: 8px;
             background: rgba(255,255,255,0.2);
             border-radius: 10px;
             overflow: hidden;
@@ -195,7 +195,7 @@
         }
         
         .time-text {
-            font-size: 0.75rem;
+            font-size: 0.8rem;
             font-weight: 600;
             white-space: nowrap;
         }
@@ -514,7 +514,7 @@
             font-size: 0.75rem;
         }
         
-        /* Limit Modal - Client Side Only */
+        /* Limit Modal */
         .modal-overlay {
             position: fixed;
             top: 0;
@@ -626,7 +626,7 @@
                 </div>
             </div>
             
-            <!-- Time Usage Bar - Client Side Only -->
+            <!-- Time Usage Bar - FIXED REAL TIME TRACKING -->
             <div class="time-usage" id="timeUsage">
                 <i class="fas fa-clock time-icon"></i>
                 <div class="time-progress">
@@ -752,13 +752,12 @@
         const db = firebase.firestore();
         
         // ============================================
-        // GITHUB MODELS CONFIGURATION - NEW TOKEN
+        // GITHUB MODELS CONFIGURATION
         // ============================================
         const GITHUB_TOKEN = "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";
         const API_URL = "https://models.inference.ai.azure.com/chat/completions";
         const currentModel = "gpt-4o-mini";
         
-        // System prompt for Dr. Waleed AI
         const systemPrompt = `You are Dr. Waleed, a friendly and knowledgeable AI assistant. 
         Give clear, helpful answers in 2-4 sentences. Be warm, professional, and encouraging. 
         If asked about complex topics, explain simply. Always maintain a supportive tone.
@@ -771,11 +770,14 @@
         let currentConversationId = 'default';
         let conversations = {};
         
-        // Client-side usage tracking (no Firestore)
-        let usageStartTime = Date.now();
-        let usageElapsedSeconds = 0;
-        const MAX_DAILY_SECONDS = 2 * 60 * 60; // 2 hours in seconds
-        let usageInterval = null;
+        // ============================================
+        // FIXED REAL-TIME USAGE TRACKING
+        // ============================================
+        let usageTotalSeconds = 0;
+        let usageTimerInterval = null;
+        let isTimerRunning = false;
+        let lastActiveTimestamp = null;
+        const MAX_DAILY_SECONDS = 2 * 60 * 60; // 2 hours = 7200 seconds
         
         // DOM Elements
         const chatContainer = document.getElementById('chat-container');
@@ -796,7 +798,172 @@
         const tabContainer = document.getElementById('tabContainer');
         
         // ============================================
-        // INITIALIZE - CHECK AUTHENTICATION
+        // LOAD/SAVE USAGE FROM LOCALSTORAGE
+        // ============================================
+        function loadUsageFromStorage() {
+            try {
+                const saved = localStorage.getItem('drWaleedUsage');
+                if (saved) {
+                    const data = JSON.parse(saved);
+                    const today = new Date().toDateString();
+                    
+                    // Check if saved data is from today
+                    if (data.date === today) {
+                        usageTotalSeconds = data.seconds || 0;
+                        console.log(`📊 Loaded today's usage: ${formatTime(usageTotalSeconds)}`);
+                    } else {
+                        // New day - reset counter
+                        usageTotalSeconds = 0;
+                        saveUsageToStorage();
+                        console.log('📊 New day - usage reset');
+                    }
+                } else {
+                    // First time use
+                    usageTotalSeconds = 0;
+                    saveUsageToStorage();
+                }
+            } catch (e) {
+                console.error('Error loading usage:', e);
+                usageTotalSeconds = 0;
+            }
+            
+            updateUsageDisplay();
+            
+            // Check if already exceeded limit
+            if (usageTotalSeconds >= MAX_DAILY_SECONDS) {
+                disableChat(true);
+                limitModal.style.display = 'flex';
+            }
+        }
+        
+        function saveUsageToStorage() {
+            try {
+                const today = new Date().toDateString();
+                localStorage.setItem('drWaleedUsage', JSON.stringify({
+                    date: today,
+                    seconds: usageTotalSeconds,
+                    lastUpdated: new Date().toISOString()
+                }));
+            } catch (e) {
+                console.error('Error saving usage:', e);
+            }
+        }
+        
+        // ============================================
+        // START/STOP TIMER BASED ON ACTIVITY
+        // ============================================
+        function startUsageTimer() {
+            // Don't start if already running or chat disabled
+            if (isTimerRunning || messageInput.disabled) return;
+            
+            console.log('⏱️ Timer started - tracking real time');
+            isTimerRunning = true;
+            lastActiveTimestamp = Date.now();
+            
+            usageTimerInterval = setInterval(() => {
+                // Only count time if user is actively using (input focused or typing)
+                if (document.activeElement === messageInput || messageInput.value.length > 0) {
+                    const now = Date.now();
+                    const elapsedSeconds = Math.floor((now - lastActiveTimestamp) / 1000);
+                    
+                    if (elapsedSeconds >= 1) {
+                        // Add 1 second per second of active use
+                        usageTotalSeconds = Math.min(usageTotalSeconds + 1, MAX_DAILY_SECONDS);
+                        lastActiveTimestamp = now;
+                        
+                        // Save and update display
+                        saveUsageToStorage();
+                        updateUsageDisplay();
+                        
+                        // Check if limit reached
+                        if (usageTotalSeconds >= MAX_DAILY_SECONDS) {
+                            stopUsageTimer();
+                            disableChat(true);
+                            limitModal.style.display = 'flex';
+                        }
+                    }
+                } else {
+                    // User not active, just update timestamp
+                    lastActiveTimestamp = Date.now();
+                }
+            }, 1000);
+        }
+        
+        function stopUsageTimer() {
+            if (usageTimerInterval) {
+                clearInterval(usageTimerInterval);
+                usageTimerInterval = null;
+                isTimerRunning = false;
+                console.log('⏱️ Timer stopped');
+            }
+        }
+        
+        // ============================================
+        // UPDATE DISPLAY WITH REAL TIME
+        // ============================================
+        function updateUsageDisplay() {
+            const percentage = (usageTotalSeconds / MAX_DAILY_SECONDS) * 100;
+            timeProgressFill.style.width = `${Math.min(percentage, 100)}%`;
+            
+            const remaining = MAX_DAILY_SECONDS - usageTotalSeconds;
+            
+            if (remaining <= 0) {
+                timeText.innerHTML = '<i class="fas fa-ban"></i> Limit reached';
+                usageCounter.innerHTML = '0h available';
+                modalTimeLeft.textContent = '00:00:00';
+                timeProgressFill.style.background = 'linear-gradient(90deg, #ef4444, #f87171)';
+            } else {
+                const hours = Math.floor(remaining / 3600);
+                const minutes = Math.floor((remaining % 3600) / 60);
+                const seconds = remaining % 60;
+                
+                const usedHours = Math.floor(usageTotalSeconds / 3600);
+                const usedMinutes = Math.floor((usageTotalSeconds % 3600) / 60);
+                
+                timeText.innerHTML = `${hours}h ${minutes}m ${seconds}s left`;
+                usageCounter.innerHTML = `${usedHours}h ${usedMinutes}m used`;
+                modalTimeLeft.textContent = `${hours.toString().padStart(2,'0')}:${minutes.toString().padStart(2,'0')}:${seconds.toString().padStart(2,'0')}`;
+                
+                // Change color based on usage
+                if (percentage > 80) {
+                    timeProgressFill.style.background = 'linear-gradient(90deg, #fbbf24, #f59e0b)';
+                } else {
+                    timeProgressFill.style.background = 'linear-gradient(90deg, #4ade80, #ffd700)';
+                }
+            }
+        }
+        
+        function formatTime(seconds) {
+            const h = Math.floor(seconds / 3600);
+            const m = Math.floor((seconds % 3600) / 60);
+            const s = seconds % 60;
+            return `${h}h ${m}m ${s}s`;
+        }
+        
+        function disableChat(disabled) {
+            messageInput.disabled = disabled;
+            sendButton.disabled = disabled;
+            
+            if (disabled) {
+                inputWrapper.classList.add('disabled');
+                messageInput.placeholder = 'Daily limit reached - try tomorrow';
+                document.querySelectorAll('.chip').forEach(chip => {
+                    chip.style.opacity = '0.5';
+                    chip.style.pointerEvents = 'none';
+                });
+                stopUsageTimer();
+            } else {
+                inputWrapper.classList.remove('disabled');
+                messageInput.placeholder = 'Ask Dr. Waleed anything...';
+                document.querySelectorAll('.chip').forEach(chip => {
+                    chip.style.opacity = '1';
+                    chip.style.pointerEvents = 'auto';
+                });
+            }
+        }
+        
+        // ============================================
+        // AUTH STATE
         // ============================================
         auth.onAuthStateChanged(async (user) => {
             if (user) {
@@ -805,13 +972,64 @@
                 updateUserUI(user);
                 await loadUserConversations();
                 checkGitHubConnection();
-                startUsageTracking();
+                
+                // Load usage from storage
+                loadUsageFromStorage();
+                
+                // Setup activity listeners for timer
+                setupActivityListeners();
+                
                 updateStatus('online', 'Ready');
             } else {
                 console.log('❌ No user, redirecting to login');
                 window.location.href = 'https://whz-co.github.io/whz/singin.html';
             }
         });
+        
+        // ============================================
+        // SETUP ACTIVITY LISTENERS FOR TIMER
+        // ============================================
+        function setupActivityListeners() {
+            // Start timer when user focuses on input
+            messageInput.addEventListener('focus', () => {
+                if (!messageInput.disabled && usageTotalSeconds < MAX_DAILY_SECONDS) {
+                    startUsageTimer();
+                }
+            });
+            
+            // Start timer when user types
+            messageInput.addEventListener('input', () => {
+                if (!messageInput.disabled && usageTotalSeconds < MAX_DAILY_SECONDS) {
+                    startUsageTimer();
+                }
+            });
+            
+            // Start timer when sending message
+            sendButton.addEventListener('click', () => {
+                if (!messageInput.disabled && usageTotalSeconds < MAX_DAILY_SECONDS) {
+                    startUsageTimer();
+                }
+            });
+            
+            // Stop timer when user leaves page
+            window.addEventListener('beforeunload', () => {
+                stopUsageTimer();
+                saveUsageToStorage();
+            });
+            
+            // Stop timer when tab becomes hidden
+            document.addEventListener('visibilitychange', () => {
+                if (document.hidden) {
+                    stopUsageTimer();
+                    saveUsageToStorage();
+                } else if (!messageInput.disabled && usageTotalSeconds < MAX_DAILY_SECONDS) {
+                    // Restart if still active
+                    if (document.activeElement === messageInput || messageInput.value.length > 0) {
+                        startUsageTimer();
+                    }
+                }
+            });
+        }
         
         // ============================================
         // UPDATE STATUS
@@ -881,18 +1099,16 @@
         }
         
         // ============================================
-        // LOAD USER CONVERSATIONS FROM FIRESTORE
+        // LOAD USER CONVERSATIONS
         // ============================================
         async function loadUserConversations() {
             try {
-                // Try to load from Firestore (if allowed by rules)
                 const snapshot = await db.collection('chats')
                     .where('userId', '==', currentUser.uid)
                     .orderBy('timestamp', 'desc')
                     .limit(100)
                     .get();
                 
-                // Group by conversation ID (using date as simple grouping)
                 const convGroups = {};
                 
                 snapshot.forEach(doc => {
@@ -917,7 +1133,6 @@
                     convGroups[convId].count++;
                 });
                 
-                // Convert to conversations object
                 Object.keys(convGroups).forEach(key => {
                     conversations[key] = {
                         id: key,
@@ -930,7 +1145,6 @@
                     };
                 });
                 
-                // Always have default conversation
                 if (!conversations['default']) {
                     conversations['default'] = {
                         id: 'default',
@@ -939,15 +1153,11 @@
                     };
                 }
                 
-                // Update tabs
                 updateConversationTabs();
-                
-                // Load current conversation
                 loadConversation(currentConversationId);
                 
             } catch (error) {
                 console.log('Using local conversations only:', error);
-                // If Firestore fails, use local only
                 conversations['default'] = {
                     id: 'default',
                     name: 'Main Chat',
@@ -961,11 +1171,9 @@
         // UPDATE CONVERSATION TABS
         // ============================================
         function updateConversationTabs() {
-            // Clear all tabs except default and new
             const tabs = document.querySelectorAll('.tab:not(#defaultTab):not(#newTabBtn)');
             tabs.forEach(tab => tab.remove());
             
-            // Add conversation tabs
             Object.keys(conversations).forEach(convId => {
                 if (convId === 'default') return;
                 
@@ -985,11 +1193,9 @@
                     }
                 });
                 
-                // Insert before new tab button
                 tabContainer.insertBefore(tab, newTabBtn);
             });
             
-            // Add close button handlers
             document.querySelectorAll('.close-tab').forEach(btn => {
                 btn.addEventListener('click', (e) => {
                     e.stopPropagation();
@@ -998,7 +1204,6 @@
                 });
             });
             
-            // Update default tab active state
             if (currentConversationId === 'default') {
                 defaultTab.classList.add('active');
             } else {
@@ -1022,25 +1227,19 @@
             const conversation = conversations[convId];
             if (!conversation) return;
             
-            // Clear chat container
             chatContainer.innerHTML = '';
             
             if (!conversation.messages || conversation.messages.length === 0) {
-                // Show welcome message
                 const welcomeClone = welcomeMessage.cloneNode(true);
                 welcomeClone.style.display = 'block';
                 chatContainer.appendChild(welcomeClone);
             } else {
-                // Hide welcome message
                 welcomeMessage.style.display = 'none';
-                
-                // Add messages
                 conversation.messages.forEach(msg => {
                     displayMessage(msg.content, msg.type, msg.timestamp);
                 });
             }
             
-            // Scroll to bottom
             chatContainer.scrollTop = chatContainer.scrollHeight;
         }
         
@@ -1053,14 +1252,13 @@
         
         function createNewConversation() {
             const convId = `conv_${Date.now()}`;
-            const date = new Date();
             const convName = `Chat ${Object.keys(conversations).length}`;
             
             conversations[convId] = {
                 id: convId,
                 name: convName,
                 messages: [],
-                createdAt: date
+                createdAt: new Date()
             };
             
             updateConversationTabs();
@@ -1121,18 +1319,15 @@
         }
         
         // ============================================
-        // SAVE MESSAGE TO FIRESTORE
+        // SAVE MESSAGE
         // ============================================
         async function saveMessage(content, type) {
-            // Display message immediately
             displayMessage(content, type);
             
-            // Hide welcome message if this is first message
             if (welcomeMessage.style.display !== 'none') {
                 welcomeMessage.style.display = 'none';
             }
             
-            // Save to conversation object
             const conversation = conversations[currentConversationId];
             if (conversation) {
                 if (!conversation.messages) {
@@ -1147,13 +1342,11 @@
                 
                 conversation.messages.push(messageObj);
                 
-                // Keep only last 50 messages
                 if (conversation.messages.length > 50) {
                     conversation.messages = conversation.messages.slice(-50);
                 }
             }
             
-            // Save to Firestore (chats collection only - allowed by rules)
             if (currentUser) {
                 try {
                     await db.collection('chats').add({
@@ -1165,118 +1358,9 @@
                         type: type,
                         timestamp: firebase.firestore.FieldValue.serverTimestamp()
                     });
-                    console.log('✅ Message saved to Firestore');
                 } catch (error) {
                     console.error('Error saving to Firestore:', error);
-                    // Continue anyway - message already displayed
                 }
-            }
-        }
-        
-        // ============================================
-        // CLIENT-SIDE USAGE TRACKING (No Firestore)
-        // ============================================
-        function startUsageTracking() {
-            // Load saved usage from localStorage
-            const savedUsage = localStorage.getItem('drWaleedUsage');
-            if (savedUsage) {
-                const usage = JSON.parse(savedUsage);
-                const today = new Date().toDateString();
-                
-                if (usage.date === today) {
-                    usageElapsedSeconds = usage.seconds;
-                } else {
-                    usageElapsedSeconds = 0;
-                    localStorage.setItem('drWaleedUsage', JSON.stringify({
-                        date: today,
-                        seconds: 0
-                    }));
-                }
-            } else {
-                const today = new Date().toDateString();
-                localStorage.setItem('drWaleedUsage', JSON.stringify({
-                    date: today,
-                    seconds: 0
-                }));
-            }
-            
-            // Update display
-            updateUsageDisplay();
-            
-            // Start interval to track time
-            usageStartTime = Date.now();
-            
-            if (usageInterval) {
-                clearInterval(usageInterval);
-            }
-            
-            usageInterval = setInterval(() => {
-                if (messageInput.disabled) return; // Don't count if disabled
-                
-                const sessionSeconds = Math.floor((Date.now() - usageStartTime) / 10); // Update more frequently
-                if (sessionSeconds >= 1) {
-                    usageElapsedSeconds += sessionSeconds;
-                    usageStartTime = Date.now();
-                    
-                    // Save to localStorage
-                    const today = new Date().toDateString();
-                    localStorage.setItem('drWaleedUsage', JSON.stringify({
-                        date: today,
-                        seconds: usageElapsedSeconds
-                    }));
-                    
-                    updateUsageDisplay();
-                    
-                    // Check if limit reached
-                    if (usageElapsedSeconds >= MAX_DAILY_SECONDS) {
-                        disableChat(true);
-                        limitModal.style.display = 'flex';
-                    }
-                }
-            }, 1000);
-        }
-        
-        function updateUsageDisplay() {
-            const usedSeconds = usageElapsedSeconds || 0;
-            const percentage = (usedSeconds / MAX_DAILY_SECONDS) * 100;
-            
-            timeProgressFill.style.width = `${Math.min(percentage, 100)}%`;
-            
-            const remaining = MAX_DAILY_SECONDS - usedSeconds;
-            
-            if (remaining <= 0) {
-                timeText.innerHTML = '<i class="fas fa-ban"></i> Limit reached';
-                usageCounter.innerHTML = '0h available';
-                modalTimeLeft.textContent = '00:00:00';
-            } else {
-                const hours = Math.floor(remaining / 3600);
-                const minutes = Math.floor((remaining % 3600) / 60);
-                const seconds = remaining % 60;
-                
-                timeText.innerHTML = `${hours}h ${minutes}m left`;
-                usageCounter.innerHTML = `${Math.floor(usedSeconds / 3600)}h used`;
-                modalTimeLeft.textContent = `${hours.toString().padStart(2,'0')}:${minutes.toString().padStart(2,'0')}:${seconds.toString().padStart(2,'0')}`;
-            }
-        }
-        
-        function disableChat(disabled) {
-            messageInput.disabled = disabled;
-            sendButton.disabled = disabled;
-            
-            if (disabled) {
-                inputWrapper.classList.add('disabled');
-                messageInput.placeholder = 'Daily limit reached - try tomorrow';
-                document.querySelectorAll('.chip').forEach(chip => {
-                    chip.style.opacity = '0.5';
-                    chip.style.pointerEvents = 'none';
-                });
-            } else {
-                inputWrapper.classList.remove('disabled');
-                messageInput.placeholder = 'Ask Dr. Waleed anything...';
-                document.querySelectorAll('.chip').forEach(chip => {
-                    chip.style.opacity = '1';
-                    chip.style.pointerEvents = 'auto';
-                });
             }
         }
         
@@ -1284,12 +1368,11 @@
         // SEND TO GITHUB AI
         // ============================================
         async function sendToGitHub(userMessage) {
-            // Get conversation history for context
             const conversation = conversations[currentConversationId];
             const history = [];
             
             if (conversation && conversation.messages) {
-                const lastMessages = conversation.messages.slice(-6); // Last 3 exchanges
+                const lastMessages = conversation.messages.slice(-6);
                 lastMessages.forEach(msg => {
                     history.push({
                         role: msg.type === 'user' ? 'user' : 'assistant',
@@ -1334,7 +1417,7 @@
         }
         
         // ============================================
-        // SHOW LOADING INDICATOR
+        // SHOW LOADING
         // ============================================
         function showLoading() {
             const loadingDiv = document.createElement('div');
@@ -1356,7 +1439,7 @@
         }
         
         // ============================================
-        // SEND MESSAGE HANDLER
+        // SEND MESSAGE
         // ============================================
         async function sendMessage() {
             const message = messageInput.value.trim();
@@ -1365,38 +1448,25 @@
                 return;
             }
             
-            // Check usage limit
-            if (usageElapsedSeconds >= MAX_DAILY_SECONDS) {
+            if (usageTotalSeconds >= MAX_DAILY_SECONDS) {
                 limitModal.style.display = 'flex';
                 return;
             }
             
-            // Clear input
             messageInput.value = '';
             
-            // Save user message
             await saveMessage(message, 'user');
             
-            // Disable input during processing
             sendButton.disabled = true;
             messageInput.disabled = true;
             
-            // Show loading
             showLoading();
             
             try {
-                // Get AI response
                 const response = await sendToGitHub(message);
-                
-                // Remove loading
                 removeLoading();
-                
-                // Save AI response
                 await saveMessage(response, 'ai');
-                
-                // Update status
                 updateStatus('online', 'Ready');
-                
             } catch (error) {
                 console.error('Send error:', error);
                 removeLoading();
@@ -1421,7 +1491,6 @@
             }
         });
         
-        // Suggestion chips
         document.querySelectorAll('.chip').forEach(chip => {
             chip.addEventListener('click', () => {
                 if (!chip.classList.contains('disabled') && !messageInput.disabled) {
@@ -1434,39 +1503,25 @@
             });
         });
         
-        // Default tab click
         defaultTab.addEventListener('click', () => {
             switchConversation('default');
         });
         
-        // Close modal when clicking outside
         limitModal.addEventListener('click', (e) => {
             if (e.target === limitModal) {
                 limitModal.style.display = 'none';
             }
         });
         
-        // ============================================
-        // CLEANUP
-        // ============================================
         window.addEventListener('beforeunload', () => {
-            if (usageInterval) {
-                clearInterval(usageInterval);
-            }
+            stopUsageTimer();
+            saveUsageToStorage();
         });
         
         // ============================================
         // INITIALIZATION
         // ============================================
-        console.log('🚀 Dr. Waleed AI initialized - Version 2.0');
-        console.log('📱 Mobile ready - Using chats collection only');
-        
-        // Test Firestore connection
-        setTimeout(() => {
-            if (currentUser) {
-                console.log('👤 Logged in as:', currentUser.email);
-            }
-        }, 1000);
+        console.log('🚀 Dr. Waleed AI initialized - Real-time tracking fixed');
     </script>
 </body>
 </html>

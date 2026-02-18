@@ -1,0 +1,1859 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>🎯 LONDON 2020 - Forex • Crypto • Sports • Casino</title>
+    
+    <!-- Firebase SDK -->
+    <script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-app-compat.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-auth-compat.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-firestore-compat.js"></script>
+    
+    <!-- Font Awesome & Google Fonts -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600;700;800&display=swap" rel="stylesheet">
+    
+    <!-- ANIMATION LIBRARIES -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/animate.css/4.1.1/animate.min.css"/>
+    
+    <style>
+        /* ===== RESET & VARIABLES ===== */
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        :root {
+            --primary: #ff4081;
+            --primary-dark: #f50057;
+            --secondary: #3949ab;
+            --accent: #2196f3;
+            --success: #4caf50;
+            --warning: #ff9800;
+            --danger: #ff5252;
+            --dark: #0f0c29;
+            --dark-light: #1a1a2e;
+            --darker: #050510;
+            --light: #f8f9fa;
+            --text: #ffffff;
+            --text-secondary: rgba(255, 255, 255, 0.7);
+            --text-muted: rgba(255, 255, 255, 0.5);
+            --gradient: linear-gradient(135deg, #ff4081 0%, #302b63 50%, #24243e 100%);
+            --gradient-primary: linear-gradient(45deg, #ff4081, #ff9100);
+            --gradient-success: linear-gradient(45deg, #00c853, #64dd17);
+            --gradient-info: linear-gradient(45deg, #2196f3, #00b0ff);
+            --gradient-warning: linear-gradient(45deg, #ff9800, #ffc107);
+            --gradient-danger: linear-gradient(45deg, #f44336, #ff1744);
+            --shadow-sm: 0 2px 10px rgba(0, 0, 0, 0.1);
+            --shadow-md: 0 5px 20px rgba(0, 0, 0, 0.2);
+            --shadow-lg: 0 10px 40px rgba(0, 0, 0, 0.3);
+            --shadow-xl: 0 20px 60px rgba(0, 0, 0, 0.4);
+            --glow-primary: 0 0 20px rgba(255, 64, 129, 0.5);
+            --glow-success: 0 0 20px rgba(76, 175, 80, 0.5);
+            --glow-warning: 0 0 20px rgba(255, 152, 0, 0.5);
+        }
+
+        body {
+            font-family: 'Poppins', sans-serif;
+            background: linear-gradient(135deg, #0f0c29 0%, #302b63 50%, #24243e 100%);
+            color: var(--text);
+            min-height: 100vh;
+            overflow-x: hidden;
+            position: relative;
+        }
+
+        /* ===== CUSTOM SCROLLBAR ===== */
+        ::-webkit-scrollbar {
+            width: 10px;
+            background: var(--dark);
+        }
+
+        ::-webkit-scrollbar-track {
+            background: rgba(255, 255, 255, 0.05);
+            border-radius: 10px;
+        }
+
+        ::-webkit-scrollbar-thumb {
+            background: linear-gradient(45deg, var(--primary), var(--secondary));
+            border-radius: 10px;
+        }
+
+        ::-webkit-scrollbar-thumb:hover {
+            background: linear-gradient(45deg, var(--secondary), var(--primary));
+        }
+
+        /* ===== BACKGROUND EFFECTS ===== */
+        .noise-bg {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: url('data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHdpZHRoPSIzMDAiIGhlaWdodD0iMzAwIj48ZmlsdGVyIGlkPSJmIj48ZmVUdXJidWxlbmNlIHR5cGU9ImZyYWN0YWxOb2lzZSIgYmFzZUZyZXF1ZW5jeT0iLjc0IiBudW1PY3RhdmVzPSIzIiAvPjwvZmlsdGVyPjxyZWN0IHdpZHRoPSIxMDAlIiBoZWlnaHQ9IjEwMCUiIGZpbHRlcj0idXJsKCNmKSIgb3BhY2l0eT0iMC4wNCIgLz48L3N2Zz4=');
+            pointer-events: none;
+            z-index: -1;
+            opacity: 0.5;
+        }
+
+        .floating-shapes {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            overflow: hidden;
+            z-index: -1;
+        }
+
+        .shape {
+            position: absolute;
+            background: linear-gradient(45deg, rgba(255,64,129,0.1), rgba(57,73,171,0.1));
+            border-radius: 50%;
+            filter: blur(60px);
+            animation: float 20s infinite;
+        }
+
+        .shape-1 {
+            width: 500px;
+            height: 500px;
+            top: -100px;
+            right: -100px;
+            animation-delay: 0s;
+        }
+
+        .shape-2 {
+            width: 600px;
+            height: 600px;
+            bottom: -200px;
+            left: -200px;
+            background: linear-gradient(45deg, rgba(33,150,243,0.1), rgba(156,39,176,0.1));
+            animation-delay: -5s;
+        }
+
+        .shape-3 {
+            width: 400px;
+            height: 400px;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            background: linear-gradient(45deg, rgba(255,152,0,0.1), rgba(244,67,54,0.1));
+            animation-delay: -10s;
+        }
+
+        @keyframes float {
+            0%, 100% { transform: translate(0, 0) scale(1); }
+            25% { transform: translate(50px, 50px) scale(1.1); }
+            50% { transform: translate(0, 100px) scale(0.9); }
+            75% { transform: translate(-50px, 50px) scale(1.05); }
+        }
+
+        /* ===== MONEY RAIN ===== */
+        .money-rain {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            pointer-events: none;
+            z-index: 9998;
+        }
+
+        .money-item {
+            position: absolute;
+            font-size: 24px;
+            color: gold;
+            text-shadow: 0 0 15px rgba(255, 215, 0, 0.7);
+            animation: rain linear infinite;
+            opacity: 0.3;
+        }
+
+        @keyframes rain {
+            0% { transform: translateY(-100px) rotate(0deg); opacity: 0.3; }
+            100% { transform: translateY(100vh) rotate(360deg); opacity: 0; }
+        }
+
+        /* ===== CONTAINER ===== */
+        .container {
+            max-width: 1400px;
+            margin: 0 auto;
+            padding: 20px;
+            position: relative;
+            z-index: 1;
+        }
+
+        /* ===== HEADER ===== */
+        .header {
+            background: rgba(10, 10, 20, 0.8);
+            backdrop-filter: blur(10px);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            border-radius: 20px;
+            padding: 20px 30px;
+            margin-bottom: 30px;
+            box-shadow: var(--shadow-lg);
+            position: sticky;
+            top: 10px;
+            z-index: 100;
+            animation: slideInDown 0.5s ease;
+        }
+
+        .header-content {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            flex-wrap: wrap;
+            gap: 20px;
+        }
+
+        .logo {
+            font-size: 32px;
+            font-weight: 800;
+            background: var(--gradient-primary);
+            -webkit-background-clip: text;
+            background-clip: text;
+            color: transparent;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .logo-icon {
+            font-size: 40px;
+            animation: spin 10s linear infinite;
+        }
+
+        @keyframes spin {
+            from { transform: rotate(0deg); }
+            to { transform: rotate(360deg); }
+        }
+
+        .live-badge {
+            background: linear-gradient(45deg, var(--danger), var(--warning));
+            padding: 5px 15px;
+            border-radius: 30px;
+            font-size: 12px;
+            font-weight: 600;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            animation: pulse 2s infinite;
+        }
+
+        @keyframes pulse {
+            0%, 100% { opacity: 1; }
+            50% { opacity: 0.7; }
+        }
+
+        /* ===== LIVE PRICE TICKER ===== */
+        .price-ticker {
+            background: rgba(0, 0, 0, 0.5);
+            border-radius: 50px;
+            padding: 10px 20px;
+            display: flex;
+            gap: 30px;
+            flex-wrap: wrap;
+            border: 1px solid rgba(255, 255, 255, 0.1);
+        }
+
+        .price-item {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            font-size: 14px;
+        }
+
+        .price-icon {
+            width: 24px;
+            height: 24px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 16px;
+        }
+
+        .btc { color: #f7931a; }
+        .eth { color: #627eea; }
+        .gold { color: #ffd700; }
+        .price-up { color: #4caf50; animation: priceFlash 1s; }
+        .price-down { color: #f44336; animation: priceFlash 1s; }
+
+        @keyframes priceFlash {
+            0%, 100% { opacity: 1; }
+            50% { opacity: 0.5; }
+        }
+
+        /* ===== NAVIGATION ===== */
+        .nav {
+            display: flex;
+            gap: 10px;
+            flex-wrap: wrap;
+            align-items: center;
+        }
+
+        .nav-btn {
+            background: rgba(255, 255, 255, 0.05);
+            color: white;
+            padding: 10px 20px;
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            border-radius: 12px;
+            font-size: 14px;
+            font-weight: 500;
+            cursor: pointer;
+            transition: all 0.3s;
+            text-decoration: none;
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .nav-btn::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: -100%;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(90deg, transparent, rgba(255,255,255,0.2), transparent);
+            transition: left 0.5s;
+        }
+
+        .nav-btn:hover::before {
+            left: 100%;
+        }
+
+        .nav-btn:hover {
+            background: var(--primary);
+            transform: translateY(-3px);
+            box-shadow: var(--glow-primary);
+            border-color: transparent;
+        }
+
+        .nav-btn i {
+            font-size: 16px;
+        }
+
+        .user-section {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            margin-left: auto;
+        }
+
+        .balance {
+            background: linear-gradient(45deg, var(--success), #00e676);
+            padding: 10px 25px;
+            border-radius: 30px;
+            font-weight: 700;
+            font-size: 18px;
+            box-shadow: var(--glow-success);
+            animation: glow 2s infinite alternate;
+            display: flex;
+            align-items: center;
+            gap: 5px;
+        }
+
+        @keyframes glow {
+            from { box-shadow: 0 0 20px rgba(76, 175, 80, 0.3); }
+            to { box-shadow: 0 0 40px rgba(76, 175, 80, 0.6); }
+        }
+
+        /* ===== HERO SECTION ===== */
+        .hero {
+            min-height: 600px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            position: relative;
+            overflow: hidden;
+            border-radius: 30px;
+            margin: 30px 0;
+            background: linear-gradient(135deg, rgba(15,12,41,0.9), rgba(48,43,99,0.9));
+            border: 1px solid rgba(255,255,255,0.1);
+        }
+
+        .hero-bg {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: url('https://images.unsplash.com/photo-1536240474400-95dad9876cd2?ixlib=rb-4.0.3&auto=format&fit=crop&w=1950&q=80') center/cover;
+            opacity: 0.1;
+            animation: zoom 20s infinite alternate;
+        }
+
+        @keyframes zoom {
+            from { transform: scale(1); }
+            to { transform: scale(1.1); }
+        }
+
+        .hero-content {
+            text-align: center;
+            position: relative;
+            z-index: 2;
+            padding: 60px;
+        }
+
+        .hero-title {
+            font-size: 72px;
+            font-weight: 800;
+            margin-bottom: 20px;
+            background: linear-gradient(45deg, #ff4081, #ff9100, #2196f3, #4caf50);
+            -webkit-background-clip: text;
+            background-clip: text;
+            color: transparent;
+            animation: titleGlow 3s infinite;
+        }
+
+        @keyframes titleGlow {
+            0%, 100% { filter: drop-shadow(0 0 20px rgba(255,64,129,0.5)); }
+            50% { filter: drop-shadow(0 0 40px rgba(33,150,243,0.5)); }
+        }
+
+        .hero-subtitle {
+            font-size: 24px;
+            color: var(--text-secondary);
+            margin-bottom: 40px;
+        }
+
+        /* ===== BONUS CARD ===== */
+        .bonus-card {
+            background: linear-gradient(135deg, rgba(255,64,129,0.2), rgba(57,73,171,0.2));
+            backdrop-filter: blur(10px);
+            border: 2px solid rgba(255,64,129,0.3);
+            border-radius: 30px;
+            padding: 40px;
+            max-width: 500px;
+            margin: 0 auto;
+            position: relative;
+            overflow: hidden;
+            animation: floatCard 3s infinite ease-in-out;
+        }
+
+        @keyframes floatCard {
+            0%, 100% { transform: translateY(0); }
+            50% { transform: translateY(-10px); }
+        }
+
+        .bonus-card::before {
+            content: '';
+            position: absolute;
+            top: -50%;
+            left: -50%;
+            width: 200%;
+            height: 200%;
+            background: linear-gradient(45deg, transparent, rgba(255,255,255,0.1), transparent);
+            transform: rotate(45deg);
+            animation: shine 3s infinite;
+        }
+
+        @keyframes shine {
+            from { transform: rotate(45deg) translateY(-100%); }
+            to { transform: rotate(45deg) translateY(100%); }
+        }
+
+        .bonus-amount {
+            font-size: 80px;
+            font-weight: 800;
+            color: gold;
+            text-shadow: 0 0 30px rgba(255,215,0,0.5);
+            margin: 20px 0;
+        }
+
+        /* ===== FEATURE CARDS ===== */
+        .features-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+            gap: 30px;
+            margin: 60px 0;
+        }
+
+        .feature-card {
+            background: rgba(255,255,255,0.03);
+            backdrop-filter: blur(10px);
+            border: 1px solid rgba(255,255,255,0.05);
+            border-radius: 30px;
+            padding: 40px 30px;
+            text-align: center;
+            transition: all 0.5s;
+            position: relative;
+            overflow: hidden;
+            cursor: pointer;
+        }
+
+        .feature-card::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(135deg, rgba(255,64,129,0.2), rgba(57,73,171,0.2));
+            opacity: 0;
+            transition: opacity 0.5s;
+        }
+
+        .feature-card:hover {
+            transform: translateY(-20px) scale(1.02);
+            box-shadow: var(--shadow-xl);
+        }
+
+        .feature-card:hover::before {
+            opacity: 1;
+        }
+
+        .feature-icon {
+            font-size: 64px;
+            margin-bottom: 20px;
+            position: relative;
+            z-index: 2;
+            animation: bounce 2s infinite;
+        }
+
+        @keyframes bounce {
+            0%, 100% { transform: translateY(0); }
+            50% { transform: translateY(-10px); }
+        }
+
+        .feature-title {
+            font-size: 24px;
+            font-weight: 700;
+            margin-bottom: 15px;
+            position: relative;
+            z-index: 2;
+        }
+
+        .feature-desc {
+            color: var(--text-secondary);
+            margin-bottom: 20px;
+            position: relative;
+            z-index: 2;
+        }
+
+        .feature-stats {
+            display: flex;
+            justify-content: center;
+            gap: 20px;
+            position: relative;
+            z-index: 2;
+        }
+
+        .stat {
+            text-align: center;
+        }
+
+        .stat-value {
+            font-size: 24px;
+            font-weight: 700;
+            color: var(--primary);
+        }
+
+        .stat-label {
+            font-size: 12px;
+            color: var(--text-muted);
+        }
+
+        /* ===== LIVE PRICES SECTION ===== */
+        .live-prices {
+            background: rgba(0,0,0,0.3);
+            border-radius: 30px;
+            padding: 40px;
+            margin: 60px 0;
+            border: 1px solid rgba(255,255,255,0.1);
+        }
+
+        .prices-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 20px;
+            margin-top: 30px;
+        }
+
+        .price-card {
+            background: linear-gradient(135deg, rgba(255,255,255,0.05), rgba(255,255,255,0.02));
+            border-radius: 20px;
+            padding: 30px;
+            text-align: center;
+            border: 1px solid rgba(255,255,255,0.05);
+            transition: all 0.3s;
+        }
+
+        .price-card:hover {
+            transform: scale(1.05);
+            border-color: var(--primary);
+        }
+
+        .price-symbol {
+            font-size: 48px;
+            margin-bottom: 15px;
+        }
+
+        .price-name {
+            font-size: 20px;
+            font-weight: 600;
+            margin-bottom: 10px;
+        }
+
+        .price-current {
+            font-size: 32px;
+            font-weight: 700;
+            margin: 15px 0;
+        }
+
+        .price-change {
+            padding: 5px 15px;
+            border-radius: 30px;
+            display: inline-block;
+            font-weight: 600;
+        }
+
+        .change-positive {
+            background: rgba(76,175,80,0.2);
+            color: #4caf50;
+        }
+
+        .change-negative {
+            background: rgba(244,67,54,0.2);
+            color: #f44336;
+        }
+
+        /* ===== GAMES SHOWCASE ===== */
+        .games-showcase {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 30px;
+            margin: 60px 0;
+        }
+
+        .game-showcase-card {
+            height: 400px;
+            border-radius: 30px;
+            position: relative;
+            overflow: hidden;
+            cursor: pointer;
+        }
+
+        .game-showcase-card img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            transition: transform 0.5s;
+        }
+
+        .game-showcase-card:hover img {
+            transform: scale(1.1);
+        }
+
+        .game-overlay {
+            position: absolute;
+            bottom: 0;
+            left: 0;
+            right: 0;
+            background: linear-gradient(transparent, rgba(0,0,0,0.9));
+            padding: 40px 30px;
+            transform: translateY(100%);
+            transition: transform 0.5s;
+        }
+
+        .game-showcase-card:hover .game-overlay {
+            transform: translateY(0);
+        }
+
+        .game-title {
+            font-size: 28px;
+            font-weight: 700;
+            margin-bottom: 10px;
+        }
+
+        .game-badge {
+            background: var(--primary);
+            padding: 5px 15px;
+            border-radius: 30px;
+            font-size: 12px;
+            display: inline-block;
+        }
+
+        /* ===== WINNERS SECTION ===== */
+        .winners-section {
+            margin: 80px 0;
+            overflow: hidden;
+        }
+
+        .winners-marquee {
+            display: flex;
+            gap: 30px;
+            animation: marquee 30s linear infinite;
+            padding: 20px 0;
+        }
+
+        .winners-marquee:hover {
+            animation-play-state: paused;
+        }
+
+        @keyframes marquee {
+            0% { transform: translateX(0); }
+            100% { transform: translateX(-100%); }
+        }
+
+        .winner-card {
+            min-width: 300px;
+            background: linear-gradient(135deg, rgba(255,255,255,0.05), rgba(255,255,255,0.02));
+            border-radius: 20px;
+            padding: 25px;
+            border: 1px solid rgba(255,255,255,0.05);
+            display: flex;
+            align-items: center;
+            gap: 20px;
+        }
+
+        .winner-avatar {
+            width: 60px;
+            height: 60px;
+            border-radius: 50%;
+            background: linear-gradient(45deg, var(--primary), var(--secondary));
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 24px;
+            font-weight: 700;
+        }
+
+        .winner-info h4 {
+            font-size: 18px;
+            margin-bottom: 5px;
+        }
+
+        .winner-amount {
+            color: gold;
+            font-size: 20px;
+            font-weight: 700;
+        }
+
+        /* ===== GLOBAL STATS ===== */
+        .global-stats {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 30px;
+            margin: 60px 0;
+            padding: 40px;
+            background: linear-gradient(135deg, rgba(255,64,129,0.1), rgba(57,73,171,0.1));
+            border-radius: 30px;
+        }
+
+        .stat-card {
+            text-align: center;
+        }
+
+        .stat-card i {
+            font-size: 48px;
+            color: var(--primary);
+            margin-bottom: 15px;
+        }
+
+        .stat-number {
+            font-size: 42px;
+            font-weight: 800;
+            background: linear-gradient(45deg, #ff4081, #ff9800);
+            -webkit-background-clip: text;
+            background-clip: text;
+            color: transparent;
+            margin-bottom: 5px;
+        }
+
+        /* ===== PAYMENT METHODS ===== */
+        .payment-methods {
+            display: flex;
+            flex-wrap: wrap;
+            justify-content: center;
+            gap: 20px;
+            margin: 40px 0;
+        }
+
+        .payment-method {
+            background: rgba(255,255,255,0.03);
+            padding: 15px 25px;
+            border-radius: 50px;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            border: 1px solid rgba(255,255,255,0.05);
+            transition: all 0.3s;
+        }
+
+        .payment-method:hover {
+            background: var(--primary);
+            transform: scale(1.05);
+        }
+
+        .payment-method i {
+            font-size: 24px;
+        }
+
+        /* ===== ABOUT SECTION ===== */
+        .about-section {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 50px;
+            margin: 80px 0;
+            padding: 60px;
+            background: linear-gradient(135deg, rgba(15,12,41,0.8), rgba(48,43,99,0.8));
+            border-radius: 30px;
+        }
+
+        .about-title {
+            font-size: 48px;
+            font-weight: 800;
+            margin-bottom: 30px;
+        }
+
+        .about-text {
+            color: var(--text-secondary);
+            line-height: 1.8;
+            margin-bottom: 30px;
+        }
+
+        .features-list {
+            list-style: none;
+        }
+
+        .features-list li {
+            margin-bottom: 15px;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .features-list i {
+            color: var(--success);
+        }
+
+        /* ===== RECENT USERS ===== */
+        .recent-users {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
+            gap: 15px;
+            margin: 40px 0;
+        }
+
+        .user-card {
+            background: rgba(255,255,255,0.03);
+            border-radius: 15px;
+            padding: 15px;
+            text-align: center;
+            border: 1px solid rgba(255,255,255,0.05);
+            transition: all 0.3s;
+            animation: fadeInUp 0.5s;
+        }
+
+        .user-card:hover {
+            transform: translateY(-5px);
+            border-color: var(--primary);
+        }
+
+        @keyframes fadeInUp {
+            from {
+                opacity: 0;
+                transform: translateY(20px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        /* ===== FOOTER ===== */
+        .footer {
+            margin-top: 80px;
+            padding: 60px 40px 30px;
+            background: rgba(5,5,10,0.8);
+            backdrop-filter: blur(10px);
+            border-radius: 30px 30px 0 0;
+            border-top: 1px solid rgba(255,255,255,0.1);
+        }
+
+        .footer-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 40px;
+            margin-bottom: 40px;
+        }
+
+        .footer-logo {
+            font-size: 24px;
+            font-weight: 800;
+            background: var(--gradient-primary);
+            -webkit-background-clip: text;
+            background-clip: text;
+            color: transparent;
+            margin-bottom: 20px;
+        }
+
+        .social-links {
+            display: flex;
+            gap: 15px;
+            margin-top: 20px;
+        }
+
+        .social-link {
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            background: rgba(255,255,255,0.05);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            transition: all 0.3s;
+        }
+
+        .social-link:hover {
+            background: var(--primary);
+            transform: translateY(-3px);
+        }
+
+        .footer-bottom {
+            text-align: center;
+            padding-top: 30px;
+            border-top: 1px solid rgba(255,255,255,0.1);
+            color: var(--text-muted);
+        }
+
+        /* ===== TOAST NOTIFICATIONS ===== */
+        .toast-container {
+            position: fixed;
+            top: 100px;
+            right: 20px;
+            z-index: 9999;
+        }
+
+        .toast {
+            background: rgba(26,26,46,0.95);
+            backdrop-filter: blur(10px);
+            border-left: 4px solid var(--success);
+            border-radius: 12px;
+            padding: 15px 25px;
+            margin-top: 10px;
+            min-width: 300px;
+            color: white;
+            font-weight: 500;
+            display: flex;
+            align-items: center;
+            gap: 15px;
+            box-shadow: var(--shadow-xl);
+            animation: slideInRight 0.3s ease;
+        }
+
+        .toast.error {
+            border-left-color: var(--danger);
+        }
+
+        .toast.warning {
+            border-left-color: var(--warning);
+        }
+
+        @keyframes slideInRight {
+            from {
+                transform: translateX(100%);
+                opacity: 0;
+            }
+            to {
+                transform: translateX(0);
+                opacity: 1;
+            }
+        }
+
+        /* ===== LOADING OVERLAY ===== */
+        .loading-overlay {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: var(--dark);
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            z-index: 99999;
+            transition: opacity 0.5s;
+        }
+
+        .loading-overlay.hidden {
+            opacity: 0;
+            pointer-events: none;
+        }
+
+        .loading-spinner {
+            width: 60px;
+            height: 60px;
+            border: 4px solid rgba(255,64,129,0.3);
+            border-top-color: var(--primary);
+            border-radius: 50%;
+            animation: spin 1s linear infinite;
+            margin-bottom: 20px;
+        }
+
+        .loading-text {
+            font-size: 18px;
+            background: linear-gradient(45deg, #ff4081, #ff9800);
+            -webkit-background-clip: text;
+            background-clip: text;
+            color: transparent;
+            font-weight: 600;
+        }
+
+        /* ===== RESPONSIVE ===== */
+        @media (max-width: 768px) {
+            .hero-title { font-size: 40px; }
+            .about-section { grid-template-columns: 1fr; }
+            .nav { flex-direction: column; width: 100%; }
+            .user-section { margin-left: 0; width: 100%; }
+            .price-ticker { flex-direction: column; }
+        }
+    </style>
+</head>
+<body>
+    <!-- Background Effects -->
+    <div class="noise-bg"></div>
+    <div class="floating-shapes">
+        <div class="shape shape-1"></div>
+        <div class="shape shape-2"></div>
+        <div class="shape shape-3"></div>
+    </div>
+    
+    <!-- Money Rain Animation -->
+    <div class="money-rain" id="moneyRain"></div>
+    
+    <!-- Loading Overlay -->
+    <div id="loadingOverlay" class="loading-overlay">
+        <div class="loading-spinner"></div>
+        <div class="loading-text">LONDON 2020</div>
+    </div>
+    
+    <!-- Toast Container -->
+    <div id="toastContainer" class="toast-container"></div>
+    
+    <!-- Main Container -->
+    <div class="container">
+        
+        <!-- Header -->
+        <header class="header animate__animated animate__slideInDown">
+            <div class="header-content">
+                <div class="logo">
+                    <span class="logo-icon">🎯</span>
+                    LONDON 2020
+                    <span class="live-badge">⚡ LIVE</span>
+                </div>
+                
+                <!-- Live Price Ticker -->
+                <div class="price-ticker" id="priceTicker">
+                    <div class="price-item">
+                        <i class="fab fa-bitcoin price-icon btc"></i>
+                        <span>BTC</span>
+                        <span id="btcPrice">$45,678</span>
+                        <span id="btcChange" class="price-up">▲ 2.3%</span>
+                    </div>
+                    <div class="price-item">
+                        <i class="fab fa-ethereum price-icon eth"></i>
+                        <span>ETH</span>
+                        <span id="ethPrice">$3,245</span>
+                        <span id="ethChange" class="price-down">▼ 1.2%</span>
+                    </div>
+                    <div class="price-item">
+                        <i class="fas fa-coins price-icon gold"></i>
+                        <span>GOLD</span>
+                        <span id="goldPrice">$2,045</span>
+                        <span id="goldChange" class="price-up">▲ 0.5%</span>
+                    </div>
+                </div>
+            </div>
+            
+            <!-- Public Navigation -->
+            <div id="navPublic" class="nav">
+                <a href="index.html" class="nav-btn"><i class="fas fa-home"></i> Home</a>
+                <a href="https://xcrazybet.github.io/millioner/forex.html" target="_blank" class="nav-btn"><i class="fas fa-chart-line"></i> Forex</a>
+                <a href="https://xcrazybet.github.io/millioner/crypto.html" target="_blank" class="nav-btn"><i class="fab fa-bitcoin"></i> Crypto</a>
+                <a href="https://xcrazybet.github.io/millioner/football.html" target="_blank" class="nav-btn"><i class="fas fa-futbol"></i> Sports</a>
+                <a href="https://xcrazybet.github.io/millioner/games.html" target="_blank" class="nav-btn"><i class="fas fa-dice"></i> Games</a>
+                <a href="wallets.html" class="nav-btn"><i class="fas fa-wallet"></i> Wallet</a>
+                <a href="https://xcrazybet.github.io/millioner/gifts.html" target="_blank" class="nav-btn"><i class="fas fa-gift"></i> Gifts</a>
+                <a href="contact.html" class="nav-btn"><i class="fas fa-info-circle"></i> About</a>
+                
+                <div class="user-section">
+                    <div id="authButtons">
+                        <button class="nav-btn" id="loginBtn"><i class="fas fa-sign-in-alt"></i> Login</button>
+                        <button class="nav-btn" id="registerBtn" style="background: var(--primary);"><i class="fas fa-user-plus"></i> Sign Up</button>
+                    </div>
+                    <button class="nav-btn logout-btn" id="logoutBtn" style="display: none;"><i class="fas fa-sign-out-alt"></i> Logout</button>
+                </div>
+            </div>
+            
+            <!-- Authenticated Navigation -->
+            <div id="navAuth" class="nav hidden">
+                <a href="dashboard.html" class="nav-btn"><i class="fas fa-chart-pie"></i> Dashboard</a>
+                <a href="https://xcrazybet.github.io/millioner/forex.html" target="_blank" class="nav-btn"><i class="fas fa-chart-line"></i> Forex</a>
+                <a href="https://xcrazybet.github.io/millioner/crypto.html" target="_blank" class="nav-btn"><i class="fab fa-bitcoin"></i> Crypto</a>
+                <a href="https://xcrazybet.github.io/millioner/football.html" target="_blank" class="nav-btn"><i class="fas fa-futbol"></i> Sports</a>
+                <a href="https://xcrazybet.github.io/millioner/games.html" target="_blank" class="nav-btn"><i class="fas fa-dice"></i> Games</a>
+                <a href="wallets.html" class="nav-btn"><i class="fas fa-wallet"></i> Wallet</a>
+                <a href="https://xcrazybet.github.io/millioner/gifts.html" target="_blank" class="nav-btn"><i class="fas fa-gift"></i> Gifts</a>
+                <a href="contact.html" class="nav-btn"><i class="fas fa-info-circle"></i> About</a>
+                <a href="profile.html" class="nav-btn"><i class="fas fa-user"></i> Profile</a>
+                
+                <div class="user-section">
+                    <div id="userBalance" class="balance" style="display: none;"><i class="fas fa-coins"></i> $0.00</div>
+                    <button class="nav-btn logout-btn" id="logoutBtnAuth"><i class="fas fa-sign-out-alt"></i> Logout</button>
+                </div>
+            </div>
+        </header>
+        
+        <!-- Hero Section -->
+        <section class="hero">
+            <div class="hero-bg"></div>
+            <div class="hero-content animate__animated animate__fadeInUp">
+                <h1 class="hero-title">WELCOME TO THE FUTURE</h1>
+                <p class="hero-subtitle">Forex • Crypto • Sports • Casino • All in One Platform</p>
+                
+                <!-- Bonus Card -->
+                <div class="bonus-card">
+                    <h2><i class="fas fa-gift"></i> LIFETIME WELCOME BONUS</h2>
+                    <div class="bonus-amount">$2.00</div>
+                    <p style="margin: 20px 0; color: var(--text-secondary);">Get $2.00 instantly on registration</p>
+                    
+                    <div id="bonusStatus" class="bonus-status" style="display: none;"></div>
+                    
+                    <button class="nav-btn" id="claimBonusBtn" style="background: linear-gradient(45deg, var(--primary), var(--warning)); padding: 15px 40px; font-size: 18px;">
+                        <i class="fas fa-gift"></i> CLAIM YOUR $2 BONUS
+                    </button>
+                </div>
+            </div>
+        </section>
+        
+        <!-- Global Stats -->
+        <div class="global-stats animate__animated animate__fadeInUp">
+            <div class="stat-card">
+                <i class="fas fa-users"></i>
+                <div class="stat-number" id="totalUsers">500K+</div>
+                <div>Active Users</div>
+            </div>
+            <div class="stat-card">
+                <i class="fas fa-dollar-sign"></i>
+                <div class="stat-number" id="totalPayout">$45M+</div>
+                <div>Total Payouts</div>
+            </div>
+            <div class="stat-card">
+                <i class="fas fa-globe"></i>
+                <div class="stat-number" id="totalCountries">150+</div>
+                <div>Countries</div>
+            </div>
+            <div class="stat-card">
+                <i class="fas fa-clock"></i>
+                <div class="stat-number" id="support247">24/7</div>
+                <div>Support</div>
+            </div>
+        </div>
+        
+        <!-- All-in-One Platform Showcase -->
+        <section class="features-grid">
+            <div class="feature-card animate__animated animate__fadeInLeft">
+                <div class="feature-icon">📈</div>
+                <h3 class="feature-title">Forex Trading</h3>
+                <p class="feature-desc">Trade major, minor & exotic pairs with 1:500 leverage</p>
+                <div class="feature-stats">
+                    <div class="stat">
+                        <div class="stat-value">50+</div>
+                        <div class="stat-label">Pairs</div>
+                    </div>
+                    <div class="stat">
+                        <div class="stat-value">24/5</div>
+                        <div class="stat-label">Market</div>
+                    </div>
+                </div>
+                <a href="https://xcrazybet.github.io/millioner/forex.html" target="_blank" class="nav-btn" style="margin-top: 20px;">Start Trading →</a>
+            </div>
+            
+            <div class="feature-card animate__animated animate__fadeInUp">
+                <div class="feature-icon">₿</div>
+                <h3 class="feature-title">Crypto Trading</h3>
+                <p class="feature-desc">Bitcoin, Ethereum, 100+ altcoins with instant settlement</p>
+                <div class="feature-stats">
+                    <div class="stat">
+                        <div class="stat-value">100+</div>
+                        <div class="stat-label">Coins</div>
+                    </div>
+                    <div class="stat">
+                        <div class="stat-value">24/7</div>
+                        <div class="stat-label">Trading</div>
+                    </div>
+                </div>
+                <a href="https://xcrazybet.github.io/millioner/crypto.html" target="_blank" class="nav-btn" style="margin-top: 20px;">Buy Crypto →</a>
+            </div>
+            
+            <div class="feature-card animate__animated animate__fadeInRight">
+                <div class="feature-icon">⚽</div>
+                <h3 class="feature-title">Sports Betting</h3>
+                <p class="feature-desc">Football, Basketball, Tennis, eSports with live streaming</p>
+                <div class="feature-stats">
+                    <div class="stat">
+                        <div class="stat-value">20+</div>
+                        <div class="stat-label">Sports</div>
+                    </div>
+                    <div class="stat">
+                        <div class="stat-value">Live</div>
+                        <div class="stat-label">Betting</div>
+                    </div>
+                </div>
+                <a href="https://xcrazybet.github.io/millioner/football.html" target="_blank" class="nav-btn" style="margin-top: 20px;">Place Bets →</a>
+            </div>
+            
+            <div class="feature-card animate__animated animate__fadeInLeft">
+                <div class="feature-icon">🎰</div>
+                <h3 class="feature-title">Casino Games</h3>
+                <p class="feature-desc">Slots, Poker, Blackjack, Roulette with 97-99% RTP</p>
+                <div class="feature-stats">
+                    <div class="stat">
+                        <div class="stat-value">500+</div>
+                        <div class="stat-label">Games</div>
+                    </div>
+                    <div class="stat">
+                        <div class="stat-value">97%</div>
+                        <div class="stat-label">RTP</div>
+                    </div>
+                </div>
+                <a href="https://xcrazybet.github.io/millioner/games.html" target="_blank" class="nav-btn" style="margin-top: 20px;">Play Now →</a>
+            </div>
+        </section>
+        
+        <!-- Live Prices Section -->
+        <section class="live-prices animate__animated animate__fadeInUp">
+            <h2 style="text-align: center; font-size: 36px; margin-bottom: 20px;">
+                <i class="fas fa-chart-line" style="color: var(--primary);"></i> LIVE MARKET PRICES
+            </h2>
+            <p style="text-align: center; color: var(--text-secondary); margin-bottom: 40px;">
+                Real-time prices updated every second
+            </p>
+            
+            <div class="prices-grid" id="livePrices">
+                <!-- Dynamically loaded via JavaScript -->
+            </div>
+        </section>
+        
+        <!-- Games Showcase -->
+        <h2 style="text-align: center; font-size: 36px; margin: 60px 0 30px;">
+            <i class="fas fa-gamepad" style="color: var(--primary);"></i> FEATURED GAMES & SPORTS
+        </h2>
+        
+        <div class="games-showcase">
+            <div class="game-showcase-card animate__animated animate__fadeInLeft">
+                <img src="https://images.unsplash.com/photo-1517466787929-bc90951d0974?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=80" alt="Football">
+                <div class="game-overlay">
+                    <div class="game-title">Football Betting</div>
+                    <span class="game-badge">LIVE NOW</span>
+                    <p style="margin-top: 15px;">Premier League • Champions League • World Cup</p>
+                </div>
+            </div>
+            
+            <div class="game-showcase-card animate__animated animate__fadeInUp">
+                <img src="https://images.unsplash.com/photo-1607962837359-5e7e89f86776?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=80" alt="Basketball">
+                <div class="game-overlay">
+                    <div class="game-title">Basketball</div>
+                    <span class="game-badge">NBA SEASON</span>
+                    <p style="margin-top: 15px;">Live odds • Player props • Parlays</p>
+                </div>
+            </div>
+            
+            <div class="game-showcase-card animate__animated animate__fadeInRight">
+                <img src="https://images.unsplash.com/photo-1596838132731-3301c3fd4317?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=80" alt="Casino">
+                <div class="game-overlay">
+                    <div class="game-title">Casino Games</div>
+                    <span class="game-badge">HOT SLOTS</span>
+                    <p style="margin-top: 15px;">Progressive jackpots up to $1.2M</p>
+                </div>
+            </div>
+        </div>
+        
+        <!-- Winners Section -->
+        <section class="winners-section">
+            <h2 style="text-align: center; font-size: 36px; margin-bottom: 30px;">
+                <i class="fas fa-trophy" style="color: gold;"></i> RECENT BIG WINNERS
+            </h2>
+            
+            <div class="winners-marquee" id="winnersMarquee">
+                <!-- Winners will be duplicated for seamless marquee -->
+            </div>
+        </section>
+        
+        <!-- Payment Methods -->
+        <div style="text-align: center; margin: 60px 0;">
+            <h2 style="font-size: 32px; margin-bottom: 30px;">
+                <i class="fas fa-credit-card"></i> PAYMENT METHODS
+            </h2>
+            
+            <div class="payment-methods">
+                <div class="payment-method"><i class="fab fa-cc-visa"></i> Visa</div>
+                <div class="payment-method"><i class="fab fa-cc-mastercard"></i> Mastercard</div>
+                <div class="payment-method"><i class="fab fa-bitcoin"></i> Bitcoin</div>
+                <div class="payment-method"><i class="fab fa-ethereum"></i> Ethereum</div>
+                <div class="payment-method"><i class="fas fa-university"></i> Bank Transfer</div>
+                <div class="payment-method"><i class="fab fa-paypal"></i> PayPal</div>
+                <div class="payment-method"><i class="fas fa-mobile-alt"></i> Mobile Money</div>
+            </div>
+            
+            <div style="margin-top: 30px; display: flex; justify-content: center; gap: 40px; flex-wrap: wrap;">
+                <span style="color: #4caf50;"><i class="fas fa-arrow-down"></i> Min Deposit: $10</span>
+                <span style="color: #ff4081;"><i class="fas fa-arrow-up"></i> Min Withdrawal: $20</span>
+                <span style="color: gold;"><i class="fas fa-bolt"></i> Instant Withdrawals</span>
+                <span style="color: #2196f3;"><i class="fas fa-shield-alt"></i> 0% Fees</span>
+            </div>
+        </div>
+        
+        <!-- Recent Users -->
+        <section style="margin: 60px 0;">
+            <h2 style="text-align: center; font-size: 32px; margin-bottom: 30px;">
+                <i class="fas fa-user-plus" style="color: var(--success);"></i> NEW MEMBERS JOINED TODAY
+            </h2>
+            
+            <div class="recent-users" id="recentUsers">
+                <!-- Dynamically loaded -->
+            </div>
+        </section>
+        
+        <!-- About Section -->
+        <section class="about-section">
+            <div>
+                <h2 class="about-title">About London 2020</h2>
+                <p class="about-text">
+                    Founded in 2020, we've grown into a premier multi-asset platform offering 
+                    Forex trading, Cryptocurrency exchange, Sports betting, and Casino games 
+                    all in one secure environment.
+                </p>
+                
+                <ul class="features-list">
+                    <li><i class="fas fa-check-circle"></i> Licensed & Regulated</li>
+                    <li><i class="fas fa-check-circle"></i> 256-bit SSL Encryption</li>
+                    <li><i class="fas fa-check-circle"></i> 24/7 Customer Support</li>
+                    <li><i class="fas fa-check-circle"></i> Instant Withdrawals</li>
+                    <li><i class="fas fa-check-circle"></i> Responsible Gaming Tools</li>
+                    <li><i class="fas fa-check-circle"></i> Multi-Currency Support</li>
+                </ul>
+            </div>
+            
+            <div style="background: rgba(255,255,255,0.03); padding: 40px; border-radius: 30px;">
+                <h3 style="font-size: 28px; margin-bottom: 20px;">Why Choose Us?</h3>
+                
+                <div style="display: grid; gap: 30px;">
+                    <div>
+                        <div style="font-size: 24px; color: var(--primary); margin-bottom: 10px;">500K+</div>
+                        <div>Happy Users Worldwide</div>
+                    </div>
+                    <div>
+                        <div style="font-size: 24px; color: var(--primary); margin-bottom: 10px;">$45M+</div>
+                        <div>Total Winnings Paid</div>
+                    </div>
+                    <div>
+                        <div style="font-size: 24px; color: var(--primary); margin-bottom: 10px;">99.7%</div>
+                        <div>Payout Ratio</div>
+                    </div>
+                </div>
+                
+                <button class="nav-btn" onclick="window.location.href='register.html'" style="background: var(--primary); width: 100%; margin-top: 30px; padding: 15px;">
+                    <i class="fas fa-rocket"></i> JOIN 500K+ USERS
+                </button>
+            </div>
+        </section>
+        
+        <!-- Footer -->
+        <footer class="footer">
+            <div class="footer-grid">
+                <div>
+                    <div class="footer-logo">LONDON 2020</div>
+                    <p style="color: var(--text-muted); margin: 20px 0;">
+                        Your premier destination for Forex, Crypto, Sports & Casino entertainment.
+                    </p>
+                    <div class="social-links">
+                        <a href="#" class="social-link"><i class="fab fa-facebook-f"></i></a>
+                        <a href="#" class="social-link"><i class="fab fa-twitter"></i></a>
+                        <a href="#" class="social-link"><i class="fab fa-instagram"></i></a>
+                        <a href="#" class="social-link"><i class="fab fa-telegram"></i></a>
+                        <a href="#" class="social-link"><i class="fab fa-discord"></i></a>
+                    </div>
+                </div>
+                
+                <div>
+                    <h4 style="margin-bottom: 20px;">Quick Links</h4>
+                    <ul style="list-style: none;">
+                        <li style="margin-bottom: 10px;"><a href="index.html" style="color: var(--text-secondary); text-decoration: none;">Home</a></li>
+                        <li style="margin-bottom: 10px;"><a href="https://xcrazybet.github.io/millioner/forex.html" style="color: var(--text-secondary); text-decoration: none;">Forex</a></li>
+                        <li style="margin-bottom: 10px;"><a href="https://xcrazybet.github.io/millioner/crypto.html" style="color: var(--text-secondary); text-decoration: none;">Crypto</a></li>
+                        <li style="margin-bottom: 10px;"><a href="https://xcrazybet.github.io/millioner/football.html" style="color: var(--text-secondary); text-decoration: none;">Sports</a></li>
+                        <li style="margin-bottom: 10px;"><a href="https://xcrazybet.github.io/millioner/games.html" style="color: var(--text-secondary); text-decoration: none;">Games</a></li>
+                    </ul>
+                </div>
+                
+                <div>
+                    <h4 style="margin-bottom: 20px;">Support</h4>
+                    <ul style="list-style: none;">
+                        <li style="margin-bottom: 10px;"><a href="contact.html" style="color: var(--text-secondary); text-decoration: none;">Contact Us</a></li>
+                        <li style="margin-bottom: 10px;"><a href="#" style="color: var(--text-secondary); text-decoration: none;">FAQ</a></li>
+                        <li style="margin-bottom: 10px;"><a href="#" style="color: var(--text-secondary); text-decoration: none;">Terms of Service</a></li>
+                        <li style="margin-bottom: 10px;"><a href="#" style="color: var(--text-secondary); text-decoration: none;">Privacy Policy</a></li>
+                        <li style="margin-bottom: 10px;"><a href="#" style="color: var(--text-secondary); text-decoration: none;">Responsible Gaming</a></li>
+                    </ul>
+                </div>
+                
+                <div>
+                    <h4 style="margin-bottom: 20px;">Newsletter</h4>
+                    <p style="color: var(--text-muted); margin-bottom: 20px;">
+                        Subscribe for bonuses and updates
+                    </p>
+                    <div style="display: flex; gap: 10px;">
+                        <input type="email" placeholder="Your email" style="flex: 1; padding: 12px; border-radius: 12px; border: none; background: rgba(255,255,255,0.05); color: white;">
+                        <button class="nav-btn" style="background: var(--primary);">Subscribe</button>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="footer-bottom">
+                <p>© 2020-2024 London 2020. All rights reserved.</p>
+                <p style="margin-top: 10px; font-size: 12px;">
+                    <span id="siteStatus">✅ System Online</span> • 
+                    <span id="serverTime"></span> • 
+                    <span id="activeUsers">2,345 users online</span>
+                </p>
+            </div>
+        </footer>
+    </div>
+    
+    <script>
+        // ===== FIREBASE CONFIG =====
+        const firebaseConfig = {
+            apiKey: "AIzaSyA72Yo_YGqno9PX25p3yQBvyflcaM-NqEM",
+            authDomain: "x-bet-prod-jd.firebaseapp.com",
+            projectId: "x-bet-prod-jd",
+            storageBucket: "x-bet-prod-jd.firebasestorage.app",
+            messagingSenderId: "499334334535",
+            appId: "1:499334334535:web:bebc1bf817e24d9e3c4962"
+        };
+        
+        // Initialize Firebase
+        firebase.initializeApp(firebaseConfig);
+        const auth = firebase.auth();
+        const db = firebase.firestore();
+        
+        // ===== GLOBAL VARIABLES =====
+        let currentUser = null;
+        let userData = null;
+        let userHasClaimedBonus = false;
+        
+        // ===== INITIALIZATION =====
+        document.addEventListener('DOMContentLoaded', () => {
+            // Create money rain
+            createMoneyRain();
+            
+            // Initialize price ticker
+            startPriceTicker();
+            
+            // Load winners
+            loadWinners();
+            
+            // Load recent users
+            loadRecentUsers();
+            
+            // Load live prices
+            loadLivePrices();
+            
+            // Update server time
+            updateServerTime();
+            
+            // Setup auth listener
+            auth.onAuthStateChanged(handleAuthStateChange);
+            
+            // Setup event listeners
+            setupEventListeners();
+            
+            // Hide loading overlay
+            setTimeout(() => {
+                document.getElementById('loadingOverlay').classList.add('hidden');
+            }, 1500);
+        });
+        
+        // ===== MONEY RAIN =====
+        function createMoneyRain() {
+            const container = document.getElementById('moneyRain');
+            const symbols = ['💰', '💵', '💸', '🪙', '💎', '💶', '💷', '💴'];
+            
+            for (let i = 0; i < 50; i++) {
+                const money = document.createElement('div');
+                money.className = 'money-item';
+                money.textContent = symbols[Math.floor(Math.random() * symbols.length)];
+                money.style.left = Math.random() * 100 + '%';
+                money.style.animationDuration = (Math.random() * 10 + 10) + 's';
+                money.style.animationDelay = Math.random() * 5 + 's';
+                money.style.fontSize = (Math.random() * 20 + 20) + 'px';
+                container.appendChild(money);
+            }
+        }
+        
+        // ===== LIVE PRICE TICKER =====
+        function startPriceTicker() {
+            // Simulate real-time price updates
+            setInterval(() => {
+                updatePrice('btc', generatePrice(45000, 50000), generateChange());
+                updatePrice('eth', generatePrice(3000, 3500), generateChange());
+                updatePrice('gold', generatePrice(2000, 2100), generateChange());
+            }, 5000);
+        }
+        
+        function generatePrice(min, max) {
+            return (Math.random() * (max - min) + min).toFixed(2);
+        }
+        
+        function generateChange() {
+            const change = (Math.random() * 5 - 2.5).toFixed(1);
+            return {
+                value: change,
+                direction: change >= 0 ? 'up' : 'down'
+            };
+        }
+        
+        function updatePrice(asset, price, change) {
+            const priceEl = document.getElementById(asset + 'Price');
+            const changeEl = document.getElementById(asset + 'Change');
+            
+            if (priceEl) {
+                priceEl.textContent = '$' + numberWithCommas(price);
+                priceEl.style.animation = 'priceFlash 0.5s';
+                setTimeout(() => priceEl.style.animation = '', 500);
+            }
+            
+            if (changeEl) {
+                changeEl.textContent = (change.value >= 0 ? '▲' : '▼') + ' ' + Math.abs(change.value) + '%';
+                changeEl.className = change.value >= 0 ? 'price-up' : 'price-down';
+            }
+        }
+        
+        // ===== LIVE PRICES GRID =====
+        function loadLivePrices() {
+            const prices = [
+                { symbol: '₿', name: 'Bitcoin', price: 47892, change: 2.4, icon: 'fab fa-bitcoin' },
+                { symbol: 'Ξ', name: 'Ethereum', price: 3245, change: -1.2, icon: 'fab fa-ethereum' },
+                { symbol: '💎', name: 'Gold', price: 2045, change: 0.5, icon: 'fas fa-coins' },
+                { symbol: '💵', name: 'S&P 500', price: 4789, change: 0.8, icon: 'fas fa-chart-line' },
+                { symbol: '🇪🇺', name: 'EUR/USD', price: 1.089, change: -0.3, icon: 'fas fa-money-bill-wave' },
+                { symbol: '🇬🇧', name: 'GBP/USD', price: 1.265, change: 0.2, icon: 'fas fa-pound-sign' }
+            ];
+            
+            const container = document.getElementById('livePrices');
+            container.innerHTML = '';
+            
+            prices.forEach(asset => {
+                const card = document.createElement('div');
+                card.className = 'price-card animate__animated animate__fadeInUp';
+                card.innerHTML = `
+                    <div class="price-symbol">${asset.symbol}</div>
+                    <div class="price-name">${asset.name}</div>
+                    <div class="price-current">$${numberWithCommas(asset.price)}</div>
+                    <div class="price-change ${asset.change >= 0 ? 'change-positive' : 'change-negative'}">
+                        ${asset.change >= 0 ? '▲' : '▼'} ${Math.abs(asset.change)}%
+                    </div>
+                `;
+                container.appendChild(card);
+            });
+        }
+        
+        // ===== WINNERS MARQUEE =====
+        function loadWinners() {
+            const winners = [
+                { name: 'Alex Johnson', country: '🇺🇸', amount: 12450, game: 'Roulette' },
+                { name: 'Maria Garcia', country: '🇪🇸', amount: 8450, game: 'Slots' },
+                { name: 'Kenji Tanaka', country: '🇯🇵', amount: 23100, game: 'Blackjack' },
+                { name: 'Sarah Miller', country: '🇨🇦', amount: 5600, game: 'Poker' },
+                { name: 'David Smith', country: '🇬🇧', amount: 18900, game: 'Football' },
+                { name: 'Li Wei', country: '🇨🇳', amount: 32200, game: 'Crypto' },
+                { name: 'Mohammed Ali', country: '🇦🇪', amount: 15750, game: 'Forex' },
+                { name: 'Olga Petrova', country: '🇷🇺', amount: 9800, game: 'Basketball' }
+            ];
+            
+            const container = document.getElementById('winnersMarquee');
+            
+            // Duplicate winners for seamless marquee
+            const allWinners = [...winners, ...winners];
+            
+            allWinners.forEach(winner => {
+                const card = document.createElement('div');
+                card.className = 'winner-card';
+                card.innerHTML = `
+                    <div class="winner-avatar">${winner.name.charAt(0)}</div>
+                    <div class="winner-info">
+                        <h4>${winner.name} ${winner.country}</h4>
+                        <div class="winner-amount">$${winner.amount.toLocaleString()}</div>
+                        <small style="color: var(--text-muted);">${winner.game}</small>
+                    </div>
+                `;
+                container.appendChild(card);
+            });
+        }
+        
+        // ===== RECENT USERS =====
+        async function loadRecentUsers() {
+            try {
+                const snapshot = await db.collection('wallets')
+                    .orderBy('createdAt', 'desc')
+                    .limit(12)
+                    .get();
+                
+                const container = document.getElementById('recentUsers');
+                container.innerHTML = '';
+                
+                if (!snapshot.empty) {
+                    snapshot.forEach(doc => {
+                        const data = doc.data();
+                        const username = data.username || data.email?.split('@')[0] || 'User';
+                        const country = data.country || getRandomCountry();
+                        const balance = data.balance || 0;
+                        
+                        const card = document.createElement('div');
+                        card.className = 'user-card';
+                        card.innerHTML = `
+                            <div style="font-size: 32px; margin-bottom: 5px;">${country}</div>
+                            <div style="font-weight: 600;">${username}</div>
+                            <div style="font-size: 12px; color: var(--success);">💰 $${balance.toFixed(2)}</div>
+                            <div style="font-size: 10px; color: var(--text-muted); margin-top: 5px;">Just joined</div>
+                        `;
+                        container.appendChild(card);
+                    });
+                } else {
+                    // Show sample users
+                    showSampleUsers();
+                }
+            } catch (error) {
+                console.error('Error loading users:', error);
+                showSampleUsers();
+            }
+        }
+        
+        function showSampleUsers() {
+            const container = document.getElementById('recentUsers');
+            const countries = ['🇺🇸', '🇬🇧', '🇩🇪', '🇨🇦', '🇦🇺', '🇯🇵', '🇧🇷', '🇮🇳', '🇫🇷', '🇮🇹', '🇪🇸', '🇲🇽'];
+            const names = ['JohnD', 'SarahC', 'MikeT', 'EmmaW', 'AlexK', 'YukiS', 'CarlosM', 'RajP', 'SophieL', 'MarcoR', 'ElenaV', 'OmarH'];
+            
+            container.innerHTML = '';
+            
+            for (let i = 0; i < 12; i++) {
+                const card = document.createElement('div');
+                card.className = 'user-card';
+                card.innerHTML = `
+                    <div style="font-size: 32px; margin-bottom: 5px;">${countries[i]}</div>
+                    <div style="font-weight: 600;">${names[i]}</div>
+                    <div style="font-size: 12px; color: var(--success);">💰 $${(Math.random() * 1000 + 10).toFixed(2)}</div>
+                    <div style="font-size: 10px; color: var(--text-muted); margin-top: 5px;">Joined today</div>
+                `;
+                container.appendChild(card);
+            }
+        }
+        
+        function getRandomCountry() {
+            const countries = ['🇺🇸', '🇬🇧', '🇨🇦', '🇦🇺', '🇩🇪', '🇫🇷', '🇯🇵', '🇧🇷'];
+            return countries[Math.floor(Math.random() * countries.length)];
+        }
+        
+        // ===== AUTH HANDLING =====
+        function handleAuthStateChange(user) {
+            if (user) {
+                currentUser = user;
+                loadUserData();
+                document.getElementById('navPublic').classList.add('hidden');
+                document.getElementById('navAuth').classList.remove('hidden');
+                document.getElementById('userBalance').style.display = 'block';
+                checkBonusStatus();
+            } else {
+                currentUser = null;
+                userData = null;
+                document.getElementById('navPublic').classList.remove('hidden');
+                document.getElementById('navAuth').classList.add('hidden');
+                document.getElementById('userBalance').style.display = 'none';
+            }
+        }
+        
+        async function loadUserData() {
+            try {
+                const doc = await db.collection('wallets').doc(currentUser.uid).get();
+                if (doc.exists) {
+                    userData = doc.data();
+                    document.getElementById('userBalance').innerHTML = `<i class="fas fa-coins"></i> $${(userData.balance || 0).toFixed(2)}`;
+                }
+            } catch (error) {
+                console.error('Error loading user data:', error);
+            }
+        }
+        
+        async function checkBonusStatus() {
+            if (!currentUser) return;
+            
+            try {
+                const doc = await db.collection('wallets').doc(currentUser.uid).get();
+                if (doc.exists) {
+                    userHasClaimedBonus = doc.data().bonusClaimed || false;
+                    
+                    const bonusStatus = document.getElementById('bonusStatus');
+                    if (userHasClaimedBonus) {
+                        bonusStatus.style.display = 'block';
+                        bonusStatus.innerHTML = '<i class="fas fa-check-circle"></i> Bonus already claimed';
+                        document.getElementById('claimBonusBtn').disabled = true;
+                    } else {
+                        bonusStatus.style.display = 'block';
+                        bonusStatus.innerHTML = '<i class="fas fa-gift"></i> $2.00 bonus available';
+                    }
+                }
+            } catch (error) {
+                console.error('Error checking bonus:', error);
+            }
+        }
+        
+        // ===== BONUS CLAIM =====
+        async function claimBonus() {
+            if (!currentUser) {
+                showToast('Please login to claim bonus', 'warning');
+                return;
+            }
+            
+            if (userHasClaimedBonus) {
+                showToast('You already claimed your bonus', 'warning');
+                return;
+            }
+            
+            try {
+                const button = document.getElementById('claimBonusBtn');
+                button.disabled = true;
+                button.innerHTML = '<i class="fas fa-spinner fa-spin"></i> Processing...';
+                
+                const walletRef = db.collection('wallets').doc(currentUser.uid);
+                
+                await db.runTransaction(async (transaction) => {
+                    const doc = await transaction.get(walletRef);
+                    if (!doc.exists) return;
+                    
+                    if (doc.data().bonusClaimed) {
+                        throw new Error('Bonus already claimed');
+                    }
+                    
+                    const currentBalance = doc.data().balance || 0;
+                    transaction.update(walletRef, {
+                        balance: currentBalance + 2,
+                        bonusClaimed: true,
+                        bonusClaimedAt: new Date()
+                    });
+                });
+                
+                userHasClaimedBonus = true;
+                showToast('🎉 $2.00 bonus added to your account!', 'success');
+                
+                // Update balance display
+                if (userData) {
+                    userData.balance = (userData.balance || 0) + 2;
+                    document.getElementById('userBalance').innerHTML = `<i class="fas fa-coins"></i> $${userData.balance.toFixed(2)}`;
+                }
+                
+                // Show confetti effect
+                createConfetti();
+                
+            } catch (error) {
+                console.error('Bonus claim error:', error);
+                showToast('Error claiming bonus', 'error');
+            } finally {
+                const button = document.getElementById('claimBonusBtn');
+                button.disabled = false;
+                button.innerHTML = '<i class="fas fa-gift"></i> CLAIM YOUR $2 BONUS';
+            }
+        }
+        
+        function createConfetti() {
+            for (let i = 0; i < 20; i++) {
+                setTimeout(() => {
+                    const confetti = document.createElement('div');
+                    confetti.innerHTML = '🎉';
+                    confetti.style.cssText = `
+                        position: fixed;
+                        left: ${Math.random() * 100}vw;
+                        top: -50px;
+                        font-size: ${Math.random() * 20 + 20}px;
+                        animation: rain ${Math.random() * 3 + 2}s linear;
+                        z-index: 9999;
+                    `;
+                    document.body.appendChild(confetti);
+                    setTimeout(() => confetti.remove(), 3000);
+                }, i * 100);
+            }
+        }
+        
+        // ===== UTILITY FUNCTIONS =====
+        function numberWithCommas(x) {
+            return x.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",");
+        }
+        
+        function showToast(message, type = 'info') {
+            const container = document.getElementById('toastContainer');
+            const toast = document.createElement('div');
+            toast.className = `toast ${type}`;
+            
+            let icon = 'info-circle';
+            if (type === 'success') icon = 'check-circle';
+            if (type === 'error') icon = 'exclamation-circle';
+            if (type === 'warning') icon = 'exclamation-triangle';
+            
+            toast.innerHTML = `<i class="fas fa-${icon}"></i> ${message}`;
+            container.appendChild(toast);
+            
+            setTimeout(() => {
+                toast.style.animation = 'slideOutRight 0.3s';
+                setTimeout(() => toast.remove(), 300);
+            }, 3000);
+        }
+        
+        function updateServerTime() {
+            const updateTime = () => {
+                const now = new Date();
+                document.getElementById('serverTime').textContent = 
+                    now.toLocaleTimeString() + ' GMT';
+            };
+            
+            updateTime();
+            setInterval(updateTime, 1000);
+        }
+        
+        function setupEventListeners() {
+            document.getElementById('loginBtn').addEventListener('click', () => {
+                window.location.href = 'login.html';
+            });
+            
+            document.getElementById('registerBtn').addEventListener('click', () => {
+                window.location.href = 'register.html';
+            });
+            
+            document.getElementById('claimBonusBtn').addEventListener('click', claimBonus);
+            
+            document.getElementById('logoutBtn').addEventListener('click', async () => {
+                await auth.signOut();
+                showToast('Logged out successfully', 'success');
+            });
+            
+            document.getElementById('logoutBtnAuth').addEventListener('click', async () => {
+                await auth.signOut();
+                showToast('Logged out successfully', 'success');
+            });
+        }
+        
+        // Add slideOutRight animation
+        const style = document.createElement('style');
+        style.textContent = `
+            @keyframes slideOutRight {
+                from { transform: translateX(0); opacity: 1; }
+                to { transform: translateX(100%); opacity: 0; }
+            }
+        `;
+        document.head.appendChild(style);
+    </script>
+</body>
+</html>

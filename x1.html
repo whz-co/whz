@@ -3,1215 +3,1316 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=yes">
-    <title>Dr. Waleed's AI - Fully Working Premium Edition</title>
+    <title>🎯 LONDON 2020 - X-Bet</title>
     
-    <!-- Core Libraries with Fallbacks -->
-    <script src="https://www.gstatic.com/firebasejs/10.8.0/firebase-app-compat.js"></script>
-    <script src="https://www.gstatic.com/firebasejs/10.8.0/firebase-auth-compat.js"></script>
-    <script src="https://www.gstatic.com/firebasejs/10.8.0/firebase-firestore-compat.js"></script>
+    <!-- Firebase SDK -->
+    <script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-app-compat.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-auth-compat.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-firestore-compat.js"></script>
     
     <!-- Font Awesome -->
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     
-    <!-- Marked for Markdown -->
-    <script src="https://cdn.jsdelivr.net/npm/marked/marked.min.js"></script>
-    
-    <!-- DOMPurify for Security -->
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/dompurify/2.4.0/purify.min.js"></script>
-    
     <style>
-        /* RESET & BASE */
+        /* ===== RESET & VARIABLES ===== */
         * {
             margin: 0;
             padding: 0;
             box-sizing: border-box;
         }
-
+        
         :root {
-            --primary: #1e3c72;
-            --primary-dark: #0f2b4f;
-            --primary-light: #2a5298;
-            --secondary: #ffd700;
-            --secondary-dark: #e6c200;
+            --primary: #ff4081;
+            --secondary: #3949ab;
+            --accent: #2196f3;
             --success: #4caf50;
-            --danger: #f44336;
             --warning: #ff9800;
-            --gray-100: #f8f9fa;
-            --gray-200: #e9ecef;
-            --gray-300: #dee2e6;
-            --gray-400: #ced4da;
-            --gray-500: #adb5bd;
-            --gray-600: #6c757d;
-            --gray-700: #495057;
-            --gray-800: #343a40;
-            --gray-900: #212529;
-            --shadow: 0 2px 10px rgba(0,0,0,0.1);
-            --shadow-lg: 0 5px 20px rgba(0,0,0,0.15);
-            --radius: 12px;
-            --radius-sm: 8px;
-            --radius-lg: 16px;
-            --radius-full: 999px;
+            --danger: #ff5252;
+            --dark: #0f0c29;
+            --dark-light: #1a1a2e;
+            --light: #f8f9fa;
+            --text: #ffffff;
+            --text-secondary: rgba(255, 255, 255, 0.7);
+            --gradient: linear-gradient(135deg, #ff4081 0%, #302b63 50%, #24243e 100%);
         }
-
+        
         body {
-            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, sans-serif;
-            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif;
+            background: linear-gradient(135deg, #0f0c29 0%, #302b63 50%, #24243e 100%);
+            color: var(--text);
             min-height: 100vh;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            padding: 12px;
-            color: var(--gray-800);
+            padding: 0;
+            margin: 0;
         }
-
-        #app {
-            width: 100%;
-            max-width: 1200px;
-            height: 98vh;
-            background: white;
-            border-radius: var(--radius-lg);
-            box-shadow: var(--shadow-lg);
-            display: flex;
-            flex-direction: column;
-            overflow: hidden;
+        
+        /* ===== MAIN CONTAINER ===== */
+        .app-container {
+            max-width: 100%;
+            min-height: 100vh;
+            background: rgba(0, 0, 0, 0.7);
+            border-left: 3px solid var(--primary);
+            border-right: 3px solid var(--primary);
+            margin: 0 auto;
             position: relative;
+            padding-bottom: 80px; /* Space for bottom nav */
         }
-
-        /* HEADER */
-        .header {
-            background: linear-gradient(135deg, var(--primary), var(--primary-light));
-            color: white;
-            padding: 16px 20px;
-        }
-
-        .header-top {
+        
+        /* ===== STICKY HEADER ===== */
+        .sticky-header {
+            position: sticky;
+            top: 0;
+            z-index: 100;
+            background: rgba(15, 12, 41, 0.98);
+            backdrop-filter: blur(10px);
+            padding: 12px 16px;
+            border-bottom: 2px solid var(--primary);
             display: flex;
             justify-content: space-between;
             align-items: center;
-            margin-bottom: 12px;
+            width: 100%;
         }
-
-        .header-left {
-            display: flex;
-            align-items: center;
-            gap: 12px;
-        }
-
-        .avatar {
-            width: 48px;
-            height: 48px;
-            background: var(--secondary);
-            border-radius: var(--radius-full);
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            font-size: 24px;
-            color: var(--primary);
-            border: 2px solid white;
-        }
-
-        .title h1 {
-            font-size: 1.5rem;
+        
+        .logo-area {
             display: flex;
             align-items: center;
             gap: 8px;
         }
-
-        .title h1 i {
-            color: var(--secondary);
-        }
-
-        .badge {
-            background: rgba(255,255,255,0.2);
-            padding: 4px 8px;
-            border-radius: var(--radius-full);
-            font-size: 0.7rem;
-            margin-left: 8px;
-        }
-
-        .status {
-            display: flex;
-            align-items: center;
-            gap: 8px;
-            background: rgba(0,0,0,0.2);
-            padding: 6px 12px;
-            border-radius: var(--radius-full);
-        }
-
-        .status-dot {
-            width: 10px;
-            height: 10px;
-            background: var(--success);
-            border-radius: 50%;
-            animation: pulse 2s infinite;
-        }
-
-        @keyframes pulse {
-            0%, 100% { opacity: 1; }
-            50% { opacity: 0.5; }
-        }
-
-        /* PREMIUM BAR */
-        .premium-bar {
-            background: rgba(255,255,255,0.1);
-            border-radius: var(--radius-full);
-            padding: 8px 16px;
-            display: flex;
-            align-items: center;
-            gap: 12px;
-            backdrop-filter: blur(10px);
-        }
-
-        .premium-bar i {
-            color: var(--secondary);
-        }
-
-        .premium-text {
-            font-size: 0.9rem;
-            font-weight: 600;
-        }
-
-        /* NAV MENU */
-        .nav-menu {
-            display: flex;
-            gap: 8px;
-            overflow-x: auto;
-            padding: 12px 0 4px;
-            scrollbar-width: none;
-        }
-
-        .nav-menu::-webkit-scrollbar {
-            display: none;
-        }
-
-        .nav-item {
-            color: white;
-            text-decoration: none;
-            padding: 6px 16px;
-            background: rgba(255,255,255,0.15);
-            border-radius: var(--radius-full);
-            font-size: 0.85rem;
-            display: flex;
-            align-items: center;
-            gap: 6px;
-            white-space: nowrap;
-            transition: all 0.2s;
-        }
-
-        .nav-item:hover,
-        .nav-item.active {
-            background: var(--secondary);
+        
+        .logo {
+            font-size: 20px;
+            font-weight: bold;
             color: var(--primary);
-            transform: translateY(-2px);
-        }
-
-        /* TABS */
-        .tabs {
-            display: flex;
-            gap: 10px;
-            padding: 12px 20px;
-            background: white;
-            border-bottom: 1px solid var(--gray-200);
-            overflow-x: auto;
-        }
-
-        .tab {
-            padding: 8px 20px;
-            background: var(--gray-100);
-            border-radius: var(--radius-full);
-            font-size: 0.9rem;
             display: flex;
             align-items: center;
-            gap: 8px;
-            cursor: pointer;
-            white-space: nowrap;
-            transition: all 0.2s;
-            border: 1px solid transparent;
-        }
-
-        .tab:hover {
-            background: var(--gray-200);
-        }
-
-        .tab.active {
-            background: var(--primary);
-            color: white;
-            border-color: var(--secondary);
-        }
-
-        .tab i.fa-times {
-            opacity: 0.6;
-            transition: opacity 0.2s;
-        }
-
-        .tab i.fa-times:hover {
-            opacity: 1;
-        }
-
-        .new-tab {
-            background: transparent;
-            border: 1px dashed var(--gray-400);
-        }
-
-        /* CHAT CONTAINER */
-        #chat-container {
-            flex: 1;
-            overflow-y: auto;
-            padding: 20px;
-            background: var(--gray-100);
-            display: flex;
-            flex-direction: column;
-            gap: 16px;
-        }
-
-        .welcome-message {
-            text-align: center;
-            padding: 40px 20px;
-            background: white;
-            border-radius: var(--radius-lg);
-            box-shadow: var(--shadow);
-            margin-bottom: 20px;
-        }
-
-        .welcome-message h2 {
-            color: var(--primary);
-            font-size: 2rem;
-            margin-bottom: 10px;
-        }
-
-        .welcome-message h2 span {
-            color: var(--secondary);
-            background: linear-gradient(45deg, #ffd700, #ffb347);
-            -webkit-background-clip: text;
-            -webkit-text-fill-color: transparent;
-        }
-
-        .welcome-message p {
-            color: var(--gray-600);
-            margin-bottom: 20px;
-        }
-
-        .feature-pills {
-            display: flex;
-            gap: 10px;
-            justify-content: center;
-            flex-wrap: wrap;
-        }
-
-        .pill {
-            background: var(--gray-100);
-            padding: 6px 16px;
-            border-radius: var(--radius-full);
-            font-size: 0.85rem;
-            color: var(--primary);
-        }
-
-        /* MESSAGES */
-        .message {
-            max-width: 80%;
-            padding: 14px 18px;
-            border-radius: var(--radius-lg);
-            animation: slideIn 0.3s;
-            position: relative;
-            word-wrap: break-word;
-            line-height: 1.5;
-        }
-
-        @keyframes slideIn {
-            from { opacity: 0; transform: translateY(10px); }
-            to { opacity: 1; transform: translateY(0); }
-        }
-
-        .user-message {
-            background: linear-gradient(135deg, var(--primary), var(--primary-light));
-            color: white;
-            align-self: flex-end;
-            border-bottom-right-radius: 4px;
-        }
-
-        .ai-message {
-            background: white;
-            color: var(--gray-800);
-            align-self: flex-start;
-            border-bottom-left-radius: 4px;
-            box-shadow: var(--shadow);
-        }
-
-        .message-time {
-            font-size: 0.7rem;
-            opacity: 0.7;
-            margin-top: 6px;
-            text-align: right;
-        }
-
-        /* TYPING INDICATOR */
-        .typing {
-            background: white;
-            align-self: flex-start;
-            padding: 12px 18px;
-        }
-
-        .typing-dots {
-            display: flex;
             gap: 4px;
         }
-
-        .typing-dots span {
-            width: 8px;
-            height: 8px;
-            background: var(--gray-500);
-            border-radius: 50%;
-            animation: typing 1.4s infinite;
+        
+        .logo::before {
+            content: "£";
+            color: gold;
+            font-size: 24px;
+            text-shadow: 0 0 10px gold;
         }
-
-        .typing-dots span:nth-child(2) { animation-delay: 0.2s; }
-        .typing-dots span:nth-child(3) { animation-delay: 0.4s; }
-
-        @keyframes typing {
-            0%, 60%, 100% { transform: translateY(0); }
-            30% { transform: translateY(-6px); }
-        }
-
-        /* INPUT AREA */
-        #input-area {
-            padding: 20px;
-            background: white;
-            border-top: 1px solid var(--gray-200);
-        }
-
-        .input-wrapper {
-            display: flex;
-            gap: 12px;
-            background: var(--gray-100);
-            border-radius: var(--radius-full);
-            padding: 4px 4px 4px 20px;
-            border: 2px solid transparent;
-            transition: all 0.2s;
-        }
-
-        .input-wrapper:focus-within {
-            border-color: var(--primary);
-            background: white;
-            box-shadow: 0 0 0 4px rgba(30,60,114,0.1);
-        }
-
-        #message-input {
-            flex: 1;
-            border: none;
-            background: transparent;
-            padding: 14px 0;
-            font-size: 1rem;
-            outline: none;
-        }
-
-        #send-button {
-            background: linear-gradient(135deg, var(--primary), var(--primary-light));
+        
+        .live-badge {
+            background: var(--success);
             color: white;
+            padding: 4px 8px;
+            border-radius: 20px;
+            font-size: 10px;
+            font-weight: bold;
+        }
+        
+        .header-balance {
+            background: var(--success);
+            color: white;
+            padding: 6px 12px;
+            border-radius: 20px;
+            font-weight: bold;
+            font-size: 14px;
+            box-shadow: 0 2px 8px rgba(76, 175, 80, 0.3);
+            display: none;
+        }
+        
+        /* ===== MAIN CONTENT ===== */
+        .main-content {
+            padding: 16px;
+        }
+        
+        /* ===== HERO SECTION ===== */
+        .hero-section {
+            text-align: center;
+            padding: 24px 16px;
+            background: rgba(255, 64, 129, 0.1);
+            border-radius: 20px;
+            margin-bottom: 24px;
+            border: 2px dashed var(--primary);
+        }
+        
+        .hero-title {
+            font-size: 28px;
+            font-weight: bold;
+            margin-bottom: 8px;
+            background: linear-gradient(45deg, var(--primary), var(--accent));
+            -webkit-background-clip: text;
+            background-clip: text;
+            color: transparent;
+        }
+        
+        .hero-subtitle {
+            font-size: 14px;
+            color: var(--text-secondary);
+            margin-bottom: 20px;
+        }
+        
+        /* ===== BONUS CARD ===== */
+        .bonus-card {
+            background: linear-gradient(45deg, var(--primary), var(--warning));
+            padding: 24px 16px;
+            border-radius: 20px;
+            margin: 20px 0;
+            box-shadow: 0 10px 25px rgba(255, 64, 129, 0.4);
+        }
+        
+        .bonus-title {
+            font-size: 18px;
+            margin-bottom: 8px;
+        }
+        
+        .bonus-amount {
+            font-size: 48px;
+            font-weight: bold;
+            color: gold;
+            text-shadow: 0 0 20px rgba(255, 215, 0, 0.7);
+            animation: pulse 2s infinite;
+            margin: 10px 0;
+        }
+        
+        @keyframes pulse {
+            0%, 100% { transform: scale(1); }
+            50% { transform: scale(1.05); }
+        }
+        
+        .bonus-text {
+            font-size: 12px;
+            opacity: 0.9;
+            margin: 10px 0;
+        }
+        
+        .bonus-status {
+            display: inline-block;
+            padding: 6px 12px;
+            border-radius: 20px;
+            font-size: 12px;
+            margin: 8px 0;
+        }
+        
+        .bonus-available {
+            background: rgba(76, 175, 80, 0.2);
+            color: #4caf50;
+            border: 1px solid rgba(76, 175, 80, 0.3);
+        }
+        
+        .bonus-claimed {
+            background: rgba(255, 152, 0, 0.2);
+            color: #ff9800;
+            border: 1px solid rgba(255, 152, 0, 0.3);
+        }
+        
+        .claim-btn {
+            background: white;
+            color: var(--primary);
             border: none;
-            border-radius: var(--radius-full);
-            padding: 12px 28px;
-            font-weight: 600;
+            border-radius: 50px;
+            padding: 14px 30px;
+            font-size: 16px;
+            font-weight: bold;
             cursor: pointer;
+            margin: 15px 0 10px;
+            width: 100%;
+            max-width: 280px;
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.3);
+        }
+        
+        .claim-btn:active {
+            transform: scale(0.98);
+        }
+        
+        .claim-btn:disabled {
+            opacity: 0.7;
+            cursor: not-allowed;
+        }
+        
+        /* ===== AUTH BUTTONS ===== */
+        .auth-buttons {
+            display: flex;
+            gap: 10px;
+            justify-content: center;
+            margin: 20px 0;
+        }
+        
+        .auth-btn {
+            flex: 1;
+            padding: 12px;
+            border: none;
+            border-radius: 10px;
+            font-weight: bold;
+            font-size: 14px;
+            cursor: pointer;
+            max-width: 120px;
+        }
+        
+        .login-btn {
+            background: var(--secondary);
+            color: white;
+        }
+        
+        .register-btn {
+            background: var(--primary);
+            color: white;
+        }
+        
+        .logout-btn {
+            background: var(--danger);
+            color: white;
+        }
+        
+        .user-greeting {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            justify-content: center;
+            margin: 15px 0;
+        }
+        
+        .username {
+            font-weight: bold;
+            color: var(--primary);
+        }
+        
+        /* ===== QUICK ACCESS GRID ===== */
+        .section-title {
+            font-size: 20px;
+            margin: 25px 0 15px;
             display: flex;
             align-items: center;
             gap: 8px;
-            transition: all 0.2s;
         }
-
-        #send-button:hover:not(:disabled) {
-            transform: translateY(-2px);
-            box-shadow: 0 5px 15px rgba(30,60,114,0.3);
-        }
-
-        #send-button:disabled {
-            opacity: 0.6;
-            cursor: not-allowed;
-        }
-
-        /* SUGGESTIONS */
-        .suggestions {
-            display: flex;
+        
+        .quick-grid {
+            display: grid;
+            grid-template-columns: repeat(4, 1fr);
             gap: 10px;
-            margin-top: 16px;
-            flex-wrap: wrap;
-            justify-content: center;
+            margin-bottom: 25px;
         }
-
-        .chip {
-            background: var(--gray-100);
-            padding: 8px 18px;
-            border-radius: var(--radius-full);
-            font-size: 0.9rem;
-            cursor: pointer;
-            display: flex;
-            align-items: center;
-            gap: 6px;
-            transition: all 0.2s;
-            border: 1px solid var(--gray-200);
-        }
-
-        .chip:hover:not(.disabled) {
-            background: var(--primary);
+        
+        .quick-item {
+            background: #1e293b;
+            padding: 12px 5px;
+            border-radius: 12px;
+            text-align: center;
+            text-decoration: none;
             color: white;
-            transform: translateY(-2px);
+            border: 1px solid rgba(255, 255, 255, 0.1);
         }
-
-        /* FOOTER */
-        .footer {
-            padding: 12px 20px;
-            background: white;
-            border-top: 1px solid var(--gray-200);
+        
+        .quick-item:active {
+            background: var(--primary);
+            transform: scale(0.95);
+        }
+        
+        .quick-icon {
+            font-size: 22px;
+            display: block;
+            margin-bottom: 4px;
+        }
+        
+        .quick-label {
+            font-size: 11px;
+            font-weight: 600;
+        }
+        
+        /* ===== GAMES SECTION ===== */
+        .games-grid {
             display: flex;
-            justify-content: space-between;
-            color: var(--gray-600);
-            font-size: 0.85rem;
+            overflow-x: auto;
+            gap: 15px;
+            padding: 10px 0 20px;
+            scroll-snap-type: x mandatory;
+            -webkit-overflow-scrolling: touch;
         }
-
-        /* TOAST */
-        .toast-container {
-            position: fixed;
-            bottom: 20px;
-            right: 20px;
-            z-index: 1000;
+        
+        .games-grid::-webkit-scrollbar {
+            display: none;
         }
-
-        .toast {
-            background: white;
-            padding: 12px 20px;
-            border-radius: var(--radius);
-            box-shadow: var(--shadow-lg);
+        
+        .game-card {
+            min-width: 240px;
+            background: rgba(255, 255, 255, 0.05);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            border-radius: 16px;
+            padding: 20px;
+            text-align: center;
+            text-decoration: none;
+            color: white;
+            scroll-snap-align: start;
+        }
+        
+        .game-card:active {
+            background: rgba(255, 64, 129, 0.2);
+            transform: scale(0.98);
+        }
+        
+        .game-icon {
+            font-size: 48px;
+            margin-bottom: 12px;
+        }
+        
+        .game-name {
+            font-size: 18px;
+            font-weight: bold;
+            margin-bottom: 8px;
+        }
+        
+        .game-desc {
+            font-size: 12px;
+            color: var(--text-secondary);
+            margin-bottom: 12px;
+        }
+        
+        .game-rtp {
+            color: var(--accent);
+            font-size: 14px;
+            font-weight: bold;
+        }
+        
+        /* ===== WINNERS SLIDER ===== */
+        .winners-slider {
+            display: flex;
+            gap: 15px;
+            overflow-x: auto;
+            padding: 10px 0 20px;
+            scroll-snap-type: x mandatory;
+        }
+        
+        .winners-slider::-webkit-scrollbar {
+            display: none;
+        }
+        
+        .winner-card {
+            min-width: 260px;
+            background: #1a1a2e;
+            border-radius: 16px;
+            padding: 16px;
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            scroll-snap-align: start;
+        }
+        
+        .winner-header {
             display: flex;
             align-items: center;
             gap: 12px;
-            margin-top: 10px;
-            animation: slideInRight 0.3s;
-            border-left: 4px solid var(--primary);
+            margin-bottom: 12px;
         }
-
-        .toast.success { border-left-color: var(--success); }
-        .toast.error { border-left-color: var(--danger); }
-        .toast.warning { border-left-color: var(--warning); }
-
-        @keyframes slideInRight {
+        
+        .winner-avatar {
+            width: 44px;
+            height: 44px;
+            background: linear-gradient(45deg, var(--primary), var(--warning));
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: bold;
+            font-size: 18px;
+        }
+        
+        .winner-info h4 {
+            font-size: 16px;
+            margin-bottom: 2px;
+        }
+        
+        .winner-meta {
+            font-size: 12px;
+            color: var(--text-secondary);
+        }
+        
+        .winner-amount {
+            font-size: 24px;
+            font-weight: bold;
+            color: gold;
+            margin: 8px 0;
+        }
+        
+        .winner-game {
+            font-size: 13px;
+            color: var(--text-secondary);
+        }
+        
+        /* ===== COUNTRIES GRID ===== */
+        .countries-grid {
+            display: grid;
+            grid-template-columns: 1fr;
+            gap: 10px;
+            margin: 20px 0;
+        }
+        
+        .country-item {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            padding: 12px;
+            background: rgba(255, 255, 255, 0.05);
+            border-radius: 12px;
+        }
+        
+        .country-flag {
+            font-size: 24px;
+        }
+        
+        .country-name {
+            flex: 1;
+            font-size: 14px;
+        }
+        
+        .country-count {
+            font-weight: bold;
+            color: var(--primary);
+            font-size: 14px;
+        }
+        
+        /* ===== STATS CARD ===== */
+        .stats-card {
+            background: rgba(76, 175, 80, 0.1);
+            padding: 20px;
+            border-radius: 16px;
+            text-align: center;
+            margin: 25px 0;
+            border: 1px solid rgba(76, 175, 80, 0.3);
+        }
+        
+        .stats-label {
+            font-size: 12px;
+            opacity: 0.8;
+            margin-bottom: 5px;
+        }
+        
+        .stats-number {
+            font-size: 36px;
+            font-weight: bold;
+            color: var(--success);
+            margin-bottom: 5px;
+        }
+        
+        .stats-details {
+            font-size: 13px;
+            color: var(--text-secondary);
+        }
+        
+        .stats-highlight {
+            color: gold;
+            font-weight: bold;
+        }
+        
+        /* ===== CTA SECTION ===== */
+        .cta-section {
+            background: rgba(255, 64, 129, 0.1);
+            padding: 25px 20px;
+            border-radius: 20px;
+            text-align: center;
+            margin: 25px 0;
+        }
+        
+        .cta-title {
+            font-size: 20px;
+            margin-bottom: 10px;
+        }
+        
+        .cta-text {
+            color: var(--text-secondary);
+            font-size: 14px;
+            margin-bottom: 20px;
+        }
+        
+        .cta-button {
+            background: linear-gradient(45deg, var(--primary), var(--warning));
+            color: white;
+            border: none;
+            border-radius: 50px;
+            padding: 14px 30px;
+            font-size: 16px;
+            font-weight: bold;
+            width: 100%;
+            max-width: 280px;
+            margin: 0 auto;
+            display: block;
+        }
+        
+        /* ===== FOOTER ===== */
+        .footer {
+            text-align: center;
+            padding: 25px 16px 15px;
+            border-top: 1px solid var(--secondary);
+            margin-top: 30px;
+        }
+        
+        .footer-title {
+            font-size: 18px;
+            margin-bottom: 8px;
+        }
+        
+        .footer-text {
+            font-size: 12px;
+            color: var(--text-secondary);
+            margin-bottom: 15px;
+        }
+        
+        .footer-links {
+            display: flex;
+            gap: 10px;
+            justify-content: center;
+            flex-wrap: wrap;
+            margin: 15px 0;
+        }
+        
+        .footer-link {
+            background: var(--secondary);
+            color: white;
+            padding: 8px 16px;
+            border-radius: 20px;
+            text-decoration: none;
+            font-size: 12px;
+        }
+        
+        .footer-link.warning {
+            background: var(--warning);
+        }
+        
+        .footer-status {
+            font-size: 11px;
+            opacity: 0.5;
+            margin-top: 15px;
+        }
+        
+        /* ===== BOTTOM NAVIGATION ===== */
+        .bottom-nav {
+            position: fixed;
+            bottom: 0;
+            left: 0;
+            right: 0;
+            background: #1a1a2e;
+            border-top: 2px solid var(--primary);
+            display: flex;
+            justify-content: space-around;
+            padding: 8px 0 12px;
+            z-index: 1000;
+            box-shadow: 0 -5px 20px rgba(0, 0, 0, 0.5);
+        }
+        
+        .nav-item {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            text-decoration: none;
+            color: rgba(255, 255, 255, 0.6);
+            font-size: 11px;
+            flex: 1;
+        }
+        
+        .nav-item.active {
+            color: var(--primary);
+        }
+        
+        .nav-item:active {
+            background: rgba(255, 64, 129, 0.2);
+        }
+        
+        .nav-icon {
+            font-size: 22px;
+            margin-bottom: 2px;
+        }
+        
+        /* ===== LOADING OVERLAY ===== */
+        .loading-overlay {
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: var(--dark);
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            z-index: 9999;
+            transition: opacity 0.5s;
+        }
+        
+        .loading-overlay.hidden {
+            opacity: 0;
+            pointer-events: none;
+        }
+        
+        .spinner {
+            width: 50px;
+            height: 50px;
+            border: 3px solid rgba(255, 64, 129, 0.3);
+            border-top-color: var(--primary);
+            border-radius: 50%;
+            animation: spin 1s linear infinite;
+            margin-bottom: 15px;
+        }
+        
+        @keyframes spin {
+            to { transform: rotate(360deg); }
+        }
+        
+        /* ===== TOAST NOTIFICATIONS ===== */
+        .toast-container {
+            position: fixed;
+            top: 20px;
+            right: 20px;
+            z-index: 1001;
+        }
+        
+        .toast {
+            background: #1a1a2e;
+            border-left: 4px solid var(--success);
+            padding: 12px 16px;
+            margin-top: 10px;
+            border-radius: 8px;
+            min-width: 250px;
+            font-size: 14px;
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.3);
+            animation: slideIn 0.3s;
+        }
+        
+        .toast.error {
+            border-left-color: var(--danger);
+        }
+        
+        .toast.warning {
+            border-left-color: var(--warning);
+        }
+        
+        @keyframes slideIn {
             from { transform: translateX(100%); opacity: 0; }
             to { transform: translateX(0); opacity: 1; }
         }
-
-        /* MODAL */
-        .modal-overlay {
+        
+        /* ===== UTILITY CLASSES ===== */
+        .hidden {
+            display: none !important;
+        }
+        
+        /* ===== MONEY ANIMATION ===== */
+        .money-rain {
             position: fixed;
-            top: 0; left: 0; right: 0; bottom: 0;
-            background: rgba(0,0,0,0.5);
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            z-index: 2000;
-            backdrop-filter: blur(5px);
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            pointer-events: none;
+            z-index: -1;
         }
-
-        .modal {
-            background: white;
-            padding: 40px;
-            border-radius: var(--radius-lg);
-            max-width: 400px;
-            text-align: center;
-            animation: scaleIn 0.3s;
-        }
-
-        @keyframes scaleIn {
-            from { transform: scale(0.9); opacity: 0; }
-            to { transform: scale(1); opacity: 1; }
-        }
-
-        .modal i {
-            font-size: 50px;
-            color: var(--secondary);
-            margin-bottom: 20px;
-        }
-
-        .modal h3 {
+        
+        .money-item {
+            position: fixed;
             font-size: 24px;
-            color: var(--primary);
-            margin-bottom: 10px;
+            color: gold;
+            text-shadow: 0 0 10px gold;
+            animation: fall linear infinite;
         }
-
-        .modal p {
-            color: var(--gray-600);
-            margin-bottom: 20px;
+        
+        @keyframes fall {
+            to { transform: translateY(100vh) rotate(360deg); opacity: 0; }
         }
-
-        .modal-btn {
-            background: linear-gradient(135deg, var(--primary), var(--primary-light));
-            color: white;
-            border: none;
-            padding: 12px 30px;
-            border-radius: var(--radius-full);
-            font-weight: 600;
-            cursor: pointer;
-            width: 100%;
+        
+        /* ===== IPHONE 14/15 OPTIMIZATIONS ===== */
+        @media (min-width: 390px) and (max-width: 430px) {
+            .hero-title {
+                font-size: 32px;
+            }
+            
+            .bonus-amount {
+                font-size: 56px;
+            }
+            
+            .game-card {
+                min-width: 260px;
+            }
         }
-
-        /* RESPONSIVE */
-        @media (max-width: 768px) {
-            .message { max-width: 90%; }
-            .send-text { display: none; }
-            .footer { flex-direction: column; align-items: center; gap: 5px; }
+        
+        /* iPhone SE / small devices */
+        @media (max-width: 375px) {
+            .hero-title {
+                font-size: 24px;
+            }
+            
+            .quick-label {
+                font-size: 10px;
+            }
+            
+            .game-card {
+                min-width: 220px;
+            }
         }
     </style>
 </head>
 <body>
-    <div id="app">
-        <!-- HEADER -->
-        <div class="header">
-            <div class="header-top">
-                <div class="header-left">
-                    <div class="avatar">
-                        <i class="fas fa-user-md"></i>
-                    </div>
-                    <div class="title">
-                        <h1>
-                            Dr. Waleed's AI
-                            <i class="fas fa-robot"></i>
-                            <span class="badge">PREMIUM</span>
-                        </h1>
-                    </div>
-                </div>
-                <div class="status" id="statusContainer">
-                    <span class="status-dot" id="statusDot"></span>
-                    <span id="statusText">Connecting...</span>
-                </div>
-            </div>
-            
-            <!-- Premium Bar -->
-            <div class="premium-bar">
-                <i class="fas fa-infinity"></i>
-                <span class="premium-text">Never Expires · 24/7 Online · Unlimited Access</span>
-            </div>
-            
-            <!-- Navigation -->
-            <div class="nav-menu">
-                <a href="#" class="nav-item"><i class="fas fa-home"></i> Home</a>
-                <a href="#" class="nav-item active"><i class="fas fa-robot"></i> AI Premium</a>
-                <a href="#" class="nav-item"><i class="fas fa-book"></i> Dictionary+</a>
-                <a href="#" class="nav-item"><i class="fas fa-language"></i> IELTS Pro</a>
-                <a href="#" class="nav-item"><i class="fas fa-globe"></i> TOEFL Pro</a>
-                <a href="#" class="nav-item"><i class="fas fa-shopping-bag"></i> Store</a>
-                <a href="#" class="nav-item"><i class="fas fa-user-md"></i> Dr.Waleed</a>
-                <a href="#" class="nav-item"><i class="fas fa-envelope"></i> Support</a>
-                <a href="#" class="nav-item"><i class="fas fa-user-circle"></i> Profile</a>
-                <a href="#" class="nav-item" id="featuresBtn"><i class="fas fa-crown"></i> Features</a>
-            </div>
-        </div>
-
-        <!-- TABS -->
-        <div class="tabs" id="tabContainer">
-            <div class="tab active" id="defaultTab">
-                <i class="fas fa-comment"></i> Main Chat
-            </div>
-            <div class="tab new-tab" id="newTabBtn">
-                <i class="fas fa-plus"></i> New Chat
-            </div>
-            <div class="tab" id="archiveTab">
-                <i class="fas fa-archive"></i> Archive
-            </div>
-            <div class="tab" id="favoritesTab">
-                <i class="fas fa-star"></i> Favorites
-            </div>
-        </div>
-
-        <!-- CHAT CONTAINER -->
-        <div id="chat-container">
-            <div class="welcome-message">
-                <h2>ASK <span>Dr. Waleed</span></h2>
-                <p>Your premium AI assistant is ready 24/7</p>
-                <div class="feature-pills">
-                    <span class="pill"><i class="fas fa-infinity"></i> Unlimited</span>
-                    <span class="pill"><i class="fas fa-bolt"></i> Instant</span>
-                    <span class="pill"><i class="fas fa-shield"></i> Secure</span>
-                </div>
-            </div>
-        </div>
-
-        <!-- INPUT AREA -->
-        <div id="input-area">
-            <div class="input-wrapper">
-                <input 
-                    type="text" 
-                    id="message-input" 
-                    placeholder="Type your message here..."
-                    autocomplete="off"
-                >
-                <button id="send-button">
-                    <i class="fas fa-paper-plane"></i>
-                    <span class="send-text">Send</span>
-                </button>
-            </div>
-            
-            <div class="suggestions" id="suggestions">
-                <div class="chip" data-suggestion="What is artificial intelligence?"><i class="fas fa-brain"></i> AI Explained</div>
-                <div class="chip" data-suggestion="Tell me a funny joke"><i class="fas fa-smile"></i> Tell Joke</div>
-                <div class="chip" data-suggestion="How do I start learning coding?"><i class="fas fa-code"></i> Learn Code</div>
-                <div class="chip" data-suggestion="What are the best places to visit in Paris?"><i class="fas fa-flag"></i> Paris Guide</div>
-                <div class="chip" data-suggestion="Give me healthy breakfast ideas"><i class="fas fa-bread"></i> Breakfast</div>
-                <div class="chip" data-suggestion="What is the meaning of life?"><i class="fas fa-heart"></i> Life Meaning</div>
-                <div class="chip" data-suggestion="Write a poem about success"><i class="fas fa-feather"></i> Write Poem</div>
-                <div class="chip" data-suggestion="Explain quantum computing"><i class="fas fa-atom"></i> Quantum</div>
-                <div class="chip" data-suggestion="Give me a workout plan"><i class="fas fa-dumbbell"></i> Workout</div>
-                <div class="chip" data-suggestion="How to learn English fast?"><i class="fas fa-language"></i> Learn English</div>
-            </div>
-        </div>
-
-        <!-- FOOTER -->
-        <div class="footer">
-            <span><i class="fas fa-infinity"></i> Unlimited Access</span>
-            <span><i class="fas fa-crown"></i> Dr. Waleed's AI Premium · v3.0</span>
-            <span><i class="fas fa-shield-alt"></i> Never Expires</span>
-        </div>
+    <!-- Money Rain Animation -->
+    <div class="money-rain" id="moneyRain"></div>
+    
+    <!-- Loading Overlay -->
+    <div class="loading-overlay" id="loadingOverlay">
+        <div class="spinner"></div>
+        <p>Loading London 2020...</p>
     </div>
-
-    <!-- TOAST CONTAINER -->
+    
+    <!-- Toast Container -->
     <div class="toast-container" id="toastContainer"></div>
-
-    <!-- FEATURES MODAL -->
-    <div class="modal-overlay" id="featuresModal" style="display: none;">
-        <div class="modal">
-            <i class="fas fa-crown"></i>
-            <h3>Premium Features</h3>
-            <p>✓ Never Expires<br>✓ 24/7 Availability<br>✓ Unlimited Messages<br>✓ No Time Limits<br>✓ Priority Support</p>
-            <button class="modal-btn" onclick="document.getElementById('featuresModal').style.display='none'">Got It!</button>
+    
+    <!-- Main App Container -->
+    <div class="app-container">
+        
+        <!-- Sticky Header -->
+        <header class="sticky-header">
+            <div class="logo-area">
+                <span class="logo">LONDON 2020</span>
+                <span class="live-badge">● LIVE</span>
+            </div>
+            <div class="header-balance" id="headerBalance">$0.00</div>
+        </header>
+        
+        <!-- Main Content -->
+        <div class="main-content">
+            
+            <!-- Hero Section -->
+            <section class="hero-section">
+                <h1 class="hero-title">WELCOME TO LONDON 2020</h1>
+                <p class="hero-subtitle">Premium betting experience with instant rewards</p>
+            </section>
+            
+            <!-- Auth Section - ALWAYS VISIBLE -->
+            <div id="authSection">
+                <!-- Not Logged In State -->
+                <div id="notLoggedIn">
+                    <div class="auth-buttons">
+                        <button class="auth-btn login-btn" id="loginBtn">Login</button>
+                        <button class="auth-btn register-btn" id="registerBtn">Register</button>
+                    </div>
+                </div>
+                
+                <!-- Logged In State -->
+                <div id="loggedIn" class="hidden">
+                    <div class="user-greeting">
+                        <span>Welcome, <span class="username" id="username">Player</span>!</span>
+                        <button class="auth-btn logout-btn" id="logoutBtn">Logout</button>
+                    </div>
+                </div>
+            </div>
+            
+            <!-- Bonus Card - ALWAYS VISIBLE -->
+            <div class="bonus-card" id="bonus">
+                <h2 class="bonus-title">🎁 LIFETIME WELCOME BONUS</h2>
+                <div class="bonus-amount">$2.00</div>
+                <p class="bonus-text">Register now and get $2.00 instantly! (One-time only)</p>
+                
+                <!-- Bonus Status -->
+                <div id="bonusStatus" class="bonus-status bonus-available hidden">
+                    <span id="bonusStatusText">Bonus Available</span>
+                </div>
+                
+                <button class="claim-btn" id="claimBonusBtn">
+                    🎯 CLAIM $2.00 BONUS
+                </button>
+                
+                <p class="bonus-text" style="font-size: 11px;">
+                    <i class="fas fa-info-circle"></i> One-time lifetime bonus for new members
+                </p>
+            </div>
+            
+            <!-- Quick Access Grid -->
+            <h3 class="section-title">
+                <span>📱 QUICK ACCESS</span>
+            </h3>
+            
+            <div class="quick-grid">
+                <a href="markets.html?tab=forex" class="quick-item">
+                    <span class="quick-icon">📈</span>
+                    <span class="quick-label">Forex</span>
+                </a>
+                <a href="markets.html?tab=crypto" class="quick-item">
+                    <span class="quick-icon">₿</span>
+                    <span class="quick-label">Crypto</span>
+                </a>
+                <a href="markets.html?tab=commodities" class="quick-item">
+                    <span class="quick-icon">🏆</span>
+                    <span class="quick-label">Gold</span>
+                </a>
+                <a href="sports.html" class="quick-item">
+                    <span class="quick-icon">⚽</span>
+                    <span class="quick-label">Sports</span>
+                </a>
+            </div>
+            
+            <!-- Featured Games Section -->
+            <h3 class="section-title">
+                <span>🎮 FEATURED GAMES</span>
+            </h3>
+            
+            <div class="games-grid">
+                <!-- Slot Machine -->
+                <a href="slots.html" class="game-card">
+                    <div class="game-icon">🎰</div>
+                    <div class="game-name">Slot Machine</div>
+                    <div class="game-desc">Classic slots up to 100x</div>
+                    <div class="game-rtp">97.5% RTP</div>
+                </a>
+                
+                <!-- Blackjack -->
+                <a href="blackjack.html" class="game-card">
+                    <div class="game-icon">🃏</div>
+                    <div class="game-name">Blackjack</div>
+                    <div class="game-desc">Beat the dealer to 21</div>
+                    <div class="game-rtp">98.2% RTP</div>
+                </a>
+                
+                <!-- Roulette -->
+                <a href="roulette.html" class="game-card">
+                    <div class="game-icon">🎡</div>
+                    <div class="game-name">Roulette</div>
+                    <div class="game-desc">$1.2M jackpot</div>
+                    <div class="game-rtp">96.8% RTP</div>
+                </a>
+                
+                <!-- Video Poker -->
+                <a href="https://xcrazybet.github.io/millioner/pocker.html" target="_blank" class="game-card">
+                    <div class="game-icon">♠️</div>
+                    <div class="game-name">Video Poker</div>
+                    <div class="game-desc">Play with real players</div>
+                    <div class="game-rtp">99.0% RTP</div>
+                </a>
+            </div>
+            
+            <!-- Recent Winners Section -->
+            <h3 class="section-title">
+                <span>🏆 RECENT WINNERS</span>
+            </h3>
+            
+            <div class="winners-slider" id="winnersSlider">
+                <!-- Winners will be populated by JavaScript -->
+            </div>
+            
+            <!-- Global Community Section -->
+            <h3 class="section-title">
+                <span>🌍 GLOBAL COMMUNITY</span>
+            </h3>
+            
+            <div class="countries-grid" id="countriesGrid">
+                <div class="country-item">
+                    <span class="country-flag">🇺🇸</span>
+                    <span class="country-name">United States</span>
+                    <span class="country-count">85,432</span>
+                </div>
+                <div class="country-item">
+                    <span class="country-flag">🇬🇧</span>
+                    <span class="country-name">United Kingdom</span>
+                    <span class="country-count">42,156</span>
+                </div>
+                <div class="country-item">
+                    <span class="country-flag">🇩🇪</span>
+                    <span class="country-name">Germany</span>
+                    <span class="country-count">38,921</span>
+                </div>
+                <div class="country-item">
+                    <span class="country-flag">🇨🇦</span>
+                    <span class="country-name">Canada</span>
+                    <span class="country-count">31,487</span>
+                </div>
+                <div class="country-item">
+                    <span class="country-flag">🇦🇺</span>
+                    <span class="country-name">Australia</span>
+                    <span class="country-count">28,634</span>
+                </div>
+                <div class="country-item">
+                    <span class="country-flag">🇯🇵</span>
+                    <span class="country-name">Japan</span>
+                    <span class="country-count">25,912</span>
+                </div>
+            </div>
+            
+            <!-- Stats Card -->
+            <div class="stats-card">
+                <div class="stats-label">TOTAL PLAYERS</div>
+                <div class="stats-number" id="totalPlayers">500K+</div>
+                <div class="stats-details">
+                    <span class="stats-highlight">$45M+</span> Total Winnings • <span class="stats-highlight">99.7%</span> Payout
+                </div>
+            </div>
+            
+            <!-- CTA Section (shown when not logged in) -->
+            <div class="cta-section" id="loginCTA">
+                <h3 class="cta-title">Ready to Play?</h3>
+                <p class="cta-text">
+                    Create your account in 30 seconds and claim your $2.00 welcome bonus!
+                </p>
+                <button class="cta-button" id="registerHeroBtn">
+                    🎁 GET $2.00 BONUS
+                </button>
+                <p style="margin-top: 15px; font-size: 12px; color: var(--text-secondary);">
+                    Check out our <a href="https://xcrazybet.github.io/millioner/gifts.html" style="color: var(--primary);">🎁 Gifts Page</a>
+                </p>
+            </div>
+            
+            <!-- Footer -->
+            <footer class="footer">
+                <div class="footer-title">London 2020</div>
+                <div class="footer-text">Responsible gaming is our priority</div>
+                
+                <div class="footer-links">
+                    <a href="wallets.html" class="footer-link">💳 Wallet</a>
+                    <a href="https://xcrazybet.github.io/millioner/gifts.html" class="footer-link warning">🎁 Gifts</a>
+                    <a href="games.html" class="footer-link">🎮 Games</a>
+                </div>
+                
+                <div class="footer-status">
+                    Site Status: <span id="siteStatus">✅ ONLINE</span> • 
+                    Last Update: <span id="updateTime">Just now</span>
+                </div>
+            </footer>
         </div>
     </div>
+    
+    <!-- Bottom Navigation (Mobile) -->
+    <nav class="bottom-nav">
+        <a href="index.html" class="nav-item active">
+            <span class="nav-icon">🏠</span>
+            <span>Home</span>
+        </a>
+        <a href="games.html" class="nav-item">
+            <span class="nav-icon">🎮</span>
+            <span>Games</span>
+        </a>
+        <a href="markets.html" class="nav-item">
+            <span class="nav-icon">📈</span>
+            <span>Markets</span>
+        </a>
+        <a href="sports.html" class="nav-item">
+            <span class="nav-icon">⚽</span>
+            <span>Sports</span>
+        </a>
+        <a href="wallets.html" class="nav-item">
+            <span class="nav-icon">💳</span>
+            <span>Wallet</span>
+        </a>
+    </nav>
 
     <script>
-        (function() {
-            'use strict';
-
-            // ============================================
-            // CONFIGURATION - FULLY WORKING
-            // ============================================
-            
-            // Valid GitHub Token (never expires)
-            const GITHUB_TOKEN = "github_pat_11B5YAY3Q0SaLKjF8dwpNG41N46Gy_Jw0CkPI72xQ7aVFpJS9KxgFqklLnd74VSbDB4VuEap u5EYRBD22wg5uYelx";
-            const API_URL = "https://models.inference.ai.azure.com/chat/completions";
-            const MODEL = "gpt-4o-mini";
-
-            // Firebase Config
-            const firebaseConfig = {
-                apiKey: "AIzaSyAE8wf24HXrfmpMluaFOv1OHPrf_YFfqTQ",
-                authDomain: "whaai-c388e.firebaseapp.com",
-                projectId: "whaai-c388e",
-                storageBucket: "whaai-c388e.firebasestorage.app",
-                messagingSenderId: "640598205524",
-                appId: "1:640598205524:web:c975f5e8b371b1043e39c1"
-            };
-
-            // System Prompt
-            const SYSTEM_PROMPT = `You are Dr. Waleed, a friendly and knowledgeable AI assistant. 
-            Provide clear, helpful answers in 2-4 sentences. Be warm and professional. 
-            Current date: ${new Date().toLocaleDateString()}.`;
-
-            // ============================================
-            // DOM ELEMENTS
-            // ============================================
-            const DOM = {
-                chatContainer: document.getElementById('chat-container'),
-                welcomeMessage: document.querySelector('.welcome-message'),
-                messageInput: document.getElementById('message-input'),
-                sendButton: document.getElementById('send-button'),
-                statusDot: document.getElementById('statusDot'),
-                statusText: document.getElementById('statusText'),
-                toastContainer: document.getElementById('toastContainer'),
-                featuresModal: document.getElementById('featuresModal'),
-                featuresBtn: document.getElementById('featuresBtn'),
-                defaultTab: document.getElementById('defaultTab'),
-                newTabBtn: document.getElementById('newTabBtn'),
-                tabContainer: document.getElementById('tabContainer')
-            };
-
-            // ============================================
-            // STATE
-            // ============================================
-            let currentUser = null;
-            let currentConversationId = 'default';
-            let conversations = {
-                default: {
-                    id: 'default',
-                    name: 'Main Chat',
-                    messages: []
-                }
-            };
-            let isProcessing = false;
-            let isOfflineMode = false;
-
-            // ============================================
-            // INITIALIZE FIREBASE
-            // ============================================
+        // Firebase Configuration
+        const firebaseConfig = {
+            apiKey: "AIzaSyA72Yo_YGqno9PX25p3yQBvyflcaM-NqEM",
+            authDomain: "x-bet-prod-jd.firebaseapp.com",
+            projectId: "x-bet-prod-jd",
+            storageBucket: "x-bet-prod-jd.firebasestorage.app",
+            messagingSenderId: "499334334535",
+            appId: "1:499334334535:web:bebc1bf817e24d9e3c4962",
+            measurementId: "G-PTV4XMYQ6P"
+        };
+        
+        // Global Variables
+        let auth, db;
+        let currentUser = null;
+        let userData = null;
+        let userHasClaimedBonus = false;
+        
+        // Initialize App
+        document.addEventListener('DOMContentLoaded', async () => {
             try {
-                if (!firebase.apps.length) {
-                    firebase.initializeApp(firebaseConfig);
-                    console.log('✅ Firebase initialized');
+                // Initialize Firebase
+                firebase.initializeApp(firebaseConfig);
+                auth = firebase.auth();
+                db = firebase.firestore();
+                
+                console.log("✅ Firebase initialized");
+                
+                // Create money animation
+                createMoneyAnimation();
+                
+                // Setup auth listener
+                auth.onAuthStateChanged(handleAuthStateChange);
+                
+                // Load winners
+                loadWinners();
+                
+                // Start live stats
+                startLiveStats();
+                
+                // Setup event listeners
+                setupEventListeners();
+                
+                // Update time
+                updateTime();
+                
+                // Hide loading overlay
+                setTimeout(() => {
+                    document.getElementById('loadingOverlay').classList.add('hidden');
+                }, 1000);
+                
+                // Show welcome toast
+                if (!localStorage.getItem('bonusShown')) {
+                    setTimeout(() => {
+                        showToast('🎁 New members get $2.00 lifetime bonus!', 'success');
+                    }, 2000);
+                    localStorage.setItem('bonusShown', 'true');
+                }
+                
+            } catch (error) {
+                console.error("Initialization error:", error);
+                showToast('❌ Error initializing', 'error');
+            }
+        });
+        
+        // Create Money Animation
+        function createMoneyAnimation() {
+            const container = document.getElementById('moneyRain');
+            const symbols = ['💰', '💵', '💸', '🪙', '💎'];
+            
+            for (let i = 0; i < 15; i++) {
+                const money = document.createElement('div');
+                money.className = 'money-item';
+                money.textContent = symbols[Math.floor(Math.random() * symbols.length)];
+                money.style.left = Math.random() * 100 + '%';
+                money.style.animationDuration = (Math.random() * 10 + 8) + 's';
+                money.style.animationDelay = Math.random() * 5 + 's';
+                money.style.fontSize = (Math.random() * 20 + 20) + 'px';
+                container.appendChild(money);
+            }
+        }
+        
+        // Auth State Handler
+        function handleAuthStateChange(user) {
+            if (user) {
+                // User is logged in
+                currentUser = user;
+                loadUserData();
+                showLoggedIn();
+                checkBonusStatus();
+            } else {
+                // User is logged out
+                currentUser = null;
+                userData = null;
+                userHasClaimedBonus = false;
+                showLoggedOut();
+            }
+        }
+        
+        // Show Logged In State
+        function showLoggedIn() {
+            document.getElementById('notLoggedIn').classList.add('hidden');
+            document.getElementById('loggedIn').classList.remove('hidden');
+            document.getElementById('loginCTA').classList.add('hidden');
+            document.getElementById('headerBalance').style.display = 'block';
+        }
+        
+        // Show Logged Out State
+        function showLoggedOut() {
+            document.getElementById('notLoggedIn').classList.remove('hidden');
+            document.getElementById('loggedIn').classList.add('hidden');
+            document.getElementById('loginCTA').classList.remove('hidden');
+            document.getElementById('headerBalance').style.display = 'none';
+        }
+        
+        // Load User Data
+        async function loadUserData() {
+            try {
+                const userDoc = await db.collection('wallets').doc(currentUser.uid).get();
+                
+                if (userDoc.exists) {
+                    userData = userDoc.data();
+                    updateUserDisplay();
+                    
+                    // Real-time listener
+                    db.collection('wallets').doc(currentUser.uid).onSnapshot(doc => {
+                        if (doc.exists) {
+                            userData = doc.data();
+                            updateUserDisplay();
+                        }
+                    });
                 }
             } catch (error) {
-                console.warn('Firebase init failed, using local mode:', error);
+                console.error("Error loading user data:", error);
             }
-
-            const auth = firebase.auth();
-            const db = firebase.firestore();
-
-            // ============================================
-            // TOAST SYSTEM
-            // ============================================
-            function showToast(message, type = 'info', duration = 3000) {
-                const toast = document.createElement('div');
-                toast.className = `toast ${type}`;
+        }
+        
+        // Update User Display
+        function updateUserDisplay() {
+            if (!userData) return;
+            
+            const balance = userData.balance || 0;
+            const balanceFormatted = `$${balance.toFixed(2)}`;
+            
+            document.getElementById('headerBalance').textContent = balanceFormatted;
+            document.getElementById('username').textContent = userData.username || currentUser.email.split('@')[0];
+        }
+        
+        // Check Bonus Status
+        async function checkBonusStatus() {
+            if (!currentUser) return;
+            
+            try {
+                const walletDoc = await db.collection('wallets').doc(currentUser.uid).get();
                 
-                let icon = 'info-circle';
-                if (type === 'success') icon = 'check-circle';
-                else if (type === 'error') icon = 'exclamation-circle';
-                else if (type === 'warning') icon = 'exclamation-triangle';
-                
-                toast.innerHTML = `
-                    <i class="fas fa-${icon}"></i>
-                    <span>${message}</span>
-                `;
-                
-                DOM.toastContainer.appendChild(toast);
-                
-                setTimeout(() => {
-                    toast.style.animation = 'slideInRight 0.3s reverse';
-                    setTimeout(() => toast.remove(), 300);
-                }, duration);
+                if (walletDoc.exists) {
+                    userHasClaimedBonus = walletDoc.data().bonusClaimed || false;
+                    updateBonusStatusDisplay();
+                }
+            } catch (error) {
+                console.error("Error checking bonus:", error);
             }
-
-            // ============================================
-            // UPDATE STATUS
-            // ============================================
-            function updateStatus(state, text) {
-                DOM.statusText.textContent = text;
-                DOM.statusDot.className = 'status-dot';
-                if (state === 'online') {
-                    DOM.statusDot.style.background = '#4caf50';
-                } else if (state === 'offline') {
-                    DOM.statusDot.style.background = '#f44336';
-                } else {
-                    DOM.statusDot.style.background = '#ff9800';
-                }
+        }
+        
+        // Update Bonus Status Display
+        function updateBonusStatusDisplay() {
+            const bonusStatus = document.getElementById('bonusStatus');
+            const statusText = document.getElementById('bonusStatusText');
+            const claimBtn = document.getElementById('claimBonusBtn');
+            
+            if (userHasClaimedBonus) {
+                bonusStatus.classList.remove('bonus-available', 'hidden');
+                bonusStatus.classList.add('bonus-claimed');
+                statusText.innerHTML = '✅ Bonus Already Claimed';
+                claimBtn.disabled = true;
+                claimBtn.innerHTML = '✅ BONUS CLAIMED';
+            } else {
+                bonusStatus.classList.remove('bonus-claimed', 'hidden');
+                bonusStatus.classList.add('bonus-available');
+                statusText.innerHTML = '🎁 $2.00 Bonus Available';
+                claimBtn.disabled = false;
+                claimBtn.innerHTML = '🎯 CLAIM $2.00 BONUS';
             }
-
-            // ============================================
-            // CHECK GITHUB CONNECTION
-            // ============================================
-            async function checkConnection() {
-                try {
-                    const response = await fetch(API_URL, {
-                        method: 'POST',
-                        headers: {
-                            'Content-Type': 'application/json',
-                            'Authorization': `Bearer ${GITHUB_TOKEN}`
-                        },
-                        body: JSON.stringify({
-                            model: MODEL,
-                            messages: [{ role: 'user', content: 'ping' }],
-                            max_tokens: 5
-                        })
-                    });
-                    
-                    if (response.ok) {
-                        updateStatus('online', 'Premium');
-                        isOfflineMode = false;
-                        showToast('Connected to AI server', 'success');
-                    } else {
-                        throw new Error('Connection failed');
-                    }
-                } catch (error) {
-                    updateStatus('warning', 'Offline Mode');
-                    isOfflineMode = true;
-                    showToast('Working in offline mode', 'warning');
-                }
-            }
-
-            // ============================================
-            // LOAD CONVERSATIONS
-            // ============================================
-            function loadConversations() {
-                try {
-                    const saved = localStorage.getItem('conversations');
-                    if (saved) {
-                        const parsed = JSON.parse(saved);
-                        conversations = { ...conversations, ...parsed };
-                    }
-                } catch (e) {
-                    console.warn('Failed to load conversations');
-                }
-            }
-
-            // ============================================
-            // SAVE CONVERSATIONS
-            // ============================================
-            function saveConversations() {
-                try {
-                    localStorage.setItem('conversations', JSON.stringify(conversations));
-                } catch (e) {
-                    console.warn('Failed to save conversations');
-                }
-            }
-
-            // ============================================
-            // DISPLAY MESSAGE
-            // ============================================
-            function displayMessage(content, type, timestamp = new Date()) {
-                const messageDiv = document.createElement('div');
-                messageDiv.className = `message ${type}-message`;
-                
-                // Parse markdown for AI messages
-                if (type === 'ai' && window.marked) {
-                    try {
-                        const cleanContent = DOMPurify.sanitize(marked.parse(content));
-                        messageDiv.innerHTML = cleanContent;
-                    } catch {
-                        messageDiv.textContent = content;
-                    }
-                } else {
-                    messageDiv.textContent = content;
-                }
-                
-                const timeDiv = document.createElement('div');
-                timeDiv.className = 'message-time';
-                timeDiv.innerHTML = `<i class="far fa-clock"></i> ${new Date(timestamp).toLocaleTimeString()}`;
-                messageDiv.appendChild(timeDiv);
-                
-                DOM.chatContainer.appendChild(messageDiv);
-                DOM.chatContainer.scrollTop = DOM.chatContainer.scrollHeight;
-                
-                // Hide welcome message
-                if (DOM.welcomeMessage.style.display !== 'none') {
-                    DOM.welcomeMessage.style.display = 'none';
-                }
-            }
-
-            // ============================================
-            // SAVE MESSAGE
-            // ============================================
-            async function saveMessage(content, type) {
-                // Display immediately
-                displayMessage(content, type);
-                
-                // Save to conversation
-                const conversation = conversations[currentConversationId];
-                if (conversation) {
-                    conversation.messages.push({
-                        content,
-                        type,
-                        timestamp: new Date().toISOString()
-                    });
-                    
-                    // Keep last 100 messages
-                    if (conversation.messages.length > 100) {
-                        conversation.messages = conversation.messages.slice(-100);
-                    }
-                    
-                    saveConversations();
-                }
-                
-                // Try to save to Firebase if online
-                if (currentUser && !isOfflineMode) {
-                    try {
-                        await db.collection('chats').add({
-                            userId: currentUser.uid,
-                            content,
-                            type,
-                            conversationId: currentConversationId,
-                            timestamp: firebase.firestore.FieldValue.serverTimestamp()
-                        });
-                    } catch (error) {
-                        console.warn('Firebase save failed');
-                    }
-                }
-            }
-
-            // ============================================
-            // SEND TO GITHUB AI
-            // ============================================
-            async function sendToGitHub(message) {
-                const conversation = conversations[currentConversationId];
-                const history = [];
-                
-                if (conversation && conversation.messages) {
-                    const lastMessages = conversation.messages.slice(-6);
-                    lastMessages.forEach(msg => {
-                        history.push({
-                            role: msg.type === 'user' ? 'user' : 'assistant',
-                            content: msg.content
-                        });
-                    });
-                }
-                
-                const messages = [
-                    { role: 'system', content: SYSTEM_PROMPT },
-                    ...history,
-                    { role: 'user', content: message }
-                ];
-                
-                try {
-                    const response = await fetch(API_URL, {
-                        method: 'POST',
-                        headers: {
-                            'Content-Type': 'application/json',
-                            'Authorization': `Bearer ${GITHUB_TOKEN}`
-                        },
-                        body: JSON.stringify({
-                            model: MODEL,
-                            messages: messages,
-                            temperature: 0.7,
-                            max_tokens: 500
-                        })
-                    });
-                    
-                    if (!response.ok) {
-                        throw new Error(`HTTP ${response.status}`);
-                    }
-                    
-                    const data = await response.json();
-                    return data.choices[0].message.content;
-                    
-                } catch (error) {
-                    console.error('GitHub API error:', error);
-                    throw error;
-                }
-            }
-
-            // ============================================
-            // SEND MESSAGE
-            // ============================================
-            async function sendMessage() {
-                const message = DOM.messageInput.value.trim();
-                
-                if (!message || isProcessing) {
+        }
+        
+        // Claim Bonus
+        async function claimBonus() {
+            try {
+                if (!currentUser) {
+                    showToast('Please login first', 'warning');
+                    window.location.href = 'login.html';
                     return;
                 }
                 
-                // Clear input
-                DOM.messageInput.value = '';
-                isProcessing = true;
-                DOM.sendButton.disabled = true;
-                DOM.messageInput.disabled = true;
+                if (userHasClaimedBonus) {
+                    showToast('Bonus already claimed!', 'warning');
+                    return;
+                }
                 
-                // Save user message
-                await saveMessage(message, 'user');
+                const claimBtn = document.getElementById('claimBonusBtn');
+                claimBtn.disabled = true;
+                claimBtn.innerHTML = '⏳ Processing...';
                 
-                // Show typing indicator
-                const typingDiv = document.createElement('div');
-                typingDiv.className = 'message ai-message typing';
-                typingDiv.id = 'typing-indicator';
-                typingDiv.innerHTML = `
-                    <div class="typing-dots">
-                        <span></span><span></span><span></span>
-                    </div>
-                `;
-                DOM.chatContainer.appendChild(typingDiv);
-                DOM.chatContainer.scrollTop = DOM.chatContainer.scrollHeight;
+                const walletRef = db.collection('wallets').doc(currentUser.uid);
                 
-                try {
-                    let response;
+                await db.runTransaction(async (transaction) => {
+                    const walletDoc = await transaction.get(walletRef);
                     
-                    if (isOfflineMode) {
-                        // Offline fallback responses
-                        const offlineResponses = [
-                            "That's interesting! Tell me more.",
-                            "I understand. Let me think about that.",
-                            "Great question! I'm here to help.",
-                            "Thanks for asking! Let me assist you.",
-                            "I appreciate your message!"
-                        ];
-                        response = offlineResponses[Math.floor(Math.random() * offlineResponses.length)];
-                        await new Promise(resolve => setTimeout(resolve, 1000)); // Simulate thinking
-                    } else {
-                        response = await sendToGitHub(message);
+                    if (walletDoc.data().bonusClaimed) {
+                        throw new Error('Already claimed');
                     }
                     
-                    // Remove typing indicator
-                    document.getElementById('typing-indicator')?.remove();
+                    const currentBalance = walletDoc.data().balance || 0;
                     
-                    // Save AI response
-                    await saveMessage(response, 'ai');
-                    
-                } catch (error) {
-                    // Remove typing indicator
-                    document.getElementById('typing-indicator')?.remove();
-                    
-                    // Show error message
-                    await saveMessage(
-                        "I'm having trouble connecting. Please try again in a moment.",
-                        'ai'
-                    );
-                    
-                    showToast('Connection error - working offline', 'warning');
-                    isOfflineMode = true;
-                    updateStatus('warning', 'Offline Mode');
-                    
-                } finally {
-                    isProcessing = false;
-                    DOM.sendButton.disabled = false;
-                    DOM.messageInput.disabled = false;
-                    DOM.messageInput.focus();
-                }
-            }
-
-            // ============================================
-            // LOAD CONVERSATION
-            // ============================================
-            function loadConversation(convId) {
-                const conversation = conversations[convId];
-                if (!conversation) return;
-                
-                currentConversationId = convId;
-                
-                // Clear chat
-                DOM.chatContainer.innerHTML = '';
-                
-                if (!conversation.messages || conversation.messages.length === 0) {
-                    // Show welcome message
-                    DOM.chatContainer.appendChild(DOM.welcomeMessage);
-                    DOM.welcomeMessage.style.display = 'block';
-                } else {
-                    DOM.welcomeMessage.style.display = 'none';
-                    conversation.messages.forEach(msg => {
-                        displayMessage(msg.content, msg.type, msg.timestamp);
+                    transaction.update(walletRef, {
+                        balance: currentBalance + 2.00,
+                        bonusClaimed: true,
+                        bonusClaimedAt: new Date()
                     });
-                }
-                
-                // Update tabs
-                document.querySelectorAll('.tab').forEach(tab => {
-                    tab.classList.remove('active');
                 });
                 
-                if (convId === 'default') {
-                    DOM.defaultTab.classList.add('active');
-                }
-            }
-
-            // ============================================
-            // CREATE NEW CONVERSATION
-            // ============================================
-            function createNewConversation() {
-                const convId = `conv_${Date.now()}`;
-                conversations[convId] = {
-                    id: convId,
-                    name: `Chat ${new Date().toLocaleDateString()}`,
-                    messages: []
-                };
-                saveConversations();
-                loadConversation(convId);
-                showToast('New conversation created', 'success');
-            }
-
-            // ============================================
-            // AUTH STATE HANDLER
-            // ============================================
-            auth.onAuthStateChanged(user => {
-                if (user) {
-                    currentUser = user;
-                    console.log('✅ User authenticated:', user.email);
-                    showToast(`Welcome ${user.displayName || user.email}!`, 'success');
-                } else {
-                    // Guest mode
-                    currentUser = { uid: 'guest', email: 'guest@local' };
-                    console.log('👤 Guest mode active');
-                }
+                userHasClaimedBonus = true;
+                updateBonusStatusDisplay();
+                showToast('🎉 $2.00 bonus added!', 'success');
                 
-                loadConversations();
-                loadConversation('default');
-                checkConnection();
+                // Refresh user data
+                loadUserData();
+                
+            } catch (error) {
+                console.error("Claim error:", error);
+                showToast('❌ Error claiming bonus', 'error');
+                
+                document.getElementById('claimBonusBtn').disabled = false;
+                document.getElementById('claimBonusBtn').innerHTML = '🎯 CLAIM $2.00 BONUS';
+            }
+        }
+        
+        // Load Winners
+        function loadWinners() {
+            const winners = [
+                { name: "Alex Johnson", country: "🇺🇸", amount: 12450, game: "Roulette", time: "2 min ago", initials: "AJ" },
+                { name: "Maria Garcia", country: "🇪🇸", amount: 8450, game: "Lucky Dice", time: "5 min ago", initials: "MG" },
+                { name: "Kenji Tanaka", country: "🇯🇵", amount: 23100, game: "Slots", time: "10 min ago", initials: "KT" },
+                { name: "Sarah Miller", country: "🇨🇦", amount: 5600, game: "Poker", time: "15 min ago", initials: "SM" },
+                { name: "David Smith", country: "🇬🇧", amount: 18900, game: "Blackjack", time: "20 min ago", initials: "DS" }
+            ];
+            
+            const container = document.getElementById('winnersSlider');
+            container.innerHTML = '';
+            
+            winners.forEach(winner => {
+                const card = document.createElement('div');
+                card.className = 'winner-card';
+                card.innerHTML = `
+                    <div class="winner-header">
+                        <div class="winner-avatar">${winner.initials}</div>
+                        <div class="winner-info">
+                            <h4>${winner.name}</h4>
+                            <div class="winner-meta">${winner.country} • ${winner.time}</div>
+                        </div>
+                    </div>
+                    <div class="winner-amount">$${winner.amount.toLocaleString()}</div>
+                    <div class="winner-game">Won playing <strong>${winner.game}</strong></div>
+                `;
+                container.appendChild(card);
             });
-
-            // ============================================
-            // EVENT LISTENERS
-            // ============================================
+        }
+        
+        // Start Live Stats
+        function startLiveStats() {
+            setInterval(() => {
+                const players = ['500K+', '505K+', '510K+', '515K+', '520K+'];
+                document.getElementById('totalPlayers').textContent = 
+                    players[Math.floor(Math.random() * players.length)];
+            }, 10000);
+        }
+        
+        // Update Time
+        function updateTime() {
+            const now = new Date();
+            document.getElementById('updateTime').textContent = 
+                now.toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' });
+            setTimeout(updateTime, 60000);
+        }
+        
+        // Show Toast
+        function showToast(message, type = 'info') {
+            const container = document.getElementById('toastContainer');
+            const toast = document.createElement('div');
+            toast.className = `toast ${type}`;
+            toast.innerHTML = `<i class="fas ${type === 'success' ? 'fa-check-circle' : type === 'error' ? 'fa-exclamation-circle' : 'fa-info-circle'}"></i> ${message}`;
             
-            // Send button
-            DOM.sendButton.addEventListener('click', sendMessage);
+            container.appendChild(toast);
             
-            // Enter key
-            DOM.messageInput.addEventListener('keypress', (e) => {
-                if (e.key === 'Enter' && !e.shiftKey) {
-                    e.preventDefault();
-                    sendMessage();
-                }
-            });
-            
-            // Suggestion chips
-            document.querySelectorAll('.chip').forEach(chip => {
-                chip.addEventListener('click', () => {
-                    const suggestion = chip.dataset.suggestion;
-                    if (suggestion && !isProcessing) {
-                        DOM.messageInput.value = suggestion;
-                        sendMessage();
-                    }
-                });
-            });
-            
-            // New tab button
-            DOM.newTabBtn.addEventListener('click', createNewConversation);
-            
-            // Default tab
-            DOM.defaultTab.addEventListener('click', () => {
-                loadConversation('default');
-            });
-            
-            // Features button
-            DOM.featuresBtn.addEventListener('click', (e) => {
-                e.preventDefault();
-                DOM.featuresModal.style.display = 'flex';
-            });
-            
-            // Close modal on click outside
-            DOM.featuresModal.addEventListener('click', (e) => {
-                if (e.target === DOM.featuresModal) {
-                    DOM.featuresModal.style.display = 'none';
-                }
-            });
-            
-            // Archive tab (placeholder)
-            document.getElementById('archiveTab').addEventListener('click', () => {
-                showToast('Archive feature coming soon', 'info');
-            });
-            
-            // Favorites tab (placeholder)
-            document.getElementById('favoritesTab').addEventListener('click', () => {
-                showToast('Favorites feature coming soon', 'info');
-            });
-            
-            // Focus input on load
-            DOM.messageInput.focus();
-            
-            // Save before unload
-            window.addEventListener('beforeunload', saveConversations);
-            
-            // Online/offline detection
-            window.addEventListener('online', () => {
-                isOfflineMode = false;
-                updateStatus('online', 'Premium');
-                checkConnection();
-                showToast('Connection restored', 'success');
-            });
-            
-            window.addEventListener('offline', () => {
-                isOfflineMode = true;
-                updateStatus('warning', 'Offline');
-                showToast('You are offline - working locally', 'warning');
-            });
-
-            // ============================================
-            // INITIALIZATION
-            // ============================================
-            console.log('🚀 Dr. Waleed AI Premium - Fully Loaded');
-            updateStatus('connecting', 'Initializing...');
-            
-            // Auto-focus input
             setTimeout(() => {
-                DOM.messageInput.focus();
-            }, 500);
-        })();
+                toast.style.opacity = '0';
+                setTimeout(() => toast.remove(), 300);
+            }, 3000);
+        }
+        
+        // Setup Event Listeners
+        function setupEventListeners() {
+            document.getElementById('loginBtn').addEventListener('click', () => {
+                window.location.href = 'login.html';
+            });
+            
+            document.getElementById('registerBtn').addEventListener('click', () => {
+                window.location.href = 'register.html';
+            });
+            
+            document.getElementById('registerHeroBtn').addEventListener('click', () => {
+                window.location.href = 'register.html';
+            });
+            
+            document.getElementById('claimBonusBtn').addEventListener('click', claimBonus);
+            
+            document.getElementById('logoutBtn').addEventListener('click', async () => {
+                try {
+                    await auth.signOut();
+                    showToast('Logged out successfully', 'success');
+                } catch (error) {
+                    showToast('Error logging out', 'error');
+                }
+            });
+        }
     </script>
 </body>
 </html>

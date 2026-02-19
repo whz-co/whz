@@ -3,8 +3,8 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=yes">
-    <title>Dr. Waleed's AI Pro · Multi‑Provider 24/7</title>
-    <!-- Font Awesome 6 (free) -->
+    <title>Dr. Waleed's AI · 24/7 Multi‑Provider</title>
+    <!-- Font Awesome 6 -->
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <!-- Google Fonts (Inter) -->
     <link href="https://fonts.googleapis.com/css2?family=Inter:opsz,wght@14..32,400;14..32,500;14..32,600;14..32,700&display=swap" rel="stylesheet">
@@ -152,6 +152,7 @@
             cursor: pointer;
             transition: 0.2s;
             font-size: 1.2rem;
+            text-decoration: none;
         }
         .icon-btn:hover {
             background: var(--surface-hover);
@@ -394,90 +395,26 @@
             background: var(--card-bg);
             border: 1px solid var(--border);
             border-radius: 40px;
-            max-width: 550px;
+            max-width: 400px;
             width: 100%;
-            max-height: 85vh;
-            overflow-y: auto;
             padding: 32px;
             color: var(--text-primary);
-            box-shadow: var(--shadow);
+            text-align: center;
         }
-        .modal-content h2 {
-            font-size: 1.8rem;
-            margin-bottom: 24px;
-            display: flex;
-            align-items: center;
-            gap: 12px;
-        }
-        .provider-row {
-            background: var(--surface);
-            border-radius: 20px;
-            padding: 16px;
-            margin-bottom: 16px;
-            border: 1px solid var(--border);
-        }
-        .provider-row label {
-            display: block;
-            font-weight: 600;
-            margin-bottom: 8px;
-        }
-        .provider-row input {
-            width: 100%;
-            background: var(--card-bg);
-            border: 1px solid var(--border);
-            border-radius: 14px;
-            padding: 12px 16px;
-            color: var(--text-primary);
-            font-size: 0.95rem;
-            margin-bottom: 8px;
-        }
-        .provider-row small {
-            color: var(--text-secondary);
-            font-size: 0.8rem;
-        }
-        .order-control {
-            display: flex;
-            align-items: center;
-            gap: 12px;
-            margin-top: 12px;
-        }
-        .order-control button {
-            background: var(--surface-hover);
-            border: none;
-            color: var(--text-primary);
-            width: 36px;
-            height: 36px;
-            border-radius: 10px;
-            cursor: pointer;
-        }
-        .modal-actions {
-            display: flex;
-            gap: 12px;
-            margin-top: 24px;
+        .modal-content i {
+            font-size: 4rem;
+            color: var(--warning);
+            margin-bottom: 20px;
         }
         .modal-btn {
-            flex: 1;
             background: var(--accent);
             border: none;
             color: white;
-            padding: 14px;
+            padding: 14px 32px;
             border-radius: 30px;
             font-weight: 600;
             cursor: pointer;
-        }
-        .modal-btn.secondary {
-            background: transparent;
-            border: 1px solid var(--border);
-            color: var(--text-primary);
-        }
-        /* limit banner */
-        .limit-modal {
-            text-align: center;
-        }
-        .limit-modal i {
-            font-size: 5rem;
-            color: var(--warning);
-            margin-bottom: 20px;
+            margin-top: 20px;
         }
     </style>
 </head>
@@ -498,7 +435,7 @@
                         <span class="usage-text" id="usageText">20 left</span>
                     </div>
                     <div class="icon-btn" id="themeToggle"><i class="fas fa-moon"></i></div>
-                    <div class="icon-btn" id="settingsBtn"><i class="fas fa-cog"></i></div>
+                    <a href="https://whz-co.github.io/whz/index.html" class="icon-btn" id="homeBtn" title="Home"><i class="fas fa-home"></i></a>
                 </div>
             </div>
         </header>
@@ -533,101 +470,46 @@
         </div>
 
         <footer>
-            <span><i class="fas fa-shield-alt"></i> Keys stored locally</span>
+            <span><i class="fas fa-shield-alt"></i> Keys stored locally (optional)</span>
             <span>© Dr. Waleed · 24/7 AI</span>
         </footer>
     </div>
 
-    <!-- Settings Modal -->
-    <div class="modal" id="settingsModal">
-        <div class="modal-content">
-            <h2><i class="fas fa-sliders-h"></i> AI Providers</h2>
-            <p style="margin-bottom: 20px; color: var(--text-secondary);">Add your API keys (optional). They never leave your browser.</p>
-            
-            <div class="provider-row">
-                <label><i class="fab fa-github"></i> GitHub Token (free)</label>
-                <input type="password" id="githubToken" placeholder="github_pat_...">
-                <small>Get one from GitHub Settings → Developer settings</small>
-            </div>
-            <div class="provider-row">
-                <label><i class="fas fa-key"></i> OpenAI API Key</label>
-                <input type="password" id="openaiKey" placeholder="sk-...">
-                <small>Optional – paid but more powerful</small>
-            </div>
-            <div class="provider-row">
-                <label><i class="fas fa-cloud"></i> Google Gemini API Key</label>
-                <input type="password" id="geminiKey" placeholder="AI...">
-                <small>Free tier available (60 requests/min)</small>
-            </div>
-
-            <div class="provider-row">
-                <label>Provider order (drag to reorder)</label>
-                <div id="providerOrderList">
-                    <!-- Filled by JS -->
-                </div>
-                <small>First working provider will be used. Local fallback always last.</small>
-            </div>
-
-            <div class="provider-row">
-                <label>Daily message limit</label>
-                <input type="number" id="dailyLimit" value="20" min="5" max="200">
-            </div>
-
-            <div class="modal-actions">
-                <button class="modal-btn" id="saveSettings">Save & Close</button>
-                <button class="modal-btn secondary" id="closeSettings">Cancel</button>
-            </div>
-        </div>
-    </div>
-
-    <!-- Limit Reached Modal -->
+    <!-- Limit Modal -->
     <div class="modal" id="limitModal">
-        <div class="modal-content limit-modal">
+        <div class="modal-content">
             <i class="fas fa-hourglass-half"></i>
             <h2>Daily Limit Reached</h2>
-            <p>You've used all your messages for today. Come back tomorrow or increase the limit in settings.</p>
-            <button class="modal-btn" id="closeLimitModal" style="margin-top: 25px;">Got it</button>
+            <p>You've used all your messages for today. Come back tomorrow.</p>
+            <button class="modal-btn" id="closeLimitModal">OK</button>
         </div>
     </div>
 
-    <!-- Transformers.js (ES module) -->
-    <script type="importmap">
-        {
-            "imports": {
-                "@xenova/transformers": "https://cdn.jsdelivr.net/npm/@xenova/transformers@2.6.0"
-            }
-        }
-    </script>
-
     <script type="module">
-        // ---------- Imports ----------
-        import { pipeline } from '@xenova/transformers';
-
         // ---------- Configuration ----------
         const STORAGE_KEYS = {
             CONVERSATIONS: 'drWaleedConversations',
-            SETTINGS: 'drWaleedSettings',
-            USAGE: 'drWaleedUsage'
+            USAGE: 'drWaleedUsage',
+            SETTINGS: 'drWaleedSettings'   // kept for potential future use, but no UI
         };
 
-        // Default settings
+        // Settings (no UI, but we can store API keys manually if user adds via console)
         let settings = {
-            githubToken: '',
-            openaiKey: '',
-            geminiKey: '',
-            providerOrder: ['github', 'openai', 'gemini', 'local'],
+            githubToken: localStorage.getItem('github_token') || '',
+            openaiKey: localStorage.getItem('openai_key') || '',
+            geminiKey: localStorage.getItem('gemini_key') || '',
             dailyLimit: 20
         };
 
-        // Usage: { date: 'Mar 19 2025', count: 0 }
+        // Usage: { date: '...', count: 0 }
         let usage = { date: new Date().toDateString(), count: 0 };
 
-        // Conversations store
+        // Conversations
         let conversations = {};
         let currentConvId = 'default';
-        let currentMessages = []; // for active conversation
+        let currentMessages = [];
 
-        // UI elements
+        // DOM elements
         const chatContainer = document.getElementById('chatContainer');
         const welcomeMsg = document.getElementById('welcomeMessage');
         const messageInput = document.getElementById('messageInput');
@@ -637,58 +519,11 @@
         const tabBar = document.getElementById('tabBar');
         const defaultTab = document.getElementById('defaultTab');
         const newTabBtn = document.getElementById('newTabBtn');
-        const settingsBtn = document.getElementById('settingsBtn');
         const themeToggle = document.getElementById('themeToggle');
-        const settingsModal = document.getElementById('settingsModal');
         const limitModal = document.getElementById('limitModal');
         const closeLimitModal = document.getElementById('closeLimitModal');
-        const saveSettingsBtn = document.getElementById('saveSettings');
-        const closeSettingsBtn = document.getElementById('closeSettings');
-        const githubInput = document.getElementById('githubToken');
-        const openaiInput = document.getElementById('openaiKey');
-        const geminiInput = document.getElementById('geminiKey');
-        const dailyLimitInput = document.getElementById('dailyLimit');
-        const providerOrderDiv = document.getElementById('providerOrderList');
-
-        // Local AI model (lazy loaded)
-        let localGenerator = null;
-        async function getLocalModel() {
-            if (!localGenerator) {
-                try {
-                    localGenerator = await pipeline('text-generation', 'Xenova/gpt2');
-                } catch (e) {
-                    console.error('Failed to load local model:', e);
-                    return null;
-                }
-            }
-            return localGenerator;
-        }
 
         // ---------- Load / Save ----------
-        function loadSettings() {
-            try {
-                const saved = localStorage.getItem(STORAGE_KEYS.SETTINGS);
-                if (saved) {
-                    const parsed = JSON.parse(saved);
-                    settings = { ...settings, ...parsed };
-                }
-            } catch (e) {}
-            // populate inputs
-            githubInput.value = settings.githubToken || '';
-            openaiInput.value = settings.openaiKey || '';
-            geminiInput.value = settings.geminiKey || '';
-            dailyLimitInput.value = settings.dailyLimit;
-            renderProviderOrder();
-        }
-
-        function saveSettingsToStorage() {
-            settings.githubToken = githubInput.value.trim();
-            settings.openaiKey = openaiInput.value.trim();
-            settings.geminiKey = geminiInput.value.trim();
-            settings.dailyLimit = parseInt(dailyLimitInput.value) || 20;
-            localStorage.setItem(STORAGE_KEYS.SETTINGS, JSON.stringify(settings));
-        }
-
         function loadUsage() {
             try {
                 const saved = localStorage.getItem(STORAGE_KEYS.USAGE);
@@ -723,11 +558,6 @@
             const percent = (usage.count / settings.dailyLimit) * 100;
             usageFill.style.width = `${Math.min(percent, 100)}%`;
             usageText.textContent = `${remaining} left`;
-            if (remaining === 0) {
-                usageFill.style.background = 'linear-gradient(90deg, var(--danger), #f87171)';
-            } else {
-                usageFill.style.background = 'linear-gradient(90deg, var(--accent), var(--success))';
-            }
         }
 
         function disableInput(disabled) {
@@ -751,7 +581,6 @@
             } catch (e) {
                 conversations = { default: { id: 'default', name: 'Main Chat', messages: [] } };
             }
-            // ensure default exists
             if (!conversations.default) {
                 conversations.default = { id: 'default', name: 'Main Chat', messages: [] };
             }
@@ -781,11 +610,9 @@
                 tabBar.insertBefore(tab, newTabBtn);
             });
 
-            // Activate default if needed
             if (currentConvId === 'default') defaultTab.classList.add('active');
             else defaultTab.classList.remove('active');
 
-            // Add close handlers
             document.querySelectorAll('.close-tab').forEach(btn => {
                 btn.addEventListener('click', (e) => {
                     e.stopPropagation();
@@ -856,41 +683,36 @@
             if (welcomeMsg.parentNode === chatContainer) welcomeMsg.remove();
         }
 
-        // ---------- Multi‑Provider AI ----------
-        async function callAI(prompt, history = []) {
-            // Build messages array
-            const messages = [
-                { role: 'system', content: 'You are Dr. Waleed, a helpful, friendly assistant. Keep answers concise (2-4 sentences).' },
-                ...history.slice(-6), // last 6 for context
-                { role: 'user', content: prompt }
-            ];
+        // ---------- AI response (always works) ----------
+        async function getAIResponse(prompt) {
+            // Try external providers if keys are set; otherwise fallback immediately.
+            const providers = [];
 
-            // Try providers in order
-            for (const provider of settings.providerOrder) {
+            if (settings.githubToken) providers.push('github');
+            if (settings.openaiKey) providers.push('openai');
+            if (settings.geminiKey) providers.push('gemini');
+
+            for (const provider of providers) {
                 try {
                     let result;
-                    if (provider === 'github' && settings.githubToken) {
-                        result = await callGitHub(messages);
-                    } else if (provider === 'openai' && settings.openaiKey) {
-                        result = await callOpenAI(messages);
-                    } else if (provider === 'gemini' && settings.geminiKey) {
-                        result = await callGemini(messages);
-                    } else if (provider === 'local') {
-                        result = await callLocal(prompt);
-                    } else {
-                        continue; // skip if no key
+                    if (provider === 'github') {
+                        result = await callGitHub(prompt);
+                    } else if (provider === 'openai') {
+                        result = await callOpenAI(prompt);
+                    } else if (provider === 'gemini') {
+                        result = await callGemini(prompt);
                     }
                     if (result) return result;
                 } catch (e) {
                     console.warn(`${provider} failed:`, e);
-                    // continue to next
                 }
             }
-            // Ultimate fallback
-            return "I'm having trouble connecting. Please check your API keys or try again later.";
+
+            // Always fallback to a simple local reply
+            return localReply(prompt);
         }
 
-        async function callGitHub(messages) {
+        async function callGitHub(prompt) {
             const response = await fetch('https://models.inference.ai.azure.com/chat/completions', {
                 method: 'POST',
                 headers: {
@@ -899,9 +721,9 @@
                 },
                 body: JSON.stringify({
                     model: 'gpt-4o-mini',
-                    messages: messages,
+                    messages: [{ role: 'user', content: prompt }],
                     temperature: 0.7,
-                    max_tokens: 200
+                    max_tokens: 150
                 })
             });
             if (!response.ok) throw new Error('GitHub error');
@@ -909,7 +731,7 @@
             return data.choices[0].message.content;
         }
 
-        async function callOpenAI(messages) {
+        async function callOpenAI(prompt) {
             const response = await fetch('https://api.openai.com/v1/chat/completions', {
                 method: 'POST',
                 headers: {
@@ -918,9 +740,9 @@
                 },
                 body: JSON.stringify({
                     model: 'gpt-3.5-turbo',
-                    messages: messages,
+                    messages: [{ role: 'user', content: prompt }],
                     temperature: 0.7,
-                    max_tokens: 200
+                    max_tokens: 150
                 })
             });
             if (!response.ok) throw new Error('OpenAI error');
@@ -928,24 +750,29 @@
             return data.choices[0].message.content;
         }
 
-        async function callGemini(messages) {
-            // Convert to Gemini format
-            const geminiMessages = messages.map(m => ({ role: m.role === 'assistant' ? 'model' : 'user', parts: [{ text: m.content }] }));
+        async function callGemini(prompt) {
             const response = await fetch(`https://generativelanguage.googleapis.com/v1beta/models/gemini-pro:generateContent?key=${settings.geminiKey}`, {
                 method: 'POST',
                 headers: { 'Content-Type': 'application/json' },
-                body: JSON.stringify({ contents: geminiMessages })
+                body: JSON.stringify({ contents: [{ parts: [{ text: prompt }] }] })
             });
             if (!response.ok) throw new Error('Gemini error');
             const data = await response.json();
             return data.candidates[0].content.parts[0].text;
         }
 
-        async function callLocal(prompt) {
-            const generator = await getLocalModel();
-            if (!generator) throw new Error('Local model not loaded');
-            const output = await generator(prompt, { max_length: 70, temperature: 0.8 });
-            return output[0].generated_text.replace(prompt, '').trim() || 'I have no answer right now.';
+        // Simple local reply generator (no external calls)
+        function localReply(prompt) {
+            const answers = [
+                "That's an interesting question. Let me think...",
+                "I'm Dr. Waleed's AI. I'm here to help!",
+                "I'm not sure, but I can try to find out for you.",
+                "Thanks for asking! I'm still learning.",
+                "Could you rephrase that? I want to give you the best answer.",
+                "I'm processing your request. Please hold on."
+            ];
+            // Return a canned response with a hint of the prompt
+            return `You asked: "${prompt}". ${answers[Math.floor(Math.random() * answers.length)]}`;
         }
 
         // ---------- Send message flow ----------
@@ -953,18 +780,13 @@
             const text = messageInput.value.trim();
             if (!text || messageInput.disabled) return;
 
-            // Check limit
             if (usage.count >= settings.dailyLimit) {
                 limitModal.style.display = 'flex';
                 return;
             }
 
-            // Show user message
             await addMessage(text, 'user');
             messageInput.value = '';
-
-            // Build history for context
-            const history = conversations[currentConvId].messages.slice(-10).map(m => ({ role: m.role, content: m.content }));
 
             // Show loading
             const loadingDiv = document.createElement('div');
@@ -975,10 +797,10 @@
             chatContainer.scrollTop = chatContainer.scrollHeight;
 
             try {
-                const reply = await callAI(text, history);
+                const reply = await getAIResponse(text);
                 document.getElementById('loadingMsg')?.remove();
                 await addMessage(reply, 'assistant');
-                incrementUsage(); // count only successful responses
+                incrementUsage();
             } catch (err) {
                 document.getElementById('loadingMsg')?.remove();
                 await addMessage('Sorry, I encountered an error. Please try again.', 'assistant');
@@ -987,64 +809,12 @@
             }
         }
 
-        // ---------- UI Helpers ----------
-        function renderProviderOrder() {
-            providerOrderDiv.innerHTML = '';
-            settings.providerOrder.forEach((prov, idx) => {
-                const row = document.createElement('div');
-                row.style.display = 'flex';
-                row.style.alignItems = 'center';
-                row.style.gap = '12px';
-                row.style.marginBottom = '10px';
-                row.style.background = 'var(--surface)';
-                row.style.padding = '8px 12px';
-                row.style.borderRadius = '30px';
-                row.innerHTML = `
-                    <i class="fas fa-grip-vertical" style="color: var(--text-secondary);"></i>
-                    <span style="flex:1; text-transform:capitalize;">${prov === 'local' ? 'Local (offline)' : prov}</span>
-                    <button class="move-up" ${idx === 0 ? 'disabled' : ''}><i class="fas fa-chevron-up"></i></button>
-                    <button class="move-down" ${idx === settings.providerOrder.length-1 ? 'disabled' : ''}><i class="fas fa-chevron-down"></i></button>
-                `;
-                row.querySelector('.move-up')?.addEventListener('click', () => moveProvider(idx, -1));
-                row.querySelector('.move-down')?.addEventListener('click', () => moveProvider(idx, 1));
-                providerOrderDiv.appendChild(row);
-            });
-        }
-
-        function moveProvider(idx, delta) {
-            const newIdx = idx + delta;
-            if (newIdx < 0 || newIdx >= settings.providerOrder.length) return;
-            [settings.providerOrder[idx], settings.providerOrder[newIdx]] = [settings.providerOrder[newIdx], settings.providerOrder[idx]];
-            renderProviderOrder();
-        }
-
         // ---------- Event Listeners ----------
         sendBtn.addEventListener('click', sendMessage);
         messageInput.addEventListener('keypress', (e) => { if (e.key === 'Enter') sendMessage(); });
 
         newTabBtn.addEventListener('click', createNewConversation);
         defaultTab.addEventListener('click', () => switchConversation('default'));
-
-        // Settings modal
-        settingsBtn.addEventListener('click', () => {
-            loadSettings(); // reload inputs
-            settingsModal.style.display = 'flex';
-        });
-        closeSettingsBtn.addEventListener('click', () => settingsModal.style.display = 'none');
-        saveSettingsBtn.addEventListener('click', () => {
-            saveSettingsToStorage();
-            settingsModal.style.display = 'none';
-            // Update daily limit
-            settings.dailyLimit = parseInt(dailyLimitInput.value) || 20;
-            updateUsageDisplay();
-            if (usage.count >= settings.dailyLimit) disableInput(true);
-            else disableInput(false);
-        });
-        window.addEventListener('click', (e) => {
-            if (e.target === settingsModal) settingsModal.style.display = 'none';
-            if (e.target === limitModal) limitModal.style.display = 'none';
-        });
-        closeLimitModal.addEventListener('click', () => limitModal.style.display = 'none');
 
         // Theme toggle
         themeToggle.addEventListener('click', () => {
@@ -1062,14 +832,25 @@
             });
         });
 
+        // Limit modal close
+        closeLimitModal.addEventListener('click', () => {
+            limitModal.style.display = 'none';
+        });
+        window.addEventListener('click', (e) => {
+            if (e.target === limitModal) limitModal.style.display = 'none';
+        });
+
+        // Optional: allow setting API keys via localStorage (for advanced users)
+        // You can open browser console and run: localStorage.setItem('github_token','your_token')
+        // Then refresh. We'll read them on load.
+        settings.githubToken = localStorage.getItem('github_token') || '';
+        settings.openaiKey = localStorage.getItem('openai_key') || '';
+        settings.geminiKey = localStorage.getItem('gemini_key') || '';
+
         // ---------- Initialization ----------
-        loadSettings();
         loadUsage();
         loadConversations();
         disableInput(usage.count >= settings.dailyLimit);
-
-        // Preload local model in background (optional)
-        getLocalModel().then(() => console.log('Local model ready'));
     </script>
 </body>
 </html>

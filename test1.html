@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=yes">
-    <title>Dr. Waleed's AI · DeepSeek Power</title>
+    <title>Dr. Zakhourani · DeepSeek AI</title>
     <!-- Font Awesome 6 -->
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <!-- Google Fonts (Inter) -->
@@ -264,6 +264,14 @@
             margin-top: 8px;
             text-align: right;
         }
+        .ai-attribution {
+            font-size: 0.8rem;
+            font-style: italic;
+            color: var(--accent);
+            margin-bottom: 6px;
+            display: block;
+            font-weight: 500;
+        }
         .loading {
             background: var(--surface);
             border: 1px solid var(--border);
@@ -487,10 +495,10 @@
         <header>
             <div class="header-row">
                 <div class="brand">
-                    <div class="avatar"><i class="fas fa-robot"></i></div>
+                    <div class="avatar"><i class="fas fa-user-md"></i></div>
                     <div class="title">
-                        <h1>Dr. Waleed AI</h1>
-                        <p><i class="far fa-clock"></i> DeepSeek Powered</p>
+                        <h1>Dr. Zakhourani</h1>
+                        <p><i class="far fa-clock"></i> DeepSeek AI</p>
                     </div>
                 </div>
                 <div class="header-actions">
@@ -514,15 +522,15 @@
         <!-- Chat messages -->
         <div id="chatContainer">
             <div class="welcome" id="welcomeMessage">
-                <h2>ASK DEEPSEEK</h2>
-                <p>Your AI assistant with automatic failover – always online.</p>
+                <h2>ASK DR. ZAKHOURANI</h2>
+                <p>Your personal AI assistant, powered by DeepSeek.</p>
             </div>
         </div>
 
         <!-- Input area -->
         <div class="input-area">
             <div class="input-wrapper">
-                <input type="text" id="messageInput" placeholder="Ask Dr. Waleed..." autocomplete="off">
+                <input type="text" id="messageInput" placeholder="Ask Dr. Zakhourani..." autocomplete="off">
                 <button id="sendButton"><i class="fas fa-paper-plane"></i><span>Send</span></button>
             </div>
             <div class="suggestions" id="suggestions">
@@ -536,7 +544,7 @@
 
         <footer>
             <span><i class="fas fa-shield-alt"></i> Keys stored locally</span>
-            <span>© Dr. Waleed · DeepSeek Core</span>
+            <span>© Dr. Zakhourani · DeepSeek Core</span>
         </footer>
     </div>
 
@@ -548,7 +556,7 @@
             
             <div class="provider-row">
                 <label><i class="fas fa-microchip"></i> DeepSeek API Key (primary)</label>
-                <input type="password" id="deepseekKey" placeholder="sk-...">
+                <input type="password" id="deepseekKey" placeholder="sk-26d206f0f103487294931892fe7ccbb0">
                 <small>Your DeepSeek key is pre‑filled. You can change it.</small>
             </div>
             <div class="provider-row">
@@ -558,7 +566,7 @@
             </div>
             <div class="provider-row">
                 <label><i class="fas fa-key"></i> OpenAI API Key</label>
-                <input type="password" id="openaiKey" placeholder="sk-26d206f0f103487294931892fe7ccbb0">
+                <input type="password" id="openaiKey" placeholder="sk-...">
                 <small>Optional – paid but powerful</small>
             </div>
             <div class="provider-row">
@@ -601,13 +609,13 @@
     <script>
         (function() {
             // ---------- Default DeepSeek Key (provided by user) ----------
-            const DEFAULT_DEEPSEEK_KEY = "sk-f4c4d77c3e0c48a2a0f4c7795bb0e402";
+            const DEFAULT_DEEPSEEK_KEY = "sk-26d206f0f103487294931892fe7ccbb0";
 
             // ---------- Storage keys ----------
             const STORAGE_KEYS = {
-                CONVERSATIONS: 'drWaleedConversations',
-                USAGE: 'drWaleedUsage',
-                SETTINGS: 'drWaleedSettings'
+                CONVERSATIONS: 'drZakhouraniConversations',
+                USAGE: 'drZakhouraniUsage',
+                SETTINGS: 'drZakhouraniSettings'
             };
 
             // ---------- Default settings ----------
@@ -867,7 +875,12 @@
             function appendMessageToDOM(content, role, timestamp = null) {
                 const msgDiv = document.createElement('div');
                 msgDiv.className = `message ${role === 'user' ? 'user-message' : 'ai-message'}`;
-                msgDiv.innerHTML = `<div>${content}</div><div class="message-time">${timestamp ? new Date(timestamp).toLocaleTimeString() : new Date().toLocaleTimeString()}</div>`;
+                let innerHtml = '';
+                if (role === 'assistant') {
+                    innerHtml += '<span class="ai-attribution"><i class="fas fa-stethoscope"></i> This is reply from Dr Zakhourani</span>';
+                }
+                innerHtml += `<div>${content}</div><div class="message-time">${timestamp ? new Date(timestamp).toLocaleTimeString() : new Date().toLocaleTimeString()}</div>`;
+                msgDiv.innerHTML = innerHtml;
                 chatContainer.appendChild(msgDiv);
                 chatContainer.scrollTop = chatContainer.scrollHeight;
             }
@@ -884,7 +897,7 @@
             // ---------- AI Calls ----------
             async function callAI(prompt, history = []) {
                 const messages = [
-                    { role: 'system', content: 'You are Dr. Waleed, a helpful, friendly assistant. Provide concise but informative answers.' },
+                    { role: 'system', content: 'You are Dr. Zakhourani, a helpful, friendly assistant. Provide concise but informative answers.' },
                     ...history.slice(-6),
                     { role: 'user', content: prompt }
                 ];
@@ -990,7 +1003,7 @@
                 // Smart local fallback with canned answers
                 const lower = prompt.toLowerCase();
                 if (lower.includes('poem')) {
-                    return "Roses are red, violets are blue,\nI'm an AI, here to help you.\nAsk me anything, I'll do my best,\nAnd give your questions a proper rest.";
+                    return "Roses are red, violets are blue,\nI'm Dr. Zakhourani, here to help you.\nAsk me anything, I'll do my best,\nAnd give your questions a proper rest.";
                 }
                 if (lower.includes('machine learning')) {
                     return "Machine learning is a subset of AI where computers learn from data without being explicitly programmed. Types: supervised, unsupervised, reinforcement learning. Applications: image recognition, NLP, recommendation systems.";
@@ -1016,10 +1029,11 @@
 
                 const history = conversations[currentConvId].messages.slice(-10).map(m => ({ role: m.role, content: m.content }));
 
+                // Custom loading message
                 const loadingDiv = document.createElement('div');
                 loadingDiv.className = 'message loading';
                 loadingDiv.id = 'loadingMsg';
-                loadingDiv.innerHTML = '<div class="typing"><span></span><span></span><span></span></div><span>Dr. Waleed is thinking...</span>';
+                loadingDiv.innerHTML = '<div class="typing"><span></span><span></span><span></span></div><span>Dr Zakhourani is thinking...</span>';
                 chatContainer.appendChild(loadingDiv);
                 chatContainer.scrollTop = chatContainer.scrollHeight;
 

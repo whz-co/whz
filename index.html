@@ -44,13 +44,32 @@
         .user-avatar { width: 40px; height: 40px; border-radius: 50%; object-fit: cover; border: 2px solid white; }
         .logout-btn { background: var(--accent); color: white; border: none; padding: 10px 20px; border-radius: 20px; cursor: pointer; text-decoration: none; }
         
-        /* Navigation */
-        nav { padding: 0 40px; background: white; }
+        /* Navigation - Desktop & Mobile */
+        nav { padding: 0 40px; background: white; position: relative; }
         .nav-container { display: flex; justify-content: center; padding: 20px 0; }
         .nav-links { display: flex; list-style: none; gap: 40px; }
-        .nav-links a { text-decoration: none; color: var(--dark); font-weight: 600; font-size: 18px; padding: 10px 20px; border-radius: 8px; transition: 0.3s; }
+        .nav-links a { text-decoration: none; color: var(--dark); font-weight: 600; font-size: 18px; padding: 10px 20px; border-radius: 8px; transition: 0.3s; white-space: nowrap; }
         .nav-links a:hover { background: var(--light); color: var(--secondary); }
         .nav-links a.active { background: var(--secondary); color: white; }
+
+        /* Mobile menu toggle (burger) */
+        .menu-toggle {
+            display: none;
+            flex-direction: column;
+            cursor: pointer;
+            padding: 10px 0;
+            margin-left: auto;
+            background: transparent;
+            border: none;
+        }
+        .menu-toggle span {
+            width: 28px;
+            height: 3px;
+            background: var(--dark);
+            margin: 4px 0;
+            border-radius: 3px;
+            transition: 0.3s;
+        }
         
         /* Hero Section */
         .hero {
@@ -110,9 +129,48 @@
         .footer-links a { color: white; text-decoration: none; }
         .footer-links a:hover { color: var(--secondary); }
         
+        /* Mobile responsive design */
         @media (max-width: 768px) {
             .header-top, nav { padding: 10px 20px; }
-            .nav-links { flex-direction: column; gap: 10px; text-align: center; }
+            
+            /* Show burger and hide desktop nav initially */
+            .menu-toggle {
+                display: flex;
+            }
+            .nav-container {
+                width: 100%;
+                padding: 0;
+            }
+            .nav-links {
+                display: none;
+                flex-direction: column;
+                gap: 0;
+                width: 100%;
+                background: white;
+                position: absolute;
+                top: 100%;
+                left: 0;
+                padding: 20px 0;
+                box-shadow: 0 10px 20px rgba(0,0,0,0.1);
+                z-index: 999;
+            }
+            .nav-links.active {
+                display: flex;
+            }
+            .nav-links li {
+                width: 100%;
+                text-align: center;
+            }
+            .nav-links a {
+                display: block;
+                padding: 15px;
+                border-radius: 0;
+                white-space: normal;
+            }
+            .nav-links a:hover {
+                background: var(--light);
+            }
+            
             .hero { padding: 40px 20px; }
             .hero h2 { font-size: 32px; }
             .cta-buttons { flex-direction: column; align-items: center; }
@@ -136,14 +194,21 @@
         
         <nav>
             <div class="nav-container">
-                <ul class="nav-links">
-                    <li><a href="index.html" class="active"><i class="fas fa-home"></i> Home</a></li>
-                    <li><a href="#"><i class="fas fa-robot"></i> AI Assistant</a></li>
-                    <li><a href="#"><i class="fas fa-book"></i> Dictionary</a></li>
-                    <li><a href="#"><i class="fas fa-language"></i> IELTS</a></li>
-                    <li><a href="#"><i class="fas fa-globe-americas"></i> TOEFL</a></li>
-                    <li><a href="#"><i class="fas fa-user-md"></i> About Dr. Waleed</a></li>
-                    <li><a href="#"><i class="fas fa-envelope"></i> Contact</a></li>
+                <!-- Burger icon (visible on mobile) -->
+                <button class="menu-toggle" id="mobileMenuToggle" aria-label="Menu">
+                    <span></span>
+                    <span></span>
+                    <span></span>
+                </button>
+                <!-- Navigation links with updated URLs -->
+                <ul class="nav-links" id="navLinks">
+                    <li><a href="https://whz-co.github.io/whz/index.html" class="active"><i class="fas fa-home"></i> Home</a></li>
+                    <li><a href="https://whz-co.github.io/whz/AI.html"><i class="fas fa-robot"></i> AI Assistant</a></li>
+                    <li><a href="https://whz-co.github.io/whz/JihanDictionary.html"><i class="fas fa-book"></i> Dictionary</a></li>
+                    <li><a href="https://whz-co.github.io/whz/IELTS.html"><i class="fas fa-language"></i> IELTS</a></li>
+                    <li><a href="https://whz-co.github.io/whz/TOFEL.html"><i class="fas fa-globe-americas"></i> TOEFL</a></li>
+                    <li><a href="https://whz-co.github.io/whz/aboutDrwaleed.html"><i class="fas fa-user-md"></i> About Dr. Waleed</a></li>
+                    <li><a href="https://whz-co.github.io/whz/contact.hml"><i class="fas fa-envelope"></i> Contact</a></li>
                     <li><a href="profile.html"><i class="fas fa-user-circle"></i> Profile</a></li>
                 </ul>
             </div>
@@ -274,9 +339,29 @@
             }
         }
 
-        // Initialize
+        // Initialize auth state
         auth.onAuthStateChanged((user) => {
             updateAuthUI(user);
+        });
+
+        // Mobile menu toggle functionality
+        document.addEventListener('DOMContentLoaded', function() {
+            const menuToggle = document.getElementById('mobileMenuToggle');
+            const navLinks = document.getElementById('navLinks');
+            
+            if (menuToggle && navLinks) {
+                menuToggle.addEventListener('click', function() {
+                    navLinks.classList.toggle('active');
+                });
+
+                // Optional: Close menu when a link is clicked (for better UX)
+                const links = navLinks.querySelectorAll('a');
+                links.forEach(link => {
+                    link.addEventListener('click', function() {
+                        navLinks.classList.remove('active');
+                    });
+                });
+            }
         });
     </script>
 </body>

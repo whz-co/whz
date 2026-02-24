@@ -1,178 +1,547 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>About Dr. Waleed · preview</title>
-    <!-- Simple, clean styling — just to see how it will be viewed -->
-    <style>
-        * {
-            margin: 0;
-            padding: 0;
-            box-sizing: border-box;
-        }
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.2, user-scalable=yes">
+  <title>Dr. Waleed · scholar & bridge</title>
+  <!-- Font Awesome 6 (free) for icons & menu -->
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+  <style>
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
 
-        body {
-            background: #f5f3f0;   /* soft parchment-like background */
-            font-family: 'Georgia', 'Times New Roman', Times, serif;
-            line-height: 1.6;
-            color: #2e2a27;
-            padding: 2rem 1rem;
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            min-height: 100vh;
-        }
+    body {
+      background: #1e1b17; /* deep warm base */
+      font-family: 'Palatino', 'Georgia', 'Times New Roman', serif;
+      line-height: 1.6;
+      color: #f0ebe3;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: flex-start;
+      min-height: 100vh;
+      padding: 0 0 1.5rem 0;
+    }
 
-        .card {
-            max-width: 950px;
-            width: 100%;
-            background: #ffffff;
-            border-radius: 28px;
-            box-shadow: 0 20px 35px -8px rgba(0, 0, 0, 0.15), 0 10px 15px -6px rgba(0, 0, 0, 0.05);
-            overflow: hidden;
-            padding: 2.2rem 2.5rem;
-            transition: all 0.2s ease;
-            border: 1px solid #ece7e0;
-        }
+    /* main container – max width, cozy */
+    .page {
+      max-width: 1300px;
+      width: 100%;
+      background: #2b2722;
+      box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.8);
+      border-radius: 36px 36px 28px 28px;
+      margin: 1rem 1rem 0.5rem 1rem;
+      overflow: hidden;
+      border: 1px solid #4d4238;
+      backdrop-filter: blur(1px);
+    }
 
-        /* image styling – fitting the dr waleed portrait */
-        .portrait-section {
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-            margin-bottom: 2rem;
-        }
+    /* ===== MENU ===== */
+    .menu-bar {
+      background: #342f29;
+      padding: 1rem 2.2rem;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      flex-wrap: wrap;
+      gap: 0.8rem 1.5rem;
+      border-bottom: 2px solid #9b7e64;
+    }
 
-        .image-frame {
-            max-width: 380px;
-            width: 100%;
-            border-radius: 18px;
-            overflow: hidden;
-            box-shadow: 0 10px 20px -5px rgba(0, 0, 0, 0.2);
-            border: 3px solid #d8d0c0;
-            background: #eae5db;
-            transition: transform 0.25s ease;
-        }
+    .logo-area {
+      font-size: 1.6rem;
+      font-weight: 400;
+      letter-spacing: 1.5px;
+      color: #e6daca;
+      font-family: 'Times New Roman', serif;
+    }
+    .logo-area i {
+      color: #b6936c;
+      margin-right: 8px;
+    }
 
-        .image-frame:hover {
-            transform: scale(1.01);
-        }
+    .nav-links {
+      display: flex;
+      gap: 2.2rem;
+      align-items: center;
+    }
+    .nav-links a {
+      color: #ddd2c0;
+      text-decoration: none;
+      font-size: 1.25rem;
+      font-weight: 400;
+      transition: all 0.2s;
+      border-bottom: 1px solid transparent;
+      padding-bottom: 3px;
+    }
+    .nav-links a:hover {
+      color: #ffeedb;
+      border-bottom-color: #c8a27b;
+    }
+    .nav-links a i {
+      margin-right: 6px;
+      font-size: 1rem;
+      color: #b29e86;
+    }
 
-        .image-frame img {
-            display: block;
-            width: 100%;
-            height: auto;
-            object-fit: cover;
-            aspect-ratio: 16 / 11;   /* gentle consistent crop — keeps the image balanced */
-            background: #cdc6b8;       /* fallback while loading */
-        }
+    /* home return bottom style – special button */
+    .home-return {
+      background: #4d3f33;
+      padding: 0.5rem 1.2rem;
+      border-radius: 40px;
+      border: 1px solid #a18568;
+    }
+    .home-return a {
+      color: #f2e0cc;
+      font-weight: 500;
+      font-size: 1.2rem;
+    }
+    .home-return a i {
+      color: #dbb48b;
+    }
 
-        /* subtle caption / note – just to mirror the filename */
-        .img-note {
-            font-size: 0.8rem;
-            font-family: monospace;
-            margin-top: 0.5rem;
-            color: #7b6e64;
-            letter-spacing: 0.3px;
-            border-bottom: 1px dashed #d4cdc0;
-            padding-bottom: 0.2rem;
-        }
+    /* ===== GALLERY: MOTION + SLIDE ===== */
+    .gallery-section {
+      padding: 2.5rem 2rem 0.5rem 2rem;
+      background: #26211c;
+    }
 
-        /* main text styling */
-        .about-text {
-            margin-top: 1.2rem;
-        }
+    .slider-head {
+      display: flex;
+      justify-content: space-between;
+      align-items: baseline;
+      margin-bottom: 1rem;
+      color: #cbbaa7;
+    }
+    .slider-head h2 {
+      font-weight: 300;
+      font-size: 1.9rem;
+      border-left: 6px solid #a17f60;
+      padding-left: 1.3rem;
+    }
+    .sound-toggle {
+      background: none;
+      border: 1px solid #6f5b4b;
+      color: #dac8b3;
+      padding: 0.5rem 1.2rem;
+      border-radius: 40px;
+      cursor: pointer;
+      font-size: 1rem;
+      transition: 0.2s;
+    }
+    .sound-toggle i {
+      margin-right: 6px;
+      color: #c1a177;
+    }
+    .sound-toggle:hover {
+      background: #3e352c;
+      border-color: #aa8c72;
+    }
 
-        .about-text h1 {
-            font-size: 2.2rem;
-            font-weight: 500;
-            letter-spacing: -0.5px;
-            color: #3b2e24;
-            border-left: 7px solid #b8a78d;
-            padding-left: 1.3rem;
-            margin-bottom: 1.6rem;
-            line-height: 1.2;
-            font-family: 'Times New Roman', 'Georgia', serif;
-        }
+    /* slider main container */
+    .slider-container {
+      position: relative;
+      width: 100%;
+      max-width: 1000px;
+      margin: 0 auto 2rem auto;
+      overflow: hidden;
+      border-radius: 36px;
+      box-shadow: 0 30px 40px -15px black;
+      border: 2px solid #514537;
+    }
 
-        .about-text p {
-            margin-bottom: 1.4rem;
-            font-size: 1.12rem;
-            text-align: justify;
-            word-spacing: 0.5px;
-        }
+    .slider-track {
+      display: flex;
+      transition: transform 0.6s cubic-bezier(0.25, 0.1, 0.15, 1.1);
+      will-change: transform;
+    }
 
-        .about-text p:first-of-type {
-            margin-top: 0;
-        }
+    .slide {
+      min-width: 100%;
+      box-sizing: border-box;
+      position: relative;
+      aspect-ratio: 16 / 11;
+      background: #352e26;
+    }
 
-        .about-text p:last-of-type {
-            margin-bottom: 0;
-        }
+    .slide img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      display: block;
+      pointer-events: none; /* no names, just pure image */
+      user-select: none;
+    }
 
-        /* fine detail: a tiny scholarly divider */
-        .separator {
-            width: 90px;
-            height: 2px;
-            background: linear-gradient(90deg, #c9bbab, #dcd2c4, #c9bbab);
-            margin: 1.8rem auto 1rem auto;
-            border-radius: 4px;
-        }
+    /* subtle overlay + effect */
+    .slide::after {
+      content: '';
+      position: absolute;
+      top: 0; left: 0; width: 100%; height: 100%;
+      box-shadow: inset 0 0 0 0 rgba(255, 245, 215, 0.2);
+      transition: box-shadow 0.3s;
+      pointer-events: none;
+    }
+    .slider-container:hover .slide::after {
+      box-shadow: inset 0 0 30px rgba(218, 185, 145, 0.3);
+    }
 
-        /* for small screens — friendly */
-        @media (max-width: 600px) {
-            .card {
-                padding: 1.5rem 1.2rem;
-            }
-            .about-text h1 {
-                font-size: 1.8rem;
-                padding-left: 1rem;
-            }
-            .about-text p {
-                font-size: 1rem;
-                text-align: left;
-            }
-        }
+    /* navigation arrows + dots */
+    .slider-nav {
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      gap: 2.5rem;
+      margin: 1rem 0 2rem 0;
+    }
 
-        /* (the github image is referenced exactly as you wrote) */
-    </style>
+    .nav-arrow {
+      background: #3d352d;
+      color: #ebdac4;
+      border: none;
+      width: 56px;
+      height: 56px;
+      border-radius: 50%;
+      font-size: 2rem;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      cursor: pointer;
+      transition: 0.2s;
+      border: 1px solid #7b6552;
+    }
+    .nav-arrow:hover {
+      background: #5f4e3d;
+      color: white;
+      transform: scale(1.07);
+    }
+
+    .dot-container {
+      display: flex;
+      gap: 1rem;
+    }
+    .dot {
+      width: 16px;
+      height: 16px;
+      background: #564b3f;
+      border-radius: 50%;
+      cursor: pointer;
+      transition: 0.2s;
+      border: 1px solid #9b856e;
+    }
+    .dot.active {
+      background: #dbbc98;
+      transform: scale(1.3);
+      box-shadow: 0 0 12px #ffcf9c;
+    }
+
+    /* ===== ABOUT TEXT (trilingual) ===== */
+    .about-container {
+      padding: 2.5rem 2.2rem;
+      background: #2f2922;
+      border-radius: 48px 48px 24px 24px;
+      margin: 0.5rem 1.2rem 1.8rem 1.2rem;
+      box-shadow: inset 0 1px 5px #463d33;
+    }
+
+    .lang-tabs {
+      display: flex;
+      gap: 1.2rem;
+      margin-bottom: 2rem;
+      flex-wrap: wrap;
+    }
+    .lang-btn {
+      background: transparent;
+      border: none;
+      color: #b7a58f;
+      font-size: 1.5rem;
+      font-weight: 400;
+      padding: 0.4rem 1rem 0.4rem 0.8rem;
+      cursor: pointer;
+      border-radius: 40px;
+      display: flex;
+      align-items: center;
+      gap: 6px;
+      transition: 0.2s;
+      border: 1px solid transparent;
+    }
+    .lang-btn i {
+      font-size: 1.3rem;
+    }
+    .lang-btn.active {
+      color: #ffebd2;
+      background: #4d3d2e;
+      border-color: #b5916c;
+    }
+
+    .lang-text {
+      display: none;
+      font-size: 1.18rem;
+      text-align: justify;
+      word-spacing: 0.5px;
+      color: #f2e5d5;
+      direction: ltr;
+    }
+    .lang-text.active {
+      display: block;
+      animation: softFade 0.4s ease;
+    }
+    /* arabic & kurdish (arabic script) may look better with appropriate font */
+    .lang-text[lang="ar"] {
+      font-family: 'Amiri', 'Traditional Arabic', 'Times New Roman', serif;
+      font-size: 1.25rem;
+      line-height: 1.9;
+    }
+    .lang-text[lang="ku-arab"], .lang-text[lang="ku-latn"] {
+      font-family: 'Noto Naskh Arabic', 'Roboto', 'Times New Roman', serif;
+    }
+    /* fallback */
+    @import url('https://fonts.googleapis.com/css2?family=Amiri&display=swap');
+
+    @keyframes softFade {
+      0% { opacity: 0.3; transform: translateY(5px); }
+      100% { opacity: 1; transform: translateY(0); }
+    }
+
+    /* ===== FOOTER: RIGHTS RESERVED ===== */
+    .footer {
+      text-align: center;
+      padding: 1.2rem 2rem;
+      background: #201c17;
+      color: #ac9e8b;
+      border-top: 1px solid #4f4338;
+      margin-top: 0.8rem;
+      font-size: 1.2rem;
+      display: flex;
+      flex-wrap: wrap;
+      justify-content: center;
+      gap: 2rem;
+      border-radius: 0 0 28px 28px;
+    }
+    .footer span i {
+      color: #b18762;
+      margin: 0 5px;
+    }
+    .footer .dev {
+      letter-spacing: 1.5px;
+      font-weight: 300;
+    }
+
+    /* mobile fine-tune */
+    @media (max-width: 650px) {
+      .menu-bar {
+        flex-direction: column;
+        align-items: stretch;
+        padding: 1rem;
+      }
+      .nav-links {
+        justify-content: space-around;
+        gap: 0.8rem;
+      }
+      .home-return {
+        text-align: center;
+      }
+      .slider-head {
+        flex-direction: column;
+        align-items: flex-start;
+        gap: 0.7rem;
+      }
+      .about-container {
+        padding: 1.8rem 1.2rem;
+      }
+      .lang-btn {
+        font-size: 1.2rem;
+      }
+    }
+
+    /* image hover effect (but no captions) */
+    .slide {
+      transition: filter 0.4s;
+    }
+    .slide:hover {
+      filter: brightness(1.05) saturate(1.1);
+    }
+  </style>
 </head>
 <body>
-    <div class="card">
-        <!-- image area: exactly the image from your github path -->
-        <div class="portrait-section">
-            <div class="image-frame">
-                <!-- using the raw github content URL for the image -->
-                <img 
-                    src="https://raw.githubusercontent.com/whz-co/whz/main/images/dr%20waleed%20on%20libra..jpg" 
-                    alt="Dr. Waleed Hussein Zakhourani – portrait"
-                    onerror="this.onerror=null; this.src='data:image/svg+xml,%3Csvg%20xmlns%3D%22http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg%22%20width%3D%22380%22%20height%3D%22260%22%20viewBox%3D%220%200%20380%20260%22%3E%3Crect%20width%3D%22380%22%20height%3D%22260%22%20fill%3D%22%23d8cfc0%22%2F%3E%3Ctext%20x%3D%2230%22%20y%3D%22140%22%20font-family%3D%22Georgia%22%20font-size%3D%2218%22%20fill%3D%22%233d3229%22%3E📷%20Dr%20Waleed%20(libra)%3C%2Ftext%3E%3C%2Fsvg%3E';"
-                >
-            </div>
-            <div class="img-note">
-                ⚖️ dr waleed on libra..jpg — scholar, linguist, cultural bridge
-            </div>
+  <div class="page">
+    <!-- MENU: home + return bottom (whz link) -->
+    <div class="menu-bar">
+      <div class="logo-area">
+        <i class="fas fa-scroll"></i> Dr. Waleed
+      </div>
+      <div class="nav-links">
+        <a href="#"><i class="fas fa-home"></i> Home</a>
+        <a href="#" id="returnBottomLink"><i class="fas fa-undo-alt"></i> return bottom</a>
+        <div class="home-return">
+          <a href="https://whz-co.github.io/whz/index.html" target="_blank" rel="noopener"><i class="fas fa-external-link-alt"></i> whz repo</a>
         </div>
-
-        <!-- full about text (exactly as provided) -->
-        <div class="about-text">
-            <h1>Dr. Waleed Hussein Zakhourani</h1>
-
-            <p>Dr. Waleed Hussein Zakhourani is a distinguished linguist, visionary educator, and cultural scholar whose life’s work serves as a vital bridge between the English, Arabic, and Kurdish worlds. Holding a PhD in English Language Etiquette from Harvard University, Dr. Zakhourani’s academic foundation is rooted in the sophisticated study of how language conveys respect, clarity, and deep-seated cultural values. This rare specialization has defined his lifelong mission: to transform the English language from a mere academic tool into a profound medium of global mutual understanding.</p>
-
-            <p>With decades of leadership in multilingual education, Dr. Zakhourani has emerged as a champion of linguistic accessibility and cultural preservation. His extensive expertise spans the intricate fields of lexicography, translation studies, and academic publishing. Throughout his career, he has worked tirelessly to ensure that the mastery of English is achieved without sacrificing the rich intellectual traditions of Arabic and Kurdish speakers. By synthesizing scholarly rigor with deep cultural sensitivity, he empowers learners to navigate the global stage while remaining firmly rooted in their own heritage.</p>
-        </div>
-
-        <!-- quiet decorative separator, just for breathing -->
-        <div class="separator"></div>
-
-        <!-- tiny footnote: image loaded from github / text as requested — test view -->
-        <div style="font-size: 0.75rem; color: #a29587; text-align: center; margin-top: 1rem; font-style: italic;">
-            ⸻  just for test · preview as requested  ⸻
-        </div>
+      </div>
     </div>
 
-    <!-- small note: if the image does not appear, fallback shows placeholder with name -->
+    <!-- GALLERY section: three images, slide with motions, subtle sound (toggle) -->
+    <div class="gallery-section">
+      <div class="slider-head">
+        <h2><i class="fas fa-camera-retro"></i>  moments & portraits</h2>
+        <button class="sound-toggle" id="soundToggleBtn"><i class="fas fa-volume-off"></i> ambient sound</button>
+      </div>
+
+      <!-- slider -->
+      <div class="slider-container" id="sliderContainer">
+        <div class="slider-track" id="sliderTrack">
+          <!-- slide 1: dr waleed on libra -->
+          <div class="slide"><img src="https://raw.githubusercontent.com/whz-co/whz/main/images/dr%20waleed%20on%20libra..jpg" alt=""></div>
+          <!-- slide 2: holding a book -->
+          <div class="slide"><img src="https://raw.githubusercontent.com/whz-co/whz/main/images/Dr%20waleed%20is%20holding%20a%20book.png" alt=""></div>
+          <!-- slide 3: writing -->
+          <div class="slide"><img src="https://raw.githubusercontent.com/whz-co/whz/main/images/Dr%20waleed%20is%20writing.jpg" alt=""></div>
+        </div>
+      </div>
+
+      <!-- navigation arrows + dots -->
+      <div class="slider-nav">
+        <button class="nav-arrow" id="prevSlide"><i class="fas fa-chevron-left"></i></button>
+        <div class="dot-container" id="dotContainer">
+          <span class="dot active" data-index="0"></span>
+          <span class="dot" data-index="1"></span>
+          <span class="dot" data-index="2"></span>
+        </div>
+        <button class="nav-arrow" id="nextSlide"><i class="fas fa-chevron-right"></i></button>
+      </div>
+    </div>
+
+    <!-- About text area: trilingual -->
+    <div class="about-container">
+      <div class="lang-tabs">
+        <button class="lang-btn active" data-lang="en"><i class="fas fa-globe"></i> English</button>
+        <button class="lang-btn" data-lang="ar"><i class="fas fa-globe"></i> العربية</button>
+        <button class="lang-btn" data-lang="ku-arab"><i class="fas fa-globe"></i> کوردی (عەرەبی)</button>
+        <button class="lang-btn" data-lang="ku-latn"><i class="fas fa-globe"></i> Kurdî (latînî)</button>
+      </div>
+
+      <!-- English text -->
+      <div class="lang-text active" id="en" lang="en">
+        <p>Dr. Waleed Hussein Zakhourani is a distinguished linguist, visionary educator, and cultural scholar whose life’s work serves as a vital bridge between the English, Arabic, and Kurdish worlds. Holding a PhD in English Language Etiquette from Harvard University, Dr. Zakhourani’s academic foundation is rooted in the sophisticated study of how language conveys respect, clarity, and deep-seated cultural values. This rare specialization has defined his lifelong mission: to transform the English language from a mere academic tool into a profound medium of global mutual understanding.</p>
+        <p>With decades of leadership in multilingual education, Dr. Zakhourani has emerged as a champion of linguistic accessibility and cultural preservation. His extensive expertise spans the intricate fields of lexicography, translation studies, and academic publishing. Throughout his career, he has worked tirelessly to ensure that the mastery of English is achieved without sacrificing the rich intellectual traditions of Arabic and Kurdish speakers. By synthesizing scholarly rigor with deep cultural sensitivity, he empowers learners to navigate the global stage while remaining firmly rooted in their own heritage.</p>
+      </div>
+
+      <!-- Arabic text -->
+      <div class="lang-text" id="ar" lang="ar" dir="rtl">
+        <p>يُعد الدكتور وليد حسين زاخوراني لغوياً بارزاً، ومربياً رؤيوياً، وباحثاً ثقافياً كرس مسيرته المهنية لتكون جسراً حيوياً يربط بين عوالم اللغات الإنجليزية والعربية والكردية. من خلال حصوله على درجة الدكتوراه في آداب اللغة الإنجليزية من جامعة هارفارد، تعذرت ركائز أساسه الأكاديمي في الدراسة المتعمقة لكيفية تعبير اللغة عن الاحترام والوضوح والقيم الثقافية الراسخة. وقد حدد هذا التخصص النادر مهمة حياته: تحويل اللغة الإنجليزية من مجرد أداة أكاديمية إلى وسيلة عميقة للتفاهم العالمي المتبادل.</p>
+        <p>مع عقود من القيادة في مجال التعليم متعدد اللغات، برز الدكتور زاخوراني كشخصية رائدة في تيسير الوصول اللغوي والحفاظ على التراث الثقافي. تشمل خبرته الواسعة مجالات صناعة المعاجم، ودراسات الترجمة، والنشر الأكاديمي. وقد عمل بلا كلل طوال مسيرته لضمان إتقان اللغة الإنجليزية دون التضحية بالتقاليد الفكرية الغنية للناطقين بالعربية والكردية. ومن خلال المزج بين الدقة العلمية والحساسية الثقافية العميقة، مكن المتعلمين من الإبحار في الساحة العالمية مع البقاء متجذرين بقوة في تراثهم الخاص.</p>
+      </div>
+
+      <!-- Kurdish (Arabic script) -->
+      <div class="lang-text" id="ku-arab" lang="ku-arab" dir="rtl">
+        <p>د. وەلید حسێن زاخۆرانی زمانزانەکێ دیار، پەروەردەکارەکێ خودان دیدەڤانی، و ڤەکۆلەرەکێ کلتووریێ خودان ئەزموونە، کو ژیانا خۆ تەرخانکرییە دا ببیتە پرەکا زیندی د ناڤبەرا جیهانێن ئینگلیزی، عەرەبی و کوردی دا. ب بەدەستڤەئینانا بروانامەیا دکتۆرا د ئیتیکێت و ئادابێن زمانێ ئینگلیزیدا ل زانکۆیا هارفارد (Harvard University)، بنیاتێ وی یێ ئەکادیمی ب کویری د ناڤ ڤەکۆلینێن زمانەڤانی دا بنەجهبویە، ب تایبەت ل سەر وێ چەندێ کا زمان چەوا ڕێز، ڕوونی و بەهایێن کلتووری دگەهینیت. ئەڤ پسپۆرییا دەگمەن بوویە ئەگەرێ دیارکرنا ئارمانجا وی یا سەرەکی د ژیانێدا: ئەو ژی گوهۆڕینا زمانێ ئینگلیزییە ژ ئامرازەکێ ئەکادیمی یێ سادە بۆ کەرەستەیەکێ کویر یێ تێگەهشتنا هەڤپشک د ئاستێ جیهانیدا.</p>
+        <p>دگەل چەندین سالێن کارکرنێ د بوارێ پەروەردەیا فرە-زمانیدا، د. وەلید وەک پالپشتەکێ مەزن یێ ب ساناهی کرنا زمانان و پاراستنا کلتووری دیار بوویە. شارەزاییا وی د بوارێن فەرهەنگنڤیسی دا، زانستێ وەرگێڕانێ و وەشانێن ئەکادیمی دگریت. د درێژاهیا کارێ خۆ یێ پیشەییدا، وی ب بێهنفەرهی کار کرییە دا کو مسۆگەر بکەت کو فێربوونا زمانێ ئینگلیزی نەبیتە ئەگەرێ ژ دەستدانا نەریتێن فکرییێن دەوڵەمەند یێن خویندکاریێن عەرەب و کورد. ب هەڤبەندکرنا پیڤەرێن زانستیێن توند و هەستیارییا کلتووری یا کویر، وی ڕێک ڤەکر بۆ فێرخوازان دا کو د ناڤ گۆڕەپانا جیهانیدا سەرکەفتی بن و ل هەمان دەمدا ب ڕەهو ڕیشالێن خۆ ڤە گرێدای ب مینن.</p>
+      </div>
+
+      <!-- Kurdish (Latin) -->
+      <div class="lang-text" id="ku-latn" lang="ku-latn">
+        <p>Dr. Welîd Hisên Zexoranî zimanzanekî berbiçav, perwerdekarekî xwedî dîtin û zanyarekî çandî ye ku xebatên jiyana wî wekî pireke girîng di navbera cîhanên Îngilîzî, Erebî û Kurdî de xizmetê dikin. Dr. Zexoranî xwediyê pileya Doktorayê (PhD) di warê Etîketa Zimên a Îngilîzî de ye ji Zanîngeha Harvardê; bingeha wî ya akademîk di lêkolîneke kûr a li ser çawaniya veguhastina rêz, zelalî û nirxên çandî yên kûr bi rêya zimên de şax vedaye. Ev pisporiya kêmpeyda mîsyona jiyana wî diyar kiriye: veguherandina zimanê Îngilîzî ji amûreke tenê akademîk ber bi navgîneke kûr a têgihiştina hevbeş a gerdûnî.</p>
+        <p>Bi ezmûneke dehan salan a di serokatiya perwerdehiya pirzimanî de, Dr. Zexoranî wekî parêzvanê gihîştina zimên û parastina çandî derketiye pêş. Pisporiya wî ya berfireh qadên aloz ên ferhengzanî, zanistên wergerê û weşangeriya akademîk lixwe digire. Di dirêjahiya kariyera xwe de, wî bi westane kar kiriye da ku piştrast bike ku serdestiya li ser zimanê Îngilîzî bêyî qurbankirina kevneşopiyên dewlemend ên rewşenbîrî yên axêvên Erebî û Kurdî pêk tê. Bi hevgirtina hişkgeriya zanistî û hestiyariya çandî ya kûr, ew şiyanê dide fêrbûyan ku di qada gerdûnî de bi pêş bikevin, di heman demê de bi koka xwe ya mîrateya xwe ve girêdayî bimînin.</p>
+      </div>
+    </div>
+
+    <!-- FOOTER: all rights reserved to WHZ developer 2026 -->
+    <div class="footer">
+      <span><i class="far fa-copyright"></i> 2026 WHZ developer – all rights reserved</span>
+      <span class="dev"><i class="fas fa-code"></i> Dr. Waleed archive</span>
+    </div>
+  </div>
+
+  <!-- AUDIO (ambient subtle sound) + toggle -->
+  <audio id="ambientAudio" loop preload="auto" style="display: none;">
+    <source src="https://www.soundhelix.com/examples/mp3/SoundHelix-Song-1.mp3" type="audio/mpeg">
+    <!-- fallback: short silent -->
+  </audio>
+
+  <script>
+    (function() {
+      // ---------- GALLERY SLIDER ----------
+      const track = document.getElementById('sliderTrack');
+      const slides = Array.from(document.querySelectorAll('.slide'));
+      const prevBtn = document.getElementById('prevSlide');
+      const nextBtn = document.getElementById('nextSlide');
+      const dots = document.querySelectorAll('.dot');
+      let currentIndex = 0;
+      const totalSlides = slides.length;
+
+      function updateGallery(index) {
+        if (index < 0) index = totalSlides - 1;
+        if (index >= totalSlides) index = 0;
+        currentIndex = index;
+        track.style.transform = `translateX(-${currentIndex * 100}%)`;
+        dots.forEach((dot, i) => {
+          dot.classList.toggle('active', i === currentIndex);
+        });
+      }
+
+      prevBtn.addEventListener('click', () => updateGallery(currentIndex - 1));
+      nextBtn.addEventListener('click', () => updateGallery(currentIndex + 1));
+      dots.forEach((dot, idx) => {
+        dot.addEventListener('click', () => updateGallery(idx));
+      });
+
+      // optional: auto slide every 6 sec
+      let autoInterval = setInterval(() => updateGallery(currentIndex + 1), 6000);
+      const container = document.querySelector('.slider-container');
+      container.addEventListener('mouseenter', () => clearInterval(autoInterval));
+      container.addEventListener('mouseleave', () => {
+        autoInterval = setInterval(() => updateGallery(currentIndex + 1), 6000);
+      });
+
+      // ---------- LANGUAGE TABS ----------
+      const langBtns = document.querySelectorAll('.lang-btn');
+      const langTexts = document.querySelectorAll('.lang-text');
+      langBtns.forEach(btn => {
+        btn.addEventListener('click', () => {
+          langBtns.forEach(b => b.classList.remove('active'));
+          btn.classList.add('active');
+          const lang = btn.dataset.lang;
+          langTexts.forEach(txt => {
+            txt.classList.remove('active');
+            if (txt.id === lang) txt.classList.add('active');
+          });
+        });
+      });
+
+      // ---------- AMBIENT SOUND (toggle) ----------
+      const audio = document.getElementById('ambientAudio');
+      const soundBtn = document.getElementById('soundToggleBtn');
+      let soundEnabled = false;
+
+      // attempt to play on first user gesture (since autoplay restricted)
+      soundBtn.addEventListener('click', () => {
+        if (!soundEnabled) {
+          audio.volume = 0.3;
+          audio.play().then(() => {
+            soundEnabled = true;
+            soundBtn.innerHTML = '<i class="fas fa-volume-up"></i> ambient sound';
+          }).catch(e => {
+            alert('Click again to enable sound (browser policy)');
+          });
+        } else {
+          audio.pause();
+          soundEnabled = false;
+          soundBtn.innerHTML = '<i class="fas fa-volume-off"></i> ambient sound';
+        }
+      });
+
+      // optional: return bottom link – scroll to footer
+      document.getElementById('returnBottomLink').addEventListener('click', (e) => {
+        e.preventDefault();
+        document.querySelector('.footer').scrollIntoView({ behavior: 'smooth' });
+      });
+
+      // ensure no image names visible – they are alt-less, fine.
+    })();
+  </script>
+  <!-- add fallback for arabic font -->
+  <link href="https://fonts.googleapis.com/css2?family=Amiri&display=swap" rel="stylesheet">
 </body>
 </html>

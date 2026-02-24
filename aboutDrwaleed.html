@@ -3,13 +3,14 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=yes, viewport-fit=cover">
-  <title>Dr. Waleed · full image on tap</title>
-  <!-- Font Awesome 6 for icons & hamburger -->
+  <title>Dr. Waleed · immersive legacy</title>
+  <!-- Font Awesome 6 (free) for icons -->
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
-  <!-- Google Fonts: clean & readable -->
-  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600&family=Amiri:wght@400;700&display=swap" rel="stylesheet">
+  <!-- Google Fonts: elegant & readable -->
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600;700&family=Amiri:wght@400;700&family=Playfair+Display:wght@400;600&display=swap" rel="stylesheet">
+  <!-- AOS (Animate on Scroll) for motion effects -->
+  <link href="https://unpkg.com/aos@2.3.1/dist/aos.css" rel="stylesheet">
   <style>
-    /* ----- RESET & BASE (ultra compact, mobile first) ----- */
     * {
       margin: 0;
       padding: 0;
@@ -19,37 +20,52 @@
     html {
       font-size: 14px;
       scroll-behavior: smooth;
-    }
-
-    body {
-      background: #171410;
-      font-family: 'Inter', sans-serif;
-      color: #ede3d7;
-      line-height: 1.5;
-      width: 100%;
       overflow-x: hidden;
     }
 
-    /* ----- HAMBURGER NAV (three lines, extra small) ----- */
+    body {
+      background: #0f0c09;
+      font-family: 'Inter', sans-serif;
+      color: #f0e4d4;
+      line-height: 1.5;
+      width: 100%;
+      position: relative;
+    }
+
+    /* ===== DYNAMIC PARTICLE CANVAS (background motion) ===== */
+    #particle-canvas {
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      z-index: -1;
+      pointer-events: none;
+      opacity: 0.5;
+    }
+
+    /* ===== HAMBURGER NAV (ultra compact) ===== */
     .mobile-nav {
       position: sticky;
       top: 0;
       z-index: 2000;
-      background: rgba(22, 18, 14, 0.97);
-      backdrop-filter: blur(10px);
-      -webkit-backdrop-filter: blur(10px);
-      border-bottom: 1px solid #544b3f;
+      background: rgba(18, 14, 10, 0.85);
+      backdrop-filter: blur(16px);
+      -webkit-backdrop-filter: blur(16px);
+      border-bottom: 1px solid #5f4f3d;
       display: flex;
       align-items: center;
       justify-content: space-between;
       padding: 0.5rem 1rem;
+      box-shadow: 0 8px 20px rgba(0,0,0,0.5);
     }
 
     .logo-mini {
       font-size: 1.3rem;
       font-weight: 600;
-      color: #ecd7bf;
-      letter-spacing: 0.2px;
+      background: linear-gradient(135deg, #f3d9bf, #c9a67c);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
     }
     .logo-mini i {
       color: #b78f69;
@@ -57,144 +73,169 @@
     }
 
     .hamburger {
-      background: none;
-      border: 1px solid #6e5d4a;
-      border-radius: 8px;
-      padding: 0.3rem 0.4rem;
+      background: rgba(255,255,240,0.08);
+      border: 1px solid #8d7761;
+      border-radius: 12px;
+      padding: 0.3rem 0.5rem;
       cursor: pointer;
       display: flex;
       flex-direction: column;
-      align-items: center;
       gap: 4px;
-      width: 38px;
-      height: 34px;
+      width: 42px;
+      height: 38px;
+      justify-content: center;
+      transition: 0.2s;
+    }
+    .hamburger:hover {
+      background: #3d3228;
     }
     .hamburger span {
       display: block;
-      width: 22px;
+      width: 24px;
       height: 2px;
-      background: #f0d8bc;
-      border-radius: 2px;
+      background: #eddac4;
+      border-radius: 4px;
+      transition: 0.2s;
     }
 
     .menu-dropdown {
       position: absolute;
-      top: 52px;
+      top: 58px;
       right: 1rem;
-      background: #2c241d;
-      border: 1px solid #9c836a;
-      border-radius: 22px;
-      padding: 0.5rem 0;
-      min-width: 190px;
-      box-shadow: 0 18px 30px rgba(0,0,0,0.7);
+      background: rgba(34, 28, 22, 0.97);
+      backdrop-filter: blur(20px);
+      border: 1px solid #ac9277;
+      border-radius: 28px;
+      padding: 0.7rem 0;
+      min-width: 200px;
+      box-shadow: 0 25px 40px rgba(0,0,0,0.8);
       display: none;
       z-index: 1999;
     }
     .menu-dropdown.show {
       display: block;
+      animation: slideIn 0.25s ease;
+    }
+    @keyframes slideIn {
+      0% { opacity: 0; transform: translateY(-10px); }
+      100% { opacity: 1; transform: translateY(0); }
     }
     .menu-dropdown a {
       display: block;
-      padding: 0.7rem 1.5rem;
-      color: #f7e3cd;
+      padding: 0.8rem 1.8rem;
+      color: #f7e2cc;
       text-decoration: none;
-      font-size: 1.2rem;
-      border-bottom: 1px solid #4e4032;
+      font-size: 1.25rem;
+      border-bottom: 1px solid #544435;
+      transition: 0.2s;
     }
-    .menu-dropdown a:last-child {
-      border-bottom: none;
+    .menu-dropdown a:hover {
+      background: #4f3e2d;
+      padding-left: 2.2rem;
     }
     .menu-dropdown a i {
-      width: 26px;
-      color: #cfa67c;
+      width: 28px;
+      color: #d6a97c;
     }
     .menu-dropdown .home-return {
-      background: #4f3b2b;
-      border-radius: 30px;
-      margin: 0.5rem 1rem;
-      padding: 0.5rem 1rem;
+      background: #5e4a36;
+      border-radius: 40px;
+      margin: 0.7rem 1.2rem;
+      padding: 0.7rem;
       text-align: center;
+      border: none;
     }
 
-    /* ----- CONTAINER & SECTIONS (tight) ----- */
-    .container {
-      padding: 0 1rem;
-    }
-    section {
-      padding: 2.2rem 0 1.8rem;
-    }
-    .section-title {
-      font-size: 2rem;
-      font-weight: 500;
-      border-left: 5px solid #c09f7c;
-      padding-left: 1.1rem;
-      margin-bottom: 1.6rem;
-    }
-
-    /* ----- HERO (very compact) ----- */
-    .hero-tiny {
-      background: linear-gradient(150deg, #241f18, #17120d);
-      padding: 2rem 1rem;
+    /* ===== HERO WITH GLOW ===== */
+    .hero-section {
+      padding: 2.8rem 1.2rem 2.2rem;
       text-align: center;
-      border-bottom: 2px solid #7a624b;
+      position: relative;
     }
-    .hero-tiny h1 {
-      font-size: 2.3rem;
-      font-weight: 600;
+    .hero-glow {
+      font-size: 2.7rem;
+      font-weight: 700;
+      font-family: 'Playfair Display', serif;
+      text-shadow: 0 0 15px #dbb487, 0 0 30px #7a583a;
+      animation: pulseGlow 3s infinite alternate;
     }
-    .hero-tiny h2 {
+    @keyframes pulseGlow {
+      0% { text-shadow: 0 0 10px #cfa97c, 0 0 20px #8f6947; }
+      100% { text-shadow: 0 0 20px #efcaa0, 0 0 40px #b2804f; }
+    }
+    .hero-sub {
       font-size: 1.2rem;
-      color: #cfb89b;
-      font-weight: 300;
+      color: #e2cbb2;
+      letter-spacing: 2px;
+      margin-top: 0.4rem;
     }
 
-    /* ----- GALLERY (three clickable images) ----- */
+    /* ===== GALLERY (3D tilt + lightbox) ===== */
+    .gallery-wrap {
+      padding: 2rem 1rem 1rem;
+    }
     .gallery-grid {
       display: grid;
       grid-template-columns: repeat(3, 1fr);
-      gap: 0.6rem;
-      margin: 1.5rem 0 0.8rem;
+      gap: 0.7rem;
+      perspective: 1000px;
     }
-    .gallery-img {
-      width: 100%;
-      aspect-ratio: 1 / 1;
-      object-fit: cover;
-      border-radius: 18px;
-      border: 2px solid #6a5b49;
-      background: #30291f;
+    .gallery-item {
+      border-radius: 24px;
+      overflow: hidden;
+      border: 2px solid #8f755b;
+      box-shadow: 0 20px 30px -8px black;
+      transition: transform 0.2s, box-shadow 0.3s;
+      aspect-ratio: 1/1;
       cursor: pointer;
-      transition: 0.1s ease;
+      transform-style: preserve-3d;
     }
-    .gallery-img:active {
-      transform: scale(0.96);
-      border-color: #cfa776;
+    .gallery-item:hover {
+      transform: rotateY(2deg) rotateX(2deg) scale(1.02);
+      box-shadow: 0 25px 35px -5px #000000dd;
+      border-color: #dbb28b;
+    }
+    .gallery-item img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      display: block;
+      transition: filter 0.3s;
+    }
+    .gallery-item:hover img {
+      filter: brightness(1.1) saturate(1.1);
     }
 
-    /* ----- LIGHTBOX (fullscreen on image press) ----- */
+    /* lightbox (fullscreen) */
     .lightbox {
       position: fixed;
       top: 0; left: 0; width: 100%; height: 100%;
-      background: rgba(0, 0, 0, 0.95);
-      backdrop-filter: blur(10px);
+      background: rgba(8, 5, 3, 0.96);
+      backdrop-filter: blur(18px);
       z-index: 3000;
       display: flex;
       align-items: center;
       justify-content: center;
       opacity: 0;
       pointer-events: none;
-      transition: opacity 0.2s ease;
+      transition: opacity 0.3s ease;
     }
     .lightbox.active {
       opacity: 1;
       pointer-events: all;
     }
     .lightbox-content {
-      max-width: 96vw;
-      max-height: 96vh;
-      border: 4px solid #be9f80;
-      border-radius: 24px;
+      max-width: 94vw;
+      max-height: 94vh;
+      border: 4px solid #dab38b;
+      border-radius: 32px;
       overflow: hidden;
-      background: #1f1a14;
+      box-shadow: 0 40px 70px black;
+      animation: zoomPop 0.3s;
+    }
+    @keyframes zoomPop {
+      0% { transform: scale(0.9); opacity: 0; }
+      100% { transform: scale(1); opacity: 1; }
     }
     .lightbox-content img {
       width: 100%;
@@ -204,110 +245,158 @@
     .lightbox-close {
       position: absolute;
       top: 30px; right: 30px;
-      font-size: 3rem;
-      color: #efd7bb;
+      font-size: 4rem;
+      color: #ffebd2;
       cursor: pointer;
-      z-index: 3001;
-      text-shadow: 0 4px 10px black;
+      text-shadow: 0 4px 20px black;
+      transition: 0.2s;
+    }
+    .lightbox-close:hover {
+      transform: scale(1.2);
     }
 
-    /* ----- BIO (trilingual with small tabs) ----- */
-    .lang-rows {
+    /* ===== LANGUAGE TOGGLE (with slide) ===== */
+    .lang-panel {
+      background: rgba(26, 21, 16, 0.7);
+      backdrop-filter: blur(8px);
+      border-radius: 48px;
+      padding: 1.5rem 1.2rem;
+      margin: 1.5rem 1rem;
+      border: 1px solid #7e6954;
+      box-shadow: 0 20px 30px -10px black;
+    }
+    .lang-tabs {
       display: flex;
       gap: 0.4rem;
       flex-wrap: wrap;
-      margin: 1.5rem 0 0.8rem;
+      justify-content: center;
     }
-    .lang-btn {
-      background: #302a22;
-      border: 1px solid #7b6752;
-      color: #ddcdb8;
-      font-size: 1rem;
-      padding: 0.3rem 1.1rem;
+    .lang-tab {
+      background: #352d24;
+      border: 1px solid #8d745b;
+      color: #f1dbc4;
+      font-size: 1.1rem;
+      padding: 0.5rem 1.1rem;
       border-radius: 40px;
+      cursor: pointer;
+      transition: 0.2s;
     }
-    .lang-btn.active {
-      background: #9e8164;
-      color: #17120c;
+    .lang-tab.active {
+      background: #c6a178;
+      color: #1c1610;
       font-weight: 600;
+      border-color: #efd2b1;
+      box-shadow: 0 0 15px #f1c494;
     }
-    .bio-card {
+    .bio-content {
+      margin-top: 1.8rem;
+    }
+    .bio-text {
       display: none;
-      background: #241f19;
-      padding: 1.5rem;
-      border-radius: 32px;
-      font-size: 1rem;
-      margin-bottom: 0.5rem;
+      font-size: 1.05rem;
+      line-height: 1.7;
+      background: #1d1711;
+      padding: 1.6rem;
+      border-radius: 34px;
+      border: 1px solid #9b856b;
+      box-shadow: inset 0 0 15px #0e0b07;
+      animation: fadeLang 0.4s;
     }
-    .bio-card.active {
+    @keyframes fadeLang {
+      0% { opacity: 0.2; transform: translateY(6px); }
+      100% { opacity: 1; transform: translateY(0); }
+    }
+    .bio-text.active {
       display: block;
     }
 
-    /* ----- TIMELINE (mini cards) ----- */
-    .timeline-item {
-      background: #2b241d;
-      border-radius: 30px 10px 30px 10px;
-      padding: 1.1rem 1.3rem;
-      margin-bottom: 1rem;
-      border-left: 6px solid #b38f69;
+    /* ===== PUBLICATIONS (cards with 3D hover) ===== */
+    .pub-section {
+      padding: 2rem 1rem;
     }
-    .timeline-year {
-      font-size: 1.5rem;
-      font-weight: 600;
-      color: #e5be95;
-    }
-
-    /* ----- PUBLICATIONS tiny grid (2 cols) ----- */
     .pub-grid {
       display: grid;
       grid-template-columns: 1fr 1fr;
-      gap: 0.8rem;
+      gap: 1rem;
     }
     .pub-card {
-      background: #2e271f;
-      border-radius: 22px;
-      padding: 1.2rem 0.7rem;
-      border: 1px solid #6c5b47;
+      background: rgba(39, 32, 25, 0.7);
+      backdrop-filter: blur(5px);
+      border: 1px solid #9a8066;
+      border-radius: 32px;
+      padding: 1.5rem 0.8rem;
+      text-align: center;
+      transition: all 0.25s cubic-bezier(0.2, 0.9, 0.3, 1.3);
+      box-shadow: 0 15px 25px -10px black;
+      transform: translateY(0);
+    }
+    .pub-card:hover {
+      transform: translateY(-10px) scale(1.02);
+      background: #4a3d30;
+      border-color: #e2b78b;
+      box-shadow: 0 30px 35px -8px #000000;
     }
     .pub-card i {
-      font-size: 1.5rem;
-      color: #bc936d;
-    }
-    .pub-card h3 {
-      font-size: 1.1rem;
-      margin: 0.2rem 0;
+      font-size: 2.2rem;
+      color: #dfb185;
+      margin-bottom: 0.6rem;
     }
 
-    /* ----- tiny map (bridge) ----- */
-    .map-micro svg {
+    /* ===== MINI MAP + FOOTER ===== */
+    .bridge-map {
+      background: #1f1a14;
+      border-radius: 60px 60px 20px 20px;
+      margin: 1.5rem 1rem;
+      padding: 1.8rem 1rem;
+      border: 2px solid #8b745c;
+    }
+    .map-svg svg {
       width: 100%;
-      background: #2b231b;
-      border-radius: 40px;
-      padding: 0.4rem;
+      height: auto;
+      filter: drop-shadow(0 10px 10px #00000070);
     }
 
-    /* ----- FOOTER all rights reserved ----- */
-    .footer-mini {
-      background: #15100b;
-      padding: 1.4rem 1rem;
+    .footer {
+      background: #100c08;
+      padding: 2rem 1rem;
       text-align: center;
-      font-size: 1rem;
-      border-top: 1px solid #5e4f3d;
-      margin-top: 1.5rem;
+      font-size: 1.1rem;
+      border-top: 2px solid #6a5743;
+      color: #cfbb9f;
+    }
+    .footer a {
+      color: #e4c5a1;
+      text-decoration: none;
     }
 
-    /* misc */
-    i {
-      font-size: 1.1rem;
+    /* ===== AUDIO visualizer effect (tiny) ===== */
+    .sound-waves {
+      display: flex;
+      justify-content: center;
+      gap: 5px;
+      margin: 1rem 0 0;
+      height: 30px;
     }
-    a {
-      text-decoration: none;
-      color: inherit;
+    .wave {
+      width: 6px;
+      height: 20px;
+      background: #c9a67b;
+      border-radius: 6px;
+      animation: wave 1.2s infinite ease-in-out;
+    }
+    .wave:nth-child(2) { animation-delay: 0.2s; background: #ddb790; }
+    .wave:nth-child(3) { animation-delay: 0.4s; background: #f0caa0; }
+    @keyframes wave {
+      0%, 100% { transform: scaleY(0.5); }
+      50% { transform: scaleY(1.3); }
     }
   </style>
 </head>
 <body>
-  <!-- HAMBURGER MENU (three lines) -->
+  <!-- particle background canvas (animated) -->
+  <canvas id="particle-canvas"></canvas>
+
+  <!-- HAMBURGER NAV (three lines) -->
   <div class="mobile-nav">
     <div class="logo-mini"><i class="fas fa-feather-alt"></i> Dr. W.</div>
     <button class="hamburger" id="hamburgerBtn" aria-label="menu">
@@ -317,80 +406,78 @@
       <a href="#home"><i class="fas fa-home"></i> Home</a>
       <a href="#gallery"><i class="fas fa-images"></i> Gallery</a>
       <a href="#bio"><i class="fas fa-book-open"></i> Bio</a>
-      <a href="#timeline"><i class="fas fa-timeline"></i> Path</a>
       <a href="#publications"><i class="fas fa-scroll"></i> Works</a>
       <div class="home-return"><a href="https://whz-co.github.io/whz/index.html" target="_blank"><i class="fas fa-arrow-left"></i> WHZ repo</a></div>
     </div>
   </div>
 
-  <!-- HERO small -->
-  <section id="home" class="hero-tiny">
-    <h1>Dr. Waleed H. Z.</h1>
-    <h2>linguist · educator · cultural bridge</h2>
+  <!-- HERO (glow effect) -->
+  <section id="home" class="hero-section" data-aos="fade-up" data-aos-duration="1000">
+    <div class="hero-glow">Dr. Waleed H. Z.</div>
+    <div class="hero-sub">linguist · educator · cultural bridge</div>
   </section>
 
-  <!-- GALLERY (three images, click to magnify) -->
-  <section id="gallery" class="container">
-    <h2 class="section-title"><i class="fas fa-camera"></i> moments</h2>
+  <!-- GALLERY with click to magnify -->
+  <section id="gallery" class="gallery-wrap" data-aos="zoom-in" data-aos-duration="800">
+    <h2 class="section-title" style="margin-left:1rem;"><i class="fas fa-camera"></i> moments</h2>
     <div class="gallery-grid">
-      <img class="gallery-img" src="https://raw.githubusercontent.com/whz-co/whz/main/images/dr%20waleed%20on%20libra..jpg" alt="" data-full="https://raw.githubusercontent.com/whz-co/whz/main/images/dr%20waleed%20on%20libra..jpg">
-      <img class="gallery-img" src="https://raw.githubusercontent.com/whz-co/whz/main/images/Dr%20waleed%20is%20holding%20a%20book.png" alt="" data-full="https://raw.githubusercontent.com/whz-co/whz/main/images/Dr%20waleed%20is%20holding%20a%20book.png">
-      <img class="gallery-img" src="https://raw.githubusercontent.com/whz-co/whz/main/images/Dr%20waleed%20is%20writing.jpg" alt="" data-full="https://raw.githubusercontent.com/whz-co/whz/main/images/Dr%20waleed%20is%20writing.jpg">
+      <div class="gallery-item" data-src="https://raw.githubusercontent.com/whz-co/whz/main/images/dr%20waleed%20on%20libra..jpg">
+        <img src="https://raw.githubusercontent.com/whz-co/whz/main/images/dr%20waleed%20on%20libra..jpg" alt="" loading="lazy">
+      </div>
+      <div class="gallery-item" data-src="https://raw.githubusercontent.com/whz-co/whz/main/images/Dr%20waleed%20is%20holding%20a%20book.png">
+        <img src="https://raw.githubusercontent.com/whz-co/whz/main/images/Dr%20waleed%20is%20holding%20a%20book.png" alt="" loading="lazy">
+      </div>
+      <div class="gallery-item" data-src="https://raw.githubusercontent.com/whz-co/whz/main/images/Dr%20waleed%20is%20writing.jpg">
+        <img src="https://raw.githubusercontent.com/whz-co/whz/main/images/Dr%20waleed%20is%20writing.jpg" alt="" loading="lazy">
+      </div>
     </div>
-    <p style="font-size:0.9rem; color:#bdab95; text-align:center;"><i class="fas fa-hand-pointer"></i> tap image to enlarge</p>
+    <p style="text-align:center; font-size:0.9rem; color:#d4ba9b; margin-top:0.5rem;"><i class="fas fa-expand-alt"></i> tap image for fullscreen</p>
   </section>
 
-  <!-- LIGHTBOX (hidden until image press) -->
+  <!-- LIGHTBOX (hidden initially) -->
   <div class="lightbox" id="lightbox">
     <span class="lightbox-close" id="lightboxClose">&times;</span>
-    <div class="lightbox-content" id="lightboxContent">
+    <div class="lightbox-content">
       <img src="" alt="" id="lightboxImg">
     </div>
   </div>
 
-  <!-- BIO trilingual (compact) -->
-  <section id="bio" class="container">
-    <h2 class="section-title"><i class="fas fa-feather"></i> about</h2>
-    <div class="lang-rows">
-      <button class="lang-btn active" data-lang="en">🇬🇧 EN</button>
-      <button class="lang-btn" data-lang="ar">🇸🇦 AR</button>
-      <button class="lang-btn" data-lang="ku-arab">🏐 KU (Ar)</button>
-      <button class="lang-btn" data-lang="ku-latn">🇹🇰 KU (La)</button>
+  <!-- BIO (trilingual, path removed) -->
+  <section id="bio" class="lang-panel" data-aos="fade-right" data-aos-duration="900">
+    <h2 style="font-size:2rem; margin-bottom:1rem;"><i class="fas fa-feather"></i> about</h2>
+    <div class="lang-tabs">
+      <button class="lang-tab active" data-lang="en">🇬🇧 EN</button>
+      <button class="lang-tab" data-lang="ar">🇸🇦 AR</button>
+      <button class="lang-tab" data-lang="ku-arab">🏴 KU(Ar)</button>
+      <button class="lang-tab" data-lang="ku-latn">🇹🇰 KU(La)</button>
     </div>
-    <!-- English -->
-    <div class="bio-card active" id="bio-en" lang="en">
-      <p>Dr. Waleed Hussein Zakhourani is a distinguished linguist, visionary educator, and cultural scholar whose life’s work serves as a vital bridge between the English, Arabic, and Kurdish worlds. Holding a PhD in English Language Etiquette from Harvard University, his academic foundation studies how language conveys respect and cultural values. This rare specialization defines his mission: to transform English into a medium of global mutual understanding.</p>
-      <p>With decades in multilingual education, he champions linguistic accessibility and cultural preservation. His expertise spans lexicography, translation studies, and academic publishing. He empowers learners to navigate the global stage while rooted in their own heritage.</p>
-    </div>
-    <!-- Arabic -->
-    <div class="bio-card" id="bio-ar" lang="ar" dir="rtl">
-      <p>يُعد الدكتور وليد حسين زاخوراني لغوياً بارزاً، ومربياً رؤيوياً، وباحثاً ثقافياً كرس مسيرته المهنية لتكون جسراً حيوياً يربط بين عوالم اللغات الإنجليزية والعربية والكردية. من خلال حصوله على درجة الدكتوراه في آداب اللغة الإنجليزية من جامعة هارفارد، تعذرت ركائز أساسه الأكاديمي في الدراسة المتعمقة لكيفية تعبير اللغة عن الاحترام والوضوح والقيم الثقافية الراسخة. وقد حدد هذا التخصص النادر مهمة حياته: تحويل اللغة الإنجليزية من مجرد أداة أكاديمية إلى وسيلة عميقة للتفاهم العالمي المتبادل.</p>
-      <p>مع عقود من القيادة في مجال التعليم متعدد اللغات، برز الدكتور زاخوراني كشخصية رائدة في تيسير الوصول اللغوي والحفاظ على التراث الثقافي. تشمل خبرته الواسعة مجالات صناعة المعاجم، ودراسات الترجمة، والنشر الأكاديمي. ويعمل لضمان إتقان الإنجليزية دون التضحية بالتقاليد الفكرية الغنية للناطقين بالعربية والكردية.</p>
-    </div>
-    <!-- Kurdish (Arabic script) -->
-    <div class="bio-card" id="bio-ku-arab" lang="ku-arab" dir="rtl">
-      <p>د. وەلید حسێن زاخۆرانی زمانزانەکێ دیار، پەروەردەکارەکێ خودان دیدەڤانی، و ڤەکۆلەرەکێ کلتووریێ خودان ئەزموونە، کو ژیانا خۆ تەرخانکرییە دا ببیتە پرەکا زیندی د ناڤبەرا جیهانێن ئینگلیزی، عەرەبی و کوردی دا. ب بەدەستڤەئینانا بروانامەیا دکتۆرا د ئیتیکێت و ئادابێن زمانێ ئینگلیزیدا ل زانکۆیا هارفارد، بنیاتێ وی یێ ئەکادیمی ب کویری ل سەر وێ چەندێ کا زمان چەوا ڕێز و بەهایێن کلتووری دگەهینیت.</p>
-      <p>دگەل چەندین سالێن کارکرنێ د بوارێ پەروەردەیا فرە-زمانیدا، د. وەلید وەک پالپشتەکێ مەزن یێ ب ساناهی کرنا زمانان و پاراستنا کلتووری دیار بوویە. شارەزاییا وی د بوارێن فەرهەنگنڤیسی و وەشانێن ئەکادیمی دگریت.</p>
-    </div>
-    <!-- Kurdish Latin -->
-    <div class="bio-card" id="bio-ku-latn" lang="ku-latn">
-      <p>Dr. Welîd Hisên Zexoranî zimanzanekî berbiçav, perwerdekarekî xwedî dîtin û zanyarekî çandî ye ku xebatên wî wekî pireke girîng di navbera cîhanên Îngilîzî, Erebî û Kurdî de xizmetê dikin. Wî PhD di warê Etîketa Zimên a Îngilîzî de ji Zanîngeha Harvardê wergirtiye.</p>
-      <p>Bi ezmûna dehan salan di perwerdehiya pirzimanî de, Dr. Zexoranî parêzvanê gihîştina zimên û parastina çandî ye. Pisporiya wî ferhengzanî, werger û weşangeriya akademîk dihewîne.</p>
+    <div class="bio-content">
+      <!-- English -->
+      <div class="bio-text active" id="bio-en" lang="en">
+        <p>Dr. Waleed Hussein Zakhourani is a distinguished linguist, visionary educator, and cultural scholar whose life’s work serves as a vital bridge between the English, Arabic, and Kurdish worlds. Holding a PhD in English Language Etiquette from Harvard University, his academic foundation studies how language conveys respect and cultural values. This rare specialization defines his mission: to transform English into a medium of global mutual understanding.</p>
+        <p>With decades in multilingual education, he champions linguistic accessibility and cultural preservation. His expertise spans lexicography, translation studies, and academic publishing. He empowers learners to navigate the global stage while rooted in their own heritage.</p>
+      </div>
+      <!-- Arabic -->
+      <div class="bio-text" id="bio-ar" lang="ar" dir="rtl">
+        <p>يُعد الدكتور وليد حسين زاخوراني لغوياً بارزاً، ومربياً رؤيوياً، وباحثاً ثقافياً كرس مسيرته المهنية لتكون جسراً حيوياً يربط بين عوالم اللغات الإنجليزية والعربية والكردية. من خلال حصوله على درجة الدكتوراه في آداب اللغة الإنجليزية من جامعة هارفارد، تعذرت ركائز أساسه الأكاديمي في الدراسة المتعمقة لكيفية تعبير اللغة عن الاحترام والوضوح والقيم الثقافية الراسخة. وقد حدد هذا التخصص النادر مهمة حياته: تحويل اللغة الإنجليزية من مجرد أداة أكاديمية إلى وسيلة عميقة للتفاهم العالمي المتبادل.</p>
+        <p>مع عقود من القيادة في مجال التعليم متعدد اللغات، برز الدكتور زاخوراني كشخصية رائدة في تيسير الوصول اللغوي والحفاظ على التراث الثقافي. تشمل خبرته الواسعة مجالات صناعة المعاجم، ودراسات الترجمة، والنشر الأكاديمي. ويعمل لضمان إتقان الإنجليزية دون التضحية بالتقاليد الفكرية الغنية للناطقين بالعربية والكردية.</p>
+      </div>
+      <!-- Kurdish (Arabic script) -->
+      <div class="bio-text" id="bio-ku-arab" lang="ku-arab" dir="rtl">
+        <p>د. وەلید حسێن زاخۆرانی زمانزانەکێ دیار، پەروەردەکارەکێ خودان دیدەڤانی، و ڤەکۆلەرەکێ کلتووریێ خودان ئەزموونە، کو ژیانا خۆ تەرخانکرییە دا ببیتە پرەکا زیندی د ناڤبەرا جیهانێن ئینگلیزی، عەرەبی و کوردی دا. ب بەدەستڤەئینانا بروانامەیا دکتۆرا د ئیتیکێت و ئادابێن زمانێ ئینگلیزیدا ل زانکۆیا هارفارد، بنیاتێ وی یێ ئەکادیمی ب کویری ل سەر وێ چەندێ کا زمان چەوا ڕێز و بەهایێن کلتووری دگەهینیت.</p>
+        <p>دگەل چەندین سالێن کارکرنێ د بوارێ پەروەردەیا فرە-زمانیدا، د. وەلید وەک پالپشتەکێ مەزن یێ ب ساناهی کرنا زمانان و پاراستنا کلتووری دیار بوویە. شارەزاییا وی د بوارێن فەرهەنگنڤیسی و وەشانێن ئەکادیمی دگریت.</p>
+      </div>
+      <!-- Kurdish Latin -->
+      <div class="bio-text" id="bio-ku-latn" lang="ku-latn">
+        <p>Dr. Welîd Hisên Zexoranî zimanzanekî berbiçav, perwerdekarekî xwedî dîtin û zanyarekî çandî ye ku xebatên wî wekî pireke girîng di navbera cîhanên Îngilîzî, Erebî û Kurdî de xizmetê dikin. Wî PhD di warê Etîketa Zimên a Îngilîzî de ji Zanîngeha Harvardê wergirtiye.</p>
+        <p>Bi ezmûna dehan salan di perwerdehiya pirzimanî de, Dr. Zexoranî parêzvanê gihîştina zimên û parastina çandî ye. Pisporiya wî ferhengzanî, werger û weşangeriya akademîk dihewîne.</p>
+      </div>
     </div>
   </section>
 
-  <!-- TIMELINE (mini) -->
-  <section id="timeline" class="container">
-    <h2 class="section-title"><i class="fas fa-timeline"></i> path</h2>
-    <div class="timeline-item"><span class="timeline-year">2004</span> PhD Harvard · English Etiquette</div>
-    <div class="timeline-item"><span class="timeline-year">2005-12</span> Chair, Multilingual Studies</div>
-    <div class="timeline-item"><span class="timeline-year">2013-20</span> Director · Linguistic Bridges Inst.</div>
-    <div class="timeline-item"><span class="timeline-year">2021–</span> Global visiting scholar</div>
-  </section>
-
-  <!-- PUBLICATIONS compact -->
-  <section id="publications" class="container">
-    <h2 class="section-title"><i class="fas fa-book"></i> selected works</h2>
+  <!-- PUBLICATIONS (with hover effects) -->
+  <section id="publications" class="pub-section" data-aos="fade-up" data-aos-duration="800">
+    <h2 class="section-title" style="margin-left:1rem;"><i class="fas fa-book"></i> selected works</h2>
     <div class="pub-grid">
       <div class="pub-card"><i class="fas fa-book"></i><h3>Lexical Bridges</h3><p>Kurdish–English dictionary</p></div>
       <div class="pub-card"><i class="fas fa-globe"></i><h3>Politeness Across Borders</h3><p>Harvard 2008</p></div>
@@ -399,11 +486,10 @@
     </div>
   </section>
 
-  <!-- tiny cultural map (bridge) -->
-  <section class="container">
-    <h2 class="section-title"><i class="fas fa-map"></i> bridge</h2>
-    <div class="map-micro">
-      <svg viewBox="0 0 360 140" style="background:#2b241c; border-radius:28px;">
+  <!-- BRIDGE MAP (decorative) -->
+  <div class="bridge-map" data-aos="flip-left" data-aos-duration="1000">
+    <div class="map-svg">
+      <svg viewBox="0 0 360 140">
         <circle cx="90" cy="70" r="22" fill="#b79067" opacity="0.9" />
         <circle cx="180" cy="70" r="25" fill="#caa37b" />
         <circle cx="270" cy="70" r="22" fill="#a88967" opacity="0.9" />
@@ -413,20 +499,29 @@
         <text x="130" y="115" fill="#e2cbb2" font-size="14">Dr. Waleed</text>
       </svg>
     </div>
-  </section>
+    <div class="sound-waves">
+      <div class="wave"></div><div class="wave"></div><div class="wave"></div>
+    </div>
+  </div>
 
-  <!-- FOOTER all rights reserved (contact removed) -->
-  <footer class="footer-mini">
+  <!-- FOOTER (all rights reserved) -->
+  <footer class="footer">
     <i class="far fa-copyright"></i> 2026 WHZ developer – all rights reserved<br>
-    <span style="font-size:0.9rem;"><i class="fas fa-code"></i> Dr. Waleed archive · <a href="#home" style="color:#c7aa88;">return top</a></span>
+    <span style="font-size:1rem;"><i class="fas fa-code"></i> Dr. Waleed archive · <a href="#home">return top</a></span>
   </footer>
 
-  <!-- ambient audio (very low, optional) -->
+  <!-- ambient audio (subtle) -->
   <audio id="ambientAudio" loop style="display:none"><source src="https://www.soundhelix.com/examples/mp3/SoundHelix-Song-1.mp3" type="audio/mpeg"></audio>
 
+  <!-- AOS library -->
+  <script src="https://unpkg.com/aos@2.3.1/dist/aos.js"></script>
+  <!-- particles script -->
   <script>
     (function() {
-      // HAMBURGER toggle
+      // Initialize AOS (animate on scroll)
+      AOS.init({ once: true, offset: 50, duration: 700 });
+
+      // Hamburger menu
       const hamburger = document.getElementById('hamburgerBtn');
       const dropdown = document.getElementById('menuDropdown');
       hamburger.addEventListener('click', (e) => {
@@ -434,62 +529,112 @@
         dropdown.classList.toggle('show');
       });
       document.addEventListener('click', (e) => {
-        if (!hamburger.contains(e.target) && !dropdown.contains(e.target)) {
-          dropdown.classList.remove('show');
-        }
+        if (!hamburger.contains(e.target) && !dropdown.contains(e.target)) dropdown.classList.remove('show');
       });
 
-      // LIGHTBOX: image magnification on press
+      // Lightbox: tap image to magnify
       const lightbox = document.getElementById('lightbox');
       const lightboxImg = document.getElementById('lightboxImg');
       const closeBtn = document.getElementById('lightboxClose');
-      const galleryImgs = document.querySelectorAll('.gallery-img');
-
-      galleryImgs.forEach(img => {
-        img.addEventListener('click', (e) => {
-          const fullSrc = img.dataset.full;  // get high-res same as src, but we use full image
-          lightboxImg.src = fullSrc;
+      const items = document.querySelectorAll('.gallery-item');
+      items.forEach(item => {
+        item.addEventListener('click', () => {
+          const src = item.dataset.src;
+          lightboxImg.src = src;
           lightbox.classList.add('active');
         });
       });
+      closeBtn.addEventListener('click', () => lightbox.classList.remove('active'));
+      lightbox.addEventListener('click', (e) => { if(e.target === lightbox) lightbox.classList.remove('active'); });
 
-      closeBtn.addEventListener('click', () => {
-        lightbox.classList.remove('active');
-      });
-      lightbox.addEventListener('click', (e) => {
-        if (e.target === lightbox) lightbox.classList.remove('active');
-      });
-
-      // LANGUAGE TABS (bio)
-      const langBtns = document.querySelectorAll('.lang-btn');
-      const bioCards = {
+      // Language tabs
+      const langTabs = document.querySelectorAll('.lang-tab');
+      const bioTexts = {
         en: document.getElementById('bio-en'),
         ar: document.getElementById('bio-ar'),
         'ku-arab': document.getElementById('bio-ku-arab'),
         'ku-latn': document.getElementById('bio-ku-latn')
       };
-      langBtns.forEach(btn => {
-        btn.addEventListener('click', () => {
-          langBtns.forEach(b => b.classList.remove('active'));
-          btn.classList.add('active');
-          const lang = btn.dataset.lang;
-          Object.values(bioCards).forEach(card => card.classList.remove('active'));
-          if (bioCards[lang]) bioCards[lang].classList.add('active');
+      langTabs.forEach(tab => {
+        tab.addEventListener('click', () => {
+          langTabs.forEach(t => t.classList.remove('active'));
+          tab.classList.add('active');
+          const lang = tab.dataset.lang;
+          Object.values(bioTexts).forEach(b => b.classList.remove('active'));
+          if(bioTexts[lang]) bioTexts[lang].classList.add('active');
         });
       });
 
-      // ambient sound (very subtle, starts after tap anywhere)
+      // ambient sound (very low, starts after any user interaction)
       const audio = document.getElementById('ambientAudio');
-      let soundStarted = false;
-      function startAudio() {
-        if (!soundStarted) {
-          audio.volume = 0.15;
+      let soundActive = false;
+      function enableSound() {
+        if (!soundActive) {
+          audio.volume = 0.12;
           audio.play().catch(()=>{});
-          soundStarted = true;
+          soundActive = true;
         }
       }
-      document.body.addEventListener('touchstart', startAudio, { once: true });
-      document.body.addEventListener('click', startAudio, { once: true });
+      document.body.addEventListener('touchstart', enableSound, { once: true });
+      document.body.addEventListener('click', enableSound, { once: true });
+
+      // particle background
+      const canvas = document.getElementById('particle-canvas');
+      const ctx = canvas.getContext('2d');
+      let width, height;
+      let particles = [];
+
+      function initParticles() {
+        width = window.innerWidth;
+        height = window.innerHeight;
+        canvas.width = width;
+        canvas.height = height;
+        particles = [];
+        for (let i = 0; i < 70; i++) {
+          particles.push({
+            x: Math.random() * width,
+            y: Math.random() * height,
+            radius: Math.random() * 3 + 1.5,
+            speedX: (Math.random() - 0.5) * 0.3,
+            speedY: (Math.random() - 0.5) * 0.2,
+            color: `rgba(205, 170, 130, ${Math.random() * 0.3 + 0.2})`
+          });
+        }
+      }
+
+      function drawParticles() {
+        ctx.clearRect(0, 0, width, height);
+        particles.forEach(p => {
+          ctx.beginPath();
+          ctx.arc(p.x, p.y, p.radius, 0, Math.PI * 2);
+          ctx.fillStyle = p.color;
+          ctx.fill();
+          // subtle connection lines
+          particles.forEach(p2 => {
+            const dx = p.x - p2.x, dy = p.y - p2.y;
+            const dist = Math.sqrt(dx*dx + dy*dy);
+            if (dist < 90 && dist > 0) {
+              ctx.strokeStyle = `rgba(180, 145, 110, ${0.15 - dist/600})`;
+              ctx.lineWidth = 0.6;
+              ctx.beginPath();
+              ctx.moveTo(p.x, p.y);
+              ctx.lineTo(p2.x, p2.y);
+              ctx.stroke();
+            }
+          });
+          p.x += p.speedX;
+          p.y += p.speedY;
+          if (p.x < 0 || p.x > width) p.speedX *= -1;
+          if (p.y < 0 || p.y > height) p.speedY *= -1;
+        });
+        requestAnimationFrame(drawParticles);
+      }
+
+      window.addEventListener('resize', () => {
+        initParticles();
+      });
+      initParticles();
+      drawParticles();
     })();
   </script>
 </body>

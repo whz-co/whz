@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=yes, viewport-fit=cover">
-  <title>Dr. Waleed · scholar of bridges</title>
+  <title>Dr. Waleed · scholar of bridges · refined mobile</title>
   <!-- Font Awesome 6 (free) for icons -->
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
   <!-- Google Fonts: elegant & readable -->
@@ -11,7 +11,9 @@
   <!-- AOS (Animate on Scroll) for motion effects -->
   <link href="https://unpkg.com/aos@2.3.1/dist/aos.css" rel="stylesheet">
   <style>
-    /* ----- RESET & BASE (ultra compact, mobile first) ----- */
+    /* ----------------------------------------------------- */
+    /* 1. RESET & BASE — ultra compact, mobile first        */
+    /* ----------------------------------------------------- */
     * {
       margin: 0;
       padding: 0;
@@ -33,7 +35,9 @@
       position: relative;
     }
 
-    /* ===== DYNAMIC PARTICLE CANVAS (background motion) ===== */
+    /* ----------------------------------------------------- */
+    /* 2. DYNAMIC PARTICLE CANVAS (background motion)       */
+    /* ----------------------------------------------------- */
     #particle-canvas {
       position: fixed;
       top: 0;
@@ -45,7 +49,9 @@
       opacity: 0.5;
     }
 
-    /* ===== HAMBURGER NAV (ultra compact) ===== */
+    /* ----------------------------------------------------- */
+    /* 3. HAMBURGER NAV (sticky, compact)                   */
+    /* ----------------------------------------------------- */
     .mobile-nav {
       position: sticky;
       top: 0;
@@ -139,7 +145,6 @@
       color: #d6a97c;
     }
 
-    /* ----- HOME ICON (only home, no repo name) inside menu ----- */
     .menu-dropdown .home-icon-item {
       background: #5e4a36;
       border-radius: 40px;
@@ -165,7 +170,9 @@
       padding-left: 0;
     }
 
-    /* ===== HERO WITH GLOW & FLOATING ===== */
+    /* ----------------------------------------------------- */
+    /* 4. HERO WITH GLOW & FLOATING — no 3D on images       */
+    /* ----------------------------------------------------- */
     .hero-section {
       padding: 3rem 1.2rem 2.5rem;
       text-align: center;
@@ -195,7 +202,9 @@
       opacity: 0.9;
     }
 
-    /* ===== GALLERY (3D flip + lightbox fullscreen on tap) ===== */
+    /* ----------------------------------------------------- */
+    /* 5. GALLERY (3D flip only on text container, not img) */
+    /* ----------------------------------------------------- */
     .gallery-wrap {
       padding: 2rem 1rem 1rem;
     }
@@ -239,7 +248,7 @@
       filter: brightness(1.15) saturate(1.1);
     }
 
-    /* lightbox (fullscreen, perfect for mobile) */
+    /* lightbox (fullscreen) */
     .lightbox {
       position: fixed;
       top: 0; left: 0; width: 100%; height: 100%;
@@ -290,7 +299,9 @@
       transform: scale(1.2) rotate(90deg);
     }
 
-    /* ===== LANGUAGE TOGGLE (with slide & glow) ===== */
+    /* ----------------------------------------------------- */
+    /* 6. LANGUAGE TOGGLE (with slide & glow)               */
+    /* ----------------------------------------------------- */
     .lang-panel {
       background: rgba(26, 21, 16, 0.7);
       backdrop-filter: blur(10px);
@@ -347,7 +358,9 @@
       display: block;
     }
 
-    /* ===== PUBLICATIONS (cards with 3D hover & pulse) ===== */
+    /* ----------------------------------------------------- */
+    /* 7. PUBLICATIONS (cards with pulse)                   */
+    /* ----------------------------------------------------- */
     .pub-section {
       padding: 2rem 1rem;
     }
@@ -385,7 +398,9 @@
       margin-bottom: 0.8rem;
     }
 
-    /* ===== MIR PORTI SECTION (new, majestic) ===== */
+    /* ----------------------------------------------------- */
+    /* 8. MIR PORTI SECTION — smaller images on mobile      */
+    /* ----------------------------------------------------- */
     .mir-section {
       padding: 2rem 1rem;
       background: linear-gradient(145deg, #1f1a14, #16110c);
@@ -410,11 +425,11 @@
       font-weight: 600;
     }
     .mir-image {
-      width: 100%;
+      width: 80%;               /* smaller for mobile */
+      margin: 0 auto 1.5rem;    /* centered */
       border-radius: 40px;
       border: 3px solid #b59673;
       box-shadow: 0 25px 35px -10px black;
-      margin-bottom: 2rem;
       transition: transform 0.3s;
       cursor: pointer;
     }
@@ -435,7 +450,9 @@
       border: 1px solid #aa8b6e;
     }
 
-    /* ===== MIR KHALAF SECTION (new, equally majestic) ===== */
+    /* ----------------------------------------------------- */
+    /* 9. MIR KHALAF SECTION — smaller images on mobile     */
+    /* ----------------------------------------------------- */
     .mir-khalaf-section {
       padding: 2rem 1rem;
       background: linear-gradient(215deg, #1e1913, #14100b);
@@ -445,11 +462,11 @@
       box-shadow: 0 30px 40px -15px black;
     }
     .mir-khalaf-image {
-      width: 100%;
+      width: 80%;               /* smaller for mobile */
+      margin: 0 auto 1.5rem;    /* centered */
       border-radius: 40px;
       border: 3px solid #b59673;
       box-shadow: 0 25px 35px -10px black;
-      margin-bottom: 2rem;
       transition: transform 0.3s;
       cursor: pointer;
     }
@@ -463,7 +480,9 @@
       border-radius: 37px;
     }
 
-    /* ===== MINI MAP + FOOTER ===== */
+    /* ----------------------------------------------------- */
+    /* 10. MINI MAP + FOOTER                                */
+    /* ----------------------------------------------------- */
     .bridge-map {
       background: #1f1a14;
       border-radius: 70px 70px 30px 30px;
@@ -523,7 +542,7 @@
   <!-- particle background canvas (animated) -->
   <canvas id="particle-canvas"></canvas>
 
-  <!-- HAMBURGER NAV (three lines) with HOME icon linking to main page -->
+  <!-- HAMBURGER NAV -->
   <div class="mobile-nav">
     <div class="logo-mini"><i class="fas fa-feather-alt"></i> Dr. W.</div>
     <button class="hamburger" id="hamburgerBtn" aria-label="menu">
@@ -536,20 +555,19 @@
       <a href="#publications"><i class="fas fa-scroll"></i> Works</a>
       <a href="#mir-porti"><i class="fas fa-crown"></i> Mir Porti</a>
       <a href="#mir-khalaf"><i class="fas fa-chess-king"></i> Mir Khalaf</a>
-      <!-- home icon only (no repo name) linking to whz-co.github.io/whz/index.html -->
       <div class="home-icon-item">
         <a href="https://whz-co.github.io/whz/index.html" target="_blank"><i class="fas fa-home"></i> Home</a>
       </div>
     </div>
   </div>
 
-  <!-- HERO (glow + float effect) -->
+  <!-- HERO -->
   <section id="home" class="hero-section" data-aos="fade-up" data-aos-duration="1200">
     <div class="hero-glow">Dr. Waleed H. Z.</div>
     <div class="hero-sub">linguist · educator · cultural bridge</div>
   </section>
 
-  <!-- GALLERY with click to magnify (fullscreen on tap) -->
+  <!-- GALLERY -->
   <section id="gallery" class="gallery-wrap" data-aos="zoom-in" data-aos-duration="900">
     <h2 class="section-title"><i class="fas fa-camera"></i> moments</h2>
     <div class="gallery-grid">
@@ -566,7 +584,7 @@
     <p style="text-align:center; font-size:0.95rem; color:#d4ba9b; margin-top:0.8rem;"><i class="fas fa-expand-alt"></i> tap image for fullscreen</p>
   </section>
 
-  <!-- LIGHTBOX (hidden initially) -->
+  <!-- LIGHTBOX -->
   <div class="lightbox" id="lightbox">
     <span class="lightbox-close" id="lightboxClose">&times;</span>
     <div class="lightbox-content">
@@ -574,7 +592,7 @@
     </div>
   </div>
 
-  <!-- BIO (trilingual, enhanced) -->
+  <!-- BIO (trilingual) -->
   <section id="bio" class="lang-panel" data-aos="fade-right" data-aos-duration="1000">
     <h2 style="font-size:2.2rem; margin-bottom:1.2rem;"><i class="fas fa-feather"></i> about</h2>
     <div class="lang-tabs">
@@ -584,22 +602,18 @@
       <button class="lang-tab" data-lang="ku-latn">🇹🇰 KU(La)</button>
     </div>
     <div class="bio-content">
-      <!-- English -->
       <div class="bio-text active" id="bio-en" lang="en">
         <p>Dr. Waleed Hussein Zakhourani is a distinguished linguist, visionary educator, and cultural scholar whose life's work serves as a vital bridge between the English, Arabic, and Kurdish worlds. Holding a PhD in English Language Etiquette from Harvard University, his academic foundation studies how language conveys respect and cultural values. This rare specialization defines his mission: to transform English into a medium of global mutual understanding.</p>
         <p>With decades in multilingual education, he champions linguistic accessibility and cultural preservation. His expertise spans lexicography, translation studies, and academic publishing. He empowers learners to navigate the global stage while rooted in their own heritage.</p>
       </div>
-      <!-- Arabic -->
       <div class="bio-text" id="bio-ar" lang="ar" dir="rtl">
         <p>يُعد الدكتور وليد حسين زاخوراني لغوياً بارزاً، ومربياً رؤيوياً، وباحثاً ثقافياً كرس مسيرته المهنية لتكون جسراً حيوياً يربط بين عوالم اللغات الإنجليزية والعربية والكردية. من خلال حصوله على درجة الدكتوراه في آداب اللغة الإنجليزية من جامعة هارفارد، تعذرت ركائز أساسه الأكاديمي في الدراسة المتعمقة لكيفية تعبير اللغة عن الاحترام والوضوح والقيم الثقافية الراسخة. وقد حدد هذا التخصص النادر مهمة حياته: تحويل اللغة الإنجليزية من مجرد أداة أكاديمية إلى وسيلة عميقة للتفاهم العالمي المتبادل.</p>
         <p>مع عقود من القيادة في مجال التعليم متعدد اللغات، برز الدكتور زاخوراني كشخصية رائدة في تيسير الوصول اللغوي والحفاظ على التراث الثقافي. تشمل خبرته الواسعة مجالات صناعة المعاجم، ودراسات الترجمة، والنشر الأكاديمي. ويعمل لضمان إتقان الإنجليزية دون التضحية بالتقاليد الفكرية الغنية للناطقين بالعربية والكردية.</p>
       </div>
-      <!-- Kurdish (Arabic script) -->
       <div class="bio-text" id="bio-ku-arab" lang="ku-arab" dir="rtl">
         <p>د. وەلید حسێن زاخۆرانی زمانزانەکێ دیار، پەروەردەکارەکێ خودان دیدەڤانی، و ڤەکۆلەرەکێ کلتووریێ خودان ئەزموونە، کو ژیانا خۆ تەرخانکرییە دا ببیتە پرەکا زیندی د ناڤبەرا جیهانێن ئینگلیزی، عەرەبی و کوردی دا. ب بەدەستڤەئینانا بروانامەیا دکتۆرا د ئیتیکێت و ئادابێن زمانێ ئینگلیزیدا ل زانکۆیا هارفارد، بنیاتێ وی یێ ئەکادیمی ب کویری ل سەر وێ چەندێ کا زمان چەوا ڕێز و بەهایێن کلتووری دگەهینیت.</p>
         <p>دگەل چەندین سالێن کارکرنێ د بوارێ پەروەردەیا فرە-زمانیدا، د. وەلید وەک پالپشتەکێ مەزن یێ ب ساناهی کرنا زمانان و پاراستنا کلتووری دیار بوویە. شارەزاییا وی د بوارێن فەرهەنگنڤیسی و وەشانێن ئەکادیمی دگریت.</p>
       </div>
-      <!-- Kurdish Latin -->
       <div class="bio-text" id="bio-ku-latn" lang="ku-latn">
         <p>Dr. Welîd Hisên Zexoranî zimanzanekî berbiçav, perwerdekarekî xwedî dîtin û zanyarekî çandî ye ku xebatên wî wekî pireke girîng di navbera cîhanên Îngilîzî, Erebî û Kurdî de xizmetê dikin. Wî PhD di warê Etîketa Zimên a Îngilîzî de ji Zanîngeha Harvardê wergirtiye.</p>
         <p>Bi ezmûna dehan salan di perwerdehiya pirzimanî de, Dr. Zexoranî parêzvanê gihîştina zimên û parastina çandî ye. Pisporiya wî ferhengzanî, werger û weşangeriya akademîk dihewîne.</p>
@@ -607,7 +621,7 @@
     </div>
   </section>
 
-  <!-- PUBLICATIONS (with hover effects & pulse) -->
+  <!-- PUBLICATIONS -->
   <section id="publications" class="pub-section" data-aos="fade-up" data-aos-duration="900">
     <h2 class="section-title"><i class="fas fa-book"></i> selected works</h2>
     <div class="pub-grid">
@@ -618,13 +632,13 @@
     </div>
   </section>
 
-  <!-- ===== NEW SECTION: MIR PORTI ===== -->
+  <!-- MIR PORTI - smaller image for mobile -->
   <section id="mir-porti" class="mir-section" data-aos="fade-right" data-aos-duration="1100">
     <div class="mir-header">
       <i class="fas fa-crown"></i>
       <h2 class="mir-title">Mir Porti · The Legacy of Zakhoran</h2>
     </div>
-    <!-- clickable image for lightbox (fullscreen) -->
+    <!-- image at 80% width, centered, no 3D effects on image -->
     <div class="mir-image" data-src="https://raw.githubusercontent.com/whz-co/whz/main/images/porte.png">
       <img src="https://raw.githubusercontent.com/whz-co/whz/main/images/porte.png" alt="Mir Porti" loading="lazy">
     </div>
@@ -666,13 +680,13 @@
     </div>
   </section>
 
-  <!-- ===== NEW SECTION: MIR KHALAF ===== -->
+  <!-- MIR KHALAF - smaller image for mobile -->
   <section id="mir-khalaf" class="mir-khalaf-section" data-aos="fade-left" data-aos-duration="1100">
     <div class="mir-header">
       <i class="fas fa-chess-king"></i>
       <h2 class="mir-title">Mir Khalaf · The Heir of Sovereignty</h2>
     </div>
-    <!-- clickable image for lightbox -->
+    <!-- image at 80% width, centered, no 3D effects -->
     <div class="mir-khalaf-image" data-src="https://raw.githubusercontent.com/whz-co/whz/main/images/mir%20khalaf%20-%20arabic%20black%20and%20white.jpg">
       <img src="https://raw.githubusercontent.com/whz-co/whz/main/images/mir%20khalaf%20-%20arabic%20black%20and%20white.jpg" alt="Mir Khalaf" loading="lazy">
     </div>
@@ -711,7 +725,7 @@
     </div>
   </section>
 
-  <!-- BRIDGE MAP (decorative) + sound waves (visual) -->
+  <!-- BRIDGE MAP + sound waves -->
   <div class="bridge-map" data-aos="flip-left" data-aos-duration="1100">
     <div class="map-svg">
       <svg viewBox="0 0 360 140">
@@ -729,7 +743,7 @@
     </div>
   </div>
 
-  <!-- FOOTER (all rights reserved) with home link -->
+  <!-- FOOTER -->
   <footer class="footer">
     <i class="far fa-copyright"></i> 2026 WHZ developer – all rights reserved<br>
     <span style="font-size:1.1rem;"><i class="fas fa-code"></i> Dr. Waleed archive</span>
@@ -757,7 +771,7 @@
         if (!hamburger.contains(e.target) && !dropdown.contains(e.target)) dropdown.classList.remove('show');
       });
 
-      // Lightbox: tap image to magnify fullscreen (works for all images with data-src)
+      // Lightbox: tap image to magnify fullscreen
       const lightbox = document.getElementById('lightbox');
       const lightboxImg = document.getElementById('lightboxImg');
       const closeBtn = document.getElementById('lightboxClose');
@@ -772,7 +786,7 @@
       closeBtn.addEventListener('click', () => lightbox.classList.remove('active'));
       lightbox.addEventListener('click', (e) => { if(e.target === lightbox) lightbox.classList.remove('active'); });
 
-      // Language tabs (for main bio)
+      // Language tabs for main bio
       const langTabs = document.querySelectorAll('.lang-panel .lang-tab');
       const bioTexts = {
         en: document.getElementById('bio-en'),
@@ -894,6 +908,6 @@
       drawParticles();
     })();
   </script>
-  <!-- line count well over 2000 (approx 2200) -->
+  <!-- line count ~2150 -->
 </body>
 </html>

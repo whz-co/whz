@@ -1,913 +1,3373 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=yes, viewport-fit=cover">
-  <title>Dr. Waleed · scholar of bridges · refined mobile</title>
-  <!-- Font Awesome 6 (free) for icons -->
-  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
-  <!-- Google Fonts: elegant & readable -->
-  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600;700&family=Amiri:wght@400;700&family=Playfair+Display:wght@400;600;700&display=swap" rel="stylesheet">
-  <!-- AOS (Animate on Scroll) for motion effects -->
-  <link href="https://unpkg.com/aos@2.3.1/dist/aos.css" rel="stylesheet">
-  <style>
-    /* ----------------------------------------------------- */
-    /* 1. RESET & BASE — ultra compact, mobile first        */
-    /* ----------------------------------------------------- */
-    * {
-      margin: 0;
-      padding: 0;
-      box-sizing: border-box;
-    }
-
-    html {
-      font-size: 14px;
-      scroll-behavior: smooth;
-      overflow-x: hidden;
-    }
-
-    body {
-      background: #0f0c09;
-      font-family: 'Inter', sans-serif;
-      color: #f0e4d4;
-      line-height: 1.5;
-      width: 100%;
-      position: relative;
-    }
-
-    /* ----------------------------------------------------- */
-    /* 2. DYNAMIC PARTICLE CANVAS (background motion)       */
-    /* ----------------------------------------------------- */
-    #particle-canvas {
-      position: fixed;
-      top: 0;
-      left: 0;
-      width: 100%;
-      height: 100%;
-      z-index: -1;
-      pointer-events: none;
-      opacity: 0.5;
-    }
-
-    /* ----------------------------------------------------- */
-    /* 3. HAMBURGER NAV (sticky, compact)                   */
-    /* ----------------------------------------------------- */
-    .mobile-nav {
-      position: sticky;
-      top: 0;
-      z-index: 2000;
-      background: rgba(18, 14, 10, 0.85);
-      backdrop-filter: blur(16px);
-      -webkit-backdrop-filter: blur(16px);
-      border-bottom: 1px solid #5f4f3d;
-      display: flex;
-      align-items: center;
-      justify-content: space-between;
-      padding: 0.5rem 1rem;
-      box-shadow: 0 8px 20px rgba(0,0,0,0.5);
-    }
-
-    .logo-mini {
-      font-size: 1.4rem;
-      font-weight: 700;
-      background: linear-gradient(135deg, #f3d9bf, #dbb58b);
-      -webkit-background-clip: text;
-      -webkit-text-fill-color: transparent;
-    }
-    .logo-mini i {
-      color: #b78f69;
-      margin-right: 4px;
-    }
-
-    .hamburger {
-      background: rgba(255,255,240,0.08);
-      border: 1px solid #8d7761;
-      border-radius: 12px;
-      padding: 0.3rem 0.5rem;
-      cursor: pointer;
-      display: flex;
-      flex-direction: column;
-      gap: 4px;
-      width: 42px;
-      height: 38px;
-      justify-content: center;
-      transition: 0.2s;
-    }
-    .hamburger:hover {
-      background: #3d3228;
-    }
-    .hamburger span {
-      display: block;
-      width: 24px;
-      height: 2px;
-      background: #eddac4;
-      border-radius: 4px;
-      transition: 0.2s;
-    }
-
-    .menu-dropdown {
-      position: absolute;
-      top: 58px;
-      right: 1rem;
-      background: rgba(34, 28, 22, 0.97);
-      backdrop-filter: blur(20px);
-      border: 1px solid #ac9277;
-      border-radius: 28px;
-      padding: 0.7rem 0;
-      min-width: 210px;
-      box-shadow: 0 25px 40px rgba(0,0,0,0.8);
-      display: none;
-      z-index: 1999;
-    }
-    .menu-dropdown.show {
-      display: block;
-      animation: slideIn 0.25s ease;
-    }
-    @keyframes slideIn {
-      0% { opacity: 0; transform: translateY(-10px); }
-      100% { opacity: 1; transform: translateY(0); }
-    }
-    .menu-dropdown a {
-      display: block;
-      padding: 0.8rem 1.8rem;
-      color: #f7e2cc;
-      text-decoration: none;
-      font-size: 1.25rem;
-      border-bottom: 1px solid #544435;
-      transition: 0.2s;
-    }
-    .menu-dropdown a:hover {
-      background: #4f3e2d;
-      padding-left: 2.2rem;
-    }
-    .menu-dropdown a i {
-      width: 28px;
-      color: #d6a97c;
-    }
-
-    .menu-dropdown .home-icon-item {
-      background: #5e4a36;
-      border-radius: 40px;
-      margin: 0.7rem 1.2rem;
-      padding: 0.7rem;
-      text-align: center;
-      border: 1px solid #ccaa84;
-    }
-    .menu-dropdown .home-icon-item i {
-      color: #f5dbb6;
-      font-size: 1.5rem;
-    }
-    .menu-dropdown .home-icon-item a {
-      padding: 0;
-      margin: 0;
-      border: none;
-      background: transparent;
-      color: #ffefdb;
-      font-size: 1.3rem;
-    }
-    .menu-dropdown .home-icon-item a:hover {
-      background: transparent;
-      padding-left: 0;
-    }
-
-    /* ----------------------------------------------------- */
-    /* 4. HERO WITH GLOW & FLOATING — no 3D on images       */
-    /* ----------------------------------------------------- */
-    .hero-section {
-      padding: 3rem 1.2rem 2.5rem;
-      text-align: center;
-      position: relative;
-    }
-    .hero-glow {
-      font-size: 2.9rem;
-      font-weight: 700;
-      font-family: 'Playfair Display', serif;
-      text-shadow: 0 0 15px #dbb487, 0 0 30px #7a583a;
-      animation: pulseGlow 3s infinite alternate, float 6s infinite ease-in-out;
-    }
-    @keyframes pulseGlow {
-      0% { text-shadow: 0 0 10px #cfa97c, 0 0 20px #8f6947; }
-      100% { text-shadow: 0 0 25px #efcaa0, 0 0 50px #b2804f; }
-    }
-    @keyframes float {
-      0% { transform: translateY(0px); }
-      50% { transform: translateY(-8px); }
-      100% { transform: translateY(0px); }
-    }
-    .hero-sub {
-      font-size: 1.3rem;
-      color: #e2cbb2;
-      letter-spacing: 2px;
-      margin-top: 0.6rem;
-      opacity: 0.9;
-    }
-
-    /* ----------------------------------------------------- */
-    /* 5. GALLERY (3D flip only on text container, not img) */
-    /* ----------------------------------------------------- */
-    .gallery-wrap {
-      padding: 2rem 1rem 1rem;
-    }
-    .section-title {
-      font-size: 2.1rem;
-      font-weight: 500;
-      border-left: 6px solid #c09f7c;
-      padding-left: 1.2rem;
-      margin-bottom: 1.8rem;
-      font-family: 'Playfair Display', serif;
-    }
-    .gallery-grid {
-      display: grid;
-      grid-template-columns: repeat(3, 1fr);
-      gap: 0.8rem;
-      perspective: 1200px;
-    }
-    .gallery-item {
-      border-radius: 26px;
-      overflow: hidden;
-      border: 2px solid #8f755b;
-      box-shadow: 0 25px 35px -10px black;
-      transition: transform 0.3s cubic-bezier(0.2, 0.9, 0.4, 1.3), box-shadow 0.3s;
-      aspect-ratio: 1/1;
-      cursor: pointer;
-      transform-style: preserve-3d;
-    }
-    .gallery-item:hover {
-      transform: rotateY(4deg) rotateX(3deg) scale(1.03);
-      box-shadow: 0 30px 45px -5px #000000;
-      border-color: #e2b78b;
-    }
-    .gallery-item img {
-      width: 100%;
-      height: 100%;
-      object-fit: cover;
-      display: block;
-      transition: filter 0.3s;
-    }
-    .gallery-item:hover img {
-      filter: brightness(1.15) saturate(1.1);
-    }
-
-    /* lightbox (fullscreen) */
-    .lightbox {
-      position: fixed;
-      top: 0; left: 0; width: 100%; height: 100%;
-      background: rgba(8, 5, 3, 0.98);
-      backdrop-filter: blur(20px);
-      z-index: 3000;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      opacity: 0;
-      pointer-events: none;
-      transition: opacity 0.3s ease;
-    }
-    .lightbox.active {
-      opacity: 1;
-      pointer-events: all;
-    }
-    .lightbox-content {
-      max-width: 96vw;
-      max-height: 96vh;
-      border: 4px solid #dab38b;
-      border-radius: 28px;
-      overflow: hidden;
-      box-shadow: 0 50px 80px black;
-      animation: zoomPop 0.25s;
-    }
-    @keyframes zoomPop {
-      0% { transform: scale(0.9); opacity: 0; }
-      100% { transform: scale(1); opacity: 1; }
-    }
-    .lightbox-content img {
-      width: 100%;
-      height: auto;
-      display: block;
-      object-fit: contain;
-    }
-    .lightbox-close {
-      position: absolute;
-      top: 30px; right: 30px;
-      font-size: 3.8rem;
-      color: #ffebd2;
-      cursor: pointer;
-      text-shadow: 0 4px 20px black;
-      transition: 0.2s;
-      z-index: 3001;
-    }
-    .lightbox-close:hover {
-      transform: scale(1.2) rotate(90deg);
-    }
-
-    /* ----------------------------------------------------- */
-    /* 6. LANGUAGE TOGGLE (with slide & glow)               */
-    /* ----------------------------------------------------- */
-    .lang-panel {
-      background: rgba(26, 21, 16, 0.7);
-      backdrop-filter: blur(10px);
-      border-radius: 50px;
-      padding: 1.8rem 1.2rem;
-      margin: 1.8rem 1rem;
-      border: 1px solid #9a8066;
-      box-shadow: 0 25px 40px -12px black;
-    }
-    .lang-tabs {
-      display: flex;
-      gap: 0.5rem;
-      flex-wrap: wrap;
-      justify-content: center;
-    }
-    .lang-tab {
-      background: #352d24;
-      border: 1px solid #9b8066;
-      color: #f1dbc4;
-      font-size: 1.15rem;
-      padding: 0.6rem 1.3rem;
-      border-radius: 50px;
-      cursor: pointer;
-      transition: 0.2s;
-      font-weight: 500;
-    }
-    .lang-tab.active {
-      background: #c6a178;
-      color: #1c1610;
-      font-weight: 700;
-      border-color: #efd2b1;
-      box-shadow: 0 0 20px #f1c494;
-      transform: scale(1.05);
-    }
-    .bio-content {
-      margin-top: 2rem;
-    }
-    .bio-text {
-      display: none;
-      font-size: 1.1rem;
-      line-height: 1.8;
-      background: #1d1711;
-      padding: 1.8rem;
-      border-radius: 40px;
-      border: 1px solid #a58b6f;
-      box-shadow: inset 0 0 20px #0e0b07;
-      animation: fadeLang 0.5s;
-    }
-    @keyframes fadeLang {
-      0% { opacity: 0; transform: translateY(10px); }
-      100% { opacity: 1; transform: translateY(0); }
-    }
-    .bio-text.active {
-      display: block;
-    }
-
-    /* ----------------------------------------------------- */
-    /* 7. PUBLICATIONS (cards with pulse)                   */
-    /* ----------------------------------------------------- */
-    .pub-section {
-      padding: 2rem 1rem;
-    }
-    .pub-grid {
-      display: grid;
-      grid-template-columns: 1fr 1fr;
-      gap: 1.2rem;
-    }
-    .pub-card {
-      background: rgba(39, 32, 25, 0.7);
-      backdrop-filter: blur(6px);
-      border: 1px solid #9a8066;
-      border-radius: 36px;
-      padding: 1.7rem 0.8rem;
-      text-align: center;
-      transition: all 0.3s cubic-bezier(0.2, 0.9, 0.3, 1.3);
-      box-shadow: 0 18px 28px -12px black;
-      transform: translateY(0);
-      animation: cardPulse 5s infinite;
-    }
-    @keyframes cardPulse {
-      0% { box-shadow: 0 18px 28px -12px black; }
-      50% { box-shadow: 0 22px 35px -8px #7a624b; }
-      100% { box-shadow: 0 18px 28px -12px black; }
-    }
-    .pub-card:hover {
-      transform: translateY(-12px) scale(1.03);
-      background: #4f4133;
-      border-color: #e9bc91;
-      box-shadow: 0 35px 45px -8px #000;
-    }
-    .pub-card i {
-      font-size: 2.5rem;
-      color: #dfb185;
-      margin-bottom: 0.8rem;
-    }
-
-    /* ----------------------------------------------------- */
-    /* 8. MIR PORTI SECTION — smaller images on mobile      */
-    /* ----------------------------------------------------- */
-    .mir-section {
-      padding: 2rem 1rem;
-      background: linear-gradient(145deg, #1f1a14, #16110c);
-      border-radius: 60px 60px 30px 30px;
-      margin: 2rem 1rem;
-      border: 2px solid #9d846b;
-      box-shadow: 0 30px 40px -15px black;
-    }
-    .mir-header {
-      display: flex;
-      align-items: center;
-      gap: 1rem;
-      margin-bottom: 1.5rem;
-    }
-    .mir-header i {
-      font-size: 2.8rem;
-      color: #c9a87c;
-    }
-    .mir-title {
-      font-size: 2.2rem;
-      font-family: 'Playfair Display', serif;
-      font-weight: 600;
-    }
-    .mir-image {
-      width: 80%;               /* smaller for mobile */
-      margin: 0 auto 1.5rem;    /* centered */
-      border-radius: 40px;
-      border: 3px solid #b59673;
-      box-shadow: 0 25px 35px -10px black;
-      transition: transform 0.3s;
-      cursor: pointer;
-    }
-    .mir-image:hover {
-      transform: scale(1.02);
-    }
-    .mir-image img {
-      width: 100%;
-      height: auto;
-      display: block;
-      border-radius: 37px;
-    }
-    .mir-desc {
-      background: rgba(24, 19, 14, 0.7);
-      backdrop-filter: blur(6px);
-      border-radius: 50px;
-      padding: 1.8rem;
-      border: 1px solid #aa8b6e;
-    }
-
-    /* ----------------------------------------------------- */
-    /* 9. MIR KHALAF SECTION — smaller images on mobile     */
-    /* ----------------------------------------------------- */
-    .mir-khalaf-section {
-      padding: 2rem 1rem;
-      background: linear-gradient(215deg, #1e1913, #14100b);
-      border-radius: 60px 60px 30px 30px;
-      margin: 2rem 1rem;
-      border: 2px solid #9d846b;
-      box-shadow: 0 30px 40px -15px black;
-    }
-    .mir-khalaf-image {
-      width: 80%;               /* smaller for mobile */
-      margin: 0 auto 1.5rem;    /* centered */
-      border-radius: 40px;
-      border: 3px solid #b59673;
-      box-shadow: 0 25px 35px -10px black;
-      transition: transform 0.3s;
-      cursor: pointer;
-    }
-    .mir-khalaf-image:hover {
-      transform: scale(1.02);
-    }
-    .mir-khalaf-image img {
-      width: 100%;
-      height: auto;
-      display: block;
-      border-radius: 37px;
-    }
-
-    /* ----------------------------------------------------- */
-    /* 10. MINI MAP + FOOTER                                */
-    /* ----------------------------------------------------- */
-    .bridge-map {
-      background: #1f1a14;
-      border-radius: 70px 70px 30px 30px;
-      margin: 2rem 1rem;
-      padding: 2rem 1rem;
-      border: 2px solid #8b745c;
-    }
-    .map-svg svg {
-      width: 100%;
-      height: auto;
-      filter: drop-shadow(0 15px 15px #00000080);
-    }
-    .sound-waves {
-      display: flex;
-      justify-content: center;
-      gap: 6px;
-      margin: 1.5rem 0 0;
-      height: 35px;
-    }
-    .wave {
-      width: 7px;
-      height: 22px;
-      background: #c9a67b;
-      border-radius: 8px;
-      animation: wave 1.4s infinite ease-in-out;
-    }
-    .wave:nth-child(2) { animation-delay: 0.2s; background: #ddb790; }
-    .wave:nth-child(3) { animation-delay: 0.4s; background: #f0caa0; }
-    .wave:nth-child(4) { animation-delay: 0.1s; background: #d6a87c; }
-    @keyframes wave {
-      0%, 100% { transform: scaleY(0.6); }
-      50% { transform: scaleY(1.5); }
-    }
-
-    .footer {
-      background: #100c08;
-      padding: 2.2rem 1rem;
-      text-align: center;
-      font-size: 1.2rem;
-      border-top: 2px solid #6a5743;
-      color: #cfbb9f;
-    }
-    .footer a {
-      color: #e4c5a1;
-      text-decoration: none;
-      transition: 0.2s;
-    }
-    .footer a:hover {
-      color: #fad6aa;
-    }
-    .home-link-bottom {
-      margin-top: 1rem;
-    }
-  </style>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=5.0, user-scalable=yes">
+    <title>Zakhourani | Master English with AI - Dr. Waleed Hussien Zakhourani</title>
+    
+    <!-- Meta Tags for SEO -->
+    <meta name="description" content="Zakhourani - Premier English language learning platform founded by Dr. Waleed Hussien Zakhourani. Master English with AI-powered IELTS, TOEFL preparation, smart dictionary, and personalized learning paths.">
+    <meta name="keywords" content="English learning, IELTS preparation, TOEFL training, AI English tutor, Dr. Waleed Hussien Zakhourani, smart dictionary, language learning, English courses">
+    <meta name="author" content="Dr. Waleed Hussien Zakhourani">
+    <meta name="robots" content="index, follow">
+    
+    <!-- Open Graph / Social Media Meta Tags -->
+    <meta property="og:title" content="Zakhourani - Master English with AI">
+    <meta property="og:description" content="Founded by Dr. Waleed Hussien Zakhourani. AI-powered English learning platform with IELTS, TOEFL, and smart dictionary.">
+    <meta property="og:type" content="website">
+    <meta property="og:url" content="https://whz-co.github.io/whz/index.html">
+    <meta property="og:image" content="https://whz-co.github.io/whz/assets/zakhourani-og-image.jpg">
+    
+    <!-- Twitter Card -->
+    <meta name="twitter:card" content="summary_large_image">
+    <meta name="twitter:title" content="Zakhourani - Master English with AI">
+    <meta name="twitter:description" content="AI-powered English learning platform by Dr. Waleed Hussien Zakhourani">
+    
+    <!-- Favicon -->
+    <link rel="icon" type="image/png" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90' fill='%233498db'>🎓</text></svg>">
+    
+    <!-- Fonts and Icons -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+    
+    <!-- Animate.css for scroll animations -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/animate.css/4.1.1/animate.min.css">
+    
+    <style>
+        /* ===== RESET & GLOBAL STYLES ===== */
+        * { 
+            margin: 0; 
+            padding: 0; 
+            box-sizing: border-box; 
+        }
+        
+        :root {
+            /* Color Palette - Enhanced */
+            --primary: #1a2634;
+            --primary-light: #2c3e50;
+            --secondary: #3498db;
+            --secondary-dark: #2980b9;
+            --secondary-light: #5faee3;
+            --accent: #e74c3c;
+            --accent-dark: #c0392b;
+            --success: #27ae60;
+            --warning: #f39c12;
+            --info: #3498db;
+            --light: #ecf0f1;
+            --light-gray: #f8f9fa;
+            --gray: #95a5a6;
+            --dark: #2c3e50;
+            --darker: #1a252f;
+            --white: #ffffff;
+            --black: #000000;
+            --shadow-sm: 0 2px 4px rgba(0,0,0,0.1);
+            --shadow-md: 0 4px 6px rgba(0,0,0,0.1);
+            --shadow-lg: 0 10px 15px rgba(0,0,0,0.1);
+            --shadow-xl: 0 20px 25px rgba(0,0,0,0.1);
+            --shadow-2xl: 0 25px 50px rgba(0,0,0,0.25);
+            --gradient-primary: linear-gradient(135deg, var(--primary) 0%, var(--primary-light) 100%);
+            --gradient-secondary: linear-gradient(135deg, var(--secondary) 0%, var(--secondary-dark) 100%);
+            --gradient-accent: linear-gradient(135deg, var(--accent) 0%, var(--accent-dark) 100%);
+        }
+        
+        body { 
+            font-family: 'Poppins', 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: linear-gradient(135deg, #f5f7fa 0%, #c3cfe2 100%);
+            min-height: 100vh;
+            color: var(--dark);
+            line-height: 1.6;
+            overflow-x: hidden;
+        }
+        
+        /* ===== TYPOGRAPHY ===== */
+        h1, h2, h3, h4, h5, h6 {
+            font-weight: 700;
+            line-height: 1.2;
+            margin-bottom: 1rem;
+        }
+        
+        h1 { font-size: 3.5rem; }
+        h2 { font-size: 2.5rem; }
+        h3 { font-size: 1.75rem; }
+        h4 { font-size: 1.5rem; }
+        h5 { font-size: 1.25rem; }
+        h6 { font-size: 1rem; }
+        
+        p {
+            margin-bottom: 1rem;
+            color: #4a5568;
+        }
+        
+        /* ===== UTILITY CLASSES ===== */
+        .container {
+            max-width: 1400px;
+            margin: 0 auto;
+            padding: 0 2rem;
+        }
+        
+        .section-padding {
+            padding: 5rem 0;
+        }
+        
+        .text-center { text-align: center; }
+        .text-left { text-align: left; }
+        .text-right { text-align: right; }
+        
+        .text-primary { color: var(--primary); }
+        .text-secondary { color: var(--secondary); }
+        .text-accent { color: var(--accent); }
+        .text-light { color: var(--light); }
+        .text-white { color: var(--white); }
+        .text-dark { color: var(--dark); }
+        
+        .bg-primary { background: var(--primary); }
+        .bg-secondary { background: var(--secondary); }
+        .bg-accent { background: var(--accent); }
+        .bg-light { background: var(--light); }
+        .bg-white { background: var(--white); }
+        .bg-dark { background: var(--dark); }
+        .bg-gradient-primary { background: var(--gradient-primary); }
+        .bg-gradient-secondary { background: var(--gradient-secondary); }
+        .bg-gradient-accent { background: var(--gradient-accent); }
+        
+        .btn {
+            display: inline-block;
+            padding: 1rem 2rem;
+            border-radius: 50px;
+            font-weight: 600;
+            text-decoration: none;
+            transition: all 0.3s ease;
+            border: none;
+            cursor: pointer;
+            font-size: 1rem;
+            position: relative;
+            overflow: hidden;
+        }
+        
+        .btn::before {
+            content: '';
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            width: 0;
+            height: 0;
+            border-radius: 50%;
+            background: rgba(255, 255, 255, 0.3);
+            transform: translate(-50%, -50%);
+            transition: width 0.6s, height 0.6s;
+        }
+        
+        .btn:hover::before {
+            width: 300px;
+            height: 300px;
+        }
+        
+        .btn-primary {
+            background: var(--secondary);
+            color: var(--white);
+            border: 2px solid var(--secondary);
+        }
+        
+        .btn-primary:hover {
+            background: var(--secondary-dark);
+            border-color: var(--secondary-dark);
+            transform: translateY(-3px);
+            box-shadow: 0 10px 20px rgba(52, 152, 219, 0.3);
+        }
+        
+        .btn-secondary {
+            background: transparent;
+            color: var(--white);
+            border: 2px solid var(--white);
+        }
+        
+        .btn-secondary:hover {
+            background: var(--white);
+            color: var(--primary);
+            transform: translateY(-3px);
+            box-shadow: 0 10px 20px rgba(255, 255, 255, 0.3);
+        }
+        
+        .btn-accent {
+            background: var(--accent);
+            color: var(--white);
+            border: 2px solid var(--accent);
+        }
+        
+        .btn-accent:hover {
+            background: var(--accent-dark);
+            border-color: var(--accent-dark);
+            transform: translateY(-3px);
+            box-shadow: 0 10px 20px rgba(231, 76, 60, 0.3);
+        }
+        
+        .btn-outline {
+            background: transparent;
+            color: var(--secondary);
+            border: 2px solid var(--secondary);
+        }
+        
+        .btn-outline:hover {
+            background: var(--secondary);
+            color: var(--white);
+            transform: translateY(-3px);
+        }
+        
+        .btn-sm { padding: 0.5rem 1.5rem; font-size: 0.875rem; }
+        .btn-lg { padding: 1.25rem 2.5rem; font-size: 1.125rem; }
+        
+        /* ===== ANIMATIONS ===== */
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(20px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+        
+        @keyframes slideInLeft {
+            from { opacity: 0; transform: translateX(-50px); }
+            to { opacity: 1; transform: translateX(0); }
+        }
+        
+        @keyframes slideInRight {
+            from { opacity: 0; transform: translateX(50px); }
+            to { opacity: 1; transform: translateX(0); }
+        }
+        
+        @keyframes pulse {
+            0% { transform: scale(1); }
+            50% { transform: scale(1.05); }
+            100% { transform: scale(1); }
+        }
+        
+        @keyframes float {
+            0% { transform: translateY(0px); }
+            50% { transform: translateY(-10px); }
+            100% { transform: translateY(0px); }
+        }
+        
+        @keyframes spin {
+            from { transform: rotate(0deg); }
+            to { transform: rotate(360deg); }
+        }
+        
+        .animate-fadeIn { animation: fadeIn 1s ease; }
+        .animate-slideInLeft { animation: slideInLeft 1s ease; }
+        .animate-slideInRight { animation: slideInRight 1s ease; }
+        .animate-pulse { animation: pulse 2s infinite; }
+        .animate-float { animation: float 3s infinite; }
+        .animate-spin { animation: spin 10s linear infinite; }
+        
+        /* ===== HEADER STYLES ===== */
+        header {
+            background: var(--white);
+            box-shadow: var(--shadow-lg);
+            position: sticky;
+            top: 0;
+            z-index: 1000;
+        }
+        
+        .header-top {
+            background: var(--gradient-primary);
+            color: var(--white);
+            padding: 1rem 4rem;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+        
+        .logo {
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+        }
+        
+        .logo-icon {
+            font-size: 2.5rem;
+            color: var(--secondary);
+            animation: float 3s infinite;
+        }
+        
+        .logo h1 {
+            font-size: 2rem;
+            font-weight: 800;
+            color: var(--white);
+            letter-spacing: 1px;
+            margin: 0;
+        }
+        
+        .logo span {
+            color: var(--secondary);
+            font-weight: 300;
+        }
+        
+        .auth-buttons {
+            display: flex;
+            gap: 1rem;
+        }
+        
+        .auth-btn {
+            padding: 0.75rem 2rem;
+            border-radius: 50px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s;
+            text-decoration: none;
+            display: inline-flex;
+            align-items: center;
+            gap: 0.5rem;
+            font-size: 1rem;
+        }
+        
+        .login-btn {
+            background: transparent;
+            color: var(--white);
+            border: 2px solid var(--white);
+        }
+        
+        .login-btn:hover {
+            background: var(--white);
+            color: var(--primary);
+            transform: translateY(-2px);
+            box-shadow: var(--shadow-md);
+        }
+        
+        .signup-btn {
+            background: var(--secondary);
+            color: var(--white);
+            border: 2px solid var(--secondary);
+        }
+        
+        .signup-btn:hover {
+            background: var(--secondary-dark);
+            border-color: var(--secondary-dark);
+            transform: translateY(-2px);
+            box-shadow: var(--shadow-md);
+        }
+        
+        .user-menu {
+            display: flex;
+            align-items: center;
+            gap: 1.5rem;
+            color: var(--white);
+        }
+        
+        .user-avatar {
+            width: 45px;
+            height: 45px;
+            border-radius: 50%;
+            object-fit: cover;
+            border: 3px solid var(--secondary);
+            transition: all 0.3s;
+        }
+        
+        .user-avatar:hover {
+            transform: scale(1.1);
+            border-color: var(--white);
+        }
+        
+        .user-name {
+            font-weight: 600;
+            font-size: 1rem;
+        }
+        
+        .logout-btn {
+            background: var(--accent);
+            color: var(--white);
+            border: none;
+            padding: 0.75rem 1.5rem;
+            border-radius: 50px;
+            cursor: pointer;
+            text-decoration: none;
+            display: inline-flex;
+            align-items: center;
+            gap: 0.5rem;
+            transition: all 0.3s;
+            font-weight: 600;
+        }
+        
+        .logout-btn:hover {
+            background: var(--accent-dark);
+            transform: translateY(-2px);
+            box-shadow: var(--shadow-md);
+        }
+        
+        /* Navigation */
+        nav {
+            padding: 0 4rem;
+            background: var(--white);
+            position: relative;
+            border-bottom: 1px solid var(--light);
+        }
+        
+        .nav-container {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 1rem 0;
+        }
+        
+        .nav-links {
+            display: flex;
+            list-style: none;
+            gap: 0.5rem;
+            margin: 0;
+            padding: 0;
+        }
+        
+        .nav-links li {
+            position: relative;
+        }
+        
+        .nav-links a {
+            text-decoration: none;
+            color: var(--dark);
+            font-weight: 600;
+            font-size: 1rem;
+            padding: 0.75rem 1.25rem;
+            border-radius: 50px;
+            transition: all 0.3s;
+            white-space: nowrap;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+        
+        .nav-links a i {
+            font-size: 1.1rem;
+            color: var(--secondary);
+            transition: all 0.3s;
+        }
+        
+        .nav-links a:hover {
+            background: var(--light);
+            color: var(--secondary);
+            transform: translateY(-2px);
+        }
+        
+        .nav-links a:hover i {
+            transform: scale(1.1);
+        }
+        
+        .nav-links a.active {
+            background: var(--secondary);
+            color: var(--white);
+        }
+        
+        .nav-links a.active i {
+            color: var(--white);
+        }
+        
+        /* Notification Badge */
+        .nav-badge {
+            position: absolute;
+            top: -5px;
+            right: -5px;
+            background: var(--accent);
+            color: var(--white);
+            font-size: 0.7rem;
+            padding: 0.2rem 0.5rem;
+            border-radius: 20px;
+            min-width: 20px;
+            text-align: center;
+        }
+        
+        /* Mobile Menu Toggle */
+        .menu-toggle {
+            display: none;
+            flex-direction: column;
+            cursor: pointer;
+            padding: 0.5rem;
+            background: transparent;
+            border: none;
+            z-index: 1001;
+        }
+        
+        .menu-toggle span {
+            width: 30px;
+            height: 3px;
+            background: var(--dark);
+            margin: 3px 0;
+            border-radius: 3px;
+            transition: all 0.3s;
+        }
+        
+        .menu-toggle.active span:nth-child(1) {
+            transform: rotate(45deg) translate(6px, 6px);
+        }
+        
+        .menu-toggle.active span:nth-child(2) {
+            opacity: 0;
+        }
+        
+        .menu-toggle.active span:nth-child(3) {
+            transform: rotate(-45deg) translate(7px, -7px);
+        }
+        
+        /* Search Bar */
+        .search-bar {
+            display: flex;
+            align-items: center;
+            background: var(--light);
+            border-radius: 50px;
+            padding: 0.25rem;
+            margin-left: 1rem;
+        }
+        
+        .search-bar input {
+            border: none;
+            background: transparent;
+            padding: 0.5rem 1rem;
+            width: 200px;
+            outline: none;
+            font-family: inherit;
+        }
+        
+        .search-bar button {
+            background: var(--secondary);
+            color: var(--white);
+            border: none;
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            cursor: pointer;
+            transition: all 0.3s;
+        }
+        
+        .search-bar button:hover {
+            background: var(--secondary-dark);
+            transform: rotate(90deg);
+        }
+        
+        /* ===== HERO SECTION ===== */
+        .hero {
+            background: var(--gradient-primary);
+            color: var(--white);
+            border-radius: 2rem;
+            padding: 6rem 4rem;
+            margin: 3rem auto;
+            max-width: 1400px;
+            position: relative;
+            overflow: hidden;
+        }
+        
+        .hero::before {
+            content: '';
+            position: absolute;
+            top: -50%;
+            right: -50%;
+            width: 100%;
+            height: 200%;
+            background: radial-gradient(circle, rgba(52,152,219,0.2) 0%, transparent 70%);
+            animation: spin 20s linear infinite;
+        }
+        
+        .hero::after {
+            content: '';
+            position: absolute;
+            bottom: -50%;
+            left: -50%;
+            width: 100%;
+            height: 200%;
+            background: radial-gradient(circle, rgba(231,76,60,0.1) 0%, transparent 70%);
+            animation: spin 25s linear infinite reverse;
+        }
+        
+        .hero-content {
+            position: relative;
+            z-index: 2;
+            max-width: 900px;
+            margin: 0 auto;
+            text-align: center;
+        }
+        
+        .hero-badge {
+            display: inline-block;
+            background: rgba(255,255,255,0.2);
+            color: var(--white);
+            padding: 0.5rem 1.5rem;
+            border-radius: 50px;
+            font-size: 0.875rem;
+            font-weight: 600;
+            margin-bottom: 2rem;
+            backdrop-filter: blur(10px);
+            border: 1px solid rgba(255,255,255,0.3);
+            animation: fadeIn 1s ease;
+        }
+        
+        .hero h2 {
+            font-size: 4rem;
+            font-weight: 800;
+            margin-bottom: 1.5rem;
+            line-height: 1.2;
+            text-shadow: 2px 2px 4px rgba(0,0,0,0.3);
+            animation: slideInLeft 1s ease;
+        }
+        
+        .hero h2 span {
+            color: var(--secondary);
+            position: relative;
+            display: inline-block;
+        }
+        
+        .hero h2 span::after {
+            content: '';
+            position: absolute;
+            bottom: -5px;
+            left: 0;
+            width: 100%;
+            height: 3px;
+            background: var(--secondary);
+            transform: scaleX(0);
+            transform-origin: right;
+            transition: transform 0.5s ease;
+        }
+        
+        .hero h2 span:hover::after {
+            transform: scaleX(1);
+            transform-origin: left;
+        }
+        
+        .hero p {
+            font-size: 1.25rem;
+            margin-bottom: 2rem;
+            max-width: 700px;
+            margin-left: auto;
+            margin-right: auto;
+            line-height: 1.8;
+            opacity: 0.9;
+            animation: slideInRight 1s ease;
+        }
+        
+        .hero-stats {
+            display: flex;
+            justify-content: center;
+            gap: 3rem;
+            margin: 3rem 0;
+            animation: fadeIn 1.5s ease;
+        }
+        
+        .stat-item {
+            text-align: center;
+        }
+        
+        .stat-number {
+            font-size: 2.5rem;
+            font-weight: 800;
+            color: var(--secondary);
+            display: block;
+        }
+        
+        .stat-label {
+            font-size: 0.875rem;
+            opacity: 0.8;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+        }
+        
+        .cta-buttons {
+            display: flex;
+            gap: 1.5rem;
+            justify-content: center;
+            margin-top: 2rem;
+            animation: fadeIn 2s ease;
+        }
+        
+        .cta-btn {
+            padding: 1.25rem 3rem;
+            border-radius: 50px;
+            font-size: 1.125rem;
+            font-weight: 600;
+            text-decoration: none;
+            transition: all 0.3s;
+            display: inline-flex;
+            align-items: center;
+            gap: 0.5rem;
+            position: relative;
+            overflow: hidden;
+        }
+        
+        .cta-primary {
+            background: var(--secondary);
+            color: var(--white);
+            border: 2px solid var(--secondary);
+        }
+        
+        .cta-primary:hover {
+            background: var(--secondary-dark);
+            transform: translateY(-3px);
+            box-shadow: 0 15px 30px rgba(52, 152, 219, 0.4);
+        }
+        
+        .cta-secondary {
+            background: transparent;
+            color: var(--white);
+            border: 2px solid var(--white);
+        }
+        
+        .cta-secondary:hover {
+            background: var(--white);
+            color: var(--primary);
+            transform: translateY(-3px);
+            box-shadow: 0 15px 30px rgba(255, 255, 255, 0.3);
+        }
+        
+        /* ===== FEATURED PRODUCTS SECTION ===== */
+        .products-section {
+            padding: 5rem 2rem;
+            background: var(--white);
+            position: relative;
+            overflow: hidden;
+        }
+        
+        .products-section::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            height: 200px;
+            background: linear-gradient(to bottom, var(--light) 0%, transparent 100%);
+            opacity: 0.5;
+        }
+        
+        .section-header {
+            text-align: center;
+            margin-bottom: 4rem;
+            position: relative;
+        }
+        
+        .section-subtitle {
+            color: var(--secondary);
+            font-weight: 600;
+            text-transform: uppercase;
+            letter-spacing: 2px;
+            font-size: 0.875rem;
+            margin-bottom: 1rem;
+            display: inline-block;
+            background: rgba(52,152,219,0.1);
+            padding: 0.5rem 1.5rem;
+            border-radius: 50px;
+        }
+        
+        .section-title {
+            font-size: 2.5rem;
+            color: var(--primary);
+            margin-bottom: 1rem;
+            font-weight: 700;
+        }
+        
+        .section-title span {
+            color: var(--secondary);
+            position: relative;
+        }
+        
+        .section-title span::before {
+            content: '';
+            position: absolute;
+            bottom: 0;
+            left: 0;
+            width: 100%;
+            height: 10px;
+            background: rgba(52,152,219,0.2);
+            z-index: -1;
+        }
+        
+        .section-description {
+            max-width: 700px;
+            margin: 0 auto;
+            color: var(--gray);
+            font-size: 1.1rem;
+        }
+        
+        .products-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(350px, 1fr));
+            gap: 2rem;
+            max-width: 1400px;
+            margin: 3rem auto;
+            padding: 0 2rem;
+        }
+        
+        .product-card {
+            background: var(--white);
+            border-radius: 20px;
+            overflow: hidden;
+            box-shadow: var(--shadow-lg);
+            transition: all 0.3s;
+            position: relative;
+            border: 1px solid rgba(0,0,0,0.05);
+        }
+        
+        .product-card:hover {
+            transform: translateY(-15px);
+            box-shadow: var(--shadow-2xl);
+        }
+        
+        .product-badge {
+            position: absolute;
+            top: 1rem;
+            right: 1rem;
+            background: var(--accent);
+            color: var(--white);
+            padding: 0.5rem 1rem;
+            border-radius: 50px;
+            font-size: 0.75rem;
+            font-weight: 600;
+            z-index: 2;
+            box-shadow: var(--shadow-md);
+        }
+        
+        .product-badge.hot {
+            background: var(--accent);
+        }
+        
+        .product-badge.new {
+            background: var(--success);
+        }
+        
+        .product-badge.sale {
+            background: var(--warning);
+        }
+        
+        .product-image {
+            height: 250px;
+            background: var(--gradient-secondary);
+            position: relative;
+            overflow: hidden;
+        }
+        
+        .product-image i {
+            font-size: 5rem;
+            color: rgba(255,255,255,0.3);
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+        }
+        
+        .product-overlay {
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: rgba(52,152,219,0.9);
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            gap: 1rem;
+            opacity: 0;
+            transition: all 0.3s;
+        }
+        
+        .product-card:hover .product-overlay {
+            opacity: 1;
+        }
+        
+        .product-overlay a {
+            width: 50px;
+            height: 50px;
+            background: var(--white);
+            border-radius: 50%;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            color: var(--secondary);
+            text-decoration: none;
+            transition: all 0.3s;
+            transform: translateY(20px);
+        }
+        
+        .product-card:hover .product-overlay a {
+            transform: translateY(0);
+        }
+        
+        .product-overlay a:hover {
+            background: var(--secondary);
+            color: var(--white);
+            transform: rotate(360deg);
+        }
+        
+        .product-info {
+            padding: 2rem;
+        }
+        
+        .product-category {
+            color: var(--secondary);
+            font-size: 0.875rem;
+            font-weight: 600;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            margin-bottom: 0.5rem;
+        }
+        
+        .product-title {
+            font-size: 1.5rem;
+            font-weight: 700;
+            margin-bottom: 0.5rem;
+            color: var(--primary);
+        }
+        
+        .product-title a {
+            text-decoration: none;
+            color: inherit;
+            transition: color 0.3s;
+        }
+        
+        .product-title a:hover {
+            color: var(--secondary);
+        }
+        
+        .product-rating {
+            color: var(--warning);
+            margin-bottom: 1rem;
+            font-size: 0.875rem;
+        }
+        
+        .product-rating span {
+            color: var(--gray);
+            margin-left: 0.5rem;
+        }
+        
+        .product-description {
+            color: var(--gray);
+            margin-bottom: 1.5rem;
+            line-height: 1.6;
+        }
+        
+        .product-price {
+            font-size: 1.75rem;
+            font-weight: 700;
+            color: var(--secondary);
+            margin-bottom: 1rem;
+        }
+        
+        .product-price .original {
+            font-size: 1rem;
+            color: var(--gray);
+            text-decoration: line-through;
+            margin-left: 0.5rem;
+        }
+        
+        .product-features {
+            list-style: none;
+            margin-bottom: 1.5rem;
+        }
+        
+        .product-features li {
+            margin-bottom: 0.5rem;
+            color: var(--dark);
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+        
+        .product-features i {
+            color: var(--success);
+        }
+        
+        .product-footer {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            border-top: 1px solid var(--light);
+            padding-top: 1.5rem;
+        }
+        
+        .product-btn {
+            padding: 0.75rem 1.5rem;
+            background: var(--secondary);
+            color: var(--white);
+            border-radius: 50px;
+            text-decoration: none;
+            font-weight: 600;
+            transition: all 0.3s;
+            display: inline-flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+        
+        .product-btn:hover {
+            background: var(--secondary-dark);
+            transform: scale(1.05);
+        }
+        
+        /* ===== SERVICES SECTION ===== */
+        .services-section {
+            padding: 5rem 2rem;
+            background: linear-gradient(135deg, var(--light) 0%, var(--white) 100%);
+        }
+        
+        .services-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 2rem;
+            max-width: 1400px;
+            margin: 3rem auto;
+            padding: 0 2rem;
+        }
+        
+        .service-card {
+            background: var(--white);
+            border-radius: 20px;
+            padding: 3rem 2rem;
+            text-align: center;
+            box-shadow: var(--shadow-lg);
+            transition: all 0.3s;
+            position: relative;
+            overflow: hidden;
+            border: 1px solid rgba(0,0,0,0.05);
+        }
+        
+        .service-card::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            height: 5px;
+            background: var(--gradient-secondary);
+            transform: scaleX(0);
+            transition: transform 0.3s;
+        }
+        
+        .service-card:hover::before {
+            transform: scaleX(1);
+        }
+        
+        .service-card:hover {
+            transform: translateY(-15px) scale(1.02);
+            box-shadow: var(--shadow-2xl);
+        }
+        
+        .service-icon {
+            width: 100px;
+            height: 100px;
+            background: linear-gradient(135deg, rgba(52,152,219,0.1) 0%, rgba(52,152,219,0.2) 100%);
+            border-radius: 50%;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            margin: 0 auto 2rem;
+            font-size: 3rem;
+            color: var(--secondary);
+            transition: all 0.3s;
+        }
+        
+        .service-card:hover .service-icon {
+            transform: rotateY(360deg);
+            background: var(--secondary);
+            color: var(--white);
+        }
+        
+        .service-card h3 {
+            font-size: 1.75rem;
+            margin-bottom: 1rem;
+            color: var(--primary);
+        }
+        
+        .service-card p {
+            color: var(--gray);
+            line-height: 1.8;
+            margin-bottom: 1.5rem;
+        }
+        
+        .service-link {
+            color: var(--secondary);
+            text-decoration: none;
+            font-weight: 600;
+            display: inline-flex;
+            align-items: center;
+            gap: 0.5rem;
+            transition: all 0.3s;
+        }
+        
+        .service-link:hover {
+            color: var(--secondary-dark);
+            gap: 1rem;
+        }
+        
+        /* ===== ABOUT DR. WALEED SECTION ===== */
+        .about-section {
+            padding: 5rem 2rem;
+            background: var(--white);
+        }
+        
+        .about-container {
+            max-width: 1400px;
+            margin: 0 auto;
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 4rem;
+            align-items: center;
+            padding: 0 2rem;
+        }
+        
+        .about-image {
+            position: relative;
+        }
+        
+        .about-image img {
+            width: 100%;
+            border-radius: 30px;
+            box-shadow: var(--shadow-2xl);
+            transition: all 0.3s;
+        }
+        
+        .about-image:hover img {
+            transform: scale(1.02);
+        }
+        
+        .about-image::before {
+            content: '';
+            position: absolute;
+            top: -20px;
+            left: -20px;
+            right: 20px;
+            bottom: 20px;
+            border: 5px solid var(--secondary);
+            border-radius: 30px;
+            z-index: -1;
+        }
+        
+        .experience-badge {
+            position: absolute;
+            bottom: 30px;
+            right: -30px;
+            background: var(--gradient-secondary);
+            color: var(--white);
+            padding: 1.5rem;
+            border-radius: 20px;
+            text-align: center;
+            box-shadow: var(--shadow-xl);
+        }
+        
+        .experience-badge .years {
+            font-size: 3rem;
+            font-weight: 800;
+            display: block;
+            line-height: 1;
+        }
+        
+        .experience-badge .text {
+            font-size: 0.875rem;
+            opacity: 0.9;
+        }
+        
+        .about-content {
+            padding-right: 2rem;
+        }
+        
+        .about-subtitle {
+            color: var(--secondary);
+            font-weight: 600;
+            text-transform: uppercase;
+            letter-spacing: 2px;
+            font-size: 0.875rem;
+            margin-bottom: 1rem;
+            display: inline-block;
+            background: rgba(52,152,219,0.1);
+            padding: 0.5rem 1.5rem;
+            border-radius: 50px;
+        }
+        
+        .about-title {
+            font-size: 3rem;
+            color: var(--primary);
+            margin-bottom: 1.5rem;
+            line-height: 1.2;
+        }
+        
+        .about-title span {
+            color: var(--secondary);
+        }
+        
+        .about-text {
+            color: var(--gray);
+            margin-bottom: 2rem;
+            line-height: 1.8;
+            font-size: 1.1rem;
+        }
+        
+        .about-features {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 1.5rem;
+            margin-bottom: 2rem;
+        }
+        
+        .about-feature {
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+        }
+        
+        .about-feature i {
+            width: 40px;
+            height: 40px;
+            background: rgba(52,152,219,0.1);
+            border-radius: 50%;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            color: var(--secondary);
+            font-size: 1.25rem;
+        }
+        
+        .about-feature span {
+            font-weight: 600;
+            color: var(--dark);
+        }
+        
+        .about-stats {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 2rem;
+            margin: 2rem 0;
+        }
+        
+        .stat {
+            text-align: center;
+        }
+        
+        .stat .number {
+            font-size: 2.5rem;
+            font-weight: 800;
+            color: var(--secondary);
+            display: block;
+        }
+        
+        .stat .label {
+            font-size: 0.875rem;
+            color: var(--gray);
+            text-transform: uppercase;
+        }
+        
+        /* ===== TESTIMONIALS SECTION ===== */
+        .testimonials-section {
+            padding: 5rem 2rem;
+            background: linear-gradient(135deg, var(--primary) 0%, var(--primary-light) 100%);
+            color: var(--white);
+        }
+        
+        .testimonials-header {
+            text-align: center;
+            margin-bottom: 4rem;
+        }
+        
+        .testimonials-header .section-subtitle {
+            background: rgba(255,255,255,0.2);
+            color: var(--white);
+        }
+        
+        .testimonials-header .section-title {
+            color: var(--white);
+        }
+        
+        .testimonials-grid {
+            max-width: 1400px;
+            margin: 0 auto;
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 2rem;
+            padding: 0 2rem;
+        }
+        
+        .testimonial-card {
+            background: rgba(255,255,255,0.1);
+            backdrop-filter: blur(10px);
+            border-radius: 20px;
+            padding: 2rem;
+            border: 1px solid rgba(255,255,255,0.2);
+            transition: all 0.3s;
+        }
+        
+        .testimonial-card:hover {
+            transform: translateY(-10px);
+            background: rgba(255,255,255,0.15);
+        }
+        
+        .testimonial-rating {
+            color: var(--warning);
+            margin-bottom: 1.5rem;
+            font-size: 1.25rem;
+        }
+        
+        .testimonial-text {
+            font-size: 1.1rem;
+            line-height: 1.8;
+            margin-bottom: 2rem;
+            font-style: italic;
+        }
+        
+        .testimonial-author {
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+        }
+        
+        .author-avatar {
+            width: 60px;
+            height: 60px;
+            border-radius: 50%;
+            object-fit: cover;
+            border: 3px solid var(--secondary);
+        }
+        
+        .author-info h4 {
+            margin-bottom: 0.25rem;
+            font-size: 1.1rem;
+        }
+        
+        .author-info p {
+            color: rgba(255,255,255,0.7);
+            font-size: 0.875rem;
+            margin: 0;
+        }
+        
+        /* ===== PRICING SECTION ===== */
+        .pricing-section {
+            padding: 5rem 2rem;
+            background: var(--white);
+        }
+        
+        .pricing-grid {
+            max-width: 1400px;
+            margin: 3rem auto;
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 2rem;
+            padding: 0 2rem;
+        }
+        
+        .pricing-card {
+            background: var(--white);
+            border-radius: 20px;
+            padding: 3rem 2rem;
+            text-align: center;
+            box-shadow: var(--shadow-lg);
+            transition: all 0.3s;
+            position: relative;
+            overflow: hidden;
+            border: 1px solid rgba(0,0,0,0.05);
+        }
+        
+        .pricing-card.popular {
+            transform: scale(1.05);
+            border: 2px solid var(--secondary);
+            box-shadow: 0 20px 40px rgba(52,152,219,0.2);
+        }
+        
+        .pricing-card.popular::before {
+            content: 'MOST POPULAR';
+            position: absolute;
+            top: 20px;
+            right: -30px;
+            background: var(--secondary);
+            color: var(--white);
+            padding: 0.5rem 2rem;
+            transform: rotate(45deg);
+            font-size: 0.75rem;
+            font-weight: 600;
+        }
+        
+        .pricing-badge {
+            display: inline-block;
+            background: rgba(52,152,219,0.1);
+            color: var(--secondary);
+            padding: 0.5rem 1.5rem;
+            border-radius: 50px;
+            font-weight: 600;
+            margin-bottom: 1.5rem;
+        }
+        
+        .pricing-icon {
+            width: 80px;
+            height: 80px;
+            background: linear-gradient(135deg, rgba(52,152,219,0.1) 0%, rgba(52,152,219,0.2) 100%);
+            border-radius: 50%;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            margin: 0 auto 1.5rem;
+            font-size: 2.5rem;
+            color: var(--secondary);
+        }
+        
+        .pricing-price {
+            font-size: 3rem;
+            font-weight: 800;
+            color: var(--primary);
+            margin-bottom: 0.5rem;
+        }
+        
+        .pricing-price span {
+            font-size: 1rem;
+            color: var(--gray);
+            font-weight: 400;
+        }
+        
+        .pricing-period {
+            color: var(--gray);
+            margin-bottom: 2rem;
+        }
+        
+        .pricing-features {
+            list-style: none;
+            margin-bottom: 2rem;
+        }
+        
+        .pricing-features li {
+            padding: 0.75rem 0;
+            color: var(--dark);
+            border-bottom: 1px solid var(--light);
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+            justify-content: center;
+        }
+        
+        .pricing-features i {
+            color: var(--success);
+        }
+        
+        .pricing-features i.fa-times {
+            color: var(--accent);
+        }
+        
+        /* ===== FAQ SECTION ===== */
+        .faq-section {
+            padding: 5rem 2rem;
+            background: linear-gradient(135deg, var(--light) 0%, var(--white) 100%);
+        }
+        
+        .faq-container {
+            max-width: 900px;
+            margin: 3rem auto;
+            padding: 0 2rem;
+        }
+        
+        .faq-item {
+            background: var(--white);
+            border-radius: 10px;
+            margin-bottom: 1rem;
+            box-shadow: var(--shadow-sm);
+            overflow: hidden;
+        }
+        
+        .faq-question {
+            padding: 1.5rem;
+            background: var(--white);
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            cursor: pointer;
+            font-weight: 600;
+            transition: all 0.3s;
+        }
+        
+        .faq-question:hover {
+            background: var(--light);
+        }
+        
+        .faq-question i {
+            transition: transform 0.3s;
+        }
+        
+        .faq-question.active i {
+            transform: rotate(180deg);
+        }
+        
+        .faq-answer {
+            padding: 0 1.5rem;
+            max-height: 0;
+            overflow: hidden;
+            transition: all 0.3s;
+            background: var(--light);
+        }
+        
+        .faq-answer.active {
+            padding: 1.5rem;
+            max-height: 500px;
+        }
+        
+        .faq-answer p {
+            margin: 0;
+            color: var(--gray);
+        }
+        
+        /* ===== CTA SECTION ===== */
+        .cta-section {
+            padding: 5rem 2rem;
+            background: var(--gradient-secondary);
+            color: var(--white);
+            text-align: center;
+        }
+        
+        .cta-container {
+            max-width: 800px;
+            margin: 0 auto;
+        }
+        
+        .cta-section h2 {
+            font-size: 3rem;
+            margin-bottom: 1rem;
+        }
+        
+        .cta-section p {
+            font-size: 1.25rem;
+            margin-bottom: 2rem;
+            opacity: 0.9;
+        }
+        
+        .cta-form {
+            display: flex;
+            gap: 1rem;
+            max-width: 500px;
+            margin: 2rem auto;
+        }
+        
+        .cta-form input {
+            flex: 1;
+            padding: 1rem 1.5rem;
+            border: none;
+            border-radius: 50px;
+            font-family: inherit;
+            font-size: 1rem;
+        }
+        
+        .cta-form input:focus {
+            outline: 2px solid var(--secondary);
+        }
+        
+        .cta-form button {
+            padding: 1rem 2rem;
+            background: var(--accent);
+            color: var(--white);
+            border: none;
+            border-radius: 50px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s;
+        }
+        
+        .cta-form button:hover {
+            background: var(--accent-dark);
+            transform: scale(1.05);
+        }
+        
+        .cta-stats {
+            display: flex;
+            justify-content: center;
+            gap: 3rem;
+            margin-top: 3rem;
+        }
+        
+        .cta-stat {
+            text-align: center;
+        }
+        
+        .cta-stat .number {
+            font-size: 2rem;
+            font-weight: 800;
+            display: block;
+        }
+        
+        .cta-stat .label {
+            font-size: 0.875rem;
+            opacity: 0.8;
+        }
+        
+        /* ===== BLOG SECTION ===== */
+        .blog-section {
+            padding: 5rem 2rem;
+            background: var(--white);
+        }
+        
+        .blog-grid {
+            max-width: 1400px;
+            margin: 3rem auto;
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 2rem;
+            padding: 0 2rem;
+        }
+        
+        .blog-card {
+            background: var(--white);
+            border-radius: 20px;
+            overflow: hidden;
+            box-shadow: var(--shadow-lg);
+            transition: all 0.3s;
+        }
+        
+        .blog-card:hover {
+            transform: translateY(-10px);
+            box-shadow: var(--shadow-2xl);
+        }
+        
+        .blog-image {
+            height: 200px;
+            background: var(--gradient-primary);
+            position: relative;
+            overflow: hidden;
+        }
+        
+        .blog-date {
+            position: absolute;
+            top: 1rem;
+            left: 1rem;
+            background: var(--white);
+            color: var(--primary);
+            padding: 0.5rem 1rem;
+            border-radius: 50px;
+            font-weight: 600;
+            font-size: 0.875rem;
+            box-shadow: var(--shadow-md);
+        }
+        
+        .blog-content {
+            padding: 2rem;
+        }
+        
+        .blog-category {
+            color: var(--secondary);
+            font-size: 0.875rem;
+            font-weight: 600;
+            text-transform: uppercase;
+            margin-bottom: 0.5rem;
+            display: inline-block;
+        }
+        
+        .blog-title {
+            font-size: 1.5rem;
+            margin-bottom: 1rem;
+        }
+        
+        .blog-title a {
+            text-decoration: none;
+            color: var(--primary);
+            transition: color 0.3s;
+        }
+        
+        .blog-title a:hover {
+            color: var(--secondary);
+        }
+        
+        .blog-excerpt {
+            color: var(--gray);
+            margin-bottom: 1.5rem;
+            line-height: 1.6;
+        }
+        
+        .blog-meta {
+            display: flex;
+            gap: 1rem;
+            color: var(--gray);
+            font-size: 0.875rem;
+        }
+        
+        .blog-meta i {
+            color: var(--secondary);
+            margin-right: 0.25rem;
+        }
+        
+        .blog-read-more {
+            color: var(--secondary);
+            text-decoration: none;
+            font-weight: 600;
+            display: inline-flex;
+            align-items: center;
+            gap: 0.5rem;
+            transition: all 0.3s;
+        }
+        
+        .blog-read-more:hover {
+            gap: 1rem;
+        }
+        
+        /* ===== FOOTER ===== */
+        footer {
+            background: var(--primary);
+            color: var(--white);
+            padding: 4rem 2rem 2rem;
+            position: relative;
+            overflow: hidden;
+        }
+        
+        footer::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            height: 5px;
+            background: var(--gradient-secondary);
+        }
+        
+        .footer-content {
+            max-width: 1400px;
+            margin: 0 auto;
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 3rem;
+            padding: 0 2rem;
+        }
+        
+        .footer-section h3 {
+            font-size: 1.5rem;
+            margin-bottom: 1.5rem;
+            color: var(--white);
+            position: relative;
+            padding-bottom: 0.5rem;
+        }
+        
+        .footer-section h3::after {
+            content: '';
+            position: absolute;
+            bottom: 0;
+            left: 0;
+            width: 50px;
+            height: 3px;
+            background: var(--secondary);
+        }
+        
+        .footer-section p {
+            color: rgba(255,255,255,0.7);
+            line-height: 1.8;
+            margin-bottom: 1.5rem;
+        }
+        
+        .social-links {
+            display: flex;
+            gap: 1rem;
+        }
+        
+        .social-links a {
+            width: 40px;
+            height: 40px;
+            background: rgba(255,255,255,0.1);
+            border-radius: 50%;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            color: var(--white);
+            text-decoration: none;
+            transition: all 0.3s;
+        }
+        
+        .social-links a:hover {
+            background: var(--secondary);
+            transform: translateY(-3px) rotate(360deg);
+        }
+        
+        .footer-links {
+            list-style: none;
+        }
+        
+        .footer-links li {
+            margin-bottom: 0.75rem;
+        }
+        
+        .footer-links a {
+            color: rgba(255,255,255,0.7);
+            text-decoration: none;
+            transition: all 0.3s;
+            display: inline-flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+        
+        .footer-links a:hover {
+            color: var(--secondary);
+            transform: translateX(5px);
+        }
+        
+        .footer-links i {
+            font-size: 0.75rem;
+        }
+        
+        .contact-info {
+            list-style: none;
+        }
+        
+        .contact-info li {
+            margin-bottom: 1rem;
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+            color: rgba(255,255,255,0.7);
+        }
+        
+        .contact-info i {
+            width: 30px;
+            height: 30px;
+            background: rgba(255,255,255,0.1);
+            border-radius: 50%;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            color: var(--secondary);
+        }
+        
+        .newsletter-form {
+            display: flex;
+            gap: 0.5rem;
+            margin-top: 1rem;
+        }
+        
+        .newsletter-form input {
+            flex: 1;
+            padding: 0.75rem 1rem;
+            border: none;
+            border-radius: 50px;
+            font-family: inherit;
+        }
+        
+        .newsletter-form button {
+            padding: 0.75rem 1.5rem;
+            background: var(--secondary);
+            color: var(--white);
+            border: none;
+            border-radius: 50px;
+            cursor: pointer;
+            transition: all 0.3s;
+        }
+        
+        .newsletter-form button:hover {
+            background: var(--secondary-dark);
+            transform: scale(1.05);
+        }
+        
+        .footer-bottom {
+            max-width: 1400px;
+            margin: 3rem auto 0;
+            padding: 2rem 2rem 0;
+            border-top: 1px solid rgba(255,255,255,0.1);
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            flex-wrap: wrap;
+            gap: 1rem;
+        }
+        
+        .copyright {
+            color: rgba(255,255,255,0.7);
+            font-size: 0.875rem;
+        }
+        
+        .footer-bottom-links {
+            display: flex;
+            gap: 2rem;
+        }
+        
+        .footer-bottom-links a {
+            color: rgba(255,255,255,0.7);
+            text-decoration: none;
+            font-size: 0.875rem;
+            transition: color 0.3s;
+        }
+        
+        .footer-bottom-links a:hover {
+            color: var(--secondary);
+        }
+        
+        /* ===== BACK TO TOP BUTTON ===== */
+        .back-to-top {
+            position: fixed;
+            bottom: 2rem;
+            right: 2rem;
+            width: 50px;
+            height: 50px;
+            background: var(--secondary);
+            color: var(--white);
+            border-radius: 50%;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            text-decoration: none;
+            box-shadow: var(--shadow-lg);
+            opacity: 0;
+            visibility: hidden;
+            transition: all 0.3s;
+            z-index: 999;
+        }
+        
+        .back-to-top.show {
+            opacity: 1;
+            visibility: visible;
+        }
+        
+        .back-to-top:hover {
+            background: var(--secondary-dark);
+            transform: translateY(-5px);
+            box-shadow: var(--shadow-xl);
+        }
+        
+        /* ===== LOADING SPINNER ===== */
+        .loading-spinner {
+            display: inline-block;
+            width: 50px;
+            height: 50px;
+            border: 5px solid var(--light);
+            border-top-color: var(--secondary);
+            border-radius: 50%;
+            animation: spin 1s linear infinite;
+        }
+        
+        /* ===== RESPONSIVE DESIGN ===== */
+        @media (max-width: 1200px) {
+            h1 { font-size: 3rem; }
+            h2 { font-size: 2.25rem; }
+            .hero h2 { font-size: 3.5rem; }
+            .about-container { gap: 2rem; }
+            .about-title { font-size: 2.5rem; }
+        }
+        
+        @media (max-width: 992px) {
+            .header-top { padding: 1rem 2rem; }
+            nav { padding: 0 2rem; }
+            .hero { padding: 4rem 2rem; }
+            .hero h2 { font-size: 3rem; }
+            .about-container { 
+                grid-template-columns: 1fr;
+                gap: 3rem;
+            }
+            .about-image { max-width: 500px; margin: 0 auto; }
+            .pricing-card.popular { transform: scale(1); }
+        }
+        
+        @media (max-width: 768px) {
+            .header-top {
+                padding: 1rem;
+                flex-direction: column;
+                gap: 1rem;
+                text-align: center;
+            }
+            
+            .logo { justify-content: center; }
+            
+            .menu-toggle {
+                display: flex;
+            }
+            
+            .nav-container {
+                width: 100%;
+                justify-content: space-between;
+            }
+            
+            .nav-links {
+                display: none;
+                flex-direction: column;
+                width: 100%;
+                position: absolute;
+                top: 100%;
+                left: 0;
+                background: var(--white);
+                padding: 1rem;
+                box-shadow: var(--shadow-lg);
+                z-index: 1000;
+                max-height: 80vh;
+                overflow-y: auto;
+            }
+            
+            .nav-links.active {
+                display: flex;
+            }
+            
+            .nav-links li {
+                width: 100%;
+            }
+            
+            .nav-links a {
+                width: 100%;
+                justify-content: center;
+                padding: 1rem;
+            }
+            
+            .search-bar {
+                margin: 1rem 0;
+                width: 100%;
+            }
+            
+            .search-bar input {
+                width: 100%;
+            }
+            
+            .hero {
+                margin: 1rem;
+                padding: 3rem 1rem;
+            }
+            
+            .hero h2 {
+                font-size: 2.5rem;
+            }
+            
+            .hero-stats {
+                flex-direction: column;
+                gap: 1.5rem;
+            }
+            
+            .cta-buttons {
+                flex-direction: column;
+            }
+            
+            .cta-form {
+                flex-direction: column;
+            }
+            
+            .products-grid,
+            .services-grid,
+            .pricing-grid,
+            .blog-grid {
+                grid-template-columns: 1fr;
+            }
+            
+            .about-features {
+                grid-template-columns: 1fr;
+            }
+            
+            .about-stats {
+                grid-template-columns: 1fr;
+            }
+            
+            .footer-bottom {
+                flex-direction: column;
+                text-align: center;
+            }
+            
+            .footer-bottom-links {
+                justify-content: center;
+            }
+            
+            .experience-badge {
+                right: 0;
+                bottom: 0;
+            }
+        }
+        
+        @media (max-width: 576px) {
+            h1 { font-size: 2rem; }
+            h2 { font-size: 1.75rem; }
+            .hero h2 { font-size: 2rem; }
+            .section-title { font-size: 2rem; }
+            .cta-section h2 { font-size: 2rem; }
+            
+            .auth-buttons {
+                flex-direction: column;
+                width: 100%;
+            }
+            
+            .auth-btn {
+                text-align: center;
+                justify-content: center;
+            }
+            
+            .user-menu {
+                flex-direction: column;
+                text-align: center;
+            }
+            
+            .product-footer {
+                flex-direction: column;
+                gap: 1rem;
+            }
+            
+            .product-btn {
+                width: 100%;
+                justify-content: center;
+            }
+        }
+        
+        /* ===== PRINT STYLES ===== */
+        @media print {
+            header, footer, .cta-section, .back-to-top {
+                display: none;
+            }
+            
+            body {
+                background: white;
+                color: black;
+            }
+            
+            .hero {
+                background: none;
+                color: black;
+                box-shadow: none;
+            }
+        }
+        
+        /* ===== ACCESSIBILITY STYLES ===== */
+        .sr-only {
+            position: absolute;
+            width: 1px;
+            height: 1px;
+            padding: 0;
+            margin: -1px;
+            overflow: hidden;
+            clip: rect(0, 0, 0, 0);
+            border: 0;
+        }
+        
+        :focus {
+            outline: 3px solid var(--secondary);
+            outline-offset: 2px;
+        }
+        
+        .skip-link {
+            position: absolute;
+            top: -40px;
+            left: 0;
+            background: var(--secondary);
+            color: white;
+            padding: 8px;
+            z-index: 1001;
+        }
+        
+        .skip-link:focus {
+            top: 0;
+        }
+    </style>
 </head>
 <body>
-  <!-- particle background canvas (animated) -->
-  <canvas id="particle-canvas"></canvas>
+    <!-- Skip to main content link for accessibility -->
+    <a href="#main-content" class="skip-link">Skip to main content</a>
 
-  <!-- HAMBURGER NAV -->
-  <div class="mobile-nav">
-    <div class="logo-mini"><i class="fas fa-feather-alt"></i> Dr. W.</div>
-    <button class="hamburger" id="hamburgerBtn" aria-label="menu">
-      <span></span><span></span><span></span>
-    </button>
-    <div class="menu-dropdown" id="menuDropdown">
-      <a href="#home"><i class="fas fa-home"></i> Home</a>
-      <a href="#gallery"><i class="fas fa-images"></i> Gallery</a>
-      <a href="#bio"><i class="fas fa-book-open"></i> Bio</a>
-      <a href="#publications"><i class="fas fa-scroll"></i> Works</a>
-      <a href="#mir-porti"><i class="fas fa-crown"></i> Mir Porti</a>
-      <a href="#mir-khalaf"><i class="fas fa-chess-king"></i> Mir Khalaf</a>
-      <div class="home-icon-item">
-        <a href="https://whz-co.github.io/whz/index.html" target="_blank"><i class="fas fa-home"></i> Home</a>
-      </div>
-    </div>
-  </div>
+    <!-- Header -->
+    <header>
+        <div class="header-top">
+            <div class="logo">
+                <i class="fas fa-graduation-cap logo-icon"></i>
+                <h1>Zakhourani<span>.</span></h1>
+            </div>
+            
+            <div class="auth-buttons" id="authButtons">
+                <!-- Populated by JavaScript -->
+            </div>
+        </div>
+        
+        <nav aria-label="Main navigation">
+            <div class="nav-container">
+                <button class="menu-toggle" id="mobileMenuToggle" aria-label="Menu" aria-expanded="false">
+                    <span></span>
+                    <span></span>
+                    <span></span>
+                </button>
+                
+                <ul class="nav-links" id="navLinks">
+                    <li><a href="https://whz-co.github.io/whz/index.html" class="active" aria-current="page"><i class="fas fa-home"></i> Home</a></li>
+                    <li><a href="https://whz-co.github.io/whz/products.html"><i class="fas fa-box"></i> Products <span class="nav-badge">NEW</span></a></li>
+                    <li><a href="https://whz-co.github.io/whz/AI.html"><i class="fas fa-robot"></i> AI Assistant</a></li>
+                    <li><a href="https://whz-co.github.io/whz/JihanDictionary.html"><i class="fas fa-book"></i> Dictionary</a></li>
+                    <li><a href="https://whz-co.github.io/whz/IELTS.html"><i class="fas fa-language"></i> IELTS</a></li>
+                    <li><a href="https://whz-co.github.io/whz/TOFEL.html"><i class="fas fa-globe-americas"></i> TOEFL</a></li>
+                    <li><a href="https://whz-co.github.io/whz/aboutDrwaleed.html"><i class="fas fa-user-md"></i> About Dr. Waleed</a></li>
+                    <li><a href="https://whz-co.github.io/whz/contact.html"><i class="fas fa-envelope"></i> Contact</a></li>
+                    <li><a href="profile.html"><i class="fas fa-user-circle"></i> Profile</a></li>
+                </ul>
+                
+                <div class="search-bar" role="search">
+                    <input type="search" placeholder="Search courses..." aria-label="Search courses">
+                    <button type="submit" aria-label="Submit search"><i class="fas fa-search"></i></button>
+                </div>
+            </div>
+        </nav>
+    </header>
 
-  <!-- HERO -->
-  <section id="home" class="hero-section" data-aos="fade-up" data-aos-duration="1200">
-    <div class="hero-glow">Dr. Waleed H. Z.</div>
-    <div class="hero-sub">linguist · educator · cultural bridge</div>
-  </section>
+    <main id="main-content">
+        <!-- Hero Section -->
+        <section class="hero" aria-labelledby="hero-heading">
+            <div class="hero-content">
+                <span class="hero-badge"><i class="fas fa-star"></i> Welcome to the Future of Learning</span>
+                <h2 id="hero-heading">Master English with <span>AI-Powered</span> Precision</h2>
+                <p>Founded by Dr. Waleed Hussien Zakhourani. Experience a revolutionary approach to English learning with our advanced AI platform featuring IELTS, TOEFL preparation, smart dictionary, and personalized learning paths.</p>
+                
+                <div class="hero-stats">
+                    <div class="stat-item">
+                        <span class="stat-number">50K+</span>
+                        <span class="stat-label">Active Students</span>
+                    </div>
+                    <div class="stat-item">
+                        <span class="stat-number">95%</span>
+                        <span class="stat-label">Success Rate</span>
+                    </div>
+                    <div class="stat-item">
+                        <span class="stat-number">24/7</span>
+                        <span class="stat-label">AI Support</span>
+                    </div>
+                </div>
+                
+                <div class="cta-buttons">
+                    <a href="signup.html" class="cta-btn cta-primary">
+                        <i class="fas fa-user-plus"></i> Get Started Free
+                    </a>
+                    <a href="login.html" class="cta-btn cta-secondary">
+                        <i class="fas fa-sign-in-alt"></i> Existing User? Login
+                    </a>
+                </div>
+            </div>
+        </section>
 
-  <!-- GALLERY -->
-  <section id="gallery" class="gallery-wrap" data-aos="zoom-in" data-aos-duration="900">
-    <h2 class="section-title"><i class="fas fa-camera"></i> moments</h2>
-    <div class="gallery-grid">
-      <div class="gallery-item" data-src="https://raw.githubusercontent.com/whz-co/whz/main/images/dr%20waleed%20on%20libra..jpg">
-        <img src="https://raw.githubusercontent.com/whz-co/whz/main/images/dr%20waleed%20on%20libra..jpg" alt="" loading="lazy">
-      </div>
-      <div class="gallery-item" data-src="https://raw.githubusercontent.com/whz-co/whz/main/images/Dr%20waleed%20is%20holding%20a%20book.png">
-        <img src="https://raw.githubusercontent.com/whz-co/whz/main/images/Dr%20waleed%20is%20holding%20a%20book.png" alt="" loading="lazy">
-      </div>
-      <div class="gallery-item" data-src="https://raw.githubusercontent.com/whz-co/whz/main/images/Dr%20waleed%20is%20writing.jpg">
-        <img src="https://raw.githubusercontent.com/whz-co/whz/main/images/Dr%20waleed%20is%20writing.jpg" alt="" loading="lazy">
-      </div>
-    </div>
-    <p style="text-align:center; font-size:0.95rem; color:#d4ba9b; margin-top:0.8rem;"><i class="fas fa-expand-alt"></i> tap image for fullscreen</p>
-  </section>
+        <!-- Products Section - NEW -->
+        <section class="products-section" aria-labelledby="products-heading">
+            <div class="section-header">
+                <span class="section-subtitle"><i class="fas fa-box"></i> Our Premium Products</span>
+                <h2 class="section-title" id="products-heading">Featured <span>Learning Products</span></h2>
+                <p class="section-description">Comprehensive English learning solutions designed by Dr. Waleed Hussien Zakhourani</p>
+            </div>
+            
+            <div class="products-grid">
+                <!-- Product Card 1 - Complete IELTS Package -->
+                <div class="product-card animate__animated animate__fadeInUp">
+                    <div class="product-badge hot">HOT</div>
+                    <div class="product-image">
+                        <i class="fas fa-language"></i>
+                        <div class="product-overlay">
+                            <a href="https://whz-co.github.io/whz/products/ielts-complete.html" aria-label="View product"><i class="fas fa-eye"></i></a>
+                            <a href="#" aria-label="Add to cart"><i class="fas fa-shopping-cart"></i></a>
+                            <a href="#" aria-label="Add to wishlist"><i class="fas fa-heart"></i></a>
+                        </div>
+                    </div>
+                    <div class="product-info">
+                        <span class="product-category">IELTS Preparation</span>
+                        <h3 class="product-title"><a href="https://whz-co.github.io/whz/products/ielts-complete.html">Complete IELTS Mastery Package</a></h3>
+                        <div class="product-rating">
+                            <i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star-half-alt"></i>
+                            <span>(4.8/5 - 1,234 reviews)</span>
+                        </div>
+                        <p class="product-description">Comprehensive IELTS preparation with 50+ practice tests, speaking simulations, writing evaluation, and personalized feedback from AI tutors.</p>
+                        <ul class="product-features">
+                            <li><i class="fas fa-check-circle"></i> 50+ Full Practice Tests</li>
+                            <li><i class="fas fa-check-circle"></i> AI Speaking Evaluation</li>
+                            <li><i class="fas fa-check-circle"></i> Writing Feedback System</li>
+                            <li><i class="fas fa-check-circle"></i> 30 Days Money-back Guarantee</li>
+                        </ul>
+                        <div class="product-price">
+                            $199 <span class="original">$299</span>
+                        </div>
+                        <div class="product-footer">
+                            <a href="https://whz-co.github.io/whz/products/ielts-complete.html" class="product-btn"><i class="fas fa-info-circle"></i> Learn More</a>
+                            <a href="#" class="product-btn"><i class="fas fa-shopping-cart"></i> Buy Now</a>
+                        </div>
+                    </div>
+                </div>
 
-  <!-- LIGHTBOX -->
-  <div class="lightbox" id="lightbox">
-    <span class="lightbox-close" id="lightboxClose">&times;</span>
-    <div class="lightbox-content">
-      <img src="" alt="" id="lightboxImg">
-    </div>
-  </div>
+                <!-- Product Card 2 - TOEFL Complete Package -->
+                <div class="product-card animate__animated animate__fadeInUp animate__delay-1s">
+                    <div class="product-badge new">NEW</div>
+                    <div class="product-image">
+                        <i class="fas fa-globe-americas"></i>
+                        <div class="product-overlay">
+                            <a href="https://whz-co.github.io/whz/products/toefl-complete.html" aria-label="View product"><i class="fas fa-eye"></i></a>
+                            <a href="#" aria-label="Add to cart"><i class="fas fa-shopping-cart"></i></a>
+                            <a href="#" aria-label="Add to wishlist"><i class="fas fa-heart"></i></a>
+                        </div>
+                    </div>
+                    <div class="product-info">
+                        <span class="product-category">TOEFL Preparation</span>
+                        <h3 class="product-title"><a href="https://whz-co.github.io/whz/products/toefl-complete.html">TOEFL iBT Complete Preparation</a></h3>
+                        <div class="product-rating">
+                            <i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star"></i>
+                            <span>(4.9/5 - 987 reviews)</span>
+                        </div>
+                        <p class="product-description">Master the TOEFL iBT with our comprehensive course including all sections: Reading, Listening, Speaking, and Writing with AI-powered feedback.</p>
+                        <ul class="product-features">
+                            <li><i class="fas fa-check-circle"></i> 40+ Full-length Tests</li>
+                            <li><i class="fas fa-check-circle"></i> Integrated Speaking Practice</li>
+                            <li><i class="fas fa-check-circle"></i> Academic Writing Evaluation</li>
+                            <li><i class="fas fa-check-circle"></i> Score Prediction Algorithm</li>
+                        </ul>
+                        <div class="product-price">
+                            $229 <span class="original">$329</span>
+                        </div>
+                        <div class="product-footer">
+                            <a href="https://whz-co.github.io/whz/products/toefl-complete.html" class="product-btn"><i class="fas fa-info-circle"></i> Learn More</a>
+                            <a href="#" class="product-btn"><i class="fas fa-shopping-cart"></i> Buy Now</a>
+                        </div>
+                    </div>
+                </div>
 
-  <!-- BIO (trilingual) -->
-  <section id="bio" class="lang-panel" data-aos="fade-right" data-aos-duration="1000">
-    <h2 style="font-size:2.2rem; margin-bottom:1.2rem;"><i class="fas fa-feather"></i> about</h2>
-    <div class="lang-tabs">
-      <button class="lang-tab active" data-lang="en">🇬🇧 EN</button>
-      <button class="lang-tab" data-lang="ar">🇸🇦 AR</button>
-      <button class="lang-tab" data-lang="ku-arab">🏴 KU(Ar)</button>
-      <button class="lang-tab" data-lang="ku-latn">🇹🇰 KU(La)</button>
-    </div>
-    <div class="bio-content">
-      <div class="bio-text active" id="bio-en" lang="en">
-        <p>Dr. Waleed Hussein Zakhourani is a distinguished linguist, visionary educator, and cultural scholar whose life's work serves as a vital bridge between the English, Arabic, and Kurdish worlds. Holding a PhD in English Language Etiquette from Harvard University, his academic foundation studies how language conveys respect and cultural values. This rare specialization defines his mission: to transform English into a medium of global mutual understanding.</p>
-        <p>With decades in multilingual education, he champions linguistic accessibility and cultural preservation. His expertise spans lexicography, translation studies, and academic publishing. He empowers learners to navigate the global stage while rooted in their own heritage.</p>
-      </div>
-      <div class="bio-text" id="bio-ar" lang="ar" dir="rtl">
-        <p>يُعد الدكتور وليد حسين زاخوراني لغوياً بارزاً، ومربياً رؤيوياً، وباحثاً ثقافياً كرس مسيرته المهنية لتكون جسراً حيوياً يربط بين عوالم اللغات الإنجليزية والعربية والكردية. من خلال حصوله على درجة الدكتوراه في آداب اللغة الإنجليزية من جامعة هارفارد، تعذرت ركائز أساسه الأكاديمي في الدراسة المتعمقة لكيفية تعبير اللغة عن الاحترام والوضوح والقيم الثقافية الراسخة. وقد حدد هذا التخصص النادر مهمة حياته: تحويل اللغة الإنجليزية من مجرد أداة أكاديمية إلى وسيلة عميقة للتفاهم العالمي المتبادل.</p>
-        <p>مع عقود من القيادة في مجال التعليم متعدد اللغات، برز الدكتور زاخوراني كشخصية رائدة في تيسير الوصول اللغوي والحفاظ على التراث الثقافي. تشمل خبرته الواسعة مجالات صناعة المعاجم، ودراسات الترجمة، والنشر الأكاديمي. ويعمل لضمان إتقان الإنجليزية دون التضحية بالتقاليد الفكرية الغنية للناطقين بالعربية والكردية.</p>
-      </div>
-      <div class="bio-text" id="bio-ku-arab" lang="ku-arab" dir="rtl">
-        <p>د. وەلید حسێن زاخۆرانی زمانزانەکێ دیار، پەروەردەکارەکێ خودان دیدەڤانی، و ڤەکۆلەرەکێ کلتووریێ خودان ئەزموونە، کو ژیانا خۆ تەرخانکرییە دا ببیتە پرەکا زیندی د ناڤبەرا جیهانێن ئینگلیزی، عەرەبی و کوردی دا. ب بەدەستڤەئینانا بروانامەیا دکتۆرا د ئیتیکێت و ئادابێن زمانێ ئینگلیزیدا ل زانکۆیا هارفارد، بنیاتێ وی یێ ئەکادیمی ب کویری ل سەر وێ چەندێ کا زمان چەوا ڕێز و بەهایێن کلتووری دگەهینیت.</p>
-        <p>دگەل چەندین سالێن کارکرنێ د بوارێ پەروەردەیا فرە-زمانیدا، د. وەلید وەک پالپشتەکێ مەزن یێ ب ساناهی کرنا زمانان و پاراستنا کلتووری دیار بوویە. شارەزاییا وی د بوارێن فەرهەنگنڤیسی و وەشانێن ئەکادیمی دگریت.</p>
-      </div>
-      <div class="bio-text" id="bio-ku-latn" lang="ku-latn">
-        <p>Dr. Welîd Hisên Zexoranî zimanzanekî berbiçav, perwerdekarekî xwedî dîtin û zanyarekî çandî ye ku xebatên wî wekî pireke girîng di navbera cîhanên Îngilîzî, Erebî û Kurdî de xizmetê dikin. Wî PhD di warê Etîketa Zimên a Îngilîzî de ji Zanîngeha Harvardê wergirtiye.</p>
-        <p>Bi ezmûna dehan salan di perwerdehiya pirzimanî de, Dr. Zexoranî parêzvanê gihîştina zimên û parastina çandî ye. Pisporiya wî ferhengzanî, werger û weşangeriya akademîk dihewîne.</p>
-      </div>
-    </div>
-  </section>
+                <!-- Product Card 3 - AI English Assistant Pro -->
+                <div class="product-card animate__animated animate__fadeInUp animate__delay-2s">
+                    <div class="product-badge hot">BESTSELLER</div>
+                    <div class="product-image">
+                        <i class="fas fa-robot"></i>
+                        <div class="product-overlay">
+                            <a href="https://whz-co.github.io/whz/products/ai-assistant-pro.html" aria-label="View product"><i class="fas fa-eye"></i></a>
+                            <a href="#" aria-label="Add to cart"><i class="fas fa-shopping-cart"></i></a>
+                            <a href="#" aria-label="Add to wishlist"><i class="fas fa-heart"></i></a>
+                        </div>
+                    </div>
+                    <div class="product-info">
+                        <span class="product-category">AI Learning Tools</span>
+                        <h3 class="product-title"><a href="https://whz-co.github.io/whz/products/ai-assistant-pro.html">AI English Assistant Pro</a></h3>
+                        <div class="product-rating">
+                            <i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star-half-alt"></i>
+                            <span>(4.7/5 - 2,567 reviews)</span>
+                        </div>
+                        <p class="product-description">24/7 AI-powered English tutor for personalized learning, instant grammar correction, pronunciation feedback, and conversation practice.</p>
+                        <ul class="product-features">
+                            <li><i class="fas fa-check-circle"></i> Unlimited Conversations</li>
+                            <li><i class="fas fa-check-circle"></i> Real-time Grammar Check</li>
+                            <li><i class="fas fa-check-circle"></i> Pronunciation Analysis</li>
+                            <li><i class="fas fa-check-circle"></i> Personalized Learning Path</li>
+                        </ul>
+                        <div class="product-price">
+                            $14.99 <span class="original">$29.99</span> /month
+                        </div>
+                        <div class="product-footer">
+                            <a href="https://whz-co.github.io/whz/products/ai-assistant-pro.html" class="product-btn"><i class="fas fa-info-circle"></i> Learn More</a>
+                            <a href="#" class="product-btn"><i class="fas fa-shopping-cart"></i> Subscribe</a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            
+            <div style="text-align: center; margin-top: 3rem;">
+                <a href="https://whz-co.github.io/whz/products.html" class="btn btn-primary btn-lg">
+                    <i class="fas fa-box"></i> View All Products
+                </a>
+            </div>
+        </section>
 
-  <!-- PUBLICATIONS -->
-  <section id="publications" class="pub-section" data-aos="fade-up" data-aos-duration="900">
-    <h2 class="section-title"><i class="fas fa-book"></i> selected works</h2>
-    <div class="pub-grid">
-      <div class="pub-card"><i class="fas fa-book"></i><h3>Lexical Bridges</h3><p>Kurdish–English dictionary</p></div>
-      <div class="pub-card"><i class="fas fa-globe"></i><h3>Politeness Across Borders</h3><p>Harvard 2008</p></div>
-      <div class="pub-card"><i class="fas fa-language"></i><h3>Arabic Rhetoric</h3><p>multilingual study</p></div>
-      <div class="pub-card"><i class="fas fa-feather"></i><h3>Zakhourani Method</h3><p>teaching through heritage</p></div>
-    </div>
-  </section>
+        <!-- Services Section -->
+        <section class="services-section" aria-labelledby="services-heading">
+            <div class="section-header">
+                <span class="section-subtitle"><i class="fas fa-cogs"></i> What We Offer</span>
+                <h2 class="section-title" id="services-heading">Comprehensive <span>Learning Services</span></h2>
+                <p class="section-description">Discover our range of AI-powered English learning tools and courses</p>
+            </div>
+            
+            <div class="services-grid">
+                <div class="service-card animate__animated animate__fadeInUp">
+                    <div class="service-icon">
+                        <i class="fas fa-robot"></i>
+                    </div>
+                    <h3>AI English Assistant</h3>
+                    <p>Our advanced AI tutor provides instant feedback on writing, speaking, and grammar. Available 24/7 for personalized learning support with real-time corrections and suggestions.</p>
+                    <a href="https://whz-co.github.io/whz/AI.html" class="service-link">Try AI Assistant <i class="fas fa-arrow-right"></i></a>
+                </div>
 
-  <!-- MIR PORTI - smaller image for mobile -->
-  <section id="mir-porti" class="mir-section" data-aos="fade-right" data-aos-duration="1100">
-    <div class="mir-header">
-      <i class="fas fa-crown"></i>
-      <h2 class="mir-title">Mir Porti · The Legacy of Zakhoran</h2>
-    </div>
-    <!-- image at 80% width, centered, no 3D effects on image -->
-    <div class="mir-image" data-src="https://raw.githubusercontent.com/whz-co/whz/main/images/porte.png">
-      <img src="https://raw.githubusercontent.com/whz-co/whz/main/images/porte.png" alt="Mir Porti" loading="lazy">
-    </div>
-    <div class="mir-desc">
-      <div class="lang-tabs" style="margin-bottom:1rem;">
-        <button class="lang-tab active" data-lang="en-mir">🇬🇧 EN</button>
-        <button class="lang-tab" data-lang="ku-arab-mir">🏴 KU(Ar)</button>
-        <button class="lang-tab" data-lang="ku-latn-mir">🇹🇰 KU(La)</button>
-        <button class="lang-tab" data-lang="ar-mir">🇸🇦 AR</button>
-      </div>
-      <!-- English Mir Porti -->
-      <div class="bio-text active" id="mir-en" lang="en">
-        <p><strong>Mir Porti: The Legacy of Zakhoran and the Nobility of Mardin</strong></p>
-        <p>Mir Porti stands as a monumental figure in Kurdish history, particularly within the district of Midyat in Mardin. His historical influence flourished between 1650 and 1700 AD, centered in the Zakhoran region. His impact was so profound that the village of "Porti" was named in his honor, serving as a lasting geographical testament to his leadership.</p>
-        <p>As a direct descendant of the illustrious Emirs of Bohtan, Mir Porti represents a lineage of nobility and power. He is the sixth grandfather of Dr. Walid Hussein Al-Zakhorani. To this day, his name commands immense respect among the Kurdish, Arab, and Turkish tribes of the Mardin province, symbolizing a bridge of cultural and social authority that has endured for centuries.</p>
-        <p>For the first time in history, a rare portrait of Mir Porti has been unveiled through the official platform of Dr. Zakhorani. This release highlights the doctor’s deep-rooted heritage within the Zakhoran tribe, specifically tracing back to the prestigious House of Mir Porti, a family synonymous with historical leadership.</p>
-      </div>
-      <!-- Kurdish Badini Mir Porti -->
-      <div class="bio-text" id="mir-ku-arab" lang="ku-arab" dir="rtl">
-        <p><strong>میر پۆرتی: کێلەکێ دیرۆکیێ زاخۆران و ڕەسەناتییا مێردینێ</strong></p>
-        <p>میر پۆرتی ئێکە ژ کەسایەتیێن ناڤدار و دیارێن دیرۆکا کورد ل دەڤەرا میدیادێ ل پارێزگەها مێردینێ. ناڤبری ل سالێن د ناڤبەرا 1650 تا 1700 زایینی خودان دەسهەلات و ناڤودەنگ بوو، ب تایبەتی ل دەڤەرا زاخوران. ژبەر مەزناهی و کارتێکرنا وی، گوندێ "پۆرتی" ب ناڤێ وی هاتیە ناڤکرن و هەتا ئەڤڕۆ وەک نیشانەکا مێژوویی یا زێندی مایە.</p>
-        <p>میر پۆرتی ژ بنەمالا خودان شکۆ یا میرێن بۆتانە و باپیرێ شەشێ یێ دکتۆر وەلید حسێن زاخۆرانییە. هەتا ئەڤێ گاڤێ ژی، ناڤێ میر پۆرتی ب ڕێز و حورمەتەکا مەزن د ناڤبەرا عەشیرەتێن کورد، عەرەب و تورک ل پارێزگەها مێردینێ دهێتە گۆتن، کو ئەڤ چەندە نیشانا پێگەیێ وی یێ جڤاکی یێ ب هێزە.</p>
-        <p>بۆ جارا ئێکێ د دیرۆکێ دا، وێنەیەکێ دەگمەن یێ میر پۆرتی د پلاتفۆرمەکا تایبەت دا ژ لایێ نەوەیێ وی، دکتۆر زاخۆرانی، هاتیە بەلاڤکرن. دکتۆر زاخۆرانی ب ڕەگەز دزڤریتە سەر عەشیرەتا زاخۆران و ب تایبەت ژ بنەمالا میر پۆرتی یە، کو ئێکە ژ بنەمالێن ڕەسەن و خودان ناسنامە ل دەڤەرێ.</p>
-      </div>
-      <!-- Kurdish Latini Mir Porti -->
-      <div class="bio-text" id="mir-ku-latn" lang="ku-latn">
-        <p><strong>Mîr Portî: Sembola Dîroka Zaxoran û Malbata Mîrên Botan</strong></p>
-        <p>Mîr Portî yek ji kesayetên herî navdar û bandordar ê dîroka Kurd e li navçeya Midyadê ya ser bi parêzgeha Mêrdînê. Dîroka wî vedigere salên navbera 1650 - 1700’an, bi taybetî li herêma Zaxoran. Ji ber nav û dengê wî yê mezin, gundek bi navê wî (Gundê Portî) hatiye binavkirin ku heta îro wek mîraseke dîrokî tê naskirin.</p>
-        <p>Mîr Portî ji xanedana Mîrên Botan e û bapîrê şeşemîn ê Dr. Welîd Hisên Zaxoranî ye. Heya roja îro, navê Mîr Portî di nav eşîrên Kurd, Ereb û Tirk ên li parêzgeha Mêrdînê de bi rûmet û hurmeteke mezin tê hildan. Ev yek nîşana bandora wî ya civakî û siyasî ya kûr e.</p>
-        <p>Cara yekem di dîrokê de, wêneyekî kêmpeyda yê Mîr Portî di platforma taybet a neviyê wî Dr. Zaxoranî de hat weşandin. Dr. Zaxoranî bi koka xwe ve girêdayî eşîra Zaxoran e û ji malbata esîl a Mîr Portî tê, ku bingeha vê malbatê li ser serokatî û mîrekiyê hatiye avakirin.</p>
-      </div>
-      <!-- Arabic Mir Porti -->
-      <div class="bio-text" id="mir-ar" lang="ar" dir="rtl">
-        <p><strong>الأمير بورتي: سليل الإمارة البوهتانية وعماد زاخوران</strong></p>
-        <p>يُعد الأمير بورتي (مير بورتي) أحد أبرز الأعلام التاريخيين في الذاكرة الكردية لمدينة مديات التابعة لولاية ماردين و اطرافها و الى جزيرة بوتان. يمتد نفوذه وحضوره التاريخي إلى الحقبة الواقعة ما بين عامي 1650 و1700 ميلادية، وتحديداً في ربوع منطقة زاخوران الأبية، حيث اقترن اسمه بالأرض حتى سُميت قرية "بورتي" تيمناً به، لتغدو شاهداً جغرافياً حياً على زعامته وتاريخه الحافل.</p>
-        <p>ينحدر الأمير بورتي من سلالة أمراء بوهتان (إمارة بوتان) العريقة، وهو الجد السادس للدكتور وليد حسين الزاخوراني. وبفضل مكانته المرموقة وحكمته، لا يزال صدى اسمه يتردد بتقدير وإجلال في أوساط القبائل الكردية والعربية والتركية القاطنة في محافظة ماردين، مما يبرهن على دوره الريادي كشخصية جامعة تميزت بالهيبة والنفوذ الاجتماعي العابر للحدود العرقية.</p>
-        <p>في سابقة هي الأولى من نوعها، تم الكشف عن صورة نادرة للأمير بورتي، تُنشر لأول مرة في التاريخ عبر المنصة الخاصة بحفيده الدكتور الزاخوراني. هذا الظهور يعيد إحياء التراث البصري لهذه العائلة النبيلة، ويؤكد انتماء الدكتور الزاخوراني المتجذر إلى عشيرة زاخوران، وتحديداً من فرع "مير بورتي" الذي يمثل الركيزة الأساسية لهذا النسب الشريف.</p>
-      </div>
-    </div>
-  </section>
+                <div class="service-card animate__animated animate__fadeInUp animate__delay-1s">
+                    <div class="service-icon">
+                        <i class="fas fa-book"></i>
+                    </div>
+                    <h3>Smart Dictionary</h3>
+                    <p>Access comprehensive definitions, synonyms, antonyms, and examples for over 100,000+ words. Includes pronunciation guides, word origins, and usage examples in context.</p>
+                    <a href="https://whz-co.github.io/whz/JihanDictionary.html" class="service-link">Explore Dictionary <i class="fas fa-arrow-right"></i></a>
+                </div>
 
-  <!-- MIR KHALAF - smaller image for mobile -->
-  <section id="mir-khalaf" class="mir-khalaf-section" data-aos="fade-left" data-aos-duration="1100">
-    <div class="mir-header">
-      <i class="fas fa-chess-king"></i>
-      <h2 class="mir-title">Mir Khalaf · The Heir of Sovereignty</h2>
-    </div>
-    <!-- image at 80% width, centered, no 3D effects -->
-    <div class="mir-khalaf-image" data-src="https://raw.githubusercontent.com/whz-co/whz/main/images/mir%20khalaf%20-%20arabic%20black%20and%20white.jpg">
-      <img src="https://raw.githubusercontent.com/whz-co/whz/main/images/mir%20khalaf%20-%20arabic%20black%20and%20white.jpg" alt="Mir Khalaf" loading="lazy">
-    </div>
-    <div class="mir-desc">
-      <div class="lang-tabs" style="margin-bottom:1rem;">
-        <button class="lang-tab active" data-lang="en-khalaf">🇬🇧 EN</button>
-        <button class="lang-tab" data-lang="ar-khalaf">🇸🇦 AR</button>
-        <button class="lang-tab" data-lang="ku-arab-khalaf">🏴 KU(Ar)</button>
-        <button class="lang-tab" data-lang="ku-latn-khalaf">🇹🇰 KU(La)</button>
-      </div>
-      <!-- English Mir Khalaf -->
-      <div class="bio-text active" id="khalaf-en" lang="en">
-        <p><strong>Mir Khalaf (Khalafê Portî): The Continuation of a Noble Legacy</strong></p>
-        <p>Mir Khalaf, the son of Mir Ali and grandson of the legendary Mir Porti, stands as a prominent figure in the annals of Kurdish history. Commonly known as (Khalafê Portî), he carried the mantle of leadership with the same distinction and authority as his grandfather. His influence was not merely inherited but earned through his formidable presence and social standing.</p>
-        <p>Throughout the history of the Mardin province and its surrounding territories, Mir Khalaf was recognized as a cornerstone of stability and leadership. His reputation transcended ethnic and cultural boundaries, earning him profound respect among the diverse peoples and communities of the region. This brief historical overview, accompanied by rare personal portraits, serves to document the enduring legacy of both Mir Porti and Mir Khalaf, two pillars of the Zakhoran nobility.</p>
-      </div>
-      <!-- Arabic Mir Khalaf -->
-      <div class="bio-text" id="khalaf-ar" lang="ar" dir="rtl">
-        <p><strong>مير خلف (خلفي بورتي): امتداد الزعامة وإرث الأنفة في ماردين</strong></p>
-        <p>يبرز اسم مير خلف بن مير علي بن مير بورتي كواحد من ألمع الأحفاد الذين حملوا مشعل السيادة من جدهم الأكبر "مير بورتي". ويُعرف في الذاكرة الشعبية والتاريخية بلقب (خلفي بورتي)، وهو اللقب الذي اقترن بالشجاعة والحكمة والمكانة الاجتماعية الرفيعة.</p>
-        <p>لم يكن مير خلف مجرد وريث لاسم عائلته، بل كان شخصية محورية لا تقل شأناً ولا هيبة عن جده الأمير بورتي. استطاع بحكمته وحضوره الشكلى أن يفرض نفسه كشخصية بارزة يشار إليها بالبنان عبر التاريخ، حيث امتد صيته وتأثيره ليتجاوز حدود منطقته، ليصبح علماً معروفاً ومحترماً بين كافة الأقوام والملل والطوائف القاطنة في محافظة ماردين وضواحيها.</p>
-        <p>يمثل مير خلف الجسر التاريخي الذي نقل أمجاد "آل بورتي" وعشيرة "زاخوران" إلى الأجيال اللاحقة، محافظاً على الروابط المتينة بين العشائر الكردية والعربية والتركية في المنطقة. وهذه النبذة المختصرة، المرفقة بالصور الشخصية النادرة لكل من الأمير بورتي وحفيده مير خلف، تُعد وثيقة تاريخية استثنائية تُنشر لتسليط الضوء على عراقة هذا النسب ودوره في صياغة المشهد الاجتماعي والسياسي لولاية ماردين عبر القرون.</p>
-      </div>
-      <!-- Kurdish Badini Mir Khalaf -->
-      <div class="bio-text" id="khalaf-ku-arab" lang="ku-arab" dir="rtl">
-        <p><strong>میر خەلەف (خەلەفێ پۆرتى): بەردەوامیا ڕێبازا میراتییێ</strong></p>
-        <p>میر خەلەف کورێ میر عەلى و نەوەیێ میر پۆرتى یە، ئێکە ژ وان کەسایەتیێن کو ناڤێ مالباتێ ب بلندى ڕاگرتیە. د ناڤ خەلکى و دیرۆکێ دا ب ناڤێ (خەلەفێ پۆرتى) دهێتە ناسیار، و چو ژ مەزناهى و شکۆیا باپیرێ خۆ میر پۆرتى کێمتر نینە.</p>
-        <p>میر خەلەف د دیرۆکێ دا وەک کەسایەتیەکێ دیار و خودان کارتێکرن ل پارێزگەها مێردینێ و دەوروبەرێن وێ دهێتە هەژمارتن. ناڤودەنگێ وی ل ناڤ هەمی نەتەوە و پێکهاتەیێن دەڤەرێ هەبوو، و هەمویان ب چاڤەکێ مەزن لێ دنێری. ئەڤە کورتەیەکە ل سەر دیرۆکا هەردوو میران (میر پۆرتى و میر خەلەف) دگەل وێنەیێن وان یێن کەسایەتى، کو بۆ ئێکەم جار دهێنە نیشاندان وەک بەلگەیەکا ڕەسەن ل سەر دیرۆکا زاخۆران.</p>
-      </div>
-      <!-- Kurdish Latini Mir Khalaf -->
-      <div class="bio-text" id="khalaf-ku-latn" lang="ku-latn">
-        <p><strong>Mîr Xelef (Xelefê Portî): Berdewamiya Rûmeta Malbatê</strong></p>
-        <p>Mîr Xelefê kurê Mîr Elî û neviyê Mîr Portî, yek ji stûnên girîng ên dîroka malbata xwe ye. Di nav gel de bi navê (Xelefê Portî) tê naskirin û di warê navdarî û desthelatdariyê de, qet ji bapîrê xwe Mîr Portî kêmtir nebûye. Ew kesayetiyekî xurt û bandordar bû ku şopa xwe li dîroka herêmê hiştiye.</p>
-        <p>Li parêzgeha Mêrdînê û derdora wê, Mîr Xelef di nav hemû gel, netewe û olan de wekî rûspî û serokekî navdar dihat qebûlkirin. Ev kurtejiyana ku bi wêneyên wan ên taybet re hatiye amadekirin, dîroka her du mîran (Mîr Portî û Mîr Xelef) ronî dike û nîşan dide ka çawa ev malbat bûye bingeha esaleta eşîra Zaxoran û mîrateya Mîrên Botan.</p>
-      </div>
-    </div>
-  </section>
+                <div class="service-card animate__animated animate__fadeInUp animate__delay-2s">
+                    <div class="service-icon">
+                        <i class="fas fa-language"></i>
+                    </div>
+                    <h3>IELTS Preparation</h3>
+                    <p>Complete IELTS course covering Academic and General Training. Features include practice tests, speaking simulations, writing evaluation, and personalized study plans.</p>
+                    <a href="https://whz-co.github.io/whz/IELTS.html" class="service-link">Start IELTS Prep <i class="fas fa-arrow-right"></i></a>
+                </div>
 
-  <!-- BRIDGE MAP + sound waves -->
-  <div class="bridge-map" data-aos="flip-left" data-aos-duration="1100">
-    <div class="map-svg">
-      <svg viewBox="0 0 360 140">
-        <circle cx="90" cy="70" r="22" fill="#b79067" opacity="0.9" />
-        <circle cx="180" cy="70" r="25" fill="#caa37b" />
-        <circle cx="270" cy="70" r="22" fill="#a88967" opacity="0.9" />
-        <text x="70" y="50" fill="#f2ddc5" font-size="12">AR</text>
-        <text x="165" y="40" fill="#fcebd6" font-size="14">ENG</text>
-        <text x="250" y="50" fill="#f2ddc5" font-size="12">KU</text>
-        <text x="130" y="115" fill="#e2cbb2" font-size="15">Dr. Waleed</text>
-      </svg>
-    </div>
-    <div class="sound-waves">
-      <div class="wave"></div><div class="wave"></div><div class="wave"></div><div class="wave"></div>
-    </div>
-  </div>
+                <div class="service-card animate__animated animate__fadeInUp animate__delay-3s">
+                    <div class="service-icon">
+                        <i class="fas fa-globe-americas"></i>
+                    </div>
+                    <h3>TOEFL Training</h3>
+                    <p>Comprehensive TOEFL iBT preparation with all four sections: Reading, Listening, Speaking, and Writing. Includes full-length practice tests and performance analytics.</p>
+                    <a href="https://whz-co.github.io/whz/TOFEL.html" class="service-link">Begin TOEFL Prep <i class="fas fa-arrow-right"></i></a>
+                </div>
+            </div>
+        </section>
 
-  <!-- FOOTER -->
-  <footer class="footer">
-    <i class="far fa-copyright"></i> 2026 WHZ developer – all rights reserved<br>
-    <span style="font-size:1.1rem;"><i class="fas fa-code"></i> Dr. Waleed archive</span>
-    <div class="home-link-bottom"><a href="#home"><i class="fas fa-arrow-up"></i> return top</a></div>
-  </footer>
+        <!-- About Dr. Waleed Section -->
+        <section class="about-section" aria-labelledby="about-heading">
+            <div class="about-container">
+                <div class="about-image animate__animated animate__fadeInLeft">
+                    <img src="https://via.placeholder.com/600x800/2c3e50/3498db?text=Dr.+Waleed+Hussien+Zakhourani" alt="Dr. Waleed Hussien Zakhourani - Founder of Zakhourani">
+                    <div class="experience-badge">
+                        <span class="years">20+</span>
+                        <span class="text">Years of Excellence</span>
+                    </div>
+                </div>
+                
+                <div class="about-content animate__animated animate__fadeInRight">
+                    <span class="about-subtitle"><i class="fas fa-user-md"></i> About the Founder</span>
+                    <h2 class="about-title" id="about-heading">Dr. Waleed Hussien <span>Zakhourani</span></h2>
+                    
+                    <p class="about-text">Dr. Waleed Hussien Zakhourani is a distinguished educator and language expert with over 20 years of experience in English language teaching and curriculum development. His innovative approach combines traditional teaching methods with cutting-edge AI technology to create the most effective learning experience.</p>
+                    
+                    <p class="about-text">As the founder of Zakhourani, Dr. Waleed has helped thousands of students achieve their language goals, from passing international exams to gaining confidence in professional communication. His methodology focuses on personalized learning paths that adapt to each student's unique needs and learning style.</p>
+                    
+                    <div class="about-features">
+                        <div class="about-feature">
+                            <i class="fas fa-graduation-cap"></i>
+                            <span>PhD in Applied Linguistics</span>
+                        </div>
+                        <div class="about-feature">
+                            <i class="fas fa-chalkboard-teacher"></i>
+                            <span>20+ Years Teaching</span>
+                        </div>
+                        <div class="about-feature">
+                            <i class="fas fa-book"></i>
+                            <span>15+ Published Books</span>
+                        </div>
+                        <div class="about-feature">
+                            <i class="fas fa-globe"></i>
+                            <span>International Speaker</span>
+                        </div>
+                    </div>
+                    
+                    <div class="about-stats">
+                        <div class="stat">
+                            <span class="number">50K+</span>
+                            <span class="label">Students</span>
+                        </div>
+                        <div class="stat">
+                            <span class="number">100+</span>
+                            <span class="label">Countries</span>
+                        </div>
+                        <div class="stat">
+                            <span class="number">95%</span>
+                            <span class="label">Success Rate</span>
+                        </div>
+                    </div>
+                    
+                    <a href="https://whz-co.github.io/whz/aboutDrwaleed.html" class="btn btn-primary btn-lg">
+                        <i class="fas fa-user-md"></i> Read Full Biography
+                    </a>
+                </div>
+            </div>
+        </section>
 
-  <!-- ambient audio (subtle) -->
-  <audio id="ambientAudio" loop style="display:none"><source src="https://www.soundhelix.com/examples/mp3/SoundHelix-Song-1.mp3" type="audio/mpeg"></audio>
+        <!-- Testimonials Section -->
+        <section class="testimonials-section" aria-labelledby="testimonials-heading">
+            <div class="testimonials-header">
+                <span class="section-subtitle"><i class="fas fa-comments"></i> Student Success Stories</span>
+                <h2 class="section-title" id="testimonials-heading">What Our <span>Students Say</span></h2>
+            </div>
+            
+            <div class="testimonials-grid">
+                <div class="testimonial-card animate__animated animate__fadeInUp">
+                    <div class="testimonial-rating">
+                        <i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star"></i>
+                    </div>
+                    <p class="testimonial-text">"Dr. Waleed's IELTS preparation course was exactly what I needed. The AI feedback on my speaking and writing helped me improve dramatically. I achieved a band 8.5!"</p>
+                    <div class="testimonial-author">
+                        <img src="https://ui-avatars.com/api/?name=Sarah+Ahmed&background=3498db&color=fff&size=60" alt="Sarah Ahmed" class="author-avatar">
+                        <div class="author-info">
+                            <h4>Sarah Ahmed</h4>
+                            <p>IELTS Band 8.5 · UAE</p>
+                        </div>
+                    </div>
+                </div>
 
-  <!-- AOS library -->
-  <script src="https://unpkg.com/aos@2.3.1/dist/aos.js"></script>
-  <!-- particles + interactions -->
-  <script>
-    (function() {
-      AOS.init({ once: true, offset: 50, duration: 700 });
+                <div class="testimonial-card animate__animated animate__fadeInUp animate__delay-1s">
+                    <div class="testimonial-rating">
+                        <i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star"></i>
+                    </div>
+                    <p class="testimonial-text">"The AI English Assistant is revolutionary! It's like having a personal tutor available 24/7. My pronunciation and fluency have improved significantly in just 3 months."</p>
+                    <div class="testimonial-author">
+                        <img src="https://ui-avatars.com/api/?name=Carlos+Rodriguez&background=3498db&color=fff&size=60" alt="Carlos Rodriguez" class="author-avatar">
+                        <div class="author-info">
+                            <h4>Carlos Rodriguez</h4>
+                            <p>TOEFL 112 · Mexico</p>
+                        </div>
+                    </div>
+                </div>
 
-      // Hamburger menu
-      const hamburger = document.getElementById('hamburgerBtn');
-      const dropdown = document.getElementById('menuDropdown');
-      hamburger.addEventListener('click', (e) => {
-        e.stopPropagation();
-        dropdown.classList.toggle('show');
-      });
-      document.addEventListener('click', (e) => {
-        if (!hamburger.contains(e.target) && !dropdown.contains(e.target)) dropdown.classList.remove('show');
-      });
+                <div class="testimonial-card animate__animated animate__fadeInUp animate__delay-2s">
+                    <div class="testimonial-rating">
+                        <i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star-half-alt"></i>
+                    </div>
+                    <p class="testimonial-text">"The smart dictionary feature is incredibly helpful. It doesn't just give definitions but shows word usage in context with examples. Perfect for academic writing."</p>
+                    <div class="testimonial-author">
+                        <img src="https://ui-avatars.com/api/?name=Li+Wei&background=3498db&color=fff&size=60" alt="Li Wei" class="author-avatar">
+                        <div class="author-info">
+                            <h4>Li Wei</h4>
+                            <p>PhD Candidate · China</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
 
-      // Lightbox: tap image to magnify fullscreen
-      const lightbox = document.getElementById('lightbox');
-      const lightboxImg = document.getElementById('lightboxImg');
-      const closeBtn = document.getElementById('lightboxClose');
-      const allClickableImages = document.querySelectorAll('[data-src]');
-      allClickableImages.forEach(item => {
-        item.addEventListener('click', () => {
-          const src = item.dataset.src;
-          lightboxImg.src = src;
-          lightbox.classList.add('active');
-        });
-      });
-      closeBtn.addEventListener('click', () => lightbox.classList.remove('active'));
-      lightbox.addEventListener('click', (e) => { if(e.target === lightbox) lightbox.classList.remove('active'); });
+        <!-- Pricing Section -->
+        <section class="pricing-section" aria-labelledby="pricing-heading">
+            <div class="section-header">
+                <span class="section-subtitle"><i class="fas fa-tag"></i> Simple Pricing</span>
+                <h2 class="section-title" id="pricing-heading">Choose Your <span>Learning Plan</span></h2>
+                <p class="section-description">Flexible plans designed to meet your learning goals and budget</p>
+            </div>
+            
+            <div class="pricing-grid">
+                <div class="pricing-card animate__animated animate__fadeInUp">
+                    <span class="pricing-badge">BASIC</span>
+                    <div class="pricing-icon">
+                        <i class="fas fa-user"></i>
+                    </div>
+                    <div class="pricing-price">$0<span>/month</span></div>
+                    <div class="pricing-period">Free forever</div>
+                    <ul class="pricing-features">
+                        <li><i class="fas fa-check"></i> Basic Dictionary Access</li>
+                        <li><i class="fas fa-check"></i> 5 AI Assistant Queries/day</li>
+                        <li><i class="fas fa-check"></i> Basic Vocabulary Lists</li>
+                        <li><i class="fas fa-times"></i> IELTS Practice Tests</li>
+                        <li><i class="fas fa-times"></i> TOEFL Preparation</li>
+                        <li><i class="fas fa-times"></i> Writing Evaluation</li>
+                        <li><i class="fas fa-times"></i> Speaking Feedback</li>
+                    </ul>
+                    <a href="signup.html" class="btn btn-outline">Get Started</a>
+                </div>
 
-      // Language tabs for main bio
-      const langTabs = document.querySelectorAll('.lang-panel .lang-tab');
-      const bioTexts = {
-        en: document.getElementById('bio-en'),
-        ar: document.getElementById('bio-ar'),
-        'ku-arab': document.getElementById('bio-ku-arab'),
-        'ku-latn': document.getElementById('bio-ku-latn')
-      };
-      langTabs.forEach(tab => {
-        tab.addEventListener('click', () => {
-          langTabs.forEach(t => t.classList.remove('active'));
-          tab.classList.add('active');
-          const lang = tab.dataset.lang;
-          Object.values(bioTexts).forEach(b => b.classList.remove('active'));
-          if(bioTexts[lang]) bioTexts[lang].classList.add('active');
-        });
-      });
+                <div class="pricing-card popular animate__animated animate__fadeInUp animate__delay-1s">
+                    <span class="pricing-badge">PRO</span>
+                    <div class="pricing-icon">
+                        <i class="fas fa-star"></i>
+                    </div>
+                    <div class="pricing-price">$14.99<span>/month</span></div>
+                    <div class="pricing-period">Billed monthly</div>
+                    <ul class="pricing-features">
+                        <li><i class="fas fa-check"></i> Full Dictionary Access</li>
+                        <li><i class="fas fa-check"></i> Unlimited AI Assistant</li>
+                        <li><i class="fas fa-check"></i> Advanced Vocabulary Builder</li>
+                        <li><i class="fas fa-check"></i> 20 IELTS Practice Tests</li>
+                        <li><i class="fas fa-check"></i> 20 TOEFL Practice Tests</li>
+                        <li><i class="fas fa-check"></i> Basic Writing Evaluation</li>
+                        <li><i class="fas fa-check"></i> Basic Speaking Feedback</li>
+                    </ul>
+                    <a href="signup.html?plan=pro" class="btn btn-primary">Start Pro Trial</a>
+                </div>
 
-      // Language tabs for Mir Porti section
-      const mirTabs = document.querySelectorAll('#mir-porti .lang-tab');
-      const mirTexts = {
-        'en-mir': document.getElementById('mir-en'),
-        'ku-arab-mir': document.getElementById('mir-ku-arab'),
-        'ku-latn-mir': document.getElementById('mir-ku-latn'),
-        'ar-mir': document.getElementById('mir-ar')
-      };
-      mirTabs.forEach(tab => {
-        tab.addEventListener('click', () => {
-          mirTabs.forEach(t => t.classList.remove('active'));
-          tab.classList.add('active');
-          const lang = tab.dataset.lang;
-          Object.values(mirTexts).forEach(t => t.classList.remove('active'));
-          if(mirTexts[lang]) mirTexts[lang].classList.add('active');
-        });
-      });
+                <div class="pricing-card animate__animated animate__fadeInUp animate__delay-2s">
+                    <span class="pricing-badge">PREMIUM</span>
+                    <div class="pricing-icon">
+                        <i class="fas fa-crown"></i>
+                    </div>
+                    <div class="pricing-price">$29.99<span>/month</span></div>
+                    <div class="pricing-period">Best value</div>
+                    <ul class="pricing-features">
+                        <li><i class="fas fa-check"></i> Everything in Pro</li>
+                        <li><i class="fas fa-check"></i> Unlimited Practice Tests</li>
+                        <li><i class="fas fa-check"></i> Advanced Writing Evaluation</li>
+                        <li><i class="fas fa-check"></i> Advanced Speaking Feedback</li>
+                        <li><i class="fas fa-check"></i> 1-on-1 Tutoring Sessions</li>
+                        <li><i class="fas fa-check"></i> Progress Analytics</li>
+                        <li><i class="fas fa-check"></i> Certificate of Completion</li>
+                    </ul>
+                    <a href="signup.html?plan=premium" class="btn btn-outline">Go Premium</a>
+                </div>
+            </div>
+        </section>
 
-      // Language tabs for Mir Khalaf section
-      const khalafTabs = document.querySelectorAll('#mir-khalaf .lang-tab');
-      const khalafTexts = {
-        'en-khalaf': document.getElementById('khalaf-en'),
-        'ar-khalaf': document.getElementById('khalaf-ar'),
-        'ku-arab-khalaf': document.getElementById('khalaf-ku-arab'),
-        'ku-latn-khalaf': document.getElementById('khalaf-ku-latn')
-      };
-      khalafTabs.forEach(tab => {
-        tab.addEventListener('click', () => {
-          khalafTabs.forEach(t => t.classList.remove('active'));
-          tab.classList.add('active');
-          const lang = tab.dataset.lang;
-          Object.values(khalafTexts).forEach(t => t.classList.remove('active'));
-          if(khalafTexts[lang]) khalafTexts[lang].classList.add('active');
-        });
-      });
+        <!-- FAQ Section -->
+        <section class="faq-section" aria-labelledby="faq-heading">
+            <div class="section-header">
+                <span class="section-subtitle"><i class="fas fa-question-circle"></i> FAQ</span>
+                <h2 class="section-title" id="faq-heading">Frequently Asked <span>Questions</span></h2>
+                <p class="section-description">Find answers to common questions about our platform</p>
+            </div>
+            
+            <div class="faq-container">
+                <div class="faq-item">
+                    <div class="faq-question">
+                        <span>How does the AI English Assistant work?</span>
+                        <i class="fas fa-chevron-down"></i>
+                    </div>
+                    <div class="faq-answer">
+                        <p>Our AI English Assistant uses advanced natural language processing to understand and evaluate your English. It can correct grammar, suggest improvements, help with writing, and even engage in conversation practice. The more you use it, the better it understands your learning needs and personalizes the feedback.</p>
+                    </div>
+                </div>
 
-      // ambient sound (very low, starts after any user interaction)
-      const audio = document.getElementById('ambientAudio');
-      let soundActive = false;
-      function enableSound() {
-        if (!soundActive) {
-          audio.volume = 0.1;
-          audio.play().catch(()=>{});
-          soundActive = true;
+                <div class="faq-item">
+                    <div class="faq-question">
+                        <span>Are the IELTS and TOEFL materials up to date?</span>
+                        <i class="fas fa-chevron-down"></i>
+                    </div>
+                    <div class="faq-answer">
+                        <p>Yes, all our test preparation materials are regularly updated to reflect the latest exam formats and question types. We monitor official IELTS and TOEFL updates and adjust our content within 48 hours of any changes. Our practice tests mirror the actual exam experience closely.</p>
+                    </div>
+                </div>
+
+                <div class="faq-item">
+                    <div class="faq-question">
+                        <span>Can I cancel my subscription anytime?</span>
+                        <i class="fas fa-chevron-down"></i>
+                    </div>
+                    <div class="faq-answer">
+                        <p>Absolutely! You can cancel your subscription at any time from your account settings. There are no long-term contracts or cancellation fees. If you cancel, you'll continue to have access until the end of your billing period.</p>
+                    </div>
+                </div>
+
+                <div class="faq-item">
+                    <div class="faq-question">
+                        <span>Is there a money-back guarantee?</span>
+                        <i class="fas fa-chevron-down"></i>
+                    </div>
+                    <div class="faq-answer">
+                        <p>Yes, we offer a 30-day money-back guarantee on all paid plans. If you're not satisfied with our platform, contact our support team within 30 days of purchase for a full refund, no questions asked.</p>
+                    </div>
+                </div>
+
+                <div class="faq-item">
+                    <div class="faq-question">
+                        <span>Do you offer certificates upon completion?</span>
+                        <i class="fas fa-chevron-down"></i>
+                    </div>
+                    <div class="faq-answer">
+                        <p>Premium subscribers receive certificates of completion for our structured courses. These certificates can be shared on LinkedIn or included in your professional portfolio. They verify your achievement and the skills you've mastered.</p>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Blog Section -->
+        <section class="blog-section" aria-labelledby="blog-heading">
+            <div class="section-header">
+                <span class="section-subtitle"><i class="fas fa-blog"></i> Latest Articles</span>
+                <h2 class="section-title" id="blog-heading">Learning <span>Insights & Tips</span></h2>
+                <p class="section-description">Expert advice and strategies from Dr. Waleed and our team</p>
+            </div>
+            
+            <div class="blog-grid">
+                <div class="blog-card animate__animated animate__fadeInUp">
+                    <div class="blog-image">
+                        <span class="blog-date"><i class="far fa-calendar"></i> Mar 15, 2024</span>
+                    </div>
+                    <div class="blog-content">
+                        <span class="blog-category">IELTS Tips</span>
+                        <h3 class="blog-title"><a href="#">10 Common IELTS Speaking Mistakes and How to Avoid Them</a></h3>
+                        <p class="blog-excerpt">Discover the most frequent mistakes students make in the IELTS speaking test and learn proven strategies to overcome them...</p>
+                        <div class="blog-meta">
+                            <span><i class="far fa-user"></i> Dr. Waleed</span>
+                            <span><i class="far fa-comment"></i> 24 Comments</span>
+                        </div>
+                        <a href="#" class="blog-read-more">Read More <i class="fas fa-arrow-right"></i></a>
+                    </div>
+                </div>
+
+                <div class="blog-card animate__animated animate__fadeInUp animate__delay-1s">
+                    <div class="blog-image">
+                        <span class="blog-date"><i class="far fa-calendar"></i> Mar 10, 2024</span>
+                    </div>
+                    <div class="blog-content">
+                        <span class="blog-category">TOEFL Strategies</span>
+                        <h3 class="blog-title"><a href="#">Mastering TOEFL Integrated Writing: A Complete Guide</a></h3>
+                        <p class="blog-excerpt">Learn the essential techniques for excelling in the TOEFL integrated writing task, including note-taking strategies and templates...</p>
+                        <div class="blog-meta">
+                            <span><i class="far fa-user"></i> Sarah Johnson</span>
+                            <span><i class="far fa-comment"></i> 18 Comments</span>
+                        </div>
+                        <a href="#" class="blog-read-more">Read More <i class="fas fa-arrow-right"></i></a>
+                    </div>
+                </div>
+
+                <div class="blog-card animate__animated animate__fadeInUp animate__delay-2s">
+                    <div class="blog-image">
+                        <span class="blog-date"><i class="far fa-calendar"></i> Mar 5, 2024</span>
+                    </div>
+                    <div class="blog-content">
+                        <span class="blog-category">AI Learning</span>
+                        <h3 class="blog-title"><a href="#">How AI is Revolutionizing English Language Learning</a></h3>
+                        <p class="blog-excerpt">Explore how artificial intelligence is transforming the way we learn English, from personalized feedback to immersive conversations...</p>
+                        <div class="blog-meta">
+                            <span><i class="far fa-user"></i> Tech Team</span>
+                            <span><i class="far fa-comment"></i> 32 Comments</span>
+                        </div>
+                        <a href="#" class="blog-read-more">Read More <i class="fas fa-arrow-right"></i></a>
+                    </div>
+                </div>
+            </div>
+            
+            <div style="text-align: center; margin-top: 3rem;">
+                <a href="#" class="btn btn-outline btn-lg">
+                    <i class="fas fa-blog"></i> View All Articles
+                </a>
+            </div>
+        </section>
+
+        <!-- CTA Section -->
+        <section class="cta-section" aria-labelledby="cta-heading">
+            <div class="cta-container">
+                <h2 id="cta-heading">Ready to Master English?</h2>
+                <p>Join thousands of successful students who have transformed their English skills with Zakhourani</p>
+                
+                <div class="cta-stats">
+                    <div class="cta-stat">
+                        <span class="number">50K+</span>
+                        <span class="label">Happy Students</span>
+                    </div>
+                    <div class="cta-stat">
+                        <span class="number">100+</span>
+                        <span class="label">Countries</span>
+                    </div>
+                    <div class="cta-stat">
+                        <span class="number">4.8★</span>
+                        <span class="label">Average Rating</span>
+                    </div>
+                </div>
+                
+                <div class="cta-buttons" style="margin-top: 2rem;">
+                    <a href="signup.html" class="cta-btn cta-primary btn-lg">
+                        <i class="fas fa-user-plus"></i> Start Your Free Trial
+                    </a>
+                    <a href="https://whz-co.github.io/whz/contact.html" class="cta-btn cta-secondary btn-lg">
+                        <i class="fas fa-headset"></i> Contact Support
+                    </a>
+                </div>
+            </div>
+        </section>
+    </main>
+
+    <!-- Footer -->
+    <footer>
+        <div class="footer-content">
+            <div class="footer-section">
+                <h3>Zakhourani</h3>
+                <p>Empowering English learners worldwide with AI-powered tools and expert guidance from Dr. Waleed Hussien Zakhourani.</p>
+                <div class="social-links">
+                    <a href="#" aria-label="Facebook"><i class="fab fa-facebook-f"></i></a>
+                    <a href="#" aria-label="Twitter"><i class="fab fa-twitter"></i></a>
+                    <a href="#" aria-label="LinkedIn"><i class="fab fa-linkedin-in"></i></a>
+                    <a href="#" aria-label="Instagram"><i class="fab fa-instagram"></i></a>
+                    <a href="#" aria-label="YouTube"><i class="fab fa-youtube"></i></a>
+                </div>
+            </div>
+
+            <div class="footer-section">
+                <h3>Quick Links</h3>
+                <ul class="footer-links">
+                    <li><a href="https://whz-co.github.io/whz/index.html"><i class="fas fa-chevron-right"></i> Home</a></li>
+                    <li><a href="https://whz-co.github.io/whz/products.html"><i class="fas fa-chevron-right"></i> Products</a></li>
+                    <li><a href="https://whz-co.github.io/whz/AI.html"><i class="fas fa-chevron-right"></i> AI Assistant</a></li>
+                    <li><a href="https://whz-co.github.io/whz/IELTS.html"><i class="fas fa-chevron-right"></i> IELTS</a></li>
+                    <li><a href="https://whz-co.github.io/whz/TOFEL.html"><i class="fas fa-chevron-right"></i> TOEFL</a></li>
+                    <li><a href="https://whz-co.github.io/whz/aboutDrwaleed.html"><i class="fas fa-chevron-right"></i> About Dr. Waleed</a></li>
+                </ul>
+            </div>
+
+            <div class="footer-section">
+                <h3>Support</h3>
+                <ul class="footer-links">
+                    <li><a href="https://whz-co.github.io/whz/contact.html"><i class="fas fa-chevron-right"></i> Contact Us</a></li>
+                    <li><a href="#"><i class="fas fa-chevron-right"></i> FAQ</a></li>
+                    <li><a href="#"><i class="fas fa-chevron-right"></i> Privacy Policy</a></li>
+                    <li><a href="#"><i class="fas fa-chevron-right"></i> Terms of Service</a></li>
+                    <li><a href="#"><i class="fas fa-chevron-right"></i> Refund Policy</a></li>
+                    <li><a href="#"><i class="fas fa-chevron-right"></i> Site Map</a></li>
+                </ul>
+            </div>
+
+            <div class="footer-section">
+                <h3>Contact Info</h3>
+                <ul class="contact-info">
+                    <li><i class="fas fa-map-marker-alt"></i> Dubai Knowledge Park, UAE</li>
+                    <li><i class="fas fa-phone"></i> +971 4 123 4567</li>
+                    <li><i class="fas fa-envelope"></i> info@zakhourani.com</li>
+                    <li><i class="fas fa-clock"></i> Mon-Fri: 9:00 AM - 6:00 PM</li>
+                </ul>
+                
+                <h3 style="margin-top: 2rem;">Newsletter</h3>
+                <form class="newsletter-form">
+                    <input type="email" placeholder="Your email" aria-label="Email for newsletter">
+                    <button type="submit" aria-label="Subscribe"><i class="fas fa-paper-plane"></i></button>
+                </form>
+            </div>
+        </div>
+
+        <div class="footer-bottom">
+            <p class="copyright">© 2024 Zakhourani. All rights reserved. Founded by Dr. Waleed Hussien Zakhourani.</p>
+            <div class="footer-bottom-links">
+                <a href="#">Privacy</a>
+                <a href="#">Terms</a>
+                <a href="#">Cookies</a>
+                <a href="#">Accessibility</a>
+            </div>
+        </div>
+    </footer>
+
+    <!-- Back to Top Button -->
+    <a href="#" class="back-to-top" id="backToTop" aria-label="Back to top">
+        <i class="fas fa-arrow-up"></i>
+    </a>
+
+    <!-- Firebase & Auth Script -->
+    <script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-app-compat.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-auth-compat.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-firestore-compat.js"></script>
+    
+    <script>
+        // ===== FIREBASE CONFIGURATION =====
+        const firebaseConfig = {
+            apiKey: "AIzaSyAE8wf24HXrfmpMluaFOv1OHPrf_YFfqTQ",
+            authDomain: "whaai-c388e.firebaseapp.com",
+            projectId: "whaai-c388e",
+            storageBucket: "whaai-c388e.firebasestorage.app",
+            messagingSenderId: "640598205524",
+            appId: "1:640598205524:web:c975f5e8b371b1043e39c1",
+            measurementId: "G-1MHE0JBZJR"
+        };
+
+        // Initialize Firebase (only once)
+        if (!firebase.apps.length) {
+            firebase.initializeApp(firebaseConfig);
         }
-      }
-      document.body.addEventListener('touchstart', enableSound, { once: true });
-      document.body.addEventListener('click', enableSound, { once: true });
 
-      // particle background (enhanced)
-      const canvas = document.getElementById('particle-canvas');
-      const ctx = canvas.getContext('2d');
-      let width, height, particles = [];
+        const auth = firebase.auth();
+        const db = firebase.firestore();
 
-      function initParticles() {
-        width = window.innerWidth;
-        height = window.innerHeight;
-        canvas.width = width;
-        canvas.height = height;
-        particles = [];
-        for (let i = 0; i < 80; i++) {
-          particles.push({
-            x: Math.random() * width,
-            y: Math.random() * height,
-            radius: Math.random() * 3.5 + 1.2,
-            speedX: (Math.random() - 0.5) * 0.25,
-            speedY: (Math.random() - 0.5) * 0.2,
-            color: `rgba(215, 180, 140, ${Math.random() * 0.3 + 0.2})`
-          });
-        }
-      }
-
-      function drawParticles() {
-        ctx.clearRect(0, 0, width, height);
-        particles.forEach(p => {
-          ctx.beginPath();
-          ctx.arc(p.x, p.y, p.radius, 0, Math.PI * 2);
-          ctx.fillStyle = p.color;
-          ctx.fill();
-          particles.forEach(p2 => {
-            const dx = p.x - p2.x, dy = p.y - p2.y;
-            const dist = Math.sqrt(dx*dx + dy*dy);
-            if (dist < 100 && dist > 0) {
-              ctx.strokeStyle = `rgba(190, 155, 120, ${0.12 - dist/900})`;
-              ctx.lineWidth = 0.7;
-              ctx.beginPath();
-              ctx.moveTo(p.x, p.y);
-              ctx.lineTo(p2.x, p2.y);
-              ctx.stroke();
+        // ===== AUTHENTICATION UI UPDATE =====
+        function updateAuthUI(user) {
+            const authButtons = document.getElementById('authButtons');
+            
+            if (user) {
+                // User is logged in - show user menu
+                const photoURL = user.photoURL || `https://ui-avatars.com/api/?name=${encodeURIComponent(user.displayName || user.email)}&background=3498db&color=fff&size=45`;
+                const displayName = user.displayName || user.email.split('@')[0];
+                
+                authButtons.innerHTML = `
+                    <div class="user-menu">
+                        <img src="${photoURL}" alt="${displayName}" class="user-avatar" loading="lazy">
+                        <span class="user-name">${displayName}</span>
+                        <a href="#" class="logout-btn" id="logoutButton">
+                            <i class="fas fa-sign-out-alt"></i> Logout
+                        </a>
+                    </div>
+                `;
+                
+                // Add logout functionality
+                document.getElementById('logoutButton').addEventListener('click', function(e) {
+                    e.preventDefault();
+                    auth.signOut().then(() => {
+                        window.location.href = 'index.html';
+                    }).catch((error) => {
+                        console.error('Logout error:', error);
+                        alert('Error logging out. Please try again.');
+                    });
+                });
+            } else {
+                // User is not logged in - show login/signup buttons
+                authButtons.innerHTML = `
+                    <a href="login.html" class="auth-btn login-btn">
+                        <i class="fas fa-sign-in-alt"></i> Login
+                    </a>
+                    <a href="signup.html" class="auth-btn signup-btn">
+                        <i class="fas fa-user-plus"></i> Sign Up
+                    </a>
+                `;
             }
-          });
-          p.x += p.speedX;
-          p.y += p.speedY;
-          if (p.x < 0 || p.x > width) p.speedX *= -1;
-          if (p.y < 0 || p.y > height) p.speedY *= -1;
-        });
-        requestAnimationFrame(drawParticles);
-      }
+        }
 
-      window.addEventListener('resize', () => { initParticles(); });
-      initParticles();
-      drawParticles();
-    })();
-  </script>
-  <!-- line count ~2150 -->
+        // Listen for auth state changes
+        auth.onAuthStateChanged((user) => {
+            updateAuthUI(user);
+        });
+
+        // ===== MOBILE MENU TOGGLE =====
+        document.addEventListener('DOMContentLoaded', function() {
+            const menuToggle = document.getElementById('mobileMenuToggle');
+            const navLinks = document.getElementById('navLinks');
+            
+            if (menuToggle && navLinks) {
+                menuToggle.addEventListener('click', function() {
+                    const expanded = this.getAttribute('aria-expanded') === 'true' ? false : true;
+                    this.setAttribute('aria-expanded', expanded);
+                    this.classList.toggle('active');
+                    navLinks.classList.toggle('active');
+                    
+                    // Prevent body scroll when menu is open on mobile
+                    if (navLinks.classList.contains('active')) {
+                        document.body.style.overflow = 'hidden';
+                    } else {
+                        document.body.style.overflow = '';
+                    }
+                });
+
+                // Close menu when clicking on a link
+                const links = navLinks.querySelectorAll('a');
+                links.forEach(link => {
+                    link.addEventListener('click', function() {
+                        menuToggle.classList.remove('active');
+                        navLinks.classList.remove('active');
+                        menuToggle.setAttribute('aria-expanded', 'false');
+                        document.body.style.overflow = '';
+                    });
+                });
+
+                // Close menu when clicking outside
+                document.addEventListener('click', function(event) {
+                    if (!menuToggle.contains(event.target) && !navLinks.contains(event.target)) {
+                        menuToggle.classList.remove('active');
+                        navLinks.classList.remove('active');
+                        menuToggle.setAttribute('aria-expanded', 'false');
+                        document.body.style.overflow = '';
+                    }
+                });
+
+                // Handle window resize
+                window.addEventListener('resize', function() {
+                    if (window.innerWidth > 768) {
+                        navLinks.classList.remove('active');
+                        menuToggle.classList.remove('active');
+                        menuToggle.setAttribute('aria-expanded', 'false');
+                        document.body.style.overflow = '';
+                    }
+                });
+            }
+
+            // ===== BACK TO TOP BUTTON =====
+            const backToTop = document.getElementById('backToTop');
+            
+            if (backToTop) {
+                window.addEventListener('scroll', function() {
+                    if (window.pageYOffset > 300) {
+                        backToTop.classList.add('show');
+                    } else {
+                        backToTop.classList.remove('show');
+                    }
+                });
+
+                backToTop.addEventListener('click', function(e) {
+                    e.preventDefault();
+                    window.scrollTo({
+                        top: 0,
+                        behavior: 'smooth'
+                    });
+                });
+            }
+
+            // ===== FAQ ACCORDION =====
+            const faqQuestions = document.querySelectorAll('.faq-question');
+            
+            faqQuestions.forEach(question => {
+                question.addEventListener('click', function() {
+                    const answer = this.nextElementSibling;
+                    const icon = this.querySelector('i');
+                    
+                    // Toggle current question
+                    this.classList.toggle('active');
+                    answer.classList.toggle('active');
+                    
+                    // Rotate icon
+                    if (icon) {
+                        icon.style.transform = this.classList.contains('active') ? 'rotate(180deg)' : 'rotate(0)';
+                    }
+                    
+                    // Close other answers (optional)
+                    faqQuestions.forEach(otherQuestion => {
+                        if (otherQuestion !== this) {
+                            otherQuestion.classList.remove('active');
+                            otherQuestion.nextElementSibling.classList.remove('active');
+                            const otherIcon = otherQuestion.querySelector('i');
+                            if (otherIcon) {
+                                otherIcon.style.transform = 'rotate(0)';
+                            }
+                        }
+                    });
+                });
+            });
+
+            // ===== ACTIVE LINK DETECTION =====
+            const currentLocation = window.location.href;
+            const navItems = document.querySelectorAll('.nav-links a');
+            
+            navItems.forEach(link => {
+                if (link.href === currentLocation) {
+                    link.classList.add('active');
+                    link.setAttribute('aria-current', 'page');
+                } else {
+                    link.classList.remove('active');
+                    link.removeAttribute('aria-current');
+                }
+            });
+
+            // ===== SEARCH FUNCTIONALITY =====
+            const searchForm = document.querySelector('.search-bar');
+            const searchInput = document.querySelector('.search-bar input');
+            
+            if (searchForm && searchInput) {
+                searchForm.addEventListener('submit', function(e) {
+                    e.preventDefault();
+                    const query = searchInput.value.trim();
+                    if (query) {
+                        // Redirect to search results page with query parameter
+                        window.location.href = `search.html?q=${encodeURIComponent(query)}`;
+                    }
+                });
+            }
+
+            // ===== NEWSLETTER FORM =====
+            const newsletterForm = document.querySelector('.newsletter-form');
+            
+            if (newsletterForm) {
+                newsletterForm.addEventListener('submit', function(e) {
+                    e.preventDefault();
+                    const email = this.querySelector('input[type="email"]').value;
+                    
+                    if (email && email.includes('@')) {
+                        // Here you would typically send to your backend
+                        alert('Thank you for subscribing to our newsletter!');
+                        this.reset();
+                    } else {
+                        alert('Please enter a valid email address.');
+                    }
+                });
+            }
+
+            // ===== SMOOTH SCROLL FOR ANCHOR LINKS =====
+            document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+                anchor.addEventListener('click', function(e) {
+                    const href = this.getAttribute('href');
+                    
+                    if (href !== '#') {
+                        e.preventDefault();
+                        const target = document.querySelector(href);
+                        
+                        if (target) {
+                            target.scrollIntoView({
+                                behavior: 'smooth',
+                                block: 'start'
+                            });
+                        }
+                    }
+                });
+            });
+
+            // ===== LAZY LOAD IMAGES =====
+            if ('IntersectionObserver' in window) {
+                const imageObserver = new IntersectionObserver((entries, observer) => {
+                    entries.forEach(entry => {
+                        if (entry.isIntersecting) {
+                            const img = entry.target;
+                            img.src = img.dataset.src;
+                            img.classList.add('loaded');
+                            imageObserver.unobserve(img);
+                        }
+                    });
+                });
+
+                document.querySelectorAll('img[data-src]').forEach(img => {
+                    imageObserver.observe(img);
+                });
+            }
+
+            // ===== ANIMATION ON SCROLL =====
+            const animatedElements = document.querySelectorAll('.animate__animated');
+            
+            if ('IntersectionObserver' in window) {
+                const animationObserver = new IntersectionObserver((entries) => {
+                    entries.forEach(entry => {
+                        if (entry.isIntersecting) {
+                            entry.target.style.visibility = 'visible';
+                            // Add animation class based on data attribute or default
+                            const animation = entry.target.dataset.animation || 'fadeInUp';
+                            entry.target.classList.add(`animate__${animation}`);
+                        }
+                    });
+                });
+
+                animatedElements.forEach(el => {
+                    el.style.visibility = 'hidden';
+                    animationObserver.observe(el);
+                });
+            } else {
+                // Fallback for older browsers
+                animatedElements.forEach(el => {
+                    el.style.visibility = 'visible';
+                });
+            }
+
+            // ===== PRODUCT CART FUNCTIONALITY =====
+            const addToCartButtons = document.querySelectorAll('.product-btn:contains("Buy Now"), .product-btn:contains("Subscribe")');
+            
+            addToCartButtons.forEach(button => {
+                button.addEventListener('click', function(e) {
+                    e.preventDefault();
+                    
+                    // Get product info
+                    const productCard = this.closest('.product-card');
+                    const productTitle = productCard.querySelector('.product-title a').textContent;
+                    const productPrice = productCard.querySelector('.product-price').textContent.trim();
+                    
+                    // Here you would typically add to cart system
+                    // For now, show a notification
+                    alert(`Added to cart: ${productTitle} - ${productPrice}`);
+                    
+                    // Optional: Update cart count in header
+                    updateCartCount();
+                });
+            });
+
+            // ===== CART COUNT FUNCTION (if needed) =====
+            function updateCartCount() {
+                let cartCount = document.querySelector('.cart-count');
+                
+                if (!cartCount) {
+                    // Create cart count badge if it doesn't exist
+                    const authButtons = document.querySelector('.auth-buttons');
+                    if (authButtons) {
+                        const cartIcon = document.createElement('a');
+                        cartIcon.href = '#';
+                        cartIcon.className = 'auth-btn cart-btn';
+                        cartIcon.innerHTML = '<i class="fas fa-shopping-cart"></i> <span class="cart-count">0</span>';
+                        cartIcon.style.marginRight = '10px';
+                        authButtons.prepend(cartIcon);
+                        cartCount = document.querySelector('.cart-count');
+                    }
+                }
+                
+                if (cartCount) {
+                    const currentCount = parseInt(cartCount.textContent) || 0;
+                    cartCount.textContent = currentCount + 1;
+                    
+                    // Add animation
+                    cartCount.classList.add('animate-pulse');
+                    setTimeout(() => {
+                        cartCount.classList.remove('animate-pulse');
+                    }, 1000);
+                }
+            }
+
+            // ===== PAGE LOADING STATES =====
+            window.addEventListener('load', function() {
+                // Remove any loading spinners
+                document.body.classList.add('page-loaded');
+                
+                // Preload critical resources
+                const preloadLinks = [
+                    'https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css',
+                    'https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700;800&display=swap'
+                ];
+                
+                preloadLinks.forEach(href => {
+                    const link = document.createElement('link');
+                    link.rel = 'preload';
+                    link.as = 'style';
+                    link.href = href;
+                    document.head.appendChild(link);
+                });
+            });
+
+            // ===== ERROR HANDLING FOR IMAGES =====
+            document.querySelectorAll('img').forEach(img => {
+                img.addEventListener('error', function() {
+                    // Fallback to avatar placeholder
+                    if (!this.src.includes('ui-avatars.com')) {
+                        this.src = 'https://ui-avatars.com/api/?name=Z&background=3498db&color=fff&size=200';
+                    }
+                });
+            });
+
+            // ===== TRACKING AND ANALYTICS (if needed) =====
+            // Track page views
+            if (typeof gtag !== 'undefined') {
+                gtag('config', 'G-1MHE0JBZJR', {
+                    'page_title': document.title,
+                    'page_path': window.location.pathname
+                });
+            }
+
+            // Track user engagement
+            let scrollDepth = 0;
+            window.addEventListener('scroll', function() {
+                const scrollPercent = (window.scrollY / (document.documentElement.scrollHeight - window.innerHeight)) * 100;
+                
+                if (scrollPercent > 25 && scrollDepth < 25) {
+                    scrollDepth = 25;
+                    // Track 25% scroll
+                    console.log('User scrolled 25%');
+                } else if (scrollPercent > 50 && scrollDepth < 50) {
+                    scrollDepth = 50;
+                    // Track 50% scroll
+                    console.log('User scrolled 50%');
+                } else if (scrollPercent > 75 && scrollDepth < 75) {
+                    scrollDepth = 75;
+                    // Track 75% scroll
+                    console.log('User scrolled 75%');
+                } else if (scrollPercent > 90 && scrollDepth < 90) {
+                    scrollDepth = 90;
+                    // Track 90% scroll (near bottom)
+                    console.log('User scrolled 90%');
+                }
+            });
+
+            // ===== PERFORMANCE OPTIMIZATION =====
+            // Debounce scroll events
+            function debounce(func, wait) {
+                let timeout;
+                return function executedFunction(...args) {
+                    const later = () => {
+                        clearTimeout(timeout);
+                        func(...args);
+                    };
+                    clearTimeout(timeout);
+                    timeout = setTimeout(later, wait);
+                };
+            }
+
+            // Optimize scroll handlers
+            const optimizedScroll = debounce(() => {
+                // Handle scroll-based updates
+            }, 100);
+
+            window.addEventListener('scroll', optimizedScroll);
+
+            // ===== ACCESSIBILITY ENHANCEMENTS =====
+            // Add keyboard navigation for dropdowns
+            document.querySelectorAll('.has-dropdown > a').forEach(link => {
+                link.addEventListener('keydown', function(e) {
+                    if (e.key === 'Enter' || e.key === ' ') {
+                        e.preventDefault();
+                        this.click();
+                    }
+                });
+            });
+
+            // Focus trap for mobile menu
+            function trapFocus(element) {
+                const focusableElements = element.querySelectorAll('a[href], button, input, select, textarea, [tabindex]:not([tabindex="-1"])');
+                const firstFocusable = focusableElements[0];
+                const lastFocusable = focusableElements[focusableElements.length - 1];
+
+                element.addEventListener('keydown', function(e) {
+                    if (e.key === 'Tab') {
+                        if (e.shiftKey) {
+                            if (document.activeElement === firstFocusable) {
+                                e.preventDefault();
+                                lastFocusable.focus();
+                            }
+                        } else {
+                            if (document.activeElement === lastFocusable) {
+                                e.preventDefault();
+                                firstFocusable.focus();
+                            }
+                        }
+                    }
+                });
+            }
+
+            if (navLinks) {
+                trapFocus(navLinks);
+            }
+        });
+
+        // ===== SERVICE WORKER FOR OFFLINE SUPPORT (optional) =====
+        if ('serviceWorker' in navigator) {
+            window.addEventListener('load', () => {
+                navigator.serviceWorker.register('/sw.js').then(registration => {
+                    console.log('ServiceWorker registration successful');
+                }).catch(err => {
+                    console.log('ServiceWorker registration failed: ', err);
+                });
+            });
+        }
+
+        // ===== EXPORT FUNCTIONS FOR DEBUGGING =====
+        window.Zakhourani = {
+            auth: auth,
+            db: db,
+            updateAuthUI: updateAuthUI,
+            version: '2.0.0',
+            founder: 'Dr. Waleed Hussien Zakhourani'
+        };
+
+        // ===== CONSOLE WELCOME MESSAGE =====
+        console.log('%c🚀 Welcome to Zakhourani v2.0', 'font-size: 20px; color: #3498db; font-weight: bold;');
+        console.log('%c📚 Master English with AI - Founded by Dr. Waleed Hussien Zakhourani', 'font-size: 14px; color: #2c3e50;');
+        console.log('%c💡 Visit whz-co.github.io/whz for more features', 'font-size: 12px; color: #e74c3c;');
+    </script>
+
+    <!-- JSON-LD Structured Data for SEO -->
+    <script type="application/ld+json">
+    {
+        "@context": "https://schema.org",
+        "@type": "EducationalOrganization",
+        "name": "Zakhourani",
+        "founder": {
+            "@type": "Person",
+            "name": "Dr. Waleed Hussien Zakhourani",
+            "jobTitle": "Founder & Chief Education Officer",
+            "description": "English language expert with 20+ years of experience"
+        },
+        "description": "AI-powered English learning platform with IELTS, TOEFL preparation, smart dictionary, and personalized learning paths.",
+        "url": "https://whz-co.github.io/whz/",
+        "logo": "https://whz-co.github.io/whz/assets/logo.png",
+        "sameAs": [
+            "https://www.facebook.com/zakhourani",
+            "https://www.twitter.com/zakhourani",
+            "https://www.linkedin.com/company/zakhourani"
+        ],
+        "offers": {
+            "@type": "Offer",
+            "price": "0",
+            "priceCurrency": "USD",
+            "availability": "https://schema.org/InStock",
+            "description": "Free basic access with premium plans available"
+        },
+        "aggregateRating": {
+            "@type": "AggregateRating",
+            "ratingValue": "4.8",
+            "ratingCount": "15432",
+            "bestRating": "5",
+            "worstRating": "1"
+        },
+        "address": {
+            "@type": "PostalAddress",
+            "addressLocality": "Dubai",
+            "addressCountry": "UAE"
+        }
+    }
+    </script>
+
+    <!-- Additional structured data for courses -->
+    <script type="application/ld+json">
+    {
+        "@context": "https://schema.org",
+        "@type": "ItemList",
+        "itemListElement": [
+            {
+                "@type": "Course",
+                "name": "Complete IELTS Preparation",
+                "description": "Comprehensive IELTS course covering Academic and General Training with AI-powered feedback.",
+                "provider": {
+                    "@type": "Organization",
+                    "name": "Zakhourani",
+                    "sameAs": "https://whz-co.github.io/whz"
+                },
+                "offers": {
+                    "@type": "Offer",
+                    "price": "199",
+                    "priceCurrency": "USD"
+                }
+            },
+            {
+                "@type": "Course",
+                "name": "TOEFL iBT Complete Preparation",
+                "description": "Master the TOEFL iBT with our comprehensive course including all sections.",
+                "provider": {
+                    "@type": "Organization",
+                    "name": "Zakhourani",
+                    "sameAs": "https://whz-co.github.io/whz"
+                },
+                "offers": {
+                    "@type": "Offer",
+                    "price": "229",
+                    "priceCurrency": "USD"
+                }
+            },
+            {
+                "@type": "Course",
+                "name": "AI English Assistant Pro",
+                "description": "24/7 AI-powered English tutor for personalized learning and feedback.",
+                "provider": {
+                    "@type": "Organization",
+                    "name": "Zakhourani",
+                    "sameAs": "https://whz-co.github.io/whz"
+                },
+                "offers": {
+                    "@type": "Offer",
+                    "price": "14.99",
+                    "priceCurrency": "USD"
+                }
+            }
+        ]
+    }
+    </script>
 </body>
 </html>

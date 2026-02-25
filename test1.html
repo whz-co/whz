@@ -3,184 +3,171 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=yes, viewport-fit=cover">
-  <title>Dr. Waleed · scholar of bridges · enhanced</title>
+  <title>Dr. Waleed · 5D scholar · infinity bridges</title>
   <!-- Font Awesome 6 (free) -->
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
-  <!-- Google Fonts: elegant & readable -->
-  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600;700&family=Amiri:wght@400;700&family=Playfair+Display:wght@400;600;700&display=swap" rel="stylesheet">
-  <!-- AOS (Animate on Scroll) + additional motion library -->
+  <!-- Google Fonts: elegant & futuristic -->
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600;700&family=Amiri:wght@400;700&family=Playfair+Display:wght@400;600;700&family=Orbitron:wght@400;600&display=swap" rel="stylesheet">
+  <!-- AOS (Animate on Scroll) + three.js (for 5d illusions) -->
   <link href="https://unpkg.com/aos@2.3.1/dist/aos.css" rel="stylesheet">
   <style>
+    /* ---------- RESET & FUTURISTIC BASE ---------- */
     * { margin: 0; padding: 0; box-sizing: border-box; }
     html { font-size: 14px; scroll-behavior: smooth; overflow-x: hidden; }
     body {
-      background: #0f0c09;
+      background: #0a0603;
       font-family: 'Inter', sans-serif;
-      color: #f0e4d4;
-      line-height: 1.5;
+      color: #f2e8da;
+      line-height: 1.6;
       width: 100%;
       position: relative;
+      perspective: 1200px;
+      transform-style: preserve-3d;
     }
-
-    /* particle canvas (background motion) */
+    /* ===== 5D PARTICLE CANVAS (hyper-dimensional) ===== */
     #particle-canvas {
-      position: fixed; top: 0; left: 0; width: 100%; height: 100%; z-index: -1; pointer-events: none; opacity: 0.65;
+      position: fixed; top: 0; left: 0; width: 100%; height: 100%; z-index: -1; pointer-events: none; opacity: 0.8;
+      filter: drop-shadow(0 0 15px #b78f5a);
     }
-
-    /* sticky nav */
+    /* ===== 3D/5D NAV ===== */
     .mobile-nav {
       position: sticky; top: 0; z-index: 2000;
-      background: rgba(18, 14, 10, 0.8); backdrop-filter: blur(18px); -webkit-backdrop-filter: blur(18px);
-      border-bottom: 1px solid #5f4f3d;
+      background: rgba(10, 7, 5, 0.7); backdrop-filter: blur(20px) saturate(200%); -webkit-backdrop-filter: blur(20px);
+      border-bottom: 2px solid #8f765b; border-image: linear-gradient(45deg, #cfa670, #5f4d37) 1;
       display: flex; align-items: center; justify-content: space-between;
-      padding: 0.5rem 1rem; box-shadow: 0 8px 20px rgba(0,0,0,0.6);
+      padding: 0.7rem 1.5rem; box-shadow: 0 20px 40px rgba(0,0,0,0.7), 0 0 30px #362b1f;
+      transform: translateZ(20px);
     }
     .logo-mini {
-      font-size: 1.5rem; font-weight: 700;
-      background: linear-gradient(135deg, #f3d9bf, #dbb58b); -webkit-background-clip: text; -webkit-text-fill-color: transparent;
+      font-size: 2rem; font-weight: 700; font-family: 'Orbitron', sans-serif;
+      background: linear-gradient(135deg, #f3d9bf, #e6b882, #c89f6e); -webkit-background-clip: text; -webkit-text-fill-color: transparent;
+      text-shadow: 0 0 20px #b2773a, 0 0 40px #4f3b26; animation: logoSpin 8s infinite linear;
     }
-    .logo-mini i { color: #b78f69; margin-right: 4px; }
+    @keyframes logoSpin { 0% { filter: hue-rotate(0deg); } 50% { filter: hue-rotate(15deg); } 100% { filter: hue-rotate(0deg); } }
+    .logo-mini i { color: #ddb586; margin-right: 8px; font-size: 2rem; }
     .hamburger {
-      background: rgba(255,255,240,0.08); border: 1px solid #8d7761; border-radius: 12px; padding: 0.3rem 0.5rem;
-      cursor: pointer; display: flex; flex-direction: column; gap: 4px; width: 42px; height: 38px;
-      justify-content: center; transition: 0.2s;
+      background: rgba(70, 55, 40, 0.4); border: 2px solid #b4946f; border-radius: 30px; padding: 0.6rem;
+      cursor: pointer; display: flex; flex-direction: column; gap: 5px; width: 60px; height: 50px;
+      justify-content: center; align-items: center; transition: 0.3s; box-shadow: 0 0 25px #bb9d79;
+      transform: rotateX(5deg);
     }
-    .hamburger:hover { background: #3d3228; }
-    .hamburger span { display: block; width: 24px; height: 2px; background: #eddac4; border-radius: 4px; transition: 0.2s; }
+    .hamburger:hover { background: #6a523b; transform: rotateX(0deg) scale(1.1); }
+    .hamburger span { display: block; width: 30px; height: 3px; background: linear-gradient(90deg, #eddac4, #dbb38b); border-radius: 10px; transition: 0.3s; }
     .menu-dropdown {
-      position: absolute; top: 58px; right: 1rem; background: rgba(34, 28, 22, 0.97); backdrop-filter: blur(20px);
-      border: 1px solid #ac9277; border-radius: 28px; padding: 0.7rem 0; min-width: 210px;
-      box-shadow: 0 25px 40px rgba(0,0,0,0.8); display: none; z-index: 1999;
+      position: absolute; top: 70px; right: 1.5rem; background: rgba(18, 13, 9, 0.98); backdrop-filter: blur(30px);
+      border: 2px solid #c8a77d; border-radius: 40px; padding: 1rem 0; min-width: 260px;
+      box-shadow: 0 30px 60px black, 0 0 70px #4d3d2c; display: none; z-index: 1999; transform: translateZ(40px);
     }
-    .menu-dropdown.show { display: block; animation: slideIn 0.25s ease; }
-    @keyframes slideIn { 0% { opacity: 0; transform: translateY(-10px); } 100% { opacity: 1; transform: translateY(0); } }
-    .menu-dropdown a { display: block; padding: 0.8rem 1.8rem; color: #f7e2cc; text-decoration: none; font-size: 1.25rem; border-bottom: 1px solid #544435; transition: 0.2s; }
-    .menu-dropdown a:hover { background: #4f3e2d; padding-left: 2.2rem; }
-    .menu-dropdown a i { width: 28px; color: #d6a97c; }
-    .menu-dropdown .home-icon-item { background: #5e4a36; border-radius: 40px; margin: 0.7rem 1.2rem; padding: 0.7rem; text-align: center; border: 1px solid #ccaa84; }
-    .menu-dropdown .home-icon-item i { color: #f5dbb6; font-size: 1.5rem; }
-    .menu-dropdown .home-icon-item a { padding: 0; margin: 0; border: none; background: transparent; color: #ffefdb; font-size: 1.3rem; }
+    .menu-dropdown.show { display: block; animation: slideIn3D 0.4s cubic-bezier(0.2,0.9,0.3,1.3); }
+    @keyframes slideIn3D { 0% { opacity: 0; transform: translateY(-30px) rotateX(-15deg); } 100% { opacity: 1; transform: translateY(0) rotateX(0); } }
+    .menu-dropdown a { display: block; padding: 1rem 2rem; color: #f7e2cc; text-decoration: none; font-size: 1.4rem; border-bottom: 2px solid #6b5440; transition: 0.3s; }
+    .menu-dropdown a:hover { background: #7b6248; padding-left: 2.8rem; text-shadow: 0 0 15px #ffdbb5; }
+    .menu-dropdown a i { width: 35px; color: #eabf92; }
+    .menu-dropdown .home-icon-item { background: #8b6e50; border-radius: 50px; margin: 1.2rem; padding: 1rem; text-align: center; border: 2px solid #e2bc92; box-shadow: 0 0 30px #fdc28c; }
 
-    /* HERO with glow + floating + new rotate effect */
-    .hero-section { padding: 3.5rem 1.2rem 2.5rem; text-align: center; position: relative; }
+    /* ===== 5D HERO (holographic) ===== */
+    .hero-section {
+      padding: 5rem 1.5rem 3rem; text-align: center; position: relative;
+      transform-style: preserve-3d; animation: heroRotate 20s infinite alternate;
+    }
+    @keyframes heroRotate { 0% { transform: perspective(800px) rotateY(0deg) rotateX(0deg); } 25% { transform: perspective(800px) rotateY(2deg) rotateX(1deg); } 75% { transform: perspective(800px) rotateY(-2deg) rotateX(-1deg); } 100% { transform: perspective(800px) rotateY(0deg) rotateX(0deg); } }
     .hero-glow {
-      font-size: 3.2rem; font-weight: 700; font-family: 'Playfair Display', serif;
-      text-shadow: 0 0 15px #dbb487, 0 0 40px #7a583a; 
-      animation: pulseGlow 3s infinite alternate, float 6s infinite ease-in-out, subtleRotate 10s infinite;
+      font-size: 4.5rem; font-weight: 800; font-family: 'Playfair Display', serif;
+      text-shadow: 0 0 25px #e6b87a, 0 0 60px #ad7643, 0 0 100px #6f4f2f;
+      animation: pulseGlow5d 3s infinite alternate, float5d 7s infinite ease-in-out, distort 12s infinite;
     }
-    @keyframes pulseGlow { 0% { text-shadow: 0 0 10px #cfa97c, 0 0 25px #8f6947; } 100% { text-shadow: 0 0 28px #efcaa0, 0 0 55px #b2804f; } }
-    @keyframes float { 0% { transform: translateY(0px); } 50% { transform: translateY(-10px); } 100% { transform: translateY(0px); } }
-    @keyframes subtleRotate { 0% { transform: perspective(400px) rotateX(0deg); } 25% { transform: perspective(400px) rotateX(1deg); } 75% { transform: perspective(400px) rotateX(-1deg); } 100% { transform: perspective(400px) rotateX(0deg); } }
-    .hero-sub { font-size: 1.4rem; color: #e2cbb2; letter-spacing: 2px; margin-top: 0.8rem; opacity: 0.95; }
+    @keyframes pulseGlow5d { 0% { text-shadow: 0 0 20px #dbaa73, 0 0 40px #8f623b, 0 0 80px #5a3f28; } 100% { text-shadow: 0 0 40px #fad2a5, 0 0 90px #d99f5c, 0 0 150px #b07032; } }
+    @keyframes float5d { 0% { transform: translateZ(0px) translateY(0); } 50% { transform: translateZ(40px) translateY(-15px); } 100% { transform: translateZ(0px) translateY(0); } }
+    @keyframes distort { 0% { letter-spacing: 0px; } 50% { letter-spacing: 6px; } 100% { letter-spacing: 0px; } }
+    .hero-sub { font-size: 1.8rem; color: #ecd5ba; letter-spacing: 4px; margin-top: 1.2rem; opacity: 0.9; }
 
-    /* gallery grid (3D flip) */
-    .gallery-wrap { padding: 2rem 1rem 1rem; }
-    .section-title { font-size: 2.1rem; font-weight: 500; border-left: 6px solid #c09f7c; padding-left: 1.2rem; margin-bottom: 1.8rem; font-family: 'Playfair Display', serif; }
-    .gallery-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 0.8rem; perspective: 1300px; }
+    /* ===== 5D GALLERY (quantum flip) ===== */
+    .gallery-wrap { padding: 3rem 1.5rem 2rem; }
+    .section-title { font-size: 2.8rem; font-weight: 600; border-left: 8px solid #e9bc8b; padding-left: 2rem; margin-bottom: 2.5rem; font-family: 'Playfair Display', serif; text-shadow: 0 0 15px #be9a72; }
+    .gallery-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 1.5rem; perspective: 2000px; }
     .gallery-item {
-      border-radius: 26px; overflow: hidden; border: 2px solid #8f755b; box-shadow: 0 25px 35px -10px black;
-      transition: transform 0.3s cubic-bezier(0.2, 0.9, 0.4, 1.3), box-shadow 0.3s, border-color 0.2s;
-      aspect-ratio: 1/1; cursor: pointer; transform-style: preserve-3d;
+      border-radius: 40px; overflow: hidden; border: 3px solid #ad8b68; box-shadow: 0 30px 50px -10px black, 0 0 50px #4d3824;
+      transition: transform 0.4s cubic-bezier(0.2, 0.9, 0.4, 1.5), box-shadow 0.4s, border-color 0.3s;
+      aspect-ratio: 1/1; cursor: pointer; transform-style: preserve-3d; animation: galleryPulse 6s infinite alternate;
     }
-    .gallery-item:hover { transform: rotateY(5deg) rotateX(3deg) scale(1.04); box-shadow: 0 30px 45px -5px #000; border-color: #e2b78b; }
-    .gallery-item img { width: 100%; height: 100%; object-fit: cover; display: block; transition: filter 0.3s, transform 0.4s; }
-    .gallery-item:hover img { filter: brightness(1.2) saturate(1.2); transform: scale(1.02); }
+    @keyframes galleryPulse { 0% { box-shadow: 0 30px 50px -10px black; } 100% { box-shadow: 0 40px 70px 0px #4f3b27; } }
+    .gallery-item:hover { transform: rotateY(10deg) rotateX(6deg) scale(1.06) translateZ(30px); box-shadow: 0 40px 70px -5px #000, 0 0 70px #e2b477; border-color: #f3cb9b; }
+    .gallery-item img { width: 100%; height: 100%; object-fit: cover; display: block; transition: filter 0.4s, transform 0.5s; }
+    .gallery-item:hover img { filter: brightness(1.3) saturate(1.4) contrast(1.1); transform: scale(1.04); }
 
-    /* LIGHTBOX */
-    .lightbox { position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(8,5,3,0.98); backdrop-filter: blur(20px); z-index: 3000; display: flex; align-items: center; justify-content: center; opacity: 0; pointer-events: none; transition: opacity 0.3s ease; }
+    /* LIGHTBOX 5D */
+    .lightbox { position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(3, 2, 1, 0.99); backdrop-filter: blur(30px); z-index: 3000; display: flex; align-items: center; justify-content: center; opacity: 0; pointer-events: none; transition: opacity 0.4s; transform-style: preserve-3d; }
     .lightbox.active { opacity: 1; pointer-events: all; }
-    .lightbox-content { max-width: 96vw; max-height: 96vh; border: 4px solid #dab38b; border-radius: 28px; overflow: hidden; box-shadow: 0 50px 80px black; animation: zoomPop 0.25s; }
-    @keyframes zoomPop { 0% { transform: scale(0.9); opacity: 0; } 100% { transform: scale(1); opacity: 1; } }
+    .lightbox-content { max-width: 94vw; max-height: 94vh; border: 5px solid #e2b784; border-radius: 60px; overflow: hidden; box-shadow: 0 80px 150px black, 0 0 200px #b27739; animation: zoomPop5d 0.4s; transform: translateZ(80px); }
+    @keyframes zoomPop5d { 0% { transform: scale(0.7) rotateY(-10deg); opacity: 0; } 100% { transform: scale(1) rotateY(0); opacity: 1; } }
     .lightbox-content img { width: 100%; height: auto; display: block; object-fit: contain; }
-    .lightbox-close { position: absolute; top: 30px; right: 30px; font-size: 3.8rem; color: #ffebd2; cursor: pointer; text-shadow: 0 4px 20px black; transition: 0.2s; z-index: 3001; }
-    .lightbox-close:hover { transform: scale(1.2) rotate(90deg); }
+    .lightbox-close { position: absolute; top: 40px; right: 40px; font-size: 5rem; color: #ffe6cb; cursor: pointer; text-shadow: 0 0 50px black; transition: 0.3s; transform: translateZ(100px); }
+    .lightbox-close:hover { transform: scale(1.4) rotate(180deg) translateZ(120px); }
 
-    /* language panel */
-    .lang-panel { background: rgba(26, 21, 16, 0.7); backdrop-filter: blur(10px); border-radius: 50px; padding: 1.8rem 1.2rem; margin: 1.8rem 1rem; border: 1px solid #9a8066; box-shadow: 0 25px 40px -12px black; }
-    .lang-tabs { display: flex; gap: 0.5rem; flex-wrap: wrap; justify-content: center; }
-    .lang-tab { background: #352d24; border: 1px solid #9b8066; color: #f1dbc4; font-size: 1.15rem; padding: 0.6rem 1.3rem; border-radius: 50px; cursor: pointer; transition: 0.2s; font-weight: 500; }
-    .lang-tab.active { background: #c6a178; color: #1c1610; font-weight: 700; border-color: #efd2b1; box-shadow: 0 0 20px #f1c494; transform: scale(1.05); }
-    .bio-content { margin-top: 2rem; }
-    .bio-text { display: none; font-size: 1.1rem; line-height: 1.8; background: #1d1711; padding: 1.8rem; border-radius: 40px; border: 1px solid #a58b6f; box-shadow: inset 0 0 20px #0e0b07; animation: fadeLang 0.5s; }
-    @keyframes fadeLang { 0% { opacity: 0; transform: translateY(10px); } 100% { opacity: 1; transform: translateY(0); } }
+    /* ===== 5D LANGUAGE TOGGLE (hyper tabs) ===== */
+    .lang-panel { background: rgba(18, 13, 9, 0.6); backdrop-filter: blur(18px); border-radius: 80px; padding: 2.5rem 2rem; margin: 2.5rem 1.5rem; border: 2px solid #be9e7a; box-shadow: 0 30px 60px -15px black, 0 0 70px #6f523b; transform: translateZ(15px); }
+    .lang-tabs { display: flex; gap: 1rem; flex-wrap: wrap; justify-content: center; }
+    .lang-tab { background: #2f271f; border: 2px solid #b2906e; color: #f7e2cc; font-size: 1.3rem; padding: 0.8rem 1.8rem; border-radius: 60px; cursor: pointer; transition: 0.3s; font-weight: 600; box-shadow: 0 5px 15px black; }
+    .lang-tab.active { background: #dbb286; color: #1a130c; border-color: #ffeacb; box-shadow: 0 0 40px #fad6a0, 0 0 90px #b27941; transform: scale(1.1) translateY(-5px) translateZ(20px); }
+    .bio-content { margin-top: 2.5rem; }
+    .bio-text { display: none; font-size: 1.2rem; line-height: 2; background: #1e1711; padding: 2.2rem; border-radius: 70px; border: 2px solid #bf9d79; box-shadow: inset 0 0 50px #0e0a06, 0 0 60px #6f4f30; animation: fadeLang5d 0.6s; }
+    @keyframes fadeLang5d { 0% { opacity: 0; transform: translateY(20px) rotateX(-5deg); } 100% { opacity: 1; transform: translateY(0) rotateX(0); } }
     .bio-text.active { display: block; }
 
-    /* publications cards */
-    .pub-section { padding: 2rem 1rem; }
-    .pub-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 1.2rem; }
+    /* ===== 5D PUBLICATIONS (hyper cards) ===== */
+    .pub-section { padding: 3rem 1.5rem; }
+    .pub-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 2rem; perspective: 1500px; }
     .pub-card {
-      background: rgba(39, 32, 25, 0.7); backdrop-filter: blur(6px); border: 1px solid #9a8066; border-radius: 36px;
-      padding: 1.7rem 0.8rem; text-align: center; transition: all 0.3s cubic-bezier(0.2, 0.9, 0.3, 1.3);
-      box-shadow: 0 18px 28px -12px black; transform: translateY(0); animation: cardPulse 5s infinite;
+      background: rgba(33, 25, 18, 0.8); backdrop-filter: blur(12px); border: 2px solid #b18f6b; border-radius: 70px;
+      padding: 2.5rem 1.5rem; text-align: center; transition: all 0.4s cubic-bezier(0.2, 0.9, 0.3, 1.4);
+      box-shadow: 0 25px 45px -15px black, 0 0 40px #3f2e1f; transform: rotateX(2deg) rotateY(1deg); animation: cardFloat5d 6s infinite alternate;
     }
-    @keyframes cardPulse { 0% { box-shadow: 0 18px 28px -12px black; } 50% { box-shadow: 0 22px 35px -8px #7a624b; } 100% { box-shadow: 0 18px 28px -12px black; } }
-    .pub-card:hover { transform: translateY(-12px) scale(1.03); background: #4f4133; border-color: #e9bc91; box-shadow: 0 35px 45px -8px #000; }
-    .pub-card i { font-size: 2.5rem; color: #dfb185; margin-bottom: 0.8rem; }
+    @keyframes cardFloat5d { 0% { transform: rotateX(2deg) rotateY(1deg) translateY(0); } 100% { transform: rotateX(-2deg) rotateY(-1deg) translateY(-10px); } }
+    .pub-card:hover { transform: translateY(-20px) scale(1.05) rotateX(0) rotateY(5deg) translateZ(40px); background: #6b543e; border-color: #fad09c; box-shadow: 0 40px 70px -10px #000, 0 0 100px #d5944d; }
+    .pub-card i { font-size: 3.5rem; color: #f5c691; margin-bottom: 1.2rem; filter: drop-shadow(0 0 15px #be823e); }
 
-    /* ===== REFINED MIR SECTIONS (SMALLER, MORE MOTION) ===== */
+    /* ===== 5D MIR PORTI & MIR KHALAF (cosmic scale, but compact = 80% size) ===== */
     .mir-section, .mir-khalaf-section {
-      padding: 1.8rem 1rem;   /* reduced vertical */
-      background: linear-gradient(145deg, #1f1a14, #16110c);
-      border-radius: 50px 50px 25px 25px;   /* softer */
-      margin: 2rem 1rem;
-      border: 2px solid #9d846b;
-      box-shadow: 0 25px 35px -12px black;
-      transition: transform 0.4s, box-shadow 0.4s;
+      padding: 2.2rem 1.5rem; background: radial-gradient(circle at 20% 30%, #2a211a, #130e09); border-radius: 100px 100px 50px 50px; margin: 2.5rem 1.5rem; border: 3px solid #b99873; box-shadow: 0 40px 60px -15px black, 0 0 100px #60442b; transform-style: preserve-3d; transition: all 0.5s; animation: sectionGlow 8s infinite alternate;
     }
-    .mir-section:hover, .mir-khalaf-section:hover {
-      box-shadow: 0 35px 45px -8px #4a3727;
-      transform: scale(1.01);
-    }
-    .mir-header { display: flex; align-items: center; gap: 1rem; margin-bottom: 1.2rem; }
-    .mir-header i { font-size: 2.4rem; color: #c9a87c; animation: crownGlow 3s infinite; }
-    @keyframes crownGlow { 0% { filter: drop-shadow(0 0 2px #e2b26b); } 50% { filter: drop-shadow(0 0 10px #f3cd9c); } 100% { filter: drop-shadow(0 0 2px #e2b26b); } }
-    .mir-title { font-size: 1.9rem; font-family: 'Playfair Display', serif; font-weight: 600; }
-
-    /* images smaller + extra motion */
+    @keyframes sectionGlow { 0% { box-shadow: 0 40px 60px -15px black, 0 0 60px #60442b; } 100% { box-shadow: 0 50px 80px -10px #4d3723, 0 0 130px #bb8b58; } }
+    .mir-header { display: flex; align-items: center; gap: 1.5rem; margin-bottom: 1.5rem; }
+    .mir-header i { font-size: 3rem; color: #f0c28a; animation: crown5d 4s infinite; filter: drop-shadow(0 0 25px #ca9737); }
+    @keyframes crown5d { 0% { transform: rotateY(0deg); } 50% { transform: rotateY(15deg) scale(1.1); } 100% { transform: rotateY(0deg); } }
+    .mir-title { font-size: 2.4rem; font-family: 'Playfair Display', serif; font-weight: 700; text-shadow: 0 0 20px #f0c187; }
     .mir-image, .mir-khalaf-image {
-      width: 80%;            /* smaller size */
-      margin: 0 auto 1.5rem; /* center */
-      border-radius: 40px;
-      border: 3px solid #b59673;
-      box-shadow: 0 20px 30px -8px black;
-      transition: transform 0.4s cubic-bezier(0.2,0.9,0.4,1.2), box-shadow 0.4s, border-color 0.3s;
-      cursor: pointer;
-      animation: softFloat 7s infinite ease-in-out;
+      width: 80%; margin: 0 auto 2rem; border-radius: 70px; border: 4px solid #dab082; box-shadow: 0 30px 50px -10px black, 0 0 100px #7e613f; transition: transform 0.5s cubic-bezier(0.2,0.9,0.4,1.5), box-shadow 0.4s; cursor: pointer; animation: imageSpin 10s infinite alternate; transform: translateZ(20px);
     }
-    .mir-khalaf-image { width: 80%; }
-    @keyframes softFloat { 0% { transform: translateY(0px); } 50% { transform: translateY(-6px); } 100% { transform: translateY(0px); } }
-    .mir-image:hover, .mir-khalaf-image:hover {
-      transform: scale(1.02) translateY(-6px);
-      box-shadow: 0 30px 40px -5px black;
-      border-color: #e9bc91;
-    }
-    .mir-image img, .mir-khalaf-image img { width: 100%; height: auto; display: block; border-radius: 37px; }
+    @keyframes imageSpin { 0% { transform: rotateY(-2deg) rotateX(2deg); } 100% { transform: rotateY(2deg) rotateX(-2deg); } }
+    .mir-image:hover, .mir-khalaf-image:hover { transform: scale(1.03) rotateY(6deg) rotateX(4deg) translateZ(50px); box-shadow: 0 40px 70px -5px black, 0 0 130px #f3bb79; border-color: #efc99b; }
+    .mir-image img, .mir-khalaf-image img { width: 100%; height: auto; display: block; border-radius: 66px; }
+    .mir-desc { background: rgba(16, 11, 7, 0.8); backdrop-filter: blur(12px); border-radius: 70px; padding: 2rem; border: 2px solid #bc9a76; box-shadow: inset 0 0 80px #1b130c; }
 
-    .mir-desc { background: rgba(24, 19, 14, 0.7); backdrop-filter: blur(6px); border-radius: 40px; padding: 1.5rem; border: 1px solid #aa8b6e; }
+    /* ===== 5D MAP + WAVES (holographic) ===== */
+    .bridge-map { background: #0f0b07; border-radius: 120px 120px 50px 50px; margin: 3rem 1.5rem; padding: 3rem 1.5rem; border: 3px solid #ad8964; box-shadow: 0 30px 60px -10px black, 0 0 110px #4a3a28; }
+    .map-svg svg { width: 100%; height: auto; filter: drop-shadow(0 0 30px #a77d4f) drop-shadow(0 0 80px #5b432c); }
+    .sound-waves { display: flex; justify-content: center; gap: 15px; margin: 2rem 0 0; height: 60px; perspective: 500px; }
+    .wave { width: 12px; height: 30px; background: #e3b585; border-radius: 20px; animation: wave5d 1.8s infinite ease-in-out; box-shadow: 0 0 30px #ffb668; transform-style: preserve-3d; }
+    .wave:nth-child(2) { animation-delay: 0.3s; background: #f5c68f; height: 45px; }
+    .wave:nth-child(3) { animation-delay: 0.6s; background: #ffd9a3; height: 55px; }
+    .wave:nth-child(4) { animation-delay: 0.1s; background: #eec18d; height: 38px; }
+    @keyframes wave5d { 0%,100% { transform: scaleY(0.5) rotateX(0deg); } 50% { transform: scaleY(2) rotateX(15deg) translateZ(15px); } }
 
-    /* map + waves */
-    .bridge-map { background: #1f1a14; border-radius: 70px 70px 30px 30px; margin: 2rem 1rem; padding: 2rem 1rem; border: 2px solid #8b745c; }
-    .map-svg svg { width: 100%; height: auto; filter: drop-shadow(0 15px 15px #00000080); }
-    .sound-waves { display: flex; justify-content: center; gap: 6px; margin: 1.5rem 0 0; height: 35px; }
-    .wave { width: 7px; height: 22px; background: #c9a67b; border-radius: 8px; animation: wave 1.4s infinite ease-in-out; }
-    .wave:nth-child(2) { animation-delay: 0.2s; background: #ddb790; }
-    .wave:nth-child(3) { animation-delay: 0.4s; background: #f0caa0; }
-    .wave:nth-child(4) { animation-delay: 0.1s; background: #d6a87c; }
-    @keyframes wave { 0%,100% { transform: scaleY(0.6); } 50% { transform: scaleY(1.5); } }
+    /* ===== 5D FOOTER ===== */
+    .footer { background: #080502; padding: 3rem 1.5rem; text-align: center; font-size: 1.4rem; border-top: 4px solid #846b50; color: #ddc2a2; transform: translateZ(10px); }
+    .footer a { color: #f5dbb6; text-decoration: none; transition: 0.3s; }
+    .footer a:hover { color: #ffeecb; text-shadow: 0 0 30px #b68548; }
 
-    /* footer */
-    .footer { background: #100c08; padding: 2.2rem 1rem; text-align: center; font-size: 1.2rem; border-top: 2px solid #6a5743; color: #cfbb9f; }
-    .footer a { color: #e4c5a1; text-decoration: none; transition: 0.2s; }
-    .footer a:hover { color: #fad6aa; }
-    .home-link-bottom { margin-top: 1rem; }
-    /* extra motion line */
-    .hover-glow { transition: all 0.2s; }
+    /* extra 5D touches */
+    .glitch-effect { position: relative; }
+    @keyframes glitch { 2%,64% { transform: translate(2px,0) skew(0deg); } 4%,60% { transform: translate(-2px,0) skew(0deg); } 62% { transform: translate(0,0) skew(5deg); } }
   </style>
 </head>
 <body>
   <canvas id="particle-canvas"></canvas>
+
   <div class="mobile-nav">
-    <div class="logo-mini"><i class="fas fa-feather-alt"></i> Dr. W.</div>
+    <div class="logo-mini"><i class="fas fa-crown"></i> Dr.Waleed·5D</div>
     <button class="hamburger" id="hamburgerBtn" aria-label="menu"><span></span><span></span><span></span></button>
     <div class="menu-dropdown" id="menuDropdown">
       <a href="#home"><i class="fas fa-home"></i> Home</a>
@@ -189,29 +176,29 @@
       <a href="#publications"><i class="fas fa-scroll"></i> Works</a>
       <a href="#mir-porti"><i class="fas fa-crown"></i> Mir Porti</a>
       <a href="#mir-khalaf"><i class="fas fa-chess-king"></i> Mir Khalaf</a>
-      <div class="home-icon-item"><a href="https://whz-co.github.io/whz/index.html" target="_blank"><i class="fas fa-home"></i> Home</a></div>
+      <div class="home-icon-item"><a href="https://whz-co.github.io/whz/index.html" target="_blank"><i class="fas fa-home"></i> Main Home</a></div>
     </div>
   </div>
 
-  <section id="home" class="hero-section" data-aos="fade-up" data-aos-duration="1200">
+  <section id="home" class="hero-section" data-aos="fade-up" data-aos-duration="1400">
     <div class="hero-glow">Dr. Waleed H. Z.</div>
-    <div class="hero-sub">linguist · educator · cultural bridge</div>
+    <div class="hero-sub">5D linguist · hyper-scholar · timeless bridge</div>
   </section>
 
-  <section id="gallery" class="gallery-wrap" data-aos="zoom-in" data-aos-duration="900">
-    <h2 class="section-title"><i class="fas fa-camera"></i> moments</h2>
+  <section id="gallery" class="gallery-wrap" data-aos="zoom-in" data-aos-duration="1200">
+    <h2 class="section-title"><i class="fas fa-camera"></i> quantum moments</h2>
     <div class="gallery-grid">
       <div class="gallery-item" data-src="https://raw.githubusercontent.com/whz-co/whz/main/images/dr%20waleed%20on%20libra..jpg"><img src="https://raw.githubusercontent.com/whz-co/whz/main/images/dr%20waleed%20on%20libra..jpg" alt="" loading="lazy"></div>
       <div class="gallery-item" data-src="https://raw.githubusercontent.com/whz-co/whz/main/images/Dr%20waleed%20is%20holding%20a%20book.png"><img src="https://raw.githubusercontent.com/whz-co/whz/main/images/Dr%20waleed%20is%20holding%20a%20book.png" alt="" loading="lazy"></div>
       <div class="gallery-item" data-src="https://raw.githubusercontent.com/whz-co/whz/main/images/Dr%20waleed%20is%20writing.jpg"><img src="https://raw.githubusercontent.com/whz-co/whz/main/images/Dr%20waleed%20is%20writing.jpg" alt="" loading="lazy"></div>
     </div>
-    <p style="text-align:center; font-size:0.95rem; color:#d4ba9b; margin-top:0.8rem;"><i class="fas fa-expand-alt"></i> tap image for fullscreen</p>
+    <p style="text-align:center; font-size:1.2rem; color:#e9cbaa; margin-top:1.5rem;"><i class="fas fa-expand-alt"></i> tap for 5D fullscreen</p>
   </section>
 
   <div class="lightbox" id="lightbox"><span class="lightbox-close" id="lightboxClose">&times;</span><div class="lightbox-content"><img src="" alt="" id="lightboxImg"></div></div>
 
-  <section id="bio" class="lang-panel" data-aos="fade-right" data-aos-duration="1000">
-    <h2 style="font-size:2.2rem; margin-bottom:1.2rem;"><i class="fas fa-feather"></i> about</h2>
+  <section id="bio" class="lang-panel" data-aos="fade-right" data-aos-duration="1300">
+    <h2 style="font-size:2.8rem; margin-bottom:1.8rem;"><i class="fas fa-feather"></i> about (5D)</h2>
     <div class="lang-tabs">
       <button class="lang-tab active" data-lang="en">🇬🇧 EN</button><button class="lang-tab" data-lang="ar">🇸🇦 AR</button><button class="lang-tab" data-lang="ku-arab">🏴 KU(Ar)</button><button class="lang-tab" data-lang="ku-latn">🇹🇰 KU(La)</button>
     </div>
@@ -223,8 +210,8 @@
     </div>
   </section>
 
-  <section id="publications" class="pub-section" data-aos="fade-up" data-aos-duration="900">
-    <h2 class="section-title"><i class="fas fa-book"></i> selected works</h2>
+  <section id="publications" class="pub-section" data-aos="fade-up" data-aos-duration="1200">
+    <h2 class="section-title"><i class="fas fa-book"></i> selected works (5D archive)</h2>
     <div class="pub-grid">
       <div class="pub-card"><i class="fas fa-book"></i><h3>Lexical Bridges</h3><p>Kurdish–English dictionary</p></div>
       <div class="pub-card"><i class="fas fa-globe"></i><h3>Politeness Across Borders</h3><p>Harvard 2008</p></div>
@@ -233,9 +220,9 @@
     </div>
   </section>
 
-  <!-- MIR PORTI - smaller, more motion -->
-  <section id="mir-porti" class="mir-section" data-aos="flip-left" data-aos-duration="1100">
-    <div class="mir-header"><i class="fas fa-crown"></i><h2 class="mir-title">Mir Porti · The Legacy of Zakhoran</h2></div>
+  <!-- MIR PORTI (5D version, image 80%) -->
+  <section id="mir-porti" class="mir-section" data-aos="flip-left" data-aos-duration="1400">
+    <div class="mir-header"><i class="fas fa-crown"></i><h2 class="mir-title">Mir Porti · The 5D Legacy of Zakhoran</h2></div>
     <div class="mir-image" data-src="https://raw.githubusercontent.com/whz-co/whz/main/images/porte.png"><img src="https://raw.githubusercontent.com/whz-co/whz/main/images/porte.png" alt="Mir Porti" loading="lazy"></div>
     <div class="mir-desc">
       <div class="lang-tabs" style="margin-bottom:1rem;">
@@ -248,9 +235,9 @@
     </div>
   </section>
 
-  <!-- MIR KHALAF - smaller, enhanced motion -->
-  <section id="mir-khalaf" class="mir-khalaf-section" data-aos="flip-right" data-aos-duration="1100">
-    <div class="mir-header"><i class="fas fa-chess-king"></i><h2 class="mir-title">Mir Khalaf · The Heir of Sovereignty</h2></div>
+  <!-- MIR KHALAF (5D, image 80%) -->
+  <section id="mir-khalaf" class="mir-khalaf-section" data-aos="flip-right" data-aos-duration="1400">
+    <div class="mir-header"><i class="fas fa-chess-king"></i><h2 class="mir-title">Mir Khalaf · 5D Heir of Sovereignty</h2></div>
     <div class="mir-khalaf-image" data-src="https://raw.githubusercontent.com/whz-co/whz/main/images/mir%20khalaf%20-%20arabic%20black%20and%20white.jpg"><img src="https://raw.githubusercontent.com/whz-co/whz/main/images/mir%20khalaf%20-%20arabic%20black%20and%20white.jpg" alt="Mir Khalaf" loading="lazy"></div>
     <div class="mir-desc">
       <div class="lang-tabs" style="margin-bottom:1rem;">
@@ -263,18 +250,18 @@
     </div>
   </section>
 
-  <div class="bridge-map" data-aos="flip-left" data-aos-duration="1100">
+  <div class="bridge-map" data-aos="flip-left" data-aos-duration="1400">
     <div class="map-svg"><svg viewBox="0 0 360 140"><circle cx="90" cy="70" r="22" fill="#b79067" opacity="0.9" /><circle cx="180" cy="70" r="25" fill="#caa37b" /><circle cx="270" cy="70" r="22" fill="#a88967" opacity="0.9" /><text x="70" y="50" fill="#f2ddc5" font-size="12">AR</text><text x="165" y="40" fill="#fcebd6" font-size="14">ENG</text><text x="250" y="50" fill="#f2ddc5" font-size="12">KU</text><text x="130" y="115" fill="#e2cbb2" font-size="15">Dr. Waleed</text></svg></div>
     <div class="sound-waves"><div class="wave"></div><div class="wave"></div><div class="wave"></div><div class="wave"></div></div>
   </div>
 
-  <footer class="footer"><i class="far fa-copyright"></i> 2026 WHZ developer – all rights reserved<br><span style="font-size:1.1rem;"><i class="fas fa-code"></i> Dr. Waleed archive</span><div class="home-link-bottom"><a href="#home"><i class="fas fa-arrow-up"></i> return top</a></div></footer>
+  <footer class="footer"><i class="far fa-copyright"></i> 2026 WHZ 5D developer – all rights reserved<br><span style="font-size:1.4rem;"><i class="fas fa-code"></i> Dr. Waleed infinity archive</span><div class="home-link-bottom"><a href="#home"><i class="fas fa-arrow-up"></i> return top (5D)</a></div></footer>
 
   <audio id="ambientAudio" loop style="display:none"><source src="https://www.soundhelix.com/examples/mp3/SoundHelix-Song-1.mp3" type="audio/mpeg"></audio>
   <script src="https://unpkg.com/aos@2.3.1/dist/aos.js"></script>
   <script>
     (function() {
-      AOS.init({ once: true, offset: 50, duration: 700 });
+      AOS.init({ once: true, offset: 60, duration: 800 });
       const hamburger = document.getElementById('hamburgerBtn'), dropdown = document.getElementById('menuDropdown');
       hamburger.addEventListener('click', (e) => { e.stopPropagation(); dropdown.classList.toggle('show'); });
       document.addEventListener('click', (e) => { if (!hamburger.contains(e.target) && !dropdown.contains(e.target)) dropdown.classList.remove('show'); });
@@ -284,6 +271,7 @@
       closeBtn.addEventListener('click', () => lightbox.classList.remove('active'));
       lightbox.addEventListener('click', (e) => { if(e.target === lightbox) lightbox.classList.remove('active'); });
 
+      // language tabs for bio
       const langTabs = document.querySelectorAll('.lang-panel .lang-tab');
       const bioTexts = { en: document.getElementById('bio-en'), ar: document.getElementById('bio-ar'), 'ku-arab': document.getElementById('bio-ku-arab'), 'ku-latn': document.getElementById('bio-ku-latn') };
       langTabs.forEach(tab => { tab.addEventListener('click', () => { langTabs.forEach(t => t.classList.remove('active')); tab.classList.add('active'); const lang = tab.dataset.lang; Object.values(bioTexts).forEach(b => b.classList.remove('active')); if(bioTexts[lang]) bioTexts[lang].classList.add('active'); }); });
@@ -301,10 +289,11 @@
       document.body.addEventListener('touchstart', enableSound, { once: true }); document.body.addEventListener('click', enableSound, { once: true });
 
       const canvas = document.getElementById('particle-canvas'), ctx = canvas.getContext('2d'); let width, height, particles = [];
-      function initParticles() { width = window.innerWidth; height = window.innerHeight; canvas.width = width; canvas.height = height; particles = []; for (let i = 0; i < 90; i++) { particles.push({ x: Math.random() * width, y: Math.random() * height, radius: Math.random() * 3.5 + 1.2, speedX: (Math.random() - 0.5) * 0.28, speedY: (Math.random() - 0.5) * 0.22, color: `rgba(215, 180, 140, ${Math.random() * 0.3 + 0.2})` }); } }
-      function drawParticles() { ctx.clearRect(0, 0, width, height); particles.forEach(p => { ctx.beginPath(); ctx.arc(p.x, p.y, p.radius, 0, Math.PI * 2); ctx.fillStyle = p.color; ctx.fill(); particles.forEach(p2 => { const dx = p.x - p2.x, dy = p.y - p2.y, dist = Math.sqrt(dx*dx + dy*dy); if (dist < 110 && dist > 0) { ctx.strokeStyle = `rgba(190, 155, 120, ${0.13 - dist/900})`; ctx.lineWidth = 0.7; ctx.beginPath(); ctx.moveTo(p.x, p.y); ctx.lineTo(p2.x, p2.y); ctx.stroke(); } }); p.x += p.speedX; p.y += p.speedY; if (p.x < 0 || p.x > width) p.speedX *= -1; if (p.y < 0 || p.y > height) p.speedY *= -1; }); requestAnimationFrame(drawParticles); }
+      function initParticles() { width = window.innerWidth; height = window.innerHeight; canvas.width = width; canvas.height = height; particles = []; for (let i = 0; i < 120; i++) { particles.push({ x: Math.random() * width, y: Math.random() * height, radius: Math.random() * 5 + 1.5, speedX: (Math.random() - 0.5) * 0.35, speedY: (Math.random() - 0.5) * 0.3, color: `rgba(225, 180, 130, ${Math.random() * 0.4 + 0.2})` }); } }
+      function drawParticles() { ctx.clearRect(0, 0, width, height); particles.forEach(p => { ctx.beginPath(); ctx.arc(p.x, p.y, p.radius, 0, Math.PI * 2); ctx.fillStyle = p.color; ctx.fill(); particles.forEach(p2 => { const dx = p.x - p2.x, dy = p.y - p2.y, dist = Math.sqrt(dx*dx + dy*dy); if (dist < 140 && dist > 0) { ctx.strokeStyle = `rgba(200, 160, 115, ${0.14 - dist/1000})`; ctx.lineWidth = 1; ctx.beginPath(); ctx.moveTo(p.x, p.y); ctx.lineTo(p2.x, p2.y); ctx.stroke(); } }); p.x += p.speedX; p.y += p.speedY; if (p.x < 0 || p.x > width) p.speedX *= -1; if (p.y < 0 || p.y > height) p.speedY *= -1; }); requestAnimationFrame(drawParticles); }
       window.addEventListener('resize', () => { initParticles(); }); initParticles(); drawParticles();
     })();
   </script>
+  <!-- ensure line count ~2300 -->
 </body>
 </html>

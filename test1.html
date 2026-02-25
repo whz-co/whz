@@ -1,1644 +1,310 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=yes">
-    <title>Zakhourani AI · Ultimate Mobile Assistant</title>
-    <!-- Font Awesome 6 (free) -->
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
-    <!-- Google Fonts (Inter) - Clean & modern -->
-    <link href="https://fonts.googleapis.com/css2?family=Inter:opsz,wght@14..32,400;14..32,500;14..32,600;14..32,700&display=swap" rel="stylesheet">
-    <style>
-        /* ========== RESET & CORE VARIABLES ========== */
-        * {
-            margin: 0;
-            padding: 0;
-            box-sizing: border-box;
-            font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
-            -webkit-tap-highlight-color: transparent;
-        }
-        :root {
-            --bg-gradient: linear-gradient(145deg, #0f172a 0%, #1e293b 100%);
-            --surface: rgba(255,255,255,0.05);
-            --surface-hover: rgba(255,255,255,0.1);
-            --border: rgba(255,255,255,0.1);
-            --text-primary: #f1f5f9;
-            --text-secondary: #94a3b8;
-            --accent: #3b82f6;
-            --accent-glow: #2563eb;
-            --success: #22c55e;
-            --warning: #eab308;
-            --danger: #ef4444;
-            --card-bg: rgba(15,23,42,0.6);
-            --shadow: 0 25px 50px -12px rgba(0,0,0,0.5);
-        }
-        body.light {
-            --bg-gradient: linear-gradient(145deg, #e2e8f0 0%, #cbd5e1 100%);
-            --surface: rgba(0,0,0,0.03);
-            --surface-hover: rgba(0,0,0,0.05);
-            --border: rgba(0,0,0,0.1);
-            --text-primary: #0f172a;
-            --text-secondary: #334155;
-            --card-bg: rgba(255,255,255,0.7);
-            --shadow: 0 25px 50px -12px rgba(0,0,0,0.2);
-        }
-        body {
-            background: var(--bg-gradient);
-            min-height: 100vh;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            padding: 8px;
-            transition: background 0.3s;
-            backdrop-filter: blur(4px);
-        }
-        #app {
-            width: 100%;
-            max-width: 1400px;
-            height: 98vh;
-            background: var(--card-bg);
-            backdrop-filter: blur(12px);
-            border-radius: 32px;
-            border: 1px solid var(--border);
-            box-shadow: var(--shadow);
-            display: flex;
-            flex-direction: column;
-            overflow: hidden;
-            color: var(--text-primary);
-        }
-        /* ========== SCROLLBARS (hidden but functional) ========== */
-        *::-webkit-scrollbar { width: 4px; height: 4px; }
-        *::-webkit-scrollbar-track { background: transparent; }
-        *::-webkit-scrollbar-thumb { background: var(--accent); border-radius: 10px; }
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=yes, viewport-fit=cover">
+  <title>Dr. Waleed · scholar of bridges · enhanced</title>
+  <!-- Font Awesome 6 (free) -->
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+  <!-- Google Fonts: elegant & readable -->
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600;700&family=Amiri:wght@400;700&family=Playfair+Display:wght@400;600;700&display=swap" rel="stylesheet">
+  <!-- AOS (Animate on Scroll) + additional motion library -->
+  <link href="https://unpkg.com/aos@2.3.1/dist/aos.css" rel="stylesheet">
+  <style>
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+    html { font-size: 14px; scroll-behavior: smooth; overflow-x: hidden; }
+    body {
+      background: #0f0c09;
+      font-family: 'Inter', sans-serif;
+      color: #f0e4d4;
+      line-height: 1.5;
+      width: 100%;
+      position: relative;
+    }
 
-        /* ========== HEADER ========== */
-        header {
-            padding: 16px 20px;
-            background: var(--surface);
-            border-bottom: 1px solid var(--border);
-        }
-        .header-row {
-            display: flex;
-            align-items: center;
-            justify-content: space-between;
-            gap: 12px;
-        }
-        .brand {
-            display: flex;
-            align-items: center;
-            gap: 12px;
-            min-width: 0; /* allow shrinking */
-        }
-        .avatar {
-            width: 44px;
-            height: 44px;
-            background: linear-gradient(135deg, var(--accent), var(--accent-glow));
-            border-radius: 14px;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            font-size: 22px;
-            color: white;
-            box-shadow: 0 8px 20px rgba(59,130,246,0.3);
-            flex-shrink: 0;
-        }
-        .title {
-            overflow: hidden;
-            white-space: nowrap;
-        }
-        .title h1 {
-            font-size: 1.5rem;
-            font-weight: 600;
-            letter-spacing: -0.3px;
-            background: linear-gradient(to right, #fff, #cbd5e1);
-            -webkit-background-clip: text;
-            -webkit-text-fill-color: transparent;
-            overflow: hidden;
-            text-overflow: ellipsis;
-        }
-        @media (max-width: 480px) {
-            .title h1 { font-size: 1.2rem; }
-            .avatar { width: 38px; height: 38px; font-size: 18px; }
-            header { padding: 12px 16px; }
-        }
-        .title p {
-            font-size: 0.75rem;
-            color: var(--text-secondary);
-            margin-top: 2px;
-            overflow: hidden;
-            text-overflow: ellipsis;
-        }
-        .header-actions {
-            display: flex;
-            gap: 8px;
-            flex-shrink: 0;
-        }
-        .icon-btn {
-            background: var(--surface);
-            border: 1px solid var(--border);
-            color: var(--text-primary);
-            width: 40px;
-            height: 40px;
-            border-radius: 12px;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            cursor: pointer;
-            transition: 0.15s;
-            font-size: 1.1rem;
-            text-decoration: none;
-            -webkit-touch-callout: none;
-        }
-        .icon-btn:active { background: var(--surface-hover); transform: scale(0.95); }
-        @media (max-width: 480px) { .icon-btn { width: 36px; height: 36px; } }
+    /* particle canvas (background motion) */
+    #particle-canvas {
+      position: fixed; top: 0; left: 0; width: 100%; height: 100%; z-index: -1; pointer-events: none; opacity: 0.65;
+    }
 
-        /* ========== TAB BAR ========== */
-        .tab-bar {
-            padding: 10px 16px;
-            display: flex;
-            gap: 8px;
-            overflow-x: auto;
-            scrollbar-width: none;
-            border-bottom: 1px solid var(--border);
-            -webkit-overflow-scrolling: touch;
-        }
-        .tab-bar::-webkit-scrollbar { display: none; }
-        .tab {
-            background: var(--surface);
-            border: 1px solid var(--border);
-            border-radius: 30px;
-            padding: 8px 16px;
-            font-size: 0.85rem;
-            display: flex;
-            align-items: center;
-            gap: 6px;
-            cursor: pointer;
-            white-space: nowrap;
-            color: var(--text-secondary);
-            transition: 0.15s;
-            position: relative;
-            -webkit-tap-highlight-color: transparent;
-        }
-        .tab:active { background: var(--surface-hover); }
-        .tab.active {
-            background: var(--accent);
-            border-color: var(--accent);
-            color: white;
-        }
-        .tab i { font-size: 0.8rem; }
-        .close-tab {
-            margin-left: 4px;
-            opacity: 0.6;
-            transition: 0.15s;
-            padding: 4px;
-            border-radius: 50%;
-        }
-        .close-tab:active { opacity: 1; background: rgba(255,255,255,0.2); }
-        .new-tab {
-            background: transparent;
-            border: 1px dashed var(--border);
-            color: var(--text-secondary);
-        }
-        .tab-options {
-            margin-left: 4px;
-            opacity: 0.6;
-            padding: 4px;
-            border-radius: 50%;
-        }
-        .tab-options:active { opacity: 1; background: rgba(255,255,255,0.2); }
+    /* sticky nav */
+    .mobile-nav {
+      position: sticky; top: 0; z-index: 2000;
+      background: rgba(18, 14, 10, 0.8); backdrop-filter: blur(18px); -webkit-backdrop-filter: blur(18px);
+      border-bottom: 1px solid #5f4f3d;
+      display: flex; align-items: center; justify-content: space-between;
+      padding: 0.5rem 1rem; box-shadow: 0 8px 20px rgba(0,0,0,0.6);
+    }
+    .logo-mini {
+      font-size: 1.5rem; font-weight: 700;
+      background: linear-gradient(135deg, #f3d9bf, #dbb58b); -webkit-background-clip: text; -webkit-text-fill-color: transparent;
+    }
+    .logo-mini i { color: #b78f69; margin-right: 4px; }
+    .hamburger {
+      background: rgba(255,255,240,0.08); border: 1px solid #8d7761; border-radius: 12px; padding: 0.3rem 0.5rem;
+      cursor: pointer; display: flex; flex-direction: column; gap: 4px; width: 42px; height: 38px;
+      justify-content: center; transition: 0.2s;
+    }
+    .hamburger:hover { background: #3d3228; }
+    .hamburger span { display: block; width: 24px; height: 2px; background: #eddac4; border-radius: 4px; transition: 0.2s; }
+    .menu-dropdown {
+      position: absolute; top: 58px; right: 1rem; background: rgba(34, 28, 22, 0.97); backdrop-filter: blur(20px);
+      border: 1px solid #ac9277; border-radius: 28px; padding: 0.7rem 0; min-width: 210px;
+      box-shadow: 0 25px 40px rgba(0,0,0,0.8); display: none; z-index: 1999;
+    }
+    .menu-dropdown.show { display: block; animation: slideIn 0.25s ease; }
+    @keyframes slideIn { 0% { opacity: 0; transform: translateY(-10px); } 100% { opacity: 1; transform: translateY(0); } }
+    .menu-dropdown a { display: block; padding: 0.8rem 1.8rem; color: #f7e2cc; text-decoration: none; font-size: 1.25rem; border-bottom: 1px solid #544435; transition: 0.2s; }
+    .menu-dropdown a:hover { background: #4f3e2d; padding-left: 2.2rem; }
+    .menu-dropdown a i { width: 28px; color: #d6a97c; }
+    .menu-dropdown .home-icon-item { background: #5e4a36; border-radius: 40px; margin: 0.7rem 1.2rem; padding: 0.7rem; text-align: center; border: 1px solid #ccaa84; }
+    .menu-dropdown .home-icon-item i { color: #f5dbb6; font-size: 1.5rem; }
+    .menu-dropdown .home-icon-item a { padding: 0; margin: 0; border: none; background: transparent; color: #ffefdb; font-size: 1.3rem; }
 
-        /* ========== SEARCH BAR ========== */
-        .search-bar {
-            padding: 10px 16px;
-            background: var(--surface);
-            border-bottom: 1px solid var(--border);
-            display: none;
-            align-items: center;
-            gap: 8px;
-            flex-wrap: wrap;
-        }
-        .search-bar input {
-            flex: 1;
-            min-width: 160px;
-            background: var(--card-bg);
-            border: 1px solid var(--border);
-            border-radius: 30px;
-            padding: 10px 14px;
-            color: var(--text-primary);
-            outline: none;
-            font-size: 0.95rem;
-        }
-        .search-bar select {
-            background: var(--card-bg);
-            border: 1px solid var(--border);
-            border-radius: 30px;
-            padding: 8px 12px;
-            color: var(--text-primary);
-            font-size: 0.9rem;
-        }
-        .search-bar button {
-            background: var(--surface-hover);
-            border: none;
-            color: var(--text-primary);
-            padding: 8px 14px;
-            border-radius: 30px;
-            cursor: pointer;
-            font-size: 0.9rem;
-            white-space: nowrap;
-        }
-        .search-bar button:active { background: var(--accent); }
+    /* HERO with glow + floating + new rotate effect */
+    .hero-section { padding: 3.5rem 1.2rem 2.5rem; text-align: center; position: relative; }
+    .hero-glow {
+      font-size: 3.2rem; font-weight: 700; font-family: 'Playfair Display', serif;
+      text-shadow: 0 0 15px #dbb487, 0 0 40px #7a583a; 
+      animation: pulseGlow 3s infinite alternate, float 6s infinite ease-in-out, subtleRotate 10s infinite;
+    }
+    @keyframes pulseGlow { 0% { text-shadow: 0 0 10px #cfa97c, 0 0 25px #8f6947; } 100% { text-shadow: 0 0 28px #efcaa0, 0 0 55px #b2804f; } }
+    @keyframes float { 0% { transform: translateY(0px); } 50% { transform: translateY(-10px); } 100% { transform: translateY(0px); } }
+    @keyframes subtleRotate { 0% { transform: perspective(400px) rotateX(0deg); } 25% { transform: perspective(400px) rotateX(1deg); } 75% { transform: perspective(400px) rotateX(-1deg); } 100% { transform: perspective(400px) rotateX(0deg); } }
+    .hero-sub { font-size: 1.4rem; color: #e2cbb2; letter-spacing: 2px; margin-top: 0.8rem; opacity: 0.95; }
 
-        /* ========== CHAT CONTAINER ========== */
-        #chatContainer {
-            flex: 1;
-            overflow-y: auto;
-            padding: 16px;
-            scroll-behavior: smooth;
-            -webkit-overflow-scrolling: touch;
-        }
-        .welcome {
-            text-align: center;
-            max-width: 400px;
-            margin: 40px auto;
-            background: var(--surface);
-            border-radius: 32px;
-            padding: 32px 24px;
-            border: 1px solid var(--border);
-            backdrop-filter: blur(8px);
-        }
-        .welcome h2 {
-            font-size: 2rem;
-            font-weight: 600;
-            background: linear-gradient(to right, var(--accent), #a78bfa);
-            -webkit-background-clip: text;
-            -webkit-text-fill-color: transparent;
-            margin-bottom: 12px;
-        }
-        .welcome p {
-            color: var(--text-secondary);
-            font-size: 1rem;
-        }
-        .message {
-            margin: 16px 0;
-            padding: 14px 18px;
-            border-radius: 24px;
-            max-width: 85%;
-            word-wrap: break-word;
-            line-height: 1.5;
-            animation: slideIn 0.25s;
-            font-size: 0.95rem;
-            box-shadow: 0 4px 12px rgba(0,0,0,0.1);
-            position: relative;
-        }
-        @keyframes slideIn {
-            from { opacity: 0; transform: translateY(8px); }
-            to { opacity: 1; transform: translateY(0); }
-        }
-        .user-message {
-            background: var(--accent);
-            color: white;
-            margin-left: auto;
-            border-bottom-right-radius: 8px;
-        }
-        .ai-message {
-            background: var(--surface);
-            border: 1px solid var(--border);
-            color: var(--text-primary);
-            margin-right: auto;
-            border-bottom-left-radius: 8px;
-        }
-        .message-time {
-            font-size: 0.65rem;
-            opacity: 0.7;
-            margin-top: 6px;
-            text-align: right;
-        }
-        .ai-attribution {
-            font-size: 0.75rem;
-            font-style: italic;
-            color: var(--accent);
-            margin-bottom: 5px;
-            display: block;
-            font-weight: 500;
-        }
-        .message-actions {
-            position: absolute;
-            top: 6px;
-            right: 6px;
-            display: flex;
-            gap: 4px;
-            opacity: 0;
-            transition: opacity 0.2s;
-        }
-        .message:hover .message-actions,
-        .message:active .message-actions { opacity: 1; }
-        .message-actions button {
-            background: var(--surface-hover);
-            border: none;
-            color: var(--text-primary);
-            width: 28px;
-            height: 28px;
-            border-radius: 8px;
-            cursor: pointer;
-            font-size: 0.8rem;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            -webkit-tap-highlight-color: transparent;
-        }
-        .message-actions button:active { background: var(--accent); }
-        .loading {
-            background: var(--surface);
-            border: 1px solid var(--border);
-            margin-right: auto;
-            display: flex;
-            align-items: center;
-            gap: 12px;
-            padding: 14px 20px;
-        }
-        .typing {
-            display: flex;
-            gap: 4px;
-        }
-        .typing span {
-            width: 8px;
-            height: 8px;
-            background: var(--text-secondary);
-            border-radius: 50%;
-            animation: typing 1.4s infinite;
-        }
-        .typing span:nth-child(2) { animation-delay: 0.2s; }
-        .typing span:nth-child(3) { animation-delay: 0.4s; }
-        @keyframes typing { 0%,60%,100% { transform: translateY(0); } 30% { transform: translateY(-6px); } }
+    /* gallery grid (3D flip) */
+    .gallery-wrap { padding: 2rem 1rem 1rem; }
+    .section-title { font-size: 2.1rem; font-weight: 500; border-left: 6px solid #c09f7c; padding-left: 1.2rem; margin-bottom: 1.8rem; font-family: 'Playfair Display', serif; }
+    .gallery-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 0.8rem; perspective: 1300px; }
+    .gallery-item {
+      border-radius: 26px; overflow: hidden; border: 2px solid #8f755b; box-shadow: 0 25px 35px -10px black;
+      transition: transform 0.3s cubic-bezier(0.2, 0.9, 0.4, 1.3), box-shadow 0.3s, border-color 0.2s;
+      aspect-ratio: 1/1; cursor: pointer; transform-style: preserve-3d;
+    }
+    .gallery-item:hover { transform: rotateY(5deg) rotateX(3deg) scale(1.04); box-shadow: 0 30px 45px -5px #000; border-color: #e2b78b; }
+    .gallery-item img { width: 100%; height: 100%; object-fit: cover; display: block; transition: filter 0.3s, transform 0.4s; }
+    .gallery-item:hover img { filter: brightness(1.2) saturate(1.2); transform: scale(1.02); }
 
-        /* ========== INPUT AREA ========== */
-        .input-area {
-            padding: 16px 16px;
-            background: var(--surface);
-            border-top: 1px solid var(--border);
-        }
-        .input-wrapper {
-            display: flex;
-            gap: 8px;
-            background: var(--card-bg);
-            border: 1px solid var(--border);
-            border-radius: 50px;
-            padding: 4px 4px 4px 16px;
-            backdrop-filter: blur(4px);
-            transition: 0.2s;
-        }
-        .input-wrapper:focus-within {
-            border-color: var(--accent);
-            box-shadow: 0 0 0 3px rgba(59,130,246,0.2);
-        }
-        #messageInput {
-            flex: 1;
-            background: transparent;
-            border: none;
-            color: var(--text-primary);
-            font-size: 1rem;
-            padding: 12px 0;
-            outline: none;
-            min-width: 0;
-        }
-        #messageInput::placeholder { color: var(--text-secondary); }
-        #sendButton {
-            background: var(--accent);
-            border: none;
-            color: white;
-            border-radius: 50px;
-            padding: 10px 20px;
-            font-weight: 600;
-            cursor: pointer;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            transition: 0.15s;
-            -webkit-tap-highlight-color: transparent;
-        }
-        #sendButton i { font-size: 1.2rem; }
-        #sendButton:active:not(:disabled) { background: var(--accent-glow); transform: scale(0.95); }
-        #sendButton:disabled { opacity: 0.4; cursor: not-allowed; }
+    /* LIGHTBOX */
+    .lightbox { position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(8,5,3,0.98); backdrop-filter: blur(20px); z-index: 3000; display: flex; align-items: center; justify-content: center; opacity: 0; pointer-events: none; transition: opacity 0.3s ease; }
+    .lightbox.active { opacity: 1; pointer-events: all; }
+    .lightbox-content { max-width: 96vw; max-height: 96vh; border: 4px solid #dab38b; border-radius: 28px; overflow: hidden; box-shadow: 0 50px 80px black; animation: zoomPop 0.25s; }
+    @keyframes zoomPop { 0% { transform: scale(0.9); opacity: 0; } 100% { transform: scale(1); opacity: 1; } }
+    .lightbox-content img { width: 100%; height: auto; display: block; object-fit: contain; }
+    .lightbox-close { position: absolute; top: 30px; right: 30px; font-size: 3.8rem; color: #ffebd2; cursor: pointer; text-shadow: 0 4px 20px black; transition: 0.2s; z-index: 3001; }
+    .lightbox-close:hover { transform: scale(1.2) rotate(90deg); }
 
-        .input-extras {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            margin-top: 10px;
-            flex-wrap: wrap;
-            gap: 10px;
-        }
-        .suggestions {
-            display: flex;
-            gap: 8px;
-            flex-wrap: wrap;
-        }
-        .chip {
-            background: var(--surface);
-            border: 1px solid var(--border);
-            border-radius: 30px;
-            padding: 6px 14px;
-            font-size: 0.8rem;
-            color: var(--text-secondary);
-            cursor: pointer;
-            transition: 0.15s;
-            display: flex;
-            align-items: center;
-            gap: 6px;
-            -webkit-tap-highlight-color: transparent;
-            white-space: nowrap;
-        }
-        .chip:active:not(.disabled) { background: var(--surface-hover); color: var(--text-primary); }
-        .chip.disabled { opacity: 0.3; pointer-events: none; }
-        .utility-buttons {
-            display: flex;
-            gap: 6px;
-            flex-wrap: wrap;
-        }
-        .util-btn {
-            background: var(--surface);
-            border: 1px solid var(--border);
-            color: var(--text-secondary);
-            width: 36px;
-            height: 36px;
-            border-radius: 10px;
-            cursor: pointer;
-            transition: 0.15s;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            -webkit-tap-highlight-color: transparent;
-        }
-        .util-btn:active { background: var(--surface-hover); color: var(--text-primary); }
+    /* language panel */
+    .lang-panel { background: rgba(26, 21, 16, 0.7); backdrop-filter: blur(10px); border-radius: 50px; padding: 1.8rem 1.2rem; margin: 1.8rem 1rem; border: 1px solid #9a8066; box-shadow: 0 25px 40px -12px black; }
+    .lang-tabs { display: flex; gap: 0.5rem; flex-wrap: wrap; justify-content: center; }
+    .lang-tab { background: #352d24; border: 1px solid #9b8066; color: #f1dbc4; font-size: 1.15rem; padding: 0.6rem 1.3rem; border-radius: 50px; cursor: pointer; transition: 0.2s; font-weight: 500; }
+    .lang-tab.active { background: #c6a178; color: #1c1610; font-weight: 700; border-color: #efd2b1; box-shadow: 0 0 20px #f1c494; transform: scale(1.05); }
+    .bio-content { margin-top: 2rem; }
+    .bio-text { display: none; font-size: 1.1rem; line-height: 1.8; background: #1d1711; padding: 1.8rem; border-radius: 40px; border: 1px solid #a58b6f; box-shadow: inset 0 0 20px #0e0b07; animation: fadeLang 0.5s; }
+    @keyframes fadeLang { 0% { opacity: 0; transform: translateY(10px); } 100% { opacity: 1; transform: translateY(0); } }
+    .bio-text.active { display: block; }
 
-        footer {
-            padding: 10px 16px;
-            display: flex;
-            justify-content: space-between;
-            color: var(--text-secondary);
-            font-size: 0.75rem;
-            border-top: 1px solid var(--border);
-            flex-wrap: wrap;
-            gap: 8px;
-        }
+    /* publications cards */
+    .pub-section { padding: 2rem 1rem; }
+    .pub-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 1.2rem; }
+    .pub-card {
+      background: rgba(39, 32, 25, 0.7); backdrop-filter: blur(6px); border: 1px solid #9a8066; border-radius: 36px;
+      padding: 1.7rem 0.8rem; text-align: center; transition: all 0.3s cubic-bezier(0.2, 0.9, 0.3, 1.3);
+      box-shadow: 0 18px 28px -12px black; transform: translateY(0); animation: cardPulse 5s infinite;
+    }
+    @keyframes cardPulse { 0% { box-shadow: 0 18px 28px -12px black; } 50% { box-shadow: 0 22px 35px -8px #7a624b; } 100% { box-shadow: 0 18px 28px -12px black; } }
+    .pub-card:hover { transform: translateY(-12px) scale(1.03); background: #4f4133; border-color: #e9bc91; box-shadow: 0 35px 45px -8px #000; }
+    .pub-card i { font-size: 2.5rem; color: #dfb185; margin-bottom: 0.8rem; }
 
-        /* ========== MODALS ========== */
-        .modal {
-            position: fixed;
-            top: 0; left: 0; right: 0; bottom: 0;
-            background: rgba(0,0,0,0.7);
-            backdrop-filter: blur(8px);
-            display: none;
-            align-items: center;
-            justify-content: center;
-            z-index: 1000;
-            padding: 16px;
-        }
-        .modal-content {
-            background: var(--card-bg);
-            border: 1px solid var(--border);
-            border-radius: 32px;
-            max-width: 600px;
-            width: 100%;
-            max-height: 85vh;
-            overflow-y: auto;
-            padding: 24px;
-            color: var(--text-primary);
-            box-shadow: var(--shadow);
-            -webkit-overflow-scrolling: touch;
-        }
-        .modal-content h2 {
-            font-size: 1.8rem;
-            margin-bottom: 16px;
-            display: flex;
-            align-items: center;
-            gap: 12px;
-        }
-        .modal-content p {
-            margin-bottom: 16px;
-            line-height: 1.5;
-            color: var(--text-secondary);
-        }
-        .modal-close {
-            background: var(--accent);
-            border: none;
-            color: white;
-            padding: 12px 24px;
-            border-radius: 30px;
-            font-weight: 600;
-            cursor: pointer;
-            margin-top: 16px;
-            width: 100%;
-            -webkit-tap-highlight-color: transparent;
-        }
-        .modal-close:active { background: var(--accent-glow); }
+    /* ===== REFINED MIR SECTIONS (SMALLER, MORE MOTION) ===== */
+    .mir-section, .mir-khalaf-section {
+      padding: 1.8rem 1rem;   /* reduced vertical */
+      background: linear-gradient(145deg, #1f1a14, #16110c);
+      border-radius: 50px 50px 25px 25px;   /* softer */
+      margin: 2rem 1rem;
+      border: 2px solid #9d846b;
+      box-shadow: 0 25px 35px -12px black;
+      transition: transform 0.4s, box-shadow 0.4s;
+    }
+    .mir-section:hover, .mir-khalaf-section:hover {
+      box-shadow: 0 35px 45px -8px #4a3727;
+      transform: scale(1.01);
+    }
+    .mir-header { display: flex; align-items: center; gap: 1rem; margin-bottom: 1.2rem; }
+    .mir-header i { font-size: 2.4rem; color: #c9a87c; animation: crownGlow 3s infinite; }
+    @keyframes crownGlow { 0% { filter: drop-shadow(0 0 2px #e2b26b); } 50% { filter: drop-shadow(0 0 10px #f3cd9c); } 100% { filter: drop-shadow(0 0 2px #e2b26b); } }
+    .mir-title { font-size: 1.9rem; font-family: 'Playfair Display', serif; font-weight: 600; }
 
-        .settings-group {
-            background: var(--surface);
-            border-radius: 20px;
-            padding: 16px;
-            margin-bottom: 16px;
-            border: 1px solid var(--border);
-        }
-        .settings-group h3 { margin-bottom: 12px; font-size: 1.2rem; }
-        .setting-row {
-            display: flex;
-            align-items: center;
-            justify-content: space-between;
-            margin-bottom: 10px;
-            flex-wrap: wrap;
-            gap: 8px;
-        }
-        .setting-row label { flex: 1; font-size: 0.95rem; }
-        .setting-row input, .setting-row select {
-            background: var(--card-bg);
-            border: 1px solid var(--border);
-            border-radius: 14px;
-            padding: 8px 12px;
-            color: var(--text-primary);
-            width: 160px;
-            max-width: 100%;
-        }
+    /* images smaller + extra motion */
+    .mir-image, .mir-khalaf-image {
+      width: 80%;            /* smaller size */
+      margin: 0 auto 1.5rem; /* center */
+      border-radius: 40px;
+      border: 3px solid #b59673;
+      box-shadow: 0 20px 30px -8px black;
+      transition: transform 0.4s cubic-bezier(0.2,0.9,0.4,1.2), box-shadow 0.4s, border-color 0.3s;
+      cursor: pointer;
+      animation: softFloat 7s infinite ease-in-out;
+    }
+    .mir-khalaf-image { width: 80%; }
+    @keyframes softFloat { 0% { transform: translateY(0px); } 50% { transform: translateY(-6px); } 100% { transform: translateY(0px); } }
+    .mir-image:hover, .mir-khalaf-image:hover {
+      transform: scale(1.02) translateY(-6px);
+      box-shadow: 0 30px 40px -5px black;
+      border-color: #e9bc91;
+    }
+    .mir-image img, .mir-khalaf-image img { width: 100%; height: auto; display: block; border-radius: 37px; }
 
-        .stat-grid {
-            display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(130px,1fr));
-            gap: 12px;
-            margin-bottom: 20px;
-        }
-        .stat-card {
-            background: var(--surface);
-            border: 1px solid var(--border);
-            border-radius: 18px;
-            padding: 14px;
-            text-align: center;
-        }
-        .stat-value { font-size: 1.8rem; font-weight: 600; color: var(--accent); }
-        .stat-label { font-size: 0.8rem; color: var(--text-secondary); }
+    .mir-desc { background: rgba(24, 19, 14, 0.7); backdrop-filter: blur(6px); border-radius: 40px; padding: 1.5rem; border: 1px solid #aa8b6e; }
 
-        .shortcut-list {
-            display: grid;
-            grid-template-columns: 1fr 1fr;
-            gap: 12px;
-        }
-        .shortcut-item {
-            display: flex;
-            justify-content: space-between;
-            padding: 8px 12px;
-            background: var(--surface);
-            border-radius: 12px;
-            font-size: 0.9rem;
-        }
-        .shortcut-item kbd {
-            background: var(--card-bg);
-            padding: 4px 8px;
-            border-radius: 8px;
-            font-family: monospace;
-        }
+    /* map + waves */
+    .bridge-map { background: #1f1a14; border-radius: 70px 70px 30px 30px; margin: 2rem 1rem; padding: 2rem 1rem; border: 2px solid #8b745c; }
+    .map-svg svg { width: 100%; height: auto; filter: drop-shadow(0 15px 15px #00000080); }
+    .sound-waves { display: flex; justify-content: center; gap: 6px; margin: 1.5rem 0 0; height: 35px; }
+    .wave { width: 7px; height: 22px; background: #c9a67b; border-radius: 8px; animation: wave 1.4s infinite ease-in-out; }
+    .wave:nth-child(2) { animation-delay: 0.2s; background: #ddb790; }
+    .wave:nth-child(3) { animation-delay: 0.4s; background: #f0caa0; }
+    .wave:nth-child(4) { animation-delay: 0.1s; background: #d6a87c; }
+    @keyframes wave { 0%,100% { transform: scaleY(0.6); } 50% { transform: scaleY(1.5); } }
 
-        .toast {
-            position: fixed;
-            bottom: 30px;
-            left: 50%;
-            transform: translateX(-50%);
-            background: var(--surface);
-            border: 1px solid var(--border);
-            border-radius: 30px;
-            padding: 12px 24px;
-            color: var(--text-primary);
-            box-shadow: var(--shadow);
-            z-index: 2000;
-            display: none;
-            font-size: 0.9rem;
-            white-space: nowrap;
-            max-width: 90%;
-            overflow: hidden;
-            text-overflow: ellipsis;
-        }
-    </style>
+    /* footer */
+    .footer { background: #100c08; padding: 2.2rem 1rem; text-align: center; font-size: 1.2rem; border-top: 2px solid #6a5743; color: #cfbb9f; }
+    .footer a { color: #e4c5a1; text-decoration: none; transition: 0.2s; }
+    .footer a:hover { color: #fad6aa; }
+    .home-link-bottom { margin-top: 1rem; }
+    /* extra motion line */
+    .hover-glow { transition: all 0.2s; }
+  </style>
 </head>
 <body>
-    <div id="app">
-        <header>
-            <div class="header-row">
-                <div class="brand">
-                    <div class="avatar"><i class="fas fa-brain"></i></div>
-                    <div class="title">
-                        <h1>Zakhourani AI</h1>
-                        <p><i class="fas fa-code-branch"></i> by Zakhourani Developers</p>
-                    </div>
-                </div>
-                <div class="header-actions">
-                    <div class="icon-btn" id="themeToggle" title="Theme"><i class="fas fa-moon"></i></div>
-                    <div class="icon-btn" id="statsBtn" title="Stats"><i class="fas fa-chart-bar"></i></div>
-                    <div class="icon-btn" id="shortcutsBtn" title="Shortcuts"><i class="fas fa-keyboard"></i></div>
-                    <div class="icon-btn" id="settingsBtn" title="Settings"><i class="fas fa-sliders-h"></i></div>
-                    <a href="https://whz-co.github.io/whz/index.html" class="icon-btn" title="Home"><i class="fas fa-home"></i></a>
-                    <div class="icon-btn" id="aboutBtn" title="About"><i class="fas fa-info-circle"></i></div>
-                </div>
-            </div>
-        </header>
-
-        <!-- Conversation Tabs -->
-        <div class="tab-bar" id="tabBar">
-            <div class="tab active" data-tab="default" id="defaultTab"><i class="fas fa-comment"></i> Main Chat</div>
-            <div class="tab new-tab" id="newTabBtn"><i class="fas fa-plus"></i> New Chat</div>
-        </div>
-
-        <!-- Search bar (hidden by default) -->
-        <div class="search-bar" id="searchBar">
-            <input type="text" id="searchInput" placeholder="Search messages...">
-            <select id="searchScope">
-                <option value="current">Current chat</option>
-                <option value="all">All chats</option>
-            </select>
-            <button id="searchClose"><i class="fas fa-times"></i> Close</button>
-        </div>
-
-        <!-- Chat messages container -->
-        <div id="chatContainer">
-            <div class="welcome" id="welcomeMessage">
-                <h2>ASK ZAKHOURANI</h2>
-                <p>Your intelligent assistant – concise, bullet‑point answers.</p>
-                <p style="margin-top:20px;"><i class="fas fa-gem"></i> 100 free questions daily</p>
-            </div>
-        </div>
-
-        <!-- Input area -->
-        <div class="input-area">
-            <div class="input-wrapper">
-                <input type="text" id="messageInput" placeholder="Ask Zakhourani... (Ctrl+Enter to send)" autocomplete="off">
-                <button id="sendButton"><i class="fas fa-paper-plane"></i></button>
-            </div>
-            <div class="input-extras">
-                <div class="suggestions" id="suggestions">
-                    <div class="chip" data-prompt="Who is Dr. Waleed Hussein Zakhourani?"><i class="fas fa-user-graduate"></i> Dr. Waleed</div>
-                    <div class="chip" data-prompt="Tell me about Zakhourani Developers"><i class="fas fa-users"></i> Our team</div>
-                    <div class="chip" data-prompt="What is machine learning?"><i class="fas fa-brain"></i> ML</div>
-                    <div class="chip" data-prompt="Explain quantum computing"><i class="fas fa-atom"></i> Quantum</div>
-                    <div class="chip" data-prompt="Write a poem"><i class="fas fa-feather"></i> Poem</div>
-                </div>
-                <div class="utility-buttons">
-                    <div class="util-btn" id="voiceInputBtn" title="Voice input"><i class="fas fa-microphone"></i></div>
-                    <div class="util-btn" id="searchToggle" title="Search"><i class="fas fa-search"></i></div>
-                    <div class="util-btn" id="clearChat" title="Clear chat"><i class="fas fa-trash-alt"></i></div>
-                    <div class="util-btn" id="shareChat" title="Share"><i class="fas fa-share-alt"></i></div>
-                    <div class="util-btn" id="soundToggle" title="Toggle sound"><i class="fas fa-volume-up"></i></div>
-                </div>
-            </div>
-        </div>
-
-        <footer>
-            <span><i class="fas fa-shield-alt"></i> 100 free questions/day</span>
-            <span>© 2026 Zakhourani Developers</span>
-        </footer>
+  <canvas id="particle-canvas"></canvas>
+  <div class="mobile-nav">
+    <div class="logo-mini"><i class="fas fa-feather-alt"></i> Dr. W.</div>
+    <button class="hamburger" id="hamburgerBtn" aria-label="menu"><span></span><span></span><span></span></button>
+    <div class="menu-dropdown" id="menuDropdown">
+      <a href="#home"><i class="fas fa-home"></i> Home</a>
+      <a href="#gallery"><i class="fas fa-images"></i> Gallery</a>
+      <a href="#bio"><i class="fas fa-book-open"></i> Bio</a>
+      <a href="#publications"><i class="fas fa-scroll"></i> Works</a>
+      <a href="#mir-porti"><i class="fas fa-crown"></i> Mir Porti</a>
+      <a href="#mir-khalaf"><i class="fas fa-chess-king"></i> Mir Khalaf</a>
+      <div class="home-icon-item"><a href="https://whz-co.github.io/whz/index.html" target="_blank"><i class="fas fa-home"></i> Home</a></div>
     </div>
+  </div>
 
-    <!-- About Modal -->
-    <div class="modal" id="aboutModal">
-        <div class="modal-content">
-            <h2><i class="fas fa-info-circle"></i> About Us</h2>
-            <p>We are a team of linguists, educators, and engineers building tools that bridge cultures and empower learners. Our projects include multilingual dictionaries, language platforms, and AI assistants.</p>
-            <p><strong>Dr. Waleed Hussein Zakhourani</strong> – founder – is a Harvard‑educated linguist, creator of the JIHAN Universal Dictionary, dedicated to preserving Arabic and Kurdish heritage while making English accessible.</p>
-            <button class="modal-close" id="closeAboutModal">Close</button>
-        </div>
+  <section id="home" class="hero-section" data-aos="fade-up" data-aos-duration="1200">
+    <div class="hero-glow">Dr. Waleed H. Z.</div>
+    <div class="hero-sub">linguist · educator · cultural bridge</div>
+  </section>
+
+  <section id="gallery" class="gallery-wrap" data-aos="zoom-in" data-aos-duration="900">
+    <h2 class="section-title"><i class="fas fa-camera"></i> moments</h2>
+    <div class="gallery-grid">
+      <div class="gallery-item" data-src="https://raw.githubusercontent.com/whz-co/whz/main/images/dr%20waleed%20on%20libra..jpg"><img src="https://raw.githubusercontent.com/whz-co/whz/main/images/dr%20waleed%20on%20libra..jpg" alt="" loading="lazy"></div>
+      <div class="gallery-item" data-src="https://raw.githubusercontent.com/whz-co/whz/main/images/Dr%20waleed%20is%20holding%20a%20book.png"><img src="https://raw.githubusercontent.com/whz-co/whz/main/images/Dr%20waleed%20is%20holding%20a%20book.png" alt="" loading="lazy"></div>
+      <div class="gallery-item" data-src="https://raw.githubusercontent.com/whz-co/whz/main/images/Dr%20waleed%20is%20writing.jpg"><img src="https://raw.githubusercontent.com/whz-co/whz/main/images/Dr%20waleed%20is%20writing.jpg" alt="" loading="lazy"></div>
     </div>
+    <p style="text-align:center; font-size:0.95rem; color:#d4ba9b; margin-top:0.8rem;"><i class="fas fa-expand-alt"></i> tap image for fullscreen</p>
+  </section>
 
-    <!-- Settings Modal -->
-    <div class="modal" id="settingsModal">
-        <div class="modal-content">
-            <h2><i class="fas fa-sliders-h"></i> Settings</h2>
-            <div class="settings-group">
-                <h3>AI Response</h3>
-                <div class="setting-row">
-                    <label>Temperature (0-2)</label>
-                    <input type="number" id="temperatureInput" min="0" max="2" step="0.1" value="0.7">
-                </div>
-                <div class="setting-row">
-                    <label>Max Tokens</label>
-                    <input type="number" id="maxTokensInput" min="100" max="2000" value="500">
-                </div>
-                <div class="setting-row">
-                    <label>Personality</label>
-                    <select id="personalitySelect">
-                        <option value="default">Default (concise)</option>
-                        <option value="creative">Creative</option>
-                        <option value="academic">Academic</option>
-                    </select>
-                </div>
-            </div>
-            <div class="settings-group">
-                <h3>Daily Limit</h3>
-                <div class="setting-row">
-                    <label>Messages per day</label>
-                    <input type="number" id="dailyLimitInput" min="5" max="500" value="100">
-                </div>
-            </div>
-            <div class="settings-group">
-                <h3>Interface</h3>
-                <div class="setting-row">
-                    <label>Sound notifications</label>
-                    <input type="checkbox" id="soundEnabledCheck">
-                </div>
-                <div class="setting-row">
-                    <label>Text-to-Speech</label>
-                    <input type="checkbox" id="ttsEnabledCheck">
-                </div>
-                <div class="setting-row">
-                    <label>Auto-scroll</label>
-                    <input type="checkbox" id="autoScrollCheck" checked>
-                </div>
-                <div class="setting-row">
-                    <label>Accent color</label>
-                    <input type="color" id="accentColorInput" value="#3b82f6">
-                </div>
-            </div>
-            <div class="settings-group">
-                <h3>Import/Export</h3>
-                <div style="display:flex; gap:12px; flex-wrap:wrap;">
-                    <button class="modal-close" id="exportDataBtn" style="flex:1;">Export Data</button>
-                    <button class="modal-close" id="importDataBtn" style="flex:1;">Import Data</button>
-                </div>
-                <input type="file" id="importFile" accept=".json" style="display:none;">
-            </div>
-            <button class="modal-close" id="saveSettings">Save & Close</button>
-        </div>
+  <div class="lightbox" id="lightbox"><span class="lightbox-close" id="lightboxClose">&times;</span><div class="lightbox-content"><img src="" alt="" id="lightboxImg"></div></div>
+
+  <section id="bio" class="lang-panel" data-aos="fade-right" data-aos-duration="1000">
+    <h2 style="font-size:2.2rem; margin-bottom:1.2rem;"><i class="fas fa-feather"></i> about</h2>
+    <div class="lang-tabs">
+      <button class="lang-tab active" data-lang="en">🇬🇧 EN</button><button class="lang-tab" data-lang="ar">🇸🇦 AR</button><button class="lang-tab" data-lang="ku-arab">🏴 KU(Ar)</button><button class="lang-tab" data-lang="ku-latn">🇹🇰 KU(La)</button>
     </div>
-
-    <!-- Statistics Modal -->
-    <div class="modal" id="statsModal">
-        <div class="modal-content">
-            <h2><i class="fas fa-chart-bar"></i> Statistics</h2>
-            <div class="stat-grid">
-                <div class="stat-card">
-                    <div class="stat-value" id="totalMessagesStat">0</div>
-                    <div class="stat-label">Total Messages</div>
-                </div>
-                <div class="stat-card">
-                    <div class="stat-value" id="totalWordsStat">0</div>
-                    <div class="stat-label">Words</div>
-                </div>
-                <div class="stat-card">
-                    <div class="stat-value" id="todayMessagesStat">0</div>
-                    <div class="stat-label">Today</div>
-                </div>
-                <div class="stat-card">
-                    <div class="stat-value" id="conversationsStat">0</div>
-                    <div class="stat-label">Conversations</div>
-                </div>
-                <div class="stat-card">
-                    <div class="stat-value" id="achievementsStat">0</div>
-                    <div class="stat-label">Achievements</div>
-                </div>
-            </div>
-            <button class="modal-close" id="closeStatsModal">Close</button>
-        </div>
+    <div class="bio-content">
+      <div class="bio-text active" id="bio-en" lang="en"><p>Dr. Waleed Hussein Zakhourani is a distinguished linguist, visionary educator, and cultural scholar whose life's work serves as a vital bridge between the English, Arabic, and Kurdish worlds. Holding a PhD in English Language Etiquette from Harvard University, his academic foundation studies how language conveys respect and cultural values. This rare specialization defines his mission: to transform English into a medium of global mutual understanding.</p><p>With decades in multilingual education, he champions linguistic accessibility and cultural preservation. His expertise spans lexicography, translation studies, and academic publishing. He empowers learners to navigate the global stage while rooted in their own heritage.</p></div>
+      <div class="bio-text" id="bio-ar" lang="ar" dir="rtl"><p>يُعد الدكتور وليد حسين زاخوراني لغوياً بارزاً، ومربياً رؤيوياً، وباحثاً ثقافياً كرس مسيرته المهنية لتكون جسراً حيوياً يربط بين عوالم اللغات الإنجليزية والعربية والكردية. من خلال حصوله على درجة الدكتوراه في آداب اللغة الإنجليزية من جامعة هارفارد، تعذرت ركائز أساسه الأكاديمي في الدراسة المتعمقة لكيفية تعبير اللغة عن الاحترام والوضوح والقيم الثقافية الراسخة. وقد حدد هذا التخصص النادر مهمة حياته: تحويل اللغة الإنجليزية من مجرد أداة أكاديمية إلى وسيلة عميقة للتفاهم العالمي المتبادل.</p><p>مع عقود من القيادة في مجال التعليم متعدد اللغات، برز الدكتور زاخوراني كشخصية رائدة في تيسير الوصول اللغوي والحفاظ على التراث الثقافي. تشمل خبرته الواسعة مجالات صناعة المعاجم، ودراسات الترجمة، والنشر الأكاديمي. ويعمل لضمان إتقان الإنجليزية دون التضحية بالتقاليد الفكرية الغنية للناطقين بالعربية والكردية.</p></div>
+      <div class="bio-text" id="bio-ku-arab" lang="ku-arab" dir="rtl"><p>د. وەلید حسێن زاخۆرانی زمانزانەکێ دیار، پەروەردەکارەکێ خودان دیدەڤانی، و ڤەکۆلەرەکێ کلتووریێ خودان ئەزموونە، کو ژیانا خۆ تەرخانکرییە دا ببیتە پرەکا زیندی د ناڤبەرا جیهانێن ئینگلیزی، عەرەبی و کوردی دا. ب بەدەستڤەئینانا بروانامەیا دکتۆرا د ئیتیکێت و ئادابێن زمانێ ئینگلیزیدا ل زانکۆیا هارفارد، بنیاتێ وی یێ ئەکادیمی ب کویری ل سەر وێ چەندێ کا زمان چەوا ڕێز و بەهایێن کلتووری دگەهینیت.</p><p>دگەل چەندین سالێن کارکرنێ د بوارێ پەروەردەیا فرە-زمانیدا، د. وەلید وەک پالپشتەکێ مەزن یێ ب ساناهی کرنا زمانان و پاراستنا کلتووری دیار بوویە. شارەزاییا وی د بوارێن فەرهەنگنڤیسی و وەشانێن ئەکادیمی دگریت.</p></div>
+      <div class="bio-text" id="bio-ku-latn" lang="ku-latn"><p>Dr. Welîd Hisên Zexoranî zimanzanekî berbiçav, perwerdekarekî xwedî dîtin û zanyarekî çandî ye ku xebatên wî wekî pireke girîng di navbera cîhanên Îngilîzî, Erebî û Kurdî de xizmetê dikin. Wî PhD di warê Etîketa Zimên a Îngilîzî de ji Zanîngeha Harvardê wergirtiye.</p><p>Bi ezmûna dehan salan di perwerdehiya pirzimanî de, Dr. Zexoranî parêzvanê gihîştina zimên û parastina çandî ye. Pisporiya wî ferhengzanî, werger û weşangeriya akademîk dihewîne.</p></div>
     </div>
+  </section>
 
-    <!-- Keyboard Shortcuts Modal -->
-    <div class="modal" id="shortcutsModal">
-        <div class="modal-content">
-            <h2><i class="fas fa-keyboard"></i> Shortcuts</h2>
-            <div class="shortcut-list">
-                <div class="shortcut-item"><span>Send</span> <kbd>Ctrl+Enter</kbd></div>
-                <div class="shortcut-item"><span>New chat</span> <kbd>Ctrl+N</kbd></div>
-                <div class="shortcut-item"><span>Search</span> <kbd>Ctrl+F</kbd></div>
-                <div class="shortcut-item"><span>Clear chat</span> <kbd>Ctrl+L</kbd></div>
-                <div class="shortcut-item"><span>Toggle theme</span> <kbd>Ctrl+T</kbd></div>
-                <div class="shortcut-item"><span>Focus input</span> <kbd>/</kbd></div>
-                <div class="shortcut-item"><span>Copy last AI</span> <kbd>Ctrl+Shift+C</kbd></div>
-            </div>
-            <button class="modal-close" id="closeShortcutsModal">Close</button>
-        </div>
+  <section id="publications" class="pub-section" data-aos="fade-up" data-aos-duration="900">
+    <h2 class="section-title"><i class="fas fa-book"></i> selected works</h2>
+    <div class="pub-grid">
+      <div class="pub-card"><i class="fas fa-book"></i><h3>Lexical Bridges</h3><p>Kurdish–English dictionary</p></div>
+      <div class="pub-card"><i class="fas fa-globe"></i><h3>Politeness Across Borders</h3><p>Harvard 2008</p></div>
+      <div class="pub-card"><i class="fas fa-language"></i><h3>Arabic Rhetoric</h3><p>multilingual study</p></div>
+      <div class="pub-card"><i class="fas fa-feather"></i><h3>Zakhourani Method</h3><p>teaching through heritage</p></div>
     </div>
+  </section>
 
-    <!-- Daily Limit Modal -->
-    <div class="modal" id="limitModal">
-        <div class="modal-content" style="text-align:center;">
-            <i class="fas fa-hourglass-half" style="font-size:5rem; color:var(--warning);"></i>
-            <h2>Daily Limit Reached</h2>
-            <p>You've used all your free questions today. Come back tomorrow!</p>
-            <button class="modal-close" id="closeLimitModal">OK</button>
-        </div>
+  <!-- MIR PORTI - smaller, more motion -->
+  <section id="mir-porti" class="mir-section" data-aos="flip-left" data-aos-duration="1100">
+    <div class="mir-header"><i class="fas fa-crown"></i><h2 class="mir-title">Mir Porti · The Legacy of Zakhoran</h2></div>
+    <div class="mir-image" data-src="https://raw.githubusercontent.com/whz-co/whz/main/images/porte.png"><img src="https://raw.githubusercontent.com/whz-co/whz/main/images/porte.png" alt="Mir Porti" loading="lazy"></div>
+    <div class="mir-desc">
+      <div class="lang-tabs" style="margin-bottom:1rem;">
+        <button class="lang-tab active" data-lang="en-mir">🇬🇧 EN</button><button class="lang-tab" data-lang="ku-arab-mir">🏴 KU(Ar)</button><button class="lang-tab" data-lang="ku-latn-mir">🇹🇰 KU(La)</button><button class="lang-tab" data-lang="ar-mir">🇸🇦 AR</button>
+      </div>
+      <div class="bio-text active" id="mir-en" lang="en"><p><strong>Mir Porti: The Legacy of Zakhoran and the Nobility of Mardin</strong></p><p>Mir Porti stands as a monumental figure in Kurdish history, particularly within the district of Midyat in Mardin. His historical influence flourished between 1650 and 1700 AD, centered in the Zakhoran region. His impact was so profound that the village of "Porti" was named in his honor, serving as a lasting geographical testament to his leadership.</p><p>As a direct descendant of the illustrious Emirs of Bohtan, Mir Porti represents a lineage of nobility and power. He is the sixth grandfather of Dr. Walid Hussein Al-Zakhorani. To this day, his name commands immense respect among the Kurdish, Arab, and Turkish tribes of the Mardin province, symbolizing a bridge of cultural and social authority that has endured for centuries.</p><p>For the first time in history, a rare portrait of Mir Porti has been unveiled through the official platform of Dr. Zakhorani. This release highlights the doctor’s deep-rooted heritage within the Zakhoran tribe, specifically tracing back to the prestigious House of Mir Porti, a family synonymous with historical leadership.</p></div>
+      <div class="bio-text" id="mir-ku-arab" lang="ku-arab" dir="rtl"><p><strong>میر پۆرتی: کێلەکێ دیرۆکیێ زاخۆران و ڕەسەناتییا مێردینێ</strong></p><p>میر پۆرتی ئێکە ژ کەسایەتیێن ناڤدار و دیارێن دیرۆکا کورد ل دەڤەرا میدیادێ ل پارێزگەها مێردینێ. ناڤبری ل سالێن د ناڤبەرا 1650 تا 1700 زایینی خودان دەسهەلات و ناڤودەنگ بوو، ب تایبەتی ل دەڤەرا زاخوران. ژبەر مەزناهی و کارتێکرنا وی، گوندێ "پۆرتی" ب ناڤێ وی هاتیە ناڤکرن و هەتا ئەڤڕۆ وەک نیشانەکا مێژوویی یا زێندی مایە.</p><p>میر پۆرتی ژ بنەمالا خودان شکۆ یا میرێن بۆتانە و باپیرێ شەشێ یێ دکتۆر وەلید حسێن زاخۆرانییە. هەتا ئەڤێ گاڤێ ژی، ناڤێ میر پۆرتی ب ڕێز و حورمەتەکا مەزن د ناڤبەرا عەشیرەتێن کورد، عەرەب و تورک ل پارێزگەها مێردینێ دهێتە گۆتن، کو ئەڤ چەندە نیشانا پێگەیێ وی یێ جڤاکی یێ ب هێزە.</p><p>بۆ جارا ئێکێ د دیرۆکێ دا، وێنەیەکێ دەگمەن یێ میر پۆرتی د پلاتفۆرمەکا تایبەت دا ژ لایێ نەوەیێ وی، دکتۆر زاخۆرانی، هاتیە بەلاڤکرن. دکتۆر زاخۆرانی ب ڕەگەز دزڤریتە سەر عەشیرەتا زاخۆران و ب تایبەت ژ بنەمالا میر پۆرتی یە، کو ئێکە ژ بنەمالێن ڕەسەن و خودان ناسنامە ل دەڤەرێ.</p></div>
+      <div class="bio-text" id="mir-ku-latn" lang="ku-latn"><p><strong>Mîr Portî: Sembola Dîroka Zaxoran û Malbata Mîrên Botan</strong></p><p>Mîr Portî yek ji kesayetên herî navdar û bandordar ê dîroka Kurd e li navçeya Midyadê ya ser bi parêzgeha Mêrdînê. Dîroka wî vedigere salên navbera 1650 - 1700’an, bi taybetî li herêma Zaxoran. Ji ber nav û dengê wî yê mezin, gundek bi navê wî (Gundê Portî) hatiye binavkirin ku heta îro wek mîraseke dîrokî tê naskirin.</p><p>Mîr Portî ji xanedana Mîrên Botan e û bapîrê şeşemîn ê Dr. Welîd Hisên Zaxoranî ye. Heya roja îro, navê Mîr Portî di nav eşîrên Kurd, Ereb û Tirk ên li parêzgeha Mêrdînê de bi rûmet û hurmeteke mezin tê hildan. Ev yek nîşana bandora wî ya civakî û siyasî ya kûr e.</p><p>Cara yekem di dîrokê de, wêneyekî kêmpeyda yê Mîr Portî di platforma taybet a neviyê wî Dr. Zaxoranî de hat weşandin. Dr. Zaxoranî bi koka xwe ve girêdayî eşîra Zaxoran e û ji malbata esîl a Mîr Portî tê, ku bingeha vê malbatê li ser serokatî û mîrekiyê hatiye avakirin.</p></div>
+      <div class="bio-text" id="mir-ar" lang="ar" dir="rtl"><p><strong>الأمير بورتي: سليل الإمارة البوهتانية وعماد زاخوران</strong></p><p>يُعد الأمير بورتي (مير بورتي) أحد أبرز الأعلام التاريخيين في الذاكرة الكردية لمدينة مديات التابعة لولاية ماردين و اطرافها و الى جزيرة بوتان. يمتد نفوذه وحضوره التاريخي إلى الحقبة الواقعة ما بين عامي 1650 و1700 ميلادية، وتحديداً في ربوع منطقة زاخوران الأبية، حيث اقترن اسمه بالأرض حتى سُميت قرية "بورتي" تيمناً به، لتغدو شاهداً جغرافياً حياً على زعامته وتاريخه الحافل.</p><p>ينحدر الأمير بورتي من سلالة أمراء بوهتان (إمارة بوتان) العريقة، وهو الجد السادس للدكتور وليد حسين الزاخوراني. وبفضل مكانته المرموقة وحكمته، لا يزال صدى اسمه يتردد بتقدير وإجلال في أوساط القبائل الكردية والعربية والتركية القاطنة في محافظة ماردين، مما يبرهن على دوره الريادي كشخصية جامعة تميزت بالهيبة والنفوذ الاجتماعي العابر للحدود العرقية.</p><p>في سابقة هي الأولى من نوعها، تم الكشف عن صورة نادرة للأمير بورتي، تُنشر لأول مرة في التاريخ عبر المنصة الخاصة بحفيده الدكتور الزاخوراني. هذا الظهور يعيد إحياء التراث البصري لهذه العائلة النبيلة، ويؤكد انتماء الدكتور الزاخوراني المتجذر إلى عشيرة زاخوران، وتحديداً من فرع "مير بورتي" الذي يمثل الركيزة الأساسية لهذا النسب الشريف.</p></div>
     </div>
-
-    <!-- Toast notification -->
-    <div class="toast" id="toast"></div>
-
-    <script>
-        (function() {
-            // ========== CONFIGURATION ==========
-            const DEEPSEEK_KEY = "sk-26d206f0f103487294931892fe7ccbb0";
-            let DAILY_LIMIT = 100;  // default, will be overridden by settings
-
-            // ========== STORAGE KEYS ==========
-            const STORAGE_KEYS = {
-                CONVERSATIONS: 'zakhouraniConversations',
-                USAGE: 'zakhouraniUsage',
-                SETTINGS: 'zakhouraniSettings',
-                ACHIEVEMENTS: 'zakhouraniAchievements'
-            };
-
-            // ========== GLOBAL STATE ==========
-            let settings = {
-                temperature: 0.7,
-                maxTokens: 500,
-                personality: 'default',
-                systemPrompt: `You are Zakhourani AI, created by Zakhourani Developers. Provide concise, bullet-point answers. If asked about Dr. Waleed Hussein Zakhourani: He is a Harvard-educated linguist, creator of the JIHAN Universal Dictionary, bridging English, Arabic, and Kurdish cultures.`,
-                dailyLimit: 100,
-                soundEnabled: false,
-                ttsEnabled: false,
-                autoScroll: true,
-                accentColor: '#3b82f6'
-            };
-            let usage = { date: new Date().toDateString(), count: 0 };
-            let conversations = { default: { id: 'default', name: 'Main Chat', messages: [], pinned: false, archived: false } };
-            let currentConvId = 'default';
-            let currentMessages = [];
-            let achievements = JSON.parse(localStorage.getItem(STORAGE_KEYS.ACHIEVEMENTS)) || { firstMessage: false, sevenStreak: false, fiveMessages: false };
-            let recognition = null;  // for voice input
-
-            // ========== DOM ELEMENTS ==========
-            const chatContainer = document.getElementById('chatContainer');
-            const welcomeMsg = document.getElementById('welcomeMessage');
-            const messageInput = document.getElementById('messageInput');
-            const sendBtn = document.getElementById('sendButton');
-            const tabBar = document.getElementById('tabBar');
-            const defaultTab = document.getElementById('defaultTab');
-            const newTabBtn = document.getElementById('newTabBtn');
-            const themeToggle = document.getElementById('themeToggle');
-            const aboutBtn = document.getElementById('aboutBtn');
-            const aboutModal = document.getElementById('aboutModal');
-            const closeAboutModal = document.getElementById('closeAboutModal');
-            const settingsBtn = document.getElementById('settingsBtn');
-            const settingsModal = document.getElementById('settingsModal');
-            const saveSettingsBtn = document.getElementById('saveSettings');
-            const statsBtn = document.getElementById('statsBtn');
-            const statsModal = document.getElementById('statsModal');
-            const closeStatsModal = document.getElementById('closeStatsModal');
-            const shortcutsBtn = document.getElementById('shortcutsBtn');
-            const shortcutsModal = document.getElementById('shortcutsModal');
-            const closeShortcutsModal = document.getElementById('closeShortcutsModal');
-            const limitModal = document.getElementById('limitModal');
-            const closeLimitModal = document.getElementById('closeLimitModal');
-            const searchToggle = document.getElementById('searchToggle');
-            const searchBar = document.getElementById('searchBar');
-            const searchInput = document.getElementById('searchInput');
-            const searchScope = document.getElementById('searchScope');
-            const searchClose = document.getElementById('searchClose');
-            const clearChatBtn = document.getElementById('clearChat');
-            const shareChatBtn = document.getElementById('shareChat');
-            const soundToggle = document.getElementById('soundToggle');
-            const voiceInputBtn = document.getElementById('voiceInputBtn');
-            const toast = document.getElementById('toast');
-
-            // Settings inputs
-            const temperatureInput = document.getElementById('temperatureInput');
-            const maxTokensInput = document.getElementById('maxTokensInput');
-            const personalitySelect = document.getElementById('personalitySelect');
-            const dailyLimitInput = document.getElementById('dailyLimitInput');
-            const soundEnabledCheck = document.getElementById('soundEnabledCheck');
-            const ttsEnabledCheck = document.getElementById('ttsEnabledCheck');
-            const autoScrollCheck = document.getElementById('autoScrollCheck');
-            const accentColorInput = document.getElementById('accentColorInput');
-            const exportDataBtn = document.getElementById('exportDataBtn');
-            const importDataBtn = document.getElementById('importDataBtn');
-            const importFile = document.getElementById('importFile');
-
-            // ========== UTILITY FUNCTIONS ==========
-            function showToast(msg, duration = 3000) {
-                toast.textContent = msg;
-                toast.style.display = 'block';
-                setTimeout(() => { toast.style.display = 'none'; }, duration);
-            }
-
-            function playNotificationSound() {
-                if (!settings.soundEnabled) return;
-                try {
-                    const audioCtx = new (window.AudioContext || window.webkitAudioContext)();
-                    const oscillator = audioCtx.createOscillator();
-                    const gainNode = audioCtx.createGain();
-                    oscillator.connect(gainNode);
-                    gainNode.connect(audioCtx.destination);
-                    oscillator.frequency.value = 800;
-                    gainNode.gain.value = 0.1;
-                    oscillator.start();
-                    oscillator.stop(audioCtx.currentTime + 0.1);
-                } catch (e) {
-                    console.log('Audio not supported');
-                }
-            }
-
-            // ========== LOAD / SAVE SETTINGS ==========
-            function loadSettings() {
-                try {
-                    const saved = localStorage.getItem(STORAGE_KEYS.SETTINGS);
-                    if (saved) {
-                        const parsed = JSON.parse(saved);
-                        settings = { ...settings, ...parsed };
-                    }
-                } catch (e) {}
-                // Populate UI
-                temperatureInput.value = settings.temperature;
-                maxTokensInput.value = settings.maxTokens;
-                personalitySelect.value = settings.personality;
-                dailyLimitInput.value = settings.dailyLimit;
-                DAILY_LIMIT = settings.dailyLimit;
-                soundEnabledCheck.checked = settings.soundEnabled;
-                ttsEnabledCheck.checked = settings.ttsEnabled;
-                autoScrollCheck.checked = settings.autoScroll;
-                accentColorInput.value = settings.accentColor;
-                // Apply accent color
-                document.documentElement.style.setProperty('--accent', settings.accentColor);
-                soundToggle.innerHTML = settings.soundEnabled ? '<i class="fas fa-volume-up"></i>' : '<i class="fas fa-volume-mute"></i>';
-            }
-
-            function saveSettings() {
-                settings.temperature = parseFloat(temperatureInput.value);
-                settings.maxTokens = parseInt(maxTokensInput.value);
-                settings.personality = personalitySelect.value;
-                settings.dailyLimit = parseInt(dailyLimitInput.value);
-                DAILY_LIMIT = settings.dailyLimit;
-                settings.soundEnabled = soundEnabledCheck.checked;
-                settings.ttsEnabled = ttsEnabledCheck.checked;
-                settings.autoScroll = autoScrollCheck.checked;
-                settings.accentColor = accentColorInput.value;
-                localStorage.setItem(STORAGE_KEYS.SETTINGS, JSON.stringify(settings));
-                // Apply accent
-                document.documentElement.style.setProperty('--accent', settings.accentColor);
-                soundToggle.innerHTML = settings.soundEnabled ? '<i class="fas fa-volume-up"></i>' : '<i class="fas fa-volume-mute"></i>';
-                showToast('Settings saved');
-                // Re-check daily limit
-                if (usage.count >= DAILY_LIMIT) disableInput(true);
-                else disableInput(false);
-            }
-
-            // ========== USAGE MANAGEMENT ==========
-            function loadUsage() {
-                try {
-                    const saved = localStorage.getItem(STORAGE_KEYS.USAGE);
-                    if (saved) {
-                        const data = JSON.parse(saved);
-                        if (data.date === new Date().toDateString()) {
-                            usage = data;
-                        } else {
-                            usage = { date: new Date().toDateString(), count: 0 };
-                        }
-                    }
-                } catch (e) {}
-            }
-
-            function saveUsage() {
-                localStorage.setItem(STORAGE_KEYS.USAGE, JSON.stringify(usage));
-            }
-
-            function incrementUsage() {
-                usage.count++;
-                saveUsage();
-                if (usage.count >= DAILY_LIMIT) {
-                    disableInput(true);
-                    limitModal.style.display = 'flex';
-                }
-            }
-
-            function disableInput(disabled) {
-                messageInput.disabled = disabled;
-                sendBtn.disabled = disabled;
-                document.querySelectorAll('.chip').forEach(chip => {
-                    if (disabled) chip.classList.add('disabled');
-                    else chip.classList.remove('disabled');
-                });
-            }
-
-            // ========== CONVERSATION MANAGEMENT ==========
-            function loadConversations() {
-                try {
-                    const saved = localStorage.getItem(STORAGE_KEYS.CONVERSATIONS);
-                    if (saved) {
-                        conversations = JSON.parse(saved);
-                    } else {
-                        conversations = { default: { id: 'default', name: 'Main Chat', messages: [], pinned: false, archived: false } };
-                    }
-                } catch (e) {
-                    conversations = { default: { id: 'default', name: 'Main Chat', messages: [], pinned: false, archived: false } };
-                }
-                if (!conversations.default) {
-                    conversations.default = { id: 'default', name: 'Main Chat', messages: [], pinned: false, archived: false };
-                }
-                renderTabs();
-                loadConversation(currentConvId);
-            }
-
-            function saveConversations() {
-                localStorage.setItem(STORAGE_KEYS.CONVERSATIONS, JSON.stringify(conversations));
-            }
-
-            function renderTabs() {
-                // Remove all dynamically added tabs
-                const tabs = document.querySelectorAll('.tab:not(#defaultTab):not(#newTabBtn)');
-                tabs.forEach(t => t.remove());
-
-                // Sort: pinned first, then by name
-                const convList = Object.values(conversations).filter(c => !c.archived && c.id !== 'default');
-                convList.sort((a, b) => {
-                    if (a.pinned && !b.pinned) return -1;
-                    if (!a.pinned && b.pinned) return 1;
-                    return (a.name || '').localeCompare(b.name || '');
-                });
-
-                convList.forEach(conv => {
-                    const tab = document.createElement('div');
-                    tab.className = `tab ${conv.id === currentConvId ? 'active' : ''}`;
-                    tab.dataset.tab = conv.id;
-                    tab.innerHTML = `
-                        <i class="fas ${conv.pinned ? 'fa-thumbtack' : 'fa-comment'}"></i>
-                        <span>${conv.name || 'Chat'}</span>
-                        <i class="fas fa-chevron-down tab-options" data-id="${conv.id}"></i>
-                        <i class="fas fa-times close-tab" data-id="${conv.id}"></i>
-                    `;
-                    tab.addEventListener('click', (e) => {
-                        if (!e.target.classList.contains('close-tab') && !e.target.classList.contains('tab-options')) {
-                            switchConversation(conv.id);
-                        }
-                    });
-                    // Options dropdown
-                    tab.querySelector('.tab-options')?.addEventListener('click', (e) => {
-                        e.stopPropagation();
-                        showTabOptions(conv.id, e.target);
-                    });
-                    tabBar.insertBefore(tab, newTabBtn);
-                });
-
-                // Update active state for default tab
-                if (currentConvId === 'default') defaultTab.classList.add('active');
-                else defaultTab.classList.remove('active');
-
-                // Attach close handlers
-                document.querySelectorAll('.close-tab').forEach(btn => {
-                    btn.addEventListener('click', (e) => {
-                        e.stopPropagation();
-                        const id = btn.dataset.id;
-                        deleteConversation(id);
-                    });
-                });
-            }
-
-            function showTabOptions(convId, target) {
-                // Simple context menu
-                const menu = document.createElement('div');
-                menu.style.cssText = 'position:absolute; background:var(--surface); border:1px solid var(--border); border-radius:12px; padding:8px; z-index:100;';
-                menu.innerHTML = `
-                    <div style="padding:8px 16px; cursor:pointer;" data-action="rename">Rename</div>
-                    <div style="padding:8px 16px; cursor:pointer;" data-action="pin">${conversations[convId].pinned ? 'Unpin' : 'Pin'}</div>
-                    <div style="padding:8px 16px; cursor:pointer;" data-action="duplicate">Duplicate</div>
-                    <div style="padding:8px 16px; cursor:pointer;" data-action="archive">Archive</div>
-                `;
-                document.body.appendChild(menu);
-                const rect = target.getBoundingClientRect();
-                menu.style.left = rect.left + 'px';
-                menu.style.top = rect.bottom + 'px';
-                menu.addEventListener('click', (e) => {
-                    const action = e.target.dataset.action;
-                    if (action === 'rename') {
-                        const newName = prompt('New name:', conversations[convId].name);
-                        if (newName) {
-                            conversations[convId].name = newName;
-                            saveConversations();
-                            renderTabs();
-                        }
-                    } else if (action === 'pin') {
-                        conversations[convId].pinned = !conversations[convId].pinned;
-                        saveConversations();
-                        renderTabs();
-                    } else if (action === 'duplicate') {
-                        const newId = 'conv_' + Date.now();
-                        conversations[newId] = {
-                            ...JSON.parse(JSON.stringify(conversations[convId])),
-                            id: newId,
-                            name: conversations[convId].name + ' (copy)',
-                            pinned: false
-                        };
-                        saveConversations();
-                        renderTabs();
-                    } else if (action === 'archive') {
-                        conversations[convId].archived = true;
-                        saveConversations();
-                        if (currentConvId === convId) switchConversation('default');
-                        else renderTabs();
-                    }
-                    menu.remove();
-                });
-                setTimeout(() => { menu.remove(); }, 5000);
-            }
-
-            function switchConversation(id) {
-                if (!conversations[id]) return;
-                currentConvId = id;
-                currentMessages = conversations[id].messages || [];
-                renderTabs();
-                displayMessages();
-            }
-
-            function deleteConversation(id) {
-                if (id === 'default') return;
-                if (!confirm('Delete this conversation?')) return;
-                delete conversations[id];
-                if (currentConvId === id) {
-                    currentConvId = 'default';
-                    currentMessages = conversations.default.messages;
-                }
-                saveConversations();
-                renderTabs();
-                displayMessages();
-            }
-
-            function createNewConversation() {
-                const id = 'conv_' + Date.now();
-                conversations[id] = {
-                    id: id,
-                    name: `Chat ${Object.keys(conversations).length}`,
-                    messages: [],
-                    pinned: false,
-                    archived: false
-                };
-                saveConversations();
-                switchConversation(id);
-            }
-
-            function displayMessages(filterText = '', scope = 'current') {
-                chatContainer.innerHTML = '';
-                if (scope === 'current') {
-                    if (!currentMessages || currentMessages.length === 0) {
-                        chatContainer.appendChild(welcomeMsg.cloneNode(true));
-                        return;
-                    }
-                    let messagesToShow = currentMessages;
-                    if (filterText.trim()) {
-                        const lowerFilter = filterText.toLowerCase();
-                        messagesToShow = currentMessages.filter(msg => 
-                            msg.content.toLowerCase().includes(lowerFilter)
-                        );
-                        if (messagesToShow.length === 0) {
-                            chatContainer.innerHTML = '<div style="text-align:center; padding:40px;">No messages match your search.</div>';
-                            return;
-                        }
-                    }
-                    messagesToShow.forEach(msg => {
-                        appendMessageToDOM(msg.content, msg.role, msg.timestamp);
-                    });
-                } else {
-                    // Global search across all conversations
-                    let results = [];
-                    Object.values(conversations).forEach(conv => {
-                        conv.messages.forEach(msg => {
-                            if (msg.content.toLowerCase().includes(filterText.toLowerCase())) {
-                                results.push({ ...msg, convName: conv.name });
-                            }
-                        });
-                    });
-                    if (results.length === 0) {
-                        chatContainer.innerHTML = '<div style="text-align:center; padding:40px;">No messages match your search.</div>';
-                        return;
-                    }
-                    results.forEach(msg => {
-                        const msgDiv = document.createElement('div');
-                        msgDiv.className = `message ${msg.role === 'user' ? 'user-message' : 'ai-message'}`;
-                        msgDiv.innerHTML = `<div><small>From: ${msg.convName}</small><br>${msg.content}</div><div class="message-time">${new Date(msg.timestamp).toLocaleTimeString()}</div>`;
-                        chatContainer.appendChild(msgDiv);
-                    });
-                }
-                if (settings.autoScroll) chatContainer.scrollTop = chatContainer.scrollHeight;
-            }
-
-            function appendMessageToDOM(content, role, timestamp = null) {
-                const msgDiv = document.createElement('div');
-                msgDiv.className = `message ${role === 'user' ? 'user-message' : 'ai-message'}`;
-                let innerHtml = '';
-                if (role === 'assistant') {
-                    innerHtml += '<span class="ai-attribution"><i class="fas fa-stethoscope"></i> Zakhourani AI</span>';
-                }
-                innerHtml += `<div>${content.replace(/\n/g, '<br>')}</div>`;
-                innerHtml += `<div class="message-time">${timestamp ? new Date(timestamp).toLocaleTimeString() : new Date().toLocaleTimeString()}</div>`;
-                innerHtml += `<div class="message-actions">`;
-                innerHtml += `<button class="copy-msg" title="Copy"><i class="fas fa-copy"></i></button>`;
-                if (role === 'assistant' && settings.ttsEnabled) {
-                    innerHtml += `<button class="speak-msg" title="Speak"><i class="fas fa-volume-up"></i></button>`;
-                }
-                innerHtml += `<button class="like-msg" title="Like"><i class="far fa-thumbs-up"></i></button>`;
-                if (role === 'user') {
-                    innerHtml += `<button class="edit-msg" title="Edit"><i class="fas fa-edit"></i></button>`;
-                }
-                innerHtml += `<button class="delete-msg" title="Delete"><i class="fas fa-trash"></i></button>`;
-                innerHtml += `</div>`;
-                msgDiv.innerHTML = innerHtml;
-                chatContainer.appendChild(msgDiv);
-
-                // Attach event listeners
-                msgDiv.querySelector('.copy-msg')?.addEventListener('click', () => {
-                    navigator.clipboard.writeText(content);
-                    showToast('Copied!');
-                });
-                if (settings.ttsEnabled) {
-                    msgDiv.querySelector('.speak-msg')?.addEventListener('click', () => {
-                        const utterance = new SpeechSynthesisUtterance(content);
-                        window.speechSynthesis.speak(utterance);
-                    });
-                }
-                msgDiv.querySelector('.like-msg')?.addEventListener('click', (e) => {
-                    e.target.classList.toggle('fas');
-                    e.target.classList.toggle('far');
-                });
-                msgDiv.querySelector('.delete-msg')?.addEventListener('click', () => {
-                    if (confirm('Delete this message?')) {
-                        const msgIndex = currentMessages.findIndex(m => m.content === content && m.role === role && m.timestamp === timestamp);
-                        if (msgIndex !== -1) {
-                            currentMessages.splice(msgIndex, 1);
-                            saveConversations();
-                            displayMessages();
-                        }
-                    }
-                });
-                if (role === 'user') {
-                    msgDiv.querySelector('.edit-msg')?.addEventListener('click', () => {
-                        const newText = prompt('Edit your message:', content);
-                        if (newText && newText !== content) {
-                            const msgIndex = currentMessages.findIndex(m => m.content === content && m.role === role && m.timestamp === timestamp);
-                            if (msgIndex !== -1) {
-                                currentMessages[msgIndex].content = newText;
-                                saveConversations();
-                                displayMessages();
-                            }
-                        }
-                    });
-                }
-            }
-
-            async function addMessage(content, role) {
-                const msg = { role, content, timestamp: new Date().toISOString() };
-                if (!conversations[currentConvId].messages) conversations[currentConvId].messages = [];
-                conversations[currentConvId].messages.push(msg);
-                saveConversations();
-                appendMessageToDOM(content, role, msg.timestamp);
-                if (welcomeMsg.parentNode === chatContainer) welcomeMsg.remove();
-                if (role === 'assistant' && settings.soundEnabled) playNotificationSound();
-                updateStats();
-
-                // Achievements
-                if (!achievements.firstMessage && role === 'user') {
-                    achievements.firstMessage = true;
-                    localStorage.setItem(STORAGE_KEYS.ACHIEVEMENTS, JSON.stringify(achievements));
-                    showToast('🏆 Achievement unlocked: First Message!');
-                }
-                const userMsgCount = conversations[currentConvId].messages.filter(m => m.role === 'user').length;
-                if (userMsgCount >= 5 && !achievements.fiveMessages) {
-                    achievements.fiveMessages = true;
-                    localStorage.setItem(STORAGE_KEYS.ACHIEVEMENTS, JSON.stringify(achievements));
-                    showToast('🏆 Achievement: 5 messages sent!');
-                }
-            }
-
-            // ========== AI CALL (DeepSeek) ==========
-            async function callAI(prompt, history = []) {
-                const messages = [
-                    { role: 'system', content: settings.systemPrompt },
-                    ...history.slice(-8),
-                    { role: 'user', content: prompt }
-                ];
-
-                try {
-                    const response = await fetch('https://api.deepseek.com/v1/chat/completions', {
-                        method: 'POST',
-                        headers: {
-                            'Content-Type': 'application/json',
-                            'Authorization': `Bearer ${DEEPSEEK_KEY}`
-                        },
-                        body: JSON.stringify({
-                            model: 'deepseek-chat',
-                            messages: messages,
-                            temperature: settings.temperature,
-                            max_tokens: settings.maxTokens
-                        })
-                    });
-                    if (!response.ok) throw new Error('DeepSeek error');
-                    const data = await response.json();
-                    return data.choices[0].message.content;
-                } catch (e) {
-                    console.warn('DeepSeek failed, using fallback:', e);
-                    const lower = prompt.toLowerCase();
-                    if (lower.includes('dr. waleed') || lower.includes('dr waleed')) {
-                        return "• Dr. Waleed Hussein Zakhourani is a Harvard-educated linguist.\n• He created the JIHAN Universal Dictionary.\n• He bridges English, Arabic, and Kurdish cultures.\n• Zakhourani Developers continues his mission.";
-                    }
-                    if (lower.includes('machine learning')) {
-                        return "• ML is a subset of AI.\n• Types: supervised, unsupervised, reinforcement.\n• Applications: image recognition, NLP, recommendation systems.";
-                    }
-                    if (lower.includes('quantum')) {
-                        return "• Quantum computing uses qubits (superposition).\n• Enables massive parallelism.\n• Applications: cryptography, drug discovery.";
-                    }
-                    if (lower.includes('poem')) {
-                        return "Roses are red,\nViolets are blue,\nI'm Zakhourani AI,\nHere to help you!";
-                    }
-                    return "I'm here to help! Please ask me about Dr. Waleed, our team, or any topic you'd like explained briefly.";
-                }
-            }
-
-            // ========== SEND MESSAGE ==========
-            async function sendMessage() {
-                const text = messageInput.value.trim();
-                if (!text || messageInput.disabled) return;
-
-                if (usage.count >= DAILY_LIMIT) {
-                    limitModal.style.display = 'flex';
-                    return;
-                }
-
-                await addMessage(text, 'user');
-                messageInput.value = '';
-
-                const history = conversations[currentConvId].messages.slice(-10).map(m => ({ role: m.role, content: m.content }));
-
-                // Show loading indicator
-                const loadingDiv = document.createElement('div');
-                loadingDiv.className = 'message loading';
-                loadingDiv.id = 'loadingMsg';
-                loadingDiv.innerHTML = '<div class="typing"><span></span><span></span><span></span></div><span>Zakhourani is thinking...</span>';
-                chatContainer.appendChild(loadingDiv);
-                if (settings.autoScroll) chatContainer.scrollTop = chatContainer.scrollHeight;
-
-                try {
-                    const reply = await callAI(text, history);
-                    document.getElementById('loadingMsg')?.remove();
-                    await addMessage(reply, 'assistant');
-                    incrementUsage();
-                } catch (err) {
-                    document.getElementById('loadingMsg')?.remove();
-                    await addMessage('Sorry, I encountered an error. Please try again.', 'assistant');
-                } finally {
-                    messageInput.focus();
-                }
-            }
-
-            // ========== VOICE INPUT ==========
-            function initSpeechRecognition() {
-                if (!('webkitSpeechRecognition' in window) && !('SpeechRecognition' in window)) {
-                    showToast('Voice input not supported in this browser.');
-                    return;
-                }
-                const SpeechRecognition = window.SpeechRecognition || window.webkitSpeechRecognition;
-                recognition = new SpeechRecognition();
-                recognition.continuous = false;
-                recognition.interimResults = false;
-                recognition.lang = 'en-US';
-                recognition.onresult = (event) => {
-                    const transcript = event.results[0][0].transcript;
-                    messageInput.value = transcript;
-                    sendMessage();
-                };
-                recognition.onerror = (e) => {
-                    showToast('Voice error: ' + e.error);
-                };
-            }
-
-            // ========== STATISTICS ==========
-            function updateStats() {
-                let totalMessages = 0, totalWords = 0, todayMessages = 0;
-                Object.values(conversations).forEach(conv => {
-                    conv.messages.forEach(msg => {
-                        totalMessages++;
-                        totalWords += msg.content.split(/\s+/).length;
-                        if (new Date(msg.timestamp).toDateString() === new Date().toDateString()) {
-                            todayMessages++;
-                        }
-                    });
-                });
-                document.getElementById('totalMessagesStat').textContent = totalMessages;
-                document.getElementById('totalWordsStat').textContent = totalWords;
-                document.getElementById('todayMessagesStat').textContent = todayMessages;
-                document.getElementById('conversationsStat').textContent = Object.keys(conversations).length;
-                document.getElementById('achievementsStat').textContent = Object.values(achievements).filter(Boolean).length;
-            }
-
-            // ========== EXPORT / IMPORT ==========
-            function exportData() {
-                const data = {
-                    conversations: conversations,
-                    settings: settings,
-                    usage: usage,
-                    achievements: achievements
-                };
-                const blob = new Blob([JSON.stringify(data, null, 2)], { type: 'application/json' });
-                const url = URL.createObjectURL(blob);
-                const a = document.createElement('a');
-                a.href = url;
-                a.download = 'zakhourani-backup.json';
-                a.click();
-                URL.revokeObjectURL(url);
-            }
-
-            function importData(file) {
-                const reader = new FileReader();
-                reader.onload = (e) => {
-                    try {
-                        const data = JSON.parse(e.target.result);
-                        if (data.conversations) conversations = data.conversations;
-                        if (data.settings) settings = { ...settings, ...data.settings };
-                        if (data.usage) usage = data.usage;
-                        if (data.achievements) achievements = data.achievements;
-                        saveConversations();
-                        saveSettings();
-                        saveUsage();
-                        localStorage.setItem(STORAGE_KEYS.ACHIEVEMENTS, JSON.stringify(achievements));
-                        loadConversations();
-                        loadSettings();
-                        showToast('Data imported successfully');
-                    } catch (ex) {
-                        showToast('Invalid file');
-                    }
-                };
-                reader.readAsText(file);
-            }
-
-            // ========== KEYBOARD SHORTCUTS ==========
-            document.addEventListener('keydown', (e) => {
-                if (e.ctrlKey && e.key === 'Enter') {
-                    e.preventDefault();
-                    sendMessage();
-                }
-                if (e.ctrlKey && e.key === 'n') {
-                    e.preventDefault();
-                    createNewConversation();
-                }
-                if (e.ctrlKey && e.key === 'f') {
-                    e.preventDefault();
-                    searchBar.style.display = 'flex';
-                    searchInput.focus();
-                }
-                if (e.ctrlKey && e.key === 'l') {
-                    e.preventDefault();
-                    clearCurrentChat();
-                }
-                if (e.ctrlKey && e.key === 't') {
-                    e.preventDefault();
-                    themeToggle.click();
-                }
-                if (e.key === '/' && document.activeElement !== messageInput) {
-                    e.preventDefault();
-                    messageInput.focus();
-                }
-                if (e.ctrlKey && e.shiftKey && e.key === 'C') {
-                    e.preventDefault();
-                    const lastAi = currentMessages.filter(m => m.role === 'assistant').pop();
-                    if (lastAi) {
-                        navigator.clipboard.writeText(lastAi.content);
-                        showToast('Last AI reply copied');
-                    }
-                }
-            });
-
-            // ========== CLEAR CURRENT CHAT ==========
-            function clearCurrentChat() {
-                if (confirm('Clear all messages in this conversation?')) {
-                    conversations[currentConvId].messages = [];
-                    saveConversations();
-                    displayMessages();
-                }
-            }
-
-            // ========== EVENT LISTENERS ==========
-            sendBtn.addEventListener('click', sendMessage);
-            messageInput.addEventListener('keypress', (e) => { if (e.key === 'Enter' && !e.ctrlKey) sendMessage(); });
-
-            newTabBtn.addEventListener('click', createNewConversation);
-            defaultTab.addEventListener('click', () => switchConversation('default'));
-
-            themeToggle.addEventListener('click', () => {
-                document.body.classList.toggle('light');
-                themeToggle.innerHTML = document.body.classList.contains('light') ? '<i class="fas fa-sun"></i>' : '<i class="fas fa-moon"></i>';
-            });
-
-            aboutBtn.addEventListener('click', () => aboutModal.style.display = 'flex');
-            closeAboutModal.addEventListener('click', () => aboutModal.style.display = 'none');
-
-            settingsBtn.addEventListener('click', () => {
-                loadSettings(); // refresh inputs
-                settingsModal.style.display = 'flex';
-            });
-            saveSettingsBtn.addEventListener('click', () => {
-                saveSettings();
-                settingsModal.style.display = 'none';
-            });
-
-            statsBtn.addEventListener('click', () => {
-                updateStats();
-                statsModal.style.display = 'flex';
-            });
-            closeStatsModal.addEventListener('click', () => statsModal.style.display = 'none');
-
-            shortcutsBtn.addEventListener('click', () => shortcutsModal.style.display = 'flex');
-            closeShortcutsModal.addEventListener('click', () => shortcutsModal.style.display = 'none');
-
-            searchToggle.addEventListener('click', () => {
-                if (searchBar.style.display === 'flex') {
-                    searchBar.style.display = 'none';
-                    displayMessages();
-                } else {
-                    searchBar.style.display = 'flex';
-                    searchInput.focus();
-                }
-            });
-
-            searchClose.addEventListener('click', () => {
-                searchBar.style.display = 'none';
-                displayMessages();
-            });
-
-            searchInput.addEventListener('input', () => {
-                displayMessages(searchInput.value, searchScope.value);
-            });
-            searchScope.addEventListener('change', () => {
-                displayMessages(searchInput.value, searchScope.value);
-            });
-
-            clearChatBtn.addEventListener('click', clearCurrentChat);
-
-            shareChatBtn.addEventListener('click', () => {
-                const messages = conversations[currentConvId].messages;
-                if (messages.length === 0) {
-                    showToast('No messages to share');
-                    return;
-                }
-                let text = `Zakhourani AI Conversation - ${new Date().toLocaleString()}\n\n`;
-                messages.forEach(m => {
-                    text += `${m.role === 'user' ? 'You' : 'Zakhourani'}: ${m.content}\n\n`;
-                });
-                navigator.clipboard.writeText(text).then(() => showToast('Conversation copied to clipboard'));
-            });
-
-            soundToggle.addEventListener('click', () => {
-                settings.soundEnabled = !settings.soundEnabled;
-                soundToggle.innerHTML = settings.soundEnabled ? '<i class="fas fa-volume-up"></i>' : '<i class="fas fa-volume-mute"></i>';
-                localStorage.setItem(STORAGE_KEYS.SETTINGS, JSON.stringify(settings));
-            });
-
-            voiceInputBtn.addEventListener('click', () => {
-                if (!recognition) initSpeechRecognition();
-                if (recognition) {
-                    try {
-                        recognition.start();
-                        showToast('Listening...');
-                    } catch (e) {
-                        showToast('Already listening');
-                    }
-                }
-            });
-
-            exportDataBtn.addEventListener('click', exportData);
-            importDataBtn.addEventListener('click', () => importFile.click());
-            importFile.addEventListener('change', (e) => {
-                if (e.target.files[0]) importData(e.target.files[0]);
-            });
-
-            window.addEventListener('click', (e) => {
-                if (e.target === aboutModal) aboutModal.style.display = 'none';
-                if (e.target === settingsModal) settingsModal.style.display = 'none';
-                if (e.target === statsModal) statsModal.style.display = 'none';
-                if (e.target === shortcutsModal) shortcutsModal.style.display = 'none';
-                if (e.target === limitModal) limitModal.style.display = 'none';
-            });
-
-            closeLimitModal.addEventListener('click', () => limitModal.style.display = 'none');
-
-            document.querySelectorAll('.chip').forEach(chip => {
-                chip.addEventListener('click', () => {
-                    if (!chip.classList.contains('disabled')) {
-                        messageInput.value = chip.dataset.prompt;
-                        sendMessage();
-                    }
-                });
-            });
-
-            // ========== EASTER EGGS ==========
-            const originalAddMessage = addMessage;
-            addMessage = async function(content, role) {
-                // Easter egg: answer to life
-                if (role === 'user' && (content.includes('42') || content.toLowerCase().includes('meaning of life'))) {
-                    await originalAddMessage.call(this, "The answer to life, the universe, and everything is 42! 🌌", 'assistant');
-                }
-                // Easter egg: about Zakhourani
-                if (role === 'user' && content.toLowerCase().includes('zakhourani') && !content.toLowerCase().includes('dr. waleed')) {
-                    await originalAddMessage.call(this, "Dr. Zakhourani is our visionary founder. Ask me about his work!", 'assistant');
-                }
-                return originalAddMessage.call(this, content, role);
-            };
-
-            // ========== INITIALIZATION ==========
-            loadSettings();
-            loadUsage();
-            loadConversations();
-            disableInput(usage.count >= DAILY_LIMIT);
-            initSpeechRecognition();
-        })();
-    </script>
-    <!-- ========== END OF JAVASCRIPT ========== -->
-    <!-- Total lines: approximately 5200 (including comments and generous spacing) -->
+  </section>
+
+  <!-- MIR KHALAF - smaller, enhanced motion -->
+  <section id="mir-khalaf" class="mir-khalaf-section" data-aos="flip-right" data-aos-duration="1100">
+    <div class="mir-header"><i class="fas fa-chess-king"></i><h2 class="mir-title">Mir Khalaf · The Heir of Sovereignty</h2></div>
+    <div class="mir-khalaf-image" data-src="https://raw.githubusercontent.com/whz-co/whz/main/images/mir%20khalaf%20-%20arabic%20black%20and%20white.jpg"><img src="https://raw.githubusercontent.com/whz-co/whz/main/images/mir%20khalaf%20-%20arabic%20black%20and%20white.jpg" alt="Mir Khalaf" loading="lazy"></div>
+    <div class="mir-desc">
+      <div class="lang-tabs" style="margin-bottom:1rem;">
+        <button class="lang-tab active" data-lang="en-khalaf">🇬🇧 EN</button><button class="lang-tab" data-lang="ar-khalaf">🇸🇦 AR</button><button class="lang-tab" data-lang="ku-arab-khalaf">🏴 KU(Ar)</button><button class="lang-tab" data-lang="ku-latn-khalaf">🇹🇰 KU(La)</button>
+      </div>
+      <div class="bio-text active" id="khalaf-en" lang="en"><p><strong>Mir Khalaf (Khalafê Portî): The Continuation of a Noble Legacy</strong></p><p>Mir Khalaf, the son of Mir Ali and grandson of the legendary Mir Porti, stands as a prominent figure in the annals of Kurdish history. Commonly known as (Khalafê Portî), he carried the mantle of leadership with the same distinction and authority as his grandfather. His influence was not merely inherited but earned through his formidable presence and social standing.</p><p>Throughout the history of the Mardin province and its surrounding territories, Mir Khalaf was recognized as a cornerstone of stability and leadership. His reputation transcended ethnic and cultural boundaries, earning him profound respect among the diverse peoples and communities of the region. This brief historical overview, accompanied by rare personal portraits, serves to document the enduring legacy of both Mir Porti and Mir Khalaf, two pillars of the Zakhoran nobility.</p></div>
+      <div class="bio-text" id="khalaf-ar" lang="ar" dir="rtl"><p><strong>مير خلف (خلفي بورتي): امتداد الزعامة وإرث الأنفة في ماردين</strong></p><p>يبرز اسم مير خلف بن مير علي بن مير بورتي كواحد من ألمع الأحفاد الذين حملوا مشعل السيادة من جدهم الأكبر "مير بورتي". ويُعرف في الذاكرة الشعبية والتاريخية بلقب (خلفي بورتي)، وهو اللقب الذي اقترن بالشجاعة والحكمة والمكانة الاجتماعية الرفيعة.</p><p>لم يكن مير خلف مجرد وريث لاسم عائلته، بل كان شخصية محورية لا تقل شأناً ولا هيبة عن جده الأمير بورتي. استطاع بحكمته وحضوره الشكلى أن يفرض نفسه كشخصية بارزة يشار إليها بالبنان عبر التاريخ، حيث امتد صيته وتأثيره ليتجاوز حدود منطقته، ليصبح علماً معروفاً ومحترماً بين كافة الأقوام والملل والطوائف القاطنة في محافظة ماردين وضواحيها.</p><p>يمثل مير خلف الجسر التاريخي الذي نقل أمجاد "آل بورتي" وعشيرة "زاخوران" إلى الأجيال اللاحقة، محافظاً على الروابط المتينة بين العشائر الكردية والعربية والتركية في المنطقة. وهذه النبذة المختصرة، المرفقة بالصور الشخصية النادرة لكل من الأمير بورتي وحفيده مير خلف، تُعد وثيقة تاريخية استثنائية تُنشر لتسليط الضوء على عراقة هذا النسب ودوره في صياغة المشهد الاجتماعي والسياسي لولاية ماردين عبر القرون.</p></div>
+      <div class="bio-text" id="khalaf-ku-arab" lang="ku-arab" dir="rtl"><p><strong>میر خەلەف (خەلەفێ پۆرتى): بەردەوامیا ڕێبازا میراتییێ</strong></p><p>میر خەلەف کورێ میر عەلى و نەوەیێ میر پۆرتى یە، ئێکە ژ وان کەسایەتیێن کو ناڤێ مالباتێ ب بلندى ڕاگرتیە. د ناڤ خەلکى و دیرۆکێ دا ب ناڤێ (خەلەفێ پۆرتى) دهێتە ناسیار، و چو ژ مەزناهى و شکۆیا باپیرێ خۆ میر پۆرتى کێمتر نینە.</p><p>میر خەلەف د دیرۆکێ دا وەک کەسایەتیەکێ دیار و خودان کارتێکرن ل پارێزگەها مێردینێ و دەوروبەرێن وێ دهێتە هەژمارتن. ناڤودەنگێ وی ل ناڤ هەمی نەتەوە و پێکهاتەیێن دەڤەرێ هەبوو، و هەمویان ب چاڤەکێ مەزن لێ دنێری. ئەڤە کورتەیەکە ل سەر دیرۆکا هەردوو میران (میر پۆرتى و میر خەلەف) دگەل وێنەیێن وان یێن کەسایەتى، کو بۆ ئێکەم جار دهێنە نیشاندان وەک بەلگەیەکا ڕەسەن ل سەر دیرۆکا زاخۆران.</p></div>
+      <div class="bio-text" id="khalaf-ku-latn" lang="ku-latn"><p><strong>Mîr Xelef (Xelefê Portî): Berdewamiya Rûmeta Malbatê</strong></p><p>Mîr Xelefê kurê Mîr Elî û neviyê Mîr Portî, yek ji stûnên girîng ên dîroka malbata xwe ye. Di nav gel de bi navê (Xelefê Portî) tê naskirin û di warê navdarî û desthelatdariyê de, qet ji bapîrê xwe Mîr Portî kêmtir nebûye. Ew kesayetiyekî xurt û bandordar bû ku şopa xwe li dîroka herêmê hiştiye.</p><p>Li parêzgeha Mêrdînê û derdora wê, Mîr Xelef di nav hemû gel, netewe û olan de wekî rûspî û serokekî navdar dihat qebûlkirin. Ev kurtejiyana ku bi wêneyên wan ên taybet re hatiye amadekirin, dîroka her du mîran (Mîr Portî û Mîr Xelef) ronî dike û nîşan dide ka çawa ev malbat bûye bingeha esaleta eşîra Zaxoran û mîrateya Mîrên Botan.</p></div>
+    </div>
+  </section>
+
+  <div class="bridge-map" data-aos="flip-left" data-aos-duration="1100">
+    <div class="map-svg"><svg viewBox="0 0 360 140"><circle cx="90" cy="70" r="22" fill="#b79067" opacity="0.9" /><circle cx="180" cy="70" r="25" fill="#caa37b" /><circle cx="270" cy="70" r="22" fill="#a88967" opacity="0.9" /><text x="70" y="50" fill="#f2ddc5" font-size="12">AR</text><text x="165" y="40" fill="#fcebd6" font-size="14">ENG</text><text x="250" y="50" fill="#f2ddc5" font-size="12">KU</text><text x="130" y="115" fill="#e2cbb2" font-size="15">Dr. Waleed</text></svg></div>
+    <div class="sound-waves"><div class="wave"></div><div class="wave"></div><div class="wave"></div><div class="wave"></div></div>
+  </div>
+
+  <footer class="footer"><i class="far fa-copyright"></i> 2026 WHZ developer – all rights reserved<br><span style="font-size:1.1rem;"><i class="fas fa-code"></i> Dr. Waleed archive</span><div class="home-link-bottom"><a href="#home"><i class="fas fa-arrow-up"></i> return top</a></div></footer>
+
+  <audio id="ambientAudio" loop style="display:none"><source src="https://www.soundhelix.com/examples/mp3/SoundHelix-Song-1.mp3" type="audio/mpeg"></audio>
+  <script src="https://unpkg.com/aos@2.3.1/dist/aos.js"></script>
+  <script>
+    (function() {
+      AOS.init({ once: true, offset: 50, duration: 700 });
+      const hamburger = document.getElementById('hamburgerBtn'), dropdown = document.getElementById('menuDropdown');
+      hamburger.addEventListener('click', (e) => { e.stopPropagation(); dropdown.classList.toggle('show'); });
+      document.addEventListener('click', (e) => { if (!hamburger.contains(e.target) && !dropdown.contains(e.target)) dropdown.classList.remove('show'); });
+
+      const lightbox = document.getElementById('lightbox'), lightboxImg = document.getElementById('lightboxImg'), closeBtn = document.getElementById('lightboxClose');
+      document.querySelectorAll('[data-src]').forEach(item => { item.addEventListener('click', () => { lightboxImg.src = item.dataset.src; lightbox.classList.add('active'); }); });
+      closeBtn.addEventListener('click', () => lightbox.classList.remove('active'));
+      lightbox.addEventListener('click', (e) => { if(e.target === lightbox) lightbox.classList.remove('active'); });
+
+      const langTabs = document.querySelectorAll('.lang-panel .lang-tab');
+      const bioTexts = { en: document.getElementById('bio-en'), ar: document.getElementById('bio-ar'), 'ku-arab': document.getElementById('bio-ku-arab'), 'ku-latn': document.getElementById('bio-ku-latn') };
+      langTabs.forEach(tab => { tab.addEventListener('click', () => { langTabs.forEach(t => t.classList.remove('active')); tab.classList.add('active'); const lang = tab.dataset.lang; Object.values(bioTexts).forEach(b => b.classList.remove('active')); if(bioTexts[lang]) bioTexts[lang].classList.add('active'); }); });
+
+      const mirTabs = document.querySelectorAll('#mir-porti .lang-tab');
+      const mirTexts = { 'en-mir': document.getElementById('mir-en'), 'ku-arab-mir': document.getElementById('mir-ku-arab'), 'ku-latn-mir': document.getElementById('mir-ku-latn'), 'ar-mir': document.getElementById('mir-ar') };
+      mirTabs.forEach(tab => { tab.addEventListener('click', () => { mirTabs.forEach(t => t.classList.remove('active')); tab.classList.add('active'); const lang = tab.dataset.lang; Object.values(mirTexts).forEach(t => t.classList.remove('active')); if(mirTexts[lang]) mirTexts[lang].classList.add('active'); }); });
+
+      const khalafTabs = document.querySelectorAll('#mir-khalaf .lang-tab');
+      const khalafTexts = { 'en-khalaf': document.getElementById('khalaf-en'), 'ar-khalaf': document.getElementById('khalaf-ar'), 'ku-arab-khalaf': document.getElementById('khalaf-ku-arab'), 'ku-latn-khalaf': document.getElementById('khalaf-ku-latn') };
+      khalafTabs.forEach(tab => { tab.addEventListener('click', () => { khalafTabs.forEach(t => t.classList.remove('active')); tab.classList.add('active'); const lang = tab.dataset.lang; Object.values(khalafTexts).forEach(t => t.classList.remove('active')); if(khalafTexts[lang]) khalafTexts[lang].classList.add('active'); }); });
+
+      const audio = document.getElementById('ambientAudio'); let soundActive = false;
+      function enableSound() { if (!soundActive) { audio.volume = 0.1; audio.play().catch(()=>{}); soundActive = true; } }
+      document.body.addEventListener('touchstart', enableSound, { once: true }); document.body.addEventListener('click', enableSound, { once: true });
+
+      const canvas = document.getElementById('particle-canvas'), ctx = canvas.getContext('2d'); let width, height, particles = [];
+      function initParticles() { width = window.innerWidth; height = window.innerHeight; canvas.width = width; canvas.height = height; particles = []; for (let i = 0; i < 90; i++) { particles.push({ x: Math.random() * width, y: Math.random() * height, radius: Math.random() * 3.5 + 1.2, speedX: (Math.random() - 0.5) * 0.28, speedY: (Math.random() - 0.5) * 0.22, color: `rgba(215, 180, 140, ${Math.random() * 0.3 + 0.2})` }); } }
+      function drawParticles() { ctx.clearRect(0, 0, width, height); particles.forEach(p => { ctx.beginPath(); ctx.arc(p.x, p.y, p.radius, 0, Math.PI * 2); ctx.fillStyle = p.color; ctx.fill(); particles.forEach(p2 => { const dx = p.x - p2.x, dy = p.y - p2.y, dist = Math.sqrt(dx*dx + dy*dy); if (dist < 110 && dist > 0) { ctx.strokeStyle = `rgba(190, 155, 120, ${0.13 - dist/900})`; ctx.lineWidth = 0.7; ctx.beginPath(); ctx.moveTo(p.x, p.y); ctx.lineTo(p2.x, p2.y); ctx.stroke(); } }); p.x += p.speedX; p.y += p.speedY; if (p.x < 0 || p.x > width) p.speedX *= -1; if (p.y < 0 || p.y > height) p.speedY *= -1; }); requestAnimationFrame(drawParticles); }
+      window.addEventListener('resize', () => { initParticles(); }); initParticles(); drawParticles();
+    })();
+  </script>
 </body>
 </html>

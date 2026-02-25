@@ -1,0 +1,453 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>IELTS Complete Challenge · whz</title>
+    <!-- Font Awesome for Icons (optional but nice) -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            background: linear-gradient(145deg, #f0f4fa 0%, #e2e9f3 100%);
+            font-family: 'Segoe UI', Roboto, system-ui, -apple-system, sans-serif;
+            min-height: 100vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 1.5rem;
+        }
+
+        .challenge-card {
+            max-width: 800px;
+            width: 100%;
+            background: rgba(255, 255, 255, 0.85);
+            backdrop-filter: blur(12px);
+            -webkit-backdrop-filter: blur(12px);
+            border-radius: 2.5rem;
+            box-shadow: 0 20px 40px -12px rgba(0, 20, 40, 0.35),
+                        0 4px 18px rgba(0, 0, 0, 0.08),
+                        inset 0 1px 0 rgba(255, 255, 255, 0.6);
+            padding: 2.2rem 2rem;
+            border: 1px solid rgba(255,255,255,0.5);
+            transition: all 0.2s ease;
+        }
+
+        /* header area */
+        .challenge-header {
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+            margin-bottom: 1.8rem;
+            flex-wrap: wrap;
+        }
+        .challenge-header h1 {
+            font-size: 2.2rem;
+            font-weight: 700;
+            letter-spacing: -0.5px;
+            background: linear-gradient(130deg, #0B2A4A, #2C5F8A);
+            -webkit-background-clip: text;
+            background-clip: text;
+            color: transparent;
+            margin-right: auto;
+        }
+        .badge {
+            background: #1e3b5c;
+            color: white;
+            padding: 0.5rem 1.2rem;
+            border-radius: 40px;
+            font-weight: 600;
+            font-size: 0.9rem;
+            box-shadow: 0 6px 14px rgba(20, 60, 120, 0.25);
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            white-space: nowrap;
+        }
+        .badge i {
+            font-size: 1rem;
+        }
+
+        .intro-text {
+            color: #2c3e50;
+            font-size: 1.1rem;
+            margin-bottom: 2rem;
+            padding-bottom: 0.75rem;
+            border-bottom: 2px dashed #aac3d4;
+            display: flex;
+            align-items: center;
+            gap: 0.8rem;
+        }
+        .intro-text i {
+            color: #e67e22;
+            font-size: 1.5rem;
+        }
+
+        /* checklist grid */
+        .steps-grid {
+            display: flex;
+            flex-direction: column;
+            gap: 1rem;
+            margin: 2rem 0 1.8rem;
+        }
+
+        .step-item {
+            background: white;
+            border-radius: 40px;
+            padding: 0.3rem 0.3rem 0.3rem 1.2rem;
+            display: flex;
+            align-items: center;
+            gap: 0.8rem;
+            box-shadow: 0 6px 14px rgba(0, 30, 50, 0.08);
+            transition: all 0.15s;
+            border: 1px solid rgba(70, 130, 200, 0.15);
+        }
+        .step-item:hover {
+            border-color: #6c9ac3;
+            box-shadow: 0 8px 18px rgba(35, 100, 160, 0.12);
+            transform: scale(1.01);
+        }
+
+        /* custom checkbox — looks like a challenge badge */
+        .step-check {
+            appearance: none;
+            -webkit-appearance: none;
+            width: 2.2rem;
+            height: 2.2rem;
+            background: #ecf3fa;
+            border-radius: 50%;
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.3rem;
+            cursor: pointer;
+            border: 2px solid #b6d0e6;
+            transition: 0.1s;
+            flex-shrink: 0;
+        }
+        .step-check:checked {
+            background: #1f6e43;
+            border-color: #1f6e43;
+        }
+        .step-check:checked::after {
+            content: "✓";
+            color: white;
+            font-weight: bold;
+        }
+        .step-check:focus {
+            outline: 2px solid #a0c2e0;
+        }
+
+        .step-content {
+            flex: 1;
+            display: flex;
+            align-items: center;
+            flex-wrap: wrap;
+            gap: 0.5rem 1rem;
+            padding: 0.5rem 0;
+        }
+        .step-icon {
+            font-size: 1.6rem;
+            width: 2rem;
+            color: #2b5879;
+        }
+        .step-text {
+            font-weight: 600;
+            color: #102a3c;
+            font-size: 1.1rem;
+        }
+        .step-tag {
+            background: #d4e2f0;
+            padding: 0.25rem 1rem;
+            border-radius: 30px;
+            font-size: 0.8rem;
+            font-weight: 600;
+            color: #113355;
+            letter-spacing: 0.3px;
+            margin-left: auto;
+            white-space: nowrap;
+        }
+        /* subtle divider for longer text */
+        @media (max-width: 550px) {
+            .step-tag { margin-left: 0; }
+            .step-item { flex-wrap: wrap; padding: 0.8rem; }
+        }
+
+        /* progress & result section */
+        .progress-area {
+            background: #dde7f2;
+            border-radius: 60px;
+            padding: 1.3rem 1.8rem;
+            margin: 1.8rem 0 1.2rem;
+            display: flex;
+            align-items: center;
+            flex-wrap: wrap;
+            gap: 1.2rem;
+            justify-content: space-between;
+            border: 1px solid rgba(255,255,255,0.6);
+        }
+        .progress-text {
+            font-weight: 650;
+            color: #0a3147;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+        .progress-bar-bg {
+            flex: 2;
+            min-width: 200px;
+            height: 16px;
+            background: #b6c9db;
+            border-radius: 30px;
+            overflow: hidden;
+        }
+        .progress-fill {
+            height: 100%;
+            width: 0%;
+            background: linear-gradient(90deg, #2b7a4b, #3f9e63);
+            border-radius: 30px;
+            transition: width 0.25s ease;
+        }
+        .reset-btn {
+            background: none;
+            border: 2px solid #4b6d8c;
+            color: #1d3b57;
+            padding: 0.5rem 1.2rem;
+            border-radius: 40px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: 0.15s;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+        .reset-btn:hover {
+            background: #4b6d8c;
+            color: white;
+        }
+
+        .completion-message {
+            background: #e0f0e6;
+            border-radius: 50px;
+            padding: 1rem 2rem;
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+            font-weight: 600;
+            color: #0d452b;
+            border: 1px solid #7daf91;
+            opacity: 0;
+            transition: 0.2s;
+            pointer-events: none;
+            margin-top: 0.8rem;
+        }
+        .completion-message.show {
+            opacity: 1;
+        }
+
+        .footnote {
+            text-align: right;
+            font-size: 0.85rem;
+            color: #5f7a97;
+            margin-top: 1rem;
+            opacity: 0.7;
+        }
+    </style>
+</head>
+<body>
+
+<div class="challenge-card">
+    <div class="challenge-header">
+        <h1><i class="fas fa-globe" style="color: #2c5f8a; margin-right: 0.3rem;"></i> IELTS complete</h1>
+        <span class="badge"><i class="fas fa-bolt"></i> 8-step challenge</span>
+    </div>
+
+    <div class="intro-text">
+        <i class="fas fa-clipboard-check"></i> 
+        <span>Check each step as you finish — track your progress to <strong>IELTS success</strong></span>
+    </div>
+
+    <!-- DYNAMIC STEP LIST (will be populated by js) -->
+    <div id="stepsContainer" class="steps-grid">
+        <!-- javascript will insert steps from an array -->
+    </div>
+
+    <!-- progress & reset -->
+    <div class="progress-area">
+        <div class="progress-text">
+            <i class="fas fa-flag-checkered"></i> 
+            <span id="progressCount">0/8 completed</span>
+        </div>
+        <div class="progress-bar-bg">
+            <div id="progressFill" class="progress-fill" style="width: 0%;"></div>
+        </div>
+        <button class="reset-btn" id="resetChallenge"><i class="fas fa-undo-alt"></i> reset</button>
+    </div>
+
+    <!-- all done celebration -->
+    <div id="completionMsg" class="completion-message">
+        <i class="fas fa-trophy" style="font-size: 1.8rem;"></i>
+        <span>🏆 Congratulations! You’ve completed the IELTS challenge. You’re ready!</span>
+    </div>
+
+    <div class="footnote">
+        <i class="far fa-circle-check"></i> your progress saves automatically
+    </div>
+</div>
+
+<script>
+    (function() {
+        // ----- CHALLENGE DATA -----
+        const stepsData = [
+            { icon: 'fa-solid fa-headphones', text: 'Listening — full mock test', tag: '4 sections' },
+            { icon: 'fa-solid fa-book-open', text: 'Reading — academic passages', tag: '3 texts' },
+            { icon: 'fa-solid fa-pencil', text: 'Writing task 1 — report/letter', tag: '20 min' },
+            { icon: 'fa-solid fa-chart-line', text: 'Writing task 2 — essay', tag: '40 min' },
+            { icon: 'fa-solid fa-comments', text: 'Speaking part 1 — intro', tag: '4–5 min' },
+            { icon: 'fa-solid fa-clock', text: 'Speaking part 2 — cue card', tag: '1 min prep' },
+            { icon: 'fa-solid fa-people-arrows', text: 'Speaking part 3 — discussion', tag: '4–5 min' },
+            { icon: 'fa-solid fa-list-check', text: 'Review mistakes & vocabulary', tag: 'review' }
+        ];
+
+        const STORAGE_KEY = 'whz_ielts_complete_challenge';
+
+        // ----- render steps into container -----
+        const container = document.getElementById('stepsContainer');
+        function renderSteps(checkedState = []) {
+            let htmlStr = '';
+            stepsData.forEach((step, index) => {
+                const isChecked = checkedState[index] || false;
+                const checkedAttr = isChecked ? 'checked' : '';
+                htmlStr += `
+                    <div class="step-item" data-index="${index}">
+                        <input type="checkbox" class="step-check" id="step_${index}" ${checkedAttr}>
+                        <div class="step-content">
+                            <i class="fas ${step.icon} step-icon"></i>
+                            <span class="step-text">${step.text}</span>
+                            <span class="step-tag">${step.tag}</span>
+                        </div>
+                    </div>
+                `;
+            });
+            container.innerHTML = htmlStr;
+
+            // attach listeners after fresh render
+            document.querySelectorAll('.step-check').forEach(checkbox => {
+                checkbox.addEventListener('change', function(e) {
+                    const index = this.closest('.step-item')?.dataset.index;
+                    if (index !== undefined) {
+                        updateProgressFromCheckboxes();
+                        saveCurrentState();
+                    }
+                });
+            });
+        }
+
+        // ----- get current checkbox states (array of boolean) -----
+        function getCurrentCheckState() {
+            const checkboxes = document.querySelectorAll('.step-check');
+            return Array.from(checkboxes).map(cb => cb.checked);
+        }
+
+        // ----- update progress bar & counter -----
+        function updateProgressFromCheckboxes() {
+            const states = getCurrentCheckState();
+            const completed = states.filter(Boolean).length;
+            const total = states.length;
+
+            // update counter
+            document.getElementById('progressCount').innerText = `${completed}/${total} completed`;
+
+            // update progress bar width
+            const percent = total > 0 ? (completed / total) * 100 : 0;
+            document.getElementById('progressFill').style.width = percent + '%';
+
+            // show/hide completion message
+            const msgDiv = document.getElementById('completionMsg');
+            if (completed === total && total > 0) {
+                msgDiv.classList.add('show');
+            } else {
+                msgDiv.classList.remove('show');
+            }
+        }
+
+        // ----- save to localStorage -----
+        function saveCurrentState() {
+            const states = getCurrentCheckState();
+            localStorage.setItem(STORAGE_KEY, JSON.stringify(states));
+        }
+
+        // ----- load saved state or default (all false) -----
+        function loadSavedState() {
+            const saved = localStorage.getItem(STORAGE_KEY);
+            if (saved) {
+                try {
+                    return JSON.parse(saved);
+                } catch (e) {
+                    return null;
+                }
+            }
+            return null;
+        }
+
+        // ----- reset all checkboxes to false -----
+        function resetAllSteps() {
+            document.querySelectorAll('.step-check').forEach(cb => {
+                cb.checked = false;
+            });
+            updateProgressFromCheckboxes();
+            saveCurrentState(); // overwrite storage with cleared state
+        }
+
+        // ----- initialise everything -----
+        function init() {
+            const savedState = loadSavedState();
+            // if there is a valid saved array, use it; otherwise all false (by passing nothing renderSteps uses default)
+            if (savedState && savedState.length === stepsData.length) {
+                renderSteps(savedState);
+            } else {
+                // create fresh array of false
+                renderSteps(new Array(stepsData.length).fill(false));
+            }
+
+            // after rendering, make sure progress shows correct numbers
+            updateProgressFromCheckboxes();
+
+            // attach reset button listener
+            document.getElementById('resetChallenge').addEventListener('click', function() {
+                resetAllSteps();
+            });
+
+            // optional: save whenever page is about to be hidden (if user leaves)
+            window.addEventListener('beforeunload', function() {
+                saveCurrentState();
+            });
+        }
+
+        // start everything when DOM ready
+        if (document.readyState === 'loading') {
+            document.addEventListener('DOMContentLoaded', init);
+        } else {
+            init(); // DOM already loaded
+        }
+    })();
+</script>
+
+<!-- font awesome kit fallback (just in case cdn fails) -->
+<script>
+    (function(){
+        // if font awesome icons don't appear, this ensures fallback text
+        setTimeout(function() {
+            if (typeof window.FontAwesome === 'undefined') {
+                console.log('font-awesome optional, icons may show as squares');
+            }
+        }, 400);
+    })();
+</script>
+</body>
+</html>

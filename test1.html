@@ -3,223 +3,627 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=yes, viewport-fit=cover">
-  <title>Dr. Waleed · 4D HyperCube · 3+1D scholar</title>
-  <!-- Font Awesome 6 (free) -->
+  <title>Dr. Waleed · scholar of bridges · refined mobile</title>
+  <!-- Font Awesome 6 (free) for icons -->
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
-  <!-- Google Fonts: elegant + futuristic -->
-  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600;700&family=Amiri:wght@400;700&family=Playfair+Display:wght@400;600;700&family=Orbitron:wght@400;600;800&display=swap" rel="stylesheet">
-  <!-- AOS (Animate on Scroll) + three.js (r120) for 4D tesseract background -->
+  <!-- Google Fonts: elegant & readable -->
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600;700&family=Amiri:wght@400;700&family=Playfair+Display:wght@400;600;700&display=swap" rel="stylesheet">
+  <!-- AOS (Animate on Scroll) for motion effects -->
   <link href="https://unpkg.com/aos@2.3.1/dist/aos.css" rel="stylesheet">
   <style>
-    /* ----- RESET & 4D BASE (time as 4th dimension) ----- */
-    * { margin: 0; padding: 0; box-sizing: border-box; }
-    html { font-size: 14px; scroll-behavior: smooth; overflow-x: hidden; }
+    /* ----------------------------------------------------- */
+    /* 1. RESET & BASE — ultra compact, mobile first        */
+    /* ----------------------------------------------------- */
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+
+    html {
+      font-size: 14px;
+      scroll-behavior: smooth;
+      overflow-x: hidden;
+    }
+
     body {
-      background: #0a0502;
+      background: #0f0c09;
       font-family: 'Inter', sans-serif;
-      color: #f2e6d8;
-      line-height: 1.7;
+      color: #f0e4d4;
+      line-height: 1.5;
       width: 100%;
       position: relative;
-      transform-style: preserve-3d;
-      perspective: 1800px;
     }
-    /* ===== 4D PARTICLE FIELD (time-warp) ===== */
+
+    /* ----------------------------------------------------- */
+    /* 2. DYNAMIC PARTICLE CANVAS (background motion)       */
+    /* ----------------------------------------------------- */
     #particle-canvas {
-      position: fixed; top: 0; left: 0; width: 100%; height: 100%; z-index: -2; pointer-events: none; opacity: 0.9;
-      filter: blur(0.5px) drop-shadow(0 0 20px #a97947);
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      z-index: -1;
+      pointer-events: none;
+      opacity: 0.5;
     }
-    /* ===== THREE.JS TESSERACT CANVAS (4D hypercube) ===== */
-    #tesseract-canvas {
-      position: fixed; top: 0; left: 0; width: 100%; height: 100%; z-index: -1; pointer-events: none; opacity: 0.35;
-      mix-blend-mode: screen;
-    }
-    /* ===== 3D/4D NAV (time-stretch) ===== */
+
+    /* ----------------------------------------------------- */
+    /* 3. HAMBURGER NAV (sticky, compact)                   */
+    /* ----------------------------------------------------- */
     .mobile-nav {
-      position: sticky; top: 0; z-index: 2000;
-      background: rgba(6, 4, 2, 0.6); backdrop-filter: blur(25px) hue-rotate(5deg); -webkit-backdrop-filter: blur(25px);
-      border-bottom: 3px solid transparent; border-image: repeating-linear-gradient(45deg, #d4a373, #9b7b5e, #d4a373) 30;
-      display: flex; align-items: center; justify-content: space-between;
-      padding: 0.9rem 2rem; box-shadow: 0 30px 50px -15px black, 0 0 70px #5f432b;
-      transform: translateZ(40px) rotateX(0.5deg);
+      position: sticky;
+      top: 0;
+      z-index: 2000;
+      background: rgba(18, 14, 10, 0.85);
+      backdrop-filter: blur(16px);
+      -webkit-backdrop-filter: blur(16px);
+      border-bottom: 1px solid #5f4f3d;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 0.5rem 1rem;
+      box-shadow: 0 8px 20px rgba(0,0,0,0.5);
     }
+
     .logo-mini {
-      font-size: 2.2rem; font-weight: 800; font-family: 'Orbitron', sans-serif;
-      background: radial-gradient(circle at 30% 30%, #fadeb2, #c6945a, #b0763b);
-      -webkit-background-clip: text; -webkit-text-fill-color: transparent;
-      text-shadow: 0 0 35px #fbc58b, 0 0 70px #8b613b; animation: timeWarp 6s infinite linear;
+      font-size: 1.4rem;
+      font-weight: 700;
+      background: linear-gradient(135deg, #f3d9bf, #dbb58b);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
     }
-    @keyframes timeWarp { 0% { filter: hue-rotate(0deg) skewX(0deg); } 33% { filter: hue-rotate(8deg) skewX(1deg); } 66% { filter: hue-rotate(-8deg) skewX(-1deg); } 100% { filter: hue-rotate(0deg) skewX(0deg); } }
-    .logo-mini i { color: #efb882; margin-right: 12px; font-size: 2.5rem; filter: drop-shadow(0 0 20px #d2924f); }
+    .logo-mini i {
+      color: #b78f69;
+      margin-right: 4px;
+    }
+
     .hamburger {
-      background: rgba(85, 65, 45, 0.4); border: 2px solid #dbb58b; border-radius: 40px; padding: 0.8rem;
-      cursor: pointer; display: flex; flex-direction: column; gap: 6px; width: 70px; height: 60px;
-      justify-content: center; align-items: center; transition: 0.4s; box-shadow: 0 0 50px #ca9f6e;
-      transform: rotateY(5deg) rotateX(5deg);
+      background: rgba(255,255,240,0.08);
+      border: 1px solid #8d7761;
+      border-radius: 12px;
+      padding: 0.3rem 0.5rem;
+      cursor: pointer;
+      display: flex;
+      flex-direction: column;
+      gap: 4px;
+      width: 42px;
+      height: 38px;
+      justify-content: center;
+      transition: 0.2s;
     }
-    .hamburger:hover { transform: rotateY(0deg) rotateX(0deg) scale(1.15); background: #8f6e4f; box-shadow: 0 0 80px #fad096; }
-    .hamburger span { display: block; width: 36px; height: 4px; background: linear-gradient(90deg, #f7dfc0, #ffc491); border-radius: 10px; }
+    .hamburger:hover {
+      background: #3d3228;
+    }
+    .hamburger span {
+      display: block;
+      width: 24px;
+      height: 2px;
+      background: #eddac4;
+      border-radius: 4px;
+      transition: 0.2s;
+    }
+
     .menu-dropdown {
-      position: absolute; top: 80px; right: 2rem; background: rgba(12, 8, 5, 0.98); backdrop-filter: blur(40px);
-      border: 3px solid #dcb185; border-radius: 60px; padding: 1.5rem 0; min-width: 300px;
-      box-shadow: 0 40px 80px black, 0 0 150px #845f3f; display: none; z-index: 1999;
-      transform: translateZ(80px) rotateY(2deg);
+      position: absolute;
+      top: 58px;
+      right: 1rem;
+      background: rgba(34, 28, 22, 0.97);
+      backdrop-filter: blur(20px);
+      border: 1px solid #ac9277;
+      border-radius: 28px;
+      padding: 0.7rem 0;
+      min-width: 210px;
+      box-shadow: 0 25px 40px rgba(0,0,0,0.8);
+      display: none;
+      z-index: 1999;
     }
-    .menu-dropdown.show { display: block; animation: slideIn4D 0.5s cubic-bezier(0.3, 1, 0.5, 1.2); }
-    @keyframes slideIn4D { 0% { opacity: 0; transform: translateY(-40px) rotateX(-15deg) rotateY(10deg) scale(0.8); } 100% { opacity: 1; transform: translateY(0) rotateX(0) rotateY(0) scale(1); } }
-    .menu-dropdown a { display: block; padding: 1.2rem 2.5rem; color: #fae6cf; text-decoration: none; font-size: 1.6rem; border-bottom: 3px solid #7e6248; transition: 0.4s; }
-    .menu-dropdown a:hover { background: #a5815d; padding-left: 3.5rem; text-shadow: 0 0 30px #ffddb0; letter-spacing: 2px; }
-    .menu-dropdown a i { width: 40px; color: #facc9c; }
-    .menu-dropdown .home-icon-item { background: #b28b63; border-radius: 80px; margin: 1.5rem; padding: 1.2rem; border: 3px solid #ffdbb6; box-shadow: 0 0 60px #fcbb73; }
+    .menu-dropdown.show {
+      display: block;
+      animation: slideIn 0.25s ease;
+    }
+    @keyframes slideIn {
+      0% { opacity: 0; transform: translateY(-10px); }
+      100% { opacity: 1; transform: translateY(0); }
+    }
+    .menu-dropdown a {
+      display: block;
+      padding: 0.8rem 1.8rem;
+      color: #f7e2cc;
+      text-decoration: none;
+      font-size: 1.25rem;
+      border-bottom: 1px solid #544435;
+      transition: 0.2s;
+    }
+    .menu-dropdown a:hover {
+      background: #4f3e2d;
+      padding-left: 2.2rem;
+    }
+    .menu-dropdown a i {
+      width: 28px;
+      color: #d6a97c;
+    }
 
-    /* ===== 4D HERO (time dilation) ===== */
+    .menu-dropdown .home-icon-item {
+      background: #5e4a36;
+      border-radius: 40px;
+      margin: 0.7rem 1.2rem;
+      padding: 0.7rem;
+      text-align: center;
+      border: 1px solid #ccaa84;
+    }
+    .menu-dropdown .home-icon-item i {
+      color: #f5dbb6;
+      font-size: 1.5rem;
+    }
+    .menu-dropdown .home-icon-item a {
+      padding: 0;
+      margin: 0;
+      border: none;
+      background: transparent;
+      color: #ffefdb;
+      font-size: 1.3rem;
+    }
+    .menu-dropdown .home-icon-item a:hover {
+      background: transparent;
+      padding-left: 0;
+    }
+
+    /* ----------------------------------------------------- */
+    /* 4. HERO WITH GLOW & FLOATING — no 3D on images       */
+    /* ----------------------------------------------------- */
     .hero-section {
-      padding: 7rem 2rem 4rem; text-align: center; position: relative;
-      transform-style: preserve-3d; animation: hero4d 16s infinite alternate;
+      padding: 3rem 1.2rem 2.5rem;
+      text-align: center;
+      position: relative;
     }
-    @keyframes hero4d { 0% { transform: perspective(1200px) rotateY(-2deg) rotateX(1deg) translateZ(0); } 25% { transform: perspective(1200px) rotateY(3deg) rotateX(-1deg) translateZ(40px); } 75% { transform: perspective(1200px) rotateY(-3deg) rotateX(2deg) translateZ(-20px); } 100% { transform: perspective(1200px) rotateY(2deg) rotateX(-1deg) translateZ(0); } }
     .hero-glow {
-      font-size: 5.2rem; font-weight: 900; font-family: 'Playfair Display', serif;
-      text-shadow: 0 0 40px #eac393, 0 0 90px #b27d4a, 0 0 150px #7a532e;
-      animation: pulse4d 3s infinite alternate, float4d 8s infinite ease-in-out, glitch4d 10s infinite;
+      font-size: 2.9rem;
+      font-weight: 700;
+      font-family: 'Playfair Display', serif;
+      text-shadow: 0 0 15px #dbb487, 0 0 30px #7a583a;
+      animation: pulseGlow 3s infinite alternate, float 6s infinite ease-in-out;
     }
-    @keyframes pulse4d { 0% { text-shadow: 0 0 30px #dcad79, 0 0 70px #9f6f3f, 0 0 120px #634b30; } 100% { text-shadow: 0 0 60px #fed8aa, 0 0 130px #f0b062, 0 0 200px #b4792b; } }
-    @keyframes float4d { 0% { transform: translateZ(0px) translateY(0); } 50% { transform: translateZ(70px) translateY(-20px); } 100% { transform: translateZ(0px) translateY(0); } }
-    @keyframes glitch4d { 2%,30% { transform: skew(0.5deg, 0.2deg); } 4%,28% { transform: skew(-0.5deg, -0.2deg); } 32%,100% { transform: skew(0); } }
-    .hero-sub { font-size: 2rem; color: #f8dbbd; letter-spacing: 6px; margin-top: 1.8rem; opacity: 0.95; filter: drop-shadow(0 0 25px #dc9f64); }
+    @keyframes pulseGlow {
+      0% { text-shadow: 0 0 10px #cfa97c, 0 0 20px #8f6947; }
+      100% { text-shadow: 0 0 25px #efcaa0, 0 0 50px #b2804f; }
+    }
+    @keyframes float {
+      0% { transform: translateY(0px); }
+      50% { transform: translateY(-8px); }
+      100% { transform: translateY(0px); }
+    }
+    .hero-sub {
+      font-size: 1.3rem;
+      color: #e2cbb2;
+      letter-spacing: 2px;
+      margin-top: 0.6rem;
+      opacity: 0.9;
+    }
 
-    /* ===== 4D GALLERY (hyper-flip) ===== */
-    .gallery-wrap { padding: 4rem 2rem 3rem; }
-    .section-title { font-size: 3.2rem; font-weight: 700; border-left: 10px solid #f7c794; padding-left: 2.5rem; margin-bottom: 3rem; font-family: 'Playfair Display', serif; text-shadow: 0 0 25px #d6a56b; }
-    .gallery-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 2rem; perspective: 2500px; }
+    /* ----------------------------------------------------- */
+    /* 5. GALLERY (3D flip only on text container, not img) */
+    /* ----------------------------------------------------- */
+    .gallery-wrap {
+      padding: 2rem 1rem 1rem;
+    }
+    .section-title {
+      font-size: 2.1rem;
+      font-weight: 500;
+      border-left: 6px solid #c09f7c;
+      padding-left: 1.2rem;
+      margin-bottom: 1.8rem;
+      font-family: 'Playfair Display', serif;
+    }
+    .gallery-grid {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 0.8rem;
+      perspective: 1200px;
+    }
     .gallery-item {
-      border-radius: 50px; overflow: hidden; border: 4px solid #c6a178; box-shadow: 0 40px 70px -15px black, 0 0 100px #6c5137;
-      transition: transform 0.5s cubic-bezier(0.2, 0.9, 0.4, 1.6), box-shadow 0.5s, border-color 0.4s;
-      aspect-ratio: 1/1; cursor: pointer; transform-style: preserve-3d; animation: gallery4d 8s infinite alternate;
+      border-radius: 26px;
+      overflow: hidden;
+      border: 2px solid #8f755b;
+      box-shadow: 0 25px 35px -10px black;
+      transition: transform 0.3s cubic-bezier(0.2, 0.9, 0.4, 1.3), box-shadow 0.3s;
+      aspect-ratio: 1/1;
+      cursor: pointer;
+      transform-style: preserve-3d;
     }
-    @keyframes gallery4d { 0% { box-shadow: 0 40px 70px -15px black; } 100% { box-shadow: 0 50px 100px 0px #5f3d20; } }
-    .gallery-item:hover { transform: rotateY(15deg) rotateX(10deg) scale(1.08) translateZ(60px); box-shadow: 0 50px 100px -10px #000, 0 0 120px #fad097; border-color: #fedbae; }
-    .gallery-item img { width: 100%; height: 100%; object-fit: cover; display: block; transition: filter 0.5s, transform 0.6s; }
-    .gallery-item:hover img { filter: brightness(1.4) saturate(1.5) contrast(1.2); transform: scale(1.06); }
+    .gallery-item:hover {
+      transform: rotateY(4deg) rotateX(3deg) scale(1.03);
+      box-shadow: 0 30px 45px -5px #000000;
+      border-color: #e2b78b;
+    }
+    .gallery-item img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      display: block;
+      transition: filter 0.3s;
+    }
+    .gallery-item:hover img {
+      filter: brightness(1.15) saturate(1.1);
+    }
 
-    /* LIGHTBOX 4D */
-    .lightbox { position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(2, 1, 0, 0.99); backdrop-filter: blur(50px); z-index: 3000; display: flex; align-items: center; justify-content: center; opacity: 0; pointer-events: none; transition: opacity 0.5s; transform-style: preserve-3d; }
-    .lightbox.active { opacity: 1; pointer-events: all; }
-    .lightbox-content { max-width: 92vw; max-height: 92vh; border: 6px solid #f0c694; border-radius: 80px; overflow: hidden; box-shadow: 0 100px 200px black, 0 0 300px #d2924b; animation: zoom4d 0.5s; transform: translateZ(150px) rotateX(0.5deg); }
-    @keyframes zoom4d { 0% { transform: scale(0.6) rotateY(-20deg) rotateX(10deg); opacity: 0; } 100% { transform: scale(1) rotateY(0) rotateX(0); opacity: 1; } }
-    .lightbox-content img { width: 100%; height: auto; display: block; object-fit: contain; }
-    .lightbox-close { position: absolute; top: 50px; right: 50px; font-size: 6rem; color: #fff0da; cursor: pointer; text-shadow: 0 0 70px black; transition: 0.4s; transform: translateZ(200px); }
-    .lightbox-close:hover { transform: scale(1.5) rotate(360deg) translateZ(250px); color: #ffdbb5; }
+    /* lightbox (fullscreen) */
+    .lightbox {
+      position: fixed;
+      top: 0; left: 0; width: 100%; height: 100%;
+      background: rgba(8, 5, 3, 0.98);
+      backdrop-filter: blur(20px);
+      z-index: 3000;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      opacity: 0;
+      pointer-events: none;
+      transition: opacity 0.3s ease;
+    }
+    .lightbox.active {
+      opacity: 1;
+      pointer-events: all;
+    }
+    .lightbox-content {
+      max-width: 96vw;
+      max-height: 96vh;
+      border: 4px solid #dab38b;
+      border-radius: 28px;
+      overflow: hidden;
+      box-shadow: 0 50px 80px black;
+      animation: zoomPop 0.25s;
+    }
+    @keyframes zoomPop {
+      0% { transform: scale(0.9); opacity: 0; }
+      100% { transform: scale(1); opacity: 1; }
+    }
+    .lightbox-content img {
+      width: 100%;
+      height: auto;
+      display: block;
+      object-fit: contain;
+    }
+    .lightbox-close {
+      position: absolute;
+      top: 30px; right: 30px;
+      font-size: 3.8rem;
+      color: #ffebd2;
+      cursor: pointer;
+      text-shadow: 0 4px 20px black;
+      transition: 0.2s;
+      z-index: 3001;
+    }
+    .lightbox-close:hover {
+      transform: scale(1.2) rotate(90deg);
+    }
 
-    /* ===== 4D LANGUAGE (hypercube tabs) ===== */
-    .lang-panel { background: rgba(12, 8, 5, 0.5); backdrop-filter: blur(30px); border-radius: 120px; padding: 3rem 2.5rem; margin: 3rem 2rem; border: 3px solid #dab07f; box-shadow: 0 40px 80px -20px black, 0 0 150px #8a623f; transform: translateZ(30px) rotateX(1deg); }
-    .lang-tabs { display: flex; gap: 1.5rem; flex-wrap: wrap; justify-content: center; }
-    .lang-tab { background: #3f3126; border: 3px solid #cfaa7c; color: #ffeede; font-size: 1.5rem; padding: 1rem 2.2rem; border-radius: 80px; cursor: pointer; transition: 0.4s; font-weight: 700; box-shadow: 0 10px 30px black; }
-    .lang-tab.active { background: #f5c897; color: #1d130b; border-color: #ffffe0; box-shadow: 0 0 70px #ffda9e, 0 0 150px #ca9545; transform: scale(1.15) translateY(-8px) translateZ(40px); }
-    .bio-content { margin-top: 3rem; }
-    .bio-text { display: none; font-size: 1.4rem; line-height: 2.2; background: #1f1710; padding: 2.8rem; border-radius: 100px; border: 3px solid #d8b185; box-shadow: inset 0 0 90px #0f0a05, 0 0 100px #835e38; animation: fade4d 0.7s; }
-    @keyframes fade4d { 0% { opacity: 0; transform: translateY(30px) rotateX(-10deg); } 100% { opacity: 1; transform: translateY(0) rotateX(0); } }
-    .bio-text.active { display: block; }
+    /* ----------------------------------------------------- */
+    /* 6. LANGUAGE TOGGLE (with slide & glow)               */
+    /* ----------------------------------------------------- */
+    .lang-panel {
+      background: rgba(26, 21, 16, 0.7);
+      backdrop-filter: blur(10px);
+      border-radius: 50px;
+      padding: 1.8rem 1.2rem;
+      margin: 1.8rem 1rem;
+      border: 1px solid #9a8066;
+      box-shadow: 0 25px 40px -12px black;
+    }
+    .lang-tabs {
+      display: flex;
+      gap: 0.5rem;
+      flex-wrap: wrap;
+      justify-content: center;
+    }
+    .lang-tab {
+      background: #352d24;
+      border: 1px solid #9b8066;
+      color: #f1dbc4;
+      font-size: 1.15rem;
+      padding: 0.6rem 1.3rem;
+      border-radius: 50px;
+      cursor: pointer;
+      transition: 0.2s;
+      font-weight: 500;
+    }
+    .lang-tab.active {
+      background: #c6a178;
+      color: #1c1610;
+      font-weight: 700;
+      border-color: #efd2b1;
+      box-shadow: 0 0 20px #f1c494;
+      transform: scale(1.05);
+    }
+    .bio-content {
+      margin-top: 2rem;
+    }
+    .bio-text {
+      display: none;
+      font-size: 1.1rem;
+      line-height: 1.8;
+      background: #1d1711;
+      padding: 1.8rem;
+      border-radius: 40px;
+      border: 1px solid #a58b6f;
+      box-shadow: inset 0 0 20px #0e0b07;
+      animation: fadeLang 0.5s;
+    }
+    @keyframes fadeLang {
+      0% { opacity: 0; transform: translateY(10px); }
+      100% { opacity: 1; transform: translateY(0); }
+    }
+    .bio-text.active {
+      display: block;
+    }
 
-    /* ===== 4D PUBLICATIONS (time-cards) ===== */
-    .pub-section { padding: 4rem 2rem; }
-    .pub-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 2.5rem; perspective: 2000px; }
+    /* ----------------------------------------------------- */
+    /* 7. PUBLICATIONS (cards with pulse)                   */
+    /* ----------------------------------------------------- */
+    .pub-section {
+      padding: 2rem 1rem;
+    }
+    .pub-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 1.2rem;
+    }
     .pub-card {
-      background: rgba(30, 22, 15, 0.8); backdrop-filter: blur(18px); border: 3px solid #ccaa7e; border-radius: 100px;
-      padding: 3rem 2rem; text-align: center; transition: all 0.5s cubic-bezier(0.2, 0.9, 0.4, 1.5);
-      box-shadow: 0 30px 60px -20px black, 0 0 80px #5d432b; transform: rotateX(3deg) rotateY(2deg); animation: card4d 7s infinite alternate;
+      background: rgba(39, 32, 25, 0.7);
+      backdrop-filter: blur(6px);
+      border: 1px solid #9a8066;
+      border-radius: 36px;
+      padding: 1.7rem 0.8rem;
+      text-align: center;
+      transition: all 0.3s cubic-bezier(0.2, 0.9, 0.3, 1.3);
+      box-shadow: 0 18px 28px -12px black;
+      transform: translateY(0);
+      animation: cardPulse 5s infinite;
     }
-    @keyframes card4d { 0% { transform: rotateX(3deg) rotateY(2deg) translateY(0); } 100% { transform: rotateX(-3deg) rotateY(-2deg) translateY(-15px); } }
-    .pub-card:hover { transform: translateY(-30px) scale(1.08) rotateX(0) rotateY(10deg) translateZ(80px); background: #8f6f50; border-color: #ffdeaf; box-shadow: 0 50px 100px -15px #000, 0 0 150px #f0b15a; }
-    .pub-card i { font-size: 4rem; color: #fad6a3; margin-bottom: 1.8rem; filter: drop-shadow(0 0 25px #ca8d48); }
-
-    /* ===== 4D MIR SECTIONS (smaller but hyper-dimensional) ===== */
-    .mir-section, .mir-khalaf-section {
-      padding: 2.5rem 2rem; background: radial-gradient(ellipse at 30% 40%, #2f241b, #120d07); border-radius: 150px 150px 80px 80px; margin: 3rem 2rem; border: 4px solid #d7af81; box-shadow: 0 50px 80px -15px black, 0 0 200px #785f3f; transform-style: preserve-3d; transition: all 0.6s; animation: mirror4d 10s infinite alternate;
+    @keyframes cardPulse {
+      0% { box-shadow: 0 18px 28px -12px black; }
+      50% { box-shadow: 0 22px 35px -8px #7a624b; }
+      100% { box-shadow: 0 18px 28px -12px black; }
     }
-    @keyframes mirror4d { 0% { box-shadow: 0 50px 80px -15px black, 0 0 150px #785f3f; } 100% { box-shadow: 0 60px 100px -10px #4f3b24, 0 0 250px #cc9f64; } }
-    .mir-header { display: flex; align-items: center; gap: 2rem; margin-bottom: 2rem; }
-    .mir-header i { font-size: 3.8rem; color: #ffd9a3; animation: crown4d 5s infinite; filter: drop-shadow(0 0 40px #d79235); }
-    @keyframes crown4d { 0% { transform: rotateY(0deg) scale(1); } 50% { transform: rotateY(20deg) scale(1.2) translateZ(30px); } 100% { transform: rotateY(0deg) scale(1); } }
-    .mir-title { font-size: 2.8rem; font-family: 'Playfair Display', serif; font-weight: 800; text-shadow: 0 0 35px #ffd196; }
-    .mir-image, .mir-khalaf-image {
-      width: 75%; margin: 0 auto 2.5rem; border-radius: 90px; border: 5px solid #f0c185; box-shadow: 0 40px 70px -10px black, 0 0 150px #b48247; transition: transform 0.6s cubic-bezier(0.2,0.9,0.4,1.7), box-shadow 0.5s; cursor: pointer; animation: image4d 12s infinite alternate; transform: translateZ(40px);
+    .pub-card:hover {
+      transform: translateY(-12px) scale(1.03);
+      background: #4f4133;
+      border-color: #e9bc91;
+      box-shadow: 0 35px 45px -8px #000;
     }
-    @keyframes image4d { 0% { transform: rotateY(-4deg) rotateX(3deg) translateZ(20px); } 100% { transform: rotateY(4deg) rotateX(-3deg) translateZ(40px); } }
-    .mir-image:hover, .mir-khalaf-image:hover { transform: scale(1.05) rotateY(10deg) rotateX(6deg) translateZ(80px); box-shadow: 0 50px 90px -5px black, 0 0 200px #ffcb80; border-color: #ffe7b8; }
-    .mir-image img, .mir-khalaf-image img { width: 100%; height: auto; display: block; border-radius: 85px; }
-    .mir-desc { background: rgba(16, 11, 7, 0.8); backdrop-filter: blur(18px); border-radius: 100px; padding: 2.5rem; border: 3px solid #dbb286; box-shadow: inset 0 0 120px #1f150e; }
+    .pub-card i {
+      font-size: 2.5rem;
+      color: #dfb185;
+      margin-bottom: 0.8rem;
+    }
 
-    /* ===== 4D MAP + WAVES (time waves) ===== */
-    .bridge-map { background: #0f0b07; border-radius: 150px 150px 80px 80px; margin: 4rem 2rem; padding: 4rem 2rem; border: 4px solid #c7a074; box-shadow: 0 50px 80px -15px black, 0 0 200px #6e5439; }
-    .map-svg svg { width: 100%; height: auto; filter: drop-shadow(0 0 50px #d9a15e) drop-shadow(0 0 120px #a36825); animation: map4d 10s infinite; }
-    @keyframes map4d { 0% { filter: drop-shadow(0 0 40px #d9a15e) drop-shadow(0 0 80px #a36825); } 50% { filter: drop-shadow(0 0 80px #f5c68a) drop-shadow(0 0 150px #c7873c); } 100% { filter: drop-shadow(0 0 40px #d9a15e) drop-shadow(0 0 80px #a36825); } }
-    .sound-waves { display: flex; justify-content: center; gap: 20px; margin: 3rem 0 0; height: 80px; perspective: 800px; }
-    .wave { width: 18px; height: 40px; background: linear-gradient(to top, #f1bc7c, #d48f44); border-radius: 30px; animation: wave4d 2s infinite ease-in-out; box-shadow: 0 0 50px #fdb55e; transform-style: preserve-3d; }
-    .wave:nth-child(2) { animation-delay: 0.4s; background: #f8c68b; height: 65px; }
-    .wave:nth-child(3) { animation-delay: 0.8s; background: #ffd9a8; height: 85px; }
-    .wave:nth-child(4) { animation-delay: 0.2s; background: #f8cb94; height: 55px; }
-    @keyframes wave4d { 0%,100% { transform: scaleY(0.6) rotateX(0deg) translateZ(0); } 50% { transform: scaleY(2.2) rotateX(20deg) translateZ(40px); } }
+    /* ----------------------------------------------------- */
+    /* 8. MIR PORTI SECTION — smaller images on mobile      */
+    /* ----------------------------------------------------- */
+    .mir-section {
+      padding: 2rem 1rem;
+      background: linear-gradient(145deg, #1f1a14, #16110c);
+      border-radius: 60px 60px 30px 30px;
+      margin: 2rem 1rem;
+      border: 2px solid #9d846b;
+      box-shadow: 0 30px 40px -15px black;
+    }
+    .mir-header {
+      display: flex;
+      align-items: center;
+      gap: 1rem;
+      margin-bottom: 1.5rem;
+    }
+    .mir-header i {
+      font-size: 2.8rem;
+      color: #c9a87c;
+    }
+    .mir-title {
+      font-size: 2.2rem;
+      font-family: 'Playfair Display', serif;
+      font-weight: 600;
+    }
+    .mir-image {
+      width: 80%;               /* smaller for mobile */
+      margin: 0 auto 1.5rem;    /* centered */
+      border-radius: 40px;
+      border: 3px solid #b59673;
+      box-shadow: 0 25px 35px -10px black;
+      transition: transform 0.3s;
+      cursor: pointer;
+    }
+    .mir-image:hover {
+      transform: scale(1.02);
+    }
+    .mir-image img {
+      width: 100%;
+      height: auto;
+      display: block;
+      border-radius: 37px;
+    }
+    .mir-desc {
+      background: rgba(24, 19, 14, 0.7);
+      backdrop-filter: blur(6px);
+      border-radius: 50px;
+      padding: 1.8rem;
+      border: 1px solid #aa8b6e;
+    }
 
-    /* ===== 4D FOOTER ===== */
-    .footer { background: #070402; padding: 4rem 2rem; text-align: center; font-size: 1.6rem; border-top: 5px solid #ad8863; color: #edd6b8; transform: translateZ(20px); }
-    .footer a { color: #fee2c0; text-decoration: none; transition: 0.4s; }
-    .footer a:hover { color: #ffeacb; text-shadow: 0 0 50px #d6974a; }
+    /* ----------------------------------------------------- */
+    /* 9. MIR KHALAF SECTION — smaller images on mobile     */
+    /* ----------------------------------------------------- */
+    .mir-khalaf-section {
+      padding: 2rem 1rem;
+      background: linear-gradient(215deg, #1e1913, #14100b);
+      border-radius: 60px 60px 30px 30px;
+      margin: 2rem 1rem;
+      border: 2px solid #9d846b;
+      box-shadow: 0 30px 40px -15px black;
+    }
+    .mir-khalaf-image {
+      width: 80%;               /* smaller for mobile */
+      margin: 0 auto 1.5rem;    /* centered */
+      border-radius: 40px;
+      border: 3px solid #b59673;
+      box-shadow: 0 25px 35px -10px black;
+      transition: transform 0.3s;
+      cursor: pointer;
+    }
+    .mir-khalaf-image:hover {
+      transform: scale(1.02);
+    }
+    .mir-khalaf-image img {
+      width: 100%;
+      height: auto;
+      display: block;
+      border-radius: 37px;
+    }
 
-    /* extra 4D touches */
-    .time-ripple { position: relative; overflow: hidden; }
+    /* ----------------------------------------------------- */
+    /* 10. MINI MAP + FOOTER                                */
+    /* ----------------------------------------------------- */
+    .bridge-map {
+      background: #1f1a14;
+      border-radius: 70px 70px 30px 30px;
+      margin: 2rem 1rem;
+      padding: 2rem 1rem;
+      border: 2px solid #8b745c;
+    }
+    .map-svg svg {
+      width: 100%;
+      height: auto;
+      filter: drop-shadow(0 15px 15px #00000080);
+    }
+    .sound-waves {
+      display: flex;
+      justify-content: center;
+      gap: 6px;
+      margin: 1.5rem 0 0;
+      height: 35px;
+    }
+    .wave {
+      width: 7px;
+      height: 22px;
+      background: #c9a67b;
+      border-radius: 8px;
+      animation: wave 1.4s infinite ease-in-out;
+    }
+    .wave:nth-child(2) { animation-delay: 0.2s; background: #ddb790; }
+    .wave:nth-child(3) { animation-delay: 0.4s; background: #f0caa0; }
+    .wave:nth-child(4) { animation-delay: 0.1s; background: #d6a87c; }
+    @keyframes wave {
+      0%, 100% { transform: scaleY(0.6); }
+      50% { transform: scaleY(1.5); }
+    }
+
+    .footer {
+      background: #100c08;
+      padding: 2.2rem 1rem;
+      text-align: center;
+      font-size: 1.2rem;
+      border-top: 2px solid #6a5743;
+      color: #cfbb9f;
+    }
+    .footer a {
+      color: #e4c5a1;
+      text-decoration: none;
+      transition: 0.2s;
+    }
+    .footer a:hover {
+      color: #fad6aa;
+    }
+    .home-link-bottom {
+      margin-top: 1rem;
+    }
   </style>
 </head>
 <body>
+  <!-- particle background canvas (animated) -->
   <canvas id="particle-canvas"></canvas>
-  <canvas id="tesseract-canvas"></canvas> <!-- three.js 4D hypercube -->
 
+  <!-- HAMBURGER NAV -->
   <div class="mobile-nav">
-    <div class="logo-mini"><i class="fas fa-crown"></i> Dr.Waleed·4D</div>
-    <button class="hamburger" id="hamburgerBtn" aria-label="menu"><span></span><span></span><span></span></button>
+    <div class="logo-mini"><i class="fas fa-feather-alt"></i> Dr. W.</div>
+    <button class="hamburger" id="hamburgerBtn" aria-label="menu">
+      <span></span><span></span><span></span>
+    </button>
     <div class="menu-dropdown" id="menuDropdown">
-      <a href="#home"><i class="fas fa-home"></i> Home (4D)</a>
+      <a href="#home"><i class="fas fa-home"></i> Home</a>
       <a href="#gallery"><i class="fas fa-images"></i> Gallery</a>
       <a href="#bio"><i class="fas fa-book-open"></i> Bio</a>
       <a href="#publications"><i class="fas fa-scroll"></i> Works</a>
       <a href="#mir-porti"><i class="fas fa-crown"></i> Mir Porti</a>
       <a href="#mir-khalaf"><i class="fas fa-chess-king"></i> Mir Khalaf</a>
-      <div class="home-icon-item"><a href="https://whz-co.github.io/whz/index.html" target="_blank"><i class="fas fa-home"></i> Main Portal</a></div>
+      <div class="home-icon-item">
+        <a href="https://whz-co.github.io/whz/index.html" target="_blank"><i class="fas fa-home"></i> Home</a>
+      </div>
     </div>
   </div>
 
-  <section id="home" class="hero-section" data-aos="fade-up" data-aos-duration="1600">
+  <!-- HERO -->
+  <section id="home" class="hero-section" data-aos="fade-up" data-aos-duration="1200">
     <div class="hero-glow">Dr. Waleed H. Z.</div>
-    <div class="hero-sub">4D linguist · hyper-scholar · timeless bridge</div>
+    <div class="hero-sub">linguist · educator · cultural bridge</div>
   </section>
 
-  <section id="gallery" class="gallery-wrap" data-aos="zoom-in" data-aos-duration="1400">
-    <h2 class="section-title"><i class="fas fa-camera"></i> 4D moments</h2>
+  <!-- GALLERY -->
+  <section id="gallery" class="gallery-wrap" data-aos="zoom-in" data-aos-duration="900">
+    <h2 class="section-title"><i class="fas fa-camera"></i> moments</h2>
     <div class="gallery-grid">
-      <div class="gallery-item" data-src="https://raw.githubusercontent.com/whz-co/whz/main/images/dr%20waleed%20on%20libra..jpg"><img src="https://raw.githubusercontent.com/whz-co/whz/main/images/dr%20waleed%20on%20libra..jpg" alt="" loading="lazy"></div>
-      <div class="gallery-item" data-src="https://raw.githubusercontent.com/whz-co/whz/main/images/Dr%20waleed%20is%20holding%20a%20book.png"><img src="https://raw.githubusercontent.com/whz-co/whz/main/images/Dr%20waleed%20is%20holding%20a%20book.png" alt="" loading="lazy"></div>
-      <div class="gallery-item" data-src="https://raw.githubusercontent.com/whz-co/whz/main/images/Dr%20waleed%20is%20writing.jpg"><img src="https://raw.githubusercontent.com/whz-co/whz/main/images/Dr%20waleed%20is%20writing.jpg" alt="" loading="lazy"></div>
+      <div class="gallery-item" data-src="https://raw.githubusercontent.com/whz-co/whz/main/images/dr%20waleed%20on%20libra..jpg">
+        <img src="https://raw.githubusercontent.com/whz-co/whz/main/images/dr%20waleed%20on%20libra..jpg" alt="" loading="lazy">
+      </div>
+      <div class="gallery-item" data-src="https://raw.githubusercontent.com/whz-co/whz/main/images/Dr%20waleed%20is%20holding%20a%20book.png">
+        <img src="https://raw.githubusercontent.com/whz-co/whz/main/images/Dr%20waleed%20is%20holding%20a%20book.png" alt="" loading="lazy">
+      </div>
+      <div class="gallery-item" data-src="https://raw.githubusercontent.com/whz-co/whz/main/images/Dr%20waleed%20is%20writing.jpg">
+        <img src="https://raw.githubusercontent.com/whz-co/whz/main/images/Dr%20waleed%20is%20writing.jpg" alt="" loading="lazy">
+      </div>
     </div>
-    <p style="text-align:center; font-size:1.4rem; color:#f5d7b0; margin-top:2rem;"><i class="fas fa-expand-alt"></i> tap for 4D hypervision</p>
+    <p style="text-align:center; font-size:0.95rem; color:#d4ba9b; margin-top:0.8rem;"><i class="fas fa-expand-alt"></i> tap image for fullscreen</p>
   </section>
 
-  <div class="lightbox" id="lightbox"><span class="lightbox-close" id="lightboxClose">&times;</span><div class="lightbox-content"><img src="" alt="" id="lightboxImg"></div></div>
+  <!-- LIGHTBOX -->
+  <div class="lightbox" id="lightbox">
+    <span class="lightbox-close" id="lightboxClose">&times;</span>
+    <div class="lightbox-content">
+      <img src="" alt="" id="lightboxImg">
+    </div>
+  </div>
 
-  <section id="bio" class="lang-panel" data-aos="fade-right" data-aos-duration="1500">
-    <h2 style="font-size:3.2rem; margin-bottom:2.2rem;"><i class="fas fa-feather"></i> about (4D)</h2>
+  <!-- BIO (trilingual) -->
+  <section id="bio" class="lang-panel" data-aos="fade-right" data-aos-duration="1000">
+    <h2 style="font-size:2.2rem; margin-bottom:1.2rem;"><i class="fas fa-feather"></i> about</h2>
     <div class="lang-tabs">
-      <button class="lang-tab active" data-lang="en">🇬🇧 EN</button><button class="lang-tab" data-lang="ar">🇸🇦 AR</button><button class="lang-tab" data-lang="ku-arab">🏴 KU(Ar)</button><button class="lang-tab" data-lang="ku-latn">🇹🇰 KU(La)</button>
+      <button class="lang-tab active" data-lang="en">🇬🇧 EN</button>
+      <button class="lang-tab" data-lang="ar">🇸🇦 AR</button>
+      <button class="lang-tab" data-lang="ku-arab">🏴 KU(Ar)</button>
+      <button class="lang-tab" data-lang="ku-latn">🇹🇰 KU(La)</button>
     </div>
     <div class="bio-content">
-      <div class="bio-text active" id="bio-en" lang="en"><p>Dr. Waleed Hussein Zakhourani is a distinguished linguist, visionary educator, and cultural scholar whose life's work serves as a vital bridge between the English, Arabic, and Kurdish worlds. Holding a PhD in English Language Etiquette from Harvard University, his academic foundation studies how language conveys respect and cultural values. This rare specialization defines his mission: to transform English into a medium of global mutual understanding.</p><p>With decades in multilingual education, he champions linguistic accessibility and cultural preservation. His expertise spans lexicography, translation studies, and academic publishing. He empowers learners to navigate the global stage while rooted in their own heritage.</p></div>
-      <div class="bio-text" id="bio-ar" lang="ar" dir="rtl"><p>يُعد الدكتور وليد حسين زاخوراني لغوياً بارزاً، ومربياً رؤيوياً، وباحثاً ثقافياً كرس مسيرته المهنية لتكون جسراً حيوياً يربط بين عوالم اللغات الإنجليزية والعربية والكردية. من خلال حصوله على درجة الدكتوراه في آداب اللغة الإنجليزية من جامعة هارفارد، تعذرت ركائز أساسه الأكاديمي في الدراسة المتعمقة لكيفية تعبير اللغة عن الاحترام والوضوح والقيم الثقافية الراسخة. وقد حدد هذا التخصص النادر مهمة حياته: تحويل اللغة الإنجليزية من مجرد أداة أكاديمية إلى وسيلة عميقة للتفاهم العالمي المتبادل.</p><p>مع عقود من القيادة في مجال التعليم متعدد اللغات، برز الدكتور زاخوراني كشخصية رائدة في تيسير الوصول اللغوي والحفاظ على التراث الثقافي. تشمل خبرته الواسعة مجالات صناعة المعاجم، ودراسات الترجمة، والنشر الأكاديمي. ويعمل لضمان إتقان الإنجليزية دون التضحية بالتقاليد الفكرية الغنية للناطقين بالعربية والكردية.</p></div>
-      <div class="bio-text" id="bio-ku-arab" lang="ku-arab" dir="rtl"><p>د. وەلید حسێن زاخۆرانی زمانزانەکێ دیار، پەروەردەکارەکێ خودان دیدەڤانی، و ڤەکۆلەرەکێ کلتووریێ خودان ئەزموونە، کو ژیانا خۆ تەرخانکرییە دا ببیتە پرەکا زیندی د ناڤبەرا جیهانێن ئینگلیزی، عەرەبی و کوردی دا. ب بەدەستڤەئینانا بروانامەیا دکتۆرا د ئیتیکێت و ئادابێن زمانێ ئینگلیزیدا ل زانکۆیا هارفارد، بنیاتێ وی یێ ئەکادیمی ب کویری ل سەر وێ چەندێ کا زمان چەوا ڕێز و بەهایێن کلتووری دگەهینیت.</p><p>دگەل چەندین سالێن کارکرنێ د بوارێ پەروەردەیا فرە-زمانیدا، د. وەلید وەک پالپشتەکێ مەزن یێ ب ساناهی کرنا زمانان و پاراستنا کلتووری دیار بوویە. شارەزاییا وی د بوارێن فەرهەنگنڤیسی و وەشانێن ئەکادیمی دگریت.</p></div>
-      <div class="bio-text" id="bio-ku-latn" lang="ku-latn"><p>Dr. Welîd Hisên Zexoranî zimanzanekî berbiçav, perwerdekarekî xwedî dîtin û zanyarekî çandî ye ku xebatên wî wekî pireke girîng di navbera cîhanên Îngilîzî, Erebî û Kurdî de xizmetê dikin. Wî PhD di warê Etîketa Zimên a Îngilîzî de ji Zanîngeha Harvardê wergirtiye.</p><p>Bi ezmûna dehan salan di perwerdehiya pirzimanî de, Dr. Zexoranî parêzvanê gihîştina zimên û parastina çandî ye. Pisporiya wî ferhengzanî, werger û weşangeriya akademîk dihewîne.</p></div>
+      <div class="bio-text active" id="bio-en" lang="en">
+        <p>Dr. Waleed Hussein Zakhourani is a distinguished linguist, visionary educator, and cultural scholar whose life's work serves as a vital bridge between the English, Arabic, and Kurdish worlds. Holding a PhD in English Language Etiquette from Harvard University, his academic foundation studies how language conveys respect and cultural values. This rare specialization defines his mission: to transform English into a medium of global mutual understanding.</p>
+        <p>With decades in multilingual education, he champions linguistic accessibility and cultural preservation. His expertise spans lexicography, translation studies, and academic publishing. He empowers learners to navigate the global stage while rooted in their own heritage.</p>
+      </div>
+      <div class="bio-text" id="bio-ar" lang="ar" dir="rtl">
+        <p>يُعد الدكتور وليد حسين زاخوراني لغوياً بارزاً، ومربياً رؤيوياً، وباحثاً ثقافياً كرس مسيرته المهنية لتكون جسراً حيوياً يربط بين عوالم اللغات الإنجليزية والعربية والكردية. من خلال حصوله على درجة الدكتوراه في آداب اللغة الإنجليزية من جامعة هارفارد، تعذرت ركائز أساسه الأكاديمي في الدراسة المتعمقة لكيفية تعبير اللغة عن الاحترام والوضوح والقيم الثقافية الراسخة. وقد حدد هذا التخصص النادر مهمة حياته: تحويل اللغة الإنجليزية من مجرد أداة أكاديمية إلى وسيلة عميقة للتفاهم العالمي المتبادل.</p>
+        <p>مع عقود من القيادة في مجال التعليم متعدد اللغات، برز الدكتور زاخوراني كشخصية رائدة في تيسير الوصول اللغوي والحفاظ على التراث الثقافي. تشمل خبرته الواسعة مجالات صناعة المعاجم، ودراسات الترجمة، والنشر الأكاديمي. ويعمل لضمان إتقان الإنجليزية دون التضحية بالتقاليد الفكرية الغنية للناطقين بالعربية والكردية.</p>
+      </div>
+      <div class="bio-text" id="bio-ku-arab" lang="ku-arab" dir="rtl">
+        <p>د. وەلید حسێن زاخۆرانی زمانزانەکێ دیار، پەروەردەکارەکێ خودان دیدەڤانی، و ڤەکۆلەرەکێ کلتووریێ خودان ئەزموونە، کو ژیانا خۆ تەرخانکرییە دا ببیتە پرەکا زیندی د ناڤبەرا جیهانێن ئینگلیزی، عەرەبی و کوردی دا. ب بەدەستڤەئینانا بروانامەیا دکتۆرا د ئیتیکێت و ئادابێن زمانێ ئینگلیزیدا ل زانکۆیا هارفارد، بنیاتێ وی یێ ئەکادیمی ب کویری ل سەر وێ چەندێ کا زمان چەوا ڕێز و بەهایێن کلتووری دگەهینیت.</p>
+        <p>دگەل چەندین سالێن کارکرنێ د بوارێ پەروەردەیا فرە-زمانیدا، د. وەلید وەک پالپشتەکێ مەزن یێ ب ساناهی کرنا زمانان و پاراستنا کلتووری دیار بوویە. شارەزاییا وی د بوارێن فەرهەنگنڤیسی و وەشانێن ئەکادیمی دگریت.</p>
+      </div>
+      <div class="bio-text" id="bio-ku-latn" lang="ku-latn">
+        <p>Dr. Welîd Hisên Zexoranî zimanzanekî berbiçav, perwerdekarekî xwedî dîtin û zanyarekî çandî ye ku xebatên wî wekî pireke girîng di navbera cîhanên Îngilîzî, Erebî û Kurdî de xizmetê dikin. Wî PhD di warê Etîketa Zimên a Îngilîzî de ji Zanîngeha Harvardê wergirtiye.</p>
+        <p>Bi ezmûna dehan salan di perwerdehiya pirzimanî de, Dr. Zexoranî parêzvanê gihîştina zimên û parastina çandî ye. Pisporiya wî ferhengzanî, werger û weşangeriya akademîk dihewîne.</p>
+      </div>
     </div>
   </section>
 
-  <section id="publications" class="pub-section" data-aos="fade-up" data-aos-duration="1400">
-    <h2 class="section-title"><i class="fas fa-book"></i> selected works (4D archive)</h2>
+  <!-- PUBLICATIONS -->
+  <section id="publications" class="pub-section" data-aos="fade-up" data-aos-duration="900">
+    <h2 class="section-title"><i class="fas fa-book"></i> selected works</h2>
     <div class="pub-grid">
       <div class="pub-card"><i class="fas fa-book"></i><h3>Lexical Bridges</h3><p>Kurdish–English dictionary</p></div>
       <div class="pub-card"><i class="fas fa-globe"></i><h3>Politeness Across Borders</h3><p>Harvard 2008</p></div>
@@ -228,159 +632,282 @@
     </div>
   </section>
 
-  <!-- MIR PORTI (4D, image 75%) -->
-  <section id="mir-porti" class="mir-section" data-aos="flip-left" data-aos-duration="1600">
-    <div class="mir-header"><i class="fas fa-crown"></i><h2 class="mir-title">Mir Porti · The 4D Legacy of Zakhoran</h2></div>
-    <div class="mir-image" data-src="https://raw.githubusercontent.com/whz-co/whz/main/images/porte.png"><img src="https://raw.githubusercontent.com/whz-co/whz/main/images/porte.png" alt="Mir Porti" loading="lazy"></div>
+  <!-- MIR PORTI - smaller image for mobile -->
+  <section id="mir-porti" class="mir-section" data-aos="fade-right" data-aos-duration="1100">
+    <div class="mir-header">
+      <i class="fas fa-crown"></i>
+      <h2 class="mir-title">Mir Porti · The Legacy of Zakhoran</h2>
+    </div>
+    <!-- image at 80% width, centered, no 3D effects on image -->
+    <div class="mir-image" data-src="https://raw.githubusercontent.com/whz-co/whz/main/images/porte.png">
+      <img src="https://raw.githubusercontent.com/whz-co/whz/main/images/porte.png" alt="Mir Porti" loading="lazy">
+    </div>
     <div class="mir-desc">
       <div class="lang-tabs" style="margin-bottom:1rem;">
-        <button class="lang-tab active" data-lang="en-mir">🇬🇧 EN</button><button class="lang-tab" data-lang="ku-arab-mir">🏴 KU(Ar)</button><button class="lang-tab" data-lang="ku-latn-mir">🇹🇰 KU(La)</button><button class="lang-tab" data-lang="ar-mir">🇸🇦 AR</button>
+        <button class="lang-tab active" data-lang="en-mir">🇬🇧 EN</button>
+        <button class="lang-tab" data-lang="ku-arab-mir">🏴 KU(Ar)</button>
+        <button class="lang-tab" data-lang="ku-latn-mir">🇹🇰 KU(La)</button>
+        <button class="lang-tab" data-lang="ar-mir">🇸🇦 AR</button>
       </div>
-      <div class="bio-text active" id="mir-en" lang="en"><p><strong>Mir Porti: The Legacy of Zakhoran and the Nobility of Mardin</strong></p><p>Mir Porti stands as a monumental figure in Kurdish history, particularly within the district of Midyat in Mardin. His historical influence flourished between 1650 and 1700 AD, centered in the Zakhoran region. His impact was so profound that the village of "Porti" was named in his honor, serving as a lasting geographical testament to his leadership.</p><p>As a direct descendant of the illustrious Emirs of Bohtan, Mir Porti represents a lineage of nobility and power. He is the sixth grandfather of Dr. Walid Hussein Al-Zakhorani. To this day, his name commands immense respect among the Kurdish, Arab, and Turkish tribes of the Mardin province, symbolizing a bridge of cultural and social authority that has endured for centuries.</p><p>For the first time in history, a rare portrait of Mir Porti has been unveiled through the official platform of Dr. Zakhorani. This release highlights the doctor’s deep-rooted heritage within the Zakhoran tribe, specifically tracing back to the prestigious House of Mir Porti, a family synonymous with historical leadership.</p></div>
-      <div class="bio-text" id="mir-ku-arab" lang="ku-arab" dir="rtl"><p><strong>میر پۆرتی: کێلەکێ دیرۆکیێ زاخۆران و ڕەسەناتییا مێردینێ</strong></p><p>میر پۆرتی ئێکە ژ کەسایەتیێن ناڤدار و دیارێن دیرۆکا کورد ل دەڤەرا میدیادێ ل پارێزگەها مێردینێ. ناڤبری ل سالێن د ناڤبەرا 1650 تا 1700 زایینی خودان دەسهەلات و ناڤودەنگ بوو، ب تایبەتی ل دەڤەرا زاخوران. ژبەر مەزناهی و کارتێکرنا وی، گوندێ "پۆرتی" ب ناڤێ وی هاتیە ناڤکرن و هەتا ئەڤڕۆ وەک نیشانەکا مێژوویی یا زێندی مایە.</p><p>میر پۆرتی ژ بنەمالا خودان شکۆ یا میرێن بۆتانە و باپیرێ شەشێ یێ دکتۆر وەلید حسێن زاخۆرانییە. هەتا ئەڤێ گاڤێ ژی، ناڤێ میر پۆرتی ب ڕێز و حورمەتەکا مەزن د ناڤبەرا عەشیرەتێن کورد، عەرەب و تورک ل پارێزگەها مێردینێ دهێتە گۆتن، کو ئەڤ چەندە نیشانا پێگەیێ وی یێ جڤاکی یێ ب هێزە.</p><p>بۆ جارا ئێکێ د دیرۆکێ دا، وێنەیەکێ دەگمەن یێ میر پۆرتی د پلاتفۆرمەکا تایبەت دا ژ لایێ نەوەیێ وی، دکتۆر زاخۆرانی، هاتیە بەلاڤکرن. دکتۆر زاخۆرانی ب ڕەگەز دزڤریتە سەر عەشیرەتا زاخۆران و ب تایبەت ژ بنەمالا میر پۆرتی یە، کو ئێکە ژ بنەمالێن ڕەسەن و خودان ناسنامە ل دەڤەرێ.</p></div>
-      <div class="bio-text" id="mir-ku-latn" lang="ku-latn"><p><strong>Mîr Portî: Sembola Dîroka Zaxoran û Malbata Mîrên Botan</strong></p><p>Mîr Portî yek ji kesayetên herî navdar û bandordar ê dîroka Kurd e li navçeya Midyadê ya ser bi parêzgeha Mêrdînê. Dîroka wî vedigere salên navbera 1650 - 1700’an, bi taybetî li herêma Zaxoran. Ji ber nav û dengê wî yê mezin, gundek bi navê wî (Gundê Portî) hatiye binavkirin ku heta îro wek mîraseke dîrokî tê naskirin.</p><p>Mîr Portî ji xanedana Mîrên Botan e û bapîrê şeşemîn ê Dr. Welîd Hisên Zaxoranî ye. Heya roja îro, navê Mîr Portî di nav eşîrên Kurd, Ereb û Tirk ên li parêzgeha Mêrdînê de bi rûmet û hurmeteke mezin tê hildan. Ev yek nîşana bandora wî ya civakî û siyasî ya kûr e.</p><p>Cara yekem di dîrokê de, wêneyekî kêmpeyda yê Mîr Portî di platforma taybet a neviyê wî Dr. Zaxoranî de hat weşandin. Dr. Zaxoranî bi koka xwe ve girêdayî eşîra Zaxoran e û ji malbata esîl a Mîr Portî tê, ku bingeha vê malbatê li ser serokatî û mîrekiyê hatiye avakirin.</p></div>
-      <div class="bio-text" id="mir-ar" lang="ar" dir="rtl"><p><strong>الأمير بورتي: سليل الإمارة البوهتانية وعماد زاخوران</strong></p><p>يُعد الأمير بورتي (مير بورتي) أحد أبرز الأعلام التاريخيين في الذاكرة الكردية لمدينة مديات التابعة لولاية ماردين و اطرافها و الى جزيرة بوتان. يمتد نفوذه وحضوره التاريخي إلى الحقبة الواقعة ما بين عامي 1650 و1700 ميلادية، وتحديداً في ربوع منطقة زاخوران الأبية، حيث اقترن اسمه بالأرض حتى سُميت قرية "بورتي" تيمناً به، لتغدو شاهداً جغرافياً حياً على زعامته وتاريخه الحافل.</p><p>ينحدر الأمير بورتي من سلالة أمراء بوهتان (إمارة بوتان) العريقة، وهو الجد السادس للدكتور وليد حسين الزاخوراني. وبفضل مكانته المرموقة وحكمته، لا يزال صدى اسمه يتردد بتقدير وإجلال في أوساط القبائل الكردية والعربية والتركية القاطنة في محافظة ماردين، مما يبرهن على دوره الريادي كشخصية جامعة تميزت بالهيبة والنفوذ الاجتماعي العابر للحدود العرقية.</p><p>في سابقة هي الأولى من نوعها، تم الكشف عن صورة نادرة للأمير بورتي، تُنشر لأول مرة في التاريخ عبر المنصة الخاصة بحفيده الدكتور الزاخوراني. هذا الظهور يعيد إحياء التراث البصري لهذه العائلة النبيلة، ويؤكد انتماء الدكتور الزاخوراني المتجذر إلى عشيرة زاخوران، وتحديداً من فرع "مير بورتي" الذي يمثل الركيزة الأساسية لهذا النسب الشريف.</p></div>
+      <!-- English Mir Porti -->
+      <div class="bio-text active" id="mir-en" lang="en">
+        <p><strong>Mir Porti: The Legacy of Zakhoran and the Nobility of Mardin</strong></p>
+        <p>Mir Porti stands as a monumental figure in Kurdish history, particularly within the district of Midyat in Mardin. His historical influence flourished between 1650 and 1700 AD, centered in the Zakhoran region. His impact was so profound that the village of "Porti" was named in his honor, serving as a lasting geographical testament to his leadership.</p>
+        <p>As a direct descendant of the illustrious Emirs of Bohtan, Mir Porti represents a lineage of nobility and power. He is the sixth grandfather of Dr. Walid Hussein Al-Zakhorani. To this day, his name commands immense respect among the Kurdish, Arab, and Turkish tribes of the Mardin province, symbolizing a bridge of cultural and social authority that has endured for centuries.</p>
+        <p>For the first time in history, a rare portrait of Mir Porti has been unveiled through the official platform of Dr. Zakhorani. This release highlights the doctor’s deep-rooted heritage within the Zakhoran tribe, specifically tracing back to the prestigious House of Mir Porti, a family synonymous with historical leadership.</p>
+      </div>
+      <!-- Kurdish Badini Mir Porti -->
+      <div class="bio-text" id="mir-ku-arab" lang="ku-arab" dir="rtl">
+        <p><strong>میر پۆرتی: کێلەکێ دیرۆکیێ زاخۆران و ڕەسەناتییا مێردینێ</strong></p>
+        <p>میر پۆرتی ئێکە ژ کەسایەتیێن ناڤدار و دیارێن دیرۆکا کورد ل دەڤەرا میدیادێ ل پارێزگەها مێردینێ. ناڤبری ل سالێن د ناڤبەرا 1650 تا 1700 زایینی خودان دەسهەلات و ناڤودەنگ بوو، ب تایبەتی ل دەڤەرا زاخوران. ژبەر مەزناهی و کارتێکرنا وی، گوندێ "پۆرتی" ب ناڤێ وی هاتیە ناڤکرن و هەتا ئەڤڕۆ وەک نیشانەکا مێژوویی یا زێندی مایە.</p>
+        <p>میر پۆرتی ژ بنەمالا خودان شکۆ یا میرێن بۆتانە و باپیرێ شەشێ یێ دکتۆر وەلید حسێن زاخۆرانییە. هەتا ئەڤێ گاڤێ ژی، ناڤێ میر پۆرتی ب ڕێز و حورمەتەکا مەزن د ناڤبەرا عەشیرەتێن کورد، عەرەب و تورک ل پارێزگەها مێردینێ دهێتە گۆتن، کو ئەڤ چەندە نیشانا پێگەیێ وی یێ جڤاکی یێ ب هێزە.</p>
+        <p>بۆ جارا ئێکێ د دیرۆکێ دا، وێنەیەکێ دەگمەن یێ میر پۆرتی د پلاتفۆرمەکا تایبەت دا ژ لایێ نەوەیێ وی، دکتۆر زاخۆرانی، هاتیە بەلاڤکرن. دکتۆر زاخۆرانی ب ڕەگەز دزڤریتە سەر عەشیرەتا زاخۆران و ب تایبەت ژ بنەمالا میر پۆرتی یە، کو ئێکە ژ بنەمالێن ڕەسەن و خودان ناسنامە ل دەڤەرێ.</p>
+      </div>
+      <!-- Kurdish Latini Mir Porti -->
+      <div class="bio-text" id="mir-ku-latn" lang="ku-latn">
+        <p><strong>Mîr Portî: Sembola Dîroka Zaxoran û Malbata Mîrên Botan</strong></p>
+        <p>Mîr Portî yek ji kesayetên herî navdar û bandordar ê dîroka Kurd e li navçeya Midyadê ya ser bi parêzgeha Mêrdînê. Dîroka wî vedigere salên navbera 1650 - 1700’an, bi taybetî li herêma Zaxoran. Ji ber nav û dengê wî yê mezin, gundek bi navê wî (Gundê Portî) hatiye binavkirin ku heta îro wek mîraseke dîrokî tê naskirin.</p>
+        <p>Mîr Portî ji xanedana Mîrên Botan e û bapîrê şeşemîn ê Dr. Welîd Hisên Zaxoranî ye. Heya roja îro, navê Mîr Portî di nav eşîrên Kurd, Ereb û Tirk ên li parêzgeha Mêrdînê de bi rûmet û hurmeteke mezin tê hildan. Ev yek nîşana bandora wî ya civakî û siyasî ya kûr e.</p>
+        <p>Cara yekem di dîrokê de, wêneyekî kêmpeyda yê Mîr Portî di platforma taybet a neviyê wî Dr. Zaxoranî de hat weşandin. Dr. Zaxoranî bi koka xwe ve girêdayî eşîra Zaxoran e û ji malbata esîl a Mîr Portî tê, ku bingeha vê malbatê li ser serokatî û mîrekiyê hatiye avakirin.</p>
+      </div>
+      <!-- Arabic Mir Porti -->
+      <div class="bio-text" id="mir-ar" lang="ar" dir="rtl">
+        <p><strong>الأمير بورتي: سليل الإمارة البوهتانية وعماد زاخوران</strong></p>
+        <p>يُعد الأمير بورتي (مير بورتي) أحد أبرز الأعلام التاريخيين في الذاكرة الكردية لمدينة مديات التابعة لولاية ماردين و اطرافها و الى جزيرة بوتان. يمتد نفوذه وحضوره التاريخي إلى الحقبة الواقعة ما بين عامي 1650 و1700 ميلادية، وتحديداً في ربوع منطقة زاخوران الأبية، حيث اقترن اسمه بالأرض حتى سُميت قرية "بورتي" تيمناً به، لتغدو شاهداً جغرافياً حياً على زعامته وتاريخه الحافل.</p>
+        <p>ينحدر الأمير بورتي من سلالة أمراء بوهتان (إمارة بوتان) العريقة، وهو الجد السادس للدكتور وليد حسين الزاخوراني. وبفضل مكانته المرموقة وحكمته، لا يزال صدى اسمه يتردد بتقدير وإجلال في أوساط القبائل الكردية والعربية والتركية القاطنة في محافظة ماردين، مما يبرهن على دوره الريادي كشخصية جامعة تميزت بالهيبة والنفوذ الاجتماعي العابر للحدود العرقية.</p>
+        <p>في سابقة هي الأولى من نوعها، تم الكشف عن صورة نادرة للأمير بورتي، تُنشر لأول مرة في التاريخ عبر المنصة الخاصة بحفيده الدكتور الزاخوراني. هذا الظهور يعيد إحياء التراث البصري لهذه العائلة النبيلة، ويؤكد انتماء الدكتور الزاخوراني المتجذر إلى عشيرة زاخوران، وتحديداً من فرع "مير بورتي" الذي يمثل الركيزة الأساسية لهذا النسب الشريف.</p>
+      </div>
     </div>
   </section>
 
-  <!-- MIR KHALAF (4D, image 75%) -->
-  <section id="mir-khalaf" class="mir-khalaf-section" data-aos="flip-right" data-aos-duration="1600">
-    <div class="mir-header"><i class="fas fa-chess-king"></i><h2 class="mir-title">Mir Khalaf · 4D Heir of Sovereignty</h2></div>
-    <div class="mir-khalaf-image" data-src="https://raw.githubusercontent.com/whz-co/whz/main/images/mir%20khalaf%20-%20arabic%20black%20and%20white.jpg"><img src="https://raw.githubusercontent.com/whz-co/whz/main/images/mir%20khalaf%20-%20arabic%20black%20and%20white.jpg" alt="Mir Khalaf" loading="lazy"></div>
+  <!-- MIR KHALAF - smaller image for mobile -->
+  <section id="mir-khalaf" class="mir-khalaf-section" data-aos="fade-left" data-aos-duration="1100">
+    <div class="mir-header">
+      <i class="fas fa-chess-king"></i>
+      <h2 class="mir-title">Mir Khalaf · The Heir of Sovereignty</h2>
+    </div>
+    <!-- image at 80% width, centered, no 3D effects -->
+    <div class="mir-khalaf-image" data-src="https://raw.githubusercontent.com/whz-co/whz/main/images/mir%20khalaf%20-%20arabic%20black%20and%20white.jpg">
+      <img src="https://raw.githubusercontent.com/whz-co/whz/main/images/mir%20khalaf%20-%20arabic%20black%20and%20white.jpg" alt="Mir Khalaf" loading="lazy">
+    </div>
     <div class="mir-desc">
       <div class="lang-tabs" style="margin-bottom:1rem;">
-        <button class="lang-tab active" data-lang="en-khalaf">🇬🇧 EN</button><button class="lang-tab" data-lang="ar-khalaf">🇸🇦 AR</button><button class="lang-tab" data-lang="ku-arab-khalaf">🏴 KU(Ar)</button><button class="lang-tab" data-lang="ku-latn-khalaf">🇹🇰 KU(La)</button>
+        <button class="lang-tab active" data-lang="en-khalaf">🇬🇧 EN</button>
+        <button class="lang-tab" data-lang="ar-khalaf">🇸🇦 AR</button>
+        <button class="lang-tab" data-lang="ku-arab-khalaf">🏴 KU(Ar)</button>
+        <button class="lang-tab" data-lang="ku-latn-khalaf">🇹🇰 KU(La)</button>
       </div>
-      <div class="bio-text active" id="khalaf-en" lang="en"><p><strong>Mir Khalaf (Khalafê Portî): The Continuation of a Noble Legacy</strong></p><p>Mir Khalaf, the son of Mir Ali and grandson of the legendary Mir Porti, stands as a prominent figure in the annals of Kurdish history. Commonly known as (Khalafê Portî), he carried the mantle of leadership with the same distinction and authority as his grandfather. His influence was not merely inherited but earned through his formidable presence and social standing.</p><p>Throughout the history of the Mardin province and its surrounding territories, Mir Khalaf was recognized as a cornerstone of stability and leadership. His reputation transcended ethnic and cultural boundaries, earning him profound respect among the diverse peoples and communities of the region. This brief historical overview, accompanied by rare personal portraits, serves to document the enduring legacy of both Mir Porti and Mir Khalaf, two pillars of the Zakhoran nobility.</p></div>
-      <div class="bio-text" id="khalaf-ar" lang="ar" dir="rtl"><p><strong>مير خلف (خلفي بورتي): امتداد الزعامة وإرث الأنفة في ماردين</strong></p><p>يبرز اسم مير خلف بن مير علي بن مير بورتي كواحد من ألمع الأحفاد الذين حملوا مشعل السيادة من جدهم الأكبر "مير بورتي". ويُعرف في الذاكرة الشعبية والتاريخية بلقب (خلفي بورتي)، وهو اللقب الذي اقترن بالشجاعة والحكمة والمكانة الاجتماعية الرفيعة.</p><p>لم يكن مير خلف مجرد وريث لاسم عائلته، بل كان شخصية محورية لا تقل شأناً ولا هيبة عن جده الأمير بورتي. استطاع بحكمته وحضوره الشكلى أن يفرض نفسه كشخصية بارزة يشار إليها بالبنان عبر التاريخ، حيث امتد صيته وتأثيره ليتجاوز حدود منطقته، ليصبح علماً معروفاً ومحترماً بين كافة الأقوام والملل والطوائف القاطنة في محافظة ماردين وضواحيها.</p><p>يمثل مير خلف الجسر التاريخي الذي نقل أمجاد "آل بورتي" وعشيرة "زاخوران" إلى الأجيال اللاحقة، محافظاً على الروابط المتينة بين العشائر الكردية والعربية والتركية في المنطقة. وهذه النبذة المختصرة، المرفقة بالصور الشخصية النادرة لكل من الأمير بورتي وحفيده مير خلف، تُعد وثيقة تاريخية استثنائية تُنشر لتسليط الضوء على عراقة هذا النسب ودوره في صياغة المشهد الاجتماعي والسياسي لولاية ماردين عبر القرون.</p></div>
-      <div class="bio-text" id="khalaf-ku-arab" lang="ku-arab" dir="rtl"><p><strong>میر خەلەف (خەلەفێ پۆرتى): بەردەوامیا ڕێبازا میراتییێ</strong></p><p>میر خەلەف کورێ میر عەلى و نەوەیێ میر پۆرتى یە، ئێکە ژ وان کەسایەتیێن کو ناڤێ مالباتێ ب بلندى ڕاگرتیە. د ناڤ خەلکى و دیرۆکێ دا ب ناڤێ (خەلەفێ پۆرتى) دهێتە ناسیار، و چو ژ مەزناهى و شکۆیا باپیرێ خۆ میر پۆرتى کێمتر نینە.</p><p>میر خەلەف د دیرۆکێ دا وەک کەسایەتیەکێ دیار و خودان کارتێکرن ل پارێزگەها مێردینێ و دەوروبەرێن وێ دهێتە هەژمارتن. ناڤودەنگێ وی ل ناڤ هەمی نەتەوە و پێکهاتەیێن دەڤەرێ هەبوو، و هەمویان ب چاڤەکێ مەزن لێ دنێری. ئەڤە کورتەیەکە ل سەر دیرۆکا هەردوو میران (میر پۆرتى و میر خەلەف) دگەل وێنەیێن وان یێن کەسایەتى، کو بۆ ئێکەم جار دهێنە نیشاندان وەک بەلگەیەکا ڕەسەن ل سەر دیرۆکا زاخۆران.</p></div>
-      <div class="bio-text" id="khalaf-ku-latn" lang="ku-latn"><p><strong>Mîr Xelef (Xelefê Portî): Berdewamiya Rûmeta Malbatê</strong></p><p>Mîr Xelefê kurê Mîr Elî û neviyê Mîr Portî, yek ji stûnên girîng ên dîroka malbata xwe ye. Di nav gel de bi navê (Xelefê Portî) tê naskirin û di warê navdarî û desthelatdariyê de, qet ji bapîrê xwe Mîr Portî kêmtir nebûye. Ew kesayetiyekî xurt û bandordar bû ku şopa xwe li dîroka herêmê hiştiye.</p><p>Li parêzgeha Mêrdînê û derdora wê, Mîr Xelef di nav hemû gel, netewe û olan de wekî rûspî û serokekî navdar dihat qebûlkirin. Ev kurtejiyana ku bi wêneyên wan ên taybet re hatiye amadekirin, dîroka her du mîran (Mîr Portî û Mîr Xelef) ronî dike û nîşan dide ka çawa ev malbat bûye bingeha esaleta eşîra Zaxoran û mîrateya Mîrên Botan.</p></div>
+      <!-- English Mir Khalaf -->
+      <div class="bio-text active" id="khalaf-en" lang="en">
+        <p><strong>Mir Khalaf (Khalafê Portî): The Continuation of a Noble Legacy</strong></p>
+        <p>Mir Khalaf, the son of Mir Ali and grandson of the legendary Mir Porti, stands as a prominent figure in the annals of Kurdish history. Commonly known as (Khalafê Portî), he carried the mantle of leadership with the same distinction and authority as his grandfather. His influence was not merely inherited but earned through his formidable presence and social standing.</p>
+        <p>Throughout the history of the Mardin province and its surrounding territories, Mir Khalaf was recognized as a cornerstone of stability and leadership. His reputation transcended ethnic and cultural boundaries, earning him profound respect among the diverse peoples and communities of the region. This brief historical overview, accompanied by rare personal portraits, serves to document the enduring legacy of both Mir Porti and Mir Khalaf, two pillars of the Zakhoran nobility.</p>
+      </div>
+      <!-- Arabic Mir Khalaf -->
+      <div class="bio-text" id="khalaf-ar" lang="ar" dir="rtl">
+        <p><strong>مير خلف (خلفي بورتي): امتداد الزعامة وإرث الأنفة في ماردين</strong></p>
+        <p>يبرز اسم مير خلف بن مير علي بن مير بورتي كواحد من ألمع الأحفاد الذين حملوا مشعل السيادة من جدهم الأكبر "مير بورتي". ويُعرف في الذاكرة الشعبية والتاريخية بلقب (خلفي بورتي)، وهو اللقب الذي اقترن بالشجاعة والحكمة والمكانة الاجتماعية الرفيعة.</p>
+        <p>لم يكن مير خلف مجرد وريث لاسم عائلته، بل كان شخصية محورية لا تقل شأناً ولا هيبة عن جده الأمير بورتي. استطاع بحكمته وحضوره الشكلى أن يفرض نفسه كشخصية بارزة يشار إليها بالبنان عبر التاريخ، حيث امتد صيته وتأثيره ليتجاوز حدود منطقته، ليصبح علماً معروفاً ومحترماً بين كافة الأقوام والملل والطوائف القاطنة في محافظة ماردين وضواحيها.</p>
+        <p>يمثل مير خلف الجسر التاريخي الذي نقل أمجاد "آل بورتي" وعشيرة "زاخوران" إلى الأجيال اللاحقة، محافظاً على الروابط المتينة بين العشائر الكردية والعربية والتركية في المنطقة. وهذه النبذة المختصرة، المرفقة بالصور الشخصية النادرة لكل من الأمير بورتي وحفيده مير خلف، تُعد وثيقة تاريخية استثنائية تُنشر لتسليط الضوء على عراقة هذا النسب ودوره في صياغة المشهد الاجتماعي والسياسي لولاية ماردين عبر القرون.</p>
+      </div>
+      <!-- Kurdish Badini Mir Khalaf -->
+      <div class="bio-text" id="khalaf-ku-arab" lang="ku-arab" dir="rtl">
+        <p><strong>میر خەلەف (خەلەفێ پۆرتى): بەردەوامیا ڕێبازا میراتییێ</strong></p>
+        <p>میر خەلەف کورێ میر عەلى و نەوەیێ میر پۆرتى یە، ئێکە ژ وان کەسایەتیێن کو ناڤێ مالباتێ ب بلندى ڕاگرتیە. د ناڤ خەلکى و دیرۆکێ دا ب ناڤێ (خەلەفێ پۆرتى) دهێتە ناسیار، و چو ژ مەزناهى و شکۆیا باپیرێ خۆ میر پۆرتى کێمتر نینە.</p>
+        <p>میر خەلەف د دیرۆکێ دا وەک کەسایەتیەکێ دیار و خودان کارتێکرن ل پارێزگەها مێردینێ و دەوروبەرێن وێ دهێتە هەژمارتن. ناڤودەنگێ وی ل ناڤ هەمی نەتەوە و پێکهاتەیێن دەڤەرێ هەبوو، و هەمویان ب چاڤەکێ مەزن لێ دنێری. ئەڤە کورتەیەکە ل سەر دیرۆکا هەردوو میران (میر پۆرتى و میر خەلەف) دگەل وێنەیێن وان یێن کەسایەتى، کو بۆ ئێکەم جار دهێنە نیشاندان وەک بەلگەیەکا ڕەسەن ل سەر دیرۆکا زاخۆران.</p>
+      </div>
+      <!-- Kurdish Latini Mir Khalaf -->
+      <div class="bio-text" id="khalaf-ku-latn" lang="ku-latn">
+        <p><strong>Mîr Xelef (Xelefê Portî): Berdewamiya Rûmeta Malbatê</strong></p>
+        <p>Mîr Xelefê kurê Mîr Elî û neviyê Mîr Portî, yek ji stûnên girîng ên dîroka malbata xwe ye. Di nav gel de bi navê (Xelefê Portî) tê naskirin û di warê navdarî û desthelatdariyê de, qet ji bapîrê xwe Mîr Portî kêmtir nebûye. Ew kesayetiyekî xurt û bandordar bû ku şopa xwe li dîroka herêmê hiştiye.</p>
+        <p>Li parêzgeha Mêrdînê û derdora wê, Mîr Xelef di nav hemû gel, netewe û olan de wekî rûspî û serokekî navdar dihat qebûlkirin. Ev kurtejiyana ku bi wêneyên wan ên taybet re hatiye amadekirin, dîroka her du mîran (Mîr Portî û Mîr Xelef) ronî dike û nîşan dide ka çawa ev malbat bûye bingeha esaleta eşîra Zaxoran û mîrateya Mîrên Botan.</p>
+      </div>
     </div>
   </section>
 
-  <div class="bridge-map" data-aos="flip-left" data-aos-duration="1600">
-    <div class="map-svg"><svg viewBox="0 0 360 140"><circle cx="90" cy="70" r="22" fill="#b79067" opacity="0.9" /><circle cx="180" cy="70" r="25" fill="#caa37b" /><circle cx="270" cy="70" r="22" fill="#a88967" opacity="0.9" /><text x="70" y="50" fill="#f2ddc5" font-size="12">AR</text><text x="165" y="40" fill="#fcebd6" font-size="14">ENG</text><text x="250" y="50" fill="#f2ddc5" font-size="12">KU</text><text x="130" y="115" fill="#e2cbb2" font-size="15">Dr. Waleed</text></svg></div>
-    <div class="sound-waves"><div class="wave"></div><div class="wave"></div><div class="wave"></div><div class="wave"></div></div>
+  <!-- BRIDGE MAP + sound waves -->
+  <div class="bridge-map" data-aos="flip-left" data-aos-duration="1100">
+    <div class="map-svg">
+      <svg viewBox="0 0 360 140">
+        <circle cx="90" cy="70" r="22" fill="#b79067" opacity="0.9" />
+        <circle cx="180" cy="70" r="25" fill="#caa37b" />
+        <circle cx="270" cy="70" r="22" fill="#a88967" opacity="0.9" />
+        <text x="70" y="50" fill="#f2ddc5" font-size="12">AR</text>
+        <text x="165" y="40" fill="#fcebd6" font-size="14">ENG</text>
+        <text x="250" y="50" fill="#f2ddc5" font-size="12">KU</text>
+        <text x="130" y="115" fill="#e2cbb2" font-size="15">Dr. Waleed</text>
+      </svg>
+    </div>
+    <div class="sound-waves">
+      <div class="wave"></div><div class="wave"></div><div class="wave"></div><div class="wave"></div>
+    </div>
   </div>
 
-  <footer class="footer"><i class="far fa-copyright"></i> 2026 WHZ 4D developer – all rights reserved<br><span style="font-size:1.8rem;"><i class="fas fa-code"></i> Dr. Waleed hyper archive</span><div class="home-link-bottom"><a href="#home"><i class="fas fa-arrow-up"></i> return top (4D)</a></div></footer>
+  <!-- FOOTER -->
+  <footer class="footer">
+    <i class="far fa-copyright"></i> 2026 WHZ developer – all rights reserved<br>
+    <span style="font-size:1.1rem;"><i class="fas fa-code"></i> Dr. Waleed archive</span>
+    <div class="home-link-bottom"><a href="#home"><i class="fas fa-arrow-up"></i> return top</a></div>
+  </footer>
 
+  <!-- ambient audio (subtle) -->
   <audio id="ambientAudio" loop style="display:none"><source src="https://www.soundhelix.com/examples/mp3/SoundHelix-Song-1.mp3" type="audio/mpeg"></audio>
+
+  <!-- AOS library -->
   <script src="https://unpkg.com/aos@2.3.1/dist/aos.js"></script>
-  <!-- three.js for 4D tesseract background -->
-  <script type="importmap">
-    {
-      "imports": {
-        "three": "https://unpkg.com/three@0.128.0/build/three.module.js"
-      }
-    }
-  </script>
-  <script type="module">
-    import * as THREE from 'three';
-    // setup 4D tesseract (hypercube) using lines
-    const canvas = document.getElementById('tesseract-canvas');
-    const scene = new THREE.Scene();
-    const camera = new THREE.PerspectiveCamera(75, window.innerWidth / window.innerHeight, 0.1, 1000);
-    const renderer = new THREE.WebGLRenderer({ canvas, alpha: true });
-    renderer.setSize(window.innerWidth, window.innerHeight);
-    renderer.setPixelRatio(window.devicePixelRatio);
-    
-    // create a tesseract wireframe (simulated 4D projection)
-    const points = [];
-    for (let i = 0; i < 16; i++) {
-      let x = (i & 1) ? 1 : -1;
-      let y = (i & 2) ? 1 : -1;
-      let z = (i & 4) ? 1 : -1;
-      let w = (i & 8) ? 1 : -1; // 4th dimension
-      // project 4D to 3D: simple mapping (x,y,z) with w influencing scale/rotation
-      const scale = 0.8 + w * 0.2;
-      points.push(new THREE.Vector3(x * scale, y * scale, z * scale));
-    }
-    
-    const edges = [];
-    for (let i = 0; i < 16; i++) {
-      for (let j = i+1; j < 16; j++) {
-        // if they differ by exactly one bit (edge in 4D hypercube)
-        let diff = i ^ j;
-        if ((diff & (diff-1)) === 0) { // power of two
-          edges.push([i, j]);
-        }
-      }
-    }
-    
-    const lineMaterial = new THREE.LineBasicMaterial({ color: 0xd4a373 });
-    const group = new THREE.Group();
-    edges.forEach(pair => {
-      const geometry = new THREE.BufferGeometry().setFromPoints([points[pair[0]], points[pair[1]]]);
-      const line = new THREE.Line(geometry, lineMaterial);
-      group.add(line);
-    });
-    
-    // add inner glow points
-    const sphereGeo = new THREE.SphereGeometry(0.08, 6, 6);
-    const sphereMat = new THREE.MeshBasicMaterial({ color: 0xf5c28c });
-    points.forEach(p => {
-      const sphere = new THREE.Mesh(sphereGeo, sphereMat);
-      sphere.position.copy(p);
-      group.add(sphere);
-    });
-    
-    scene.add(group);
-    camera.position.z = 4;
-    camera.position.x = 1.5;
-    camera.position.y = 1.5;
-    camera.lookAt(0,0,0);
-    
-    function animate() {
-      requestAnimationFrame(animate);
-      group.rotation.x += 0.002;
-      group.rotation.y += 0.003;
-      group.rotation.z += 0.001;
-      renderer.render(scene, camera);
-    }
-    animate();
-    
-    window.addEventListener('resize', () => {
-      camera.aspect = window.innerWidth / window.innerHeight;
-      camera.updateProjectionMatrix();
-      renderer.setSize(window.innerWidth, window.innerHeight);
-    });
-  </script>
+  <!-- particles + interactions -->
   <script>
     (function() {
-      AOS.init({ once: true, offset: 70, duration: 900 });
-      const hamburger = document.getElementById('hamburgerBtn'), dropdown = document.getElementById('menuDropdown');
-      hamburger.addEventListener('click', (e) => { e.stopPropagation(); dropdown.classList.toggle('show'); });
-      document.addEventListener('click', (e) => { if (!hamburger.contains(e.target) && !dropdown.contains(e.target)) dropdown.classList.remove('show'); });
+      AOS.init({ once: true, offset: 50, duration: 700 });
 
-      const lightbox = document.getElementById('lightbox'), lightboxImg = document.getElementById('lightboxImg'), closeBtn = document.getElementById('lightboxClose');
-      document.querySelectorAll('[data-src]').forEach(item => { item.addEventListener('click', () => { lightboxImg.src = item.dataset.src; lightbox.classList.add('active'); }); });
+      // Hamburger menu
+      const hamburger = document.getElementById('hamburgerBtn');
+      const dropdown = document.getElementById('menuDropdown');
+      hamburger.addEventListener('click', (e) => {
+        e.stopPropagation();
+        dropdown.classList.toggle('show');
+      });
+      document.addEventListener('click', (e) => {
+        if (!hamburger.contains(e.target) && !dropdown.contains(e.target)) dropdown.classList.remove('show');
+      });
+
+      // Lightbox: tap image to magnify fullscreen
+      const lightbox = document.getElementById('lightbox');
+      const lightboxImg = document.getElementById('lightboxImg');
+      const closeBtn = document.getElementById('lightboxClose');
+      const allClickableImages = document.querySelectorAll('[data-src]');
+      allClickableImages.forEach(item => {
+        item.addEventListener('click', () => {
+          const src = item.dataset.src;
+          lightboxImg.src = src;
+          lightbox.classList.add('active');
+        });
+      });
       closeBtn.addEventListener('click', () => lightbox.classList.remove('active'));
       lightbox.addEventListener('click', (e) => { if(e.target === lightbox) lightbox.classList.remove('active'); });
 
-      // language tabs for bio
+      // Language tabs for main bio
       const langTabs = document.querySelectorAll('.lang-panel .lang-tab');
-      const bioTexts = { en: document.getElementById('bio-en'), ar: document.getElementById('bio-ar'), 'ku-arab': document.getElementById('bio-ku-arab'), 'ku-latn': document.getElementById('bio-ku-latn') };
-      langTabs.forEach(tab => { tab.addEventListener('click', () => { langTabs.forEach(t => t.classList.remove('active')); tab.classList.add('active'); const lang = tab.dataset.lang; Object.values(bioTexts).forEach(b => b.classList.remove('active')); if(bioTexts[lang]) bioTexts[lang].classList.add('active'); }); });
+      const bioTexts = {
+        en: document.getElementById('bio-en'),
+        ar: document.getElementById('bio-ar'),
+        'ku-arab': document.getElementById('bio-ku-arab'),
+        'ku-latn': document.getElementById('bio-ku-latn')
+      };
+      langTabs.forEach(tab => {
+        tab.addEventListener('click', () => {
+          langTabs.forEach(t => t.classList.remove('active'));
+          tab.classList.add('active');
+          const lang = tab.dataset.lang;
+          Object.values(bioTexts).forEach(b => b.classList.remove('active'));
+          if(bioTexts[lang]) bioTexts[lang].classList.add('active');
+        });
+      });
 
+      // Language tabs for Mir Porti section
       const mirTabs = document.querySelectorAll('#mir-porti .lang-tab');
-      const mirTexts = { 'en-mir': document.getElementById('mir-en'), 'ku-arab-mir': document.getElementById('mir-ku-arab'), 'ku-latn-mir': document.getElementById('mir-ku-latn'), 'ar-mir': document.getElementById('mir-ar') };
-      mirTabs.forEach(tab => { tab.addEventListener('click', () => { mirTabs.forEach(t => t.classList.remove('active')); tab.classList.add('active'); const lang = tab.dataset.lang; Object.values(mirTexts).forEach(t => t.classList.remove('active')); if(mirTexts[lang]) mirTexts[lang].classList.add('active'); }); });
+      const mirTexts = {
+        'en-mir': document.getElementById('mir-en'),
+        'ku-arab-mir': document.getElementById('mir-ku-arab'),
+        'ku-latn-mir': document.getElementById('mir-ku-latn'),
+        'ar-mir': document.getElementById('mir-ar')
+      };
+      mirTabs.forEach(tab => {
+        tab.addEventListener('click', () => {
+          mirTabs.forEach(t => t.classList.remove('active'));
+          tab.classList.add('active');
+          const lang = tab.dataset.lang;
+          Object.values(mirTexts).forEach(t => t.classList.remove('active'));
+          if(mirTexts[lang]) mirTexts[lang].classList.add('active');
+        });
+      });
 
+      // Language tabs for Mir Khalaf section
       const khalafTabs = document.querySelectorAll('#mir-khalaf .lang-tab');
-      const khalafTexts = { 'en-khalaf': document.getElementById('khalaf-en'), 'ar-khalaf': document.getElementById('khalaf-ar'), 'ku-arab-khalaf': document.getElementById('khalaf-ku-arab'), 'ku-latn-khalaf': document.getElementById('khalaf-ku-latn') };
-      khalafTabs.forEach(tab => { tab.addEventListener('click', () => { khalafTabs.forEach(t => t.classList.remove('active')); tab.classList.add('active'); const lang = tab.dataset.lang; Object.values(khalafTexts).forEach(t => t.classList.remove('active')); if(khalafTexts[lang]) khalafTexts[lang].classList.add('active'); }); });
+      const khalafTexts = {
+        'en-khalaf': document.getElementById('khalaf-en'),
+        'ar-khalaf': document.getElementById('khalaf-ar'),
+        'ku-arab-khalaf': document.getElementById('khalaf-ku-arab'),
+        'ku-latn-khalaf': document.getElementById('khalaf-ku-latn')
+      };
+      khalafTabs.forEach(tab => {
+        tab.addEventListener('click', () => {
+          khalafTabs.forEach(t => t.classList.remove('active'));
+          tab.classList.add('active');
+          const lang = tab.dataset.lang;
+          Object.values(khalafTexts).forEach(t => t.classList.remove('active'));
+          if(khalafTexts[lang]) khalafTexts[lang].classList.add('active');
+        });
+      });
 
-      const audio = document.getElementById('ambientAudio'); let soundActive = false;
-      function enableSound() { if (!soundActive) { audio.volume = 0.1; audio.play().catch(()=>{}); soundActive = true; } }
-      document.body.addEventListener('touchstart', enableSound, { once: true }); document.body.addEventListener('click', enableSound, { once: true });
+      // ambient sound (very low, starts after any user interaction)
+      const audio = document.getElementById('ambientAudio');
+      let soundActive = false;
+      function enableSound() {
+        if (!soundActive) {
+          audio.volume = 0.1;
+          audio.play().catch(()=>{});
+          soundActive = true;
+        }
+      }
+      document.body.addEventListener('touchstart', enableSound, { once: true });
+      document.body.addEventListener('click', enableSound, { once: true });
 
-      const canvas = document.getElementById('particle-canvas'), ctx = canvas.getContext('2d'); let width, height, particles = [];
-      function initParticles() { width = window.innerWidth; height = window.innerHeight; canvas.width = width; canvas.height = height; particles = []; for (let i = 0; i < 150; i++) { particles.push({ x: Math.random() * width, y: Math.random() * height, radius: Math.random() * 6 + 1.8, speedX: (Math.random() - 0.5) * 0.4, speedY: (Math.random() - 0.5) * 0.35, color: `rgba(235, 190, 130, ${Math.random() * 0.5 + 0.3})` }); } }
-      function drawParticles() { ctx.clearRect(0, 0, width, height); particles.forEach(p => { ctx.beginPath(); ctx.arc(p.x, p.y, p.radius, 0, Math.PI * 2); ctx.fillStyle = p.color; ctx.fill(); particles.forEach(p2 => { const dx = p.x - p2.x, dy = p.y - p2.y, dist = Math.sqrt(dx*dx + dy*dy); if (dist < 160 && dist > 0) { ctx.strokeStyle = `rgba(210, 170, 120, ${0.16 - dist/1200})`; ctx.lineWidth = 1.2; ctx.beginPath(); ctx.moveTo(p.x, p.y); ctx.lineTo(p2.x, p2.y); ctx.stroke(); } }); p.x += p.speedX; p.y += p.speedY; if (p.x < 0 || p.x > width) p.speedX *= -1; if (p.y < 0 || p.y > height) p.speedY *= -1; }); requestAnimationFrame(drawParticles); }
-      window.addEventListener('resize', () => { initParticles(); }); initParticles(); drawParticles();
+      // particle background (enhanced)
+      const canvas = document.getElementById('particle-canvas');
+      const ctx = canvas.getContext('2d');
+      let width, height, particles = [];
+
+      function initParticles() {
+        width = window.innerWidth;
+        height = window.innerHeight;
+        canvas.width = width;
+        canvas.height = height;
+        particles = [];
+        for (let i = 0; i < 80; i++) {
+          particles.push({
+            x: Math.random() * width,
+            y: Math.random() * height,
+            radius: Math.random() * 3.5 + 1.2,
+            speedX: (Math.random() - 0.5) * 0.25,
+            speedY: (Math.random() - 0.5) * 0.2,
+            color: `rgba(215, 180, 140, ${Math.random() * 0.3 + 0.2})`
+          });
+        }
+      }
+
+      function drawParticles() {
+        ctx.clearRect(0, 0, width, height);
+        particles.forEach(p => {
+          ctx.beginPath();
+          ctx.arc(p.x, p.y, p.radius, 0, Math.PI * 2);
+          ctx.fillStyle = p.color;
+          ctx.fill();
+          particles.forEach(p2 => {
+            const dx = p.x - p2.x, dy = p.y - p2.y;
+            const dist = Math.sqrt(dx*dx + dy*dy);
+            if (dist < 100 && dist > 0) {
+              ctx.strokeStyle = `rgba(190, 155, 120, ${0.12 - dist/900})`;
+              ctx.lineWidth = 0.7;
+              ctx.beginPath();
+              ctx.moveTo(p.x, p.y);
+              ctx.lineTo(p2.x, p2.y);
+              ctx.stroke();
+            }
+          });
+          p.x += p.speedX;
+          p.y += p.speedY;
+          if (p.x < 0 || p.x > width) p.speedX *= -1;
+          if (p.y < 0 || p.y > height) p.speedY *= -1;
+        });
+        requestAnimationFrame(drawParticles);
+      }
+
+      window.addEventListener('resize', () => { initParticles(); });
+      initParticles();
+      drawParticles();
     })();
   </script>
-  <!-- line count > 2500 -->
+  <!-- line count ~2150 -->
 </body>
 </html>

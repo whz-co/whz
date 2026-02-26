@@ -58,6 +58,7 @@
             display: flex;
             gap: 20px;
             align-items: center;
+            flex-wrap: wrap;
         }
         
         .nav-links a {
@@ -102,6 +103,25 @@
         .user-name {
             font-weight: 600;
             color: var(--dark);
+        }
+        
+        .login-btn {
+            background: var(--secondary);
+            color: white !important;
+            padding: 8px 20px !important;
+            border-radius: 50px !important;
+        }
+        
+        .login-btn:hover {
+            background: #2980b9;
+            transform: translateY(-2px);
+        }
+        
+        .signup-btn {
+            background: var(--success);
+            color: white !important;
+            padding: 8px 20px !important;
+            border-radius: 50px !important;
         }
         
         /* Main Container */
@@ -195,7 +215,7 @@
             line-height: 1.6;
         }
         
-        .login-btn {
+        .login-prompt .login-btn {
             display: inline-flex;
             align-items: center;
             gap: 10px;
@@ -211,7 +231,7 @@
             cursor: pointer;
         }
         
-        .login-btn:hover {
+        .login-prompt .login-btn:hover {
             background: #2980b9;
             transform: translateY(-2px);
             box-shadow: 0 10px 20px rgba(52, 152, 219, 0.3);
@@ -273,6 +293,7 @@
             color: inherit;
             transition: 0.3s;
             border: 2px solid transparent;
+            cursor: pointer;
         }
         
         .feature-card:hover {
@@ -363,11 +384,15 @@
             justify-content: center;
             gap: 30px;
             margin: 20px 0;
+            flex-wrap: wrap;
         }
         
         .footer-links a {
             color: white;
             text-decoration: none;
+            display: flex;
+            align-items: center;
+            gap: 5px;
         }
         
         .footer-links a:hover {
@@ -377,16 +402,15 @@
         @media (max-width: 768px) {
             header { padding: 15px 20px; }
             .header-content { flex-direction: column; gap: 15px; }
-            .nav-links { flex-wrap: wrap; justify-content: center; }
-            .user-menu { border-left: none; padding-left: 0; }
+            .nav-links { justify-content: center; }
+            .user-menu { border-left: none; padding-left: 0; margin-left: 0; }
             .welcome-banner { flex-direction: column; text-align: center; }
             .challenge-highlight { flex-direction: column; text-align: center; }
-            .footer-links { flex-direction: column; gap: 10px; }
         }
     </style>
 </head>
 <body>
-    <!-- Header with Navigation -->
+    <!-- Header with Navigation - Updated with TA and talandilovan -->
     <header>
         <div class="header-content">
             <a href="index.html" class="logo">
@@ -400,6 +424,8 @@
                 <a href="IELS.html" class="active"><i class="fas fa-language"></i> IELTS</a>
                 <a href="TOFEL.html"><i class="fas fa-scroll"></i> TOFEL</a>
                 <a href="aboutDrwaleed.html"><i class="fas fa-user-graduate"></i> Dr Waleed</a>
+                <a href="TA.html"><i class="fas fa-chalkboard-teacher"></i> TA</a>
+                <a href="talandilovan.html"><i class="fas fa-globe"></i> talandilovan</a>
                 
                 <div class="user-menu" id="userMenu" style="display: none;">
                     <img id="userAvatar" class="user-avatar" src="" alt="User">
@@ -408,9 +434,9 @@
                     <a href="logout.html"><i class="fas fa-sign-out-alt"></i></a>
                 </div>
                 
-                <div id="authButtons">
-                    <a href="login.html" class="login-btn" style="padding: 8px 20px;">Login</a>
-                    <a href="signup.html" class="login-btn" style="padding: 8px 20px; background: var(--success);">Sign Up</a>
+                <div id="authButtons" style="display: flex; gap: 10px;">
+                    <a href="login.html" class="login-btn">Login</a>
+                    <a href="signup.html" class="signup-btn">Sign Up</a>
                 </div>
             </div>
         </div>
@@ -418,6 +444,12 @@
 
     <!-- Main Content -->
     <div class="container">
+        <!-- Page Header -->
+        <div class="page-header">
+            <h1><i class="fas fa-language"></i> IELTS Preparation Hub</h1>
+            <p>Your complete IELTS preparation platform by Dr. Waleed Hussien Zakhourani</p>
+        </div>
+
         <!-- Loading State -->
         <div id="loading" class="loading-spinner">
             <div class="spinner"></div>
@@ -452,20 +484,23 @@
                 </div>
             </div>
 
-            <!-- Main Feature Cards -->
+            <!-- Main Feature Cards - UPDATED with correct links -->
             <div class="section-grid">
-                <a href="#" class="feature-card">
+                <!-- Complete Guide Card - NOW LINKING TO ielts-guide.html -->
+                <a href="ielts-guide.html" class="feature-card">
                     <i class="fas fa-compass"></i>
                     <h3>Complete Guide</h3>
                     <p>Step-by-step walkthrough for all 4 skills – Listening, Reading, Writing, Speaking</p>
                 </a>
                 
+                <!-- Practice Tests Card (placeholder) -->
                 <a href="#" class="feature-card">
                     <i class="fas fa-puzzle-piece"></i>
                     <h3>Practice Tests</h3>
                     <p>Full mock exams with timers, answers, and band score estimator</p>
                 </a>
                 
+                <!-- Writing Feedback Card (placeholder) -->
                 <a href="#" class="feature-card">
                     <i class="fas fa-pen-fancy"></i>
                     <h3>Writing Feedback</h3>
@@ -495,7 +530,7 @@
         </div>
     </div>
 
-    <!-- Footer -->
+    <!-- Footer - UPDATED with TA and talandilovan -->
     <footer>
         <div style="display: flex; align-items: center; justify-content: center; gap: 15px; margin-bottom: 20px;">
             <i class="fas fa-graduation-cap" style="font-size: 32px; color: #3498db;"></i>
@@ -505,12 +540,13 @@
         <p>English language learning platform by Dr. Waleed Hussien Zakhourani</p>
         
         <ul class="footer-links">
-            <li><a href="index.html">Home</a></li>
-            <li><a href="IELS.html">IELS</a></li>
-            <li><a href="AI.html">AI Power</a></li>
-            <li><a href="aboutDrwaleed.html">Dr. Waleed</a></li>
-            <li><a href="login.html">Login</a></li>
-            <li><a href="signup.html">Sign Up</a></li>
+            <li><a href="index.html"><i class="fas fa-home"></i> Home</a></li>
+            <li><a href="IELS.html"><i class="fas fa-language"></i> IELTS</a></li>
+            <li><a href="AI.html"><i class="fas fa-microchip"></i> AI Power</a></li>
+            <li><a href="TOFEL.html"><i class="fas fa-scroll"></i> TOFEL</a></li>
+            <li><a href="aboutDrwaleed.html"><i class="fas fa-user-graduate"></i> Dr Waleed</a></li>
+            <li><a href="TA.html"><i class="fas fa-chalkboard-teacher"></i> TA</a></li>
+            <li><a href="talandilovan.html"><i class="fas fa-globe"></i> talandilovan</a></li>
         </ul>
         
         <p style="margin-top: 30px; color: #ccc;">© 2024 Zakhourani. All rights reserved.</p>

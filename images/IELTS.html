@@ -3,378 +3,463 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Quantum Space Survivor</title>
+    <title>IELS · Dr. Waleed's Hub</title>
+    <!-- Font Awesome Icons -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
     <style>
-        body {
+        * {
             margin: 0;
             padding: 0;
-            background-color: #050505;
-            color: #fff;
-            font-family: 'Courier New', Courier, monospace;
-            overflow: hidden;
+            box-sizing: border-box;
+            font-family: 'Segoe UI', Roboto, system-ui, -apple-system, sans-serif;
+        }
+
+        body {
+            background: #f8fafd;
+            color: #1a2b3e;
+            line-height: 1.5;
+            min-height: 100vh;
             display: flex;
-            justify-content: center;
+            flex-direction: column;
+        }
+
+        /* ---- navigation (same style as aboutDrwaleed) ---- */
+        .top-nav {
+            background: rgba(255, 255, 255, 0.85);
+            backdrop-filter: blur(12px);
+            -webkit-backdrop-filter: blur(12px);
+            padding: 0.8rem 2.5rem;
+            display: flex;
+            flex-wrap: wrap;
             align-items: center;
-            height: 100vh;
+            gap: 2rem;
+            border-bottom: 1px solid rgba(44, 95, 138, 0.2);
+            box-shadow: 0 4px 12px rgba(0,0,0,0.02);
         }
-        #game-container {
-            position: relative;
-            box-shadow: 0 0 50px rgba(0, 210, 255, 0.2);
-            border: 2px solid #333;
+
+        .nav-brand a {
+            font-weight: 700;
+            font-size: 1.5rem;
+            text-decoration: none;
+            background: linear-gradient(130deg, #0B2A4A, #2C5F8A);
+            -webkit-background-clip: text;
+            background-clip: text;
+            color: transparent;
+            letter-spacing: -0.5px;
         }
-        canvas {
-            display: block;
-            background: radial-gradient(circle at center, #111 0%, #000 100%);
+
+        .nav-links {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 1.2rem 1.8rem;
+            align-items: center;
+            list-style: none;
+            margin-left: auto;
         }
-        #ui-layer {
-            position: absolute;
-            top: 10px;
-            left: 10px;
-            pointer-events: none;
-            width: 100%;
+
+        .nav-links li a {
+            text-decoration: none;
+            color: #1e3b5c;
+            font-weight: 500;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            font-size: 1.05rem;
+            padding: 0.3rem 0;
+            border-bottom: 2px solid transparent;
+            transition: 0.15s;
         }
-        .stat-box {
-            background: rgba(0, 0, 0, 0.7);
-            padding: 5px 15px;
-            border-left: 3px solid #00d2ff;
-            margin-bottom: 5px;
-            display: inline-block;
-        }
-        #menu, #game-over {
-            position: absolute;
-            top: 50%;
-            left: 50%;
-            transform: translate(-50%, -50%);
+
+        .nav-links li a i {
+            color: #2c5f8a;
+            font-size: 1.2rem;
+            width: 1.5rem;
             text-align: center;
-            background: rgba(10, 10, 20, 0.9);
-            padding: 40px;
-            border-radius: 20px;
-            border: 1px solid #00d2ff;
         }
-        button {
-            background: #00d2ff;
+
+        .nav-links li a:hover {
+            border-bottom-color: #2c5f8a;
+        }
+
+        /* active page indicator (IELS) */
+        .nav-links .active a {
+            border-bottom-color: #e67e22;
+            font-weight: 600;
+        }
+        .nav-links .active a i {
+            color: #e67e22;
+        }
+
+        /* main container */
+        .container {
+            max-width: 1100px;
+            width: 100%;
+            margin: 2rem auto;
+            padding: 0 2rem;
+            flex: 1;
+        }
+
+        /* page header */
+        .page-header {
+            margin-bottom: 2.5rem;
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+            flex-wrap: wrap;
+        }
+        .page-header h1 {
+            font-size: 2.5rem;
+            font-weight: 700;
+            background: linear-gradient(130deg, #0f3b5e, #1f6692);
+            -webkit-background-clip: text;
+            background-clip: text;
+            color: transparent;
+            display: flex;
+            align-items: center;
+            gap: 15px;
+        }
+        .page-header h1 i {
+            color: #cc6b2c;
+            font-size: 2.2rem;
+        }
+        .header-badge {
+            background: #e9f0f9;
+            color: #1f4970;
+            padding: 0.5rem 1.5rem;
+            border-radius: 40px;
+            font-weight: 600;
+            border: 1px solid #c0d4e8;
+            font-size: 0.9rem;
+            margin-left: auto;
+        }
+
+        /* ---- LOGIN SECTION (shown when not authenticated) ---- */
+        .login-prompt {
+            background: white;
+            border-radius: 2.5rem;
+            padding: 2.5rem 2rem;
+            text-align: center;
+            box-shadow: 0 20px 35px -8px rgba(0, 35, 60, 0.15);
+            border: 1px solid rgba(255,255,255,0.6);
+            max-width: 500px;
+            margin: 2rem auto;
+        }
+        .login-prompt i {
+            font-size: 4rem;
+            color: #2c5f8a;
+            background: #e5effa;
+            padding: 1.2rem;
+            border-radius: 60px;
+            margin-bottom: 1.2rem;
+        }
+        .login-prompt h2 {
+            font-size: 1.9rem;
+            margin-bottom: 0.5rem;
+            color: #0a2f4a;
+        }
+        .login-prompt p {
+            color: #4a5f73;
+            margin-bottom: 2rem;
+            font-size: 1.1rem;
+        }
+        .password-form {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 1.2rem;
+        }
+        .password-form input {
+            padding: 1rem 1.5rem;
+            font-size: 1.1rem;
+            border: 2px solid #d4e0ec;
+            border-radius: 60px;
+            width: 80%;
+            max-width: 300px;
+            outline: none;
+            transition: 0.15s;
+            text-align: center;
+        }
+        .password-form input:focus {
+            border-color: #1f6e43;
+        }
+        .password-form button {
+            background: #1f4b77;
+            color: white;
             border: none;
-            padding: 15px 30px;
-            color: #000;
-            font-weight: bold;
+            font-size: 1.2rem;
+            font-weight: 600;
+            padding: 0.9rem 2.5rem;
+            border-radius: 60px;
             cursor: pointer;
-            border-radius: 5px;
-            margin-top: 20px;
-            transition: 0.3s;
+            display: inline-flex;
+            align-items: center;
+            gap: 12px;
+            box-shadow: 0 8px 16px rgba(28, 80, 130, 0.25);
+            transition: 0.1s;
+            border: 1px solid #ffffff50;
         }
-        button:hover { background: #fff; box-shadow: 0 0 20px #00d2ff; }
-        .hidden { display: none !important; }
+        .password-form button:hover {
+            background: #123a5c;
+            transform: scale(1.02);
+        }
+        .error-msg {
+            color: #b13e3e;
+            font-weight: 500;
+            margin-top: 0.5rem;
+            min-height: 1.8rem;
+        }
+
+        /* ---- PROTECTED IELTS CONTENT (hidden by default) ---- */
+        .ielts-protected {
+            display: none;
+        }
+
+        .intro-card {
+            background: white;
+            border-radius: 2rem;
+            padding: 2rem 2.2rem;
+            margin-bottom: 2.5rem;
+            box-shadow: 0 10px 25px rgba(0, 30, 50, 0.08);
+            border: 1px solid #e0ecf5;
+        }
+        .intro-card p {
+            font-size: 1.2rem;
+            color: #1f3a57;
+            margin-bottom: 0.8rem;
+        }
+        .intro-card p:last-child {
+            margin-bottom: 0;
+        }
+
+        .section-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
+            gap: 1.8rem;
+            margin: 2.5rem 0;
+        }
+
+        .feature-card {
+            background: white;
+            padding: 2rem 1.5rem;
+            border-radius: 2rem;
+            box-shadow: 0 12px 28px -8px rgba(0, 40, 70, 0.12);
+            text-align: center;
+            border: 1px solid #d9e6f2;
+            transition: all 0.2s;
+            text-decoration: none;
+            color: inherit;
+            display: block;
+        }
+        .feature-card:hover {
+            transform: translateY(-6px);
+            border-color: #6c9ac3;
+            box-shadow: 0 22px 38px -10px #1f4b7750;
+        }
+        .feature-card i {
+            font-size: 2.8rem;
+            background: #e2f0fa;
+            padding: 1rem;
+            border-radius: 60px;
+            color: #204f79;
+            margin-bottom: 1.2rem;
+        }
+        .feature-card h3 {
+            font-size: 1.7rem;
+            margin-bottom: 0.5rem;
+            color: #0e324b;
+        }
+        .feature-card p {
+            color: #3f5b77;
+        }
+
+        .challenge-highlight {
+            background: linear-gradient(135deg, #f1f7fd, #ffffff);
+            border-radius: 2.5rem;
+            padding: 2rem 2.5rem;
+            margin: 2rem 0 1.5rem;
+            display: flex;
+            align-items: center;
+            flex-wrap: wrap;
+            gap: 2rem;
+            border: 2px dashed #6797b9;
+        }
+        .challenge-text {
+            flex: 2;
+        }
+        .challenge-text h2 {
+            font-size: 2.2rem;
+            color: #0a334f;
+            display: flex;
+            align-items: center;
+            gap: 12px;
+        }
+        .challenge-text p {
+            font-size: 1.15rem;
+            color: #2a4e6e;
+        }
+        .challenge-button {
+            background: #1f6e43;
+            color: white;
+            border: none;
+            padding: 1.1rem 2.2rem;
+            border-radius: 60px;
+            font-weight: 700;
+            font-size: 1.3rem;
+            display: inline-flex;
+            align-items: center;
+            gap: 12px;
+            box-shadow: 0 8px 18px #1b4d33a0;
+            text-decoration: none;
+            white-space: nowrap;
+        }
+        .challenge-button i {
+            font-size: 1.6rem;
+        }
+
+        .footer-note {
+            margin-top: 3rem;
+            text-align: center;
+            color: #5a738b;
+            border-top: 1px solid #cbdae7;
+            padding-top: 2rem;
+            font-size: 0.95rem;
+        }
     </style>
 </head>
 <body>
+    <!-- navigation exactly matching the style from aboutDrwaleed -->
+    <nav class="top-nav">
+        <div class="nav-brand">
+            <a href="index.hml">whz · Dr. Waleed</a>
+        </div>
+        <ul class="nav-links">
+            <li><a href="index.hml"><i class="fas fa-home"></i> home</a></li>
+            <li><a href="AI.hml"><i class="fas fa-microchip"></i> AI power</a></li>
+            <li class="active"><a href="IELS.html"><i class="fas fa-language"></i> IELTS</a></li>
+            <li><a href="TOFEL.html"><i class="fas fa-scroll"></i> TOFEL</a></li>
+            <li><a href="aboutDrwaleed.html"><i class="fas fa-user-graduate"></i> Dr Waleed</a></li>
+        </ul>
+    </nav>
 
-<div id="game-container">
-    <canvas id="gameCanvas"></canvas>
-    
-    <div id="ui-layer">
-        <div class="stat-box">SCORE: <span id="scoreVal">0</span></div><br>
-        <div class="stat-box">HEALTH: <span id="healthVal">100</span>%</div>
+    <div class="container">
+        <div class="page-header">
+            <h1><i class="fas fa-certificate"></i> IELTS preparation hub</h1>
+            <span class="header-badge"><i class="fas fa-lock"></i>  member area</span>
+        </div>
+
+        <!-- LOGIN AREA (visible by default) -->
+        <div id="loginArea" class="login-prompt">
+            <i class="fas fa-lock"></i>
+            <h2>secure section</h2>
+            <p>please sign in to access IELTS materials</p>
+            <div class="password-form">
+                <input type="password" id="passwordInput" placeholder="enter password" autocomplete="off">
+                <button id="loginBtn"><i class="fas fa-key"></i> unlock</button>
+                <div id="loginError" class="error-msg"></div>
+            </div>
+            <div style="margin-top: 1.8rem; font-size: 0.9rem; color: #4a6f8c;">( demo password: <strong>ielts2024</strong> )</div>
+        </div>
+
+        <!-- PROTECTED IELTS CONTENT (hidden initially) -->
+        <div id="protectedContent" class="ielts-protected">
+            <!-- welcome intro -->
+            <div class="intro-card">
+                <p><i class="fas fa-quote-right" style="color: #1f6e43; opacity: 0.6; font-size: 1.8rem; float: right;"></i></p>
+                <p>Welcome to your dedicated <strong>IELTS hub</strong>. Here you'll find structured materials, practice tests, and the famous <strong>8‑step challenge</strong> — everything guided by Dr. Waleed's methodology.</p>
+                <p style="margin-top: 0.8rem;">👇 select a section below</p>
+            </div>
+
+            <!-- three main feature cards -->
+            <div class="section-grid">
+                <a href="#" class="feature-card">
+                    <i class="fas fa-compass"></i>
+                    <h3>Complete guide</h3>
+                    <p>step‑by‑step walkthrough for all 4 skills – listening, reading, writing, speaking</p>
+                </a>
+                <a href="#" class="feature-card">
+                    <i class="fas fa-puzzle-piece"></i>
+                    <h3>Practice tests</h3>
+                    <p>full mock exams with timers, answers, and band score estimator</p>
+                </a>
+                <a href="#" class="feature-card">
+                    <i class="fas fa-pen-fancy"></i>
+                    <h3>Writing feedback</h3>
+                    <p>submit tasks and get personalised comments (Dr Waleed’s method)</p>
+                </a>
+            </div>
+
+            <!-- special challenge card linking to ielts-complete.html -->
+            <div class="challenge-highlight">
+                <div class="challenge-text">
+                    <h2><i class="fas fa-bolt" style="color: #e68a2e;"></i> IELTS complete challenge</h2>
+                    <p>track your progress step‑by‑step. 8 essential tasks to exam readiness.</p>
+                </div>
+                <a href="ielts-complete.html" class="challenge-button">
+                    <i class="fas fa-flag-checkered"></i> start challenge
+                </a>
+            </div>
+
+            <!-- extra note about further resources -->
+            <p style="text-align: center; color: #3d6181;"><i class="fas fa-arrow-right"></i> more academic materials added weekly</p>
+        </div>
+
+        <div class="footer-note">
+            <i class="far fa-copyright"></i> Dr. Waleed Hussein Zakhourani · language hub
+        </div>
     </div>
 
-    <div id="menu">
-        <h1 style="color: #00d2ff; font-size: 3em;">SPACE SURVIVOR</h1>
-        <p>Use WASD or Arrows to move<br>Mouse to Aim & Fire</p>
-        <button onclick="startGame()">START MISSION</button>
-    </div>
+    <!-- simple login logic (client‑side, for demonstration) -->
+    <script>
+        (function() {
+            const loginArea = document.getElementById('loginArea');
+            const protectedDiv = document.getElementById('protectedContent');
+            const passwordInput = document.getElementById('passwordInput');
+            const loginBtn = document.getElementById('loginBtn');
+            const loginError = document.getElementById('loginError');
 
-    <div id="game-over" class="hidden">
-        <h1 style="color: #ff4d4d;">MISSION FAILED</h1>
-        <p>Final Score: <span id="finalScore">0</span></p>
-        <button onclick="startGame()">RETRY</button>
-    </div>
-</div>
+            // demo password — in a real site use proper server authentication
+            const CORRECT_PASSWORD = 'ielts2024';
 
-<script>
-/**
- * QUANTUM SPACE SURVIVOR - FULL ENGINE
- * Features: Sprite pooling, Vector math, Dynamic Difficulty
- */
+            // check if already authenticated in this session
+            const isUnlocked = sessionStorage.getItem('whz_iels_unlocked') === 'true';
 
-const canvas = document.getElementById('gameCanvas');
-const ctx = canvas.getContext('2d');
-const scoreEl = document.getElementById('scoreVal');
-const healthEl = document.getElementById('healthVal');
-
-// Game Config
-const CONFIG = {
-    width: 1000,
-    height: 700,
-    playerSpeed: 5,
-    enemyBaseSpeed: 1.5,
-    spawnRate: 1500, // ms
-    starCount: 150
-};
-
-canvas.width = CONFIG.width;
-canvas.height = CONFIG.height;
-
-// Global State
-let player, projectiles, enemies, particles, stars;
-let keys = {};
-let score = 0;
-let isGameRunning = false;
-let spawnInterval;
-
-// Classes
-class Player {
-    constructor() {
-        this.x = canvas.width / 2;
-        this.y = canvas.height / 2;
-        this.radius = 15;
-        this.color = '#00d2ff';
-        this.health = 100;
-        this.angle = 0;
-    }
-
-    draw() {
-        ctx.save();
-        ctx.translate(this.x, this.y);
-        ctx.rotate(this.angle);
-        
-        // Ship Body
-        ctx.beginPath();
-        ctx.moveTo(20, 0);
-        ctx.lineTo(-15, -15);
-        ctx.lineTo(-15, 15);
-        ctx.closePath();
-        ctx.fillStyle = this.color;
-        ctx.shadowBlur = 15;
-        ctx.shadowColor = this.color;
-        ctx.fill();
-        
-        // Engine Glow
-        if (keys['w'] || keys['ArrowUp']) {
-            ctx.beginPath();
-            ctx.moveTo(-15, -5);
-            ctx.lineTo(-25, 0);
-            ctx.lineTo(-15, 5);
-            ctx.fillStyle = '#ffcc00';
-            ctx.fill();
-        }
-        
-        ctx.restore();
-    }
-
-    update() {
-        // Movement
-        if ((keys['w'] || keys['ArrowUp']) && this.y > this.radius) this.y -= CONFIG.playerSpeed;
-        if ((keys['s'] || keys['ArrowDown']) && this.y < canvas.height - this.radius) this.y += CONFIG.playerSpeed;
-        if ((keys['a'] || keys['ArrowLeft']) && this.x > this.radius) this.x -= CONFIG.playerSpeed;
-        if ((keys['d'] || keys['ArrowRight']) && this.x < canvas.width - this.radius) this.x += CONFIG.playerSpeed;
-    }
-}
-
-class Projectile {
-    constructor(x, y, angle) {
-        this.x = x;
-        this.y = y;
-        this.velocity = {
-            x: Math.cos(angle) * 8,
-            y: Math.sin(angle) * 8
-        };
-        this.radius = 3;
-        this.color = '#fff';
-    }
-
-    draw() {
-        ctx.beginPath();
-        ctx.arc(this.x, this.y, this.radius, 0, Math.PI * 2);
-        ctx.fillStyle = this.color;
-        ctx.shadowBlur = 10;
-        ctx.shadowColor = '#00d2ff';
-        ctx.fill();
-    }
-
-    update() {
-        this.x += this.velocity.x;
-        this.y += this.velocity.y;
-    }
-}
-
-class Enemy {
-    constructor() {
-        const side = Math.floor(Math.random() * 4);
-        if (side === 0) { this.x = Math.random() * canvas.width; this.y = -50; }
-        else if (side === 1) { this.x = Math.random() * canvas.width; this.y = canvas.height + 50; }
-        else if (side === 2) { this.x = -50; this.y = Math.random() * canvas.height; }
-        else { this.x = canvas.width + 50; this.y = Math.random() * canvas.height; }
-
-        this.radius = 10 + Math.random() * 15;
-        this.color = `hsl(${Math.random() * 360}, 70%, 50%)`;
-        this.speed = CONFIG.enemyBaseSpeed + (score / 5000);
-    }
-
-    draw() {
-        ctx.beginPath();
-        ctx.arc(this.x, this.y, this.radius, 0, Math.PI * 2);
-        ctx.fillStyle = this.color;
-        ctx.fill();
-        ctx.strokeStyle = '#fff';
-        ctx.stroke();
-    }
-
-    update() {
-        const angle = Math.atan2(player.y - this.y, player.x - this.x);
-        this.x += Math.cos(angle) * this.speed;
-        this.y += Math.sin(angle) * this.speed;
-    }
-}
-
-class Particle {
-    constructor(x, y, color) {
-        this.x = x; this.y = y;
-        this.color = color;
-        this.radius = Math.random() * 3;
-        this.velocity = {
-            x: (Math.random() - 0.5) * 5,
-            y: (Math.random() - 0.5) * 5
-        };
-        this.alpha = 1;
-    }
-    draw() {
-        ctx.save();
-        ctx.globalAlpha = this.alpha;
-        ctx.beginPath();
-        ctx.arc(this.x, this.y, this.radius, 0, Math.PI * 2);
-        ctx.fillStyle = this.color;
-        ctx.fill();
-        ctx.restore();
-    }
-    update() {
-        this.x += this.velocity.x;
-        this.y += this.velocity.y;
-        this.alpha -= 0.02;
-    }
-}
-
-// Background effect
-function initStars() {
-    stars = [];
-    for(let i=0; i<CONFIG.starCount; i++) {
-        stars.push({
-            x: Math.random() * canvas.width,
-            y: Math.random() * canvas.height,
-            size: Math.random() * 2,
-            speed: Math.random() * 0.5
-        });
-    }
-}
-
-function drawStars() {
-    ctx.fillStyle = '#fff';
-    stars.forEach(star => {
-        ctx.beginPath();
-        ctx.arc(star.x, star.y, star.size, 0, Math.PI * 2);
-        ctx.fill();
-        star.y += star.speed;
-        if(star.y > canvas.height) star.y = 0;
-    });
-}
-
-// Controls
-window.addEventListener('keydown', e => keys[e.key] = true);
-window.addEventListener('keyup', e => keys[e.key] = false);
-window.addEventListener('mousemove', e => {
-    const rect = canvas.getBoundingClientRect();
-    const mouseX = e.clientX - rect.left;
-    const mouseY = e.clientY - rect.top;
-    player.angle = Math.atan2(mouseY - player.y, mouseX - player.x);
-});
-window.addEventListener('mousedown', () => {
-    if(isGameRunning) projectiles.push(new Projectile(player.x, player.y, player.angle));
-});
-
-// Game Engine
-function startGame() {
-    document.getElementById('menu').classList.add('hidden');
-    document.getElementById('game-over').classList.add('hidden');
-    
-    player = new Player();
-    projectiles = [];
-    enemies = [];
-    particles = [];
-    score = 0;
-    scoreEl.innerText = 0;
-    healthEl.innerText = 100;
-    isGameRunning = true;
-    
-    initStars();
-    if(spawnInterval) clearInterval(spawnInterval);
-    spawnInterval = setInterval(() => enemies.push(new Enemy()), CONFIG.spawnRate);
-    
-    requestAnimationFrame(animate);
-}
-
-function gameOver() {
-    isGameRunning = false;
-    document.getElementById('game-over').classList.remove('hidden');
-    document.getElementById('finalScore').innerText = score;
-}
-
-function animate() {
-    if(!isGameRunning) return;
-    requestAnimationFrame(animate);
-    
-    ctx.fillStyle = 'rgba(0, 0, 0, 0.2)';
-    ctx.fillRect(0, 0, canvas.width, canvas.height);
-    
-    drawStars();
-    player.update();
-    player.draw();
-    
-    // Projectiles
-    projectiles.forEach((p, index) => {
-        p.update();
-        p.draw();
-        // Remove offscreen
-        if(p.x < 0 || p.x > canvas.width || p.y < 0 || p.y > canvas.height) {
-            projectiles.splice(index, 1);
-        }
-    });
-    
-    // Particles
-    particles.forEach((p, index) => {
-        if(p.alpha <= 0) particles.splice(index, 1);
-        else { p.update(); p.draw(); }
-    });
-    
-    // Enemies
-    enemies.forEach((e, eIndex) => {
-        e.update();
-        e.draw();
-        
-        // Player Collision
-        const dist = Math.hypot(player.x - e.x, player.y - e.y);
-        if(dist - e.radius - player.radius < 1) {
-            enemies.splice(eIndex, 1);
-            player.health -= 10;
-            healthEl.innerText = player.health;
-            if(player.health <= 0) gameOver();
-        }
-        
-        // Projectile Collision
-        projectiles.forEach((p, pIndex) => {
-            const pDist = Math.hypot(p.x - e.x, p.y - e.y);
-            if(pDist - e.radius - p.radius < 1) {
-                // Explosion
-                for(let i=0; i<8; i++) particles.push(new Particle(e.x, e.y, e.color));
-                
-                score += 100;
-                scoreEl.innerText = score;
-                
-                setTimeout(() => {
-                    enemies.splice(eIndex, 1);
-                    projectiles.splice(pIndex, 1);
-                }, 0);
+            if (isUnlocked) {
+                // show protected content, hide login
+                loginArea.style.display = 'none';
+                protectedDiv.style.display = 'block';
+            } else {
+                // show login, hide protected
+                loginArea.style.display = 'block';
+                protectedDiv.style.display = 'none';
             }
-        });
-    });
-}
-</script>
+
+            // login button event
+            loginBtn.addEventListener('click', function() {
+                const entered = passwordInput.value.trim();
+
+                if (entered === CORRECT_PASSWORD) {
+                    // success — store flag and swap views
+                    sessionStorage.setItem('whz_iels_unlocked', 'true');
+                    loginArea.style.display = 'none';
+                    protectedDiv.style.display = 'block';
+                    loginError.innerText = '';  // clear any error
+                    passwordInput.value = '';    // optional clear
+                } else {
+                    loginError.innerText = '❌ incorrect password. try again.';
+                    passwordInput.value = '';    // clear for retry
+                    passwordInput.focus();
+                }
+            });
+
+            // also allow Enter key in password field
+            passwordInput.addEventListener('keypress', function(e) {
+                if (e.key === 'Enter') {
+                    loginBtn.click();
+                }
+            });
+        })();
+    </script>
+
+    <!-- note: index.hml, AI.hml, TOFEL.html currently return 404; they will work once you create them -->
 </body>
 </html>

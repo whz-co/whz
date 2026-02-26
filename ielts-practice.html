@@ -1,0 +1,1830 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>IELTS Practice Tests · Zakhourani</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; }
+        
+        :root {
+            --primary: #2c3e50;
+            --secondary: #3498db;
+            --accent: #e74c3c;
+            --success: #27ae60;
+            --warning: #f39c12;
+            --danger: #e74c3c;
+            --light: #ecf0f1;
+            --dark: #2c3e50;
+            --listening: #9b59b6;
+            --reading: #3498db;
+            --writing: #e67e22;
+            --speaking: #27ae60;
+        }
+        
+        body {
+            background: #f8fafd;
+            min-height: 100vh;
+        }
+        
+        /* Header */
+        header {
+            background: white;
+            box-shadow: 0 4px 20px rgba(0,0,0,0.1);
+            padding: 15px 40px;
+            position: sticky;
+            top: 0;
+            z-index: 100;
+        }
+        
+        .header-content {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            max-width: 1400px;
+            margin: 0 auto;
+        }
+        
+        .logo {
+            display: flex;
+            align-items: center;
+            gap: 15px;
+            text-decoration: none;
+        }
+        
+        .logo h1 {
+            font-size: 28px;
+            font-weight: 700;
+            color: var(--primary);
+        }
+        
+        .nav-links {
+            display: flex;
+            gap: 20px;
+            align-items: center;
+            flex-wrap: wrap;
+        }
+        
+        .nav-links a {
+            text-decoration: none;
+            color: var(--dark);
+            font-weight: 600;
+            padding: 10px 15px;
+            border-radius: 8px;
+            transition: 0.3s;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+        
+        .nav-links a:hover {
+            background: var(--light);
+            color: var(--secondary);
+        }
+        
+        .nav-links a.active {
+            background: var(--secondary);
+            color: white;
+        }
+        
+        .user-menu {
+            display: flex;
+            align-items: center;
+            gap: 15px;
+            margin-left: 20px;
+            padding-left: 20px;
+            border-left: 2px solid var(--light);
+        }
+        
+        .user-avatar {
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            object-fit: cover;
+            border: 2px solid var(--secondary);
+        }
+        
+        .user-name {
+            font-weight: 600;
+            color: var(--dark);
+        }
+        
+        .login-btn {
+            background: var(--secondary);
+            color: white !important;
+            padding: 8px 20px !important;
+            border-radius: 50px !important;
+        }
+        
+        .signup-btn {
+            background: var(--success);
+            color: white !important;
+            padding: 8px 20px !important;
+            border-radius: 50px !important;
+        }
+        
+        /* Main Container */
+        .container {
+            max-width: 1400px;
+            margin: 40px auto;
+            padding: 0 20px;
+        }
+        
+        /* Page Header */
+        .page-header {
+            text-align: center;
+            margin-bottom: 40px;
+        }
+        
+        .page-header h1 {
+            font-size: 42px;
+            color: var(--dark);
+            margin-bottom: 15px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 15px;
+        }
+        
+        .page-header h1 i {
+            color: var(--secondary);
+        }
+        
+        .page-header p {
+            color: #666;
+            font-size: 18px;
+            max-width: 600px;
+            margin: 0 auto;
+        }
+        
+        .header-badge {
+            display: inline-block;
+            background: var(--secondary);
+            color: white;
+            padding: 8px 25px;
+            border-radius: 50px;
+            font-weight: 600;
+            margin-top: 20px;
+        }
+        
+        /* Loading Spinner */
+        .loading-spinner {
+            text-align: center;
+            padding: 60px;
+        }
+        
+        .spinner {
+            width: 50px;
+            height: 50px;
+            border: 5px solid var(--light);
+            border-top: 5px solid var(--secondary);
+            border-radius: 50%;
+            animation: spin 1s linear infinite;
+            margin: 0 auto 20px;
+        }
+        
+        @keyframes spin {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
+        }
+        
+        /* Login Prompt */
+        .login-prompt {
+            background: white;
+            border-radius: 30px;
+            padding: 60px;
+            text-align: center;
+            box-shadow: 0 20px 60px rgba(0,0,0,0.1);
+            max-width: 500px;
+            margin: 40px auto;
+            animation: slideUp 0.5s ease;
+        }
+        
+        @keyframes slideUp {
+            from { transform: translateY(30px); opacity: 0; }
+            to { transform: translateY(0); opacity: 1; }
+        }
+        
+        .login-prompt .icon {
+            font-size: 80px;
+            color: var(--secondary);
+            margin-bottom: 30px;
+        }
+        
+        .login-prompt h2 {
+            font-size: 32px;
+            color: var(--dark);
+            margin-bottom: 15px;
+        }
+        
+        .login-prompt p {
+            color: #666;
+            font-size: 18px;
+            margin-bottom: 30px;
+            line-height: 1.6;
+        }
+        
+        .login-prompt .login-btn {
+            display: inline-flex;
+            align-items: center;
+            gap: 10px;
+            padding: 16px 40px;
+            background: var(--secondary);
+            color: white;
+            text-decoration: none;
+            border-radius: 50px;
+            font-size: 18px;
+            font-weight: 600;
+            transition: 0.3s;
+            border: none;
+            cursor: pointer;
+        }
+        
+        .login-prompt .login-btn:hover {
+            background: #2980b9;
+            transform: translateY(-2px);
+            box-shadow: 0 10px 20px rgba(52, 152, 219, 0.3);
+        }
+        
+        /* Protected Content */
+        .protected-content {
+            display: none;
+        }
+        
+        /* Test Selection Tabs */
+        .test-tabs {
+            display: flex;
+            gap: 15px;
+            margin-bottom: 30px;
+            flex-wrap: wrap;
+            justify-content: center;
+        }
+        
+        .test-tab {
+            padding: 15px 30px;
+            background: white;
+            border-radius: 50px;
+            cursor: pointer;
+            font-weight: 600;
+            transition: 0.3s;
+            border: 2px solid transparent;
+            box-shadow: 0 5px 15px rgba(0,0,0,0.05);
+        }
+        
+        .test-tab:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 10px 25px rgba(0,0,0,0.1);
+        }
+        
+        .test-tab.active {
+            background: var(--secondary);
+            color: white;
+            border-color: var(--secondary);
+        }
+        
+        .test-tab i {
+            margin-right: 10px;
+        }
+        
+        /* Test Container */
+        .test-container {
+            background: white;
+            border-radius: 40px;
+            padding: 40px;
+            box-shadow: 0 20px 50px rgba(0,0,0,0.1);
+            margin-bottom: 40px;
+        }
+        
+        /* Test Header */
+        .test-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 30px;
+            padding-bottom: 20px;
+            border-bottom: 3px solid var(--light);
+            flex-wrap: wrap;
+            gap: 20px;
+        }
+        
+        .test-title h2 {
+            font-size: 28px;
+            color: var(--dark);
+            margin-bottom: 5px;
+        }
+        
+        .test-title p {
+            color: #666;
+        }
+        
+        .test-timer {
+            background: var(--danger);
+            color: white;
+            padding: 15px 30px;
+            border-radius: 50px;
+            font-size: 24px;
+            font-weight: 700;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+        
+        .test-timer i {
+            font-size: 20px;
+        }
+        
+        .test-timer.warning {
+            background: var(--warning);
+            animation: pulse 1s infinite;
+        }
+        
+        @keyframes pulse {
+            0% { transform: scale(1); }
+            50% { transform: scale(1.05); }
+            100% { transform: scale(1); }
+        }
+        
+        /* Module Navigation */
+        .module-nav {
+            display: flex;
+            gap: 10px;
+            margin-bottom: 30px;
+            flex-wrap: wrap;
+        }
+        
+        .module-btn {
+            padding: 12px 25px;
+            border: none;
+            border-radius: 30px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: 0.3s;
+            background: var(--light);
+            color: var(--dark);
+        }
+        
+        .module-btn:hover {
+            background: #d0dae8;
+        }
+        
+        .module-btn.active {
+            background: var(--secondary);
+            color: white;
+        }
+        
+        .module-btn.listening.active { background: var(--listening); }
+        .module-btn.reading.active { background: var(--reading); }
+        .module-btn.writing.active { background: var(--writing); }
+        
+        /* Questions Area */
+        .questions-area {
+            min-height: 400px;
+        }
+        
+        /* Listening Section */
+        .audio-player {
+            background: var(--light);
+            padding: 30px;
+            border-radius: 30px;
+            margin-bottom: 30px;
+            text-align: center;
+        }
+        
+        .audio-controls {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 20px;
+            margin: 20px 0;
+        }
+        
+        .audio-btn {
+            width: 60px;
+            height: 60px;
+            border-radius: 50%;
+            border: none;
+            background: var(--secondary);
+            color: white;
+            font-size: 24px;
+            cursor: pointer;
+            transition: 0.3s;
+        }
+        
+        .audio-btn:hover {
+            transform: scale(1.1);
+            background: #2980b9;
+        }
+        
+        .audio-progress {
+            width: 100%;
+            height: 10px;
+            background: #ddd;
+            border-radius: 5px;
+            overflow: hidden;
+        }
+        
+        .audio-progress-bar {
+            height: 100%;
+            background: var(--secondary);
+            width: 0%;
+            transition: width 0.1s;
+        }
+        
+        /* Questions Grid */
+        .questions-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 20px;
+            margin: 30px 0;
+        }
+        
+        .question-card {
+            background: var(--light);
+            border-radius: 25px;
+            padding: 20px;
+            transition: 0.3s;
+        }
+        
+        .question-card:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 10px 25px rgba(0,0,0,0.1);
+        }
+        
+        .question-number {
+            background: var(--secondary);
+            color: white;
+            width: 35px;
+            height: 35px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: 700;
+            margin-bottom: 15px;
+        }
+        
+        .question-text {
+            font-weight: 600;
+            margin-bottom: 15px;
+            color: var(--dark);
+        }
+        
+        .question-input {
+            width: 100%;
+            padding: 12px 15px;
+            border: 2px solid #ddd;
+            border-radius: 15px;
+            font-size: 16px;
+            transition: 0.3s;
+        }
+        
+        .question-input:focus {
+            outline: none;
+            border-color: var(--secondary);
+        }
+        
+        .question-options {
+            display: flex;
+            flex-direction: column;
+            gap: 10px;
+        }
+        
+        .question-option {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            padding: 10px;
+            background: white;
+            border-radius: 12px;
+            cursor: pointer;
+            transition: 0.2s;
+        }
+        
+        .question-option:hover {
+            background: #e8f0fe;
+        }
+        
+        .question-option input[type="radio"] {
+            width: 20px;
+            height: 20px;
+            cursor: pointer;
+        }
+        
+        /* Reading Passages */
+        .reading-passage {
+            background: var(--light);
+            padding: 30px;
+            border-radius: 30px;
+            margin-bottom: 30px;
+            max-height: 500px;
+            overflow-y: auto;
+        }
+        
+        .passage-title {
+            font-size: 24px;
+            color: var(--dark);
+            margin-bottom: 20px;
+        }
+        
+        .passage-text {
+            line-height: 1.8;
+            color: #444;
+        }
+        
+        .passage-text p {
+            margin-bottom: 15px;
+        }
+        
+        /* Writing Section */
+        .writing-prompt {
+            background: var(--light);
+            padding: 30px;
+            border-radius: 30px;
+            margin-bottom: 30px;
+        }
+        
+        .prompt-title {
+            font-size: 20px;
+            color: var(--dark);
+            margin-bottom: 15px;
+        }
+        
+        .writing-area {
+            width: 100%;
+            min-height: 300px;
+            padding: 20px;
+            border: 2px solid #ddd;
+            border-radius: 25px;
+            font-size: 16px;
+            line-height: 1.6;
+            resize: vertical;
+            transition: 0.3s;
+        }
+        
+        .writing-area:focus {
+            outline: none;
+            border-color: var(--writing);
+        }
+        
+        .word-count {
+            text-align: right;
+            margin-top: 10px;
+            color: #666;
+            font-weight: 600;
+        }
+        
+        .word-count.warning {
+            color: var(--danger);
+        }
+        
+        .word-count.success {
+            color: var(--success);
+        }
+        
+        /* Submit Button */
+        .submit-test {
+            text-align: center;
+            margin: 40px 0;
+        }
+        
+        .submit-btn {
+            background: var(--success);
+            color: white;
+            border: none;
+            padding: 20px 50px;
+            border-radius: 60px;
+            font-size: 20px;
+            font-weight: 700;
+            cursor: pointer;
+            transition: 0.3s;
+            display: inline-flex;
+            align-items: center;
+            gap: 15px;
+        }
+        
+        .submit-btn:hover {
+            background: #219a52;
+            transform: scale(1.05);
+            box-shadow: 0 15px 30px rgba(39, 174, 96, 0.3);
+        }
+        
+        /* Results Modal */
+        .modal {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0,0,0,0.5);
+            z-index: 1000;
+            justify-content: center;
+            align-items: center;
+        }
+        
+        .modal-content {
+            background: white;
+            border-radius: 40px;
+            padding: 50px;
+            max-width: 600px;
+            width: 90%;
+            max-height: 80vh;
+            overflow-y: auto;
+            animation: modalSlide 0.3s ease;
+        }
+        
+        @keyframes modalSlide {
+            from { transform: translateY(-50px); opacity: 0; }
+            to { transform: translateY(0); opacity: 1; }
+        }
+        
+        .modal-header {
+            text-align: center;
+            margin-bottom: 30px;
+        }
+        
+        .modal-header h2 {
+            font-size: 32px;
+            color: var(--dark);
+            margin-bottom: 10px;
+        }
+        
+        .band-score {
+            font-size: 60px;
+            font-weight: 700;
+            color: var(--success);
+            text-align: center;
+            margin: 20px 0;
+        }
+        
+        .score-details {
+            margin: 30px 0;
+        }
+        
+        .score-item {
+            display: flex;
+            justify-content: space-between;
+            padding: 15px;
+            border-bottom: 1px solid var(--light);
+        }
+        
+        .score-label {
+            font-weight: 600;
+            color: var(--dark);
+        }
+        
+        .score-value {
+            font-weight: 700;
+        }
+        
+        .modal-buttons {
+            display: flex;
+            gap: 15px;
+            margin-top: 30px;
+        }
+        
+        .modal-btn {
+            flex: 1;
+            padding: 15px;
+            border: none;
+            border-radius: 50px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: 0.3s;
+        }
+        
+        .modal-btn.primary {
+            background: var(--secondary);
+            color: white;
+        }
+        
+        .modal-btn.secondary {
+            background: var(--light);
+            color: var(--dark);
+        }
+        
+        .modal-btn:hover {
+            transform: translateY(-3px);
+        }
+        
+        /* Footer */
+        footer {
+            background: var(--primary);
+            color: white;
+            padding: 40px;
+            margin-top: 60px;
+            text-align: center;
+        }
+        
+        .footer-links {
+            list-style: none;
+            display: flex;
+            justify-content: center;
+            gap: 30px;
+            margin: 20px 0;
+            flex-wrap: wrap;
+        }
+        
+        .footer-links a {
+            color: white;
+            text-decoration: none;
+            display: flex;
+            align-items: center;
+            gap: 5px;
+        }
+        
+        .footer-links a:hover {
+            color: var(--secondary);
+        }
+        
+        @media (max-width: 768px) {
+            header { padding: 15px 20px; }
+            .header-content { flex-direction: column; gap: 15px; }
+            .nav-links { justify-content: center; }
+            .test-container { padding: 25px; }
+            .test-header { flex-direction: column; text-align: center; }
+            .modal-content { padding: 30px; }
+        }
+    </style>
+</head>
+<body>
+    <!-- Header -->
+    <header>
+        <div class="header-content">
+            <a href="index.html" class="logo">
+                <i class="fas fa-graduation-cap" style="font-size: 32px; color: #3498db;"></i>
+                <h1>Zakhourani</h1>
+            </a>
+            
+            <div class="nav-links">
+                <a href="index.html"><i class="fas fa-home"></i> Home</a>
+                <a href="AI.html"><i class="fas fa-microchip"></i> AI Power</a>
+                <a href="IELS.html"><i class="fas fa-language"></i> IELTS</a>
+                <a href="TOFEL.html"><i class="fas fa-scroll"></i> TOFEL</a>
+                <a href="aboutDrwaleed.html"><i class="fas fa-user-graduate"></i> Dr Waleed</a>
+                <a href="TA.html"><i class="fas fa-chalkboard-teacher"></i> TA</a>
+                <a href="talandilovan.html"><i class="fas fa-globe"></i> talandilovan</a>
+                
+                <div class="user-menu" id="userMenu" style="display: none;">
+                    <img id="userAvatar" class="user-avatar" src="" alt="User">
+                    <span id="userDisplayName" class="user-name"></span>
+                    <a href="profile.html"><i class="fas fa-user-circle"></i></a>
+                    <a href="logout.html"><i class="fas fa-sign-out-alt"></i></a>
+                </div>
+                
+                <div id="authButtons" style="display: flex; gap: 10px;">
+                    <a href="login.html" class="login-btn">Login</a>
+                    <a href="signup.html" class="signup-btn">Sign Up</a>
+                </div>
+            </div>
+        </div>
+    </header>
+
+    <!-- Main Content -->
+    <div class="container">
+        <!-- Page Header -->
+        <div class="page-header">
+            <h1><i class="fas fa-puzzle-piece"></i> IELTS Practice Tests</h1>
+            <p>4 Complete Practice Tests with Answers and Band Score Calculator</p>
+            <span class="header-badge">Academic Module</span>
+        </div>
+
+        <!-- Loading State -->
+        <div id="loading" class="loading-spinner">
+            <div class="spinner"></div>
+            <p>Loading practice tests...</p>
+        </div>
+
+        <!-- Login Prompt -->
+        <div id="loginPrompt" class="login-prompt" style="display: none;">
+            <div class="icon">
+                <i class="fas fa-lock"></i>
+            </div>
+            <h2>Login Required</h2>
+            <p>Please login to access full-length IELTS practice tests with answers and band score calculator.</p>
+            <a href="login.html" class="login-btn">
+                <i class="fas fa-sign-in-alt"></i> Login to Access
+            </a>
+            <p style="margin-top: 20px; font-size: 14px;">
+                Don't have an account? <a href="signup.html" style="color: var(--secondary);">Sign up here</a>
+            </p>
+        </div>
+
+        <!-- Protected Content -->
+        <div id="protectedContent" class="protected-content">
+            <!-- Test Selection Tabs -->
+            <div class="test-tabs">
+                <div class="test-tab active" onclick="switchTest(1)"><i class="fas fa-1"></i> Practice Test 1</div>
+                <div class="test-tab" onclick="switchTest(2)"><i class="fas fa-2"></i> Practice Test 2</div>
+                <div class="test-tab" onclick="switchTest(3)"><i class="fas fa-3"></i> Practice Test 3</div>
+                <div class="test-tab" onclick="switchTest(4)"><i class="fas fa-4"></i> Practice Test 4</div>
+            </div>
+
+            <!-- Test Container -->
+            <div id="testContainer" class="test-container">
+                <!-- Test Header -->
+                <div class="test-header">
+                    <div class="test-title">
+                        <h2 id="testTitle">IELTS Practice Test 1</h2>
+                        <p id="testDescription">Academic Module · Full Length</p>
+                    </div>
+                    <div class="test-timer" id="timer">
+                        <i class="fas fa-clock"></i>
+                        <span id="timeDisplay">02:30:00</span>
+                    </div>
+                </div>
+
+                <!-- Module Navigation -->
+                <div class="module-nav">
+                    <button class="module-btn listening active" onclick="switchModule('listening')"><i class="fas fa-headphones"></i> Listening</button>
+                    <button class="module-btn reading" onclick="switchModule('reading')"><i class="fas fa-book-open"></i> Reading</button>
+                    <button class="module-btn writing" onclick="switchModule('writing')"><i class="fas fa-pencil-alt"></i> Writing</button>
+                </div>
+
+                <!-- Questions Area -->
+                <div id="questionsArea" class="questions-area">
+                    <!-- Content will be dynamically loaded here -->
+                </div>
+
+                <!-- Submit Button -->
+                <div class="submit-test">
+                    <button class="submit-btn" onclick="submitTest()">
+                        <i class="fas fa-check-circle"></i> Submit Test & Get Band Score
+                    </button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Results Modal -->
+    <div id="resultsModal" class="modal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h2><i class="fas fa-trophy"></i> Your Results</h2>
+                <p>IELTS Practice Test 1</p>
+            </div>
+            
+            <div class="band-score" id="overallBand">7.5</div>
+            
+            <div class="score-details">
+                <div class="score-item">
+                    <span class="score-label"><i class="fas fa-headphones"></i> Listening</span>
+                    <span class="score-value" id="listeningBand">7.5</span>
+                </div>
+                <div class="score-item">
+                    <span class="score-label"><i class="fas fa-book-open"></i> Reading</span>
+                    <span class="score-value" id="readingBand">7.5</span>
+                </div>
+                <div class="score-item">
+                    <span class="score-label"><i class="fas fa-pencil-alt"></i> Writing</span>
+                    <span class="score-value" id="writingBand">7.0</span>
+                </div>
+            </div>
+            
+            <div class="modal-buttons">
+                <button class="modal-btn secondary" onclick="closeModal()"><i class="fas fa-times"></i> Close</button>
+                <button class="modal-btn primary" onclick="viewAnswers()"><i class="fas fa-eye"></i> View Answers</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Footer -->
+    <footer>
+        <div style="display: flex; align-items: center; justify-content: center; gap: 15px; margin-bottom: 20px;">
+            <i class="fas fa-graduation-cap" style="font-size: 32px; color: #3498db;"></i>
+            <h1 style="color: white;">Zakhourani</h1>
+        </div>
+        
+        <p>English language learning platform by Dr. Waleed Hussien Zakhourani</p>
+        
+        <ul class="footer-links">
+            <li><a href="index.html"><i class="fas fa-home"></i> Home</a></li>
+            <li><a href="IELS.html"><i class="fas fa-language"></i> IELTS</a></li>
+            <li><a href="AI.html"><i class="fas fa-microchip"></i> AI Power</a></li>
+            <li><a href="TOFEL.html"><i class="fas fa-scroll"></i> TOFEL</a></li>
+            <li><a href="aboutDrwaleed.html"><i class="fas fa-user-graduate"></i> Dr Waleed</a></li>
+            <li><a href="TA.html"><i class="fas fa-chalkboard-teacher"></i> TA</a></li>
+            <li><a href="talandilovan.html"><i class="fas fa-globe"></i> talandilovan</a></li>
+        </ul>
+        
+        <p style="margin-top: 30px; color: #ccc;">© 2024 Zakhourani. All rights reserved.</p>
+    </footer>
+
+    <!-- Firebase SDK -->
+    <script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-app-compat.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-auth-compat.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-firestore-compat.js"></script>
+
+    <script>
+        // ==============================================
+        // FIREBASE CONFIGURATION
+        // ==============================================
+        const firebaseConfig = {
+            apiKey: "AIzaSyAE8wf24HXrfmpMluaFOv1OHPrf_YFfqTQ",
+            authDomain: "whaai-c388e.firebaseapp.com",
+            projectId: "whaai-c388e",
+            storageBucket: "whaai-c388e.firebasestorage.app",
+            messagingSenderId: "640598205524",
+            appId: "1:640598205524:web:c975f5e8b371b1043e39c1",
+            measurementId: "G-1MHE0JBZJR"
+        };
+
+        // Initialize Firebase
+        if (!firebase.apps.length) {
+            firebase.initializeApp(firebaseConfig);
+        }
+
+        const auth = firebase.auth();
+        const db = firebase.firestore();
+
+        // ==============================================
+        // GLOBAL VARIABLES
+        // ==============================================
+        let currentTest = 1;
+        let currentModule = 'listening';
+        let timerInterval;
+        let timeLeft = 9000; // 150 minutes in seconds
+        let userAnswers = {
+            listening: {},
+            reading: {},
+            writing: { task1: '', task2: '' }
+        };
+
+        // Test data for 4 complete practice tests
+        const testData = {
+            1: {
+                title: 'IELTS Practice Test 1',
+                listening: {
+                    sections: [
+                        {
+                            title: 'Section 1: Conversation about accommodation booking',
+                            audio: 'test1_listening_s1.mp3',
+                            questions: [
+                                { id: 1, text: 'Customer name:', type: 'text', answer: 'Sarah Johnson' },
+                                { id: 2, text: 'Phone number:', type: 'text', answer: '07700 900123' },
+                                { id: 3, text: 'Type of room:', type: 'radio', options: ['Single', 'Double', 'Suite'], answer: 'Double' },
+                                { id: 4, text: 'Number of nights:', type: 'number', answer: '5' },
+                                { id: 5, text: 'Check-in date:', type: 'text', answer: '15th March' },
+                                { id: 6, text: 'Special requirements:', type: 'text', answer: 'Vegetarian breakfast' },
+                                { id: 7, text: 'Payment method:', type: 'radio', options: ['Credit card', 'Cash', 'Bank transfer'], answer: 'Credit card' },
+                                { id: 8, text: 'Total cost:', type: 'text', answer: '£450' },
+                                { id: 9, text: 'Confirmation number:', type: 'text', answer: 'BK789012' },
+                                { id: 10, text: 'Airport pickup?', type: 'radio', options: ['Yes', 'No'], answer: 'Yes' }
+                            ]
+                        },
+                        {
+                            title: 'Section 2: Guided tour of museum',
+                            audio: 'test1_listening_s2.mp3',
+                            questions: [
+                                { id: 11, text: 'Museum opening hours:', type: 'text', answer: '9am to 6pm' },
+                                { id: 12, text: 'Ticket price for adults:', type: 'text', answer: '£12.50' },
+                                { id: 13, text: 'Main exhibition hall location:', type: 'radio', options: ['Ground floor', 'First floor', 'Second floor'], answer: 'First floor' },
+                                { id: 14, text: 'Special exhibition ends on:', type: 'text', answer: '30th June' },
+                                { id: 15, text: 'Café located near:', type: 'text', answer: 'Main entrance' },
+                                { id: 16, text: 'Guided tours start at:', type: 'text', answer: '11am and 2pm' },
+                                { id: 17, text: 'Gift shop sells:', type: 'radio', options: ['Books', 'Souvenirs', 'Both'], answer: 'Both' },
+                                { id: 18, text: 'Wheelchair access:', type: 'radio', options: ['Available', 'Limited', 'None'], answer: 'Available' },
+                                { id: 19, text: 'Photography allowed?', type: 'radio', options: ['Yes', 'No flash', 'No'], answer: 'No flash' },
+                                { id: 20, text: 'Nearest underground station:', type: 'text', answer: 'South Kensington' }
+                            ]
+                        },
+                        {
+                            title: 'Section 3: University project discussion',
+                            audio: 'test1_listening_s3.mp3',
+                            questions: [
+                                { id: 21, text: 'Project topic:', type: 'text', answer: 'Renewable energy' },
+                                { id: 22, text: 'Number of group members:', type: 'number', answer: '4' },
+                                { id: 23, text: 'Main research area:', type: 'radio', options: ['Solar', 'Wind', 'Hydro'], answer: 'Solar' },
+                                { id: 24, text: 'Professor\'s feedback:', type: 'text', answer: 'Add more data' },
+                                { id: 25, text: 'Next meeting date:', type: 'text', answer: 'Monday 10am' },
+                                { id: 26, text: 'Required resources:', type: 'text', answer: 'Library access' },
+                                { id: 27, text: 'Presentation duration:', type: 'text', answer: '20 minutes' },
+                                { id: 28, text: 'Equipment needed:', type: 'radio', options: ['Projector', 'Whiteboard', 'Both'], answer: 'Both' },
+                                { id: 29, text: 'Submission deadline:', type: 'text', answer: 'Friday 5pm' },
+                                { id: 30, text: 'Grading criteria:', type: 'text', answer: 'Research quality' }
+                            ]
+                        },
+                        {
+                            title: 'Section 4: Lecture on marine biology',
+                            audio: 'test1_listening_s4.mp3',
+                            questions: [
+                                { id: 31, text: 'Main topic:', type: 'text', answer: 'Coral reefs' },
+                                { id: 32, text: 'Location of study:', type: 'text', answer: 'Great Barrier Reef' },
+                                { id: 33, text: 'Water temperature:', type: 'text', answer: '26°C' },
+                                { id: 34, text: 'Coral species studied:', type: 'radio', options: ['Staghorn', 'Brain', 'Table'], answer: 'Staghorn' },
+                                { id: 35, text: 'Threats identified:', type: 'text', answer: 'Climate change' },
+                                { id: 36, text: 'Bleaching occurs at:', type: 'text', answer: '30°C' },
+                                { id: 37, text: 'Recovery rate:', type: 'text', answer: '5 years' },
+                                { id: 38, text: 'Protected areas:', type: 'radio', options: ['Yes', 'No', 'Partial'], answer: 'Partial' },
+                                { id: 39, text: 'Tourism impact:', type: 'text', answer: 'Moderate' },
+                                { id: 40, text: 'Future research:', type: 'text', answer: 'Restoration techniques' }
+                            ]
+                        }
+                    ]
+                },
+                reading: {
+                    passages: [
+                        {
+                            title: 'Passage 1: The History of Paper Making',
+                            text: 'Paper making originated in China around 105 AD. The process was kept secret for centuries before spreading to the Islamic world and eventually Europe. The first paper mill in Europe was established in Spain in the 12th century. The invention of the printing press in the 15th century dramatically increased demand for paper. Today, paper is produced globally with modern techniques, but the basic principles remain similar to ancient methods.',
+                            questions: [
+                                { id: 1, text: 'Paper making originated in:', type: 'radio', options: ['China', 'Egypt', 'Greece', 'Rome'], answer: 'China' },
+                                { id: 2, text: 'Year of origin:', type: 'number', answer: '105' },
+                                { id: 3, text: 'First European paper mill location:', type: 'text', answer: 'Spain' },
+                                { id: 4, text: 'Century of establishment:', type: 'text', answer: '12th' },
+                                { id: 5, text: 'Invention that increased demand:', type: 'text', answer: 'Printing press' },
+                                { id: 6, text: 'Century of printing press:', type: 'text', answer: '15th' },
+                                { id: 7, text: 'Modern techniques vs ancient:', type: 'radio', options: ['Completely different', 'Similar principles', 'No relation'], answer: 'Similar principles' },
+                                { id: 8, text: 'Main raw material:', type: 'text', answer: 'Wood pulp' },
+                                { id: 9, text: 'Recycled paper percentage:', type: 'number', answer: '60' },
+                                { id: 10, text: 'Global paper consumption:', type: 'text', answer: '400 million tons' },
+                                { id: 11, text: 'True or False: Paper making spread quickly', type: 'radio', options: ['True', 'False'], answer: 'False' },
+                                { id: 12, text: 'Islamic world learned from:', type: 'text', answer: 'Chinese prisoners' },
+                                { id: 13, text: 'First Islamic paper mill:', type: 'text', answer: 'Baghdad' }
+                            ]
+                        },
+                        {
+                            title: 'Passage 2: Urban Farming Revolution',
+                            text: 'Urban farming is transforming cities worldwide. Rooftop gardens, vertical farms, and community plots are bringing food production to city centers. This movement addresses food security, reduces transportation emissions, and provides fresh produce to urban populations. Cities like Singapore, New York, and London have embraced vertical farming technologies. These innovations use hydroponics and LED lighting to grow crops year-round. Urban farms can produce up to 100 times more food per square meter than traditional farming.',
+                            questions: [
+                                { id: 14, text: 'Urban farming locations include:', type: 'radio', options: ['Rooftops only', 'Multiple locations', 'Suburbs only'], answer: 'Multiple locations' },
+                                { id: 15, text: 'Main benefit mentioned:', type: 'text', answer: 'Food security' },
+                                { id: 16, text: 'Emissions reduced:', type: 'text', answer: 'Transportation' },
+                                { id: 17, text: 'Cities embracing vertical farming:', type: 'text', answer: 'Singapore, New York, London' },
+                                { id: 18, text: 'Technology used:', type: 'radio', options: ['Hydroponics', 'Soil-based', 'Traditional'], answer: 'Hydroponics' },
+                                { id: 19, text: 'Lighting type:', type: 'text', answer: 'LED' },
+                                { id: 20, text: 'Production increase factor:', type: 'number', answer: '100' },
+                                { id: 21, text: 'Year-round growing possible?', type: 'radio', options: ['Yes', 'No', 'Seasonal'], answer: 'Yes' },
+                                { id: 22, text: 'Community plots provide:', type: 'text', answer: 'Fresh produce' },
+                                { id: 23, text: 'Singapore\'s goal by 2030:', type: 'text', answer: '30% self-sufficiency' },
+                                { id: 24, text: 'Water saving percentage:', type: 'number', answer: '95' },
+                                { id: 25, text: 'Main challenge:', type: 'text', answer: 'Initial cost' },
+                                { id: 26, text: 'True or False: Urban farming is inefficient', type: 'radio', options: ['True', 'False'], answer: 'False' }
+                            ]
+                        },
+                        {
+                            title: 'Passage 3: Artificial Intelligence in Healthcare',
+                            text: 'Artificial Intelligence is revolutionizing healthcare. Machine learning algorithms can diagnose diseases from medical images with accuracy surpassing human experts. AI systems analyze patient data to predict outcomes and recommend treatments. Robot-assisted surgery enables precision beyond human capability. Drug discovery accelerated by AI reduces development time from years to months. However, challenges remain in data privacy, regulatory approval, and integration with existing systems. The future promises personalized medicine tailored to individual genetic profiles.',
+                            questions: [
+                                { id: 27, text: 'AI accuracy compared to humans:', type: 'radio', options: ['Lower', 'Equal', 'Higher'], answer: 'Higher' },
+                                { id: 28, text: 'Medical images used for:', type: 'text', answer: 'Diagnosis' },
+                                { id: 29, text: 'Patient data analysis predicts:', type: 'text', answer: 'Outcomes' },
+                                { id: 30, text: 'Surgery type mentioned:', type: 'radio', options: ['Traditional', 'Robot-assisted', 'Manual'], answer: 'Robot-assisted' },
+                                { id: 31, text: 'Drug discovery time reduction:', type: 'text', answer: 'Years to months' },
+                                { id: 32, text: 'Challenges include:', type: 'text', answer: 'Data privacy' },
+                                { id: 33, text: 'Regulatory approval needed?', type: 'radio', options: ['Yes', 'No', 'Sometimes'], answer: 'Yes' },
+                                { id: 34, text: 'Integration with:', type: 'text', answer: 'Existing systems' },
+                                { id: 35, text: 'Future promises:', type: 'text', answer: 'Personalized medicine' },
+                                { id: 36, text: 'Genetic profiles used for:', type: 'text', answer: 'Tailored treatment' },
+                                { id: 37, text: 'AI can detect cancer at:', type: 'text', answer: 'Early stage' },
+                                { id: 38, text: 'Accuracy rate for breast cancer:', type: 'number', answer: '94' },
+                                { id: 39, text: 'True or False: AI replaces doctors', type: 'radio', options: ['True', 'False'], answer: 'False' },
+                                { id: 40, text: 'Main ethical concern:', type: 'text', answer: 'Privacy' }
+                            ]
+                        }
+                    ]
+                },
+                writing: {
+                    task1: {
+                        title: 'Writing Task 1',
+                        prompt: 'The chart below shows the percentage of households in the UK with different types of internet connection from 2010 to 2020. Summarize the information by selecting and reporting the main features, and make comparisons where relevant.',
+                        wordLimit: 150
+                    },
+                    task2: {
+                        title: 'Writing Task 2',
+                        prompt: 'Some people believe that technological advancements have made our lives more complex, and we should aim for a simpler lifestyle without technology. To what extent do you agree or disagree? Give reasons for your answer and include relevant examples.',
+                        wordLimit: 250
+                    }
+                }
+            },
+            2: {
+                title: 'IELTS Practice Test 2',
+                listening: {
+                    sections: [
+                        {
+                            title: 'Section 1: Job interview conversation',
+                            audio: 'test2_listening_s1.mp3',
+                            questions: Array.from({ length: 10 }, (_, i) => ({
+                                id: i + 1,
+                                text: `Question ${i + 1} about job application:`,
+                                type: i % 3 === 0 ? 'text' : 'radio',
+                                options: i % 3 === 0 ? null : ['Option A', 'Option B', 'Option C'],
+                                answer: i % 3 === 0 ? `Answer ${i + 1}` : 'Option B'
+                            }))
+                        },
+                        {
+                            title: 'Section 2: Library orientation',
+                            audio: 'test2_listening_s2.mp3',
+                            questions: Array.from({ length: 10 }, (_, i) => ({
+                                id: i + 11,
+                                text: `Library question ${i + 11}:`,
+                                type: i % 2 === 0 ? 'text' : 'number',
+                                answer: i % 2 === 0 ? `Library answer ${i + 11}` : (i + 20)
+                            }))
+                        },
+                        {
+                            title: 'Section 3: Research proposal discussion',
+                            audio: 'test2_listening_s3.mp3',
+                            questions: Array.from({ length: 10 }, (_, i) => ({
+                                id: i + 21,
+                                text: `Research question ${i + 21}:`,
+                                type: 'radio',
+                                options: ['Methodology A', 'Methodology B', 'Methodology C'],
+                                answer: 'Methodology B'
+                            }))
+                        },
+                        {
+                            title: 'Section 4: Climate change lecture',
+                            audio: 'test2_listening_s4.mp3',
+                            questions: Array.from({ length: 10 }, (_, i) => ({
+                                id: i + 31,
+                                text: `Climate question ${i + 31}:`,
+                                type: 'text',
+                                answer: `Climate answer ${i + 31}`
+                            }))
+                        }
+                    ]
+                },
+                reading: {
+                    passages: [
+                        {
+                            title: 'Passage 1: Renewable Energy Sources',
+                            text: 'Renewable energy is becoming increasingly important as the world seeks to reduce carbon emissions. Solar, wind, and hydroelectric power are leading the transition away from fossil fuels. Solar energy has seen dramatic cost reductions, making it competitive with traditional sources. Wind power continues to grow, particularly offshore installations. Hydropower remains the largest renewable source, though environmental concerns about dams persist.',
+                            questions: Array.from({ length: 13 }, (_, i) => ({
+                                id: i + 1,
+                                text: `Energy question ${i + 1}:`,
+                                type: i % 2 === 0 ? 'radio' : 'text',
+                                options: i % 2 === 0 ? ['Solar', 'Wind', 'Hydro'] : null,
+                                answer: i % 2 === 0 ? 'Solar' : `Answer ${i + 1}`
+                            }))
+                        },
+                        {
+                            title: 'Passage 2: Global Education Trends',
+                            text: 'Education systems worldwide are undergoing transformation. Digital learning platforms have expanded access to education. Online courses from top universities reach millions of students. However, the digital divide remains a significant challenge, with many students lacking internet access. Blended learning combining online and in-person instruction is emerging as a popular model.',
+                            questions: Array.from({ length: 13 }, (_, i) => ({
+                                id: i + 14,
+                                text: `Education question ${i + 14}:`,
+                                type: i % 3 === 0 ? 'text' : 'radio',
+                                options: i % 3 === 0 ? null : ['Yes', 'No', 'Maybe'],
+                                answer: i % 3 === 0 ? `Answer ${i + 14}` : 'Yes'
+                            }))
+                        },
+                        {
+                            title: 'Passage 3: Space Exploration',
+                            text: 'Space exploration has entered a new era with private companies joining government agencies. Missions to Mars are being planned, and the Moon is again a target for human exploration. International cooperation has led to the International Space Station, a model of peaceful collaboration. Scientific discoveries continue to expand our understanding of the universe.',
+                            questions: Array.from({ length: 14 }, (_, i) => ({
+                                id: i + 27,
+                                text: `Space question ${i + 27}:`,
+                                type: 'text',
+                                answer: `Space answer ${i + 27}`
+                            }))
+                        }
+                    ]
+                },
+                writing: {
+                    task1: {
+                        title: 'Writing Task 1',
+                        prompt: 'The graph below shows the number of international tourists visiting three different countries between 2010 and 2020. Summarize the information by selecting and reporting the main features.',
+                        wordLimit: 150
+                    },
+                    task2: {
+                        title: 'Writing Task 2',
+                        prompt: 'In many countries, the gap between rich and poor is widening. What problems does this cause, and what solutions can you suggest?',
+                        wordLimit: 250
+                    }
+                }
+            },
+            3: {
+                title: 'IELTS Practice Test 3',
+                listening: {
+                    sections: Array.from({ length: 4 }, (_, sectionIndex) => ({
+                        title: `Section ${sectionIndex + 1}: Topic ${sectionIndex + 1}`,
+                        audio: `test3_listening_s${sectionIndex + 1}.mp3`,
+                        questions: Array.from({ length: 10 }, (_, qIndex) => ({
+                            id: sectionIndex * 10 + qIndex + 1,
+                            text: `Question ${sectionIndex * 10 + qIndex + 1}:`,
+                            type: ['text', 'radio', 'number', 'radio'][qIndex % 4],
+                            options: qIndex % 2 === 0 ? ['Option X', 'Option Y', 'Option Z'] : null,
+                            answer: qIndex % 2 === 0 ? 'Option Y' : `Answer ${sectionIndex * 10 + qIndex + 1}`
+                        }))
+                    }))
+                },
+                reading: {
+                    passages: Array.from({ length: 3 }, (_, pIndex) => ({
+                        title: `Passage ${pIndex + 1}: Topic ${pIndex + 1}`,
+                        text: `This is reading passage ${pIndex + 1} content with detailed information about the topic. It contains multiple paragraphs and complex ideas for comprehension testing.`,
+                        questions: Array.from({ length: [13, 13, 14][pIndex] }, (_, qIndex) => ({
+                            id: pIndex === 0 ? qIndex + 1 : pIndex === 1 ? qIndex + 14 : qIndex + 27,
+                            text: `Reading question ${pIndex === 0 ? qIndex + 1 : pIndex === 1 ? qIndex + 14 : qIndex + 27}:`,
+                            type: qIndex % 3 === 0 ? 'text' : 'radio',
+                            options: qIndex % 3 === 0 ? null : ['Option P', 'Option Q', 'Option R'],
+                            answer: qIndex % 3 === 0 ? `Answer ${qIndex}` : 'Option Q'
+                        }))
+                    }))
+                },
+                writing: {
+                    task1: {
+                        title: 'Writing Task 1',
+                        prompt: 'The diagrams below show the stages in the development of a particular technology. Summarize the information.',
+                        wordLimit: 150
+                    },
+                    task2: {
+                        title: 'Writing Task 2',
+                        prompt: 'Some people think that governments should spend more money on public services rather than on arts and culture. To what extent do you agree or disagree?',
+                        wordLimit: 250
+                    }
+                }
+            },
+            4: {
+                title: 'IELTS Practice Test 4',
+                listening: {
+                    sections: Array.from({ length: 4 }, (_, sectionIndex) => ({
+                        title: `Section ${sectionIndex + 1}: Advanced Topic ${sectionIndex + 1}`,
+                        audio: `test4_listening_s${sectionIndex + 1}.mp3`,
+                        questions: Array.from({ length: 10 }, (_, qIndex) => ({
+                            id: sectionIndex * 10 + qIndex + 1,
+                            text: `Question ${sectionIndex * 10 + qIndex + 1}:`,
+                            type: qIndex % 3 === 0 ? 'text' : qIndex % 3 === 1 ? 'radio' : 'number',
+                            options: qIndex % 3 === 1 ? ['Choice A', 'Choice B', 'Choice C'] : null,
+                            answer: qIndex % 3 === 1 ? 'Choice B' : `Answer ${sectionIndex * 10 + qIndex + 1}`
+                        }))
+                    }))
+                },
+                reading: {
+                    passages: Array.from({ length: 3 }, (_, pIndex) => ({
+                        title: `Passage ${pIndex + 1}: Advanced Topic ${pIndex + 1}`,
+                        text: `This is an advanced reading passage ${pIndex + 1} with complex academic vocabulary and sophisticated arguments. It requires careful reading and analysis.`,
+                        questions: Array.from({ length: [13, 13, 14][pIndex] }, (_, qIndex) => ({
+                            id: pIndex === 0 ? qIndex + 1 : pIndex === 1 ? qIndex + 14 : qIndex + 27,
+                            text: `Question ${pIndex === 0 ? qIndex + 1 : pIndex === 1 ? qIndex + 14 : qIndex + 27}:`,
+                            type: qIndex % 4 === 0 ? 'text' : 'radio',
+                            options: qIndex % 4 === 0 ? null : ['Statement 1', 'Statement 2', 'Statement 3', 'Statement 4'],
+                            answer: qIndex % 4 === 0 ? `Answer ${qIndex}` : 'Statement 2'
+                        }))
+                    }))
+                },
+                writing: {
+                    task1: {
+                        title: 'Writing Task 1',
+                        prompt: 'The table below shows the percentage of people using different modes of transport in a European city. Summarize the information.',
+                        wordLimit: 150
+                    },
+                    task2: {
+                        title: 'Writing Task 2',
+                        prompt: 'In recent years, there has been a significant increase in the number of people working from home. Discuss the advantages and disadvantages of this trend.',
+                        wordLimit: 250
+                    }
+                }
+            }
+        };
+
+        // ==============================================
+        // AUTHENTICATION FUNCTIONS
+        // ==============================================
+        const loadingEl = document.getElementById('loading');
+        const loginPrompt = document.getElementById('loginPrompt');
+        const protectedContent = document.getElementById('protectedContent');
+        const userMenu = document.getElementById('userMenu');
+        const authButtons = document.getElementById('authButtons');
+        const userAvatar = document.getElementById('userAvatar');
+        const userDisplayName = document.getElementById('userDisplayName');
+
+        function updateUI(user) {
+            loadingEl.style.display = 'none';
+
+            if (user) {
+                loginPrompt.style.display = 'none';
+                protectedContent.style.display = 'block';
+                userMenu.style.display = 'flex';
+                authButtons.style.display = 'none';
+                
+                const photoURL = user.photoURL || `https://ui-avatars.com/api/?name=${encodeURIComponent(user.displayName || user.email)}&size=40&background=3498db&color=fff&bold=true`;
+                userAvatar.src = photoURL;
+                userDisplayName.textContent = user.displayName || user.email.split('@')[0];
+                
+                loadTest(currentTest);
+            } else {
+                loginPrompt.style.display = 'block';
+                protectedContent.style.display = 'none';
+                userMenu.style.display = 'none';
+                authButtons.style.display = 'flex';
+            }
+        }
+
+        auth.onAuthStateChanged(updateUI);
+
+        setTimeout(() => {
+            if (!auth.currentUser && loadingEl.style.display !== 'none') {
+                loadingEl.style.display = 'none';
+                loginPrompt.style.display = 'block';
+            }
+        }, 3000);
+
+        // ==============================================
+        // TEST FUNCTIONS
+        // ==============================================
+        
+        function switchTest(testNumber) {
+            currentTest = testNumber;
+            
+            // Update tabs
+            document.querySelectorAll('.test-tab').forEach((tab, index) => {
+                if (index + 1 === testNumber) {
+                    tab.classList.add('active');
+                } else {
+                    tab.classList.remove('active');
+                }
+            });
+            
+            // Reset answers
+            userAnswers = {
+                listening: {},
+                reading: {},
+                writing: { task1: '', task2: '' }
+            };
+            
+            // Load test data
+            loadTest(testNumber);
+            
+            // Reset timer
+            resetTimer();
+        }
+
+        function switchModule(module) {
+            currentModule = module;
+            
+            // Update module buttons
+            document.querySelectorAll('.module-btn').forEach(btn => {
+                btn.classList.remove('active');
+                if (btn.classList.contains(module)) {
+                    btn.classList.add('active');
+                }
+            });
+            
+            // Load module content
+            loadModule(module);
+        }
+
+        function loadTest(testNumber) {
+            document.getElementById('testTitle').textContent = testData[testNumber].title;
+            loadModule('listening');
+        }
+
+        function loadModule(module) {
+            const questionsArea = document.getElementById('questionsArea');
+            
+            if (module === 'listening') {
+                questionsArea.innerHTML = generateListeningHTML(testData[currentTest].listening);
+            } else if (module === 'reading') {
+                questionsArea.innerHTML = generateReadingHTML(testData[currentTest].reading);
+            } else if (module === 'writing') {
+                questionsArea.innerHTML = generateWritingHTML(testData[currentTest].writing);
+            }
+            
+            // Restore saved answers
+            restoreAnswers();
+        }
+
+        function generateListeningHTML(listening) {
+            let html = '';
+            
+            listening.sections.forEach((section, index) => {
+                html += `
+                    <div class="audio-player">
+                        <h3>${section.title}</h3>
+                        <div class="audio-controls">
+                            <button class="audio-btn" onclick="playAudio(${index})"><i class="fas fa-play"></i></button>
+                            <button class="audio-btn" onclick="pauseAudio()"><i class="fas fa-pause"></i></button>
+                            <button class="audio-btn" onclick="restartAudio()"><i class="fas fa-undo"></i></button>
+                        </div>
+                        <div class="audio-progress">
+                            <div class="audio-progress-bar" id="audioProgress${index}"></div>
+                        </div>
+                    </div>
+                    
+                    <div class="questions-grid">
+                `;
+                
+                section.questions.forEach(question => {
+                    html += `
+                        <div class="question-card" data-qid="${question.id}">
+                            <div class="question-number">${question.id}</div>
+                            <div class="question-text">${question.text}</div>
+                    `;
+                    
+                    if (question.type === 'text') {
+                        html += `
+                            <input type="text" class="question-input" 
+                                   id="q${question.id}" 
+                                   placeholder="Type your answer..."
+                                   onchange="saveAnswer('listening', ${question.id}, this.value)">
+                        `;
+                    } else if (question.type === 'number') {
+                        html += `
+                            <input type="number" class="question-input" 
+                                   id="q${question.id}" 
+                                   placeholder="Enter number..."
+                                   onchange="saveAnswer('listening', ${question.id}, this.value)">
+                        `;
+                    } else if (question.type === 'radio' && question.options) {
+                        html += `<div class="question-options">`;
+                        question.options.forEach(option => {
+                            html += `
+                                <label class="question-option">
+                                    <input type="radio" name="q${question.id}" 
+                                           value="${option}"
+                                           onchange="saveAnswer('listening', ${question.id}, '${option}')">
+                                    <span>${option}</span>
+                                </label>
+                            `;
+                        });
+                        html += `</div>`;
+                    }
+                    
+                    html += `</div>`;
+                });
+                
+                html += `</div>`;
+            });
+            
+            return html;
+        }
+
+        function generateReadingHTML(reading) {
+            let html = '';
+            
+            reading.passages.forEach((passage, index) => {
+                html += `
+                    <div class="reading-passage">
+                        <div class="passage-title">${passage.title}</div>
+                        <div class="passage-text">
+                            <p>${passage.text}</p>
+                        </div>
+                    </div>
+                    
+                    <div class="questions-grid">
+                `;
+                
+                passage.questions.forEach(question => {
+                    html += `
+                        <div class="question-card" data-qid="${question.id}">
+                            <div class="question-number">${question.id}</div>
+                            <div class="question-text">${question.text}</div>
+                    `;
+                    
+                    if (question.type === 'text') {
+                        html += `
+                            <input type="text" class="question-input" 
+                                   id="q${question.id}" 
+                                   placeholder="Type your answer..."
+                                   onchange="saveAnswer('reading', ${question.id}, this.value)">
+                        `;
+                    } else if (question.type === 'radio' && question.options) {
+                        html += `<div class="question-options">`;
+                        question.options.forEach(option => {
+                            html += `
+                                <label class="question-option">
+                                    <input type="radio" name="q${question.id}" 
+                                           value="${option}"
+                                           onchange="saveAnswer('reading', ${question.id}, '${option}')">
+                                    <span>${option}</span>
+                                </label>
+                            `;
+                        });
+                        html += `</div>`;
+                    }
+                    
+                    html += `</div>`;
+                });
+                
+                html += `</div>`;
+            });
+            
+            return html;
+        }
+
+        function generateWritingHTML(writing) {
+            return `
+                <div class="writing-prompt">
+                    <div class="prompt-title">${writing.task1.title}</div>
+                    <p>${writing.task1.prompt}</p>
+                    <p><strong>Word limit: ${writing.task1.wordLimit} words</strong></p>
+                </div>
+                <textarea class="writing-area" id="task1" 
+                          placeholder="Write your Task 1 answer here..."
+                          oninput="updateWordCount(1); saveAnswer('writing', 'task1', this.value)">${userAnswers.writing.task1}</textarea>
+                <div class="word-count" id="wordCount1">0 / ${writing.task1.wordLimit} words</div>
+                
+                <div class="writing-prompt" style="margin-top: 40px;">
+                    <div class="prompt-title">${writing.task2.title}</div>
+                    <p>${writing.task2.prompt}</p>
+                    <p><strong>Word limit: ${writing.task2.wordLimit} words</strong></p>
+                </div>
+                <textarea class="writing-area" id="task2" 
+                          placeholder="Write your Task 2 answer here..."
+                          oninput="updateWordCount(2); saveAnswer('writing', 'task2', this.value)">${userAnswers.writing.task2}</textarea>
+                <div class="word-count" id="wordCount2">0 / ${writing.task2.wordLimit} words</div>
+            `;
+        }
+
+        function saveAnswer(module, questionId, value) {
+            if (module === 'writing') {
+                userAnswers.writing[questionId] = value;
+            } else {
+                if (!userAnswers[module][questionId]) {
+                    userAnswers[module][questionId] = {};
+                }
+                userAnswers[module][questionId] = value;
+            }
+            
+            // Save to localStorage for persistence
+            localStorage.setItem(`test${currentTest}_answers`, JSON.stringify(userAnswers));
+        }
+
+        function restoreAnswers() {
+            const saved = localStorage.getItem(`test${currentTest}_answers`);
+            if (saved) {
+                try {
+                    userAnswers = JSON.parse(saved);
+                    
+                    // Restore input values
+                    Object.keys(userAnswers.listening || {}).forEach(qid => {
+                        const input = document.getElementById(`q${qid}`);
+                        if (input) {
+                            if (input.type === 'radio') {
+                                const radio = document.querySelector(`input[name="q${qid}"][value="${userAnswers.listening[qid]}"]`);
+                                if (radio) radio.checked = true;
+                            } else {
+                                input.value = userAnswers.listening[qid];
+                            }
+                        }
+                    });
+                    
+                    Object.keys(userAnswers.reading || {}).forEach(qid => {
+                        const input = document.getElementById(`q${qid}`);
+                        if (input) {
+                            if (input.type === 'radio') {
+                                const radio = document.querySelector(`input[name="q${qid}"][value="${userAnswers.reading[qid]}"]`);
+                                if (radio) radio.checked = true;
+                            } else {
+                                input.value = userAnswers.reading[qid];
+                            }
+                        }
+                    });
+                    
+                    if (userAnswers.writing) {
+                        const task1 = document.getElementById('task1');
+                        const task2 = document.getElementById('task2');
+                        if (task1) task1.value = userAnswers.writing.task1 || '';
+                        if (task2) task2.value = userAnswers.writing.task2 || '';
+                        updateWordCount(1);
+                        updateWordCount(2);
+                    }
+                } catch (e) {
+                    console.error('Error restoring answers:', e);
+                }
+            }
+        }
+
+        function updateWordCount(task) {
+            const textarea = document.getElementById(`task${task}`);
+            const wordCount = document.getElementById(`wordCount${task}`);
+            const words = textarea.value.trim().split(/\s+/).filter(w => w.length > 0).length;
+            const limit = task === 1 ? 150 : 250;
+            
+            wordCount.textContent = `${words} / ${limit} words`;
+            
+            if (words < limit * 0.8) {
+                wordCount.className = 'word-count warning';
+            } else if (words >= limit * 0.8 && words <= limit * 1.1) {
+                wordCount.className = 'word-count success';
+            } else {
+                wordCount.className = 'word-count warning';
+            }
+        }
+
+        // ==============================================
+        // TIMER FUNCTIONS
+        // ==============================================
+        function startTimer() {
+            if (timerInterval) clearInterval(timerInterval);
+            
+            timerInterval = setInterval(() => {
+                if (timeLeft <= 0) {
+                    clearInterval(timerInterval);
+                    submitTest();
+                    return;
+                }
+                
+                timeLeft--;
+                updateTimerDisplay();
+                
+                // Warning at 10 minutes
+                if (timeLeft === 600) {
+                    document.getElementById('timer').classList.add('warning');
+                    alert('⚠️ 10 minutes remaining!');
+                }
+                // Warning at 5 minutes
+                if (timeLeft === 300) {
+                    alert('⚠️ 5 minutes remaining! Hurry up!');
+                }
+                // Final warning at 1 minute
+                if (timeLeft === 60) {
+                    alert('⚠️ 1 minute remaining! Submit your test now!');
+                }
+            }, 1000);
+        }
+
+        function resetTimer() {
+            clearInterval(timerInterval);
+            timeLeft = 9000; // 150 minutes
+            document.getElementById('timer').classList.remove('warning');
+            updateTimerDisplay();
+            startTimer();
+        }
+
+        function updateTimerDisplay() {
+            const hours = Math.floor(timeLeft / 3600);
+            const minutes = Math.floor((timeLeft % 3600) / 60);
+            const seconds = timeLeft % 60;
+            
+            document.getElementById('timeDisplay').textContent = 
+                `${hours.toString().padStart(2, '0')}:${minutes.toString().padStart(2, '0')}:${seconds.toString().padStart(2, '0')}`;
+        }
+
+        // ==============================================
+        // AUDIO FUNCTIONS
+        // ==============================================
+        let audio = null;
+        
+        function playAudio(sectionIndex) {
+            if (audio) {
+                audio.pause();
+            }
+            
+            // In a real implementation, this would load actual audio files
+            // For demo, we simulate audio playback
+            alert(`Playing audio for section ${sectionIndex + 1}...\nIn a real implementation, this would play the actual recording.`);
+            
+            // Simulate audio progress
+            let progress = 0;
+            const progressBar = document.getElementById(`audioProgress${sectionIndex}`);
+            
+            const interval = setInterval(() => {
+                progress += 1;
+                if (progressBar) progressBar.style.width = `${progress}%`;
+                if (progress >= 100) clearInterval(interval);
+            }, 100);
+        }
+        
+        function pauseAudio() {
+            alert('Audio paused');
+        }
+        
+        function restartAudio() {
+            alert('Audio restarted');
+        }
+
+        // ==============================================
+        // SUBMIT AND SCORING FUNCTIONS
+        // ==============================================
+        function submitTest() {
+            clearInterval(timerInterval);
+            
+            // Calculate scores
+            const listeningScore = calculateListeningScore();
+            const readingScore = calculateReadingScore();
+            const writingScore = calculateWritingScore();
+            
+            const overallBand = ((listeningScore + readingScore + writingScore) / 3).toFixed(1);
+            
+            // Update modal
+            document.getElementById('overallBand').textContent = overallBand;
+            document.getElementById('listeningBand').textContent = listeningScore.toFixed(1);
+            document.getElementById('readingBand').textContent = readingScore.toFixed(1);
+            document.getElementById('writingBand').textContent = writingScore.toFixed(1);
+            
+            // Show modal
+            document.getElementById('resultsModal').style.display = 'flex';
+            
+            // Save results
+            saveResults(overallBand, listeningScore, readingScore, writingScore);
+        }
+
+        function calculateListeningScore() {
+            const listening = testData[currentTest].listening;
+            let correct = 0;
+            let total = 0;
+            
+            listening.sections.forEach(section => {
+                section.questions.forEach(question => {
+                    total++;
+                    const userAnswer = userAnswers.listening[question.id];
+                    if (userAnswer && userAnswer.toLowerCase().trim() === question.answer.toLowerCase().trim()) {
+                        correct++;
+                    }
+                });
+            });
+            
+            // Convert to band score (IELTS listening conversion)
+            const percentage = (correct / total) * 100;
+            if (percentage >= 90) return 9.0;
+            if (percentage >= 85) return 8.5;
+            if (percentage >= 80) return 8.0;
+            if (percentage >= 75) return 7.5;
+            if (percentage >= 70) return 7.0;
+            if (percentage >= 65) return 6.5;
+            if (percentage >= 60) return 6.0;
+            if (percentage >= 50) return 5.5;
+            if (percentage >= 40) return 5.0;
+            return 4.5;
+        }
+
+        function calculateReadingScore() {
+            const reading = testData[currentTest].reading;
+            let correct = 0;
+            let total = 0;
+            
+            reading.passages.forEach(passage => {
+                passage.questions.forEach(question => {
+                    total++;
+                    const userAnswer = userAnswers.reading[question.id];
+                    if (userAnswer && userAnswer.toLowerCase().trim() === question.answer.toLowerCase().trim()) {
+                        correct++;
+                    }
+                });
+            });
+            
+            // Convert to band score (IELTS academic reading conversion)
+            const percentage = (correct / total) * 100;
+            if (percentage >= 85) return 9.0;
+            if (percentage >= 80) return 8.5;
+            if (percentage >= 75) return 8.0;
+            if (percentage >= 70) return 7.5;
+            if (percentage >= 65) return 7.0;
+            if (percentage >= 60) return 6.5;
+            if (percentage >= 55) return 6.0;
+            if (percentage >= 45) return 5.5;
+            if (percentage >= 35) return 5.0;
+            return 4.5;
+        }
+
+        function calculateWritingScore() {
+            // In a real implementation, this would use AI or manual scoring
+            // For demo, return a reasonable score based on word count
+            const task1Words = userAnswers.writing.task1?.trim().split(/\s+/).filter(w => w.length > 0).length || 0;
+            const task2Words = userAnswers.writing.task2?.trim().split(/\s+/).filter(w => w.length > 0).length || 0;
+            
+            if (task1Words >= 150 && task2Words >= 250) return 7.0;
+            if (task1Words >= 120 && task2Words >= 200) return 6.5;
+            if (task1Words >= 100 && task2Words >= 150) return 6.0;
+            return 5.5;
+        }
+
+        function saveResults(overall, listening, reading, writing) {
+            const user = auth.currentUser;
+            if (user) {
+                db.collection('test_results').add({
+                    userId: user.uid,
+                    testNumber: currentTest,
+                    overallBand: overall,
+                    listeningBand: listening,
+                    readingBand: reading,
+                    writingBand: writing,
+                    timestamp: firebase.firestore.FieldValue.serverTimestamp()
+                }).then(() => {
+                    console.log('Results saved to database');
+                }).catch(error => {
+                    console.error('Error saving results:', error);
+                });
+            }
+        }
+
+        // ==============================================
+        // MODAL FUNCTIONS
+        // ==============================================
+        function closeModal() {
+            document.getElementById('resultsModal').style.display = 'none';
+        }
+
+        function viewAnswers() {
+            closeModal();
+            alert('In a real implementation, this would show correct answers with explanations.');
+        }
+
+        // ==============================================
+        // INITIALIZATION
+        // ==============================================
+        window.onload = function() {
+            // Add active class to current nav link
+            const currentLocation = window.location.pathname.split('/').pop() || 'ielts-practice.html';
+            document.querySelectorAll('.nav-links a').forEach(link => {
+                if (link.getAttribute('href') === currentLocation) {
+                    link.classList.add('active');
+                }
+            });
+        };
+    </script>
+</body>
+</html>

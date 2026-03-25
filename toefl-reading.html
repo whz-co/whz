@@ -1,0 +1,751 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+    <title>TOEFL Reading Pro · Academic Texts & Practice Tests | Zakhourani</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        :root {
+            --toefl-primary: #e67e22;
+            --toefl-dark: #d35400;
+            --toefl-light: #fff5e8;
+            --success: #27ae60;
+            --info: #3498db;
+            --warning: #f39c12;
+            --danger: #e74c3c;
+            --text-dark: #2c3e50;
+            --text-muted: #5a6e7c;
+            --border-light: #ffdec2;
+            --card-white: #ffffff;
+            --shadow-sm: 0 8px 20px rgba(0,0,0,0.05);
+            --shadow-md: 0 15px 35px rgba(230,126,34,0.12);
+        }
+
+        body {
+            font-family: system-ui, 'Segoe UI', 'Inter', -apple-system, sans-serif;
+            background: linear-gradient(145deg, #fef8f0 0%, #fff3e8 100%);
+            color: var(--text-dark);
+            line-height: 1.5;
+        }
+
+        html {
+            font-size: 16px;
+        }
+        @media (max-width: 640px) {
+            html { font-size: 15px; }
+        }
+        @media (max-width: 480px) {
+            html { font-size: 14px; }
+        }
+
+        h1 { font-size: 2rem; font-weight: 800; letter-spacing: -0.01em; }
+        h2 { font-size: 1.6rem; font-weight: 700; margin: 0.75rem 0; }
+        h3 { font-size: 1.25rem; font-weight: 700; }
+        h4 { font-size: 1.1rem; font-weight: 600; }
+
+        .container {
+            max-width: 1300px;
+            margin: 0 auto;
+            padding: 0 1.5rem;
+        }
+
+        /* Header */
+        header {
+            background: white;
+            box-shadow: 0 2px 15px rgba(0,0,0,0.05);
+            padding: 0.8rem 1.5rem;
+            position: sticky;
+            top: 0;
+            z-index: 100;
+            backdrop-filter: blur(2px);
+            background: rgba(255,255,255,0.97);
+        }
+        .header-content {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            max-width: 1300px;
+            margin: 0 auto;
+            flex-wrap: wrap;
+            gap: 1rem;
+        }
+        .logo {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            text-decoration: none;
+        }
+        .logo h1 {
+            font-size: 1.6rem;
+            font-weight: 700;
+            color: #2c3e50;
+            margin: 0;
+        }
+        .nav-links {
+            display: flex;
+            gap: 0.7rem;
+            flex-wrap: wrap;
+            align-items: center;
+        }
+        .nav-links a {
+            text-decoration: none;
+            color: #2c3e50;
+            font-weight: 600;
+            padding: 0.45rem 1rem;
+            border-radius: 40px;
+            transition: 0.2s;
+            font-size: 0.85rem;
+            display: inline-flex;
+            align-items: center;
+            gap: 6px;
+        }
+        .nav-links a.active {
+            background: var(--toefl-primary);
+            color: white;
+        }
+        .login-btn, .signup-btn {
+            padding: 0.4rem 1.2rem;
+            border-radius: 40px;
+            font-weight: 600;
+            text-decoration: none;
+            font-size: 0.85rem;
+        }
+        .login-btn { background: #3498db; color: white; }
+        .signup-btn { background: #27ae60; color: white; }
+        .user-avatar {
+            width: 34px;
+            height: 34px;
+            border-radius: 50%;
+            object-fit: cover;
+            border: 2px solid var(--toefl-primary);
+        }
+
+        /* Breadcrumb */
+        .breadcrumb {
+            margin: 1.2rem 0 1rem;
+            font-size: 0.85rem;
+            color: #b97f44;
+        }
+
+        /* Hero */
+        .hero-reading {
+            background: linear-gradient(115deg, #e67e22 0%, #f39c12 100%);
+            border-radius: 2rem;
+            padding: 2rem;
+            color: white;
+            margin-bottom: 2rem;
+        }
+        .hero-reading h1 i, .hero-reading p { color: white; }
+        .badge {
+            background: rgba(255,255,255,0.2);
+            backdrop-filter: blur(4px);
+            display: inline-block;
+            padding: 0.3rem 1rem;
+            border-radius: 60px;
+            font-size: 0.8rem;
+            margin-top: 0.8rem;
+        }
+
+        /* Filter & Stats */
+        .stats-bar {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            flex-wrap: wrap;
+            gap: 1rem;
+            background: white;
+            padding: 1rem 1.5rem;
+            border-radius: 1.5rem;
+            margin-bottom: 2rem;
+            box-shadow: var(--shadow-sm);
+        }
+        .filter-buttons {
+            display: flex;
+            gap: 0.8rem;
+            flex-wrap: wrap;
+        }
+        .filter-btn {
+            background: #f0e4d8;
+            border: none;
+            padding: 0.5rem 1.2rem;
+            border-radius: 50px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: 0.2s;
+            font-size: 0.85rem;
+        }
+        .filter-btn.active {
+            background: var(--toefl-primary);
+            color: white;
+        }
+        .progress-indicator {
+            background: #fef3e4;
+            padding: 0.5rem 1rem;
+            border-radius: 50px;
+            font-size: 0.85rem;
+        }
+
+        /* Passages Grid */
+        .passages-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(350px, 1fr));
+            gap: 1.8rem;
+            margin-bottom: 2rem;
+        }
+        .passage-card {
+            background: white;
+            border-radius: 1.5rem;
+            padding: 1.5rem;
+            box-shadow: var(--shadow-sm);
+            transition: all 0.25s ease;
+            border: 1px solid var(--border-light);
+            cursor: pointer;
+        }
+        .passage-card:hover {
+            transform: translateY(-5px);
+            box-shadow: var(--shadow-md);
+            border-color: var(--toefl-primary);
+        }
+        .passage-icon {
+            font-size: 2rem;
+            color: var(--toefl-primary);
+            margin-bottom: 0.8rem;
+        }
+        .topic-tag {
+            display: inline-block;
+            background: #fef3e4;
+            padding: 0.2rem 0.8rem;
+            border-radius: 50px;
+            font-size: 0.7rem;
+            font-weight: 600;
+            margin: 0.5rem 0;
+        }
+        .difficulty {
+            font-size: 0.75rem;
+            color: var(--text-muted);
+            margin: 0.5rem 0;
+        }
+        .question-count {
+            font-size: 0.8rem;
+            color: var(--toefl-primary);
+            font-weight: 600;
+        }
+
+        /* Modal for reading practice */
+        .modal-overlay {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0,0,0,0.9);
+            z-index: 1000;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            backdrop-filter: blur(5px);
+            overflow-y: auto;
+            padding: 1rem;
+        }
+        .reading-modal {
+            background: white;
+            max-width: 1000px;
+            width: 100%;
+            border-radius: 2rem;
+            max-height: 90vh;
+            overflow-y: auto;
+            box-shadow: 0 25px 50px rgba(0,0,0,0.3);
+            animation: slideUp 0.2s ease;
+        }
+        @keyframes slideUp {
+            from { transform: translateY(30px); opacity: 0; }
+            to { transform: translateY(0); opacity: 1; }
+        }
+        .modal-header {
+            background: var(--toefl-primary);
+            color: white;
+            padding: 1.2rem 1.5rem;
+            border-radius: 2rem 2rem 0 0;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            flex-wrap: wrap;
+            position: sticky;
+            top: 0;
+            z-index: 10;
+        }
+        .timer-box {
+            background: rgba(0,0,0,0.3);
+            padding: 0.3rem 1rem;
+            border-radius: 60px;
+            font-family: monospace;
+            font-weight: bold;
+            font-size: 1.2rem;
+        }
+        .modal-body {
+            padding: 1.8rem;
+        }
+        .passage-text {
+            background: #fef9f2;
+            padding: 1.5rem;
+            border-radius: 1rem;
+            margin-bottom: 2rem;
+            line-height: 1.7;
+            font-size: 0.95rem;
+            max-height: 400px;
+            overflow-y: auto;
+        }
+        .question-item {
+            background: white;
+            border: 1px solid var(--border-light);
+            border-radius: 1rem;
+            padding: 1.2rem;
+            margin-bottom: 1.2rem;
+        }
+        .question-text {
+            font-weight: 700;
+            margin-bottom: 0.8rem;
+            font-size: 1rem;
+        }
+        .options label {
+            display: block;
+            margin: 0.6rem 0;
+            cursor: pointer;
+            padding: 0.4rem;
+            border-radius: 8px;
+            transition: background 0.1s;
+        }
+        .options label:hover {
+            background: #fff0e0;
+        }
+        .options input {
+            margin-right: 12px;
+        }
+        .submit-btn {
+            background: var(--success);
+            color: white;
+            border: none;
+            padding: 0.9rem 2rem;
+            border-radius: 60px;
+            font-weight: 700;
+            font-size: 1rem;
+            cursor: pointer;
+            width: 100%;
+            margin: 1.5rem 0;
+        }
+        .result-area {
+            background: #e8f5e9;
+            padding: 1.2rem;
+            border-radius: 1rem;
+            margin-top: 1rem;
+            text-align: center;
+        }
+        .explanation {
+            background: #f0f4fa;
+            padding: 0.8rem;
+            border-radius: 0.8rem;
+            margin-top: 0.5rem;
+            font-size: 0.85rem;
+            display: none;
+        }
+        .close-modal {
+            background: rgba(255,255,255,0.2);
+            border: none;
+            color: white;
+            font-size: 1.5rem;
+            cursor: pointer;
+            width: 36px;
+            height: 36px;
+            border-radius: 50%;
+        }
+
+        /* Tips Section */
+        .tips-section {
+            background: white;
+            border-radius: 1.5rem;
+            padding: 1.5rem;
+            margin: 2rem 0;
+        }
+
+        footer {
+            background: #1e2a36;
+            color: white;
+            padding: 2rem 1rem;
+            margin-top: 3rem;
+            text-align: center;
+            border-radius: 2rem 2rem 0 0;
+        }
+
+        @media (max-width: 680px) {
+            .reading-modal { max-width: 95%; }
+            .modal-header { flex-direction: column; text-align: center; gap: 0.5rem; }
+            .passage-text { max-height: 300px; }
+        }
+    </style>
+</head>
+<body>
+
+<header>
+    <div class="header-content">
+        <a href="index.html" class="logo">
+            <i class="fas fa-graduation-cap" style="font-size: 28px; color: #e67e22;"></i>
+            <h1>Zakhourani</h1>
+        </a>
+        <div class="nav-links">
+            <a href="index.html"><i class="fas fa-home"></i> Home</a>
+            <a href="IELS.html"><i class="fas fa-language"></i> IELTS</a>
+            <a href="TOFEL.html" class="active"><i class="fas fa-scroll"></i> TOEFL</a>
+            <a href="AI.html"><i class="fas fa-microchip"></i> AI Power</a>
+            <a href="aboutDrwaleed.html"><i class="fas fa-user-graduate"></i> Dr Waleed</a>
+            <div id="userMenuHeader" style="display: none;" class="user-menu" style="display:flex; gap:8px; align-items:center;">
+                <img id="userAvatarHeader" class="user-avatar" src="" alt="user">
+                <span id="userNameHeader" style="font-weight:500;"></span>
+            </div>
+            <div id="authButtonsHeader" style="display: flex; gap: 8px;">
+                <a href="login.html" class="login-btn">Login</a>
+                <a href="signup.html" class="signup-btn">Sign Up</a>
+            </div>
+        </div>
+    </div>
+</header>
+
+<main class="container">
+    <div class="breadcrumb">
+        <a href="TOFEL.html" style="color:#e67e22;"><i class="fas fa-scroll"></i> TOEFL Hub</a> / <span>Reading Pro Simulator</span>
+    </div>
+
+    <div class="hero-reading">
+        <h1><i class="fas fa-newspaper"></i> TOEFL Reading Pro Simulator</h1>
+        <p>Academic texts with 10 question types: inference, vocabulary, rhetorical purpose, insert sentence, and more. Timed & untimed modes with detailed explanations.</p>
+        <div class="badge"><i class="fas fa-clock"></i> 3-4 passages per set | 54-72 min simulation | Score estimator</div>
+    </div>
+
+    <div class="stats-bar">
+        <div class="filter-buttons">
+            <button class="filter-btn active" data-filter="all">All Passages</button>
+            <button class="filter-btn" data-filter="science">🔬 Science</button>
+            <button class="filter-btn" data-filter="history">📜 History</button>
+            <button class="filter-btn" data-filter="arts">🎨 Arts & Humanities</button>
+            <button class="filter-btn" data-filter="hard">⭐ Advanced</button>
+        </div>
+        <div class="progress-indicator">
+            <i class="fas fa-chart-line"></i> <span id="completedCount">0</span>/<span id="totalCount">0</span> passages completed
+        </div>
+    </div>
+
+    <div class="passages-grid" id="passagesGrid"></div>
+
+    <div class="tips-section">
+        <i class="fas fa-lightbulb" style="font-size: 2rem; color: var(--toefl-primary);"></i>
+        <h3>Dr. Waleed's Reading Strategies</h3>
+        <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(250px, 1fr)); gap: 1rem; margin-top: 1rem;">
+            <div><i class="fas fa-eye"></i> <strong>Skim first</strong> — 3-4 min to grasp main idea</div>
+            <div><i class="fas fa-highlighter"></i> <strong>Annotate keywords</strong> — names, dates, transitions</div>
+            <div><i class="fas fa-chart-line"></i> <strong>Eliminate 2 wrong answers</strong> — increase odds</div>
+            <div><i class="fas fa-quote-right"></i> <strong>Vocabulary in context</strong> — guess from surrounding text</div>
+            <div><i class="fas fa-table"></i> <strong>Summary questions</strong> — focus on major ideas, not details</div>
+        </div>
+    </div>
+</main>
+
+<footer>
+    <i class="fas fa-graduation-cap"></i> Zakhourani TOEFL Reading Lab · Master academic texts
+    <p style="margin-top: 10px; font-size: 0.8rem;">10+ full-length passages with all TOEFL question types. Track your progress!</p>
+</footer>
+
+<script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-app-compat.js"></script>
+<script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-auth-compat.js"></script>
+<script>
+    const firebaseConfig = {
+        apiKey: "AIzaSyAE8wf24HXrfmpMluaFOv1OHPrf_YFfqTQ",
+        authDomain: "whaai-c388e.firebaseapp.com",
+        projectId: "whaai-c388e",
+        storageBucket: "whaai-c388e.firebasestorage.app",
+        messagingSenderId: "640598205524",
+        appId: "1:640598205524:web:c975f5e8b371b1043e39c1"
+    };
+    if (!firebase.apps.length) firebase.initializeApp(firebaseConfig);
+    const auth = firebase.auth();
+
+    const userMenuDiv = document.getElementById('userMenuHeader');
+    const authBtnsDiv = document.getElementById('authButtonsHeader');
+    const userAvatarImg = document.getElementById('userAvatarHeader');
+    const userNameSpan = document.getElementById('userNameHeader');
+
+    auth.onAuthStateChanged(user => {
+        if (user) {
+            userMenuDiv.style.display = 'flex';
+            authBtnsDiv.style.display = 'none';
+            const photo = user.photoURL || `https://ui-avatars.com/api/?name=${encodeURIComponent(user.displayName || user.email)}&background=e67e22&color=fff&size=32`;
+            userAvatarImg.src = photo;
+            userNameSpan.textContent = user.displayName?.split(' ')[0] || user.email.split('@')[0];
+        } else {
+            userMenuDiv.style.display = 'none';
+            authBtnsDiv.style.display = 'flex';
+        }
+    });
+
+    // Reading Passages Database
+    const passages = [
+        {
+            id: 1,
+            title: "The Industrial Revolution and Urbanization",
+            category: "history",
+            difficulty: "Medium",
+            wordCount: 420,
+            questions: 6,
+            text: "The Industrial Revolution, which began in Britain in the late 18th century, fundamentally transformed society from agrarian to industrial. Urbanization accelerated dramatically as rural populations migrated to cities seeking factory work. Manchester, England, became a symbol of this transformation, its population soaring from 17,000 in 1760 to over 180,000 by 1830. However, this rapid growth brought severe challenges: overcrowded slums, inadequate sanitation, and public health crises. Reformers like Edwin Chadwick advocated for public health legislation, leading to the Public Health Act of 1848. Despite these efforts, urban poverty remained pervasive throughout the 19th century. The Industrial Revolution also created new social classes—the industrial bourgeoisie and the urban proletariat—whose tensions would shape modern political movements. By 1900, urbanization had spread across Europe and North America, fundamentally altering the relationship between humans and their environment.",
+            questions: [
+                { text: "According to the passage, what was a direct consequence of the Industrial Revolution?", options: ["Decreased factory production", "Migration to rural areas", "Rapid urbanization", "Decline in population"], correct: 2, explanation: "The passage states that 'Urbanization accelerated dramatically as rural populations migrated to cities.'" },
+                { text: "The word 'pervasive' in the passage is closest in meaning to:", options: ["Rare", "Widespread", "Temporary", "Insignificant"], correct: 1, explanation: "Pervasive means spreading widely throughout an area or group of people." },
+                { text: "What can be inferred about Manchester's population growth?", options: ["It declined after 1830", "It was typical of industrial cities", "It was slower than rural areas", "It had no impact on housing"], correct: 1, explanation: "Manchester is described as a symbol of transformation, implying its growth was representative." }
+            ]
+        },
+        {
+            id: 2,
+            title: "Climate Change and Ocean Acidification",
+            category: "science",
+            difficulty: "Medium",
+            wordCount: 480,
+            questions: 6,
+            text: "Ocean acidification, often called climate change's 'evil twin,' results from increased atmospheric carbon dioxide (CO2) dissolving into seawater. Since the Industrial Revolution, ocean surface pH has decreased by 0.1 units—a 30% increase in acidity. This chemical change threatens marine organisms with calcium carbonate shells, including oysters, clams, and coral reefs. The process occurs because CO2 reacts with water to form carbonic acid, which releases hydrogen ions that bind with carbonate ions essential for shell formation. Laboratory studies show that under projected CO2 levels by 2100, shell formation could decrease by 25-40% in some species. Furthermore, acidification disrupts marine food webs and fisheries that billions depend on for protein. Scientists emphasize that reducing CO2 emissions remains the only long-term solution, though local measures like reducing nutrient pollution may provide temporary resilience.",
+            questions: [
+                { text: "What is the primary cause of ocean acidification?", options: ["Industrial pollution", "Increased atmospheric CO2", "Marine animal waste", "Ocean warming"], correct: 1, explanation: "The passage states acidification results from increased atmospheric CO2 dissolving into seawater." },
+                { text: "According to the passage, which organisms are most threatened by acidification?", options: ["Fish species", "Marine mammals", "Calcium carbonate shell organisms", "Seaweed"], correct: 2, explanation: "The text mentions organisms with calcium carbonate shells including oysters, clams, and coral reefs." },
+                { text: "The word 'resilience' in the last sentence is closest in meaning to:", options: ["Weakness", "Adaptability", "Destruction", "Permanence"], correct: 1, explanation: "Resilience refers to the ability to recover or adapt to changes." }
+            ]
+        },
+        {
+            id: 3,
+            title: "Renaissance Art: Perspective and Humanism",
+            category: "arts",
+            difficulty: "Hard",
+            wordCount: 530,
+            questions: 7,
+            text: "The Renaissance, meaning 'rebirth,' marked a profound shift in European art from medieval symbolism to naturalistic representation. Central to this transformation was linear perspective, codified by Filippo Brunelleschi in the early 15th century. This mathematical system created illusionistic depth on flat surfaces, revolutionizing painting. Masaccio's 'Holy Trinity' (1428) exemplified this technique, creating a convincing architectural space that appeared to recede into the wall. Simultaneously, humanism—the celebration of human potential and classical antiquity—redirected artistic focus toward individual experience. Artists like Leonardo da Vinci dissected cadavers to understand musculature, achieving unprecedented anatomical accuracy. The High Renaissance produced masters such as Raphael, whose 'School of Athens' synthesized perspective, humanism, and classical philosophy into a unified vision. By 1520, these innovations had spread across Italy and Northern Europe, establishing artistic conventions that would dominate Western art for centuries.",
+            questions: [
+                { text: "What was the significance of Brunelleschi's contribution to Renaissance art?", options: ["He invented oil painting", "He codified linear perspective", "He painted the Sistine Chapel", "He discovered humanism"], correct: 1, explanation: "The passage states he codified linear perspective, creating illusionistic depth." },
+                { text: "The word 'unprecedented' in the passage most nearly means:", options: ["Unusual", "Record-breaking", "Without previous example", "Predictable"], correct: 2, explanation: "Unprecedented means never done or known before." },
+                { text: "What can be inferred about medieval art compared to Renaissance art?", options: ["It used perspective more effectively", "It focused more on naturalism", "It was more symbolic", "It emphasized human anatomy"], correct: 2, explanation: "The passage contrasts Renaissance naturalism with medieval symbolism." }
+            ]
+        },
+        {
+            id: 4,
+            title: "Quantum Mechanics: The Uncertainty Principle",
+            category: "science",
+            difficulty: "Hard",
+            wordCount: 560,
+            questions: 7,
+            text: "Werner Heisenberg's uncertainty principle, formulated in 1927, fundamentally challenged classical physics' deterministic worldview. The principle states that the more precisely one measures a particle's position, the less precisely its momentum can be known, and vice versa. This isn't a limitation of measurement technology but a fundamental property of quantum systems. Mathematically, Δx Δp ≥ ħ/2, where ħ is the reduced Planck constant. The principle arises from wave-particle duality: particles exhibit wave-like behavior, and attempting to localize a wave inevitably spreads its momentum. This insight led to philosophical debates about determinism and reality itself. Einstein famously objected, declaring 'God does not play dice with the universe,' yet experiments consistently confirm the principle. Today, quantum cryptography and computing leverage uncertainty for secure communication and computational advantages, demonstrating that fundamental constraints can become technological opportunities.",
+            questions: [
+                { text: "What does the uncertainty principle state about position and momentum?", options: ["They can both be measured precisely", "Measuring one precisely limits knowledge of the other", "Neither can be measured", "Only momentum is measurable"], correct: 1, explanation: "The principle states precise position measurement makes momentum less known." },
+                { text: "According to the passage, what is the source of the uncertainty principle?", options: ["Measurement technology limits", "Wave-particle duality", "Mathematical errors", "Experimental mistakes"], correct: 1, explanation: "The principle arises from wave-particle duality, not technology limitations." }
+            ]
+        },
+        {
+            id: 5,
+            title: "The Silk Road: Cultural Exchange",
+            category: "history",
+            difficulty: "Medium",
+            wordCount: 390,
+            questions: 5,
+            text: "The Silk Road was not a single road but a network of trade routes connecting China to the Mediterranean from approximately 130 BCE to 1453 CE. While silk was a major commodity, cultural and technological exchange proved more enduring. Buddhism traveled from India to China via these routes, transforming Chinese civilization. Papermaking technology spread westward, revolutionizing record-keeping. The Black Death also likely followed these routes in the 14th century, demonstrating that connectivity carried both benefits and risks. Cities like Samarkand and Bukhara flourished as multicultural hubs where Persian, Arab, Chinese, and European merchants exchanged goods and ideas. The Mongol Empire briefly unified much of the Silk Road under Pax Mongolica, enabling unprecedented safe travel. When Ottoman Empire conflicts disrupted overland routes in the 15th century, European powers began seeking maritime alternatives—ultimately leading to the Age of Exploration.",
+            questions: [
+                { text: "What was the most significant impact of the Silk Road according to the passage?", options: ["Silk trade profits", "Cultural and technological exchange", "Spread of disease only", "Political unification"], correct: 1, explanation: "The passage states cultural and technological exchange proved more enduring than silk trade." },
+                { text: "What was the Pax Mongolica's effect on the Silk Road?", options: ["Disrupted trade routes", "Enabled safer travel", "Ended all exchange", "Increased disease only"], correct: 1, explanation: "The Pax Mongolica enabled unprecedented safe travel across the routes." }
+            ]
+        }
+    ];
+
+    let currentFilter = "all";
+    let completedPassages = JSON.parse(localStorage.getItem('toefl_reading_completed') || '[]');
+
+    function updateProgressDisplay() {
+        document.getElementById('completedCount').innerText = completedPassages.length;
+        document.getElementById('totalCount').innerText = passages.length;
+    }
+
+    function renderPassages() {
+        const grid = document.getElementById('passagesGrid');
+        const filtered = passages.filter(p => {
+            if (currentFilter === "all") return true;
+            if (currentFilter === "hard") return p.difficulty === "Hard";
+            return p.category === currentFilter;
+        });
+        
+        grid.innerHTML = filtered.map(p => `
+            <div class="passage-card" data-id="${p.id}">
+                <div class="passage-icon"><i class="fas ${p.category === 'science' ? 'fa-flask' : p.category === 'history' ? 'fa-landmark' : 'fa-palette'}"></i></div>
+                <h3>${p.title}</h3>
+                <span class="topic-tag">${p.category === 'science' ? '🔬 Science' : p.category === 'history' ? '📜 History' : '🎨 Arts'}</span>
+                <div class="difficulty"><i class="fas fa-chart-simple"></i> ${p.difficulty} • ${p.wordCount} words</div>
+                <div class="question-count"><i class="fas fa-question-circle"></i> ${p.questions} questions</div>
+                ${completedPassages.includes(p.id) ? '<div style="color:#27ae60; margin-top:0.5rem;"><i class="fas fa-check-circle"></i> Completed</div>' : ''}
+                <button class="btn-start" style="margin-top: 1rem; background: #e67e22; color: white; border: none; padding: 0.6rem; border-radius: 50px; cursor: pointer; width: 100%; font-weight:600;">📖 Start Reading</button>
+            </div>
+        `).join('');
+        
+        document.querySelectorAll('.passage-card').forEach(card => {
+            const btn = card.querySelector('.btn-start');
+            const id = parseInt(card.getAttribute('data-id'));
+            btn.addEventListener('click', () => openReadingModal(passages.find(p => p.id === id)));
+        });
+    }
+
+    let activeModal = null;
+    let timerInterval = null;
+
+    function openReadingModal(passage) {
+        if (activeModal) return;
+        
+        let userAnswers = new Array(passage.questions.length).fill(null);
+        let timerSeconds = 20 * 60; // 20 minutes per passage simulation
+        let timerRunning = true;
+        
+        const modalDiv = document.createElement('div');
+        modalDiv.className = 'modal-overlay';
+        
+        const modalHtml = `
+            <div class="reading-modal">
+                <div class="modal-header">
+                    <h3><i class="fas fa-book-open"></i> ${passage.title}</h3>
+                    <div class="timer-box" id="modalTimer">20:00</div>
+                    <button class="close-modal" id="closeModalBtn"><i class="fas fa-times"></i></button>
+                </div>
+                <div class="modal-body">
+                    <div class="passage-text">
+                        ${passage.text}
+                    </div>
+                    <div class="questions-area">
+                        <h4><i class="fas fa-question-circle"></i> Reading Comprehension Questions</h4>
+                        ${passage.questions.map((q, idx) => `
+                            <div class="question-item" data-qidx="${idx}">
+                                <div class="question-text">${idx+1}. ${q.text}</div>
+                                <div class="options">
+                                    ${q.options.map((opt, optIdx) => `
+                                        <label><input type="radio" name="q_${idx}" value="${optIdx}"> ${opt}</label>
+                                    `).join('')}
+                                </div>
+                                <div class="explanation" id="exp_${idx}" style="display:none;">
+                                    <i class="fas fa-info-circle"></i> <strong>Explanation:</strong> ${q.explanation || 'Review the passage to understand why this answer is correct.'}
+                                </div>
+                            </div>
+                        `).join('')}
+                    </div>
+                    <button class="submit-btn" id="submitReadingBtn"><i class="fas fa-check-double"></i> Submit Answers & Get Score</button>
+                    <div id="resultArea"></div>
+                </div>
+            </div>
+        `;
+        
+        modalDiv.innerHTML = modalHtml;
+        document.body.appendChild(modalDiv);
+        activeModal = modalDiv;
+        
+        // Timer functionality
+        function updateTimerDisplay() {
+            const mins = Math.floor(timerSeconds / 60);
+            const secs = timerSeconds % 60;
+            const timerSpan = document.getElementById('modalTimer');
+            if (timerSpan) timerSpan.innerText = `${mins.toString().padStart(2,'0')}:${secs.toString().padStart(2,'0')}`;
+            if (timerSeconds <= 0 && timerRunning) {
+                clearInterval(timerInterval);
+                timerRunning = false;
+                alert("Time's up! Submitting your answers...");
+                submitAnswers();
+            }
+        }
+        
+        timerInterval = setInterval(() => {
+            if (timerRunning && timerSeconds > 0) {
+                timerSeconds--;
+                updateTimerDisplay();
+            }
+        }, 1000);
+        
+        // Track radio changes
+        modalDiv.querySelectorAll('input[type="radio"]').forEach(radio => {
+            radio.addEventListener('change', (e) => {
+                const name = e.target.getAttribute('name');
+                const idx = parseInt(name.split('_')[1]);
+                userAnswers[idx] = parseInt(e.target.value);
+            });
+        });
+        
+        function submitAnswers() {
+            if (timerInterval) clearInterval(timerInterval);
+            timerRunning = false;
+            
+            let correctCount = 0;
+            passage.questions.forEach((q, idx) => {
+                if (userAnswers[idx] !== null && userAnswers[idx] === q.correct) {
+                    correctCount++;
+                }
+                // Show explanations
+                const expDiv = document.getElementById(`exp_${idx}`);
+                if (expDiv) expDiv.style.display = 'block';
+            });
+            
+            const percentScore = (correctCount / passage.questions.length) * 100;
+            let estimatedScore = 0;
+            if (percentScore >= 90) estimatedScore = 28;
+            else if (percentScore >= 75) estimatedScore = 24;
+            else if (percentScore >= 60) estimatedScore = 20;
+            else if (percentScore >= 45) estimatedScore = 15;
+            else estimatedScore = 10;
+            
+            const resultDiv = document.getElementById('resultArea');
+            resultDiv.innerHTML = `
+                <div class="result-area">
+                    <i class="fas fa-chart-line" style="font-size: 2rem; color: #27ae60;"></i>
+                    <h3>Your Score: ${correctCount}/${passage.questions} correct</h3>
+                    <p><strong>Estimated TOEFL Reading Scale:</strong> ${estimatedScore}/30</p>
+                    <p>${percentScore >= 70 ? 'Excellent work! You\'re on track for a high score.' : percentScore >= 50 ? 'Good effort. Review the explanations and try again.' : 'Keep practicing! Use the strategies above to improve.'}</p>
+                    <button id="markCompleteBtn" style="background: #e67e22; margin-top: 1rem; padding: 0.6rem 1.5rem; border-radius: 50px; border: none; color: white; cursor: pointer;"><i class="fas fa-save"></i> Mark as Completed</button>
+                </div>
+            `;
+            
+            document.getElementById('markCompleteBtn')?.addEventListener('click', () => {
+                if (!completedPassages.includes(passage.id)) {
+                    completedPassages.push(passage.id);
+                    localStorage.setItem('toefl_reading_completed', JSON.stringify(completedPassages));
+                    updateProgressDisplay();
+                    renderPassages();
+                    alert(`✅ "${passage.title}" marked as completed!`);
+                }
+            });
+            
+            const submitBtn = document.getElementById('submitReadingBtn');
+            if (submitBtn) submitBtn.disabled = true;
+        }
+        
+        document.getElementById('submitReadingBtn').addEventListener('click', submitAnswers);
+        document.getElementById('closeModalBtn').addEventListener('click', () => {
+            if (timerInterval) clearInterval(timerInterval);
+            if (activeModal) activeModal.remove();
+            activeModal = null;
+        });
+    }
+    
+    // Filter functionality
+    document.querySelectorAll('.filter-btn').forEach(btn => {
+        btn.addEventListener('click', () => {
+            document.querySelectorAll('.filter-btn').forEach(b => b.classList.remove('active'));
+            btn.classList.add('active');
+            currentFilter = btn.getAttribute('data-filter');
+            renderPassages();
+        });
+    });
+    
+    updateProgressDisplay();
+    renderPassages();
+</script>
+</body>
+</html>

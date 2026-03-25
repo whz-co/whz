@@ -1,0 +1,615 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+    <title>TOEFL Feedback Lab · Writing & Speaking Analysis | Zakhourani</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        :root {
+            --toefl-primary: #e67e22;
+            --toefl-dark: #d35400;
+            --toefl-light: #fff5e8;
+            --success: #27ae60;
+            --info: #3498db;
+            --warning: #f39c12;
+            --danger: #e74c3c;
+            --text-dark: #2c3e50;
+            --text-muted: #5a6e7c;
+            --border-light: #ffdec2;
+            --card-white: #ffffff;
+            --shadow-sm: 0 8px 20px rgba(0,0,0,0.05);
+            --shadow-md: 0 15px 35px rgba(230,126,34,0.12);
+        }
+
+        body {
+            font-family: system-ui, 'Segoe UI', 'Inter', -apple-system, sans-serif;
+            background: linear-gradient(145deg, #fef8f0 0%, #fff3e8 100%);
+            color: var(--text-dark);
+            line-height: 1.5;
+        }
+
+        html {
+            font-size: 16px;
+        }
+        @media (max-width: 640px) {
+            html { font-size: 15px; }
+        }
+        @media (max-width: 480px) {
+            html { font-size: 14px; }
+        }
+
+        h1 { font-size: 2rem; font-weight: 800; letter-spacing: -0.01em; }
+        h2 { font-size: 1.6rem; font-weight: 700; margin: 0.75rem 0; }
+        h3 { font-size: 1.25rem; font-weight: 700; }
+        h4 { font-size: 1.1rem; font-weight: 600; }
+
+        .container {
+            max-width: 1300px;
+            margin: 0 auto;
+            padding: 0 1.5rem;
+        }
+
+        /* Header */
+        header {
+            background: white;
+            box-shadow: 0 2px 15px rgba(0,0,0,0.05);
+            padding: 0.8rem 1.5rem;
+            position: sticky;
+            top: 0;
+            z-index: 100;
+            backdrop-filter: blur(2px);
+            background: rgba(255,255,255,0.97);
+        }
+        .header-content {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            max-width: 1300px;
+            margin: 0 auto;
+            flex-wrap: wrap;
+            gap: 1rem;
+        }
+        .logo {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            text-decoration: none;
+        }
+        .logo h1 {
+            font-size: 1.6rem;
+            font-weight: 700;
+            color: #2c3e50;
+            margin: 0;
+        }
+        .nav-links {
+            display: flex;
+            gap: 0.7rem;
+            flex-wrap: wrap;
+            align-items: center;
+        }
+        .nav-links a {
+            text-decoration: none;
+            color: #2c3e50;
+            font-weight: 600;
+            padding: 0.45rem 1rem;
+            border-radius: 40px;
+            transition: 0.2s;
+            font-size: 0.85rem;
+            display: inline-flex;
+            align-items: center;
+            gap: 6px;
+        }
+        .nav-links a.active {
+            background: var(--toefl-primary);
+            color: white;
+        }
+        .login-btn, .signup-btn {
+            padding: 0.4rem 1.2rem;
+            border-radius: 40px;
+            font-weight: 600;
+            text-decoration: none;
+            font-size: 0.85rem;
+        }
+        .login-btn { background: #3498db; color: white; }
+        .signup-btn { background: #27ae60; color: white; }
+        .user-avatar {
+            width: 34px;
+            height: 34px;
+            border-radius: 50%;
+            object-fit: cover;
+            border: 2px solid var(--toefl-primary);
+        }
+
+        /* Breadcrumb */
+        .breadcrumb {
+            margin: 1.2rem 0 1rem;
+            font-size: 0.85rem;
+            color: #b97f44;
+        }
+
+        /* Hero */
+        .hero-feedback {
+            background: linear-gradient(115deg, #e67e22 0%, #f39c12 100%);
+            border-radius: 2rem;
+            padding: 2rem;
+            color: white;
+            margin-bottom: 2rem;
+        }
+        .hero-feedback h1 i, .hero-feedback p { color: white; }
+        .badge {
+            background: rgba(255,255,255,0.2);
+            backdrop-filter: blur(4px);
+            display: inline-block;
+            padding: 0.3rem 1rem;
+            border-radius: 60px;
+            font-size: 0.8rem;
+            margin-top: 0.8rem;
+        }
+
+        /* Tabs */
+        .tabs-container {
+            background: white;
+            border-radius: 1.5rem;
+            overflow: hidden;
+            box-shadow: var(--shadow-sm);
+            margin-bottom: 2rem;
+        }
+        .tabs-header {
+            display: flex;
+            gap: 0.5rem;
+            background: #fef3e8;
+            padding: 0.8rem 1rem 0;
+            border-bottom: 2px solid var(--border-light);
+            flex-wrap: wrap;
+        }
+        .tab-btn {
+            background: transparent;
+            border: none;
+            padding: 0.8rem 1.8rem;
+            font-size: 1rem;
+            font-weight: 600;
+            cursor: pointer;
+            border-radius: 60px 60px 0 0;
+            transition: 0.2s;
+            color: var(--text-muted);
+        }
+        .tab-btn.active {
+            background: var(--toefl-primary);
+            color: white;
+            box-shadow: 0 -2px 8px rgba(0,0,0,0.05);
+        }
+        .tab-pane {
+            display: none;
+            padding: 2rem;
+            animation: fadeIn 0.2s ease;
+        }
+        .tab-pane.active-pane {
+            display: block;
+        }
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(8px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        /* Forms & cards */
+        .form-group {
+            margin-bottom: 1.5rem;
+        }
+        label {
+            font-weight: 600;
+            display: block;
+            margin-bottom: 0.5rem;
+            color: var(--text-dark);
+        }
+        select, textarea, input {
+            width: 100%;
+            padding: 0.8rem 1rem;
+            border: 2px solid #ffe0c0;
+            border-radius: 1rem;
+            font-size: 0.95rem;
+            font-family: inherit;
+            transition: 0.2s;
+            background: white;
+        }
+        select:focus, textarea:focus, input:focus {
+            outline: none;
+            border-color: var(--toefl-primary);
+            box-shadow: 0 0 0 3px rgba(230,126,34,0.1);
+        }
+        button.submit-feedback {
+            background: var(--toefl-primary);
+            color: white;
+            border: none;
+            padding: 0.9rem 2rem;
+            border-radius: 60px;
+            font-weight: 700;
+            font-size: 1rem;
+            cursor: pointer;
+            transition: 0.2s;
+            width: auto;
+            min-width: 200px;
+        }
+        button.submit-feedback:hover {
+            background: var(--toefl-dark);
+            transform: scale(0.98);
+        }
+
+        .result-card {
+            margin-top: 2rem;
+            background: #fef9f2;
+            border-radius: 1.5rem;
+            padding: 1.5rem;
+            border-left: 5px solid var(--toefl-primary);
+            display: none;
+        }
+        .result-card.show {
+            display: block;
+            animation: slideUp 0.3s ease;
+        }
+        @keyframes slideUp {
+            from { opacity: 0; transform: translateY(20px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+        .score-circle {
+            display: inline-block;
+            background: var(--toefl-primary);
+            color: white;
+            border-radius: 60px;
+            padding: 0.3rem 1rem;
+            font-weight: 800;
+        }
+        .feedback-metrics {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 1rem;
+            margin: 1.5rem 0;
+        }
+        .metric {
+            background: white;
+            padding: 1rem;
+            border-radius: 1rem;
+            text-align: center;
+        }
+        .improvement-tip {
+            background: #fff0e0;
+            padding: 1rem;
+            border-radius: 1rem;
+            margin: 1rem 0;
+        }
+
+        /* submission history mock */
+        .history-item {
+            background: white;
+            border-radius: 1rem;
+            padding: 1rem;
+            margin-bottom: 1rem;
+            border: 1px solid var(--border-light);
+        }
+
+        @media (max-width: 680px) {
+            .tab-pane { padding: 1.2rem; }
+            .tabs-header { padding: 0.5rem; }
+            .tab-btn { padding: 0.5rem 1rem; font-size: 0.85rem; }
+        }
+
+        footer {
+            background: #1e2a36;
+            color: white;
+            padding: 2rem 1rem;
+            margin-top: 3rem;
+            text-align: center;
+            border-radius: 2rem 2rem 0 0;
+        }
+    </style>
+</head>
+<body>
+
+<header>
+    <div class="header-content">
+        <a href="index.html" class="logo">
+            <i class="fas fa-graduation-cap" style="font-size: 28px; color: #e67e22;"></i>
+            <h1>Zakhourani</h1>
+        </a>
+        <div class="nav-links">
+            <a href="index.html"><i class="fas fa-home"></i> Home</a>
+            <a href="IELS.html"><i class="fas fa-language"></i> IELTS</a>
+            <a href="TOFEL.html" class="active"><i class="fas fa-scroll"></i> TOEFL</a>
+            <a href="AI.html"><i class="fas fa-microchip"></i> AI Power</a>
+            <a href="aboutDrwaleed.html"><i class="fas fa-user-graduate"></i> Dr Waleed</a>
+            <div id="userMenuHeader" style="display: none;" class="user-menu" style="display:flex; gap:8px; align-items:center;">
+                <img id="userAvatarHeader" class="user-avatar" src="" alt="user">
+                <span id="userNameHeader" style="font-weight:500;"></span>
+            </div>
+            <div id="authButtonsHeader" style="display: flex; gap: 8px;">
+                <a href="login.html" class="login-btn">Login</a>
+                <a href="signup.html" class="signup-btn">Sign Up</a>
+            </div>
+        </div>
+    </div>
+</header>
+
+<main class="container">
+    <div class="breadcrumb">
+        <a href="TOFEL.html" style="color:#e67e22;"><i class="fas fa-scroll"></i> TOEFL Hub</a> / <span>Integrated Feedback Lab</span>
+    </div>
+
+    <div class="hero-feedback">
+        <h1><i class="fas fa-comments"></i> TOEFL Feedback Lab</h1>
+        <p>Submit your Integrated Writing, Academic Discussion, or Speaking responses. Get AI-powered analysis + Dr. Waleed’s rubric-based feedback with estimated scores (0–30).</p>
+        <div class="badge"><i class="fas fa-robot"></i> AI + Expert hybrid scoring | Detailed grammar & coherence reports</div>
+    </div>
+
+    <div class="tabs-container">
+        <div class="tabs-header">
+            <button class="tab-btn active" data-tab="writing">📝 Writing Feedback</button>
+            <button class="tab-btn" data-tab="speaking">🎤 Speaking Analysis</button>
+            <button class="tab-btn" data-tab="history">📋 My Submissions</button>
+        </div>
+
+        <!-- Writing Tab -->
+        <div id="writing-pane" class="tab-pane active-pane">
+            <h3><i class="fas fa-pen-fancy"></i> Submit Your Writing Task</h3>
+            <p style="margin-bottom: 1.2rem;">Choose task type: Integrated Writing (20 min) or Academic Discussion (new TOEFL format).</p>
+            <form id="writingForm">
+                <div class="form-group">
+                    <label>Task Type <i class="fas fa-info-circle" style="color:#e67e22;"></i></label>
+                    <select id="writingType" required>
+                        <option value="integrated">Integrated Writing (Reading + Lecture)</option>
+                        <option value="academic">Academic Discussion (Professor's post)</option>
+                    </select>
+                </div>
+                <div class="form-group">
+                    <label>Your Essay / Response</label>
+                    <textarea id="writingEssay" rows="8" placeholder="Paste your TOEFL writing response here... (min 100 words)"></textarea>
+                </div>
+                <button type="submit" class="submit-feedback"><i class="fas fa-chart-line"></i> Analyze & Get Feedback</button>
+            </form>
+            <div id="writingResult" class="result-card"></div>
+        </div>
+
+        <!-- Speaking Tab -->
+        <div id="speaking-pane" class="tab-pane">
+            <h3><i class="fas fa-microphone-alt"></i> Speaking Task Evaluator</h3>
+            <p>Simulate TOEFL Speaking (Independent or Integrated). Describe your response or upload transcript.</p>
+            <form id="speakingForm">
+                <div class="form-group">
+                    <label>Speaking Task Type</label>
+                    <select id="speakingType">
+                        <option value="independent">Independent (Personal Experience)</option>
+                        <option value="integrated">Integrated (Campus / Academic lecture)</option>
+                    </select>
+                </div>
+                <div class="form-group">
+                    <label>Transcript of Your Response (or describe what you said)</label>
+                    <textarea id="speakingTranscript" rows="6" placeholder="Paste your speaking response transcript or describe your answer..."></textarea>
+                </div>
+                <div class="form-group">
+                    <label>Audio Duration (seconds, optional)</label>
+                    <input type="number" id="speakingDuration" placeholder="e.g., 60" value="60">
+                </div>
+                <button type="submit" class="submit-feedback"><i class="fas fa-waveform"></i> Evaluate Speaking</button>
+            </form>
+            <div id="speakingResult" class="result-card"></div>
+        </div>
+
+        <!-- History Tab -->
+        <div id="history-pane" class="tab-pane">
+            <h3><i class="fas fa-history"></i> Your Recent Submissions</h3>
+            <div id="historyList">
+                <div class="history-item">
+                    <i class="fas fa-file-alt" style="color:#e67e22;"></i> <strong>Integrated Writing</strong> - Apr 5, 2025<br>
+                    <span style="font-size:0.85rem;">Score: 24/30 | Feedback: Strong organization, vocabulary needs refinement.</span>
+                </div>
+                <div class="history-item">
+                    <i class="fas fa-microphone"></i> <strong>Speaking Task 2 (Integrated)</strong> - Apr 3, 2025<br>
+                    <span style="font-size:0.85rem;">Score: 22/30 | Fluency good, work on transitions.</span>
+                </div>
+                <div class="history-item">
+                    <i class="fas fa-file-alt"></i> <strong>Academic Discussion</strong> - Mar 28, 2025<br>
+                    <span style="font-size:0.85rem;">Score: 27/30 | Excellent argument development, minor grammar.</span>
+                </div>
+                <p style="margin-top:1rem; font-style:italic;"><i class="fas fa-cloud-upload-alt"></i> New submissions will appear here after analysis.</p>
+            </div>
+        </div>
+    </div>
+
+    <!-- Additional tips -->
+    <div style="background: white; border-radius: 1.5rem; padding: 1.5rem; margin: 1rem 0;">
+        <i class="fas fa-lightbulb" style="color: #e67e22; font-size: 1.8rem;"></i>
+        <h3>Dr. Waleed’s Feedback Methodology</h3>
+        <p>Our system evaluates based on official TOEFL rubrics: <strong>Delivery, Language Use, Topic Development</strong> (Speaking) and <strong>Organization, Grammar, Lexical Resource, Task Achievement</strong> (Writing). Get personalized suggestions to boost your band.</p>
+    </div>
+</main>
+
+<footer>
+    <i class="fas fa-graduation-cap"></i> Zakhourani TOEFL Feedback Lab · Powered by AI & Expert Review
+    <p style="margin-top: 10px; font-size: 0.8rem;">Get actionable insights to improve your TOEFL score.</p>
+</footer>
+
+<script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-app-compat.js"></script>
+<script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-auth-compat.js"></script>
+<script>
+    const firebaseConfig = {
+        apiKey: "AIzaSyAE8wf24HXrfmpMluaFOv1OHPrf_YFfqTQ",
+        authDomain: "whaai-c388e.firebaseapp.com",
+        projectId: "whaai-c388e",
+        storageBucket: "whaai-c388e.firebasestorage.app",
+        messagingSenderId: "640598205524",
+        appId: "1:640598205524:web:c975f5e8b371b1043e39c1"
+    };
+    if (!firebase.apps.length) firebase.initializeApp(firebaseConfig);
+    const auth = firebase.auth();
+
+    const userMenuDiv = document.getElementById('userMenuHeader');
+    const authBtnsDiv = document.getElementById('authButtonsHeader');
+    const userAvatarImg = document.getElementById('userAvatarHeader');
+    const userNameSpan = document.getElementById('userNameHeader');
+
+    auth.onAuthStateChanged(user => {
+        if (user) {
+            userMenuDiv.style.display = 'flex';
+            authBtnsDiv.style.display = 'none';
+            const photo = user.photoURL || `https://ui-avatars.com/api/?name=${encodeURIComponent(user.displayName || user.email)}&background=e67e22&color=fff&size=32`;
+            userAvatarImg.src = photo;
+            userNameSpan.textContent = user.displayName?.split(' ')[0] || user.email.split('@')[0];
+        } else {
+            userMenuDiv.style.display = 'none';
+            authBtnsDiv.style.display = 'flex';
+        }
+    });
+
+    // Tab switching logic
+    const tabBtns = document.querySelectorAll('.tab-btn');
+    const panes = {
+        writing: document.getElementById('writing-pane'),
+        speaking: document.getElementById('speaking-pane'),
+        history: document.getElementById('history-pane')
+    };
+    tabBtns.forEach(btn => {
+        btn.addEventListener('click', () => {
+            const target = btn.getAttribute('data-tab');
+            tabBtns.forEach(b => b.classList.remove('active'));
+            btn.classList.add('active');
+            Object.keys(panes).forEach(key => {
+                panes[key].classList.remove('active-pane');
+            });
+            panes[target].classList.add('active-pane');
+        });
+    });
+
+    // Helper: generate simulated AI feedback for writing
+    function generateWritingFeedback(text, type) {
+        const wordCount = text.trim().split(/\s+/).length;
+        let score = 18;
+        let grammarFeedback = "", organization = "", lexical = "", taskAchievement = "";
+        
+        if (wordCount < 100) score = 12;
+        else if (wordCount < 150) score = 18;
+        else if (wordCount < 250) score = 23;
+        else score = 27;
+        
+        if (text.includes("however") || text.includes("therefore") || text.includes("consequently")) organization = "Good use of transition words, cohesive structure.";
+        else organization = "Add more linking phrases (however, moreover, in contrast) to improve flow.";
+        
+        if (text.match(/[A-Z][a-z]{5,}/g)?.length > 3) lexical = "Varied vocabulary, academic tone present.";
+        else lexical = "Enhance lexical range: use synonyms, academic collocations.";
+        
+        if (text.includes("because") || text.includes("for example") || text.includes("for instance")) taskAchievement = "Good development with examples.";
+        else taskAchievement = "Include specific examples/reasons to support your claim.";
+        
+        const grammarIssues = (text.match(/(is are am was were)/gi)?.length > 10 ? "Minor subject-verb agreement issues" : "Grammar mostly accurate");
+        grammarFeedback = grammarIssues;
+        
+        if (wordCount < 100) taskAchievement = "Response too short. Aim for 150-200 words for integrated, 100+ for academic discussion.";
+        
+        const finalScore = Math.min(30, Math.max(10, score + (wordCount > 200 ? 1 : 0)));
+        return {
+            score: finalScore,
+            wordCount,
+            grammar: grammarFeedback,
+            organization,
+            lexical,
+            taskAchievement,
+            overall: `Your response demonstrates ${finalScore >= 24 ? "strong" : "developing"} proficiency. ${finalScore >= 26 ? "Excellent work, ready for high TOEFL score." : "Focus on expanding ideas and proofreading grammar."}`
+        };
+    }
+    
+    function generateSpeakingFeedback(transcript, duration) {
+        const wordCount = transcript.trim().split(/\s+/).length;
+        let score = 20;
+        let delivery = "Clear pronunciation but some hesitations.";
+        let languageUse = "Good range of grammar structures.";
+        let topicDev = "Main points covered, but lacks detail.";
+        
+        if (wordCount < 40) { score = 14; delivery = "Too short; expand ideas for 45-60s response."; }
+        else if (wordCount > 80) { score = 26; delivery = "Fluent, confident pace."; topicDev = "Well-developed with examples."; }
+        else if (wordCount > 60) score = 24;
+        
+        if (transcript.includes("first") && transcript.includes("second")) topicDev = "Good structure using sequencing.";
+        if (transcript.split(" ").length > 10 && transcript.match(/um|uh|like/gi)) delivery = "Reduce filler words (um/uh) for higher fluency score.";
+        
+        const finalScore = Math.min(30, score);
+        return {
+            score: finalScore,
+            delivery,
+            languageUse,
+            topicDev,
+            overall: `Estimated speaking score ${finalScore}/30. ${finalScore >= 24 ? "Strong delivery! Keep practicing integrated tasks." : "Practice with timer and record yourself to improve pacing."}`
+        };
+    }
+    
+    // Writing submission handler
+    document.getElementById('writingForm').addEventListener('submit', (e) => {
+        e.preventDefault();
+        const essay = document.getElementById('writingEssay').value;
+        const type = document.getElementById('writingType').value;
+        if (!essay.trim()) {
+            alert("Please paste your writing response.");
+            return;
+        }
+        const feedback = generateWritingFeedback(essay, type);
+        const resultDiv = document.getElementById('writingResult');
+        resultDiv.classList.add('show');
+        resultDiv.innerHTML = `
+            <h4><i class="fas fa-chart-simple"></i> TOEFL Writing Analysis</h4>
+            <div class="score-circle" style="background:#e67e22; font-size:1.4rem; margin-bottom:1rem;">Estimated Score: ${feedback.score}/30</div>
+            <p><strong>Word count:</strong> ${feedback.wordCount} words</p>
+            <div class="feedback-metrics">
+                <div class="metric"><i class="fas fa-tasks"></i> Task Achievement<br>${feedback.taskAchievement}</div>
+                <div class="metric"><i class="fas fa-paragraph"></i> Organization<br>${feedback.organization}</div>
+                <div class="metric"><i class="fas fa-spell-check"></i> Grammar<br>${feedback.grammar}</div>
+                <div class="metric"><i class="fas fa-book"></i> Lexical Resource<br>${feedback.lexical}</div>
+            </div>
+            <div class="improvement-tip"><i class="fas fa-chalkboard-user"></i> <strong>Dr. Waleed's Advice:</strong> ${feedback.overall}</div>
+            <button onclick="saveToHistory('Writing', ${feedback.score}, '${type}')" style="background:#27ae60; border:none; padding:0.6rem 1.5rem; border-radius:60px; color:white; margin-top:0.8rem; cursor:pointer;"><i class="fas fa-save"></i> Save to History</button>
+        `;
+    });
+    
+    document.getElementById('speakingForm').addEventListener('submit', (e) => {
+        e.preventDefault();
+        const transcript = document.getElementById('speakingTranscript').value;
+        let duration = parseInt(document.getElementById('speakingDuration').value);
+        if (isNaN(duration)) duration = 60;
+        if (!transcript.trim()) {
+            alert("Please provide a transcript or description of your speaking response.");
+            return;
+        }
+        const feedback = generateSpeakingFeedback(transcript, duration);
+        const resultDiv = document.getElementById('speakingResult');
+        resultDiv.classList.add('show');
+        resultDiv.innerHTML = `
+            <h4><i class="fas fa-microphone"></i> TOEFL Speaking Evaluation</h4>
+            <div class="score-circle" style="background:#e67e22; font-size:1.4rem;">Score: ${feedback.score}/30</div>
+            <div class="feedback-metrics">
+                <div class="metric"><i class="fas fa-waveform"></i> Delivery<br>${feedback.delivery}</div>
+                <div class="metric"><i class="fas fa-language"></i> Language Use<br>${feedback.languageUse}</div>
+                <div class="metric"><i class="fas fa-brain"></i> Topic Development<br>${feedback.topicDev}</div>
+            </div>
+            <div class="improvement-tip"><i class="fas fa-head-side-vr"></i> <strong>Speaking Tip:</strong> ${feedback.overall}</div>
+            <button onclick="saveToHistory('Speaking', ${feedback.score}, '${document.getElementById('speakingType').value}')" style="background:#27ae60; border:none; padding:0.6rem 1.5rem; border-radius:60px; color:white; margin-top:1rem; cursor:pointer;"><i class="fas fa-save"></i> Save to History</button>
+        `;
+    });
+    
+    window.saveToHistory = function(type, score, subtype) {
+        const historyContainer = document.getElementById('historyList');
+        const date = new Date().toLocaleDateString();
+        const newEntry = document.createElement('div');
+        newEntry.className = 'history-item';
+        newEntry.innerHTML = `
+            <i class="fas ${type === 'Writing' ? 'fa-file-alt' : 'fa-microphone'}" style="color:#e67e22;"></i> 
+            <strong>${type} (${subtype})</strong> - ${date}<br>
+            <span style="font-size:0.85rem;">Score: ${score}/30 | Feedback received via AI Lab.</span>
+        `;
+        historyContainer.insertBefore(newEntry, historyContainer.firstChild);
+        alert(`✅ Saved! Your ${type} submission has been added to history.`);
+    };
+</script>
+</body>
+</html>

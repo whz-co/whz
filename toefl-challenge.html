@@ -1,0 +1,821 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+    <title>TOEFL 7-Day Challenge · Intensive Prep | Zakhourani</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        :root {
+            --toefl-primary: #e67e22;
+            --toefl-dark: #d35400;
+            --toefl-light: #fff5e8;
+            --success: #27ae60;
+            --info: #3498db;
+            --warning: #f39c12;
+            --danger: #e74c3c;
+            --text-dark: #2c3e50;
+            --text-muted: #5a6e7c;
+            --border-light: #ffdec2;
+            --card-white: #ffffff;
+            --shadow-sm: 0 8px 20px rgba(0,0,0,0.05);
+            --shadow-md: 0 15px 35px rgba(230,126,34,0.12);
+            --gold: #f39c12;
+            --silver: #bdc3c7;
+            --bronze: #cd7f32;
+        }
+
+        body {
+            font-family: system-ui, 'Segoe UI', 'Inter', -apple-system, sans-serif;
+            background: linear-gradient(145deg, #fef8f0 0%, #fff3e8 100%);
+            color: var(--text-dark);
+            line-height: 1.5;
+        }
+
+        html {
+            font-size: 16px;
+        }
+        @media (max-width: 640px) {
+            html { font-size: 15px; }
+        }
+        @media (max-width: 480px) {
+            html { font-size: 14px; }
+        }
+
+        h1 { font-size: 2rem; font-weight: 800; letter-spacing: -0.01em; }
+        h2 { font-size: 1.6rem; font-weight: 700; margin: 0.75rem 0; }
+        h3 { font-size: 1.25rem; font-weight: 700; }
+        h4 { font-size: 1.1rem; font-weight: 600; }
+
+        .container {
+            max-width: 1300px;
+            margin: 0 auto;
+            padding: 0 1.5rem;
+        }
+
+        /* Header */
+        header {
+            background: white;
+            box-shadow: 0 2px 15px rgba(0,0,0,0.05);
+            padding: 0.8rem 1.5rem;
+            position: sticky;
+            top: 0;
+            z-index: 100;
+            backdrop-filter: blur(2px);
+            background: rgba(255,255,255,0.97);
+        }
+        .header-content {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            max-width: 1300px;
+            margin: 0 auto;
+            flex-wrap: wrap;
+            gap: 1rem;
+        }
+        .logo {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            text-decoration: none;
+        }
+        .logo h1 {
+            font-size: 1.6rem;
+            font-weight: 700;
+            color: #2c3e50;
+            margin: 0;
+        }
+        .nav-links {
+            display: flex;
+            gap: 0.7rem;
+            flex-wrap: wrap;
+            align-items: center;
+        }
+        .nav-links a {
+            text-decoration: none;
+            color: #2c3e50;
+            font-weight: 600;
+            padding: 0.45rem 1rem;
+            border-radius: 40px;
+            transition: 0.2s;
+            font-size: 0.85rem;
+            display: inline-flex;
+            align-items: center;
+            gap: 6px;
+        }
+        .nav-links a.active {
+            background: var(--toefl-primary);
+            color: white;
+        }
+        .login-btn, .signup-btn {
+            padding: 0.4rem 1.2rem;
+            border-radius: 40px;
+            font-weight: 600;
+            text-decoration: none;
+            font-size: 0.85rem;
+        }
+        .login-btn { background: #3498db; color: white; }
+        .signup-btn { background: #27ae60; color: white; }
+        .user-avatar {
+            width: 34px;
+            height: 34px;
+            border-radius: 50%;
+            object-fit: cover;
+            border: 2px solid var(--toefl-primary);
+        }
+
+        /* Breadcrumb */
+        .breadcrumb {
+            margin: 1.2rem 0 1rem;
+            font-size: 0.85rem;
+            color: #b97f44;
+        }
+
+        /* Hero Challenge Banner */
+        .challenge-hero {
+            background: linear-gradient(135deg, #e67e22 0%, #f39c12 50%, #e67e22 100%);
+            border-radius: 2rem;
+            padding: 2rem;
+            color: white;
+            margin-bottom: 2rem;
+            text-align: center;
+            position: relative;
+            overflow: hidden;
+        }
+        .challenge-hero::before {
+            content: "🔥";
+            font-size: 8rem;
+            position: absolute;
+            right: -20px;
+            bottom: -30px;
+            opacity: 0.1;
+        }
+        .challenge-badge {
+            background: rgba(255,255,255,0.2);
+            backdrop-filter: blur(4px);
+            display: inline-block;
+            padding: 0.5rem 1.5rem;
+            border-radius: 60px;
+            font-size: 0.9rem;
+            font-weight: 700;
+            margin-bottom: 1rem;
+        }
+        .progress-bar-container {
+            background: rgba(255,255,255,0.3);
+            border-radius: 60px;
+            height: 12px;
+            margin: 1.5rem 0;
+            overflow: hidden;
+        }
+        .progress-fill {
+            background: white;
+            height: 100%;
+            border-radius: 60px;
+            width: 0%;
+            transition: width 0.5s ease;
+        }
+
+        /* Stats Cards */
+        .stats-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
+            gap: 1rem;
+            margin-bottom: 2rem;
+        }
+        .stat-card {
+            background: white;
+            border-radius: 1.5rem;
+            padding: 1.2rem;
+            text-align: center;
+            box-shadow: var(--shadow-sm);
+        }
+        .stat-number {
+            font-size: 2rem;
+            font-weight: 800;
+            color: var(--toefl-primary);
+        }
+
+        /* Days Timeline */
+        .days-timeline {
+            display: flex;
+            overflow-x: auto;
+            gap: 0.8rem;
+            margin-bottom: 2rem;
+            padding-bottom: 0.5rem;
+        }
+        .day-tab {
+            background: white;
+            border: 2px solid var(--border-light);
+            border-radius: 1rem;
+            padding: 0.8rem 1.2rem;
+            min-width: 90px;
+            text-align: center;
+            cursor: pointer;
+            transition: 0.2s;
+        }
+        .day-tab.active {
+            background: var(--toefl-primary);
+            border-color: var(--toefl-primary);
+            color: white;
+        }
+        .day-tab.completed {
+            background: var(--success);
+            border-color: var(--success);
+            color: white;
+        }
+        .day-number {
+            font-weight: 800;
+            font-size: 1.2rem;
+        }
+
+        /* Daily Content Card */
+        .daily-content {
+            background: white;
+            border-radius: 2rem;
+            padding: 2rem;
+            box-shadow: var(--shadow-md);
+            margin-bottom: 2rem;
+            animation: fadeIn 0.3s ease;
+        }
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(10px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+        .day-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            flex-wrap: wrap;
+            margin-bottom: 1.5rem;
+            padding-bottom: 1rem;
+            border-bottom: 2px solid var(--border-light);
+        }
+        .day-title {
+            font-size: 1.8rem;
+            font-weight: 800;
+            color: var(--toefl-primary);
+        }
+        .task-list {
+            display: flex;
+            flex-direction: column;
+            gap: 1.2rem;
+            margin: 1.5rem 0;
+        }
+        .task-item {
+            background: #fef9f2;
+            border-radius: 1rem;
+            padding: 1.2rem;
+            border-left: 4px solid var(--toefl-primary);
+            transition: 0.2s;
+        }
+        .task-item.completed-task {
+            background: #e8f5e9;
+            border-left-color: var(--success);
+            opacity: 0.8;
+        }
+        .task-header {
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+            flex-wrap: wrap;
+            justify-content: space-between;
+        }
+        .task-name {
+            font-weight: 700;
+            font-size: 1.1rem;
+        }
+        .task-checkbox {
+            width: 24px;
+            height: 24px;
+            cursor: pointer;
+            accent-color: var(--success);
+        }
+        .task-desc {
+            margin-top: 0.5rem;
+            color: var(--text-muted);
+            font-size: 0.9rem;
+        }
+        .task-link {
+            display: inline-block;
+            margin-top: 0.5rem;
+            color: var(--toefl-primary);
+            text-decoration: none;
+            font-weight: 600;
+        }
+        .complete-day-btn {
+            background: var(--success);
+            color: white;
+            border: none;
+            padding: 0.8rem 2rem;
+            border-radius: 60px;
+            font-weight: 700;
+            cursor: pointer;
+            margin-top: 1.5rem;
+            width: 100%;
+            transition: 0.2s;
+        }
+        .complete-day-btn:disabled {
+            background: #95a5a6;
+            cursor: not-allowed;
+        }
+
+        /* Achievements Section */
+        .achievements-section {
+            background: white;
+            border-radius: 2rem;
+            padding: 1.5rem;
+            margin-top: 2rem;
+        }
+        .achievement-badge {
+            display: inline-flex;
+            align-items: center;
+            gap: 0.5rem;
+            background: #fef3e4;
+            padding: 0.5rem 1rem;
+            border-radius: 60px;
+            margin: 0.3rem;
+        }
+        .achievement-unlocked {
+            background: var(--gold);
+            color: white;
+        }
+
+        footer {
+            background: #1e2a36;
+            color: white;
+            padding: 2rem 1rem;
+            margin-top: 3rem;
+            text-align: center;
+            border-radius: 2rem 2rem 0 0;
+        }
+
+        @media (max-width: 680px) {
+            .daily-content { padding: 1.2rem; }
+            .day-title { font-size: 1.4rem; }
+        }
+    </style>
+</head>
+<body>
+
+<header>
+    <div class="header-content">
+        <a href="index.html" class="logo">
+            <i class="fas fa-graduation-cap" style="font-size: 28px; color: #e67e22;"></i>
+            <h1>Zakhourani</h1>
+        </a>
+        <div class="nav-links">
+            <a href="index.html"><i class="fas fa-home"></i> Home</a>
+            <a href="IELS.html"><i class="fas fa-language"></i> IELTS</a>
+            <a href="TOFEL.html" class="active"><i class="fas fa-scroll"></i> TOEFL</a>
+            <a href="AI.html"><i class="fas fa-microchip"></i> AI Power</a>
+            <a href="aboutDrwaleed.html"><i class="fas fa-user-graduate"></i> Dr Waleed</a>
+            <div id="userMenuHeader" style="display: none;" class="user-menu" style="display:flex; gap:8px; align-items:center;">
+                <img id="userAvatarHeader" class="user-avatar" src="" alt="user">
+                <span id="userNameHeader" style="font-weight:500;"></span>
+            </div>
+            <div id="authButtonsHeader" style="display: flex; gap: 8px;">
+                <a href="login.html" class="login-btn">Login</a>
+                <a href="signup.html" class="signup-btn">Sign Up</a>
+            </div>
+        </div>
+    </div>
+</header>
+
+<main class="container">
+    <div class="breadcrumb">
+        <a href="TOFEL.html" style="color:#e67e22;"><i class="fas fa-scroll"></i> TOEFL Hub</a> / <span>7-Day Intensive Challenge</span>
+    </div>
+
+    <div class="challenge-hero">
+        <div class="challenge-badge">
+            <i class="fas fa-trophy"></i> Dr. Waleed's Signature Challenge
+        </div>
+        <h1><i class="fas fa-bolt"></i> TOEFL 7-Day Intensive Challenge</h1>
+        <p>Complete daily integrated tasks: reading passages, listening sets, speaking drills, and writing prompts. Track progress & unlock certificates.</p>
+        <div class="progress-bar-container">
+            <div class="progress-fill" id="overallProgress"></div>
+        </div>
+        <p id="progressText">0/7 days completed</p>
+    </div>
+
+    <div class="stats-grid">
+        <div class="stat-card">
+            <div class="stat-number" id="completedDays">0</div>
+            <div>Days Completed</div>
+        </div>
+        <div class="stat-card">
+            <div class="stat-number" id="totalTasks">0</div>
+            <div>Tasks Completed</div>
+        </div>
+        <div class="stat-card">
+            <div class="stat-number" id="streakDays">0</div>
+            <div>Day Streak 🔥</div>
+        </div>
+        <div class="stat-card">
+            <div class="stat-number" id="estimatedScore">0</div>
+            <div>Est. Score (0-120)</div>
+        </div>
+    </div>
+
+    <div class="days-timeline" id="daysTimeline"></div>
+
+    <div id="dailyContent"></div>
+
+    <div class="achievements-section" id="achievementsSection">
+        <h3><i class="fas fa-medal"></i> Achievements Unlocked</h3>
+        <div id="achievementsList"></div>
+    </div>
+</main>
+
+<footer>
+    <i class="fas fa-graduation-cap"></i> Zakhourani TOEFL Challenge · Complete all 7 days to earn your certificate
+    <p style="margin-top: 10px; font-size: 0.8rem;">Each day builds essential skills for TOEFL success.</p>
+</footer>
+
+<script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-app-compat.js"></script>
+<script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-auth-compat.js"></script>
+<script>
+    const firebaseConfig = {
+        apiKey: "AIzaSyAE8wf24HXrfmpMluaFOv1OHPrf_YFfqTQ",
+        authDomain: "whaai-c388e.firebaseapp.com",
+        projectId: "whaai-c388e",
+        storageBucket: "whaai-c388e.firebasestorage.app",
+        messagingSenderId: "640598205524",
+        appId: "1:640598205524:web:c975f5e8b371b1043e39c1"
+    };
+    if (!firebase.apps.length) firebase.initializeApp(firebaseConfig);
+    const auth = firebase.auth();
+
+    const userMenuDiv = document.getElementById('userMenuHeader');
+    const authBtnsDiv = document.getElementById('authButtonsHeader');
+    const userAvatarImg = document.getElementById('userAvatarHeader');
+    const userNameSpan = document.getElementById('userNameHeader');
+
+    auth.onAuthStateChanged(user => {
+        if (user) {
+            userMenuDiv.style.display = 'flex';
+            authBtnsDiv.style.display = 'none';
+            const photo = user.photoURL || `https://ui-avatars.com/api/?name=${encodeURIComponent(user.displayName || user.email)}&background=e67e22&color=fff&size=32`;
+            userAvatarImg.src = photo;
+            userNameSpan.textContent = user.displayName?.split(' ')[0] || user.email.split('@')[0];
+            loadUserProgress();
+        } else {
+            userMenuDiv.style.display = 'none';
+            authBtnsDiv.style.display = 'flex';
+            // Show demo progress for non-logged users
+            loadDemoProgress();
+        }
+    });
+
+    // Challenge Days Data
+    const challengeDays = [
+        {
+            day: 1,
+            title: "Reading Foundations",
+            theme: "📖 Academic Texts",
+            tasks: [
+                { id: "d1t1", name: "Complete 1 Academic Reading Passage", description: "Read a TOEFL-style passage and answer 10 questions. Focus on main idea and vocabulary in context.", link: "toefl-reading.html", skill: "Reading" },
+                { id: "d1t2", name: "Learn 20 Academic Vocabulary Words", description: "Study high-frequency TOEFL words: analyze, concept, significant, theory, evidence, etc.", skill: "Vocabulary" },
+                { id: "d1t3", name: "Reading Strategy: Skimming Practice", description: "Practice skimming 3 passages in 5 minutes each. Identify thesis statements.", skill: "Reading" }
+            ]
+        },
+        {
+            day: 2,
+            title: "Listening Immersion",
+            theme: "🎧 Academic Lectures",
+            tasks: [
+                { id: "d2t1", name: "Complete 2 Academic Lectures", description: "Listen to lectures on biology and history. Take structured notes.", link: "toefl-listening.html", skill: "Listening" },
+                { id: "d2t2", name: "Campus Conversation Practice", description: "Listen to a student-faculty conversation and answer 5 questions.", link: "toefl-listening.html", skill: "Listening" },
+                { id: "d2t3", name: "Note-Taking Method", description: "Practice Cornell note-taking system for lectures.", skill: "Strategy" }
+            ]
+        },
+        {
+            day: 3,
+            title: "Speaking Foundations",
+            theme: "🎤 Independent Task",
+            tasks: [
+                { id: "d3t1", name: "Task 1: Personal Experience", description: "Record response to a personal preference question. Aim for 45 seconds.", link: "toefl-speaking.html", skill: "Speaking" },
+                { id: "d3t2", name: "Fluency Drill", description: "Record yourself describing a photo for 60 seconds without pauses.", skill: "Speaking" },
+                { id: "d3t3", name: "Pronunciation Practice", description: "Practice 10 commonly mispronounced academic words.", skill: "Pronunciation" }
+            ]
+        },
+        {
+            day: 4,
+            title: "Integrated Speaking",
+            theme: "📚 Campus & Academic Tasks",
+            tasks: [
+                { id: "d4t1", name: "Task 2: Campus Announcement", description: "Practice integrated speaking with reading + conversation.", link: "toefl-speaking.html", skill: "Speaking" },
+                { id: "d4t2", name: "Task 3: Academic Lecture", description: "Summarize a lecture using reading passage information.", link: "toefl-speaking.html", skill: "Speaking" },
+                { id: "d4t3", name: "Task 4: Lecture Summary", description: "Listen to lecture and summarize key points in 60 seconds.", skill: "Speaking" }
+            ]
+        },
+        {
+            day: 5,
+            title: "Writing Workshop",
+            theme: "✍️ Integrated & Academic Discussion",
+            tasks: [
+                { id: "d5t1", name: "Integrated Writing Practice", description: "Write 150-225 words summarizing reading and lecture.", link: "toefl-feedback.html", skill: "Writing" },
+                { id: "d5t2", name: "Academic Discussion Response", description: "Respond to professor's post with 100+ words.", link: "toefl-feedback.html", skill: "Writing" },
+                { id: "d5t3", name: "Grammar Review", description: "Review subject-verb agreement and sentence structure.", skill: "Grammar" }
+            ]
+        },
+        {
+            day: 6,
+            title: "Full Section Practice",
+            theme: "⚡ Mixed Skills",
+            tasks: [
+                { id: "d6t1", name: "Reading + Listening Combo", description: "Complete 1 reading passage and 1 lecture with questions.", link: "toefl-reading.html", skill: "Integrated" },
+                { id: "d6t2", name: "Speaking + Writing Integration", description: "Practice a task that requires both skills.", skill: "Integrated" },
+                { id: "d6t3", name: "Timed Practice Session", description: "Complete all 4 sections in 2 hours (simulated).", skill: "Test Simulation" }
+            ]
+        },
+        {
+            day: 7,
+            title: "Full Mock Test & Review",
+            theme: "🏆 Final Assessment",
+            tasks: [
+                { id: "d7t1", name: "Complete Full TOEFL Mock Test", description: "Take a complete practice test with all 4 sections.", link: "toefl-practice.html", skill: "Test Simulation" },
+                { id: "d7t2", name: "Review Mistakes & Weaknesses", description: "Analyze errors and create improvement plan.", skill: "Review" },
+                { id: "d7t3", name: "Claim Your Certificate", description: "Complete all tasks to unlock your completion certificate!", skill: "Achievement" }
+            ]
+        }
+    ];
+
+    let userProgress = {
+        completedDays: [],
+        taskStatus: {},
+        lastUpdated: null
+    };
+
+    function loadUserProgress() {
+        const saved = localStorage.getItem('toefl_challenge_progress');
+        if (saved) {
+            userProgress = JSON.parse(saved);
+        } else {
+            userProgress = { completedDays: [], taskStatus: {}, lastUpdated: new Date().toISOString() };
+        }
+        updateAllUI();
+    }
+
+    function loadDemoProgress() {
+        // Demo: allow progress even without login
+        const saved = localStorage.getItem('toefl_challenge_progress_demo');
+        if (saved) {
+            userProgress = JSON.parse(saved);
+        } else {
+            userProgress = { completedDays: [], taskStatus: {}, lastUpdated: new Date().toISOString() };
+        }
+        updateAllUI();
+    }
+
+    function saveProgress() {
+        if (auth.currentUser) {
+            localStorage.setItem('toefl_challenge_progress', JSON.stringify(userProgress));
+        } else {
+            localStorage.setItem('toefl_challenge_progress_demo', JSON.stringify(userProgress));
+        }
+        updateAllUI();
+    }
+
+    function isTaskCompleted(dayIndex, taskId) {
+        return userProgress.taskStatus[`day${dayIndex+1}_${taskId}`] === true;
+    }
+
+    function toggleTask(dayIndex, taskId) {
+        const key = `day${dayIndex+1}_${taskId}`;
+        if (userProgress.taskStatus[key]) {
+            userProgress.taskStatus[key] = false;
+        } else {
+            userProgress.taskStatus[key] = true;
+        }
+        
+        // Check if all tasks for this day are completed
+        const dayTasks = challengeDays[dayIndex].tasks;
+        const allCompleted = dayTasks.every(task => userProgress.taskStatus[`day${dayIndex+1}_${task.id}`] === true);
+        
+        const dayCompleted = userProgress.completedDays.includes(dayIndex);
+        if (allCompleted && !dayCompleted) {
+            userProgress.completedDays.push(dayIndex);
+        } else if (!allCompleted && dayCompleted) {
+            userProgress.completedDays = userProgress.completedDays.filter(d => d !== dayIndex);
+        }
+        
+        saveProgress();
+    }
+
+    function isDayCompleted(dayIndex) {
+        return userProgress.completedDays.includes(dayIndex);
+    }
+
+    function calculateStats() {
+        const completedDays = userProgress.completedDays.length;
+        let totalTasksCompleted = 0;
+        challengeDays.forEach((day, idx) => {
+            day.tasks.forEach(task => {
+                if (userProgress.taskStatus[`day${idx+1}_${task.id}`]) totalTasksCompleted++;
+            });
+        });
+        const totalTasks = challengeDays.reduce((sum, day) => sum + day.tasks.length, 0);
+        const streak = calculateStreak();
+        const estimatedScore = Math.min(120, Math.floor(60 + (completedDays / 7) * 60));
+        
+        return { completedDays, totalTasksCompleted, totalTasks, streak, estimatedScore };
+    }
+
+    function calculateStreak() {
+        // Simple streak: consecutive completed days from day 1
+        let streak = 0;
+        for (let i = 0; i < challengeDays.length; i++) {
+            if (userProgress.completedDays.includes(i)) streak++;
+            else break;
+        }
+        return streak;
+    }
+
+    function renderDaysTimeline() {
+        const timeline = document.getElementById('daysTimeline');
+        timeline.innerHTML = challengeDays.map((day, idx) => `
+            <div class="day-tab ${userProgress.completedDays.includes(idx) ? 'completed' : ''} ${currentDay === idx ? 'active' : ''}" data-day="${idx}">
+                <div class="day-number">Day ${day.day}</div>
+                <div style="font-size:0.7rem;">${day.title.substring(0, 12)}</div>
+            </div>
+        `).join('');
+        
+        document.querySelectorAll('.day-tab').forEach(tab => {
+            tab.addEventListener('click', () => {
+                const day = parseInt(tab.getAttribute('data-day'));
+                setCurrentDay(day);
+            });
+        });
+    }
+
+    let currentDay = 0;
+
+    function setCurrentDay(day) {
+        currentDay = day;
+        renderDailyContent();
+        renderDaysTimeline();
+    }
+
+    function renderDailyContent() {
+        const day = challengeDays[currentDay];
+        const container = document.getElementById('dailyContent');
+        const dayCompleted = isDayCompleted(currentDay);
+        
+        container.innerHTML = `
+            <div class="daily-content">
+                <div class="day-header">
+                    <div>
+                        <span class="day-title">Day ${day.day}: ${day.title}</span>
+                        <p style="color: #666; margin-top: 0.3rem;">${day.theme}</p>
+                    </div>
+                    ${dayCompleted ? '<span style="background: #27ae60; color: white; padding: 0.3rem 1rem; border-radius: 60px;"><i class="fas fa-check-circle"></i> Day Completed!</span>' : ''}
+                </div>
+                
+                <div class="task-list">
+                    ${day.tasks.map(task => `
+                        <div class="task-item ${isTaskCompleted(currentDay, task.id) ? 'completed-task' : ''}">
+                            <div class="task-header">
+                                <div class="task-name">
+                                    <i class="fas ${getSkillIcon(task.skill)}"></i> ${task.name}
+                                </div>
+                                <input type="checkbox" class="task-checkbox" data-task-id="${task.id}" ${isTaskCompleted(currentDay, task.id) ? 'checked' : ''}>
+                            </div>
+                            <div class="task-desc">${task.description}</div>
+                            ${task.link ? `<a href="${task.link}" class="task-link" target="_blank"><i class="fas fa-external-link-alt"></i> Start Practice →</a>` : ''}
+                        </div>
+                    `).join('')}
+                </div>
+                
+                <button class="complete-day-btn" id="completeDayBtn" ${dayCompleted ? 'disabled' : ''}>
+                    ${dayCompleted ? '✓ Day Completed!' : '🏆 Mark Day as Complete (All Tasks)'}
+                </button>
+            </div>
+        `;
+        
+        // Add event listeners for checkboxes
+        document.querySelectorAll('.task-checkbox').forEach(checkbox => {
+            checkbox.addEventListener('change', (e) => {
+                const taskId = checkbox.getAttribute('data-task-id');
+                toggleTask(currentDay, taskId);
+                renderDailyContent();
+                updateStats();
+                renderAchievements();
+            });
+        });
+        
+        const completeDayBtn = document.getElementById('completeDayBtn');
+        if (completeDayBtn && !dayCompleted) {
+            completeDayBtn.addEventListener('click', () => {
+                // Check if all tasks are completed
+                const allTasksCompleted = day.tasks.every(task => isTaskCompleted(currentDay, task.id));
+                if (allTasksCompleted) {
+                    if (!userProgress.completedDays.includes(currentDay)) {
+                        userProgress.completedDays.push(currentDay);
+                        saveProgress();
+                        renderDailyContent();
+                        updateAllUI();
+                    }
+                } else {
+                    alert("Please complete all tasks for this day before marking it complete!");
+                }
+            });
+        }
+    }
+
+    function getSkillIcon(skill) {
+        const icons = {
+            Reading: 'fa-book',
+            Listening: 'fa-headphones',
+            Speaking: 'fa-microphone',
+            Writing: 'fa-pen',
+            Vocabulary: 'fa-spell-check',
+            Grammar: 'fa-language',
+            Strategy: 'fa-lightbulb',
+            Pronunciation: 'fa-volume-up',
+            Integrated: 'fa-puzzle-piece',
+            'Test Simulation': 'fa-clock',
+            Review: 'fa-chart-line',
+            Achievement: 'fa-trophy'
+        };
+        return icons[skill] || 'fa-check-circle';
+    }
+
+    function updateStats() {
+        const stats = calculateStats();
+        document.getElementById('completedDays').innerText = stats.completedDays;
+        document.getElementById('totalTasks').innerText = `${stats.totalTasksCompleted}/${stats.totalTasks}`;
+        document.getElementById('streakDays').innerText = stats.streak;
+        document.getElementById('estimatedScore').innerText = stats.estimatedScore;
+        
+        const progressPercent = (stats.completedDays / 7) * 100;
+        document.getElementById('overallProgress').style.width = `${progressPercent}%`;
+        document.getElementById('progressText').innerHTML = `${stats.completedDays}/7 days completed • ${Math.round(progressPercent)}% mastery`;
+    }
+
+    function renderAchievements() {
+        const stats = calculateStats();
+        const achievements = [];
+        
+        if (stats.completedDays >= 1) achievements.push({ name: "Day 1 Warrior", icon: "🌅", unlocked: true });
+        if (stats.completedDays >= 3) achievements.push({ name: "Halfway Hero", icon: "⚡", unlocked: true });
+        if (stats.completedDays >= 5) achievements.push({ name: "Almost There!", icon: "🔥", unlocked: true });
+        if (stats.completedDays >= 7) achievements.push({ name: "TOEFL Champion", icon: "🏆", unlocked: true });
+        if (stats.totalTasksCompleted >= 10) achievements.push({ name: "Task Master", icon: "📋", unlocked: true });
+        if (stats.totalTasksCompleted >= 21) achievements.push({ name: "Completionist", icon: "💎", unlocked: true });
+        if (stats.streak === 7) achievements.push({ name: "7-Day Streak", icon: "⚡", unlocked: true });
+        
+        const container = document.getElementById('achievementsList');
+        if (achievements.length === 0) {
+            container.innerHTML = '<p style="color: #666;">Complete tasks to unlock achievements!</p>';
+        } else {
+            container.innerHTML = achievements.map(ach => `
+                <span class="achievement-badge achievement-unlocked">
+                    ${ach.icon} ${ach.name}
+                </span>
+            `).join('');
+        }
+        
+        // Show certificate for full completion
+        if (stats.completedDays === 7) {
+            const certHtml = `
+                <div style="margin-top: 1rem; padding: 1rem; background: linear-gradient(135deg, #f39c12, #e67e22); border-radius: 1rem; text-align: center; color: white;">
+                    <i class="fas fa-certificate" style="font-size: 2rem;"></i>
+                    <h3>🎉 Congratulations! You've Completed the TOEFL Challenge! 🎉</h3>
+                    <p>Download your certificate of completion below.</p>
+                    <button id="downloadCertBtn" style="background: white; color: #e67e22; border: none; padding: 0.5rem 1.5rem; border-radius: 50px; margin-top: 0.5rem; cursor: pointer; font-weight: 700;">
+                        <i class="fas fa-download"></i> Download Certificate
+                    </button>
+                </div>
+            `;
+            if (!document.getElementById('certificateBanner')) {
+                const certDiv = document.createElement('div');
+                certDiv.id = 'certificateBanner';
+                certDiv.innerHTML = certHtml;
+                document.getElementById('achievementsSection').appendChild(certDiv);
+                
+                document.getElementById('downloadCertBtn')?.addEventListener('click', () => {
+                    alert("🎓 TOEFL CHALLENGE CERTIFICATE\n\nCongratulations on completing Dr. Waleed's 7-Day Intensive TOEFL Challenge!\n\nName: " + (auth.currentUser?.displayName || "TOEFL Warrior") + "\nDate: " + new Date().toLocaleDateString() + "\n\nScore Estimate: " + stats.estimatedScore + "/120\n\nThis certificate recognizes your dedication to TOEFL preparation.\n\n— Zakhourani Learning Hub");
+                });
+            }
+        }
+    }
+
+    function updateAllUI() {
+        updateStats();
+        renderDaysTimeline();
+        renderDailyContent();
+        renderAchievements();
+    }
+
+    // Initialize
+    setCurrentDay(0);
+</script>
+</body>
+</html>

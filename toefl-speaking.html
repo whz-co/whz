@@ -1,0 +1,835 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+    <title>TOEFL Speaking Studio · Fluency & Pronunciation Practice | Zakhourani</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        :root {
+            --toefl-primary: #e67e22;
+            --toefl-dark: #d35400;
+            --toefl-light: #fff5e8;
+            --success: #27ae60;
+            --info: #3498db;
+            --warning: #f39c12;
+            --danger: #e74c3c;
+            --text-dark: #2c3e50;
+            --text-muted: #5a6e7c;
+            --border-light: #ffdec2;
+            --card-white: #ffffff;
+            --shadow-sm: 0 8px 20px rgba(0,0,0,0.05);
+            --shadow-md: 0 15px 35px rgba(230,126,34,0.12);
+        }
+
+        body {
+            font-family: system-ui, 'Segoe UI', 'Inter', -apple-system, sans-serif;
+            background: linear-gradient(145deg, #fef8f0 0%, #fff3e8 100%);
+            color: var(--text-dark);
+            line-height: 1.5;
+        }
+
+        html {
+            font-size: 16px;
+        }
+        @media (max-width: 640px) {
+            html { font-size: 15px; }
+        }
+        @media (max-width: 480px) {
+            html { font-size: 14px; }
+        }
+
+        h1 { font-size: 2rem; font-weight: 800; letter-spacing: -0.01em; }
+        h2 { font-size: 1.6rem; font-weight: 700; margin: 0.75rem 0; }
+        h3 { font-size: 1.25rem; font-weight: 700; }
+        h4 { font-size: 1.1rem; font-weight: 600; }
+
+        .container {
+            max-width: 1300px;
+            margin: 0 auto;
+            padding: 0 1.5rem;
+        }
+
+        /* Header */
+        header {
+            background: white;
+            box-shadow: 0 2px 15px rgba(0,0,0,0.05);
+            padding: 0.8rem 1.5rem;
+            position: sticky;
+            top: 0;
+            z-index: 100;
+            backdrop-filter: blur(2px);
+            background: rgba(255,255,255,0.97);
+        }
+        .header-content {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            max-width: 1300px;
+            margin: 0 auto;
+            flex-wrap: wrap;
+            gap: 1rem;
+        }
+        .logo {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            text-decoration: none;
+        }
+        .logo h1 {
+            font-size: 1.6rem;
+            font-weight: 700;
+            color: #2c3e50;
+            margin: 0;
+        }
+        .nav-links {
+            display: flex;
+            gap: 0.7rem;
+            flex-wrap: wrap;
+            align-items: center;
+        }
+        .nav-links a {
+            text-decoration: none;
+            color: #2c3e50;
+            font-weight: 600;
+            padding: 0.45rem 1rem;
+            border-radius: 40px;
+            transition: 0.2s;
+            font-size: 0.85rem;
+            display: inline-flex;
+            align-items: center;
+            gap: 6px;
+        }
+        .nav-links a.active {
+            background: var(--toefl-primary);
+            color: white;
+        }
+        .login-btn, .signup-btn {
+            padding: 0.4rem 1.2rem;
+            border-radius: 40px;
+            font-weight: 600;
+            text-decoration: none;
+            font-size: 0.85rem;
+        }
+        .login-btn { background: #3498db; color: white; }
+        .signup-btn { background: #27ae60; color: white; }
+        .user-avatar {
+            width: 34px;
+            height: 34px;
+            border-radius: 50%;
+            object-fit: cover;
+            border: 2px solid var(--toefl-primary);
+        }
+
+        /* Breadcrumb */
+        .breadcrumb {
+            margin: 1.2rem 0 1rem;
+            font-size: 0.85rem;
+            color: #b97f44;
+        }
+
+        /* Hero */
+        .hero-speaking {
+            background: linear-gradient(115deg, #e67e22 0%, #f39c12 100%);
+            border-radius: 2rem;
+            padding: 2rem;
+            color: white;
+            margin-bottom: 2rem;
+        }
+        .hero-speaking h1 i, .hero-speaking p { color: white; }
+        .badge {
+            background: rgba(255,255,255,0.2);
+            backdrop-filter: blur(4px);
+            display: inline-block;
+            padding: 0.3rem 1rem;
+            border-radius: 60px;
+            font-size: 0.8rem;
+            margin-top: 0.8rem;
+        }
+
+        /* Task Tabs */
+        .task-tabs {
+            display: flex;
+            gap: 0.8rem;
+            flex-wrap: wrap;
+            margin-bottom: 2rem;
+            background: white;
+            padding: 1rem;
+            border-radius: 1.5rem;
+            box-shadow: var(--shadow-sm);
+        }
+        .task-tab {
+            background: #f0e4d8;
+            border: none;
+            padding: 0.7rem 1.5rem;
+            border-radius: 50px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: 0.2s;
+            font-size: 0.9rem;
+        }
+        .task-tab.active {
+            background: var(--toefl-primary);
+            color: white;
+        }
+
+        /* Practice Cards Grid */
+        .practice-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(340px, 1fr));
+            gap: 1.8rem;
+            margin-bottom: 2rem;
+        }
+        .speaking-card {
+            background: white;
+            border-radius: 1.5rem;
+            padding: 1.5rem;
+            box-shadow: var(--shadow-sm);
+            transition: all 0.25s ease;
+            border: 1px solid var(--border-light);
+        }
+        .speaking-card:hover {
+            transform: translateY(-5px);
+            box-shadow: var(--shadow-md);
+        }
+        .task-icon {
+            font-size: 2rem;
+            color: var(--toefl-primary);
+            margin-bottom: 0.8rem;
+        }
+        .task-type-badge {
+            display: inline-block;
+            background: #fef3e4;
+            padding: 0.2rem 0.8rem;
+            border-radius: 50px;
+            font-size: 0.7rem;
+            font-weight: 600;
+            margin: 0.5rem 0;
+        }
+        .prep-time, .speak-time {
+            font-size: 0.75rem;
+            color: var(--text-muted);
+            margin: 0.3rem 0;
+        }
+
+        /* Modal for speaking practice */
+        .modal-overlay {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0,0,0,0.9);
+            z-index: 1000;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            backdrop-filter: blur(5px);
+            overflow-y: auto;
+            padding: 1rem;
+        }
+        .speaking-modal {
+            background: white;
+            max-width: 750px;
+            width: 100%;
+            border-radius: 2rem;
+            max-height: 90vh;
+            overflow-y: auto;
+            box-shadow: 0 25px 50px rgba(0,0,0,0.3);
+            animation: slideUp 0.2s ease;
+        }
+        @keyframes slideUp {
+            from { transform: translateY(30px); opacity: 0; }
+            to { transform: translateY(0); opacity: 1; }
+        }
+        .modal-header {
+            background: var(--toefl-primary);
+            color: white;
+            padding: 1.2rem 1.5rem;
+            border-radius: 2rem 2rem 0 0;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            flex-wrap: wrap;
+        }
+        .timer-circle {
+            background: rgba(0,0,0,0.3);
+            padding: 0.3rem 1rem;
+            border-radius: 60px;
+            font-family: monospace;
+            font-weight: bold;
+            font-size: 1.3rem;
+        }
+        .modal-body {
+            padding: 1.8rem;
+        }
+        .task-prompt {
+            background: #fef9f2;
+            padding: 1.2rem;
+            border-radius: 1rem;
+            margin-bottom: 1.5rem;
+            border-left: 4px solid var(--toefl-primary);
+        }
+        .recording-area {
+            background: #f8f9fa;
+            padding: 1.5rem;
+            border-radius: 1rem;
+            text-align: center;
+            margin: 1.5rem 0;
+        }
+        .record-btn {
+            background: var(--danger);
+            color: white;
+            border: none;
+            padding: 1rem 2rem;
+            border-radius: 60px;
+            font-size: 1.1rem;
+            font-weight: 700;
+            cursor: pointer;
+            margin: 0.5rem;
+            transition: 0.2s;
+        }
+        .record-btn.recording {
+            background: #c0392b;
+            animation: pulse 1s infinite;
+        }
+        @keyframes pulse {
+            0% { transform: scale(1); }
+            50% { transform: scale(1.05); }
+            100% { transform: scale(1); }
+        }
+        .playback-btn {
+            background: var(--info);
+            color: white;
+            border: none;
+            padding: 0.6rem 1.2rem;
+            border-radius: 50px;
+            cursor: pointer;
+            margin: 0.5rem;
+        }
+        .transcript-input {
+            width: 100%;
+            padding: 0.8rem;
+            border: 2px solid var(--border-light);
+            border-radius: 1rem;
+            font-family: inherit;
+            margin: 1rem 0;
+        }
+        .feedback-area {
+            background: #e8f5e9;
+            padding: 1.2rem;
+            border-radius: 1rem;
+            margin-top: 1.5rem;
+            display: none;
+        }
+        .close-modal {
+            background: rgba(255,255,255,0.2);
+            border: none;
+            color: white;
+            font-size: 1.5rem;
+            cursor: pointer;
+            width: 36px;
+            height: 36px;
+            border-radius: 50%;
+        }
+
+        /* Tips Section */
+        .tips-speaking {
+            background: white;
+            border-radius: 1.5rem;
+            padding: 1.5rem;
+            margin: 2rem 0;
+        }
+
+        footer {
+            background: #1e2a36;
+            color: white;
+            padding: 2rem 1rem;
+            margin-top: 3rem;
+            text-align: center;
+            border-radius: 2rem 2rem 0 0;
+        }
+
+        @media (max-width: 680px) {
+            .speaking-modal { max-width: 95%; }
+            .modal-header { flex-direction: column; text-align: center; gap: 0.5rem; }
+        }
+    </style>
+</head>
+<body>
+
+<header>
+    <div class="header-content">
+        <a href="index.html" class="logo">
+            <i class="fas fa-graduation-cap" style="font-size: 28px; color: #e67e22;"></i>
+            <h1>Zakhourani</h1>
+        </a>
+        <div class="nav-links">
+            <a href="index.html"><i class="fas fa-home"></i> Home</a>
+            <a href="IELS.html"><i class="fas fa-language"></i> IELTS</a>
+            <a href="TOFEL.html" class="active"><i class="fas fa-scroll"></i> TOEFL</a>
+            <a href="AI.html"><i class="fas fa-microchip"></i> AI Power</a>
+            <a href="aboutDrwaleed.html"><i class="fas fa-user-graduate"></i> Dr Waleed</a>
+            <div id="userMenuHeader" style="display: none;" class="user-menu" style="display:flex; gap:8px; align-items:center;">
+                <img id="userAvatarHeader" class="user-avatar" src="" alt="user">
+                <span id="userNameHeader" style="font-weight:500;"></span>
+            </div>
+            <div id="authButtonsHeader" style="display: flex; gap: 8px;">
+                <a href="login.html" class="login-btn">Login</a>
+                <a href="signup.html" class="signup-btn">Sign Up</a>
+            </div>
+        </div>
+    </div>
+</header>
+
+<main class="container">
+    <div class="breadcrumb">
+        <a href="TOFEL.html" style="color:#e67e22;"><i class="fas fa-scroll"></i> TOEFL Hub</a> / <span>Speaking Fluency Studio</span>
+    </div>
+
+    <div class="hero-speaking">
+        <h1><i class="fas fa-microphone-alt"></i> TOEFL Speaking Fluency Studio</h1>
+        <p>Record and evaluate independent & integrated tasks. Get instant AI feedback on delivery, grammar, coherence, and pronunciation. Practice with real TOEFL prompts.</p>
+        <div class="badge"><i class="fas fa-waveform"></i> Voice analytics | 4 task types | Score estimator 0-30</div>
+    </div>
+
+    <div class="task-tabs">
+        <button class="task-tab active" data-task="all">📋 All Tasks</button>
+        <button class="task-tab" data-task="independent">🎤 Independent (Task 1)</button>
+        <button class="task-tab" data-task="integrated">📚 Integrated (Tasks 2-4)</button>
+    </div>
+
+    <div class="practice-grid" id="practiceGrid"></div>
+
+    <div class="tips-speaking">
+        <i class="fas fa-chalkboard-user" style="font-size: 2rem; color: var(--toefl-primary);"></i>
+        <h3>Dr. Waleed's Speaking Formula</h3>
+        <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(240px, 1fr)); gap: 1rem; margin-top: 1rem;">
+            <div><i class="fas fa-clock"></i> <strong>Structure:</strong> Opinion + Reason + Example + Conclusion</div>
+            <div><i class="fas fa-chart-line"></i> <strong>Pacing:</strong> 45-60 seconds, 120-150 words per response</div>
+            <div><i class="fas fa-language"></i> <strong>Transition words:</strong> "First," "Moreover," "For instance," "Therefore"</div>
+            <div><i class="fas fa-ear-listen"></i> <strong>Record yourself:</strong> Listen for fillers (um, uh) and pronunciation</div>
+        </div>
+    </div>
+</main>
+
+<footer>
+    <i class="fas fa-graduation-cap"></i> Zakhourani TOEFL Speaking Studio · Practice until fluent
+    <p style="margin-top: 10px; font-size: 0.8rem;">AI-powered feedback simulates official TOEFL scoring criteria.</p>
+</footer>
+
+<script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-app-compat.js"></script>
+<script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-auth-compat.js"></script>
+<script>
+    const firebaseConfig = {
+        apiKey: "AIzaSyAE8wf24HXrfmpMluaFOv1OHPrf_YFfqTQ",
+        authDomain: "whaai-c388e.firebaseapp.com",
+        projectId: "whaai-c388e",
+        storageBucket: "whaai-c388e.firebasestorage.app",
+        messagingSenderId: "640598205524",
+        appId: "1:640598205524:web:c975f5e8b371b1043e39c1"
+    };
+    if (!firebase.apps.length) firebase.initializeApp(firebaseConfig);
+    const auth = firebase.auth();
+
+    const userMenuDiv = document.getElementById('userMenuHeader');
+    const authBtnsDiv = document.getElementById('authButtonsHeader');
+    const userAvatarImg = document.getElementById('userAvatarHeader');
+    const userNameSpan = document.getElementById('userNameHeader');
+
+    auth.onAuthStateChanged(user => {
+        if (user) {
+            userMenuDiv.style.display = 'flex';
+            authBtnsDiv.style.display = 'none';
+            const photo = user.photoURL || `https://ui-avatars.com/api/?name=${encodeURIComponent(user.displayName || user.email)}&background=e67e22&color=fff&size=32`;
+            userAvatarImg.src = photo;
+            userNameSpan.textContent = user.displayName?.split(' ')[0] || user.email.split('@')[0];
+        } else {
+            userMenuDiv.style.display = 'none';
+            authBtnsDiv.style.display = 'flex';
+        }
+    });
+
+    // Speaking Tasks Database
+    const speakingTasks = [
+        {
+            id: 1,
+            title: "Favorite Teacher",
+            type: "independent",
+            category: "independent",
+            prepTime: 15,
+            speakTime: 45,
+            prompt: "Describe a teacher who has influenced you. Explain why this teacher was important to you. Include specific details and examples.",
+            sampleResponse: "One teacher who greatly influenced me was my high school English teacher, Mrs. Johnson. She had a unique way of making literature come alive. For example, when we read Shakespeare, she would have us act out scenes, which made the language accessible. She also stayed after school to help me prepare for college essays. Her dedication showed me the power of passionate teaching."
+        },
+        {
+            id: 2,
+            title: "City vs. Countryside",
+            type: "independent",
+            category: "independent",
+            prepTime: 15,
+            speakTime: 45,
+            prompt: "Some people prefer living in a big city. Others prefer living in the countryside. Which do you prefer and why? Use specific reasons and examples.",
+            sampleResponse: "I prefer living in a big city because of the opportunities it offers. For instance, cities have diverse career options, cultural events, and educational institutions. When I lived in a rural area, I had limited access to museums and networking events. However, I acknowledge that countryside offers tranquility. Ultimately, the city's dynamic environment aligns with my career goals."
+        },
+        {
+            id: 3,
+            title: "Integrated: Campus Announcement",
+            type: "integrated",
+            category: "integrated",
+            prepTime: 30,
+            speakTime: 60,
+            prompt: "Reading: The university plans to extend library hours to 24/7 during finals week. The student newspaper reports that many students support this change. Conversation: A student expresses concern about noise levels and security. Question: Summarize the announcement and the student's opinion.",
+            sampleResponse: "The university is extending library hours to 24/7 during finals week to accommodate student study needs. However, the student in the conversation worries about noise levels potentially increasing and security concerns during late-night hours. While the student acknowledges the benefit of more study time, they suggest implementing quiet zones and increasing security patrols to address these issues."
+        },
+        {
+            id: 4,
+            title: "Integrated: Biology Lecture",
+            type: "integrated",
+            category: "integrated",
+            prepTime: 30,
+            speakTime: 60,
+            prompt: "Listen to part of a biology lecture about camouflage. The professor discusses two types: background matching and disruptive coloration. Explain how these two camouflage strategies work and give examples.",
+            sampleResponse: "The professor describes two camouflage strategies. Background matching involves animals blending with their environment's colors and patterns, like the peppered moth matching tree bark. Disruptive coloration uses contrasting patterns to break up an animal's outline, making it harder to recognize. For example, zebras' stripes create visual confusion for predators. Both strategies increase survival by reducing detection."
+        },
+        {
+            id: 5,
+            title: "Important Decision",
+            type: "independent",
+            category: "independent",
+            prepTime: 15,
+            speakTime: 45,
+            prompt: "Describe an important decision you made. Explain why it was important and what you learned from the experience.",
+            sampleResponse: "The most important decision I made was choosing to study abroad during my sophomore year. Initially, I was nervous about leaving my comfort zone. However, this experience taught me independence and cultural adaptability. I learned to navigate unfamiliar situations, improved my language skills, and built international friendships. This decision shaped my career path and personal growth significantly."
+        },
+        {
+            id: 6,
+            title: "Integrated: Psychology Study",
+            type: "integrated",
+            category: "integrated",
+            prepTime: 30,
+            speakTime: 60,
+            prompt: "Reading: A study shows that people perform better when they set specific goals. Lecture: The professor gives examples of students with vague versus specific study goals. Question: Explain how specific goals lead to better performance.",
+            sampleResponse: "The professor explains that specific goals lead to better performance compared to vague intentions. For instance, students who set concrete targets like 'study three chapters today' were more likely to complete the task than those who said 'study more.' The specificity creates accountability and measurable progress. Additionally, specific goals help individuals allocate time effectively and track their achievements."
+        }
+    ];
+
+    let currentTaskFilter = "all";
+
+    function renderTasks() {
+        const grid = document.getElementById('practiceGrid');
+        const filtered = speakingTasks.filter(t => {
+            if (currentTaskFilter === "all") return true;
+            return t.category === currentTaskFilter;
+        });
+        
+        grid.innerHTML = filtered.map(task => `
+            <div class="speaking-card">
+                <div class="task-icon"><i class="fas ${task.type === 'independent' ? 'fa-microphone' : 'fa-chalkboard'}"></i></div>
+                <h3>${task.title}</h3>
+                <span class="task-type-badge">${task.type === 'independent' ? '🎤 Independent Task' : '📚 Integrated Task'}</span>
+                <div class="prep-time"><i class="fas fa-hourglass-start"></i> Prep: ${task.prepTime} sec</div>
+                <div class="speak-time"><i class="fas fa-hourglass-end"></i> Speak: ${task.speakTime} sec</div>
+                <p style="font-size: 0.85rem; margin: 0.8rem 0; color: #666;">${task.prompt.substring(0, 100)}...</p>
+                <button class="btn-start" data-id="${task.id}" style="margin-top: 1rem; background: #e67e22; color: white; border: none; padding: 0.6rem; border-radius: 50px; cursor: pointer; width: 100%; font-weight:600;">🎙️ Practice This Task</button>
+            </div>
+        `).join('');
+        
+        document.querySelectorAll('.btn-start').forEach(btn => {
+            const id = parseInt(btn.getAttribute('data-id'));
+            btn.addEventListener('click', () => openSpeakingModal(speakingTasks.find(t => t.id === id)));
+        });
+    }
+    
+    let activeModal = null;
+    let mediaRecorder = null;
+    let audioChunks = [];
+    let audioBlob = null;
+    let timerInterval = null;
+    let currentState = 'idle'; // idle, prep, speaking, done
+    
+    function openSpeakingModal(task) {
+        if (activeModal) return;
+        
+        const modalDiv = document.createElement('div');
+        modalDiv.className = 'modal-overlay';
+        
+        const modalHtml = `
+            <div class="speaking-modal">
+                <div class="modal-header">
+                    <h3><i class="fas fa-microphone-alt"></i> ${task.title}</h3>
+                    <div class="timer-circle" id="modalTimer">${task.prepTime}s</div>
+                    <button class="close-modal" id="closeModalBtn"><i class="fas fa-times"></i></button>
+                </div>
+                <div class="modal-body">
+                    <div class="task-prompt">
+                        <i class="fas fa-quote-left" style="color: #e67e22;"></i>
+                        <p><strong>Prompt:</strong> ${task.prompt}</p>
+                        ${task.type === 'integrated' ? '<p style="margin-top:0.5rem;"><em>Note: In real TOEFL, you would read a passage and listen to a lecture. Use the transcript above for practice.</em></p>' : ''}
+                    </div>
+                    
+                    <div class="recording-area">
+                        <div id="timerStatus" style="font-size: 1.2rem; margin-bottom: 1rem;">⏱️ Ready to start</div>
+                        <button id="startPrepBtn" class="record-btn" style="background: #3498db;">📝 Start Preparation (${task.prepTime}s)</button>
+                        <button id="startSpeakingBtn" class="record-btn" style="background: #e67e22; display: none;">🎤 Start Speaking (${task.speakTime}s)</button>
+                        <button id="recordBtn" class="record-btn" style="background: #e74c3c; display: none;">🔴 Start Recording</button>
+                        <button id="stopBtn" class="record-btn" style="background: #95a5a6; display: none;">⏹️ Stop Recording</button>
+                        <button id="playbackBtn" class="playback-btn" style="display: none;"><i class="fas fa-play"></i> Play Recording</button>
+                        <audio id="audioPlayback" style="display: none;" controls></audio>
+                    </div>
+                    
+                    <div>
+                        <label><strong>✍️ Your Response Transcript (optional):</strong></label>
+                        <textarea id="responseTranscript" class="transcript-input" rows="4" placeholder="Paste or type your speaking transcript here for AI feedback..."></textarea>
+                    </div>
+                    
+                    <button id="getFeedbackBtn" class="record-btn" style="background: #27ae60; margin-top: 0.5rem;">🤖 Get AI Feedback & Score</button>
+                    
+                    <div id="feedbackArea" class="feedback-area"></div>
+                    
+                    <div style="margin-top: 1rem;">
+                        <details>
+                            <summary style="cursor: pointer; color: #e67e22;"><i class="fas fa-lightbulb"></i> Sample Response (for reference)</summary>
+                            <p style="margin-top: 0.5rem; background: #f8f9fa; padding: 1rem; border-radius: 0.8rem;">${task.sampleResponse}</p>
+                        </details>
+                    </div>
+                </div>
+            </div>
+        `;
+        
+        modalDiv.innerHTML = modalHtml;
+        document.body.appendChild(modalDiv);
+        activeModal = modalDiv;
+        
+        let prepSeconds = task.prepTime;
+        let speakSeconds = task.speakTime;
+        let currentTimer = prepSeconds;
+        
+        const timerDisplay = document.getElementById('modalTimer');
+        const timerStatus = document.getElementById('timerStatus');
+        const startPrepBtn = document.getElementById('startPrepBtn');
+        const startSpeakingBtn = document.getElementById('startSpeakingBtn');
+        const recordBtn = document.getElementById('recordBtn');
+        const stopBtn = document.getElementById('stopBtn');
+        const playbackBtn = document.getElementById('playbackBtn');
+        const audioPlayback = document.getElementById('audioPlayback');
+        const getFeedbackBtn = document.getElementById('getFeedbackBtn');
+        const transcriptArea = document.getElementById('responseTranscript');
+        const feedbackArea = document.getElementById('feedbackArea');
+        
+        let recordingActive = false;
+        let stream = null;
+        
+        function updateTimer(seconds) {
+            timerDisplay.innerText = `${seconds}s`;
+            if (seconds === 0) timerDisplay.innerText = "0s";
+        }
+        
+        function startTimer(callback, duration, onTick) {
+            if (timerInterval) clearInterval(timerInterval);
+            let remaining = duration;
+            updateTimer(remaining);
+            timerInterval = setInterval(() => {
+                remaining--;
+                updateTimer(remaining);
+                if (onTick) onTick(remaining);
+                if (remaining <= 0) {
+                    clearInterval(timerInterval);
+                    if (callback) callback();
+                }
+            }, 1000);
+        }
+        
+        startPrepBtn.addEventListener('click', () => {
+            currentState = 'prep';
+            startPrepBtn.style.display = 'none';
+            timerStatus.innerHTML = "📝 Preparation time... Take notes!";
+            startTimer(() => {
+                timerStatus.innerHTML = "✅ Preparation complete! Now speak.";
+                startSpeakingBtn.style.display = 'block';
+                startPrepBtn.disabled = true;
+            }, prepSeconds);
+        });
+        
+        startSpeakingBtn.addEventListener('click', () => {
+            currentState = 'speaking';
+            startSpeakingBtn.style.display = 'none';
+            timerStatus.innerHTML = "🎤 Speaking now... Record your response";
+            recordBtn.style.display = 'block';
+            
+            startTimer(() => {
+                timerStatus.innerHTML = "⏰ Time's up! Stop recording if still active.";
+                if (recordingActive && mediaRecorder && mediaRecorder.state === 'recording') {
+                    stopRecording();
+                }
+                recordBtn.style.display = 'none';
+                stopBtn.style.display = 'none';
+            }, speakSeconds);
+        });
+        
+        // Recording functionality
+        async function startRecording() {
+            try {
+                stream = await navigator.mediaDevices.getUserMedia({ audio: true });
+                mediaRecorder = new MediaRecorder(stream);
+                audioChunks = [];
+                
+                mediaRecorder.ondataavailable = (event) => {
+                    audioChunks.push(event.data);
+                };
+                
+                mediaRecorder.onstop = () => {
+                    audioBlob = new Blob(audioChunks, { type: 'audio/webm' });
+                    const audioUrl = URL.createObjectURL(audioBlob);
+                    audioPlayback.src = audioUrl;
+                    audioPlayback.style.display = 'block';
+                    playbackBtn.style.display = 'block';
+                    timerStatus.innerHTML = "✅ Recording saved! Playback available.";
+                    if (stream) {
+                        stream.getTracks().forEach(track => track.stop());
+                    }
+                };
+                
+                mediaRecorder.start();
+                recordingActive = true;
+                recordBtn.style.display = 'none';
+                stopBtn.style.display = 'block';
+                timerStatus.innerHTML = "🔴 Recording... Speak clearly!";
+            } catch (err) {
+                console.error("Microphone error:", err);
+                timerStatus.innerHTML = "⚠️ Microphone access denied. Use transcript input instead.";
+                alert("Please allow microphone access or type your response transcript for feedback.");
+            }
+        }
+        
+        function stopRecording() {
+            if (mediaRecorder && mediaRecorder.state === 'recording') {
+                mediaRecorder.stop();
+                recordingActive = false;
+                stopBtn.style.display = 'none';
+            }
+        }
+        
+        recordBtn.addEventListener('click', startRecording);
+        stopBtn.addEventListener('click', stopRecording);
+        
+        playbackBtn.addEventListener('click', () => {
+            if (audioPlayback.src) {
+                audioPlayback.play();
+            }
+        });
+        
+        // AI Feedback Generator
+        function generateSpeakingFeedback(transcript) {
+            const words = transcript.trim().split(/\s+/).filter(w => w.length > 0);
+            const wordCount = words.length;
+            let score = 18;
+            let delivery = "";
+            let languageUse = "";
+            let topicDev = "";
+            
+            // Score based on word count for 45-60s responses
+            if (wordCount < 50) score = 12;
+            else if (wordCount < 80) score = 18;
+            else if (wordCount < 110) score = 22;
+            else if (wordCount < 140) score = 26;
+            else score = 28;
+            
+            // Delivery analysis
+            if (transcript.match(/um|uh|like|actually/gi)) {
+                delivery = "Some filler words detected. Reduce 'um' and 'uh' for smoother delivery.";
+            } else {
+                delivery = "Good fluency with minimal hesitations.";
+            }
+            
+            // Language use
+            if (transcript.match(/however|therefore|moreover|consequently|in addition/gi)) {
+                languageUse = "Good use of transition words, enhancing coherence.";
+            } else {
+                languageUse = "Add more discourse markers (first, however, for example) to improve structure.";
+            }
+            
+            // Topic development
+            if (transcript.match(/for example|for instance|specifically|such as/gi)) {
+                topicDev = "Strong development with specific examples.";
+            } else if (wordCount > 80) {
+                topicDev = "Good length but include specific details to strengthen argument.";
+            } else {
+                topicDev = "Response could be more detailed. Use personal examples or evidence.";
+            }
+            
+            // Check for structure
+            if (transcript.match(/first|second|finally|to conclude/gi)) {
+                topicDev += " Good organizational structure.";
+            }
+            
+            const finalScore = Math.min(30, Math.max(10, score));
+            let overallComment = "";
+            if (finalScore >= 26) overallComment = "Excellent! You're ready for a high TOEFL speaking score. Keep practicing integrated tasks.";
+            else if (finalScore >= 20) overallComment = "Good progress. Focus on reducing fillers and adding specific examples.";
+            else overallComment = "Keep practicing! Use the template: opinion + reason + example + conclusion. Record yourself frequently.";
+            
+            return { score: finalScore, delivery, languageUse, topicDev, overallComment, wordCount };
+        }
+        
+        getFeedbackBtn.addEventListener('click', () => {
+            let transcript = transcriptArea.value.trim();
+            if (transcript === "") {
+                alert("Please enter your response transcript for feedback (or record and transcribe).");
+                return;
+            }
+            
+            const feedback = generateSpeakingFeedback(transcript);
+            feedbackArea.style.display = 'block';
+            feedbackArea.innerHTML = `
+                <h4><i class="fas fa-chart-line"></i> Speaking Evaluation</h4>
+                <div style="font-size: 2rem; font-weight: 800; color: #e67e22; margin: 0.5rem 0;">${feedback.score}/30</div>
+                <p><strong>Word count:</strong> ${feedback.wordCount} words (target: 120-150 for 45-60s)</p>
+                <div style="margin: 1rem 0;">
+                    <div><i class="fas fa-waveform"></i> <strong>Delivery:</strong> ${feedback.delivery}</div>
+                    <div><i class="fas fa-language"></i> <strong>Language Use:</strong> ${feedback.languageUse}</div>
+                    <div><i class="fas fa-brain"></i> <strong>Topic Development:</strong> ${feedback.topicDev}</div>
+                </div>
+                <div style="background: #fff3e0; padding: 0.8rem; border-radius: 0.8rem;">
+                    <i class="fas fa-chalkboard-user"></i> <strong>Dr. Waleed's Advice:</strong> ${feedback.overallComment}
+                </div>
+                <button id="savePracticeBtn" style="margin-top: 1rem; background: #e67e22; border: none; padding: 0.5rem 1.2rem; border-radius: 50px; color: white; cursor: pointer;"><i class="fas fa-save"></i> Save to History</button>
+            `;
+            
+            document.getElementById('savePracticeBtn')?.addEventListener('click', () => {
+                const saved = JSON.parse(localStorage.getItem('toefl_speaking_history') || '[]');
+                saved.unshift({ task: task.title, score: feedback.score, date: new Date().toLocaleDateString() });
+                localStorage.setItem('toefl_speaking_history', JSON.stringify(saved.slice(0, 10)));
+                alert(`✅ Saved! Score ${feedback.score}/30 for "${task.title}"`);
+            });
+        });
+        
+        document.getElementById('closeModalBtn').addEventListener('click', () => {
+            if (timerInterval) clearInterval(timerInterval);
+            if (mediaRecorder && mediaRecorder.state === 'recording') mediaRecorder.stop();
+            if (stream) stream.getTracks().forEach(track => track.stop());
+            if (activeModal) activeModal.remove();
+            activeModal = null;
+        });
+    }
+    
+    // Tab switching
+    document.querySelectorAll('.task-tab').forEach(btn => {
+        btn.addEventListener('click', () => {
+            document.querySelectorAll('.task-tab').forEach(b => b.classList.remove('active'));
+            btn.classList.add('active');
+            currentTaskFilter = btn.getAttribute('data-task');
+            renderTasks();
+        });
+    });
+    
+    renderTasks();
+</script>
+</body>
+</html>

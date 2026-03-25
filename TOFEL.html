@@ -1,0 +1,746 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>TOEFL · Zakhourani Learning Hub</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; }
+        
+        :root {
+            --primary: #2c3e50;
+            --secondary: #3498db;
+            --toefl-accent: #e67e22;    /* TOEFL specific orange accent */
+            --success: #27ae60;
+            --warning: #f39c12;
+            --light: #ecf0f1;
+            --dark: #2c3e50;
+        }
+        
+        body {
+            background: linear-gradient(135deg, #f5f7fa 0%, #c3cfe2 100%);
+            min-height: 100vh;
+        }
+        
+        /* Header */
+        header {
+            background: white;
+            box-shadow: 0 4px 20px rgba(0,0,0,0.1);
+            padding: 15px 40px;
+            position: sticky;
+            top: 0;
+            z-index: 100;
+        }
+        
+        .header-content {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+        
+        .logo {
+            display: flex;
+            align-items: center;
+            gap: 15px;
+            text-decoration: none;
+        }
+        
+        .logo h1 {
+            font-size: 28px;
+            font-weight: 700;
+            color: var(--primary);
+        }
+        
+        .nav-links {
+            display: flex;
+            gap: 20px;
+            align-items: center;
+            flex-wrap: wrap;
+        }
+        
+        .nav-links a {
+            text-decoration: none;
+            color: var(--dark);
+            font-weight: 600;
+            padding: 10px 15px;
+            border-radius: 8px;
+            transition: 0.3s;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+        
+        .nav-links a:hover {
+            background: var(--light);
+            color: var(--secondary);
+        }
+        
+        .nav-links a.active {
+            background: var(--toefl-accent);
+            color: white;
+        }
+        
+        .user-menu {
+            display: flex;
+            align-items: center;
+            gap: 15px;
+            margin-left: 20px;
+            padding-left: 20px;
+            border-left: 2px solid var(--light);
+        }
+        
+        .user-avatar {
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            object-fit: cover;
+            border: 2px solid var(--secondary);
+        }
+        
+        .user-name {
+            font-weight: 600;
+            color: var(--dark);
+        }
+        
+        .login-btn {
+            background: var(--secondary);
+            color: white !important;
+            padding: 8px 20px !important;
+            border-radius: 50px !important;
+        }
+        
+        .signup-btn {
+            background: var(--success);
+            color: white !important;
+            padding: 8px 20px !important;
+            border-radius: 50px !important;
+        }
+        
+        /* Main Container */
+        .container {
+            max-width: 1200px;
+            margin: 40px auto;
+            padding: 0 20px;
+        }
+        
+        /* Page Header */
+        .page-header {
+            text-align: center;
+            margin-bottom: 40px;
+        }
+        
+        .page-header h1 {
+            font-size: 42px;
+            color: var(--dark);
+            margin-bottom: 15px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 15px;
+        }
+        
+        .page-header h1 i {
+            color: var(--toefl-accent);
+        }
+        
+        .page-header p {
+            color: #666;
+            font-size: 18px;
+            max-width: 600px;
+            margin: 0 auto;
+        }
+        
+        /* Loading Spinner */
+        .loading-spinner {
+            text-align: center;
+            padding: 60px;
+        }
+        
+        .spinner {
+            width: 50px;
+            height: 50px;
+            border: 5px solid var(--light);
+            border-top: 5px solid var(--toefl-accent);
+            border-radius: 50%;
+            animation: spin 1s linear infinite;
+            margin: 0 auto 20px;
+        }
+        
+        @keyframes spin {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
+        }
+        
+        /* Login Prompt */
+        .login-prompt {
+            background: white;
+            border-radius: 30px;
+            padding: 60px;
+            text-align: center;
+            box-shadow: 0 20px 60px rgba(0,0,0,0.1);
+            max-width: 500px;
+            margin: 40px auto;
+            animation: slideUp 0.5s ease;
+        }
+        
+        @keyframes slideUp {
+            from { transform: translateY(30px); opacity: 0; }
+            to { transform: translateY(0); opacity: 1; }
+        }
+        
+        .login-prompt .icon {
+            font-size: 80px;
+            color: var(--toefl-accent);
+            margin-bottom: 30px;
+        }
+        
+        .login-prompt h2 {
+            font-size: 32px;
+            color: var(--dark);
+            margin-bottom: 15px;
+        }
+        
+        .login-prompt p {
+            color: #666;
+            font-size: 18px;
+            margin-bottom: 30px;
+            line-height: 1.6;
+        }
+        
+        .login-prompt .login-btn {
+            display: inline-flex;
+            align-items: center;
+            gap: 10px;
+            padding: 16px 40px;
+            background: var(--toefl-accent);
+            color: white;
+            text-decoration: none;
+            border-radius: 50px;
+            font-size: 18px;
+            font-weight: 600;
+            transition: 0.3s;
+            border: none;
+            cursor: pointer;
+        }
+        
+        .login-prompt .login-btn:hover {
+            background: #d35400;
+            transform: translateY(-2px);
+            box-shadow: 0 10px 20px rgba(230, 126, 34, 0.3);
+        }
+        
+        /* Protected Content */
+        .protected-content {
+            display: none;
+        }
+        
+        /* Welcome Banner - TOEFL themed */
+        .welcome-banner {
+            background: linear-gradient(135deg, var(--toefl-accent), #d35400);
+            color: white;
+            padding: 40px;
+            border-radius: 30px;
+            margin-bottom: 40px;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            flex-wrap: wrap;
+            gap: 30px;
+        }
+        
+        .welcome-text h2 {
+            font-size: 32px;
+            margin-bottom: 10px;
+        }
+        
+        .welcome-text p {
+            font-size: 18px;
+            opacity: 0.9;
+        }
+        
+        .user-welcome {
+            background: rgba(255,255,255,0.2);
+            padding: 15px 25px;
+            border-radius: 50px;
+            font-size: 18px;
+            font-weight: 600;
+            backdrop-filter: blur(10px);
+        }
+        
+        /* Section Grid */
+        .section-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 30px;
+            margin: 40px 0;
+        }
+        
+        .feature-card {
+            background: white;
+            padding: 35px 25px;
+            border-radius: 30px;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.08);
+            text-align: center;
+            text-decoration: none;
+            color: inherit;
+            transition: 0.3s;
+            border: 2px solid transparent;
+            cursor: pointer;
+        }
+        
+        .feature-card:hover {
+            transform: translateY(-10px);
+            border-color: var(--toefl-accent);
+            box-shadow: 0 20px 40px rgba(230, 126, 34, 0.15);
+        }
+        
+        .feature-card i {
+            font-size: 50px;
+            color: var(--toefl-accent);
+            background: var(--light);
+            padding: 20px;
+            border-radius: 60px;
+            margin-bottom: 20px;
+        }
+        
+        .feature-card h3 {
+            font-size: 24px;
+            margin-bottom: 15px;
+            color: var(--dark);
+        }
+        
+        .feature-card p {
+            color: #666;
+            line-height: 1.6;
+        }
+        
+        /* Challenge Highlight - TOEFL themed */
+        .challenge-highlight {
+            background: white;
+            border-radius: 30px;
+            padding: 40px;
+            margin: 40px 0;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            flex-wrap: wrap;
+            gap: 30px;
+            border: 3px dashed var(--toefl-accent);
+        }
+        
+        .challenge-text h2 {
+            font-size: 28px;
+            color: var(--dark);
+            margin-bottom: 10px;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+        
+        .challenge-text p {
+            color: #666;
+            font-size: 18px;
+        }
+        
+        .challenge-btn {
+            background: var(--success);
+            color: white;
+            padding: 18px 35px;
+            border-radius: 50px;
+            text-decoration: none;
+            font-weight: 600;
+            font-size: 18px;
+            display: inline-flex;
+            align-items: center;
+            gap: 10px;
+            transition: 0.3s;
+        }
+        
+        .challenge-btn:hover {
+            background: #219a52;
+            transform: scale(1.05);
+        }
+        
+        /* Skill badges */
+        .skill-badge {
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+            background: var(--light);
+            padding: 8px 16px;
+            border-radius: 50px;
+            font-size: 14px;
+            font-weight: 600;
+            color: var(--toefl-accent);
+        }
+        
+        /* Footer */
+        footer {
+            background: var(--primary);
+            color: white;
+            padding: 40px;
+            margin-top: 60px;
+            text-align: center;
+        }
+        
+        .footer-links {
+            list-style: none;
+            display: flex;
+            justify-content: center;
+            gap: 30px;
+            margin: 20px 0;
+            flex-wrap: wrap;
+        }
+        
+        .footer-links a {
+            color: white;
+            text-decoration: none;
+            display: flex;
+            align-items: center;
+            gap: 5px;
+        }
+        
+        .footer-links a:hover {
+            color: var(--toefl-accent);
+        }
+        
+        @media (max-width: 768px) {
+            header { padding: 15px 20px; }
+            .header-content { flex-direction: column; gap: 15px; }
+            .nav-links { justify-content: center; }
+            .user-menu { border-left: none; padding-left: 0; margin-left: 0; }
+            .welcome-banner { flex-direction: column; text-align: center; }
+            .challenge-highlight { flex-direction: column; text-align: center; }
+        }
+    </style>
+</head>
+<body>
+    <!-- Header with Navigation -->
+    <header>
+        <div class="header-content">
+            <a href="index.html" class="logo">
+                <i class="fas fa-graduation-cap" style="font-size: 32px; color: #3498db;"></i>
+                <h1>Zakhourani</h1>
+            </a>
+            
+            <div class="nav-links">
+                <a href="index.html"><i class="fas fa-home"></i> Home</a>
+                <a href="AI.html"><i class="fas fa-microchip"></i> AI Power</a>
+                <a href="IELS.html"><i class="fas fa-language"></i> IELTS</a>
+                <a href="TOFEL.html" class="active"><i class="fas fa-scroll"></i> TOEFL</a>
+                <a href="aboutDrwaleed.html"><i class="fas fa-user-graduate"></i> Dr Waleed</a>
+                <a href="TA.html"><i class="fas fa-chalkboard-teacher"></i> TA</a>
+                <a href="talandilovan.html"><i class="fas fa-globe"></i> talandilovan</a>
+                
+                <div class="user-menu" id="userMenu" style="display: none;">
+                    <img id="userAvatar" class="user-avatar" src="" alt="User">
+                    <span id="userDisplayName" class="user-name"></span>
+                    <a href="profile.html"><i class="fas fa-user-circle"></i></a>
+                    <a href="logout.html"><i class="fas fa-sign-out-alt"></i></a>
+                </div>
+                
+                <div id="authButtons" style="display: flex; gap: 10px;">
+                    <a href="login.html" class="login-btn">Login</a>
+                    <a href="signup.html" class="signup-btn">Sign Up</a>
+                </div>
+            </div>
+        </div>
+    </header>
+
+    <!-- Main Content -->
+    <div class="container">
+        <!-- Page Header -->
+        <div class="page-header">
+            <h1><i class="fas fa-scroll"></i> TOEFL iBT Mastery Hub</h1>
+            <p>Your complete TOEFL preparation platform by Dr. Waleed Hussien Zakhourani — ace the Reading, Listening, Speaking & Writing sections</p>
+        </div>
+
+        <!-- Loading State -->
+        <div id="loading" class="loading-spinner">
+            <div class="spinner"></div>
+            <p>Loading TOEFL preparation hub...</p>
+        </div>
+
+        <!-- Login Prompt (shown when not authenticated) -->
+        <div id="loginPrompt" class="login-prompt" style="display: none;">
+            <div class="icon">
+                <i class="fas fa-lock"></i>
+            </div>
+            <h2>Secure TOEFL Hub</h2>
+            <p>Unlock Dr. Waleed's exclusive TOEFL materials, integrated practice tests, and the 7-day intensive challenge. Please login to continue your journey.</p>
+            <a href="login.html" class="login-btn">
+                <i class="fas fa-sign-in-alt"></i> Login to Access
+            </a>
+            <p style="margin-top: 20px; font-size: 14px;">
+                New here? <a href="signup.html" style="color: var(--toefl-accent);">Create free account</a>
+            </p>
+        </div>
+
+        <!-- Protected TOEFL Content (shown when authenticated) -->
+        <div id="protectedContent" class="protected-content">
+            <!-- Welcome Banner -->
+            <div class="welcome-banner">
+                <div class="welcome-text">
+                    <h2><i class="fas fa-globe-americas"></i> Welcome to TOEFL Mastery</h2>
+                    <p>Your structured path to 100+ iBT score with Dr. Waleed's proven methodology</p>
+                </div>
+                <div class="user-welcome" id="welcomeMessage">
+                    Loading...
+                </div>
+            </div>
+
+            <!-- Skill cards & resources -->
+            <div class="section-grid">
+                <!-- Comprehensive Guide - TOEFL structure & strategies -->
+                <a href="toefl-guide.html" class="feature-card">
+                    <i class="fas fa-book-open"></i>
+                    <h3>Complete TOEFL Guide</h3>
+                    <p>Deep dive into TOEFL iBT structure: question types, time management, note-taking strategies & scoring criteria</p>
+                    <div style="margin-top: 15px;">
+                        <span class="skill-badge"><i class="fas fa-microphone-alt"></i> Speaking</span>
+                        <span class="skill-badge"><i class="fas fa-pen"></i> Writing</span>
+                    </div>
+                </a>
+                
+                <!-- Full Practice Exams (Simulated) -->
+                <a href="toefl-practice.html" class="feature-card">
+                    <i class="fas fa-chalkboard"></i>
+                    <h3>Full-Length Practice Tests</h3>
+                    <p>Realistic TOEFL iBT simulations with timers, integrated tasks, and automated band score estimator (0-120)</p>
+                    <div style="margin-top: 15px;">
+                        <span class="skill-badge"><i class="fas fa-head-side-vr"></i> Adaptive</span>
+                        <span class="skill-badge"><i class="fas fa-chart-line"></i> Score Predictor</span>
+                    </div>
+                </a>
+                
+                <!-- Integrated Writing & Speaking Feedback -->
+                <a href="toefl-feedback.html" class="feature-card">
+                    <i class="fas fa-comments"></i>
+                    <h3>Integrated Feedback Lab</h3>
+                    <p>Submit speaking responses and writing essays (integrated + independent). Get AI-powered and instructor feedback using Dr. Waleed’s rubrics</p>
+                    <div style="margin-top: 15px;">
+                        <span class="skill-badge"><i class="fas fa-robot"></i> AI Analysis</span>
+                        <span class="skill-badge"><i class="fas fa-user-check"></i> Expert Review</span>
+                    </div>
+                </a>
+            </div>
+
+            <!-- Second row: additional TOEFL-specific resources -->
+            <div class="section-grid">
+                <!-- Academic Listening Vault -->
+                <a href="toefl-listening.html" class="feature-card">
+                    <i class="fas fa-headphones-alt"></i>
+                    <h3>Listening & Lecture Vault</h3>
+                    <p>Academic lectures, campus conversations, and note-taking drills with comprehension quizzes. Accents: US, UK, Canadian</p>
+                    <div style="margin-top: 10px;"><i class="fas fa-university"></i> 40+ lectures</div>
+                </a>
+                
+                <!-- Reading Pro Simulator -->
+                <a href="toefl-reading.html" class="feature-card">
+                    <i class="fas fa-newspaper"></i>
+                    <h3>Reading Pro Simulator</h3>
+                    <p>Academic texts with 10 question types: inference, vocabulary, rhetorical purpose, insert sentence. Detailed explanations.</p>
+                    <div style="margin-top: 10px;"><i class="fas fa-clock"></i> Timed & untimed modes</div>
+                </a>
+                
+                <!-- Speaking Fluency Studio -->
+                <a href="toefl-speaking.html" class="feature-card">
+                    <i class="fas fa-microphone-alt"></i>
+                    <h3>Speaking Fluency Studio</h3>
+                    <p>Record and evaluate independent & integrated tasks (Question 1-4). Get instant feedback on delivery, grammar & coherence.</p>
+                    <div style="margin-top: 10px;"><i class="fas fa-waveform"></i> Voice analytics</div>
+                </a>
+            </div>
+
+            <!-- TOEFL Complete Challenge: 7 days to mastery -->
+            <div class="challenge-highlight">
+                <div class="challenge-text">
+                    <h2><i class="fas fa-trophy" style="color: var(--toefl-accent);"></i> TOEFL 7‑Day Intensive Challenge</h2>
+                    <p>Daily integrated tasks: reading passages, listening sets, speaking drills, and writing prompts. Track progress & unlock certificates.</p>
+                    <div style="margin-top: 12px; display: flex; flex-wrap: wrap; gap: 8px;">
+                        <span class="skill-badge"><i class="fas fa-calendar-day"></i> Day 1: Reading Foundations</span>
+                        <span class="skill-badge"><i class="fas fa-calendar-week"></i> Day 4: Integrated Speaking</span>
+                        <span class="skill-badge"><i class="fas fa-certificate"></i> Final mock test</span>
+                    </div>
+                </div>
+                <a href="toefl-challenge.html" class="challenge-btn">
+                    <i class="fas fa-flag-checkered"></i> Launch Challenge
+                </a>
+            </div>
+
+            <!-- Strategy resources: Dr. Waleed’s TOEFL notes -->
+            <div style="background: white; border-radius: 28px; padding: 30px; margin: 40px 0; display: flex; flex-wrap: wrap; justify-content: space-between; align-items: center; gap: 20px; box-shadow: 0 8px 20px rgba(0,0,0,0.05);">
+                <div>
+                    <h3 style="color: var(--dark); margin-bottom: 10px;"><i class="fas fa-chalkboard-user" style="color: var(--toefl-accent);"></i> Dr. Waleed's TOEFL Insider Tips</h3>
+                    <p style="color: #555; max-width: 700px;">"Master the integrated tasks: synthesize reading & listening. For independent writing, always use personal examples. Practice with academic tone."</p>
+                </div>
+                <a href="toefl-strategies.html" style="background: var(--toefl-accent); color: white; padding: 12px 28px; border-radius: 60px; text-decoration: none; font-weight: 600; display: inline-flex; align-items: center; gap: 8px;">
+                    <i class="fas fa-download"></i> Free Strategy Kit
+                </a>
+            </div>
+
+            <!-- Additional motivational / study tracker -->
+            <div style="text-align: center; margin: 20px 0 30px;">
+                <p style="color: #666;"><i class="fas fa-chart-simple" style="color: var(--toefl-accent);"></i> Your study activity is tracked — complete tasks to earn badges & improve your TOEFL readiness score.</p>
+            </div>
+        </div>
+    </div>
+
+    <!-- Footer -->
+    <footer>
+        <div style="display: flex; align-items: center; justify-content: center; gap: 15px; margin-bottom: 20px;">
+            <i class="fas fa-graduation-cap" style="font-size: 32px; color: #3498db;"></i>
+            <h1 style="color: white;">Zakhourani</h1>
+        </div>
+        
+        <p>English language & test preparation platform by Dr. Waleed Hussien Zakhourani — TOEFL, IELTS, Academic English</p>
+        
+        <ul class="footer-links">
+            <li><a href="index.html"><i class="fas fa-home"></i> Home</a></li>
+            <li><a href="IELS.html"><i class="fas fa-language"></i> IELTS</a></li>
+            <li><a href="TOFEL.html"><i class="fas fa-scroll"></i> TOEFL</a></li>
+            <li><a href="AI.html"><i class="fas fa-microchip"></i> AI Power</a></li>
+            <li><a href="aboutDrwaleed.html"><i class="fas fa-user-graduate"></i> Dr Waleed</a></li>
+            <li><a href="TA.html"><i class="fas fa-chalkboard-teacher"></i> TA</a></li>
+            <li><a href="talandilovan.html"><i class="fas fa-globe"></i> talandilovan</a></li>
+        </ul>
+        
+        <p style="margin-top: 30px; color: #ccc;">© 2025 Zakhourani. All rights reserved. TOEFL® is a registered trademark of ETS.</p>
+    </footer>
+
+    <!-- Firebase SDK -->
+    <script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-app-compat.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-auth-compat.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-firestore-compat.js"></script>
+
+    <script>
+        // Firebase Configuration (same as original for consistency)
+        const firebaseConfig = {
+            apiKey: "AIzaSyAE8wf24HXrfmpMluaFOv1OHPrf_YFfqTQ",
+            authDomain: "whaai-c388e.firebaseapp.com",
+            projectId: "whaai-c388e",
+            storageBucket: "whaai-c388e.firebasestorage.app",
+            messagingSenderId: "640598205524",
+            appId: "1:640598205524:web:c975f5e8b371b1043e39c1",
+            measurementId: "G-1MHE0JBZJR"
+        };
+
+        // Initialize Firebase if not already initialized
+        if (!firebase.apps.length) {
+            firebase.initializeApp(firebaseConfig);
+            console.log('✅ Firebase initialized for TOEFL page');
+        }
+
+        const auth = firebase.auth();
+        const db = firebase.firestore();
+
+        // DOM Elements
+        const loadingEl = document.getElementById('loading');
+        const loginPrompt = document.getElementById('loginPrompt');
+        const protectedContent = document.getElementById('protectedContent');
+        const userMenu = document.getElementById('userMenu');
+        const authButtons = document.getElementById('authButtons');
+        const userAvatar = document.getElementById('userAvatar');
+        const userDisplayName = document.getElementById('userDisplayName');
+        const welcomeMessage = document.getElementById('welcomeMessage');
+
+        // Helper: update UI based on auth state
+        function updateUI(user) {
+            loadingEl.style.display = 'none';
+
+            if (user) {
+                // User authenticated
+                console.log('✅ TOEFL hub: user logged in', user.email);
+                loginPrompt.style.display = 'none';
+                protectedContent.style.display = 'block';
+                userMenu.style.display = 'flex';
+                authButtons.style.display = 'none';
+
+                // Avatar and name
+                const photoURL = user.photoURL || `https://ui-avatars.com/api/?name=${encodeURIComponent(user.displayName || user.email)}&size=40&background=e67e22&color=fff&bold=true`;
+                userAvatar.src = photoURL;
+                userDisplayName.textContent = user.displayName || user.email.split('@')[0];
+                
+                // Personalized welcome with time-based greeting
+                const hour = new Date().getHours();
+                let greeting = '';
+                if (hour < 12) greeting = 'Good Morning';
+                else if (hour < 18) greeting = 'Good Afternoon';
+                else greeting = 'Good Evening';
+                
+                const firstName = (user.displayName || user.email.split('@')[0]).split(' ')[0];
+                welcomeMessage.innerHTML = `<i class="fas fa-leaf"></i> ${greeting}, ${firstName}! Ready to boost your TOEFL score?`;
+                
+                // Optional: Firestore user data fetch (no impact on UI errors)
+                loadUserTOEFLData(user);
+            } else {
+                // Not authenticated
+                console.log('❌ TOEFL hub: no user');
+                loginPrompt.style.display = 'block';
+                protectedContent.style.display = 'none';
+                userMenu.style.display = 'none';
+                authButtons.style.display = 'flex';
+            }
+        }
+
+        // Load any additional TOEFL progress data (optional)
+        async function loadUserTOEFLData(user) {
+            try {
+                const docRef = db.collection('users').doc(user.uid);
+                const docSnap = await docRef.get();
+                if (docSnap.exists) {
+                    const data = docSnap.data();
+                    // could store toefl-specific progress but not required for MVP
+                    console.log('✅ TOEFL user data synced');
+                    // For extra touch: if user has TOEFL challenge progress, show a subtle indicator?
+                    if (data && data.toeflChallengeStarted) {
+                        // just a lightweight enhancement, but we keep UI consistent
+                        const challengeBtn = document.querySelector('.challenge-btn');
+                        if (challengeBtn && data.toeflChallengeDay) {
+                            challengeBtn.style.background = "#f39c12";
+                            challengeBtn.innerHTML = `<i class="fas fa-play-circle"></i> Continue Challenge (Day ${data.toeflChallengeDay})`;
+                        }
+                    }
+                }
+            } catch (err) {
+                console.warn("Error fetching user TOEFL data:", err);
+            }
+        }
+
+        // Listen for auth state changes
+        auth.onAuthStateChanged((user) => {
+            updateUI(user);
+        });
+
+        // fallback in case Firebase loading takes long (avoid forever spinner)
+        setTimeout(() => {
+            if (loadingEl.style.display !== 'none' && !auth.currentUser) {
+                loadingEl.style.display = 'none';
+                loginPrompt.style.display = 'block';
+            } else if (loadingEl.style.display !== 'none' && auth.currentUser) {
+                loadingEl.style.display = 'none';
+                protectedContent.style.display = 'block';
+            }
+        }, 2800);
+
+        // active nav link management based on current file (TOFEL.html)
+        const currentFile = window.location.pathname.split('/').pop() || 'TOFEL.html';
+        document.querySelectorAll('.nav-links a').forEach(link => {
+            const href = link.getAttribute('href');
+            if (href === currentFile || (currentFile === 'TOFEL.html' && href === 'TOFEL.html')) {
+                link.classList.add('active');
+            } else if (link.classList.contains('active') && href !== currentFile) {
+                link.classList.remove('active');
+            }
+        });
+        
+        // Additional smooth demo: if user clicks any protected feature link while not logged in?
+        // but all links will redirect to login if not logged in due to firebase + page logic.
+        // However we add a small handler for future-proofing: ensure "Start Challenge" and cards
+        // only work when protected content visible. But since UI is conditional, no extra logic needed.
+    </script>
+</body>
+</html>

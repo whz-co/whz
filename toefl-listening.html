@@ -1,0 +1,699 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+    <title>TOEFL Listening Vault · Academic Lectures & Conversations | Zakhourani</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        :root {
+            --toefl-primary: #e67e22;
+            --toefl-dark: #d35400;
+            --toefl-light: #fff5e8;
+            --success: #27ae60;
+            --info: #3498db;
+            --warning: #f39c12;
+            --danger: #e74c3c;
+            --text-dark: #2c3e50;
+            --text-muted: #5a6e7c;
+            --border-light: #ffdec2;
+            --card-white: #ffffff;
+            --shadow-sm: 0 8px 20px rgba(0,0,0,0.05);
+            --shadow-md: 0 15px 35px rgba(230,126,34,0.12);
+        }
+
+        body {
+            font-family: system-ui, 'Segoe UI', 'Inter', -apple-system, sans-serif;
+            background: linear-gradient(145deg, #fef8f0 0%, #fff3e8 100%);
+            color: var(--text-dark);
+            line-height: 1.5;
+        }
+
+        html {
+            font-size: 16px;
+        }
+        @media (max-width: 640px) {
+            html { font-size: 15px; }
+        }
+        @media (max-width: 480px) {
+            html { font-size: 14px; }
+        }
+
+        h1 { font-size: 2rem; font-weight: 800; letter-spacing: -0.01em; }
+        h2 { font-size: 1.6rem; font-weight: 700; margin: 0.75rem 0; }
+        h3 { font-size: 1.25rem; font-weight: 700; }
+        h4 { font-size: 1.1rem; font-weight: 600; }
+
+        .container {
+            max-width: 1300px;
+            margin: 0 auto;
+            padding: 0 1.5rem;
+        }
+
+        /* Header */
+        header {
+            background: white;
+            box-shadow: 0 2px 15px rgba(0,0,0,0.05);
+            padding: 0.8rem 1.5rem;
+            position: sticky;
+            top: 0;
+            z-index: 100;
+            backdrop-filter: blur(2px);
+            background: rgba(255,255,255,0.97);
+        }
+        .header-content {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            max-width: 1300px;
+            margin: 0 auto;
+            flex-wrap: wrap;
+            gap: 1rem;
+        }
+        .logo {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            text-decoration: none;
+        }
+        .logo h1 {
+            font-size: 1.6rem;
+            font-weight: 700;
+            color: #2c3e50;
+            margin: 0;
+        }
+        .nav-links {
+            display: flex;
+            gap: 0.7rem;
+            flex-wrap: wrap;
+            align-items: center;
+        }
+        .nav-links a {
+            text-decoration: none;
+            color: #2c3e50;
+            font-weight: 600;
+            padding: 0.45rem 1rem;
+            border-radius: 40px;
+            transition: 0.2s;
+            font-size: 0.85rem;
+            display: inline-flex;
+            align-items: center;
+            gap: 6px;
+        }
+        .nav-links a.active {
+            background: var(--toefl-primary);
+            color: white;
+        }
+        .login-btn, .signup-btn {
+            padding: 0.4rem 1.2rem;
+            border-radius: 40px;
+            font-weight: 600;
+            text-decoration: none;
+            font-size: 0.85rem;
+        }
+        .login-btn { background: #3498db; color: white; }
+        .signup-btn { background: #27ae60; color: white; }
+        .user-avatar {
+            width: 34px;
+            height: 34px;
+            border-radius: 50%;
+            object-fit: cover;
+            border: 2px solid var(--toefl-primary);
+        }
+
+        /* Breadcrumb */
+        .breadcrumb {
+            margin: 1.2rem 0 1rem;
+            font-size: 0.85rem;
+            color: #b97f44;
+        }
+
+        /* Hero */
+        .hero-listening {
+            background: linear-gradient(115deg, #e67e22 0%, #f39c12 100%);
+            border-radius: 2rem;
+            padding: 2rem;
+            color: white;
+            margin-bottom: 2rem;
+        }
+        .hero-listening h1 i, .hero-listening p { color: white; }
+        .badge {
+            background: rgba(255,255,255,0.2);
+            backdrop-filter: blur(4px);
+            display: inline-block;
+            padding: 0.3rem 1rem;
+            border-radius: 60px;
+            font-size: 0.8rem;
+            margin-top: 0.8rem;
+        }
+
+        /* Filter tabs */
+        .filter-bar {
+            display: flex;
+            gap: 0.8rem;
+            flex-wrap: wrap;
+            margin-bottom: 2rem;
+            background: white;
+            padding: 1rem;
+            border-radius: 1.5rem;
+            box-shadow: var(--shadow-sm);
+        }
+        .filter-btn {
+            background: #f0e4d8;
+            border: none;
+            padding: 0.5rem 1.2rem;
+            border-radius: 50px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: 0.2s;
+            font-size: 0.85rem;
+        }
+        .filter-btn.active {
+            background: var(--toefl-primary);
+            color: white;
+        }
+
+        /* Lecture Cards Grid */
+        .lectures-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(340px, 1fr));
+            gap: 1.8rem;
+            margin-bottom: 2rem;
+        }
+        .lecture-card {
+            background: white;
+            border-radius: 1.5rem;
+            padding: 1.5rem;
+            box-shadow: var(--shadow-sm);
+            transition: all 0.25s ease;
+            border: 1px solid var(--border-light);
+            cursor: pointer;
+        }
+        .lecture-card:hover {
+            transform: translateY(-5px);
+            box-shadow: var(--shadow-md);
+            border-color: var(--toefl-primary);
+        }
+        .lecture-icon {
+            font-size: 2rem;
+            color: var(--toefl-primary);
+            margin-bottom: 0.8rem;
+        }
+        .lecture-type {
+            display: inline-block;
+            background: #fef3e4;
+            padding: 0.2rem 0.8rem;
+            border-radius: 50px;
+            font-size: 0.7rem;
+            font-weight: 600;
+            margin: 0.5rem 0;
+        }
+        .difficulty {
+            font-size: 0.75rem;
+            color: var(--text-muted);
+            margin: 0.5rem 0;
+        }
+
+        /* Modal for listening practice */
+        .modal-overlay {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0,0,0,0.9);
+            z-index: 1000;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            backdrop-filter: blur(5px);
+            overflow-y: auto;
+            padding: 1rem;
+        }
+        .listening-modal {
+            background: white;
+            max-width: 850px;
+            width: 100%;
+            border-radius: 2rem;
+            max-height: 90vh;
+            overflow-y: auto;
+            box-shadow: 0 25px 50px rgba(0,0,0,0.3);
+            animation: slideUp 0.2s ease;
+        }
+        @keyframes slideUp {
+            from { transform: translateY(30px); opacity: 0; }
+            to { transform: translateY(0); opacity: 1; }
+        }
+        .modal-header {
+            background: var(--toefl-primary);
+            color: white;
+            padding: 1.2rem 1.5rem;
+            border-radius: 2rem 2rem 0 0;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            flex-wrap: wrap;
+        }
+        .audio-player {
+            background: #f8f9fa;
+            padding: 1rem;
+            border-radius: 1rem;
+            margin: 1rem 0;
+            text-align: center;
+        }
+        audio {
+            width: 100%;
+            border-radius: 40px;
+        }
+        .questions-area {
+            margin: 1.5rem 0;
+        }
+        .quiz-question {
+            background: #fef9f2;
+            padding: 1rem;
+            border-radius: 1rem;
+            margin-bottom: 1rem;
+        }
+        .options label {
+            display: block;
+            margin: 0.5rem 0;
+            cursor: pointer;
+            padding: 0.4rem;
+        }
+        .submit-quiz {
+            background: var(--success);
+            color: white;
+            border: none;
+            padding: 0.8rem 1.5rem;
+            border-radius: 60px;
+            font-weight: 700;
+            cursor: pointer;
+            margin: 1rem 0;
+        }
+        .result-box {
+            background: #e8f5e9;
+            padding: 1rem;
+            border-radius: 1rem;
+            margin-top: 1rem;
+            text-align: center;
+        }
+        .close-modal {
+            background: rgba(255,255,255,0.2);
+            border: none;
+            color: white;
+            font-size: 1.5rem;
+            cursor: pointer;
+            width: 36px;
+            height: 36px;
+            border-radius: 50%;
+        }
+        .note-taking-area {
+            background: #fff9ef;
+            padding: 1rem;
+            border-radius: 1rem;
+            margin: 1rem 0;
+            border-left: 4px solid var(--toefl-primary);
+        }
+        textarea {
+            width: 100%;
+            padding: 0.8rem;
+            border: 2px solid #ffe0c0;
+            border-radius: 1rem;
+            font-family: monospace;
+            margin-top: 0.5rem;
+        }
+
+        /* Tips Section */
+        .tips-section {
+            background: white;
+            border-radius: 1.5rem;
+            padding: 1.5rem;
+            margin: 2rem 0;
+        }
+
+        footer {
+            background: #1e2a36;
+            color: white;
+            padding: 2rem 1rem;
+            margin-top: 3rem;
+            text-align: center;
+            border-radius: 2rem 2rem 0 0;
+        }
+
+        @media (max-width: 680px) {
+            .listening-modal { max-width: 95%; }
+            .modal-header { flex-direction: column; text-align: center; }
+        }
+    </style>
+</head>
+<body>
+
+<header>
+    <div class="header-content">
+        <a href="index.html" class="logo">
+            <i class="fas fa-graduation-cap" style="font-size: 28px; color: #e67e22;"></i>
+            <h1>Zakhourani</h1>
+        </a>
+        <div class="nav-links">
+            <a href="index.html"><i class="fas fa-home"></i> Home</a>
+            <a href="IELS.html"><i class="fas fa-language"></i> IELTS</a>
+            <a href="TOFEL.html" class="active"><i class="fas fa-scroll"></i> TOEFL</a>
+            <a href="AI.html"><i class="fas fa-microchip"></i> AI Power</a>
+            <a href="aboutDrwaleed.html"><i class="fas fa-user-graduate"></i> Dr Waleed</a>
+            <div id="userMenuHeader" style="display: none;" class="user-menu" style="display:flex; gap:8px; align-items:center;">
+                <img id="userAvatarHeader" class="user-avatar" src="" alt="user">
+                <span id="userNameHeader" style="font-weight:500;"></span>
+            </div>
+            <div id="authButtonsHeader" style="display: flex; gap: 8px;">
+                <a href="login.html" class="login-btn">Login</a>
+                <a href="signup.html" class="signup-btn">Sign Up</a>
+            </div>
+        </div>
+    </div>
+</header>
+
+<main class="container">
+    <div class="breadcrumb">
+        <a href="TOFEL.html" style="color:#e67e22;"><i class="fas fa-scroll"></i> TOEFL Hub</a> / <span>Listening Vault</span>
+    </div>
+
+    <div class="hero-listening">
+        <h1><i class="fas fa-headphones-alt"></i> TOEFL Listening Vault</h1>
+        <p>Academic lectures, campus conversations, and note-taking drills with comprehension quizzes. Accents: US, UK, Canadian. Track your listening progress.</p>
+        <div class="badge"><i class="fas fa-university"></i> 40+ lectures & conversations | Timed practice | Full transcripts</div>
+    </div>
+
+    <div class="filter-bar">
+        <button class="filter-btn active" data-filter="all">All Materials</button>
+        <button class="filter-btn" data-filter="lecture">🎓 Academic Lectures</button>
+        <button class="filter-btn" data-filter="conversation">💬 Campus Conversations</button>
+        <button class="filter-btn" data-filter="hard">⭐ Advanced (Challenging)</button>
+    </div>
+
+    <div class="lectures-grid" id="lecturesGrid"></div>
+
+    <div class="tips-section">
+        <i class="fas fa-lightbulb" style="font-size: 2rem; color: var(--toefl-primary);"></i>
+        <h3>Dr. Waleed's Listening Strategies</h3>
+        <ul style="margin-left: 1.5rem; margin-top: 0.8rem;">
+            <li>🔹 <strong>Predict before listening:</strong> Scan questions, anticipate main ideas.</li>
+            <li>🔹 <strong>Take structured notes:</strong> Use abbreviations, focus on speaker attitude & transitions.</li>
+            <li>🔹 <strong>Watch for signposts:</strong> "However," "First," "The important point is..."</li>
+            <li>🔹 <strong>Practice with 1.25x speed</strong> to build real-test stamina.</li>
+        </ul>
+    </div>
+</main>
+
+<footer>
+    <i class="fas fa-graduation-cap"></i> Zakhourani TOEFL Listening Lab · Practice with real academic content
+    <p style="margin-top: 10px; font-size: 0.8rem;">New lectures added weekly. Improve your listening comprehension for TOEFL iBT.</p>
+</footer>
+
+<script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-app-compat.js"></script>
+<script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-auth-compat.js"></script>
+<script>
+    const firebaseConfig = {
+        apiKey: "AIzaSyAE8wf24HXrfmpMluaFOv1OHPrf_YFfqTQ",
+        authDomain: "whaai-c388e.firebaseapp.com",
+        projectId: "whaai-c388e",
+        storageBucket: "whaai-c388e.firebasestorage.app",
+        messagingSenderId: "640598205524",
+        appId: "1:640598205524:web:c975f5e8b371b1043e39c1"
+    };
+    if (!firebase.apps.length) firebase.initializeApp(firebaseConfig);
+    const auth = firebase.auth();
+
+    const userMenuDiv = document.getElementById('userMenuHeader');
+    const authBtnsDiv = document.getElementById('authButtonsHeader');
+    const userAvatarImg = document.getElementById('userAvatarHeader');
+    const userNameSpan = document.getElementById('userNameHeader');
+
+    auth.onAuthStateChanged(user => {
+        if (user) {
+            userMenuDiv.style.display = 'flex';
+            authBtnsDiv.style.display = 'none';
+            const photo = user.photoURL || `https://ui-avatars.com/api/?name=${encodeURIComponent(user.displayName || user.email)}&background=e67e22&color=fff&size=32`;
+            userAvatarImg.src = photo;
+            userNameSpan.textContent = user.displayName?.split(' ')[0] || user.email.split('@')[0];
+        } else {
+            userMenuDiv.style.display = 'none';
+            authBtnsDiv.style.display = 'flex';
+        }
+    });
+
+    // Lecture Database (simulated audio with text-to-speech friendly content, actual audio will be simulated via text reading)
+    const lectures = [
+        {
+            id: 1,
+            title: "Biology: Coral Reef Ecosystems",
+            type: "lecture",
+            category: "lecture",
+            duration: "4:32",
+            difficulty: "Medium",
+            transcript: "Professor: Today we'll discuss coral reef ecosystems. Coral reefs are often called the rainforests of the sea. They support about 25% of all marine species. However, rising ocean temperatures cause coral bleaching, where corals expel the symbiotic algae zooxanthellae. This algae provides up to 90% of the coral's energy. Without them, corals turn white and eventually die. Another threat is ocean acidification due to increased CO2 absorption. So what can be done? Marine protected areas and reducing carbon emissions are key strategies.",
+            questions: [
+                { text: "What percentage of marine species do coral reefs support?", options: ["10%", "25%", "50%", "75%"], correct: 1 },
+                { text: "What causes coral bleaching according to the lecture?", options: ["Pollution", "Rising ocean temperatures", "Overfishing", "Ocean currents"], correct: 1 },
+                { text: "What is the primary function of zooxanthellae?", options: ["Provide color", "Provide energy through photosynthesis", "Protect from predators", "Filter water"], correct: 1 }
+            ]
+        },
+        {
+            id: 2,
+            title: "Psychology: Memory and Chunking",
+            type: "lecture",
+            category: "lecture",
+            duration: "5:15",
+            difficulty: "Medium",
+            transcript: "Professor: Let's explore how memory works. The concept of chunking was introduced by George Miller. He suggested that short-term memory can hold about seven items, plus or minus two. Chunking allows us to group individual pieces of information into larger units. For example, remembering a phone number as three chunks rather than ten digits. This technique is crucial for improving recall. In academic settings, students who chunk information perform better on tests. Additionally, visualization and association further enhance memory retention.",
+            questions: [
+                { text: "What is chunking in memory psychology?", options: ["Forgetting old memories", "Grouping information into units", "Repeating information aloud", "Visualizing images"], correct: 1 },
+                { text: "How many items can short-term memory typically hold?", options: ["3 ± 1", "5 ± 2", "7 ± 2", "10 ± 3"], correct: 2 }
+            ]
+        },
+        {
+            id: 3,
+            title: "Campus Conversation: Library Extension",
+            type: "conversation",
+            category: "conversation",
+            duration: "3:20",
+            difficulty: "Easy",
+            transcript: "Student: Hi, I heard the library is getting a new extension. Can you tell me more? Librarian: Yes! The university is adding a 24/7 study space with 200 new seats and charging stations. Student: That sounds great. When will it open? Librarian: Construction finishes in August. There will also be a new café. Student: Perfect, I'm always studying late. Thanks for the info!",
+            questions: [
+                { text: "What is being added to the library?", options: ["A gym", "A 24/7 study space", "A parking lot", "A theater"], correct: 1 },
+                { text: "When will the new facility open?", options: ["May", "June", "August", "October"], correct: 2 }
+            ]
+        },
+        {
+            id: 4,
+            title: "Economics: Behavioral Finance",
+            type: "lecture",
+            category: "lecture",
+            duration: "6:10",
+            difficulty: "Hard",
+            transcript: "Professor: Behavioral finance challenges the traditional assumption that investors are rational. Loss aversion is a key concept: people feel losses twice as strongly as gains. This leads to irrational decisions like holding losing stocks too long. Another bias is overconfidence, where investors trade excessively. Understanding these biases can help make better financial choices. The field has grown significantly since Kahneman and Tversky's prospect theory.",
+            questions: [
+                { text: "What is loss aversion?", options: ["Fear of making profit", "Losses felt more intensely than gains", "Always selling winners", "Avoiding all risk"], correct: 1 },
+                { text: "Who developed prospect theory?", options: ["Smith & Ricardo", "Kahneman & Tversky", "Marx & Engels", "Friedman & Hayek"], correct: 1 }
+            ]
+        },
+        {
+            id: 5,
+            title: "Conversation: Course Registration Issue",
+            type: "conversation",
+            category: "conversation",
+            duration: "2:45",
+            difficulty: "Easy",
+            transcript: "Advisor: How can I help? Student: I'm trying to register for ECO 202, but it says prerequisite not met. Advisor: Have you taken ECO 101? Student: Yes, last semester. Advisor: Let me check the system. Oh, there's a glitch. I'll override it for you. Student: Thank you so much!",
+            questions: [
+                { text: "What problem does the student have?", options: ["Class is full", "Prerequisite error", "Schedule conflict", "Professor unavailable"], correct: 1 },
+                { text: "What does the advisor do to help?", options: ["Adds the student manually", "Overrides the prerequisite", "Changes the schedule", "Refers to department"], correct: 1 }
+            ]
+        },
+        {
+            id: 6,
+            title: "Advanced: Quantum Computing",
+            type: "lecture",
+            category: "hard",
+            duration: "7:30",
+            difficulty: "Hard",
+            transcript: "Professor: Quantum computing leverages superposition and entanglement. Unlike classical bits which are 0 or 1, qubits can exist in multiple states simultaneously. This allows exponential processing power for certain problems like cryptography and drug discovery. However, decoherence remains a major challenge. Researchers are developing error correction methods. The field is advancing rapidly, with companies like IBM and Google building quantum processors.",
+            questions: [
+                { text: "What is a qubit?", options: ["Classical bit", "Quantum bit with superposition", "Binary digit", "Memory unit"], correct: 1 },
+                { text: "What challenge does quantum computing face?", options: ["Speed", "Decoherence", "Cost only", "Lack of interest"], correct: 1 }
+            ]
+        }
+    ];
+
+    let activeModal = null;
+    let currentFilter = "all";
+
+    function renderLectures(filter) {
+        const grid = document.getElementById('lecturesGrid');
+        const filtered = lectures.filter(l => {
+            if (filter === "all") return true;
+            if (filter === "hard") return l.difficulty === "Hard";
+            return l.category === filter;
+        });
+        grid.innerHTML = filtered.map(lect => `
+            <div class="lecture-card" data-id="${lect.id}">
+                <div class="lecture-icon"><i class="fas ${lect.type === 'lecture' ? 'fa-chalkboard-teacher' : 'fa-users'}"></i></div>
+                <h3>${lect.title}</h3>
+                <span class="lecture-type">${lect.type === 'lecture' ? '🎓 Academic Lecture' : '💬 Campus Conversation'}</span>
+                <div class="difficulty"><i class="fas fa-clock"></i> ${lect.duration} • Difficulty: ${lect.difficulty}</div>
+                <p style="font-size: 0.85rem; color: #7f8c8d; margin-top: 0.8rem;">${lect.transcript.substring(0, 80)}...</p>
+                <button class="btn-start" style="margin-top: 1rem; background: #e67e22; color: white; border: none; padding: 0.5rem 1rem; border-radius: 50px; cursor: pointer; width: 100%;">🎧 Start Listening & Quiz</button>
+            </div>
+        `).join('');
+        
+        document.querySelectorAll('.lecture-card').forEach(card => {
+            const btn = card.querySelector('.btn-start');
+            const id = parseInt(card.getAttribute('data-id'));
+            btn.addEventListener('click', () => openListeningModal(lectures.find(l => l.id === id)));
+        });
+    }
+
+    function openListeningModal(lecture) {
+        if (activeModal) return;
+        const modalDiv = document.createElement('div');
+        modalDiv.className = 'modal-overlay';
+        
+        let userAnswers = new Array(lecture.questions.length).fill(null);
+        
+        const modalHtml = `
+            <div class="listening-modal">
+                <div class="modal-header">
+                    <h3><i class="fas fa-headphones"></i> ${lecture.title}</h3>
+                    <button class="close-modal" id="closeModalBtn"><i class="fas fa-times"></i></button>
+                </div>
+                <div class="modal-body" style="padding: 1.5rem;">
+                    <div class="audio-player">
+                        <i class="fas fa-volume-up" style="font-size: 1.5rem; color: #e67e22;"></i>
+                        <p><strong>Audio Simulation:</strong> Press play to listen to the lecture/conversation</p>
+                        <audio controls id="audioSimulation">
+                            <source src="#" type="audio/mpeg">
+                            Your browser does not support audio. Use text transcript below.
+                        </audio>
+                        <p style="font-size: 0.75rem; color: #666; margin-top: 0.5rem;"><i class="fas fa-info-circle"></i> For demo, read the transcript aloud or use text-to-speech. Real TOEFL uses recorded audio.</p>
+                    </div>
+                    
+                    <div class="note-taking-area">
+                        <i class="fas fa-pencil-alt"></i> <strong>Note-Taking Practice</strong>
+                        <textarea id="notesField" rows="3" placeholder="Take notes here as you listen... (just like real TOEFL)"></textarea>
+                    </div>
+                    
+                    <div class="questions-area">
+                        <h4><i class="fas fa-question-circle"></i> Comprehension Questions</h4>
+                        ${lecture.questions.map((q, idx) => `
+                            <div class="quiz-question" data-qidx="${idx}">
+                                <p><strong>${idx+1}. ${q.text}</strong></p>
+                                <div class="options">
+                                    ${q.options.map((opt, optIdx) => `
+                                        <label><input type="radio" name="q_${idx}" value="${optIdx}"> ${opt}</label>
+                                    `).join('')}
+                                </div>
+                            </div>
+                        `).join('')}
+                    </div>
+                    
+                    <button class="submit-quiz" id="submitQuizBtn"><i class="fas fa-check-circle"></i> Submit Answers & Check Score</button>
+                    <div id="quizResult"></div>
+                    
+                    <div class="transcript-box" style="margin-top: 1.5rem; background: #f8f9fa; padding: 1rem; border-radius: 1rem;">
+                        <i class="fas fa-file-alt"></i> <strong>Transcript (for reference after listening):</strong>
+                        <p style="margin-top: 0.5rem; font-size: 0.85rem;">${lecture.transcript}</p>
+                    </div>
+                </div>
+            </div>
+        `;
+        
+        modalDiv.innerHTML = modalHtml;
+        document.body.appendChild(modalDiv);
+        activeModal = modalDiv;
+        
+        // Simulate audio with Web Speech API for demo (optional)
+        const audioElem = document.getElementById('audioSimulation');
+        if (audioElem && 'speechSynthesis' in window) {
+            audioElem.style.display = 'none';
+            const playBtn = document.createElement('button');
+            playBtn.innerHTML = '<i class="fas fa-play"></i> Play Audio (Text-to-Speech)';
+            playBtn.style.background = '#e67e22';
+            playBtn.style.color = 'white';
+            playBtn.style.border = 'none';
+            playBtn.style.padding = '0.5rem 1rem';
+            playBtn.style.borderRadius = '50px';
+            playBtn.style.margin = '0.5rem 0';
+            playBtn.style.cursor = 'pointer';
+            const audioDiv = document.querySelector('.audio-player');
+            audioDiv.appendChild(playBtn);
+            playBtn.addEventListener('click', () => {
+                const utterance = new SpeechSynthesisUtterance(lecture.transcript);
+                utterance.rate = 0.9;
+                utterance.lang = 'en-US';
+                speechSynthesis.cancel();
+                speechSynthesis.speak(utterance);
+            });
+        }
+        
+        // Track radio changes
+        modalDiv.querySelectorAll('input[type="radio"]').forEach(radio => {
+            radio.addEventListener('change', (e) => {
+                const name = e.target.getAttribute('name');
+                const idx = parseInt(name.split('_')[1]);
+                userAnswers[idx] = parseInt(e.target.value);
+            });
+        });
+        
+        document.getElementById('submitQuizBtn').addEventListener('click', () => {
+            let correctCount = 0;
+            lecture.questions.forEach((q, idx) => {
+                if (userAnswers[idx] !== null && userAnswers[idx] === q.correct) correctCount++;
+            });
+            const scorePercent = (correctCount / lecture.questions.length) * 100;
+            let estimatedScore = 0;
+            if (scorePercent >= 90) estimatedScore = 28;
+            else if (scorePercent >= 70) estimatedScore = 23;
+            else if (scorePercent >= 50) estimatedScore = 18;
+            else estimatedScore = 12;
+            
+            const resultDiv = document.getElementById('quizResult');
+            resultDiv.innerHTML = `
+                <div class="result-box">
+                    <i class="fas fa-chart-line" style="font-size: 1.5rem; color: #27ae60;"></i>
+                    <h4>Your Score: ${correctCount}/${lecture.questions.length} correct</h4>
+                    <p><strong>Estimated TOEFL Listening Scale:</strong> ${estimatedScore}/30</p>
+                    <p>${scorePercent >= 70 ? 'Great job! Keep practicing with academic lectures.' : 'Review the transcript and try again to improve note-taking.'}</p>
+                    <button id="saveProgressBtn" style="background: #e67e22; margin-top: 0.8rem; padding: 0.5rem 1.2rem; border-radius: 50px; border: none; color: white; cursor: pointer;"><i class="fas fa-save"></i> Save to Profile</button>
+                </div>
+            `;
+            document.getElementById('saveProgressBtn')?.addEventListener('click', () => {
+                alert(`✅ Progress saved! You scored ${correctCount}/${lecture.questions.length} on "${lecture.title}"`);
+            });
+        });
+        
+        document.getElementById('closeModalBtn').addEventListener('click', () => {
+            if (activeModal) activeModal.remove();
+            activeModal = null;
+            speechSynthesis.cancel();
+        });
+    }
+    
+    // Filter functionality
+    document.querySelectorAll('.filter-btn').forEach(btn => {
+        btn.addEventListener('click', () => {
+            document.querySelectorAll('.filter-btn').forEach(b => b.classList.remove('active'));
+            btn.classList.add('active');
+            currentFilter = btn.getAttribute('data-filter');
+            renderLectures(currentFilter);
+        });
+    });
+    
+    renderLectures("all");
+</script>
+</body>
+</html>

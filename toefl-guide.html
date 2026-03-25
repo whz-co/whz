@@ -1,0 +1,598 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+    <title>TOEFL Complete Guide · Dr. Waleed | Zakhourani</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        :root {
+            --toefl-primary: #e67e22;
+            --toefl-dark: #d35400;
+            --bg-soft: #fff9f0;
+            --card-white: #ffffff;
+            --text-dark: #1e2a3a;
+            --text-muted: #4a627a;
+            --border-light: #ffe0b5;
+            --shadow-sm: 0 10px 25px -5px rgba(0,0,0,0.05), 0 8px 10px -6px rgba(0,0,0,0.02);
+            --shadow-md: 0 20px 30px -12px rgba(230,126,34,0.12);
+        }
+
+        body {
+            font-family: system-ui, 'Segoe UI', 'Inter', -apple-system, BlinkMacSystemFont, 'Roboto', sans-serif;
+            background: linear-gradient(145deg, #fef9f0 0%, #fff5e6 100%);
+            color: var(--text-dark);
+            line-height: 1.5;
+            -webkit-font-smoothing: antialiased;
+        }
+
+        /* Mobile-first typography – fluid scales */
+        html {
+            font-size: 16px;
+        }
+        @media (max-width: 640px) {
+            html { font-size: 15px; }
+        }
+        @media (max-width: 480px) {
+            html { font-size: 14px; }
+        }
+
+        h1 { font-size: 2.2rem; line-height: 1.2; font-weight: 800; letter-spacing: -0.01em; }
+        h2 { font-size: 1.75rem; font-weight: 700; margin: 1.5rem 0 0.75rem; letter-spacing: -0.01em; }
+        h3 { font-size: 1.35rem; font-weight: 700; margin: 1.25rem 0 0.6rem; color: var(--toefl-primary); }
+        h4 { font-size: 1.15rem; font-weight: 700; margin: 1rem 0 0.4rem; }
+        p, li, .text-body { font-size: 1rem; line-height: 1.5; color: var(--text-muted); }
+        
+        @media (max-width: 640px) {
+            h1 { font-size: 1.9rem; }
+            h2 { font-size: 1.55rem; }
+            h3 { font-size: 1.25rem; }
+        }
+
+        /* container */
+        .container {
+            max-width: 1280px;
+            margin: 0 auto;
+            padding: 0 1.5rem;
+        }
+
+        /* header / navigation (same style as main hub) */
+        header {
+            background: white;
+            box-shadow: 0 4px 20px rgba(0,0,0,0.05);
+            padding: 0.8rem 1.5rem;
+            position: sticky;
+            top: 0;
+            z-index: 100;
+            backdrop-filter: blur(2px);
+            background: rgba(255,255,255,0.96);
+        }
+        .header-content {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            max-width: 1280px;
+            margin: 0 auto;
+            flex-wrap: wrap;
+            gap: 1rem;
+        }
+        .logo {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            text-decoration: none;
+        }
+        .logo h1 {
+            font-size: 1.7rem;
+            font-weight: 700;
+            color: #2c3e50;
+            margin: 0;
+        }
+        .nav-links {
+            display: flex;
+            gap: 0.8rem;
+            flex-wrap: wrap;
+            align-items: center;
+        }
+        .nav-links a {
+            text-decoration: none;
+            color: #2c3e50;
+            font-weight: 600;
+            padding: 0.5rem 0.9rem;
+            border-radius: 40px;
+            transition: 0.2s;
+            font-size: 0.9rem;
+            display: inline-flex;
+            align-items: center;
+            gap: 6px;
+        }
+        .nav-links a:hover {
+            background: #fef3e4;
+            color: var(--toefl-primary);
+        }
+        .nav-links a.active {
+            background: var(--toefl-primary);
+            color: white;
+        }
+        .user-menu, .auth-btns {
+            display: flex;
+            gap: 12px;
+            align-items: center;
+        }
+        .login-btn, .signup-btn {
+            padding: 0.45rem 1.2rem;
+            border-radius: 40px;
+            font-weight: 600;
+            text-decoration: none;
+            font-size: 0.85rem;
+        }
+        .login-btn { background: #3498db; color: white; }
+        .signup-btn { background: #27ae60; color: white; }
+        .user-avatar {
+            width: 36px;
+            height: 36px;
+            border-radius: 50%;
+            object-fit: cover;
+            border: 2px solid var(--toefl-primary);
+        }
+
+        /* breadcrumb */
+        .breadcrumb {
+            margin: 1.5rem 0 1rem;
+            font-size: 0.85rem;
+            color: #b97f44;
+        }
+        .breadcrumb a {
+            color: var(--toefl-dark);
+            text-decoration: none;
+        }
+
+        /* hero section */
+        .guide-hero {
+            background: linear-gradient(105deg, #fff2e6 0%, #ffe6d5 100%);
+            border-radius: 2rem;
+            padding: 2rem 2rem;
+            margin: 1.5rem 0 2rem;
+            box-shadow: var(--shadow-sm);
+        }
+        .hero-badge {
+            display: inline-block;
+            background: var(--toefl-primary);
+            color: white;
+            padding: 0.2rem 1rem;
+            border-radius: 40px;
+            font-size: 0.75rem;
+            font-weight: 600;
+            margin-bottom: 1rem;
+        }
+        .guide-hero h1 {
+            margin: 0.5rem 0 0.75rem;
+        }
+        .guide-hero p {
+            font-size: 1.1rem;
+            max-width: 85%;
+        }
+        @media (max-width: 700px) {
+            .guide-hero p { max-width: 100%; }
+            .guide-hero { padding: 1.5rem; }
+        }
+
+        /* grid layout for sections */
+        .two-columns {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 2rem;
+            margin: 2rem 0;
+        }
+        @media (max-width: 780px) {
+            .two-columns { grid-template-columns: 1fr; gap: 1.5rem; }
+        }
+
+        .info-card {
+            background: var(--card-white);
+            border-radius: 1.8rem;
+            padding: 1.5rem;
+            box-shadow: var(--shadow-sm);
+            transition: transform 0.2s, box-shadow 0.2s;
+            border: 1px solid rgba(230,126,34,0.15);
+        }
+        .info-card:hover {
+            transform: translateY(-4px);
+            box-shadow: var(--shadow-md);
+        }
+        .card-icon {
+            font-size: 2.2rem;
+            color: var(--toefl-primary);
+            margin-bottom: 1rem;
+        }
+        .skill-tag {
+            background: #fff0e0;
+            padding: 0.2rem 0.8rem;
+            border-radius: 30px;
+            font-size: 0.75rem;
+            font-weight: 600;
+            color: var(--toefl-dark);
+            display: inline-block;
+            margin-top: 0.8rem;
+        }
+
+        /* strategy timeline */
+        .strategy-list {
+            background: white;
+            border-radius: 1.8rem;
+            padding: 1.5rem;
+            margin: 2rem 0;
+        }
+        .step-item {
+            display: flex;
+            gap: 1rem;
+            margin-bottom: 1.5rem;
+            border-bottom: 1px solid #ffe6d0;
+            padding-bottom: 1.2rem;
+        }
+        .step-num {
+            width: 40px;
+            height: 40px;
+            background: var(--toefl-primary);
+            color: white;
+            font-weight: 800;
+            border-radius: 60px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.2rem;
+            flex-shrink: 0;
+        }
+        .step-content h4 {
+            margin: 0 0 0.3rem;
+        }
+        .step-content p {
+            margin: 0;
+            font-size: 0.95rem;
+        }
+
+        /* table responsive */
+        .section-table {
+            overflow-x: auto;
+            margin: 1.8rem 0;
+        }
+        .section-table table {
+            width: 100%;
+            border-collapse: collapse;
+            background: white;
+            border-radius: 1.5rem;
+            overflow: hidden;
+            box-shadow: var(--shadow-sm);
+        }
+        .section-table th, .section-table td {
+            padding: 1rem;
+            text-align: left;
+            border-bottom: 1px solid #f0e2d4;
+            font-size: 0.9rem;
+        }
+        .section-table th {
+            background: #fbe9dc;
+            color: var(--toefl-dark);
+            font-weight: 700;
+        }
+        @media (max-width: 560px) {
+            .section-table th, .section-table td { padding: 0.7rem; font-size: 0.85rem; }
+        }
+
+        .tips-box {
+            background: #fef5e9;
+            border-left: 5px solid var(--toefl-primary);
+            padding: 1.2rem 1.5rem;
+            border-radius: 1.2rem;
+            margin: 1.5rem 0;
+        }
+        .faq-item {
+            background: white;
+            border-radius: 1.2rem;
+            padding: 1rem 1.3rem;
+            margin-bottom: 1rem;
+            box-shadow: 0 1px 3px rgba(0,0,0,0.05);
+        }
+
+        footer {
+            background: #1e2a36;
+            color: white;
+            padding: 2rem 1.5rem;
+            margin-top: 4rem;
+            text-align: center;
+            border-radius: 2rem 2rem 0 0;
+        }
+        .footer-links {
+            display: flex;
+            justify-content: center;
+            gap: 1.8rem;
+            flex-wrap: wrap;
+            margin: 1.2rem 0;
+        }
+        .footer-links a {
+            color: #ffddb0;
+            text-decoration: none;
+            font-size: 0.9rem;
+        }
+        .back-to-top {
+            position: fixed;
+            bottom: 1.8rem;
+            right: 1.5rem;
+            background: var(--toefl-primary);
+            color: white;
+            width: 44px;
+            height: 44px;
+            border-radius: 60px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            text-decoration: none;
+            box-shadow: 0 6px 14px rgba(0,0,0,0.2);
+            opacity: 0.8;
+            transition: 0.2s;
+            z-index: 99;
+        }
+        @media (max-width: 640px) {
+            .back-to-top { width: 38px; height: 38px; bottom: 1rem; right: 1rem; }
+        }
+    </style>
+</head>
+<body>
+
+<header>
+    <div class="header-content">
+        <a href="index.html" class="logo">
+            <i class="fas fa-graduation-cap" style="font-size: 28px; color: #e67e22;"></i>
+            <h1>Zakhourani</h1>
+        </a>
+        <div class="nav-links">
+            <a href="index.html"><i class="fas fa-home"></i> Home</a>
+            <a href="IELS.html"><i class="fas fa-language"></i> IELTS</a>
+            <a href="TOFEL.html" class="active"><i class="fas fa-scroll"></i> TOEFL</a>
+            <a href="AI.html"><i class="fas fa-microchip"></i> AI Power</a>
+            <a href="aboutDrwaleed.html"><i class="fas fa-user-graduate"></i> Dr Waleed</a>
+            <div id="userMenuHeader" style="display: none;" class="user-menu">
+                <img id="userAvatarHeader" class="user-avatar" src="" alt="user">
+                <span id="userNameHeader" style="font-weight:500;"></span>
+            </div>
+            <div id="authButtonsHeader" style="display: flex; gap: 8px;">
+                <a href="login.html" class="login-btn">Login</a>
+                <a href="signup.html" class="signup-btn">Sign Up</a>
+            </div>
+        </div>
+    </div>
+</header>
+
+<main class="container">
+    <div class="breadcrumb">
+        <a href="TOFEL.html"><i class="fas fa-scroll"></i> TOEFL Hub</a> / <span style="color: #e67e22;">Complete Guide</span>
+    </div>
+
+    <div class="guide-hero">
+        <span class="hero-badge"><i class="fas fa-star-of-life"></i> Dr. Waleed's Official Blueprint</span>
+        <h1><i class="fas fa-book-open" style="color: #e67e22;"></i> TOEFL iBT Complete Guide</h1>
+        <p>Master every section: Reading, Listening, Speaking, Writing. Strategies, scoring, time management, and pro tips — all in one ultimate resource.</p>
+    </div>
+
+    <!-- overview cards -->
+    <div class="two-columns">
+        <div class="info-card">
+            <div class="card-icon"><i class="fas fa-info-circle"></i></div>
+            <h3>What is TOEFL iBT?</h3>
+            <p>Test of English as a Foreign Language (Internet-Based Test) measures academic English proficiency. Used by 11,500+ universities in 160+ countries. Score range: 0–120 (30 per section). Valid for 2 years.</p>
+            <span class="skill-tag"><i class="fas fa-globe"></i> Accepted globally</span>
+        </div>
+        <div class="info-card">
+            <div class="card-icon"><i class="fas fa-clock"></i></div>
+            <h3>Test Format & Duration</h3>
+            <p>Total: ~3 hours (plus 10-min break). Reading: 54-72 min (3-4 passages), Listening: 41-57 min, Speaking: 17 min, Writing: 50 min. Integrated tasks simulate real academic environment.</p>
+            <span class="skill-tag"><i class="fas fa-hourglass-half"></i> Computer-delivered</span>
+        </div>
+    </div>
+
+    <!-- Section deep dive -->
+    <h2><i class="fas fa-newspaper" style="margin-right: 12px;"></i> 1. Reading Section</h2>
+    <div class="two-columns">
+        <div class="info-card">
+            <h4><i class="fas fa-question-circle"></i> Question Types</h4>
+            <ul style="margin-left: 1.2rem; margin-top: 0.5rem;">
+                <li>Factual / Negative Factual</li>
+                <li>Inference & Rhetorical Purpose</li>
+                <li>Vocabulary in Context</li>
+                <li>Sentence Insertion</li>
+                <li>Prose Summary (6 options, pick 3)</li>
+                <li>Fill in a Table (categories)</li>
+            </ul>
+        </div>
+        <div class="info-card">
+            <h4><i class="fas fa-chart-line"></i> Key Strategies</h4>
+            <p>✔ Skim passage for main idea (3-4 min) before answering.<br>
+            ✔ Highlight transition words (however, therefore).<br>
+            ✔ Eliminate 2 wrong answers quickly.<br>
+            ✔ For summary questions: focus on major ideas, not details.</p>
+            <span class="skill-tag">🔹 10 question types mastery</span>
+        </div>
+    </div>
+
+    <div class="tips-box">
+        <i class="fas fa-lightbulb" style="font-size: 1.4rem; color: #e67e22; margin-right: 10px;"></i> 
+        <strong>Dr. Waleed’s Insider Reading Tip:</strong> “Never read the whole passage twice. Annotate keywords, then jump to questions. Use the ‘review’ button to flag uncertain answers.”
+    </div>
+
+    <h2><i class="fas fa-headphones-alt"></i> 2. Listening Section</h2>
+    <div class="two-columns">
+        <div class="info-card">
+            <h4>Lecture & Conversation Types</h4>
+            <p>2-3 lectures (each 3–5 min, 6 questions) + 2-3 conversations (2–3 min, 5 questions). Accents: North American, British, Australian. Topics: arts, life science, physical science, social science.</p>
+        </div>
+        <div class="info-card">
+            <h4>Active Listening Strategies</h4>
+            <p>✔ Take structured notes: main idea, attitude, transitions.<br>
+            ✔ Predict questions while listening (why professor says X?).<br>
+            ✔ Pay attention to repetition, blackboard cues, and student questions.<br>
+            ✔ Don’t rely on memory — note details.</p>
+        </div>
+    </div>
+
+    <!-- Speaking & writing combo -->
+    <h2><i class="fas fa-microphone-alt"></i> 3. Speaking Section (4 tasks)</h2>
+    <div class="section-table">
+        <table>
+            <thead>
+                <tr><th>Task</th><th>Type</th><th>Prep/Response</th><th>Key Skill</th></tr>
+            </thead>
+            <tbody>
+                <tr><td>Task 1</td><td>Independent (Personal choice)</td><td>15s prep / 45s speak</td><td>Opinion + example</td></tr>
+                <tr><td>Task 2</td><td>Integrated: Campus announcement + conversation</td><td>30s prep / 60s speak</td><td>Summarize & explain opinion</td></tr>
+                <tr><td>Task 3</td><td>Integrated: Academic lecture + reading</td><td>30s prep / 60s speak</td><td>Explain concept with examples</td></tr>
+                <tr><td>Task 4</td><td>Integrated: Lecture only (summary)</td><td>20s prep / 60s speak</td><td>Synthesize main points</td></tr>
+            </tbody>
+        </table>
+    </div>
+    <div class="tips-box">
+        <i class="fas fa-ear-listen"></i> <strong>Speaking pro tip:</strong> Use a template for integrated tasks: “The reading states that... However, the speaker argues that... because...” Always include transitional phrases.
+    </div>
+
+    <h2><i class="fas fa-pen-fancy"></i> 4. Writing Section (2 tasks)</h2>
+    <div class="two-columns">
+        <div class="info-card">
+            <h4>Integrated Writing (20 min)</h4>
+            <p>Read a short academic passage → listen to a lecture → write 150–225 words summarizing lecture points and how they relate to reading. No personal opinion.</p>
+            <span class="skill-tag">Structure: Introduction + 3 body paragraphs</span>
+        </div>
+        <div class="info-card">
+            <h4>Academic Discussion / Independent Writing (30 min)</h4>
+            <p>New “Writing for an Academic Discussion” task (replaces independent essay). Respond to a professor's online discussion post, providing opinion and reasoning. 100+ words, clear argument, and evidence.</p>
+            <span class="skill-tag">🔥 Updated TOEFL format 2023+</span>
+        </div>
+    </div>
+    
+    <!-- Scoring rubric explained -->
+    <div class="strategy-list">
+        <h3><i class="fas fa-chart-simple"></i> Scoring & Band Descriptors</h3>
+        <div class="step-item">
+            <div class="step-num">1</div>
+            <div class="step-content"><h4>Reading/Listening (raw → scaled)</h4><p>Each correct answer gives 1 point raw. Scaled to 0–30. High scores require 85%+ accuracy.</p></div>
+        </div>
+        <div class="step-item">
+            <div class="step-num">2</div>
+            <div class="step-content"><h4>Speaking (0–30)</h4><p>Raters evaluate delivery, language use, topic development. Score based on 4 tasks averaged. Score 26+ = advanced.</p></div>
+        </div>
+        <div class="step-item">
+            <div class="step-num">3</div>
+            <div class="step-content"><h4>Writing (0–30)</h4><p>Integrated: how well you synthesize; Academic discussion: clarity, grammar, relevance. Automated e-rater + human rater.</p></div>
+        </div>
+    </div>
+
+    <!-- 6-week study plan -->
+    <h2><i class="fas fa-calendar-alt"></i> Dr. Waleed's 6-Week Study Roadmap</h2>
+    <div class="info-card" style="margin-bottom: 1.5rem;">
+        <div class="card-icon"><i class="fas fa-chalkboard-user"></i></div>
+        <p><strong>Week 1-2:</strong> Foundation — learn question patterns, take 1 diagnostic test, identify weak sections. Focus on vocabulary 500 academic words.<br>
+        <strong>Week 3-4:</strong> Skill building — daily reading 1 passage + listening lecture. Speaking templates & writing outlines.<br>
+        <strong>Week 5:</strong> Full mock tests (3x) with strict timing. Analyze mistakes.<br>
+        <strong>Week 6:</strong> Refine weak areas, practice integrated tasks, simulated environment, confidence drills.</p>
+        <span class="skill-tag"><i class="fas fa-check-circle"></i> 20+ practice tests recommended</span>
+    </div>
+
+    <!-- top common mistakes -->
+    <div class="tips-box">
+        <i class="fas fa-exclamation-triangle"></i> <strong>Avoid these TOEFL killers:</strong>
+        <ul style="margin-top: 8px; margin-left: 1.4rem;">
+            <li>Not managing time — running out of reading section due to overthinking.</li>
+            <li>Speaking too quietly or using fillers “um” repeatedly.</li>
+            <li>Writing off-topic in integrated task: add personal opinion (forbidden).</li>
+            <li>Ignoring note-taking during listening lectures — key details missed.</li>
+        </ul>
+    </div>
+
+    <!-- FAQ section (mobile friendly) -->
+    <h2><i class="fas fa-question-circle"></i> Frequently Asked Questions</h2>
+    <div class="faq-item">
+        <h4><i class="fas fa-dollar-sign"></i> Is TOEFL easier than IELTS?</h4>
+        <p>Both are similar in difficulty. TOEFL uses more academic content and multiple-choice reading/listening. IELTS offers more variety (maps, diagrams). Choose based on your strengths.</p>
+    </div>
+    <div class="faq-item">
+        <h4><i class="fas fa-laptop"></i> Can I take notes during the test?</h4>
+        <p>Yes! ETS provides scratch paper. Use abbreviations & symbols for speed. Note-taking is essential for listening, speaking, integrated writing.</p>
+    </div>
+    <div class="faq-item">
+        <h4><i class="fas fa-tachometer-alt"></i> How many times can I retake TOEFL?</h4>
+        <p>Unlimited, but you must wait at least 3 days between attempts. Most universities take the highest score.</p>
+    </div>
+
+    <!-- final resource banner -->
+    <div style="background: linear-gradient(115deg, #fff1e2, #ffe1ca); border-radius: 2rem; padding: 2rem; text-align: center; margin: 2rem 0;">
+        <i class="fas fa-dove" style="font-size: 2.5rem; color: #e67e22;"></i>
+        <h3 style="margin-top: 0.5rem;">Ready to achieve your dream score?</h3>
+        <p>Access full-length practice tests, personalized feedback, and live strategy sessions inside Zakhourani TOEFL Pro.</p>
+        <a href="toefl-practice.html" style="display: inline-block; margin-top: 1rem; background: #e67e22; color: white; padding: 0.8rem 2rem; border-radius: 50px; text-decoration: none; font-weight: 700;"><i class="fas fa-arrow-right"></i> Start Practice Tests</a>
+    </div>
+</main>
+
+<footer>
+    <div><i class="fas fa-graduation-cap" style="font-size: 28px; margin-right: 8px;"></i> Zakhourani TOEFL Academy</div>
+    <p style="margin: 12px 0 0;">Dr. Waleed Hussien Zakhourani — Expert TOEFL & IELTS preparation since 2012</p>
+    <ul class="footer-links">
+        <li><a href="TOFEL.html">TOEFL Hub</a></li>
+        <li><a href="aboutDrwaleed.html">Dr. Waleed</a></li>
+        <li><a href="AI.html">AI Tools</a></li>
+        <li><a href="login.html">Login</a></li>
+    </ul>
+    <p style="font-size: 0.75rem;">TOEFL® is a registered trademark of ETS. This site is not endorsed by ETS.</p>
+</footer>
+
+<a href="#" class="back-to-top" id="backToTop"><i class="fas fa-chevron-up"></i></a>
+
+<!-- Firebase integration for user display (same as hub) -->
+<script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-app-compat.js"></script>
+<script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-auth-compat.js"></script>
+<script>
+    const firebaseConfig = {
+        apiKey: "AIzaSyAE8wf24HXrfmpMluaFOv1OHPrf_YFfqTQ",
+        authDomain: "whaai-c388e.firebaseapp.com",
+        projectId: "whaai-c388e",
+        storageBucket: "whaai-c388e.firebasestorage.app",
+        messagingSenderId: "640598205524",
+        appId: "1:640598205524:web:c975f5e8b371b1043e39c1"
+    };
+    if (!firebase.apps.length) firebase.initializeApp(firebaseConfig);
+    const auth = firebase.auth();
+
+    const userMenuDiv = document.getElementById('userMenuHeader');
+    const authBtnsDiv = document.getElementById('authButtonsHeader');
+    const userAvatarImg = document.getElementById('userAvatarHeader');
+    const userNameSpan = document.getElementById('userNameHeader');
+
+    auth.onAuthStateChanged(user => {
+        if (user) {
+            userMenuDiv.style.display = 'flex';
+            authBtnsDiv.style.display = 'none';
+            const photo = user.photoURL || `https://ui-avatars.com/api/?name=${encodeURIComponent(user.displayName || user.email)}&background=e67e22&color=fff&size=32`;
+            userAvatarImg.src = photo;
+            userNameSpan.textContent = user.displayName?.split(' ')[0] || user.email.split('@')[0];
+        } else {
+            userMenuDiv.style.display = 'none';
+            authBtnsDiv.style.display = 'flex';
+        }
+    });
+
+    // back to top button
+    const backBtn = document.getElementById('backToTop');
+    window.addEventListener('scroll', () => {
+        if (window.scrollY > 400) backBtn.style.opacity = '1';
+        else backBtn.style.opacity = '0.4';
+    });
+    backBtn.addEventListener('click', (e) => {
+        e.preventDefault();
+        window.scrollTo({ top: 0, behavior: 'smooth' });
+    });
+</script>
+</body>
+</html>

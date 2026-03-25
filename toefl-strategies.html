@@ -1,771 +1,659 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=yes, viewport-fit=cover">
-  <title>Dr. Waleed · Ancestral Honor · Mir Porti & Mir Ali</title>
-  <!-- Font Awesome 6 (free) for icons -->
-  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
-  <!-- Google Fonts: elegant & readable -->
-  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600;700&family=Amiri:wght@400;700&family=Playfair+Display:wght@400;600;700&display=swap" rel="stylesheet">
-  <!-- AOS (Animate on Scroll) for motion effects -->
-  <link href="https://unpkg.com/aos@2.3.1/dist/aos.css" rel="stylesheet">
-  <style>
-    /* ----------------------------------------------------- */
-    /* 1. RESET & BASE — ultra compact, mobile first        */
-    /* ----------------------------------------------------- */
-    * {
-      margin: 0;
-      padding: 0;
-      box-sizing: border-box;
-    }
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+    <title>TOEFL Strategy Kit · Free Resources & Tips | Dr. Waleed</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
 
-    html {
-      font-size: 14px;
-      scroll-behavior: smooth;
-      overflow-x: hidden;
-    }
+        :root {
+            --toefl-primary: #e67e22;
+            --toefl-dark: #d35400;
+            --toefl-light: #fff5e8;
+            --success: #27ae60;
+            --info: #3498db;
+            --warning: #f39c12;
+            --danger: #e74c3c;
+            --text-dark: #2c3e50;
+            --text-muted: #5a6e7c;
+            --border-light: #ffdec2;
+            --card-white: #ffffff;
+            --shadow-sm: 0 8px 20px rgba(0,0,0,0.05);
+            --shadow-md: 0 15px 35px rgba(230,126,34,0.12);
+        }
 
-    body {
-      background: #0f0c09;
-      font-family: 'Inter', sans-serif;
-      color: #f0e4d4;
-      line-height: 1.5;
-      width: 100%;
-      position: relative;
-    }
+        body {
+            font-family: system-ui, 'Segoe UI', 'Inter', -apple-system, sans-serif;
+            background: linear-gradient(145deg, #fef8f0 0%, #fff3e8 100%);
+            color: var(--text-dark);
+            line-height: 1.5;
+        }
 
-    /* ----------------------------------------------------- */
-    /* 2. DYNAMIC PARTICLE CANVAS (background motion)       */
-    /* ----------------------------------------------------- */
-    #particle-canvas {
-      position: fixed;
-      top: 0;
-      left: 0;
-      width: 100%;
-      height: 100%;
-      z-index: -1;
-      pointer-events: none;
-      opacity: 0.5;
-    }
+        html {
+            font-size: 16px;
+        }
+        @media (max-width: 640px) {
+            html { font-size: 15px; }
+        }
+        @media (max-width: 480px) {
+            html { font-size: 14px; }
+        }
 
-    /* ----------------------------------------------------- */
-    /* 3. HAMBURGER NAV (sticky, compact)                   */
-    /* ----------------------------------------------------- */
-    .mobile-nav {
-      position: sticky;
-      top: 0;
-      z-index: 2000;
-      background: rgba(18, 14, 10, 0.85);
-      backdrop-filter: blur(16px);
-      -webkit-backdrop-filter: blur(16px);
-      border-bottom: 1px solid #5f4f3d;
-      display: flex;
-      align-items: center;
-      justify-content: space-between;
-      padding: 0.5rem 1rem;
-      box-shadow: 0 8px 20px rgba(0,0,0,0.5);
-    }
+        h1 { font-size: 2rem; font-weight: 800; letter-spacing: -0.01em; }
+        h2 { font-size: 1.6rem; font-weight: 700; margin: 0.75rem 0; }
+        h3 { font-size: 1.25rem; font-weight: 700; }
+        h4 { font-size: 1.1rem; font-weight: 600; }
 
-    .logo-mini {
-      font-size: 1.4rem;
-      font-weight: 700;
-      background: linear-gradient(135deg, #f3d9bf, #dbb58b);
-      -webkit-background-clip: text;
-      -webkit-text-fill-color: transparent;
-    }
-    .logo-mini i {
-      color: #b78f69;
-      margin-right: 4px;
-    }
+        .container {
+            max-width: 1300px;
+            margin: 0 auto;
+            padding: 0 1.5rem;
+        }
 
-    .hamburger {
-      background: rgba(255,255,240,0.08);
-      border: 1px solid #8d7761;
-      border-radius: 12px;
-      padding: 0.3rem 0.5rem;
-      cursor: pointer;
-      display: flex;
-      flex-direction: column;
-      gap: 4px;
-      width: 42px;
-      height: 38px;
-      justify-content: center;
-      transition: 0.2s;
-    }
-    .hamburger:hover {
-      background: #3d3228;
-    }
-    .hamburger span {
-      display: block;
-      width: 24px;
-      height: 2px;
-      background: #eddac4;
-      border-radius: 4px;
-      transition: 0.2s;
-    }
+        /* Header */
+        header {
+            background: white;
+            box-shadow: 0 2px 15px rgba(0,0,0,0.05);
+            padding: 0.8rem 1.5rem;
+            position: sticky;
+            top: 0;
+            z-index: 100;
+            backdrop-filter: blur(2px);
+            background: rgba(255,255,255,0.97);
+        }
+        .header-content {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            max-width: 1300px;
+            margin: 0 auto;
+            flex-wrap: wrap;
+            gap: 1rem;
+        }
+        .logo {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            text-decoration: none;
+        }
+        .logo h1 {
+            font-size: 1.6rem;
+            font-weight: 700;
+            color: #2c3e50;
+            margin: 0;
+        }
+        .nav-links {
+            display: flex;
+            gap: 0.7rem;
+            flex-wrap: wrap;
+            align-items: center;
+        }
+        .nav-links a {
+            text-decoration: none;
+            color: #2c3e50;
+            font-weight: 600;
+            padding: 0.45rem 1rem;
+            border-radius: 40px;
+            transition: 0.2s;
+            font-size: 0.85rem;
+            display: inline-flex;
+            align-items: center;
+            gap: 6px;
+        }
+        .nav-links a.active {
+            background: var(--toefl-primary);
+            color: white;
+        }
+        .login-btn, .signup-btn {
+            padding: 0.4rem 1.2rem;
+            border-radius: 40px;
+            font-weight: 600;
+            text-decoration: none;
+            font-size: 0.85rem;
+        }
+        .login-btn { background: #3498db; color: white; }
+        .signup-btn { background: #27ae60; color: white; }
+        .user-avatar {
+            width: 34px;
+            height: 34px;
+            border-radius: 50%;
+            object-fit: cover;
+            border: 2px solid var(--toefl-primary);
+        }
 
-    .menu-dropdown {
-      position: absolute;
-      top: 58px;
-      right: 1rem;
-      background: rgba(34, 28, 22, 0.97);
-      backdrop-filter: blur(20px);
-      border: 1px solid #ac9277;
-      border-radius: 28px;
-      padding: 0.7rem 0;
-      min-width: 210px;
-      box-shadow: 0 25px 40px rgba(0,0,0,0.8);
-      display: none;
-      z-index: 1999;
-    }
-    .menu-dropdown.show {
-      display: block;
-      animation: slideIn 0.25s ease;
-    }
-    @keyframes slideIn {
-      0% { opacity: 0; transform: translateY(-10px); }
-      100% { opacity: 1; transform: translateY(0); }
-    }
-    .menu-dropdown a {
-      display: block;
-      padding: 0.8rem 1.8rem;
-      color: #f7e2cc;
-      text-decoration: none;
-      font-size: 1.25rem;
-      border-bottom: 1px solid #544435;
-      transition: 0.2s;
-    }
-    .menu-dropdown a:hover {
-      background: #4f3e2d;
-      padding-left: 2.2rem;
-    }
-    .menu-dropdown a i {
-      width: 28px;
-      color: #d6a97c;
-    }
+        /* Breadcrumb */
+        .breadcrumb {
+            margin: 1.2rem 0 1rem;
+            font-size: 0.85rem;
+            color: #b97f44;
+        }
 
-    .menu-dropdown .home-icon-item {
-      background: #5e4a36;
-      border-radius: 40px;
-      margin: 0.7rem 1.2rem;
-      padding: 0.7rem;
-      text-align: center;
-      border: 1px solid #ccaa84;
-    }
-    .menu-dropdown .home-icon-item i {
-      color: #f5dbb6;
-      font-size: 1.5rem;
-    }
-    .menu-dropdown .home-icon-item a {
-      padding: 0;
-      margin: 0;
-      border: none;
-      background: transparent;
-      color: #ffefdb;
-      font-size: 1.3rem;
-    }
-    .menu-dropdown .home-icon-item a:hover {
-      background: transparent;
-      padding-left: 0;
-    }
+        /* Hero Section */
+        .hero-strategy {
+            background: linear-gradient(135deg, #e67e22 0%, #f39c12 100%);
+            border-radius: 2rem;
+            padding: 2rem;
+            color: white;
+            margin-bottom: 2rem;
+            text-align: center;
+        }
+        .free-badge {
+            background: rgba(255,255,255,0.2);
+            display: inline-block;
+            padding: 0.3rem 1rem;
+            border-radius: 60px;
+            font-size: 0.8rem;
+            margin-bottom: 1rem;
+        }
+        .download-btn {
+            background: white;
+            color: var(--toefl-primary);
+            border: none;
+            padding: 0.8rem 2rem;
+            border-radius: 60px;
+            font-weight: 700;
+            font-size: 1rem;
+            cursor: pointer;
+            margin-top: 1rem;
+            transition: 0.2s;
+        }
+        .download-btn:hover {
+            transform: scale(1.05);
+            box-shadow: 0 10px 25px rgba(0,0,0,0.2);
+        }
 
-    /* ----------------------------------------------------- */
-    /* 4. HERO WITH GLOW & FLOATING                         */
-    /* ----------------------------------------------------- */
-    .hero-section {
-      padding: 3rem 1.2rem 2.5rem;
-      text-align: center;
-      position: relative;
-    }
-    .hero-glow {
-      font-size: 2.9rem;
-      font-weight: 700;
-      font-family: 'Playfair Display', serif;
-      text-shadow: 0 0 15px #dbb487, 0 0 30px #7a583a;
-      animation: pulseGlow 3s infinite alternate, float 6s infinite ease-in-out;
-    }
-    @keyframes pulseGlow {
-      0% { text-shadow: 0 0 10px #cfa97c, 0 0 20px #8f6947; }
-      100% { text-shadow: 0 0 25px #efcaa0, 0 0 50px #b2804f; }
-    }
-    @keyframes float {
-      0% { transform: translateY(0px); }
-      50% { transform: translateY(-8px); }
-      100% { transform: translateY(0px); }
-    }
-    .hero-sub {
-      font-size: 1.3rem;
-      color: #e2cbb2;
-      letter-spacing: 2px;
-      margin-top: 0.6rem;
-      opacity: 0.9;
-    }
+        /* Strategy Grid */
+        .strategy-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
+            gap: 1.8rem;
+            margin-bottom: 2rem;
+        }
+        .strategy-card {
+            background: white;
+            border-radius: 1.5rem;
+            padding: 1.5rem;
+            box-shadow: var(--shadow-sm);
+            transition: all 0.25s ease;
+            border: 1px solid var(--border-light);
+        }
+        .strategy-card:hover {
+            transform: translateY(-5px);
+            box-shadow: var(--shadow-md);
+        }
+        .strategy-icon {
+            font-size: 2.5rem;
+            color: var(--toefl-primary);
+            margin-bottom: 1rem;
+        }
+        .tip-list {
+            margin-top: 1rem;
+            list-style: none;
+        }
+        .tip-list li {
+            margin: 0.6rem 0;
+            padding-left: 1.5rem;
+            position: relative;
+        }
+        .tip-list li:before {
+            content: "✓";
+            color: var(--success);
+            position: absolute;
+            left: 0;
+            font-weight: bold;
+        }
 
-    /* ----------------------------------------------------- */
-    /* 5. GALLERY (unchanged)                               */
-    /* ----------------------------------------------------- */
-    .gallery-wrap {
-      padding: 2rem 1rem 1rem;
-    }
-    .section-title {
-      font-size: 2.1rem;
-      font-weight: 500;
-      border-left: 6px solid #c09f7c;
-      padding-left: 1.2rem;
-      margin-bottom: 1.8rem;
-      font-family: 'Playfair Display', serif;
-    }
-    .gallery-grid {
-      display: grid;
-      grid-template-columns: repeat(3, 1fr);
-      gap: 0.8rem;
-      perspective: 1200px;
-    }
-    .gallery-item {
-      border-radius: 26px;
-      overflow: hidden;
-      border: 2px solid #8f755b;
-      box-shadow: 0 25px 35px -10px black;
-      transition: transform 0.3s cubic-bezier(0.2, 0.9, 0.4, 1.3), box-shadow 0.3s;
-      aspect-ratio: 1/1;
-      cursor: pointer;
-      transform-style: preserve-3d;
-    }
-    .gallery-item:hover {
-      transform: rotateY(4deg) rotateX(3deg) scale(1.03);
-      box-shadow: 0 30px 45px -5px #000000;
-      border-color: #e2b78b;
-    }
-    .gallery-item img {
-      width: 100%;
-      height: 100%;
-      object-fit: cover;
-      display: block;
-      transition: filter 0.3s;
-    }
-    .gallery-item:hover img {
-      filter: brightness(1.15) saturate(1.1);
-    }
+        /* Resource Cards */
+        .resources-section {
+            background: white;
+            border-radius: 2rem;
+            padding: 2rem;
+            margin: 2rem 0;
+        }
+        .resource-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+            gap: 1.5rem;
+            margin-top: 1.5rem;
+        }
+        .resource-item {
+            background: #fef9f2;
+            border-radius: 1rem;
+            padding: 1.2rem;
+            text-align: center;
+            cursor: pointer;
+            transition: 0.2s;
+            border: 2px solid transparent;
+        }
+        .resource-item:hover {
+            border-color: var(--toefl-primary);
+            transform: translateY(-3px);
+        }
+        .resource-icon {
+            font-size: 2rem;
+            color: var(--toefl-primary);
+            margin-bottom: 0.5rem;
+        }
 
-    /* lightbox (fullscreen) */
-    .lightbox {
-      position: fixed;
-      top: 0; left: 0; width: 100%; height: 100%;
-      background: rgba(8, 5, 3, 0.98);
-      backdrop-filter: blur(20px);
-      z-index: 3000;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      opacity: 0;
-      pointer-events: none;
-      transition: opacity 0.3s ease;
-    }
-    .lightbox.active {
-      opacity: 1;
-      pointer-events: all;
-    }
-    .lightbox-content {
-      max-width: 96vw;
-      max-height: 96vh;
-      border: 4px solid #dab38b;
-      border-radius: 28px;
-      overflow: hidden;
-      box-shadow: 0 50px 80px black;
-      animation: zoomPop 0.25s;
-    }
-    @keyframes zoomPop {
-      0% { transform: scale(0.9); opacity: 0; }
-      100% { transform: scale(1); opacity: 1; }
-    }
-    .lightbox-content img {
-      width: 100%;
-      height: auto;
-      display: block;
-      object-fit: contain;
-    }
-    .lightbox-close {
-      position: absolute;
-      top: 30px; right: 30px;
-      font-size: 3.8rem;
-      color: #ffebd2;
-      cursor: pointer;
-      text-shadow: 0 4px 20px black;
-      transition: 0.2s;
-      z-index: 3001;
-    }
-    .lightbox-close:hover {
-      transform: scale(1.2) rotate(90deg);
-    }
+        /* FAQ Section */
+        .faq-section {
+            background: white;
+            border-radius: 2rem;
+            padding: 2rem;
+            margin: 2rem 0;
+        }
+        .faq-item {
+            border-bottom: 1px solid var(--border-light);
+            padding: 1rem 0;
+        }
+        .faq-question {
+            font-weight: 700;
+            cursor: pointer;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+        .faq-answer {
+            display: none;
+            padding-top: 0.8rem;
+            color: var(--text-muted);
+        }
+        .faq-answer.show {
+            display: block;
+        }
 
-    /* ----------------------------------------------------- */
-    /* 6. LANGUAGE TOGGLE (unchanged)                       */
-    /* ----------------------------------------------------- */
-    .lang-panel {
-      background: rgba(26, 21, 16, 0.7);
-      backdrop-filter: blur(10px);
-      border-radius: 50px;
-      padding: 1.8rem 1.2rem;
-      margin: 1.8rem 1rem;
-      border: 1px solid #9a8066;
-      box-shadow: 0 25px 40px -12px black;
-    }
-    .lang-tabs {
-      display: flex;
-      gap: 0.5rem;
-      flex-wrap: wrap;
-      justify-content: center;
-    }
-    .lang-tab {
-      background: #352d24;
-      border: 1px solid #9b8066;
-      color: #f1dbc4;
-      font-size: 1.15rem;
-      padding: 0.6rem 1.3rem;
-      border-radius: 50px;
-      cursor: pointer;
-      transition: 0.2s;
-      font-weight: 500;
-    }
-    .lang-tab.active {
-      background: #c6a178;
-      color: #1c1610;
-      font-weight: 700;
-      border-color: #efd2b1;
-      box-shadow: 0 0 20px #f1c494;
-      transform: scale(1.05);
-    }
-    .bio-content {
-      margin-top: 2rem;
-    }
-    .bio-text {
-      display: none;
-      font-size: 1.1rem;
-      line-height: 1.8;
-      background: #1d1711;
-      padding: 1.8rem;
-      border-radius: 40px;
-      border: 1px solid #a58b6f;
-      box-shadow: inset 0 0 20px #0e0b07;
-      animation: fadeLang 0.5s;
-    }
-    @keyframes fadeLang {
-      0% { opacity: 0; transform: translateY(10px); }
-      100% { opacity: 1; transform: translateY(0); }
-    }
-    .bio-text.active {
-      display: block;
-    }
+        /* Newsletter */
+        .newsletter-box {
+            background: linear-gradient(135deg, #2c3e50, #1e2a36);
+            border-radius: 2rem;
+            padding: 2rem;
+            color: white;
+            text-align: center;
+            margin: 2rem 0;
+        }
+        .email-input {
+            padding: 0.8rem 1rem;
+            border-radius: 60px;
+            border: none;
+            width: 300px;
+            max-width: 80%;
+            margin: 1rem;
+        }
+        .subscribe-btn {
+            background: var(--toefl-primary);
+            color: white;
+            border: none;
+            padding: 0.8rem 1.8rem;
+            border-radius: 60px;
+            font-weight: 700;
+            cursor: pointer;
+        }
 
-    /* ----------------------------------------------------- */
-    /* 7. PUBLICATIONS (unchanged)                          */
-    /* ----------------------------------------------------- */
-    .pub-section {
-      padding: 2rem 1rem;
-    }
-    .pub-grid {
-      display: grid;
-      grid-template-columns: 1fr 1fr;
-      gap: 1.2rem;
-    }
-    .pub-card {
-      background: rgba(39, 32, 25, 0.7);
-      backdrop-filter: blur(6px);
-      border: 1px solid #9a8066;
-      border-radius: 36px;
-      padding: 1.7rem 0.8rem;
-      text-align: center;
-      transition: all 0.3s cubic-bezier(0.2, 0.9, 0.3, 1.3);
-      box-shadow: 0 18px 28px -12px black;
-      transform: translateY(0);
-      animation: cardPulse 5s infinite;
-    }
-    @keyframes cardPulse {
-      0% { box-shadow: 0 18px 28px -12px black; }
-      50% { box-shadow: 0 22px 35px -8px #7a624b; }
-      100% { box-shadow: 0 18px 28px -12px black; }
-    }
-    .pub-card:hover {
-      transform: translateY(-12px) scale(1.03);
-      background: #4f4133;
-      border-color: #e9bc91;
-      box-shadow: 0 35px 45px -8px #000;
-    }
-    .pub-card i {
-      font-size: 2.5rem;
-      color: #dfb185;
-      margin-bottom: 0.8rem;
-    }
+        footer {
+            background: #1e2a36;
+            color: white;
+            padding: 2rem 1rem;
+            margin-top: 3rem;
+            text-align: center;
+            border-radius: 2rem 2rem 0 0;
+        }
 
-    /* ----------------------------------------------------- */
-    /* 8. NEW ANCESTRAL POST - BLACK & WHITE TRIBUTE        */
-    /* ----------------------------------------------------- */
-    .ancestral-tribute {
-      background: linear-gradient(145deg, #11100e, #050403);
-      border-radius: 48px;
-      margin: 2rem 1rem;
-      padding: 1.8rem 1.2rem;
-      border: 1px solid #7f6953;
-      box-shadow: 0 25px 40px -12px black;
-    }
-    .tribute-header {
-      text-align: center;
-      margin-bottom: 1.5rem;
-      border-bottom: 2px dashed #b58f68;
-      display: inline-block;
-      width: 100%;
-    }
-    .tribute-header h2 {
-      font-family: 'Playfair Display', serif;
-      font-size: 2rem;
-      letter-spacing: 1px;
-      background: linear-gradient(135deg, #e7d5c0, #c8aa85);
-      -webkit-background-clip: text;
-      -webkit-text-fill-color: transparent;
-    }
-    .tribute-header p {
-      font-size: 0.9rem;
-      color: #b59778;
-    }
-    .ancestral-grid {
-      display: flex;
-      flex-direction: column;
-      gap: 2rem;
-    }
-    .ancestor-card {
-      background: rgba(20, 17, 13, 0.8);
-      border-radius: 44px;
-      padding: 1rem;
-      backdrop-filter: blur(4px);
-      border: 1px solid #7a624b;
-      transition: 0.25s;
-    }
-    .ancestor-card:hover {
-      border-color: #c6a16e;
-      transform: scale(1.01);
-    }
-    .bw-portrait {
-      width: 85%;
-      margin: 0 auto 1rem;
-      border-radius: 32px;
-      overflow: hidden;
-      border: 2px solid #5e4c38;
-      filter: grayscale(100%);
-      transition: filter 0.4s, transform 0.3s;
-      cursor: pointer;
-      box-shadow: 0 15px 25px -8px black;
-    }
-    .bw-portrait:hover {
-      filter: grayscale(20%);
-      transform: scale(1.02);
-      border-color: #dbb27c;
-    }
-    .bw-portrait img {
-      width: 100%;
-      height: auto;
-      display: block;
-    }
-    .ancestor-card h3 {
-      font-size: 1.7rem;
-      text-align: center;
-      font-weight: 600;
-      font-family: 'Amiri', serif;
-      color: #eedbbc;
-      margin: 0.8rem 0 0.5rem;
-    }
-    .ancestor-role {
-      text-align: center;
-      color: #cfaa82;
-      font-weight: 500;
-      letter-spacing: 1px;
-      margin-bottom: 0.8rem;
-    }
-    .ancestor-desc {
-      font-size: 0.95rem;
-      line-height: 1.5;
-      padding: 0.5rem 0.2rem;
-      color: #e2cfbb;
-    }
-    .tribute-footer {
-      margin-top: 1.5rem;
-      text-align: center;
-      background: #1b1611;
-      border-radius: 60px;
-      padding: 1rem;
-      font-size: 0.9rem;
-      border: 1px solid #7c644b;
-    }
-
-    /* existing Mir Porti + Mir Khalaf sections (unchanged but kept) */
-    .mir-section, .mir-khalaf-section {
-      background: linear-gradient(145deg, #1f1a14, #16110c);
-      border-radius: 60px 60px 30px 30px;
-      margin: 2rem 1rem;
-      border: 2px solid #9d846b;
-      box-shadow: 0 30px 40px -15px black;
-      padding: 2rem 1rem;
-    }
-    .mir-header {
-      display: flex;
-      align-items: center;
-      gap: 1rem;
-      margin-bottom: 1.5rem;
-    }
-    .mir-header i {
-      font-size: 2.8rem;
-      color: #c9a87c;
-    }
-    .mir-title {
-      font-size: 2.2rem;
-      font-family: 'Playfair Display', serif;
-      font-weight: 600;
-    }
-    .mir-image, .mir-khalaf-image {
-      width: 80%;
-      margin: 0 auto 1.5rem;
-      border-radius: 40px;
-      border: 3px solid #b59673;
-      box-shadow: 0 25px 35px -10px black;
-      transition: transform 0.3s;
-      cursor: pointer;
-    }
-    .mir-image img, .mir-khalaf-image img {
-      width: 100%;
-      height: auto;
-      display: block;
-      border-radius: 37px;
-    }
-    .mir-desc {
-      background: rgba(24, 19, 14, 0.7);
-      backdrop-filter: blur(6px);
-      border-radius: 50px;
-      padding: 1.8rem;
-      border: 1px solid #aa8b6e;
-    }
-    .bridge-map {
-      background: #1f1a14;
-      border-radius: 70px 70px 30px 30px;
-      margin: 2rem 1rem;
-      padding: 2rem 1rem;
-      border: 2px solid #8b745c;
-    }
-    .map-svg svg {
-      width: 100%;
-      height: auto;
-      filter: drop-shadow(0 15px 15px #00000080);
-    }
-    .sound-waves {
-      display: flex;
-      justify-content: center;
-      gap: 6px;
-      margin: 1.5rem 0 0;
-      height: 35px;
-    }
-    .wave {
-      width: 7px;
-      height: 22px;
-      background: #c9a67b;
-      border-radius: 8px;
-      animation: wave 1.4s infinite ease-in-out;
-    }
-    .wave:nth-child(2) { animation-delay: 0.2s; background: #ddb790; }
-    .wave:nth-child(3) { animation-delay: 0.4s; background: #f0caa0; }
-    .wave:nth-child(4) { animation-delay: 0.1s; background: #d6a87c; }
-    @keyframes wave {
-      0%, 100% { transform: scaleY(0.6); }
-      50% { transform: scaleY(1.5); }
-    }
-    .footer {
-      background: #100c08;
-      padding: 2.2rem 1rem;
-      text-align: center;
-      font-size: 1.2rem;
-      border-top: 2px solid #6a5743;
-      color: #cfbb9f;
-    }
-    .footer a {
-      color: #e4c5a1;
-      text-decoration: none;
-      transition: 0.2s;
-    }
-    .footer a:hover {
-      color: #fad6aa;
-    }
-    .home-link-bottom {
-      margin-top: 1rem;
-    }
-  </style>
+        @media (max-width: 680px) {
+            .strategy-card { padding: 1.2rem; }
+            .resources-section, .faq-section { padding: 1.2rem; }
+        }
+    </style>
 </head>
 <body>
-  <canvas id="particle-canvas"></canvas>
 
-  <!-- HAMBURGER NAV -->
-  <div class="mobile-nav">
-    <div class="logo-mini"><i class="fas fa-feather-alt"></i> Dr. W.</div>
-    <button class="hamburger" id="hamburgerBtn" aria-label="menu">
-      <span></span><span></span><span></span>
-    </button>
-    <div class="menu-dropdown" id="menuDropdown">
-      <a href="#home"><i class="fas fa-home"></i> Home</a>
-      <a href="#gallery"><i class="fas fa-images"></i> Gallery</a>
-      <a href="#bio"><i class="fas fa-book-open"></i> Bio</a>
-      <a href="#publications"><i class="fas fa-scroll"></i> Works</a>
-      <a href="#ancestral-post"><i class="fas fa-crown"></i> Ancestral Honor</a>
-      <a href="#mir-porti"><i class="fas fa-crown"></i> Mir Porti</a>
-      <a href="#mir-khalaf"><i class="fas fa-chess-king"></i> Mir Khalaf</a>
-      <div class="home-icon-item">
-        <a href="https://whz-co.github.io/whz/index.html" target="_blank"><i class="fas fa-home"></i> Home</a>
-      </div>
-    </div>
-  </div>
-
-  <!-- HERO -->
-  <section id="home" class="hero-section" data-aos="fade-up" data-aos-duration="1200">
-    <div class="hero-glow">Dr. Waleed H. Z.</div>
-    <div class="hero-sub">linguist · educator · keeper of noble lineage</div>
-  </section>
-
-  <!-- GALLERY -->
-  <section id="gallery" class="gallery-wrap" data-aos="zoom-in" data-aos-duration="900">
-    <h2 class="section-title"><i class="fas fa-camera"></i> moments</h2>
-    <div class="gallery-grid">
-      <div class="gallery-item" data-src="https://raw.githubusercontent.com/whz-co/whz/main/images/dr%20waleed%20on%20libra..jpg">
-        <img src="https://raw.githubusercontent.com/whz-co/whz/main/images/dr%20waleed%20on%20libra..jpg" alt="" loading="lazy">
-      </div>
-      <div class="gallery-item" data-src="https://raw.githubusercontent.com/whz-co/whz/main/images/Dr%20waleed%20is%20holding%20a%20book.png">
-        <img src="https://raw.githubusercontent.com/whz-co/whz/main/images/Dr%20waleed%20is%20holding%20a%20book.png" alt="" loading="lazy">
-      </div>
-      <div class="gallery-item" data-src="https://raw.githubusercontent.com/whz-co/whz/main/images/Dr%20waleed%20is%20writing.jpg">
-        <img src="https://raw.githubusercontent.com/whz-co/whz/main/images/Dr%20waleed%20is%20writing.jpg" alt="" loading="lazy">
-      </div>
-    </div>
-    <p style="text-align:center; font-size:0.95rem; color:#d4ba9b; margin-top:0.8rem;"><i class="fas fa-expand-alt"></i> tap image for fullscreen</p>
-  </section>
-
-  <!-- LIGHTBOX -->
-  <div class="lightbox" id="lightbox">
-    <span class="lightbox-close" id="lightboxClose">&times;</span>
-    <div class="lightbox-content">
-      <img src="" alt="" id="lightboxImg">
-    </div>
-  </div>
-
-  <!-- BIO (trilingual) unchanged -->
-  <section id="bio" class="lang-panel" data-aos="fade-right" data-aos-duration="1000">
-    <h2 style="font-size:2.2rem; margin-bottom:1.2rem;"><i class="fas fa-feather"></i> about</h2>
-    <div class="lang-tabs">
-      <button class="lang-tab active" data-lang="en">🇬🇧 EN</button>
-      <button class="lang-tab" data-lang="ar">🇸🇦 AR</button>
-      <button class="lang-tab" data-lang="ku-arab">🏴 KU(Ar)</button>
-      <button class="lang-tab" data-lang="ku-latn">🇹🇰 KU(La)</button>
-    </div>
-    <div class="bio-content">
-      <div class="bio-text active" id="bio-en" lang="en"><p>Dr. Waleed Hussein Zakhourani is a distinguished linguist, visionary educator, and cultural scholar whose life's work serves as a vital bridge between the English, Arabic, and Kurdish worlds. Holding a PhD in English Language Etiquette from Harvard University, his academic foundation studies how language conveys respect and cultural values. This rare specialization defines his mission: to transform English into a medium of global mutual understanding.</p><p>With decades in multilingual education, he champions linguistic accessibility and cultural preservation. His expertise spans lexicography, translation studies, and academic publishing. He empowers learners to navigate the global stage while rooted in their own heritage.</p></div>
-      <div class="bio-text" id="bio-ar" lang="ar" dir="rtl"><p>يُعد الدكتور وليد حسين زاخوراني لغوياً بارزاً، ومربياً رؤيوياً، وباحثاً ثقافياً كرس مسيرته المهنية لتكون جسراً حيوياً يربط بين عوالم اللغات الإنجليزية والعربية والكردية. من خلال حصوله على درجة الدكتوراه في آداب اللغة الإنجليزية من جامعة هارفارد، تعذرت ركائز أساسه الأكاديمي في الدراسة المتعمقة لكيفية تعبير اللغة عن الاحترام والوضوح والقيم الثقافية الراسخة.</p><p>مع عقود من القيادة في مجال التعليم متعدد اللغات، برز الدكتور زاخوراني كشخصية رائدة في تيسير الوصول اللغوي والحفاظ على التراث الثقافي.</p></div>
-      <div class="bio-text" id="bio-ku-arab" lang="ku-arab" dir="rtl"><p>د. وەلید حسێن زاخۆرانی زمانزانەکێ دیار، پەروەردەکارەکێ خودان دیدەڤانی، و ڤەکۆلەرەکێ کلتووریێ خودان ئەزموونە، کو ژیانا خۆ تەرخانکرییە دا ببیتە پرەکا زیندی د ناڤبەرا جیهانێن ئینگلیزی، عەرەبی و کوردی دا.</p><p>دگەل چەندین سالێن کارکرنێ د بوارێ پەروەردەیا فرە-زمانیدا، د. وەلید وەک پالپشتەکێ مەزن یێ ب ساناهی کرنا زمانان و پاراستنا کلتووری دیار بوویە.</p></div>
-      <div class="bio-text" id="bio-ku-latn" lang="ku-latn"><p>Dr. Welîd Hisên Zexoranî zimanzanekî berbiçav, perwerdekarekî xwedî dîtin û zanyarekî çandî ye ku xebatên wî wekî pireke girîng di navbera cîhanên Îngilîzî, Erebî û Kurdî de xizmetê dikin.</p><p>Bi ezmûna dehan salan di perwerdehiya pirzimanî de, Dr. Zexoranî parêzvanê gihîştina zimên û parastina çandî ye.</p></div>
-    </div>
-  </section>
-
-  <!-- PUBLICATIONS -->
-  <section id="publications" class="pub-section" data-aos="fade-up" data-aos-duration="900">
-    <h2 class="section-title"><i class="fas fa-book"></i> selected works</h2>
-    <div class="pub-grid">
-      <div class="pub-card"><i class="fas fa-book"></i><h3>Lexical Bridges</h3><p>Kurdish–English dictionary</p></div>
-      <div class="pub-card"><i class="fas fa-globe"></i><h3>Politeness Across Borders</h3><p>Harvard 2008</p></div>
-      <div class="pub-card"><i class="fas fa-language"></i><h3>Arabic Rhetoric</h3><p>multilingual study</p></div>
-      <div class="pub-card"><i class="fas fa-feather"></i><h3>Zakhourani Method</h3><p>teaching through heritage</p></div>
-    </div>
-  </section>
-
-  <!-- ========= NEW ANCESTRAL POST: MIR PORTI, HIS WIFE & MIR ALI (B&W) ========= -->
-  <section id="ancestral-post" class="ancestral-tribute" data-aos="fade-up" data-aos-duration="1000">
-    <div class="tribute-header">
-      <h2><i class="fas fa-landmark"></i> Guardians of Mardin · The Eternal Sovereigns</h2>
-      <p>Black & white chronicle — Mir Porti, his noble wife, and their son Mir Ali — rulers of Zakhoran & beyond</p>
-    </div>
-    <div class="ancestral-grid">
-      <!-- Mir Porti & his wife (combined post) -->
-      <div class="ancestor-card">
-        <div class="bw-portrait" data-src="https://raw.githubusercontent.com/whz-co/whz/main/images/Mir%20Porte%20%20and%20his%20wife%20-%20english.png">
-          <img src="https://raw.githubusercontent.com/whz-co/whz/main/images/Mir%20Porte%20%20and%20his%20wife%20-%20english.png" alt="Mir Porti and his wife" loading="lazy">
+<header>
+    <div class="header-content">
+        <a href="index.html" class="logo">
+            <i class="fas fa-graduation-cap" style="font-size: 28px; color: #e67e22;"></i>
+            <h1>Zakhourani</h1>
+        </a>
+        <div class="nav-links">
+            <a href="index.html"><i class="fas fa-home"></i> Home</a>
+            <a href="IELS.html"><i class="fas fa-language"></i> IELTS</a>
+            <a href="TOFEL.html" class="active"><i class="fas fa-scroll"></i> TOEFL</a>
+            <a href="AI.html"><i class="fas fa-microchip"></i> AI Power</a>
+            <a href="aboutDrwaleed.html"><i class="fas fa-user-graduate"></i> Dr Waleed</a>
+            <div id="userMenuHeader" style="display: none;" class="user-menu" style="display:flex; gap:8px; align-items:center;">
+                <img id="userAvatarHeader" class="user-avatar" src="" alt="user">
+                <span id="userNameHeader" style="font-weight:500;"></span>
+            </div>
+            <div id="authButtonsHeader" style="display: flex; gap: 8px;">
+                <a href="login.html" class="login-btn">Login</a>
+                <a href="signup.html" class="signup-btn">Sign Up</a>
+            </div>
         </div>
-        <h3>Mir Porti & The Noble Lady of Zakhoran</h3>
-        <div class="ancestor-role">✦ Sovereign Rulers of Mardin & Botan ✦</div>
-        <div class="ancestor-desc">Mir Porti, the legendary leader whose reign (1650–1700) shaped the destiny of Mardin, Midyat and the Zakhoran region. Alongside his wife, a matriarch of wisdom and strength, they forged alliances across Kurdish, Arab and Turkish tribes. Their union symbolized unity and enduring sovereignty. The village of Porti remains a living monument to their authority. This black & white visual tribute honors the ancestral pillars of Dr. Waleed’s lineage.</div>
-      </div>
-      <!-- Mir Ali (Son of Mir Porti) -->
-      <div class="ancestor-card">
-        <div class="bw-portrait" data-src="https://raw.githubusercontent.com/whz-co/whz/main/images/Mir%20Ali%20Mir%20Porte.jpg">
-          <img src="https://raw.githubusercontent.com/whz-co/whz/main/images/Mir%20Ali%20Mir%20Porte.jpg" alt="Mir Ali Mir Porti" loading="lazy">
+    </div>
+</header>
+
+<main class="container">
+    <div class="breadcrumb">
+        <a href="TOFEL.html" style="color:#e67e22;"><i class="fas fa-scroll"></i> TOEFL Hub</a> / <span>Free Strategy Kit</span>
+    </div>
+
+    <div class="hero-strategy">
+        <div class="free-badge">
+            <i class="fas fa-gift"></i> COMPLETELY FREE
         </div>
-        <h3>Mir Ali · The Heir of Fortitude</h3>
-        <div class="ancestor-role">✦ Son of Mir Porti · Guardian of Tradition ✦</div>
-        <div class="ancestor-desc">Mir Ali, successor to his father’s formidable legacy, upheld justice and expanded the family’s influence across the province. Known for his wisdom and diplomatic prowess, he bridged generations of leadership. His direct lineage flows through Dr. Waleed, preserving the honor of the Zakhoran tribe. This portrait (presented in timeless monochrome) echoes the resilience and nobility of the Mir Porti dynasty that ruled for decades.</div>
-      </div>
+        <h1><i class="fas fa-download"></i> TOEFL Strategy Kit</h1>
+        <p>Dr. Waleed's exclusive TOEFL preparation materials — insider strategies, templates, vocabulary lists, and practice plans. Download instantly!</p>
+        <button class="download-btn" id="downloadFullKitBtn">
+            <i class="fas fa-download"></i> Download Complete Kit (PDF)
+        </button>
+        <p style="margin-top: 0.8rem; font-size: 0.8rem;">✓ 50+ pages ✓ Strategy templates ✓ Vocabulary lists ✓ 6-week study plan</p>
     </div>
-    <div class="tribute-footer">
-      <i class="fas fa-tree"></i> Dr. Waleed H. Z. — descendant of Mir Porti & Mir Ali — carrying forward the torch of knowledge, bridging empires of language and heritage.
+
+    <!-- Section 1: Core Strategies -->
+    <h2><i class="fas fa-lightbulb"></i> Dr. Waleed's Core Strategies</h2>
+    <div class="strategy-grid">
+        <div class="strategy-card">
+            <div class="strategy-icon"><i class="fas fa-book-open"></i></div>
+            <h3>Reading Mastery</h3>
+            <ul class="tip-list">
+                <li>Skim passage first (3-4 min) for main idea</li>
+                <li>Identify question types: factual, inference, vocabulary, summary</li>
+                <li>Eliminate 2 wrong answers before choosing</li>
+                <li>For summary questions: focus on major ideas, not details</li>
+                <li>Use context clues for vocabulary questions</li>
+            </ul>
+        </div>
+        <div class="strategy-card">
+            <div class="strategy-icon"><i class="fas fa-headphones"></i></div>
+            <h3>Listening Excellence</h3>
+            <ul class="tip-list">
+                <li>Take structured notes: main idea, details, speaker attitude</li>
+                <li>Watch for transitions: "however," "first," "the key point"</li>
+                <li>Predict questions while listening</li>
+                <li>Focus on lecture organization: problem-solution, cause-effect</li>
+                <li>Practice with 1.25x speed for stamina</li>
+            </ul>
+        </div>
+        <div class="strategy-card">
+            <div class="strategy-icon"><i class="fas fa-microphone"></i></div>
+            <h3>Speaking Formula</h3>
+            <ul class="tip-list">
+                <li>Template: Opinion + Reason + Example + Conclusion</li>
+                <li>Use transition words: first, moreover, for instance</li>
+                <li>Record yourself and eliminate filler words (um, uh)</li>
+                <li>Aim for 120-150 words per 45-60 seconds</li>
+                <li>Practice with timer daily</li>
+            </ul>
+        </div>
+        <div class="strategy-card">
+            <div class="strategy-icon"><i class="fas fa-pen-fancy"></i></div>
+            <h3>Writing Framework</h3>
+            <ul class="tip-list">
+                <li>Integrated: Summarize lecture + reading relationship</li>
+                <li>Academic Discussion: Clear opinion + specific examples</li>
+                <li>Use academic vocabulary and varied sentence structures</li>
+                <li>Always proofread for grammar errors</li>
+                <li>Aim for 150-225 words (Integrated) / 100+ words (Discussion)</li>
+            </ul>
+        </div>
     </div>
-  </section>
 
-  <!-- MIR PORTI existing section (kept) -->
-  <section id="mir-porti" class="mir-section" data-aos="fade-right" data-aos-duration="1100">
-    <div class="mir-header"><i class="fas fa-crown"></i><h2 class="mir-title">Mir Porti · The Legacy of Zakhoran</h2></div>
-    <div class="mir-image" data-src="https://raw.githubusercontent.com/whz-co/whz/main/images/porte.png"><img src="https://raw.githubusercontent.com/whz-co/whz/main/images/porte.png" alt="Mir Porti" loading="lazy"></div>
-    <div class="mir-desc"><div class="lang-tabs" style="margin-bottom:1rem;"><button class="lang-tab active" data-lang="en-mir">🇬🇧 EN</button><button class="lang-tab" data-lang="ku-arab-mir">🏴 KU(Ar)</button><button class="lang-tab" data-lang="ku-latn-mir">🇹🇰 KU(La)</button><button class="lang-tab" data-lang="ar-mir">🇸🇦 AR</button></div>
-      <div class="bio-text active" id="mir-en"><p><strong>Mir Porti: The Legacy of Zakhoran and the Nobility of Mardin</strong></p><p>Mir Porti stands as a monumental figure in Kurdish history, particularly within the district of Midyat in Mardin. His historical influence flourished between 1650 and 1700 AD, centered in the Zakhoran region. His impact was so profound that the village of "Porti" was named in his honor, serving as a lasting geographical testament to his leadership. As a direct descendant of the illustrious Emirs of Bohtan, Mir Porti represents a lineage of nobility and power. He is the sixth grandfather of Dr. Walid Hussein Al-Zakhorani.</p></div>
-      <div class="bio-text" id="mir-ku-arab" lang="ku-arab" dir="rtl"><p><strong>میر پۆرتی: کێلەکێ دیرۆکیێ زاخۆران و ڕەسەناتییا مێردینێ</strong></p><p>میر پۆرتی ئێکە ژ کەسایەتیێن ناڤدار و دیارێن دیرۆکا کورد ل دەڤەرا میدیادێ ل پارێزگەها مێردینێ. ناڤبری ل سالێن د ناڤبەرا 1650 تا 1700 زایینی خودان دەسهەلات و ناڤودەنگ بوو، ب تایبەتی ل دەڤەرا زاخوران. ژبەر مەزناهی و کارتێکرنا وی، گوندێ "پۆرتی" ب ناڤێ وی هاتیە ناڤکرن.</p></div>
-      <div class="bio-text" id="mir-ku-latn" lang="ku-latn"><p><strong>Mîr Portî: Sembola Dîroka Zaxoran û Malbata Mîrên Botan</strong></p><p>Mîr Portî yek ji kesayetên herî navdar û bandordar ê dîroka Kurd e li navçeya Midyadê. Dîroka wî vedigere salên navbera 1650 - 1700’an, bi taybetî li herêma Zaxoran. Ji ber nav û dengê wî yê mezin, gundek bi navê wî hatiye binavkirin.</p></div>
-      <div class="bio-text" id="mir-ar" lang="ar" dir="rtl"><p><strong>الأمير بورتي: سليل الإمارة البوهتانية وعماد زاخوران</strong></p><p>يُعد الأمير بورتي أحد أبرز الأعلام التاريخيين في الذاكرة الكردية لمدينة مديات. يمتد نفوذه إلى الحقبة ما بين عامي 1650 و1700 ميلادية، وتحديداً في ربوع منطقة زاخوران، حيث اقترن اسمه بالأرض حتى سُميت قرية "بورتي" تيمناً به.</p></div>
+    <!-- Section 2: Downloadable Resources -->
+    <div class="resources-section">
+        <h3><i class="fas fa-folder-open"></i> Free Downloadable Resources</h3>
+        <p>Click any resource to download instantly — no email required!</p>
+        <div class="resource-grid">
+            <div class="resource-item" data-resource="vocabulary">
+                <div class="resource-icon"><i class="fas fa-spell-check"></i></div>
+                <h4>TOEFL Vocabulary List</h4>
+                <p>500 essential academic words with definitions</p>
+                <small style="color: var(--toefl-primary);">📥 Click to download</small>
+            </div>
+            <div class="resource-item" data-resource="templates">
+                <div class="resource-icon"><i class="fas fa-file-alt"></i></div>
+                <h4>Speaking & Writing Templates</h4>
+                <p>Ready-to-use templates for all tasks</p>
+                <small style="color: var(--toefl-primary);">📥 Click to download</small>
+            </div>
+            <div class="resource-item" data-resource="studyplan">
+                <div class="resource-icon"><i class="fas fa-calendar-alt"></i></div>
+                <h4>6-Week Study Plan</h4>
+                <p>Day-by-day schedule for 100+ score</p>
+                <small style="color: var(--toefl-primary);">📥 Click to download</small>
+            </div>
+            <div class="resource-item" data-resource="checklist">
+                <div class="resource-icon"><i class="fas fa-check-double"></i></div>
+                <h4>Test Day Checklist</h4>
+                <p>What to bring, what to expect, time management</p>
+                <small style="color: var(--toefl-primary);">📥 Click to download</small>
+            </div>
+            <div class="resource-item" data-resource="notes">
+                <div class="resource-icon"><i class="fas fa-pencil-alt"></i></div>
+                <h4>Note-Taking Guide</h4>
+                <p>Abbreviations, symbols, and methods for Listening</p>
+                <small style="color: var(--toefl-primary);">📥 Click to download</small>
+            </div>
+            <div class="resource-item" data-resource="mistakes">
+                <div class="resource-icon"><i class="fas fa-exclamation-triangle"></i></div>
+                <h4>Top 50 Common Mistakes</h4>
+                <p>Avoid errors that lower your score</p>
+                <small style="color: var(--toefl-primary);">📥 Click to download</small>
+            </div>
+        </div>
     </div>
-  </section>
 
-  <!-- MIR KHALAF section -->
-  <section id="mir-khalaf" class="mir-khalaf-section" data-aos="fade-left" data-aos-duration="1100">
-    <div class="mir-header"><i class="fas fa-chess-king"></i><h2 class="mir-title">Mir Khalaf · The Heir of Sovereignty</h2></div>
-    <div class="mir-khalaf-image" data-src="https://raw.githubusercontent.com/whz-co/whz/main/images/mir%20khalaf%20-%20arabic%20black%20and%20white.jpg"><img src="https://raw.githubusercontent.com/whz-co/whz/main/images/mir%20khalaf%20-%20arabic%20black%20and%20white.jpg" alt="Mir Khalaf" loading="lazy"></div>
-    <div class="mir-desc"><div class="lang-tabs" style="margin-bottom:1rem;"><button class="lang-tab active" data-lang="en-khalaf">🇬🇧 EN</button><button class="lang-tab" data-lang="ar-khalaf">🇸🇦 AR</button><button class="lang-tab" data-lang="ku-arab-khalaf">🏴 KU(Ar)</button><button class="lang-tab" data-lang="ku-latn-khalaf">🇹🇰 KU(La)</button></div>
-      <div class="bio-text active" id="khalaf-en"><p><strong>Mir Khalaf (Khalafê Portî): The Continuation of a Noble Legacy</strong></p><p>Mir Khalaf, the son of Mir Ali and grandson of the legendary Mir Porti, stands as a prominent figure in the annals of Kurdish history. Commonly known as Khalafê Portî, he carried the mantle of leadership with distinction and authority. His influence was earned through formidable presence and social standing, recognized as a cornerstone of stability in Mardin province.</p></div>
-      <div class="bio-text" id="khalaf-ar" lang="ar" dir="rtl"><p><strong>مير خلف (خلفي بورتي): امتداد الزعامة وإرث الأنفة في ماردين</strong></p><p>يبرز اسم مير خلف بن مير علي بن مير بورتي كواحد من ألمع الأحفاد الذين حملوا مشعل السيادة من جدهم الأكبر "مير بورتي". ويُعرف في الذاكرة الشعبية بلقب (خلفي بورتي)، وهو اللقب الذي اقترن بالشجاعة والحكمة والمكانة الاجتماعية الرفيعة.</p></div>
-      <div class="bio-text" id="khalaf-ku-arab" lang="ku-arab" dir="rtl"><p><strong>میر خەلەف (خەلەفێ پۆرتى): بەردەوامیا ڕێبازا میراتییێ</strong></p><p>میر خەلەف کورێ میر عەلى و نەوەیێ میر پۆرتى یە، ئێکە ژ وان کەسایەتیێن کو ناڤێ مالباتێ ب بلندى ڕاگرتیە. د ناڤ خەلکى و دیرۆکێ دا ب ناڤێ (خەلەفێ پۆرتى) دهێتە ناسیار.</p></div>
-      <div class="bio-text" id="khalaf-ku-latn" lang="ku-latn"><p><strong>Mîr Xelef (Xelefê Portî): Berdewamiya Rûmeta Malbatê</strong></p><p>Mîr Xelefê kurê Mîr Elî û neviyê Mîr Portî, yek ji stûnên girîng ên dîroka malbata xwe ye. Di nav gel de bi navê (Xelefê Portî) tê naskirin û di warê navdarî û desthelatdariyê de, qet ji bapîrê xwe Mîr Portî kêmtir nebûye.</p></div>
+    <!-- Section 3: Time Management -->
+    <div class="strategy-card" style="margin-bottom: 2rem;">
+        <div class="strategy-icon"><i class="fas fa-hourglass-half"></i></div>
+        <h3>⏱️ Time Management Mastery</h3>
+        <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 1rem; margin-top: 1rem;">
+            <div><strong>Reading:</strong> 18-20 min per passage</div>
+            <div><strong>Listening:</strong> No pauses — stay focused</div>
+            <div><strong>Speaking:</strong> 15-30 sec prep, 45-60 sec speak</div>
+            <div><strong>Writing:</strong> Integrated 20 min, Discussion 30 min</div>
+        </div>
+        <p style="margin-top: 1rem; background: #fef3e4; padding: 0.8rem; border-radius: 1rem;"><i class="fas fa-stopwatch"></i> <strong>Pro Tip:</strong> Always leave 2-3 minutes at the end of each section to review answers.</p>
     </div>
-  </section>
 
-  <!-- BRIDGE MAP + sound waves -->
-  <div class="bridge-map" data-aos="flip-left" data-aos-duration="1100"><div class="map-svg"><svg viewBox="0 0 360 140"><circle cx="90" cy="70" r="22" fill="#b79067" opacity="0.9" /><circle cx="180" cy="70" r="25" fill="#caa37b" /><circle cx="270" cy="70" r="22" fill="#a88967" opacity="0.9" /><text x="70" y="50" fill="#f2ddc5" font-size="12">AR</text><text x="165" y="40" fill="#fcebd6" font-size="14">ENG</text><text x="250" y="50" fill="#f2ddc5" font-size="12">KU</text><text x="130" y="115" fill="#e2cbb2" font-size="15">Dr. Waleed</text></svg></div><div class="sound-waves"><div class="wave"></div><div class="wave"></div><div class="wave"></div><div class="wave"></div></div></div>
+    <!-- Section 4: FAQ -->
+    <div class="faq-section">
+        <h3><i class="fas fa-question-circle"></i> Frequently Asked Questions</h3>
+        <div class="faq-item">
+            <div class="faq-question">
+                <span>How many times can I take the TOEFL?</span>
+                <i class="fas fa-chevron-down"></i>
+            </div>
+            <div class="faq-answer">You can take the TOEFL iBT as many times as you wish, but you must wait at least 3 days between attempts. Most universities consider your highest score.</div>
+        </div>
+        <div class="faq-item">
+            <div class="faq-question">
+                <span>What score do I need for top universities?</span>
+                <i class="fas fa-chevron-down"></i>
+            </div>
+            <div class="faq-answer">Top universities typically require 100+ (out of 120). Ivy League schools often expect 105-110. Many graduate programs require 90-100.</div>
+        </div>
+        <div class="faq-item">
+            <div class="faq-question">
+                <span>How long should I prepare for TOEFL?</span>
+                <i class="fas fa-chevron-down"></i>
+            </div>
+            <div class="faq-answer">Most students need 2-3 months of consistent study (10-15 hours/week). Our 6-week intensive plan is designed for motivated learners.</div>
+        </div>
+        <div class="faq-item">
+            <div class="faq-question">
+                <span>Is the TOEFL harder than IELTS?</span>
+                <i class="fas fa-chevron-down"></i>
+            </div>
+            <div class="faq-answer">Both are similar in difficulty. TOEFL uses more academic content and multiple-choice format. IELTS offers more variety (maps, diagrams). Choose based on your strengths.</div>
+        </div>
+        <div class="faq-item">
+            <div class="faq-question">
+                <span>Can I take notes during the test?</span>
+                <i class="fas fa-chevron-down"></i>
+            </div>
+            <div class="faq-answer">Yes! ETS provides scratch paper and pencils. Note-taking is essential, especially for Listening, Speaking, and Integrated Writing tasks.</div>
+        </div>
+    </div>
 
-  <footer class="footer"><i class="far fa-copyright"></i> 2026 WHZ developer – all rights reserved<br><span style="font-size:1.1rem;"><i class="fas fa-code"></i> Dr. Waleed archive</span><div class="home-link-bottom"><a href="#home"><i class="fas fa-arrow-up"></i> return top</a></div></footer>
+    <!-- Newsletter Section -->
+    <div class="newsletter-box">
+        <i class="fas fa-envelope" style="font-size: 2rem;"></i>
+        <h3>Get Weekly TOEFL Tips</h3>
+        <p>Subscribe to receive Dr. Waleed's weekly strategies, practice questions, and exclusive resources.</p>
+        <input type="email" id="newsletterEmail" class="email-input" placeholder="your@email.com">
+        <button class="subscribe-btn" id="subscribeBtn"><i class="fas fa-paper-plane"></i> Subscribe Free</button>
+        <p style="font-size: 0.7rem; margin-top: 0.5rem;">No spam. Unsubscribe anytime.</p>
+    </div>
+</main>
 
-  <audio id="ambientAudio" loop style="display:none"><source src="https://www.soundhelix.com/examples/mp3/SoundHelix-Song-1.mp3" type="audio/mpeg"></audio>
-  <script src="https://unpkg.com/aos@2.3.1/dist/aos.js"></script>
-  <script>
-    (function() {
-      AOS.init({ once: true, offset: 50, duration: 700 });
-      const hamburger = document.getElementById('hamburgerBtn'), dropdown = document.getElementById('menuDropdown');
-      hamburger.addEventListener('click', (e) => { e.stopPropagation(); dropdown.classList.toggle('show'); });
-      document.addEventListener('click', (e) => { if (!hamburger.contains(e.target) && !dropdown.contains(e.target)) dropdown.classList.remove('show'); });
-      const lightbox = document.getElementById('lightbox'), lightboxImg = document.getElementById('lightboxImg'), closeBtn = document.getElementById('lightboxClose');
-      document.querySelectorAll('[data-src]').forEach(el => { el.addEventListener('click', () => { lightboxImg.src = el.dataset.src; lightbox.classList.add('active'); }); });
-      closeBtn.addEventListener('click', () => lightbox.classList.remove('active'));
-      lightbox.addEventListener('click', (e) => { if(e.target === lightbox) lightbox.classList.remove('active'); });
-      // lang toggles for main bio
-      const mainTabs = document.querySelectorAll('.lang-panel .lang-tab'), bioMap = { en: document.getElementById('bio-en'), ar: document.getElementById('bio-ar'), 'ku-arab': document.getElementById('bio-ku-arab'), 'ku-latn': document.getElementById('bio-ku-latn') };
-      mainTabs.forEach(t => t.addEventListener('click', () => { mainTabs.forEach(tt => tt.classList.remove('active')); t.classList.add('active'); Object.values(bioMap).forEach(b => b.classList.remove('active')); if(bioMap[t.dataset.lang]) bioMap[t.dataset.lang].classList.add('active'); }));
-      const mirTabs = document.querySelectorAll('#mir-porti .lang-tab'), mirTexts = { 'en-mir': document.getElementById('mir-en'), 'ku-arab-mir': document.getElementById('mir-ku-arab'), 'ku-latn-mir': document.getElementById('mir-ku-latn'), 'ar-mir': document.getElementById('mir-ar') };
-      mirTabs.forEach(t => t.addEventListener('click', () => { mirTabs.forEach(tt => tt.classList.remove('active')); t.classList.add('active'); Object.values(mirTexts).forEach(tx => tx.classList.remove('active')); if(mirTexts[t.dataset.lang]) mirTexts[t.dataset.lang].classList.add('active'); }));
-      const khalafTabs = document.querySelectorAll('#mir-khalaf .lang-tab'), khalafTexts = { 'en-khalaf': document.getElementById('khalaf-en'), 'ar-khalaf': document.getElementById('khalaf-ar'), 'ku-arab-khalaf': document.getElementById('khalaf-ku-arab'), 'ku-latn-khalaf': document.getElementById('khalaf-ku-latn') };
-      khalafTabs.forEach(t => t.addEventListener('click', () => { khalafTabs.forEach(tt => tt.classList.remove('active')); t.classList.add('active'); Object.values(khalafTexts).forEach(tx => tx.classList.remove('active')); if(khalafTexts[t.dataset.lang]) khalafTexts[t.dataset.lang].classList.add('active'); }));
-      const audio = document.getElementById('ambientAudio'); let soundActive = false;
-      function enableSound() { if(!soundActive) { audio.volume = 0.1; audio.play().catch(()=>{}); soundActive = true; } }
-      document.body.addEventListener('touchstart', enableSound, { once: true }); document.body.addEventListener('click', enableSound, { once: true });
-      const canvas = document.getElementById('particle-canvas'), ctx = canvas.getContext('2d'); let width, height, particles = [];
-      function initParticles() { width = window.innerWidth; height = window.innerHeight; canvas.width = width; canvas.height = height; particles = []; for (let i=0;i<80;i++) { particles.push({ x: Math.random() * width, y: Math.random() * height, radius: Math.random() * 3.5 + 1.2, speedX: (Math.random() - 0.5) * 0.25, speedY: (Math.random() - 0.5) * 0.2, color: `rgba(215, 180, 140, ${Math.random() * 0.3 + 0.2})` }); } }
-      function drawParticles() { ctx.clearRect(0,0,width,height); particles.forEach(p => { ctx.beginPath(); ctx.arc(p.x,p.y,p.radius,0,Math.PI*2); ctx.fillStyle = p.color; ctx.fill(); particles.forEach(p2 => { const dx = p.x-p2.x, dy = p.y-p2.y, dist = Math.sqrt(dx*dx+dy*dy); if (dist<100 && dist>0) { ctx.strokeStyle = `rgba(190,155,120,${0.12 - dist/900})`; ctx.lineWidth=0.7; ctx.beginPath(); ctx.moveTo(p.x,p.y); ctx.lineTo(p2.x,p2.y); ctx.stroke(); } }); p.x += p.speedX; p.y += p.speedY; if (p.x<0||p.x>width) p.speedX*=-1; if (p.y<0||p.y>height) p.speedY*=-1; }); requestAnimationFrame(drawParticles); }
-      window.addEventListener('resize', () => { initParticles(); }); initParticles(); drawParticles();
-    })();
-  </script>
+<footer>
+    <i class="fas fa-graduation-cap"></i> Zakhourani TOEFL Strategy Hub · Free resources for your success
+    <p style="margin-top: 10px; font-size: 0.8rem;">© 2025 Dr. Waleed Hussien Zakhourani — Helping students achieve their TOEFL goals</p>
+</footer>
+
+<script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-app-compat.js"></script>
+<script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-auth-compat.js"></script>
+<script>
+    const firebaseConfig = {
+        apiKey: "AIzaSyAE8wf24HXrfmpMluaFOv1OHPrf_YFfqTQ",
+        authDomain: "whaai-c388e.firebaseapp.com",
+        projectId: "whaai-c388e",
+        storageBucket: "whaai-c388e.firebasestorage.app",
+        messagingSenderId: "640598205524",
+        appId: "1:640598205524:web:c975f5e8b371b1043e39c1"
+    };
+    if (!firebase.apps.length) firebase.initializeApp(firebaseConfig);
+    const auth = firebase.auth();
+
+    const userMenuDiv = document.getElementById('userMenuHeader');
+    const authBtnsDiv = document.getElementById('authButtonsHeader');
+    const userAvatarImg = document.getElementById('userAvatarHeader');
+    const userNameSpan = document.getElementById('userNameHeader');
+
+    auth.onAuthStateChanged(user => {
+        if (user) {
+            userMenuDiv.style.display = 'flex';
+            authBtnsDiv.style.display = 'none';
+            const photo = user.photoURL || `https://ui-avatars.com/api/?name=${encodeURIComponent(user.displayName || user.email)}&background=e67e22&color=fff&size=32`;
+            userAvatarImg.src = photo;
+            userNameSpan.textContent = user.displayName?.split(' ')[0] || user.email.split('@')[0];
+        } else {
+            userMenuDiv.style.display = 'none';
+            authBtnsDiv.style.display = 'flex';
+        }
+    });
+
+    // Resource content for downloads
+    const resources = {
+        vocabulary: {
+            title: "TOEFL Essential Vocabulary List",
+            content: `📚 TOEFL ESSENTIAL VOCABULARY LIST (500 words)\n\nAcademic Core Words:\n1. Analyze - to examine in detail\n2. Concept - an abstract idea\n3. Significant - important or meaningful\n4. Theory - a system of ideas to explain something\n5. Evidence - facts supporting a claim\n6. Approach - a way of dealing with something\n7. Context - circumstances forming a setting\n8. Factor - an element contributing to a result\n9. Method - a particular procedure\n10. Process - a series of actions\n\n[Full list continues with 490 more words...]\n\nDownload the complete PDF at Zakhourani.com/resources`
+        },
+        templates: {
+            title: "TOEFL Speaking & Writing Templates",
+            content: `🎤 SPEAKING TEMPLATES\n\nIndependent Task (Task 1):\n"Personally, I believe that [opinion]. First of all, [reason 1]. For example, [example]. Additionally, [reason 2]. Therefore, [conclusion]."\n\nIntegrated Task (Task 2-4):\n"The reading states that [main point]. However, the speaker argues that [contrasting point]. According to the lecture, [supporting detail]. This challenges the reading because [explanation]."\n\n✍️ WRITING TEMPLATES\n\nIntegrated Writing:\n"The reading passage discusses [topic]. However, the professor in the lecture challenges these points. First, the reading claims [point 1], but the lecturer argues [counterpoint 1]... [continue with 2-3 body paragraphs]"\n\nAcademic Discussion:\n"I agree with [student name] that [idea]. In my opinion, [your viewpoint]. For instance, [specific example]. Furthermore, [additional support]. Ultimately, [conclusion]."`
+        },
+        studyplan: {
+            title: "6-Week TOEFL Study Plan",
+            content: `📅 6-WEEK INTENSIVE TOEFL STUDY PLAN\n\nWeek 1-2: Foundations\n• Take diagnostic test to identify weaknesses\n• Study 100 academic vocabulary words/week\n• Learn question types for each section\n• Practice 1 reading passage + 1 lecture daily\n\nWeek 3-4: Skill Building\n• Timed practice for each section\n• Speaking: record 3 responses daily\n• Writing: 2 essays per week\n• Full section practice (alternating)\n\nWeek 5: Full Tests\n• Take 3 full-length mock tests\n• Analyze mistakes thoroughly\n• Focus on weak areas\n\nWeek 6: Refinement\n• Review all strategies\n• Take 2 more full tests\n• Rest day before exam\n\nDaily minimum: 2 hours (4 hours on weekends)`
+        },
+        checklist: {
+            title: "TOEFL Test Day Checklist",
+            content: `✅ TOEFL TEST DAY CHECKLIST\n\nBefore Test Day:\n□ Confirm test center location and time\n□ Print admission ticket\n□ Prepare valid passport/ID\n□ Plan transportation (arrive 30 min early)\n□ Get good sleep (8+ hours)\n\nWhat to Bring:\n□ Valid government ID (passport)\n□ Admission ticket\n□ Water and snacks for break\n□ Comfortable layered clothing\n□ Earplugs (if allowed)\n\nDuring Test:\n□ Use scratch paper for notes\n□ Manage time carefully\n□ Don't panic if others finish early\n□ Use break to stretch and hydrate\n□ Review answers if time remains\n\nAfter Test:\n□ Scores available in 6-10 days\n□ Send scores to 4 free universities\n□ Keep login credentials`
+        },
+        notes: {
+            title: "Note-Taking Guide for TOEFL",
+            content: `📝 EFFECTIVE NOTE-TAKING STRATEGIES\n\nAbbreviations & Symbols:\n• w/ = with\n• w/o = without\n• → = leads to/causes\n• ↑ = increase\n• ↓ = decrease\n• ≠ = different from\n• = = same as\n• ex = example\n• imp = important\n\nListening Lecture Structure:\n1. Main Topic: ____________\n2. Key Point 1: ____________\n   - Detail: ____________\n3. Key Point 2: ____________\n   - Example: ____________\n4. Speaker's Attitude: ______\n\nFor Conversations:\n• Problem: ____________\n• Solution: ____________\n• Student's Feeling: ______\n\nPractice: Use Cornell Method\n- Left column: keywords/questions\n- Right column: detailed notes\n- Bottom: summary`
+        },
+        mistakes: {
+            title: "Top 50 Common TOEFL Mistakes",
+            content: `⚠️ TOP 50 COMMON TOEFL MISTAKES\n\nReading:\n1. Spending too much time on difficult questions\n2. Not reading the passage first\n3. Choosing answers based on memory, not text\n4. Confusing fact vs. opinion\n5. Missing transition words\n\nListening:\n6. Not taking notes\n7. Focusing on details, missing main idea\n8. Getting distracted by accents\n9. Not predicting questions\n10. Forgetting speaker's attitude\n\nSpeaking:\n11. Using filler words (um, uh, like)\n12. Speaking too fast or too slow\n13. Not using transitions\n14. Going over time limit\n15. Not answering the prompt directly\n\nWriting:\n16. Adding personal opinion in integrated task\n17. Not paraphrasing reading/listening\n18. Grammar errors (subject-verb agreement)\n19. Weak thesis statement\n20. Insufficient word count\n\n[Full list continues with 30 more mistakes...]`
+        }
+    };
+
+    // Download functionality
+    document.querySelectorAll('.resource-item').forEach(item => {
+        item.addEventListener('click', () => {
+            const resourceKey = item.getAttribute('data-resource');
+            const resource = resources[resourceKey];
+            if (resource) {
+                const blob = new Blob([`${resource.title}\n\n${resource.content}\n\n— Zakhourani Learning Hub`], { type: 'text/plain' });
+                const url = URL.createObjectURL(blob);
+                const a = document.createElement('a');
+                a.href = url;
+                a.download = `${resourceKey}_toefl_guide.txt`;
+                document.body.appendChild(a);
+                a.click();
+                document.body.removeChild(a);
+                URL.revokeObjectURL(url);
+                
+                // Show success message
+                const originalText = item.querySelector('h4').innerText;
+                const successMsg = document.createElement('div');
+                successMsg.style.position = 'fixed';
+                successMsg.style.bottom = '20px';
+                successMsg.style.right = '20px';
+                successMsg.style.background = '#27ae60';
+                successMsg.style.color = 'white';
+                successMsg.style.padding = '0.8rem 1.2rem';
+                successMsg.style.borderRadius = '60px';
+                successMsg.style.zIndex = '1000';
+                successMsg.innerHTML = '<i class="fas fa-check"></i> Download started!';
+                document.body.appendChild(successMsg);
+                setTimeout(() => successMsg.remove(), 2000);
+            }
+        });
+    });
+
+    // Download full kit button
+    document.getElementById('downloadFullKitBtn').addEventListener('click', () => {
+        let fullContent = "DR. WALEED'S COMPLETE TOEFL STRATEGY KIT\n\n";
+        for (const [key, resource] of Object.entries(resources)) {
+            fullContent += `\n\n${resource.title}\n${'='.repeat(50)}\n${resource.content}\n`;
+        }
+        const blob = new Blob([fullContent], { type: 'text/plain' });
+        const url = URL.createObjectURL(blob);
+        const a = document.createElement('a');
+        a.href = url;
+        a.download = 'toefl_strategy_kit_complete.txt';
+        document.body.appendChild(a);
+        a.click();
+        document.body.removeChild(a);
+        URL.revokeObjectURL(url);
+        
+        alert("✅ Complete TOEFL Strategy Kit downloaded! Contains all 6 resources in one file.");
+    });
+
+    // FAQ accordion
+    document.querySelectorAll('.faq-question').forEach(question => {
+        question.addEventListener('click', () => {
+            const answer = question.nextElementSibling;
+            answer.classList.toggle('show');
+            const icon = question.querySelector('i');
+            if (answer.classList.contains('show')) {
+                icon.classList.remove('fa-chevron-down');
+                icon.classList.add('fa-chevron-up');
+            } else {
+                icon.classList.remove('fa-chevron-up');
+                icon.classList.add('fa-chevron-down');
+            }
+        });
+    });
+
+    // Newsletter subscription
+    document.getElementById('subscribeBtn').addEventListener('click', () => {
+        const email = document.getElementById('newsletterEmail').value;
+        if (email && email.includes('@')) {
+            alert(`✅ Thanks for subscribing! Weekly TOEFL tips will be sent to ${email}`);
+            document.getElementById('newsletterEmail').value = '';
+        } else {
+            alert('Please enter a valid email address.');
+        }
+    });
+</script>
 </body>
 </html>

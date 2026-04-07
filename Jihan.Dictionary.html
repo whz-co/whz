@@ -1,1 +1,69 @@
+import React, { useState } from 'react';
 
+const DictionaryTemplate = () => {
+  const [activeLang, setActiveLang] = useState('en');
+
+  const dictionaryData = [
+    { en: "Home", ar: "الرئيسية", ku: "Malper", url: "https://whz-co.github.io/whz/index.html" },
+    { en: "Products", ar: "المنتجات", ku: "Berhem", url: "https://whz-co.github.io/whz/products.html" },
+    { en: "AI Assistant", ar: "المساعد الذكي", ku: "Alîkarê AI", url: "https://whz-co.github.io/whz/AI.html" },
+    { en: "IELTS", ar: "اختبار الآيلتس", ku: "IELTS", url: "https://whz-co.github.io/whz/IELTS.html" },
+    { en: "TOEFL", ar: "اختبار التوفل", ku: "TOEFL", url: "https://whz-co.github.io/whz/TOFEL.html" },
+    { en: "About Dr. Waleed", ar: "عن الدكتور وليد", ku: "Derbarê Dr. Waleed de", url: "https://whz-co.github.io/whz/aboutDrwaleed.html" }
+  ];
+
+  const languages = {
+    en: { flag: "🇬🇧", name: "English", label: "Link Text" },
+    ar: { flag: "🇸🇦", name: "العربية", label: "النص" },
+    ku: { flag: "🏴󠁩󠁲󠁱󠁶󠁿", name: "Kurdî", label: "Nivîs" }
+  };
+
+  return (
+    <div className="container">
+      <div className="header">
+        <h1>📚 Zakhourani Dictionary</h1>
+        <p>Quick Links | روابط سريعة | Girêdanên Bilez</p>
+      </div>
+
+      <div className="tabs">
+        {Object.entries(languages).map(([key, lang]) => (
+          <button
+            key={key}
+            className={`tab-btn ${activeLang === key ? 'active' : ''}`}
+            onClick={() => setActiveLang(key)}
+          >
+            {lang.flag} {lang.name}
+          </button>
+        ))}
+      </div>
+
+      <div className="tab-content">
+        <h2>{languages[activeLang].flag} {languages[activeLang].name}</h2>
+        <table className="dictionary-table">
+          <thead>
+            <tr>
+              <th>#</th>
+              <th>{languages[activeLang].label}</th>
+              <th>URL</th>
+            </tr>
+          </thead>
+          <tbody>
+            {dictionaryData.map((item, index) => (
+              <tr key={index}>
+                <td>{index + 1}</td>
+                <td><strong>{item[activeLang]}</strong></td>
+                <td className="url-cell">
+                  <a href={item.url} target="_blank" rel="noopener noreferrer">
+                    {item.url}
+                  </a>
+                </td>
+              </tr>
+            ))}
+          </tbody>
+        </table>
+      </div>
+    </div>
+  );
+};
+
+export default DictionaryTemplate;

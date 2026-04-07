@@ -1,47 +1,847 @@
-{
-  "QuickLinks": {
-    "title": {
-      "en": "Quick Links",
-      "ar": "روابط سريعة",
-      "ku": "Girêdanên Bilez"
-    },
-    "links": [
-      {
-        "en": "Home",
-        "ar": "الرئيسية",
-        "ku": "Malper",
-        "url": "https://whz-co.github.io/whz/index.html"
-      },
-      {
-        "en": "Products",
-        "ar": "المنتجات",
-        "ku": "Berhem",
-        "url": "https://whz-co.github.io/whz/products.html"
-      },
-      {
-        "en": "AI Assistant",
-        "ar": "المساعد الذكي",
-        "ku": "Alîkarê AI",
-        "url": "https://whz-co.github.io/whz/AI.html"
-      },
-      {
-        "en": "IELTS",
-        "ar": "اختبار الآيلتس",
-        "ku": "IELTS",
-        "url": "https://whz-co.github.io/whz/IELTS.html"
-      },
-      {
-        "en": "TOEFL",
-        "ar": "اختبار التوفل",
-        "ku": "TOEFL",
-        "url": "https://whz-co.github.io/whz/TOFEL.html"
-      },
-      {
-        "en": "About Dr. Waleed",
-        "ar": "عن الدكتور وليد",
-        "ku": "Derbarê Dr. Waleed de",
-        "url": "https://whz-co.github.io/whz/aboutDrwaleed.html"
-      }
-    ]
-  }
-}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Zakhourani Dictionary | English - Arabic - Kurdish</title>
+    
+    <!-- SEO Meta Tags -->
+    <meta name="description" content="Multi-language dictionary by Dr. Waleed Hussien Zakhourani. Translate between English, Arabic, and Kurdish with quick links to all Zakhourani learning resources.">
+    <meta name="keywords" content="dictionary, English Arabic Kurdish, translator, Zakhourani, Dr. Waleed, language learning">
+    <meta name="author" content="Dr. Waleed Hussien Zakhourani">
+    
+    <!-- Favicon -->
+    <link rel="icon" type="image/png" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90' fill='%233498db'>📖</text></svg>">
+    
+    <!-- Font Awesome -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    
+    <!-- Google Fonts -->
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+    
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        :root {
+            --primary: #1a2634;
+            --primary-light: #2c3e50;
+            --secondary: #3498db;
+            --secondary-dark: #2980b9;
+            --accent: #e74c3c;
+            --success: #27ae60;
+            --light: #ecf0f1;
+            --gray: #95a5a6;
+            --white: #ffffff;
+            --dark: #2c3e50;
+            --shadow: 0 10px 40px rgba(0,0,0,0.1);
+            --shadow-lg: 0 20px 60px rgba(0,0,0,0.15);
+        }
+
+        body {
+            font-family: 'Poppins', 'Segoe UI', sans-serif;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+            color: var(--dark);
+        }
+
+        /* Header */
+        .main-header {
+            background: linear-gradient(135deg, var(--primary) 0%, var(--primary-light) 100%);
+            color: var(--white);
+            padding: 1rem 0;
+            position: sticky;
+            top: 0;
+            z-index: 100;
+            box-shadow: var(--shadow);
+        }
+
+        .header-container {
+            max-width: 1400px;
+            margin: 0 auto;
+            padding: 0 2rem;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            flex-wrap: wrap;
+            gap: 1rem;
+        }
+
+        .logo {
+            display: flex;
+            align-items: center;
+            gap: 0.75rem;
+        }
+
+        .logo i {
+            font-size: 2rem;
+            color: var(--secondary);
+        }
+
+        .logo h1 {
+            font-size: 1.75rem;
+            font-weight: 700;
+        }
+
+        .logo span {
+            color: var(--secondary);
+        }
+
+        .nav-links {
+            display: flex;
+            gap: 1rem;
+            flex-wrap: wrap;
+        }
+
+        .nav-links a {
+            color: var(--white);
+            text-decoration: none;
+            padding: 0.5rem 1rem;
+            border-radius: 50px;
+            transition: all 0.3s;
+            font-weight: 500;
+        }
+
+        .nav-links a:hover {
+            background: rgba(255,255,255,0.2);
+        }
+
+        .nav-links a.active {
+            background: var(--secondary);
+        }
+
+        /* Main Container */
+        .container {
+            max-width: 1400px;
+            margin: 2rem auto;
+            padding: 0 2rem;
+        }
+
+        /* Hero Section */
+        .hero {
+            background: var(--white);
+            border-radius: 30px;
+            padding: 3rem;
+            text-align: center;
+            margin-bottom: 2rem;
+            box-shadow: var(--shadow-lg);
+            background: linear-gradient(135deg, var(--white) 0%, var(--light) 100%);
+        }
+
+        .hero h1 {
+            font-size: 3rem;
+            color: var(--primary);
+            margin-bottom: 1rem;
+        }
+
+        .hero h1 i {
+            color: var(--secondary);
+            margin-right: 0.5rem;
+        }
+
+        .hero p {
+            font-size: 1.2rem;
+            color: var(--gray);
+            max-width: 700px;
+            margin: 0 auto;
+        }
+
+        .hero-badge {
+            display: inline-block;
+            background: var(--secondary);
+            color: var(--white);
+            padding: 0.5rem 1.5rem;
+            border-radius: 50px;
+            font-size: 0.875rem;
+            margin-bottom: 1.5rem;
+        }
+
+        /* Language Tabs */
+        .tabs-container {
+            background: var(--white);
+            border-radius: 20px;
+            overflow: hidden;
+            box-shadow: var(--shadow-lg);
+            margin-bottom: 2rem;
+        }
+
+        .tabs {
+            display: flex;
+            background: var(--light);
+            border-bottom: 2px solid #ddd;
+            flex-wrap: wrap;
+        }
+
+        .tab-btn {
+            flex: 1;
+            min-width: 150px;
+            padding: 1.25rem;
+            font-size: 1.1rem;
+            font-weight: 600;
+            border: none;
+            background: transparent;
+            cursor: pointer;
+            transition: all 0.3s;
+            font-family: inherit;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 0.75rem;
+        }
+
+        .tab-btn i {
+            font-size: 1.5rem;
+        }
+
+        .tab-btn:hover {
+            background: rgba(52,152,219,0.1);
+        }
+
+        .tab-btn.active {
+            background: var(--white);
+            color: var(--secondary);
+            border-bottom: 3px solid var(--secondary);
+        }
+
+        /* Tab Content */
+        .tab-content {
+            display: none;
+            padding: 2rem;
+            animation: fadeIn 0.4s ease;
+        }
+
+        .tab-content.active {
+            display: block;
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(10px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        /* H1 inside tabs */
+        .tab-header {
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+            margin-bottom: 2rem;
+            padding-bottom: 1rem;
+            border-bottom: 3px solid var(--secondary);
+        }
+
+        .tab-header i {
+            font-size: 2.5rem;
+            color: var(--secondary);
+        }
+
+        .tab-header h2 {
+            font-size: 1.8rem;
+            color: var(--primary);
+            margin: 0;
+        }
+
+        /* Dictionary Table */
+        .dictionary-table {
+            width: 100%;
+            border-collapse: collapse;
+        }
+
+        .dictionary-table th {
+            background: linear-gradient(135deg, var(--secondary) 0%, var(--secondary-dark) 100%);
+            color: var(--white);
+            padding: 1rem;
+            text-align: left;
+            font-weight: 600;
+        }
+
+        .dictionary-table th:first-child {
+            border-radius: 10px 0 0 0;
+        }
+
+        .dictionary-table th:last-child {
+            border-radius: 0 10px 0 0;
+        }
+
+        .dictionary-table td {
+            padding: 1rem;
+            border-bottom: 1px solid var(--light);
+            vertical-align: middle;
+        }
+
+        .dictionary-table tr:hover {
+            background: rgba(52,152,219,0.05);
+        }
+
+        .link-text {
+            font-weight: 600;
+            color: var(--primary);
+            font-size: 1.1rem;
+        }
+
+        .url-cell {
+            font-family: monospace;
+            font-size: 0.85rem;
+        }
+
+        .url-cell a {
+            color: var(--secondary);
+            text-decoration: none;
+            word-break: break-all;
+        }
+
+        .url-cell a:hover {
+            text-decoration: underline;
+        }
+
+        .copy-btn {
+            background: var(--light);
+            border: none;
+            padding: 0.25rem 0.5rem;
+            border-radius: 5px;
+            cursor: pointer;
+            margin-left: 0.5rem;
+            transition: all 0.3s;
+        }
+
+        .copy-btn:hover {
+            background: var(--secondary);
+            color: var(--white);
+        }
+
+        .badge {
+            display: inline-block;
+            background: var(--success);
+            color: white;
+            padding: 0.25rem 0.75rem;
+            border-radius: 20px;
+            font-size: 0.7rem;
+            margin-left: 0.5rem;
+        }
+
+        /* Search Section */
+        .search-section {
+            background: var(--white);
+            border-radius: 20px;
+            padding: 2rem;
+            margin-bottom: 2rem;
+            box-shadow: var(--shadow);
+        }
+
+        .search-box {
+            display: flex;
+            gap: 1rem;
+            max-width: 600px;
+            margin: 0 auto;
+        }
+
+        .search-box input {
+            flex: 1;
+            padding: 1rem 1.5rem;
+            border: 2px solid var(--light);
+            border-radius: 50px;
+            font-size: 1rem;
+            font-family: inherit;
+            transition: all 0.3s;
+        }
+
+        .search-box input:focus {
+            outline: none;
+            border-color: var(--secondary);
+        }
+
+        .search-box button {
+            padding: 1rem 2rem;
+            background: var(--secondary);
+            color: var(--white);
+            border: none;
+            border-radius: 50px;
+            cursor: pointer;
+            font-weight: 600;
+            transition: all 0.3s;
+        }
+
+        .search-box button:hover {
+            background: var(--secondary-dark);
+            transform: scale(1.02);
+        }
+
+        /* Stats Section */
+        .stats-section {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 1.5rem;
+            margin-bottom: 2rem;
+        }
+
+        .stat-card {
+            background: var(--white);
+            border-radius: 20px;
+            padding: 1.5rem;
+            text-align: center;
+            box-shadow: var(--shadow);
+            transition: all 0.3s;
+        }
+
+        .stat-card:hover {
+            transform: translateY(-5px);
+            box-shadow: var(--shadow-lg);
+        }
+
+        .stat-card i {
+            font-size: 2.5rem;
+            color: var(--secondary);
+            margin-bottom: 0.5rem;
+        }
+
+        .stat-card .number {
+            font-size: 2rem;
+            font-weight: 800;
+            color: var(--primary);
+        }
+
+        .stat-card .label {
+            color: var(--gray);
+            font-size: 0.875rem;
+        }
+
+        /* Footer */
+        .footer {
+            background: var(--primary);
+            color: var(--white);
+            padding: 3rem 2rem 1.5rem;
+            margin-top: 3rem;
+        }
+
+        .footer-content {
+            max-width: 1400px;
+            margin: 0 auto;
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 2rem;
+        }
+
+        .footer-section h3 {
+            margin-bottom: 1rem;
+            font-size: 1.2rem;
+        }
+
+        .footer-section p {
+            color: rgba(255,255,255,0.7);
+            line-height: 1.6;
+        }
+
+        .social-links {
+            display: flex;
+            gap: 1rem;
+            margin-top: 1rem;
+        }
+
+        .social-links a {
+            width: 35px;
+            height: 35px;
+            background: rgba(255,255,255,0.1);
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: var(--white);
+            transition: all 0.3s;
+        }
+
+        .social-links a:hover {
+            background: var(--secondary);
+            transform: translateY(-3px);
+        }
+
+        .footer-bottom {
+            text-align: center;
+            padding-top: 2rem;
+            margin-top: 2rem;
+            border-top: 1px solid rgba(255,255,255,0.1);
+            color: rgba(255,255,255,0.5);
+            font-size: 0.875rem;
+        }
+
+        /* Responsive */
+        @media (max-width: 768px) {
+            .header-container {
+                flex-direction: column;
+                text-align: center;
+            }
+
+            .hero h1 {
+                font-size: 2rem;
+            }
+
+            .tabs {
+                flex-direction: column;
+            }
+
+            .tab-btn {
+                justify-content: center;
+            }
+
+            .tab-content {
+                padding: 1rem;
+                overflow-x: auto;
+            }
+
+            .dictionary-table {
+                font-size: 0.85rem;
+            }
+
+            .dictionary-table th,
+            .dictionary-table td {
+                padding: 0.75rem 0.5rem;
+            }
+
+            .search-box {
+                flex-direction: column;
+            }
+
+            .stats-section {
+                grid-template-columns: 1fr 1fr;
+            }
+        }
+
+        @media (max-width: 480px) {
+            .stats-section {
+                grid-template-columns: 1fr;
+            }
+        }
+
+        /* Print Styles */
+        @media print {
+            .tabs, .search-section, .stats-section, .footer, .main-header {
+                display: none;
+            }
+            
+            .tab-content {
+                display: block !important;
+            }
+        }
+    </style>
+</head>
+<body>
+
+    <!-- Header -->
+    <header class="main-header">
+        <div class="header-container">
+            <div class="logo">
+                <i class="fas fa-book-open"></i>
+                <h1>Zakhourani<span>Dictionary</span></h1>
+            </div>
+            <nav class="nav-links">
+                <a href="#" class="active"><i class="fas fa-home"></i> Dictionary</a>
+                <a href="https://whz-co.github.io/whz/index.html"><i class="fas fa-graduation-cap"></i> Main Site</a>
+                <a href="https://whz-co.github.io/whz/AI.html"><i class="fas fa-robot"></i> AI Assistant</a>
+                <a href="https://whz-co.github.io/whz/aboutDrwaleed.html"><i class="fas fa-user-md"></i> About</a>
+            </nav>
+        </div>
+    </header>
+
+    <div class="container">
+        <!-- Hero Section -->
+        <div class="hero">
+            <span class="hero-badge"><i class="fas fa-language"></i> Trilingual Dictionary</span>
+            <h1><i class="fas fa-book"></i> English · العربية · Kurdî</h1>
+            <p>Your complete reference for Zakhourani learning resources. Translate and navigate between English, Arabic, and Kurdish.</p>
+        </div>
+
+        <!-- Stats Section -->
+        <div class="stats-section">
+            <div class="stat-card">
+                <i class="fas fa-link"></i>
+                <div class="number">6</div>
+                <div class="label">Quick Links</div>
+            </div>
+            <div class="stat-card">
+                <i class="fas fa-language"></i>
+                <div class="number">3</div>
+                <div class="label">Languages</div>
+            </div>
+            <div class="stat-card">
+                <i class="fas fa-globe"></i>
+                <div class="number">50K+</div>
+                <div class="label">Users</div>
+            </div>
+            <div class="stat-card">
+                <i class="fas fa-user-md"></i>
+                <div class="number">20+</div>
+                <div class="label">Years Experience</div>
+            </div>
+        </div>
+
+        <!-- Search Section -->
+        <div class="search-section">
+            <div class="search-box">
+                <input type="text" id="searchInput" placeholder="🔍 Search across all languages... (e.g., Home, الرئيسية, Malper)" onkeyup="searchDictionary()">
+                <button onclick="searchDictionary()"><i class="fas fa-search"></i> Search</button>
+            </div>
+        </div>
+
+        <!-- Tabs Container -->
+        <div class="tabs-container">
+            <div class="tabs">
+                <button class="tab-btn active" onclick="switchTab('english')">
+                    <i class="fas fa-flag-usa"></i> English
+                </button>
+                <button class="tab-btn" onclick="switchTab('arabic')">
+                    <i class="fas fa-flag-saudi-arabia"></i> العربية
+                </button>
+                <button class="tab-btn" onclick="switchTab('kurdish')">
+                    <i class="fas fa-flag"></i> Kurdî
+                </button>
+            </div>
+
+            <!-- English Tab -->
+            <div id="englishTab" class="tab-content active">
+                <div class="tab-header">
+                    <i class="fas fa-flag-usa"></i>
+                    <h2>English Quick Links</h2>
+                </div>
+                <table class="dictionary-table" id="englishTable">
+                    <thead>
+                        <tr><th>#</th><th>Link Text (H1)</th><th>Full URL</th><th>Action</th></tr>
+                    </thead>
+                    <tbody></tbody>
+                </table>
+            </div>
+
+            <!-- Arabic Tab -->
+            <div id="arabicTab" class="tab-content">
+                <div class="tab-header">
+                    <i class="fas fa-flag-saudi-arabia"></i>
+                    <h2>روابط سريعة - العربية</h2>
+                </div>
+                <table class="dictionary-table" id="arabicTable">
+                    <thead>
+                        <tr><th>#</th><th>النص (H1)</th><th>الرابط الكامل</th><th>الإجراء</th></tr>
+                    </thead>
+                    <tbody></tbody>
+                </table>
+            </div>
+
+            <!-- Kurdish Tab -->
+            <div id="kurdishTab" class="tab-content">
+                <div class="tab-header">
+                    <i class="fas fa-flag"></i>
+                    <h2>Girêdanên Bilez - Kurdî</h2>
+                </div>
+                <table class="dictionary-table" id="kurdishTable">
+                    <thead>
+                        <tr><th>#</th><th>Nivîs (H1)</th><th>URL</th><th>Çalakî</th></tr>
+                    </thead>
+                    <tbody></tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+
+    <!-- Footer -->
+    <footer class="footer">
+        <div class="footer-content">
+            <div class="footer-section">
+                <h3><i class="fas fa-book"></i> Zakhourani Dictionary</h3>
+                <p>Founded by Dr. Waleed Hussien Zakhourani. Your trusted resource for English, Arabic, and Kurdish translations of Zakhourani learning resources.</p>
+                <div class="social-links">
+                    <a href="#"><i class="fab fa-facebook-f"></i></a>
+                    <a href="#"><i class="fab fa-twitter"></i></a>
+                    <a href="#"><i class="fab fa-linkedin-in"></i></a>
+                    <a href="#"><i class="fab fa-instagram"></i></a>
+                </div>
+            </div>
+            <div class="footer-section">
+                <h3><i class="fas fa-link"></i> Quick Links</h3>
+                <p><a href="https://whz-co.github.io/whz/index.html" style="color: rgba(255,255,255,0.7);">Main Website</a></p>
+                <p><a href="https://whz-co.github.io/whz/AI.html" style="color: rgba(255,255,255,0.7);">AI Assistant</a></p>
+                <p><a href="https://whz-co.github.io/whz/aboutDrwaleed.html" style="color: rgba(255,255,255,0.7);">About Dr. Waleed</a></p>
+            </div>
+            <div class="footer-section">
+                <h3><i class="fas fa-envelope"></i> Contact</h3>
+                <p>Email: info@zakhourani.com</p>
+                <p>Dubai Knowledge Park, UAE</p>
+                <p>© 2024 Zakhourani. All rights reserved.</p>
+            </div>
+        </div>
+        <div class="footer-bottom">
+            <p>Created by Dr. Waleed Hussien Zakhourani | Master English with AI</p>
+        </div>
+    </footer>
+
+    <script>
+        // Dictionary Data
+        const dictionaryData = [
+            { 
+                en: "Home", 
+                ar: "الرئيسية", 
+                ku: "Malper", 
+                url: "https://whz-co.github.io/whz/index.html",
+                description: "Main Zakhourani homepage"
+            },
+            { 
+                en: "Products", 
+                ar: "المنتجات", 
+                ku: "Berhem", 
+                url: "https://whz-co.github.io/whz/products.html",
+                description: "All Zakhourani learning products"
+            },
+            { 
+                en: "AI Assistant", 
+                ar: "المساعد الذكي", 
+                ku: "Alîkarê AI", 
+                url: "https://whz-co.github.io/whz/AI.html",
+                description: "24/7 AI-powered English tutor"
+            },
+            { 
+                en: "IELTS", 
+                ar: "اختبار الآيلتس", 
+                ku: "IELTS", 
+                url: "https://whz-co.github.io/whz/IELTS.html",
+                description: "IELTS preparation course"
+            },
+            { 
+                en: "TOEFL", 
+                ar: "اختبار التوفل", 
+                ku: "TOEFL", 
+                url: "https://whz-co.github.io/whz/TOFEL.html",
+                description: "TOEFL iBT preparation course"
+            },
+            { 
+                en: "About Dr. Waleed", 
+                ar: "عن الدكتور وليد", 
+                ku: "Derbarê Dr. Waleed de", 
+                url: "https://whz-co.github.io/whz/aboutDrwaleed.html",
+                description: "Biography of Dr. Waleed Hussien Zakhourani"
+            }
+        ];
+
+        // Populate Tables
+        function populateTables() {
+            // English Table
+            const englishTbody = document.querySelector('#englishTable tbody');
+            englishTbody.innerHTML = dictionaryData.map((item, index) => `
+                <tr>
+                    <td>${index + 1}</td>
+                    <td class="link-text">${item.en} <span class="badge">H1</span></td>
+                    <td class="url-cell"><a href="${item.url}" target="_blank">${item.url}</a></td>
+                    <td><button class="copy-btn" onclick="copyToClipboard('${item.url}')"><i class="fas fa-copy"></i> Copy</button></td>
+                </tr>
+            `).join('');
+
+            // Arabic Table
+            const arabicTbody = document.querySelector('#arabicTable tbody');
+            arabicTbody.innerHTML = dictionaryData.map((item, index) => `
+                <tr>
+                    <td>${index + 1}</td>
+                    <td class="link-text">${item.ar} <span class="badge">H1</span></td>
+                    <td class="url-cell"><a href="${item.url}" target="_blank">${item.url}</a></td>
+                    <td><button class="copy-btn" onclick="copyToClipboard('${item.url}')"><i class="fas fa-copy"></i> نسخ</button></td>
+                </tr>
+            `).join('');
+
+            // Kurdish Table
+            const kurdishTbody = document.querySelector('#kurdishTable tbody');
+            kurdishTbody.innerHTML = dictionaryData.map((item, index) => `
+                <tr>
+                    <td>${index + 1}</td>
+                    <td class="link-text">${item.ku} <span class="badge">H1</span></td>
+                    <td class="url-cell"><a href="${item.url}" target="_blank">${item.url}</a></td>
+                    <td><button class="copy-btn" onclick="copyToClipboard('${item.url}')"><i class="fas fa-copy"></i> Kopî bike</button></td>
+                </tr>
+            `).join('');
+        }
+
+        // Copy to Clipboard Function
+        function copyToClipboard(text) {
+            navigator.clipboard.writeText(text).then(() => {
+                alert('URL copied to clipboard: ' + text);
+            }).catch(() => {
+                alert('Failed to copy URL');
+            });
+        }
+
+        // Tab Switching Function
+        function switchTab(language) {
+            // Hide all tabs
+            document.getElementById('englishTab').classList.remove('active');
+            document.getElementById('arabicTab').classList.remove('active');
+            document.getElementById('kurdishTab').classList.remove('active');
+            
+            // Remove active class from all buttons
+            const buttons = document.querySelectorAll('.tab-btn');
+            buttons.forEach(btn => btn.classList.remove('active'));
+            
+            // Show selected tab
+            document.getElementById(language + 'Tab').classList.add('active');
+            
+            // Add active class to clicked button
+            event.target.classList.add('active');
+        }
+
+        // Search Function
+        function searchDictionary() {
+            const searchTerm = document.getElementById('searchInput').value.toLowerCase().trim();
+            
+            if (searchTerm === '') {
+                populateTables();
+                return;
+            }
+            
+            // Filter data based on search term
+            const filteredData = dictionaryData.filter(item => 
+                item.en.toLowerCase().includes(searchTerm) ||
+                item.ar.includes(searchTerm) ||
+                item.ku.toLowerCase().includes(searchTerm) ||
+                item.url.toLowerCase().includes(searchTerm)
+            );
+            
+            // Update all tables with filtered data
+            const englishTbody = document.querySelector('#englishTable tbody');
+            englishTbody.innerHTML = filteredData.map((item, index) => `
+                <tr>
+                    <td>${index + 1}</td>
+                    <td class="link-text">${item.en} <span class="badge">H1</span></td>
+                    <td class="url-cell"><a href="${item.url}" target="_blank">${item.url}</a></td>
+                    <td><button class="copy-btn" onclick="copyToClipboard('${item.url}')"><i class="fas fa-copy"></i> Copy</button></td>
+                </tr>
+            `).join('');
+
+            const arabicTbody = document.querySelector('#arabicTable tbody');
+            arabicTbody.innerHTML = filteredData.map((item, index) => `
+                <tr>
+                    <td>${index + 1}</td>
+                    <td class="link-text">${item.ar} <span class="badge">H1</span></td>
+                    <td class="url-cell"><a href="${item.url}" target="_blank">${item.url}</a></td>
+                    <td><button class="copy-btn" onclick="copyToClipboard('${item.url}')"><i class="fas fa-copy"></i> نسخ</button></td>
+                </tr>
+            `).join('');
+
+            const kurdishTbody = document.querySelector('#kurdishTable tbody');
+            kurdishTbody.innerHTML = filteredData.map((item, index) => `
+                <tr>
+                    <td>${index + 1}</td>
+                    <td class="link-text">${item.ku} <span class="badge">H1</span></td>
+                    <td class="url-cell"><a href="${item.url}" target="_blank">${item.url}</a></td>
+                    <td><button class="copy-btn" onclick="copyToClipboard('${item.url}')"><i class="fas fa-copy"></i> Kopî bike</button></td>
+                </tr>
+            `).join('');
+        }
+
+        // Enter key search
+        document.getElementById('searchInput').addEventListener('keypress', function(e) {
+            if (e.key === 'Enter') {
+                searchDictionary();
+            }
+        });
+
+        // Initialize on page load
+        document.addEventListener('DOMContentLoaded', function() {
+            populateTables();
+        });
+    </script>
+</body>
+</html>

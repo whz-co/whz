@@ -2,46 +2,128 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Zakhourani Dictionary</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
+    <title>Zakhourani Dictionary - 41,000+ Words | English - Arabic - Kurdish</title>
+    <meta name="description" content="Comprehensive dictionary with 41,000+ words in English, Arabic, and Kurdish (Sorani & Badini)">
+    <meta name="theme-color" content="#1e3c72">
     <link rel="stylesheet" href="style.css">
 </head>
 <body>
-    <div class="container">
+    <div id="app">
+        <!-- Header -->
         <header>
-            <h1>📖 Zakhourani Dictionary</h1>
-            <p>Your trusted source for word definitions</p>
+            <div class="header-content">
+                <h1>📚 Zakhourani Dictionary</h1>
+                <p>41,000+ Words • English • العربية • کوردی (سۆرانی • بدینی)</p>
+                <div class="loading-status" id="loadingStatus">
+                    <div class="progress-bar">
+                        <div class="progress-fill" id="progressFill"></div>
+                    </div>
+                    <span id="loadPercentage">0%</span>
+                </div>
+            </div>
         </header>
 
-        <div class="search-section">
-            <div class="search-box">
-                <input type="text" id="searchInput" placeholder="Search for a word...">
-                <button id="searchBtn">🔍 Search</button>
+        <!-- Search & Filters -->
+        <div class="controls">
+            <div class="search-container">
+                <input type="text" id="searchInput" placeholder="Search 41,000+ words... (e.g., 'Aardvark', 'سلام')" autocomplete="off">
+                <button id="searchBtn" class="search-btn">🔍 Search</button>
+                <button id="clearBtn" class="clear-btn">✖</button>
             </div>
-            <div class="filter-buttons">
-                <button class="filter-btn active" data-filter="all">All</button>
-                <button class="filter-btn" data-filter="noun">Nouns</button>
-                <button class="filter-btn" data-filter="verb">Verbs</button>
-                <button class="filter-btn" data-filter="adjective">Adjectives</button>
-                <button class="filter-btn" data-filter="phrase">Phrases</button>
+            
+            <div class="filters">
+                <div class="filter-group">
+                    <label>🌐 Language:</label>
+                    <select id="languageSelect">
+                        <option value="en">English</option>
+                        <option value="ar">العربية</option>
+                        <option value="ku">کوردی</option>
+                    </select>
+                </div>
+                
+                <div class="filter-group" id="dialectGroup" style="display:none">
+                    <label>🏴 Dialect:</label>
+                    <select id="dialectSelect">
+                        <option value="sorani">سۆرانی (Sorani)</option>
+                        <option value="badini">بدینی (Badini)</option>
+                    </select>
+                </div>
+                
+                <div class="filter-group">
+                    <label>📖 Word Type:</label>
+                    <select id="typeFilter">
+                        <option value="all">All Types</option>
+                        <option value="noun">Nouns</option>
+                        <option value="verb">Verbs</option>
+                        <option value="adjective">Adjectives</option>
+                        <option value="adverb">Adverbs</option>
+                        <option value="phrase">Phrases</option>
+                    </select>
+                </div>
+                
+                <div class="filter-group">
+                    <label>🔤 Sort by:</label>
+                    <select id="sortBy">
+                        <option value="term">Word (A-Z)</option>
+                        <option value="term-desc">Word (Z-A)</option>
+                        <option value="type">Type</option>
+                    </select>
+                </div>
+            </div>
+            
+            <div class="quick-stats">
+                <div class="stat">
+                    <span class="stat-label">Loaded:</span>
+                    <span class="stat-value" id="loadedCount">0</span>
+                    <span class="stat-unit">words</span>
+                </div>
+                <div class="stat">
+                    <span class="stat-label">Total:</span>
+                    <span class="stat-value" id="totalCount">41,000</span>
+                    <span class="stat-unit">words</span>
+                </div>
+                <div class="stat">
+                    <span class="stat-label">Batches:</span>
+                    <span class="stat-value" id="batchCount">0</span>
+                    <span class="stat-unit">/ 100</span>
+                </div>
             </div>
         </div>
 
-        <div class="stats">
-            <span id="wordCount">0</span> words in dictionary
+        <!-- Results Area -->
+        <div id="resultsContainer" class="results-container">
+            <div class="welcome-message">
+                <div class="welcome-icon">📖</div>
+                <h3>Welcome to Zakhourani Dictionary</h3>
+                <p>Search 41,000+ words in English, Arabic, and Kurdish</p>
+                <small>🔍 Start typing to search... Results appear instantly</small>
+            </div>
         </div>
 
-        <div id="results" class="results-container">
-            <!-- Search results will appear here -->
+        <!-- Pagination -->
+        <div class="pagination" id="pagination" style="display:none">
+            <button id="prevPage" disabled>← Previous</button>
+            <span id="pageInfo">Page 1 of 1</span>
+            <button id="nextPage" disabled>Next →</button>
         </div>
 
-        <div class="info-panel">
-            <button id="showAllBtn" class="info-btn">📚 Show All Words</button>
-            <button id="randomWordBtn" class="info-btn">🎲 Random Word</button>
+        <!-- Footer Controls -->
+        <div class="footer-controls">
+            <button id="randomWordBtn" class="footer-btn">🎲 Random Word</button>
+            <button id="showAllBtn" class="footer-btn">📚 Show All Words</button>
+            <button id="exportBtn" class="footer-btn">💾 Export Results</button>
+            <button id="scrollTopBtn" class="footer-btn">⬆ Top</button>
         </div>
     </div>
 
-    <script src="data.js"></script>
-    <script src="script.js"></script>
+    <!-- Scripts -->
+    <script src="js/config.js"></script>
+    <script src="js/batch-loader.js"></script>
+    <script src="js/search-engine.js"></script>
+    <script src="js/ui-handler.js"></script>
+    <script src="js/main.js"></script>
+    
+    <!-- Batch files will be loaded dynamically -->
 </body>
 </html>

@@ -3,218 +3,45 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Zakhourani Dictionary | English - Arabic - Kurdish</title>
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
-    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+    <title>Zakhourani Dictionary</title>
     <link rel="stylesheet" href="style.css">
 </head>
 <body>
-
-    <!-- Header -->
-    <header class="main-header">
-        <div class="header-container">
-            <div class="logo">
-                <i class="fas fa-book-open"></i>
-                <h1>Zakhourani<span>Dictionary</span></h1>
-            </div>
-            <nav class="nav-links">
-                <a href="index.html" class="active"><i class="fas fa-home"></i> Dictionary</a>
-                <a href="admin.html"><i class="fas fa-user-shield"></i> Admin Panel</a>
-                <a href="https://whz-co.github.io/whz/index.html"><i class="fas fa-graduation-cap"></i> Main Site</a>
-            </nav>
-        </div>
-    </header>
-
     <div class="container">
-        <!-- Hero Section -->
-        <div class="hero">
-            <span class="hero-badge"><i class="fas fa-language"></i> Trilingual Dictionary</span>
-            <h1><i class="fas fa-book"></i> English · العربية · Kurdî</h1>
-            <p>Your complete reference for Zakhourani learning resources. Translate and navigate between English, Arabic, and Kurdish.</p>
-        </div>
+        <header>
+            <h1>📖 Zakhourani Dictionary</h1>
+            <p>Your trusted source for word definitions</p>
+        </header>
 
-        <!-- Stats Section -->
-        <div class="stats-section" id="statsSection">
-            <div class="stat-card">
-                <i class="fas fa-link"></i>
-                <div class="number" id="totalWords">0</div>
-                <div class="label">Total Words</div>
-            </div>
-            <div class="stat-card">
-                <i class="fas fa-language"></i>
-                <div class="number">3</div>
-                <div class="label">Languages</div>
-            </div>
-            <div class="stat-card">
-                <i class="fas fa-tags"></i>
-                <div class="number" id="totalCategories">0</div>
-                <div class="label">Categories</div>
-            </div>
-            <div class="stat-card">
-                <i class="fas fa-calendar"></i>
-                <div class="number" id="lastUpdated">-</div>
-                <div class="label">Last Updated</div>
-            </div>
-        </div>
-
-        <!-- Search & Filter Section -->
         <div class="search-section">
             <div class="search-box">
-                <input type="text" id="searchInput" placeholder="🔍 Search across all languages..." onkeyup="filterDictionary()">
-                <select id="categoryFilter" onchange="filterDictionary()">
-                    <option value="all">📁 All Categories</option>
-                </select>
-                <button onclick="filterDictionary()"><i class="fas fa-search"></i> Search</button>
+                <input type="text" id="searchInput" placeholder="Search for a word...">
+                <button id="searchBtn">🔍 Search</button>
+            </div>
+            <div class="filter-buttons">
+                <button class="filter-btn active" data-filter="all">All</button>
+                <button class="filter-btn" data-filter="noun">Nouns</button>
+                <button class="filter-btn" data-filter="verb">Verbs</button>
+                <button class="filter-btn" data-filter="adjective">Adjectives</button>
+                <button class="filter-btn" data-filter="phrase">Phrases</button>
             </div>
         </div>
 
-        <!-- Tabs Container -->
-        <div class="tabs-container">
-            <div class="tabs">
-                <button class="tab-btn active" onclick="switchTab('english')"><i class="fas fa-flag-usa"></i> English</button>
-                <button class="tab-btn" onclick="switchTab('arabic')"><i class="fas fa-flag-saudi-arabia"></i> العربية</button>
-                <button class="tab-btn" onclick="switchTab('kurdish')"><i class="fas fa-flag"></i> Kurdî</button>
-            </div>
+        <div class="stats">
+            <span id="wordCount">0</span> words in dictionary
+        </div>
 
-            <div id="englishTab" class="tab-content active">
-                <div class="tab-header"><i class="fas fa-flag-usa"></i><h2>English Quick Links</h2></div>
-                <table class="dictionary-table" id="englishTable"><thead><tr><th>#</th><th>Link Text (H1)</th><th>Category</th><th>Full URL</th><th>Action</th></tr></thead><tbody></tbody></table>
-            </div>
+        <div id="results" class="results-container">
+            <!-- Search results will appear here -->
+        </div>
 
-            <div id="arabicTab" class="tab-content">
-                <div class="tab-header"><i class="fas fa-flag-saudi-arabia"></i><h2>روابط سريعة - العربية</h2></div>
-                <table class="dictionary-table" id="arabicTable"><thead><tr><th>#</th><th>النص (H1)</th><th>التصنيف</th><th>الرابط الكامل</th><th>الإجراء</th></tr></thead><tbody></tbody></table>
-            </div>
-
-            <div id="kurdishTab" class="tab-content">
-                <div class="tab-header"><i class="fas fa-flag"></i><h2>Girêdanên Bilez - Kurdî</h2></div>
-                <table class="dictionary-table" id="kurdishTable"><thead><tr><th>#</th><th>Nivîs (H1)</th><th>Kategorî</th><th>URL</th><th>Çalakî</th></tr></thead><tbody></tbody></table>
-            </div>
+        <div class="info-panel">
+            <button id="showAllBtn" class="info-btn">📚 Show All Words</button>
+            <button id="randomWordBtn" class="info-btn">🎲 Random Word</button>
         </div>
     </div>
 
-    <footer class="footer">
-        <div class="footer-content">
-            <div class="footer-section"><h3>Zakhourani Dictionary</h3><p>Founded by Dr. Waleed Hussien Zakhourani</p></div>
-            <div class="footer-section"><h3>Quick Links</h3><p><a href="admin.html">Admin Panel</a> | <a href="https://whz-co.github.io/whz/index.html">Main Site</a></p></div>
-            <div class="footer-section"><h3>Contact</h3><p>info@zakhourani.com | Dubai, UAE</p></div>
-        </div>
-        <div class="footer-bottom"><p>© 2024 Zakhourani. All rights reserved.</p></div>
-    </footer>
-
+    <script src="data.js"></script>
     <script src="script.js"></script>
-    <script>
-        let dictionaryData = [];
-        let currentTab = 'english';
-
-        // Load data from JSON
-        async function loadData() {
-            try {
-                const response = await fetch('data.json?v=' + Date.now());
-                const data = await response.json();
-                dictionaryData = data.words;
-                updateStats(data);
-                populateCategories(data.categories);
-                populateTables();
-                console.log(`Loaded ${dictionaryData.length} words`);
-            } catch (error) {
-                console.error('Error loading data:', error);
-            }
-        }
-
-        function updateStats(data) {
-            document.getElementById('totalWords').textContent = dictionaryData.length;
-            document.getElementById('totalCategories').textContent = data.categories.length;
-            document.getElementById('lastUpdated').textContent = data.lastUpdated || '-';
-        }
-
-        function populateCategories(categories) {
-            const select = document.getElementById('categoryFilter');
-            select.innerHTML = '<option value="all">📁 All Categories</option>';
-            categories.forEach(cat => {
-                select.innerHTML += `<option value="${cat}">📌 ${cat.charAt(0).toUpperCase() + cat.slice(1)}</option>`;
-            });
-        }
-
-        function filterDictionary() {
-            const searchTerm = document.getElementById('searchInput').value.toLowerCase();
-            const category = document.getElementById('categoryFilter').value;
-            
-            let filtered = dictionaryData;
-            
-            if (searchTerm) {
-                filtered = filtered.filter(item => 
-                    item.en.toLowerCase().includes(searchTerm) ||
-                    item.ar.includes(searchTerm) ||
-                    item.ku.toLowerCase().includes(searchTerm)
-                );
-            }
-            
-            if (category !== 'all') {
-                filtered = filtered.filter(item => item.category === category);
-            }
-            
-            populateTables(filtered);
-        }
-
-        function populateTables(data = dictionaryData) {
-            // English Table
-            const englishTbody = document.querySelector('#englishTable tbody');
-            englishTbody.innerHTML = data.map((item, index) => `
-                <tr>
-                    <td>${index + 1}</td>
-                    <td class="link-text">${item.en} <span class="badge">H1</span></td>
-                    <td><span class="category-tag">${item.category}</span></td>
-                    <td class="url-cell"><a href="${item.url}" target="_blank">${item.url}</a></td>
-                    <td><button class="copy-btn" onclick="copyToClipboard('${item.url}')"><i class="fas fa-copy"></i> Copy</button></td>
-                </tr>
-            `).join('');
-
-            // Arabic Table
-            const arabicTbody = document.querySelector('#arabicTable tbody');
-            arabicTbody.innerHTML = data.map((item, index) => `
-                <tr>
-                    <td>${index + 1}</td>
-                    <td class="link-text">${item.ar} <span class="badge">H1</span></td>
-                    <td><span class="category-tag">${item.category}</span></td>
-                    <td class="url-cell"><a href="${item.url}" target="_blank">${item.url}</a></td>
-                    <td><button class="copy-btn" onclick="copyToClipboard('${item.url}')"><i class="fas fa-copy"></i> نسخ</button></td>
-                </tr>
-            `).join('');
-
-            // Kurdish Table
-            const kurdishTbody = document.querySelector('#kurdishTable tbody');
-            kurdishTbody.innerHTML = data.map((item, index) => `
-                <tr>
-                    <td>${index + 1}</td>
-                    <td class="link-text">${item.ku} <span class="badge">H1</span></td>
-                    <td><span class="category-tag">${item.category}</span></td>
-                    <td class="url-cell"><a href="${item.url}" target="_blank">${item.url}</a></td>
-                    <td><button class="copy-btn" onclick="copyToClipboard('${item.url}')"><i class="fas fa-copy"></i> Kopî bike</button></td>
-                </tr>
-            `).join('');
-        }
-
-        function switchTab(language) {
-            document.getElementById('englishTab').classList.remove('active');
-            document.getElementById('arabicTab').classList.remove('active');
-            document.getElementById('kurdishTab').classList.remove('active');
-            document.querySelectorAll('.tab-btn').forEach(btn => btn.classList.remove('active'));
-            document.getElementById(language + 'Tab').classList.add('active');
-            event.target.classList.add('active');
-            currentTab = language;
-        }
-
-        function copyToClipboard(text) {
-            navigator.clipboard.writeText(text);
-            alert('URL copied: ' + text);
-        }
-
-        document.getElementById('searchInput').addEventListener('keypress', function(e) {
-            if (e.key === 'Enter') filterDictionary();
-        });
-
-        loadData();
-    </script>
 </body>
 </html>

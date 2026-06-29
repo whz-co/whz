@@ -497,7 +497,7 @@
 
         .timeline-grid {
             display: grid;
-            grid-template-columns: repeat(auto-fill, minmax(140px, 1fr));
+            grid-template-columns: repeat(auto-fill, minmax(150px, 1fr));
             gap: 12px;
             max-height: 420px;
             overflow-y: auto;
@@ -545,6 +545,14 @@
             margin-top: 2px;
         }
 
+        .timeline-card .user-detail {
+            font-size: 9px;
+            color: var(--text-secondary);
+            margin-top: 2px;
+            border-top: 1px solid var(--border);
+            padding-top: 4px;
+        }
+
         .timeline-card.predicted {
             border-color: rgba(59,130,246,0.2);
             background: rgba(59,130,246,0.04);
@@ -553,6 +561,17 @@
         .timeline-card.critical {
             border-color: var(--danger);
             background: rgba(239,68,68,0.06);
+            border-width: 2px;
+        }
+
+        .timeline-card.critical .amount {
+            color: var(--danger) !important;
+            animation: pulse-critical 1.5s ease-in-out infinite;
+        }
+
+        @keyframes pulse-critical {
+            0%, 100% { opacity: 1; }
+            50% { opacity: 0.5; }
         }
 
         /* Users Table */
@@ -961,7 +980,8 @@
                             <th>User</th>
                             <th>Email</th>
                             <th>Provider</th>
-                            <th>Tokens</th>
+                            <th>Daily Tokens</th>
+                            <th>Total Tokens</th>
                             <th>Cost ($)</th>
                             <th>Questions</th>
                             <th>Status</th>
@@ -1115,7 +1135,9 @@
                 const lastName = lastNames[Math.floor(i / 3) % lastNames.length];
                 const name = `${firstName} ${lastName}`;
                 const email = `${firstName.toLowerCase()}.${lastName.toLowerCase()}${Math.floor(Math.random() * 100)}@${['gmail.com', 'yahoo.com', 'outlook.com', 'hotmail.com'][i % 4]}`;
-                const tokens = Math.floor(Math.random() * 250000) + 15000;
+                const totalTokens = Math.floor(Math.random() * 250000) + 15000;
+                // Daily tokens: random between 500 and 8000
+                const dailyTokens = Math.floor(Math.random() * 7500) + 500;
                 const questions = Math.floor(Math.random() * 120) + 5;
                 const daysAgo = Math.floor(Math.random() * 60);
                 
@@ -1127,8 +1149,10 @@
                     provider: providers[i % providers.length],
                     createdAt: new Date(2026, 0, Math.floor(Math.random() * 180) + 1),
                     lastActive: new Date(Date.now() - daysAgo * 24 * 60 * 60 * 1000 - Math.random() * 12 * 60 * 60 * 1000),
-                    tokensUsed: tokens,
-                    cost: calculateCostFromTokens(tokens),
+                    tokensUsed: totalTokens,
+                    dailyTokens: dailyTokens,
+                    cost: calculateCostFromTokens(totalTokens),
+                    dailyCost: calculateCostFromTokens(dailyTokens),
                     questions: questions,
                     calls: Math.floor(Math.random() * 300) + 20,
                     status: statuses[i % statuses.length]
@@ -1157,6 +1181,7 @@
             let balance = TOTAL_BUDGET;
             let totalTokens = 0;
             const days = 200;
+            const now = new Date();
 
             for (let i = 0; i <= days; i++) {
                 const date = new Date(2026, 0, 1 + i);
@@ -1176,6 +1201,10 @@
                 dailySpend = Math.round(dailySpend * 100) / 100;
                 const dailyTokens = calculateTokensFromCost(dailySpend);
                 
+                // Calculate user consumption for this day (sum of all users' daily tokens)
+                const totalDailyUserTokens = users.reduce((sum, u) => sum + (u.dailyTokens || Math.floor(Math.random() * 7500) + 500), 0);
+                const avgUserTokens = Math.round(totalDailyUserTokens / users.length);
+                
                 if (balance - dailySpend < MIN_BALANCE) {
                     dailySpend = Math.round((balance - MIN_BALANCE) * 100) / 100;
                     if (dailySpend < 0) dailySpend = 0;
@@ -1186,6 +1215,10 @@
                 
                 totalTokens += dailyTokens;
                 
+                // Check if date is in June 2026 (critical period)
+                const isJune = date.getMonth() === 5 && date.getFullYear() === 2026;
+                const isCritical = isJune || balance < MIN_BALANCE + 15;
+                
                 data.push({
                     date: date,
                     spend: dailySpend,
@@ -1194,7 +1227,11 @@
                     totalTokens: totalTokens,
                     day: i + 1,
                     predicted: false,
-                    dayOfWeek: date.toLocaleDateString('en-US', { weekday: 'short' })
+                    dayOfWeek: date.toLocaleDateString('en-US', { weekday: 'short' }),
+                    avgUserTokens: avgUserTokens,
+                    userCount: users.length,
+                    isCritical: isCritical,
+                    isJune: isJune
                 });
             }
             
@@ -1240,7 +1277,11 @@
                     totalTokens: totalTokens,
                     day: day + i,
                     predicted: true,
-                    dayOfWeek: date.toLocaleDateString('en-US', { weekday: 'short' })
+                    dayOfWeek: date.toLocaleDateString('en-US', { weekday: 'short' }),
+                    avgUserTokens: Math.round(dailyTokens / users.length),
+                    userCount: users.length,
+                    isCritical: balance < MIN_BALANCE + 15,
+                    isJune: date.getMonth() === 5 && date.getFullYear() === 2026
                 });
             }
             
@@ -1328,7 +1369,7 @@
             } else if (currentTimelineView === 'past') {
                 data = data.filter(d => !d.predicted && new Date(d.date) <= new Date());
             } else if (currentTimelineView === 'critical') {
-                data = data.filter(d => d.balance < MIN_BALANCE + 10);
+                data = data.filter(d => d.isCritical || d.balance < MIN_BALANCE + 15);
             }
 
             const recentData = data.slice(-45);
@@ -1336,28 +1377,44 @@
             grid.innerHTML = recentData.map(d => {
                 const date = new Date(d.date);
                 const isFuture = d.predicted || date > new Date();
-                const isCritical = d.balance < MIN_BALANCE + 10;
+                const isCritical = d.isCritical || d.balance < MIN_BALANCE + 15;
                 const isToday = date.toDateString() === new Date().toDateString();
+                const isJune = date.getMonth() === 5 && date.getFullYear() === 2026;
                 
                 let statusClass = '';
                 if (isFuture) statusClass = 'predicted';
-                if (isCritical) statusClass = 'critical';
+                if (isCritical || isJune) statusClass = 'critical';
                 
+                // Random sample of users for this day (3-5 users)
+                const sampleUsers = users
+                    .sort(() => Math.random() - 0.5)
+                    .slice(0, Math.floor(Math.random() * 3) + 3);
+                
+                const userTokensList = sampleUsers.map(u => 
+                    `${u.displayName.split(' ')[0]}: ${(u.dailyTokens || Math.floor(Math.random() * 7500) + 500).toLocaleString()} tokens`
+                ).join(' · ');
+
                 return `
                     <div class="timeline-card ${statusClass}" onclick="showDayDetail(${d.day})">
                         <div class="date">
                             ${date.toLocaleDateString('en-US', { month: 'short', day: 'numeric' })}
                             ${isToday ? '⭐' : ''}
+                            ${isJune ? '🔥' : ''}
                             <span style="font-size:9px;color:var(--text-secondary);">${d.dayOfWeek || ''}</span>
                         </div>
                         <div class="day-name">Day ${d.day}</div>
                         <div class="amount ${isCritical ? 'negative' : isFuture ? 'warning' : 'positive'}">
                             $${d.spend.toFixed(2)}
                         </div>
-                        <div class="detail">Balance: $${d.balance.toFixed(2)}</div>
                         <div class="detail">${Math.round(d.tokens || 0).toLocaleString()} tokens</div>
+                        <div class="detail">Balance: $${d.balance.toFixed(2)}</div>
+                        <div class="user-detail">
+                            <i class="fas fa-users" style="font-size:8px;"></i> ${d.userCount || users.length} users
+                            <br>${userTokensList}
+                        </div>
                         ${isFuture ? '<div class="detail">📊 Projected</div>' : ''}
-                        ${isCritical ? '<div class="detail">⚠️ Near Minimum</div>' : ''}
+                        ${isCritical ? '<div class="detail">⚠️ CRITICAL</div>' : ''}
+                        ${isJune ? '<div class="detail">📅 June 2026</div>' : ''}
                     </div>
                 `;
             }).join('');
@@ -1378,12 +1435,21 @@
             const content = document.getElementById('userDetailContent');
             
             const date = new Date(data.date);
+            const isCritical = data.isCritical || data.balance < MIN_BALANCE + 15;
+            const isJune = date.getMonth() === 5 && date.getFullYear() === 2026;
             
+            // Get top users for this day
+            const topUsers = users
+                .sort((a, b) => (b.dailyTokens || 0) - (a.dailyTokens || 0))
+                .slice(0, 5);
+
             content.innerHTML = `
                 <div style="text-align:center;margin-bottom:16px;">
                     <h2 style="font-size:24px;font-weight:800;">Day ${day}</h2>
                     <div style="color:var(--text-secondary);font-size:14px;">
                         ${date.toLocaleDateString('en-US', { weekday: 'long', year: 'numeric', month: 'long', day: 'numeric' })}
+                        ${isJune ? ' 🔥 June 2026' : ''}
+                        ${isCritical ? ' ⚠️ CRITICAL' : ''}
                     </div>
                 </div>
                 <div style="display:grid;grid-template-columns:1fr 1fr 1fr;gap:12px;margin-bottom:16px;">
@@ -1392,17 +1458,28 @@
                         <div style="font-size:11px;color:var(--text-secondary);">Daily Spend</div>
                     </div>
                     <div style="background:var(--bg-primary);padding:16px;border-radius:12px;text-align:center;">
-                        <div style="font-size:24px;font-weight:700;color:${data.balance < MIN_BALANCE + 10 ? 'var(--warning)' : 'var(--success)'};">$${data.balance.toFixed(2)}</div>
+                        <div style="font-size:24px;font-weight:700;color:${isCritical ? 'var(--danger)' : 'var(--success)'};">$${data.balance.toFixed(2)}</div>
                         <div style="font-size:11px;color:var(--text-secondary);">Remaining Balance</div>
                     </div>
                     <div style="background:var(--bg-primary);padding:16px;border-radius:12px;text-align:center;">
                         <div style="font-size:24px;font-weight:700;color:var(--warning);">${Math.round(data.tokens || 0).toLocaleString()}</div>
-                        <div style="font-size:11px;color:var(--text-secondary);">Tokens Used</div>
+                        <div style="font-size:11px;color:var(--text-secondary);">Total Tokens Used</div>
                     </div>
+                </div>
+                <div style="background:var(--bg-primary);padding:14px;border-radius:12px;margin-bottom:12px;">
+                    <div style="font-weight:600;margin-bottom:6px;font-size:13px;">👤 Top Users Today:</div>
+                    ${topUsers.map((u, i) => `
+                        <div style="display:flex;justify-content:space-between;padding:4px 0;border-bottom:1px solid var(--border);font-size:13px;">
+                            <span>${i+1}. ${u.displayName}</span>
+                            <span style="color:var(--accent);">${(u.dailyTokens || Math.floor(Math.random() * 7500) + 500).toLocaleString()} tokens</span>
+                            <span style="color:var(--text-secondary);">$${calculateCostFromTokens(u.dailyTokens || 500).toFixed(2)}</span>
+                        </div>
+                    `).join('')}
                 </div>
                 <div style="background:var(--bg-primary);padding:12px 16px;border-radius:10px;border:1px solid rgba(59,130,246,0.15);">
                     <span style="font-size:12px;color:var(--text-secondary);">💰 Token Cost: <strong style="color:var(--accent);">$${TOKEN_COST_PER_MILLION}</strong> per 1M tokens</span>
-                    <span style="font-size:12px;color:var(--text-secondary);margin-left:16px;">📈 Total Tokens: <strong>${Math.round(data.totalTokens || 0).toLocaleString()}</strong></span>
+                    <span style="font-size:12px;color:var(--text-secondary);margin-left:16px;">📈 Total Users: <strong>${data.userCount || users.length}</strong></span>
+                    ${isCritical ? '<span style="font-size:12px;color:var(--danger);margin-left:16px;">⚠️ CRITICAL BALANCE</span>' : ''}
                 </div>
             `;
 
@@ -1509,6 +1586,8 @@
                 else if (index === 1) rankClass = 'rank-2';
                 else if (index === 2) rankClass = 'rank-3';
 
+                const dailyTokens = user.dailyTokens || Math.floor(Math.random() * 7500) + 500;
+
                 return `
                     <tr>
                         <td>
@@ -1531,8 +1610,9 @@
                                 ${user.provider}
                             </span>
                         </td>
+                        <td style="font-weight:600;font-size:13px;color:var(--accent);">${dailyTokens.toLocaleString()}</td>
                         <td style="font-weight:600;font-size:13px;">${user.tokensUsed.toLocaleString()}</td>
-                        <td style="font-weight:600;font-size:13px;color:var(--accent);">$${user.cost.toFixed(2)}</td>
+                        <td style="font-weight:600;font-size:13px;color:var(--success);">$${user.cost.toFixed(2)}</td>
                         <td>${user.questions}</td>
                         <td><span class="status-badge ${statusClass}">${statusLabel}</span></td>
                         <td style="font-size:12px;color:var(--text-secondary);">
@@ -1573,6 +1653,7 @@
 
             const content = document.getElementById('userDetailContent');
             const rank = users.sort((a, b) => b.tokensUsed - a.tokensUsed).findIndex(u => u.uid === uid) + 1;
+            const dailyTokens = user.dailyTokens || Math.floor(Math.random() * 7500) + 500;
             
             content.innerHTML = `
                 <div style="display:flex;align-items:center;gap:16px;margin-bottom:16px;">
@@ -1590,18 +1671,22 @@
                         </div>
                     </div>
                 </div>
-                <div style="display:grid;grid-template-columns:repeat(3,1fr);gap:10px;margin:14px 0;">
+                <div style="display:grid;grid-template-columns:repeat(4,1fr);gap:10px;margin:14px 0;">
                     <div style="background:var(--bg-primary);padding:14px;border-radius:10px;text-align:center;">
-                        <div style="font-size:22px;font-weight:700;color:var(--accent);">${user.tokensUsed.toLocaleString()}</div>
-                        <div style="font-size:11px;color:var(--text-secondary);">Tokens Used</div>
+                        <div style="font-size:20px;font-weight:700;color:var(--accent);">${dailyTokens.toLocaleString()}</div>
+                        <div style="font-size:10px;color:var(--text-secondary);">Daily Tokens</div>
                     </div>
                     <div style="background:var(--bg-primary);padding:14px;border-radius:10px;text-align:center;">
-                        <div style="font-size:22px;font-weight:700;color:var(--success);">$${user.cost.toFixed(2)}</div>
-                        <div style="font-size:11px;color:var(--text-secondary);">Total Cost</div>
+                        <div style="font-size:20px;font-weight:700;color:var(--accent);">${user.tokensUsed.toLocaleString()}</div>
+                        <div style="font-size:10px;color:var(--text-secondary);">Total Tokens</div>
                     </div>
                     <div style="background:var(--bg-primary);padding:14px;border-radius:10px;text-align:center;">
-                        <div style="font-size:22px;font-weight:700;color:var(--warning);">${user.questions}</div>
-                        <div style="font-size:11px;color:var(--text-secondary);">Questions Asked</div>
+                        <div style="font-size:20px;font-weight:700;color:var(--success);">$${user.cost.toFixed(2)}</div>
+                        <div style="font-size:10px;color:var(--text-secondary);">Total Cost</div>
+                    </div>
+                    <div style="background:var(--bg-primary);padding:14px;border-radius:10px;text-align:center;">
+                        <div style="font-size:20px;font-weight:700;color:var(--warning);">${user.questions}</div>
+                        <div style="font-size:10px;color:var(--text-secondary);">Questions</div>
                     </div>
                 </div>
                 <div style="margin-top:12px;background:var(--bg-primary);padding:12px 16px;border-radius:10px;">
@@ -1612,7 +1697,11 @@
                         ${user.questions > 50 ? '<span style="background:var(--bg-secondary);padding:4px 12px;border-radius:20px;">💬 50+ Questions</span>' : ''}
                         ${user.questions > 100 ? '<span style="background:var(--bg-secondary);padding:4px 12px;border-radius:20px;">📚 100+ Questions</span>' : ''}
                         ${rank <= 3 ? '<span style="background:rgba(234,179,8,0.15);padding:4px 12px;border-radius:20px;color:var(--warning);">👑 Top 3 User</span>' : ''}
+                        ${dailyTokens > 5000 ? '<span style="background:rgba(59,130,246,0.12);padding:4px 12px;border-radius:20px;color:var(--accent);">⚡ 5K+ Daily Tokens</span>' : ''}
                     </div>
+                </div>
+                <div style="margin-top:8px;background:var(--bg-primary);padding:8px 12px;border-radius:8px;font-size:11px;color:var(--text-secondary);">
+                    💰 Cost per token: $${(TOKEN_COST_PER_MILLION / 1000000).toFixed(8)}
                 </div>
             `;
 
@@ -1769,6 +1858,11 @@
             const newDate = new Date();
             newDate.setDate(newDate.getDate() + simulatedDay);
             
+            // Update daily tokens for users randomly
+            users.forEach(u => {
+                u.dailyTokens = Math.floor(Math.random() * 7500) + 500;
+            });
+            
             timelineData.push({
                 date: newDate,
                 spend: Math.round(newSpend * 100) / 100,
@@ -1777,10 +1871,15 @@
                 totalTokens: lastData.totalTokens + newTokens,
                 day: timelineData.length + 1,
                 predicted: true,
-                dayOfWeek: newDate.toLocaleDateString('en-US', { weekday: 'short' })
+                dayOfWeek: newDate.toLocaleDateString('en-US', { weekday: 'short' }),
+                avgUserTokens: Math.round(newTokens / users.length),
+                userCount: users.length,
+                isCritical: newBalance < MIN_BALANCE + 15,
+                isJune: newDate.getMonth() === 5 && newDate.getFullYear() === 2026
             });
 
             renderTimeline();
+            renderUsers();
             updateStats();
             updateCharts();
             showAlert(`📆 Simulated day ${simulatedDay} added!`, 'success');
@@ -1819,7 +1918,8 @@
                     name: u.displayName,
                     email: u.email,
                     provider: u.provider,
-                    tokensUsed: u.tokensUsed,
+                    dailyTokens: u.dailyTokens || Math.floor(Math.random() * 7500) + 500,
+                    totalTokens: u.tokensUsed,
                     cost: u.cost,
                     questions: u.questions,
                     status: u.status
@@ -1831,7 +1931,8 @@
                     balance: d.balance,
                     tokens: d.tokens,
                     totalTokens: d.totalTokens,
-                    day: d.day
+                    day: d.day,
+                    isCritical: d.isCritical || false
                 }))
             };
 

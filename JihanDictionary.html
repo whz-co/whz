@@ -1,0 +1,1634 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=5.0, user-scalable=yes">
+    <title>Jihan Dictionary - Coming Soon | Zakhourani</title>
+    
+    <!-- Meta Tags -->
+    <meta name="description" content="Jihan Universal Dictionary - Coming Soon! English, Arabic, Kurdish trilingual dictionary with 100,000+ entries by Dr. Waleed Hussien Zakhourani.">
+    <meta name="keywords" content="Jihan Dictionary, Universal Dictionary, English Arabic Kurdish Dictionary, Dr. Waleed Zakhourani">
+    <meta name="author" content="Dr. Waleed Hussien Zakhourani">
+    <meta name="robots" content="index, follow">
+    
+    <!-- Open Graph -->
+    <meta property="og:title" content="Jihan Dictionary - Coming Soon">
+    <meta property="og:description" content="The Ultimate Trilingual Dictionary - English, Arabic, Kurdish">
+    <meta property="og:type" content="website">
+    <meta property="og:url" content="https://whz-co.github.io/whz/JihanDictionary.html">
+    
+    <!-- Fonts and Icons -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700;800;900&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/animate.css/4.1.1/animate.min.css">
+    
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        :root {
+            --primary: #1a2634;
+            --primary-light: #2c3e50;
+            --secondary: #3498db;
+            --secondary-dark: #2980b9;
+            --accent: #e74c3c;
+            --success: #27ae60;
+            --warning: #f39c12;
+            --gold: #f7971e;
+            --light: #ecf0f1;
+            --gray: #95a5a6;
+            --dark: #2c3e50;
+            --white: #ffffff;
+            --shadow-lg: 0 10px 15px rgba(0,0,0,0.1);
+            --shadow-xl: 0 20px 25px rgba(0,0,0,0.1);
+            --shadow-2xl: 0 25px 50px rgba(0,0,0,0.25);
+            --gradient-primary: linear-gradient(135deg, #1a2634 0%, #2c3e50 100%);
+            --gradient-secondary: linear-gradient(135deg, #3498db 0%, #2980b9 100%);
+            --gradient-gold: linear-gradient(135deg, #f7971e 0%, #ffd200 100%);
+            --gradient-book: linear-gradient(135deg, #0c2461 0%, #1e3799 50%, #4a69bd 100%);
+        }
+
+        body {
+            font-family: 'Poppins', 'Segoe UI', sans-serif;
+            background: linear-gradient(135deg, #f5f7fa 0%, #c3cfe2 100%);
+            min-height: 100vh;
+            color: var(--dark);
+            line-height: 1.6;
+            overflow-x: hidden;
+        }
+
+        /* Header */
+        header {
+            background: var(--white);
+            box-shadow: var(--shadow-lg);
+            position: sticky;
+            top: 0;
+            z-index: 1000;
+        }
+
+        .header-top {
+            background: var(--gradient-primary);
+            color: var(--white);
+            padding: 1rem 4rem;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .logo {
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+        }
+
+        .logo-icon {
+            font-size: 2.5rem;
+            color: var(--secondary);
+            animation: float 3s infinite;
+        }
+
+        .logo h1 {
+            font-size: 2rem;
+            font-weight: 800;
+            color: var(--white);
+            letter-spacing: 1px;
+            margin: 0;
+        }
+
+        .logo span {
+            color: var(--secondary);
+            font-weight: 300;
+        }
+
+        .auth-buttons {
+            display: flex;
+            gap: 1rem;
+        }
+
+        .auth-btn {
+            padding: 0.75rem 2rem;
+            border-radius: 50px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s;
+            text-decoration: none;
+            display: inline-flex;
+            align-items: center;
+            gap: 0.5rem;
+            font-size: 1rem;
+        }
+
+        .login-btn {
+            background: transparent;
+            color: var(--white);
+            border: 2px solid var(--white);
+        }
+
+        .login-btn:hover {
+            background: var(--white);
+            color: var(--primary);
+            transform: translateY(-2px);
+        }
+
+        .signup-btn {
+            background: var(--secondary);
+            color: var(--white);
+            border: 2px solid var(--secondary);
+        }
+
+        .signup-btn:hover {
+            background: var(--secondary-dark);
+            transform: translateY(-2px);
+        }
+
+        .user-menu {
+            display: flex;
+            align-items: center;
+            gap: 1.5rem;
+            color: var(--white);
+        }
+
+        .user-avatar {
+            width: 45px;
+            height: 45px;
+            border-radius: 50%;
+            object-fit: cover;
+            border: 3px solid var(--secondary);
+            transition: all 0.3s;
+        }
+
+        .user-avatar:hover {
+            transform: scale(1.1);
+            border-color: var(--white);
+        }
+
+        .user-name {
+            font-weight: 600;
+            font-size: 1rem;
+        }
+
+        .logout-btn {
+            background: var(--accent);
+            color: var(--white);
+            border: none;
+            padding: 0.75rem 1.5rem;
+            border-radius: 50px;
+            cursor: pointer;
+            text-decoration: none;
+            display: inline-flex;
+            align-items: center;
+            gap: 0.5rem;
+            transition: all 0.3s;
+            font-weight: 600;
+        }
+
+        .logout-btn:hover {
+            background: var(--accent-dark);
+            transform: translateY(-2px);
+        }
+
+        /* Navigation */
+        nav {
+            padding: 0 4rem;
+            background: var(--white);
+            border-bottom: 1px solid var(--light);
+        }
+
+        .nav-container {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 1rem 0;
+        }
+
+        .nav-links {
+            display: flex;
+            list-style: none;
+            gap: 0.5rem;
+            margin: 0;
+            padding: 0;
+        }
+
+        .nav-links li {
+            position: relative;
+        }
+
+        .nav-links a {
+            text-decoration: none;
+            color: var(--dark);
+            font-weight: 600;
+            font-size: 1rem;
+            padding: 0.75rem 1.25rem;
+            border-radius: 50px;
+            transition: all 0.3s;
+            white-space: nowrap;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+
+        .nav-links a i {
+            font-size: 1.1rem;
+            color: var(--secondary);
+            transition: all 0.3s;
+        }
+
+        .nav-links a:hover {
+            background: var(--light);
+            color: var(--secondary);
+            transform: translateY(-2px);
+        }
+
+        .nav-links a:hover i {
+            transform: scale(1.1);
+        }
+
+        .nav-links a.active {
+            background: var(--secondary);
+            color: var(--white);
+        }
+
+        .nav-links a.active i {
+            color: var(--white);
+        }
+
+        .nav-badge {
+            position: absolute;
+            top: -5px;
+            right: -5px;
+            background: var(--accent);
+            color: var(--white);
+            font-size: 0.7rem;
+            padding: 0.2rem 0.5rem;
+            border-radius: 20px;
+            min-width: 20px;
+            text-align: center;
+        }
+
+        .menu-toggle {
+            display: none;
+            flex-direction: column;
+            cursor: pointer;
+            padding: 0.5rem;
+            background: transparent;
+            border: none;
+            z-index: 1001;
+        }
+
+        .menu-toggle span {
+            width: 30px;
+            height: 3px;
+            background: var(--dark);
+            margin: 3px 0;
+            border-radius: 3px;
+            transition: all 0.3s;
+        }
+
+        .menu-toggle.active span:nth-child(1) {
+            transform: rotate(45deg) translate(6px, 6px);
+        }
+
+        .menu-toggle.active span:nth-child(2) {
+            opacity: 0;
+        }
+
+        .menu-toggle.active span:nth-child(3) {
+            transform: rotate(-45deg) translate(7px, -7px);
+        }
+
+        .search-bar {
+            display: flex;
+            align-items: center;
+            background: var(--light);
+            border-radius: 50px;
+            padding: 0.25rem;
+            margin-left: 1rem;
+        }
+
+        .search-bar input {
+            border: none;
+            background: transparent;
+            padding: 0.5rem 1rem;
+            width: 200px;
+            outline: none;
+            font-family: inherit;
+        }
+
+        .search-bar button {
+            background: var(--secondary);
+            color: var(--white);
+            border: none;
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            cursor: pointer;
+            transition: all 0.3s;
+        }
+
+        .search-bar button:hover {
+            background: var(--secondary-dark);
+            transform: rotate(90deg);
+        }
+
+        /* Hero */
+        .hero {
+            background: var(--gradient-primary);
+            color: var(--white);
+            border-radius: 2rem;
+            padding: 4rem 4rem;
+            margin: 2rem auto;
+            max-width: 1400px;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .hero::before {
+            content: '';
+            position: absolute;
+            top: -50%;
+            right: -50%;
+            width: 100%;
+            height: 200%;
+            background: radial-gradient(circle, rgba(52,152,219,0.2) 0%, transparent 70%);
+            animation: spin 20s linear infinite;
+        }
+
+        .hero::after {
+            content: '';
+            position: absolute;
+            bottom: -50%;
+            left: -50%;
+            width: 100%;
+            height: 200%;
+            background: radial-gradient(circle, rgba(231,76,60,0.1) 0%, transparent 70%);
+            animation: spin 25s linear infinite reverse;
+        }
+
+        .hero-content {
+            position: relative;
+            z-index: 2;
+            max-width: 900px;
+            margin: 0 auto;
+            text-align: center;
+        }
+
+        .hero-badge {
+            display: inline-block;
+            background: rgba(255,255,255,0.2);
+            color: var(--white);
+            padding: 0.5rem 1.5rem;
+            border-radius: 50px;
+            font-size: 0.875rem;
+            font-weight: 600;
+            margin-bottom: 2rem;
+            backdrop-filter: blur(10px);
+            border: 1px solid rgba(255,255,255,0.3);
+            animation: fadeIn 1s ease;
+        }
+
+        .hero h2 {
+            font-size: 4rem;
+            font-weight: 900;
+            margin-bottom: 1.5rem;
+            line-height: 1.2;
+            text-shadow: 2px 2px 4px rgba(0,0,0,0.3);
+            animation: slideInLeft 1s ease;
+        }
+
+        .hero h2 span {
+            color: var(--gold);
+            position: relative;
+        }
+
+        .hero p {
+            font-size: 1.25rem;
+            margin-bottom: 2rem;
+            max-width: 700px;
+            margin-left: auto;
+            margin-right: auto;
+            line-height: 1.8;
+            opacity: 0.9;
+            animation: slideInRight 1s ease;
+        }
+
+        /* Coming Soon Main Section */
+        .coming-soon-main {
+            padding: 4rem 2rem;
+            background: var(--white);
+        }
+
+        .section-header {
+            text-align: center;
+            margin-bottom: 4rem;
+        }
+
+        .section-subtitle {
+            color: var(--secondary);
+            font-weight: 600;
+            text-transform: uppercase;
+            letter-spacing: 2px;
+            font-size: 0.875rem;
+            margin-bottom: 1rem;
+            display: inline-block;
+            background: rgba(52,152,219,0.1);
+            padding: 0.5rem 1.5rem;
+            border-radius: 50px;
+        }
+
+        .section-title {
+            font-size: 2.5rem;
+            color: var(--primary);
+            margin-bottom: 1rem;
+            font-weight: 700;
+        }
+
+        .section-title span {
+            color: var(--secondary);
+        }
+
+        /* Book Showcase */
+        .book-showcase {
+            max-width: 1400px;
+            margin: 0 auto;
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 4rem;
+            align-items: center;
+            padding: 0 2rem;
+        }
+
+        .book-cover-large {
+            position: relative;
+            perspective: 1000px;
+        }
+
+        .book-3d {
+            width: 100%;
+            max-width: 450px;
+            margin: 0 auto;
+            background: var(--gradient-book);
+            border-radius: 20px;
+            padding: 3rem;
+            text-align: center;
+            color: white;
+            transform: rotateY(-5deg) rotateX(5deg);
+            transition: all 0.5s;
+            box-shadow: var(--shadow-2xl);
+            position: relative;
+            overflow: hidden;
+        }
+
+        .book-3d:hover {
+            transform: rotateY(0deg) rotateX(0deg) scale(1.02);
+        }
+
+        .book-3d::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: linear-gradient(135deg, rgba(255,255,255,0.1) 0%, transparent 50%);
+            pointer-events: none;
+        }
+
+        .book-3d .book-icon {
+            font-size: 6rem;
+            color: var(--gold);
+            margin-bottom: 1rem;
+            animation: float 3s infinite;
+        }
+
+        .book-3d h2 {
+            font-size: 3rem;
+            font-weight: 900;
+            color: var(--gold);
+            margin-bottom: 0.5rem;
+            text-shadow: 0 0 30px rgba(241, 196, 15, 0.3);
+        }
+
+        .book-3d .subtitle {
+            font-size: 1.2rem;
+            color: #ecf0f1;
+            margin-bottom: 0.5rem;
+        }
+
+        .book-3d .author {
+            font-size: 0.95rem;
+            color: #bdc3c7;
+            border-top: 2px solid rgba(255,255,255,0.2);
+            padding-top: 1rem;
+            margin-top: 1rem;
+        }
+
+        .book-3d .languages {
+            display: flex;
+            justify-content: center;
+            gap: 1rem;
+            margin-top: 1rem;
+        }
+
+        .book-3d .languages span {
+            background: rgba(255,255,255,0.15);
+            padding: 0.3rem 1rem;
+            border-radius: 20px;
+            font-size: 0.8rem;
+            font-weight: 600;
+        }
+
+        /* Countdown Timer */
+        .countdown-section {
+            background: var(--light);
+            padding: 3rem;
+            border-radius: 20px;
+            text-align: center;
+        }
+
+        .countdown-section h3 {
+            font-size: 1.8rem;
+            color: var(--primary);
+            margin-bottom: 1rem;
+        }
+
+        .countdown-section p {
+            color: var(--gray);
+            margin-bottom: 2rem;
+        }
+
+        .countdown-timer {
+            display: flex;
+            justify-content: center;
+            gap: 2rem;
+            flex-wrap: wrap;
+        }
+
+        .countdown-item {
+            background: var(--white);
+            padding: 1.5rem 2rem;
+            border-radius: 16px;
+            box-shadow: var(--shadow-lg);
+            min-width: 100px;
+            text-align: center;
+        }
+
+        .countdown-item .number {
+            font-size: 3.5rem;
+            font-weight: 800;
+            color: var(--secondary);
+            display: block;
+            line-height: 1;
+        }
+
+        .countdown-item .label {
+            font-size: 0.8rem;
+            color: var(--gray);
+            text-transform: uppercase;
+            font-weight: 600;
+            margin-top: 0.5rem;
+        }
+
+        /* Dictionary Preview */
+        .dictionary-preview {
+            padding: 4rem 2rem;
+            background: var(--white);
+        }
+
+        .preview-container {
+            max-width: 1400px;
+            margin: 0 auto;
+            padding: 0 2rem;
+        }
+
+        .language-selector {
+            display: flex;
+            justify-content: center;
+            gap: 1rem;
+            margin-bottom: 2rem;
+            flex-wrap: wrap;
+        }
+
+        .lang-btn {
+            padding: 0.75rem 2rem;
+            border: 2px solid var(--border);
+            border-radius: 50px;
+            background: var(--white);
+            color: var(--dark);
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s;
+        }
+
+        .lang-btn:hover {
+            border-color: var(--secondary);
+            color: var(--secondary);
+        }
+
+        .lang-btn.active {
+            background: var(--secondary);
+            color: var(--white);
+            border-color: var(--secondary);
+        }
+
+        .lang-btn i {
+            margin-right: 0.5rem;
+        }
+
+        .search-preview {
+            display: flex;
+            gap: 1rem;
+            max-width: 600px;
+            margin: 0 auto 2rem;
+        }
+
+        .search-preview input {
+            flex: 1;
+            padding: 1rem 1.5rem;
+            border: 2px solid var(--light);
+            border-radius: 50px;
+            font-size: 1rem;
+            transition: all 0.3s;
+        }
+
+        .search-preview input:focus {
+            border-color: var(--secondary);
+            outline: none;
+            box-shadow: 0 0 0 4px rgba(52,152,219,0.1);
+        }
+
+        .search-preview button {
+            padding: 1rem 2rem;
+            background: var(--secondary);
+            color: var(--white);
+            border: none;
+            border-radius: 50px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s;
+        }
+
+        .search-preview button:hover {
+            background: var(--secondary-dark);
+            transform: scale(1.05);
+        }
+
+        /* Dictionary Entries */
+        .entries-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(350px, 1fr));
+            gap: 1.5rem;
+            margin-top: 2rem;
+        }
+
+        .entry-card {
+            background: var(--white);
+            border: 1px solid var(--light);
+            border-radius: 16px;
+            padding: 1.5rem;
+            transition: all 0.3s;
+            box-shadow: var(--shadow-sm);
+        }
+
+        .entry-card:hover {
+            transform: translateY(-5px);
+            box-shadow: var(--shadow-xl);
+            border-color: var(--secondary);
+        }
+
+        .entry-word {
+            font-size: 1.5rem;
+            font-weight: 700;
+            color: var(--primary);
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+
+        .entry-word .pronunciation {
+            font-size: 0.9rem;
+            color: var(--gray);
+            font-weight: 400;
+        }
+
+        .entry-part {
+            color: var(--secondary);
+            font-size: 0.9rem;
+            font-weight: 600;
+            margin: 0.25rem 0;
+        }
+
+        .entry-translations {
+            display: flex;
+            gap: 1rem;
+            flex-wrap: wrap;
+            margin: 0.5rem 0;
+            font-size: 0.95rem;
+        }
+
+        .entry-translations .lang-tag {
+            font-weight: 600;
+            color: var(--gray);
+        }
+
+        .entry-translations .translation {
+            color: var(--dark);
+        }
+
+        .entry-example {
+            background: var(--light);
+            padding: 0.75rem 1rem;
+            border-radius: 10px;
+            margin: 0.75rem 0;
+            font-style: italic;
+            font-size: 0.95rem;
+            color: var(--dark);
+        }
+
+        .entry-synonyms {
+            font-size: 0.9rem;
+            color: var(--gray);
+        }
+
+        .entry-synonyms strong {
+            color: var(--dark);
+        }
+
+        /* Features Grid */
+        .features-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 2rem;
+            max-width: 1400px;
+            margin: 3rem auto;
+            padding: 0 2rem;
+        }
+
+        .feature-card {
+            text-align: center;
+            padding: 2rem;
+            background: var(--white);
+            border-radius: 20px;
+            box-shadow: var(--shadow-lg);
+            transition: all 0.3s;
+        }
+
+        .feature-card:hover {
+            transform: translateY(-10px);
+            box-shadow: var(--shadow-2xl);
+        }
+
+        .feature-card .icon {
+            font-size: 3rem;
+            color: var(--secondary);
+            margin-bottom: 1rem;
+        }
+
+        .feature-card h3 {
+            font-size: 1.3rem;
+            margin-bottom: 0.5rem;
+        }
+
+        .feature-card p {
+            color: var(--gray);
+            font-size: 0.95rem;
+        }
+
+        /* Footer */
+        footer {
+            background: var(--primary);
+            color: var(--white);
+            padding: 4rem 2rem 2rem;
+            position: relative;
+            overflow: hidden;
+        }
+
+        footer::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            height: 5px;
+            background: var(--gradient-secondary);
+        }
+
+        .footer-content {
+            max-width: 1400px;
+            margin: 0 auto;
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 3rem;
+            padding: 0 2rem;
+        }
+
+        .footer-section h3 {
+            font-size: 1.5rem;
+            margin-bottom: 1.5rem;
+            color: var(--white);
+            position: relative;
+            padding-bottom: 0.5rem;
+        }
+
+        .footer-section h3::after {
+            content: '';
+            position: absolute;
+            bottom: 0;
+            left: 0;
+            width: 50px;
+            height: 3px;
+            background: var(--secondary);
+        }
+
+        .footer-section p {
+            color: rgba(255,255,255,0.7);
+            line-height: 1.8;
+            margin-bottom: 1.5rem;
+        }
+
+        .social-links {
+            display: flex;
+            gap: 1rem;
+        }
+
+        .social-links a {
+            width: 40px;
+            height: 40px;
+            background: rgba(255,255,255,0.1);
+            border-radius: 50%;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            color: var(--white);
+            text-decoration: none;
+            transition: all 0.3s;
+        }
+
+        .social-links a:hover {
+            background: var(--secondary);
+            transform: translateY(-3px) rotate(360deg);
+        }
+
+        .footer-links {
+            list-style: none;
+        }
+
+        .footer-links li {
+            margin-bottom: 0.75rem;
+        }
+
+        .footer-links a {
+            color: rgba(255,255,255,0.7);
+            text-decoration: none;
+            transition: all 0.3s;
+            display: inline-flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+
+        .footer-links a:hover {
+            color: var(--secondary);
+            transform: translateX(5px);
+        }
+
+        .footer-bottom {
+            max-width: 1400px;
+            margin: 3rem auto 0;
+            padding: 2rem 2rem 0;
+            border-top: 1px solid rgba(255,255,255,0.1);
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            flex-wrap: wrap;
+            gap: 1rem;
+        }
+
+        .copyright {
+            color: rgba(255,255,255,0.7);
+            font-size: 0.875rem;
+        }
+
+        .footer-bottom-links {
+            display: flex;
+            gap: 2rem;
+        }
+
+        .footer-bottom-links a {
+            color: rgba(255,255,255,0.7);
+            text-decoration: none;
+            font-size: 0.875rem;
+            transition: color 0.3s;
+        }
+
+        .footer-bottom-links a:hover {
+            color: var(--secondary);
+        }
+
+        /* Back to Top */
+        .back-to-top {
+            position: fixed;
+            bottom: 2rem;
+            right: 2rem;
+            width: 50px;
+            height: 50px;
+            background: var(--secondary);
+            color: var(--white);
+            border-radius: 50%;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            text-decoration: none;
+            box-shadow: var(--shadow-lg);
+            opacity: 0;
+            visibility: hidden;
+            transition: all 0.3s;
+            z-index: 999;
+        }
+
+        .back-to-top.show {
+            opacity: 1;
+            visibility: visible;
+        }
+
+        .back-to-top:hover {
+            background: var(--secondary-dark);
+            transform: translateY(-5px);
+        }
+
+        /* Animations */
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(20px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        @keyframes slideInLeft {
+            from { opacity: 0; transform: translateX(-50px); }
+            to { opacity: 1; transform: translateX(0); }
+        }
+
+        @keyframes slideInRight {
+            from { opacity: 0; transform: translateX(50px); }
+            to { opacity: 1; transform: translateX(0); }
+        }
+
+        @keyframes float {
+            0% { transform: translateY(0px); }
+            50% { transform: translateY(-10px); }
+            100% { transform: translateY(0px); }
+        }
+
+        @keyframes spin {
+            from { transform: rotate(0deg); }
+            to { transform: rotate(360deg); }
+        }
+
+        @keyframes pulse {
+            0% { transform: scale(1); }
+            50% { transform: scale(1.05); }
+            100% { transform: scale(1); }
+        }
+
+        .animate-fadeIn { animation: fadeIn 1s ease; }
+        .animate-slideInLeft { animation: slideInLeft 1s ease; }
+        .animate-slideInRight { animation: slideInRight 1s ease; }
+        .animate-float { animation: float 3s infinite; }
+        .animate-pulse { animation: pulse 2s infinite; }
+
+        /* Responsive */
+        @media (max-width: 1024px) {
+            .book-showcase {
+                grid-template-columns: 1fr;
+                gap: 2rem;
+            }
+            .book-3d { max-width: 350px; }
+        }
+
+        @media (max-width: 992px) {
+            .header-top { padding: 1rem 2rem; }
+            nav { padding: 0 2rem; }
+            .hero { padding: 3rem 2rem; }
+            .hero h2 { font-size: 3rem; }
+        }
+
+        @media (max-width: 768px) {
+            .header-top {
+                padding: 1rem;
+                flex-direction: column;
+                gap: 1rem;
+                text-align: center;
+            }
+            .logo { justify-content: center; }
+            .menu-toggle { display: flex; }
+            .nav-container { width: 100%; justify-content: space-between; }
+            .nav-links {
+                display: none;
+                flex-direction: column;
+                width: 100%;
+                position: absolute;
+                top: 100%;
+                left: 0;
+                background: var(--white);
+                padding: 1rem;
+                box-shadow: var(--shadow-lg);
+                z-index: 1000;
+            }
+            .nav-links.active { display: flex; }
+            .nav-links li { width: 100%; }
+            .nav-links a { width: 100%; justify-content: center; padding: 1rem; }
+            .search-bar { margin: 1rem 0; width: 100%; }
+            .search-bar input { width: 100%; }
+            .hero { margin: 1rem; padding: 2rem 1rem; }
+            .hero h2 { font-size: 2.5rem; }
+            .countdown-timer { gap: 1rem; }
+            .countdown-item { min-width: 70px; padding: 1rem; }
+            .countdown-item .number { font-size: 2.5rem; }
+            .section-title { font-size: 2rem; }
+            .entries-grid { grid-template-columns: 1fr; }
+            .language-selector { gap: 0.5rem; }
+            .lang-btn { padding: 0.5rem 1rem; font-size: 0.8rem; }
+            .search-preview { flex-direction: column; }
+            .footer-bottom { flex-direction: column; text-align: center; }
+            .footer-bottom-links { justify-content: center; }
+            .book-3d { padding: 2rem; }
+            .book-3d h2 { font-size: 2rem; }
+        }
+
+        @media (max-width: 480px) {
+            .hero h2 { font-size: 2rem; }
+            .countdown-item .number { font-size: 2rem; }
+            .countdown-item { min-width: 60px; padding: 0.75rem; }
+            .entry-card { padding: 1rem; }
+            .auth-buttons { flex-direction: column; width: 100%; }
+            .auth-btn { text-align: center; justify-content: center; }
+            .user-menu { flex-direction: column; text-align: center; }
+        }
+
+        /* Scrollbar */
+        ::-webkit-scrollbar { width: 8px; }
+        ::-webkit-scrollbar-track { background: var(--light); }
+        ::-webkit-scrollbar-thumb { background: var(--secondary); border-radius: 10px; }
+        ::-webkit-scrollbar-thumb:hover { background: var(--secondary-dark); }
+    </style>
+</head>
+<body>
+    <!-- Header -->
+    <header>
+        <div class="header-top">
+            <div class="logo">
+                <i class="fas fa-book logo-icon"></i>
+                <h1>Jihan<span>Dictionary</span></h1>
+            </div>
+            <div class="auth-buttons" id="authButtons">
+                <a href="login.html" class="auth-btn login-btn"><i class="fas fa-sign-in-alt"></i> Login</a>
+                <a href="signup.html" class="auth-btn signup-btn"><i class="fas fa-user-plus"></i> Sign Up</a>
+            </div>
+        </div>
+        
+        <nav>
+            <div class="nav-container">
+                <button class="menu-toggle" id="mobileMenuToggle" aria-label="Menu">
+                    <span></span><span></span><span></span>
+                </button>
+                <ul class="nav-links" id="navLinks">
+                    <li><a href="index.html"><i class="fas fa-home"></i> Home</a></li>
+                    <li><a href="products.html"><i class="fas fa-box"></i> Products</a></li>
+                    <li><a href="AI.html"><i class="fas fa-robot"></i> AI Assistant</a></li>
+                    <li><a href="JihanDictionary.html" class="active"><i class="fas fa-book"></i> Dictionary <span class="nav-badge">NEW</span></a></li>
+                    <li><a href="IELTS.html"><i class="fas fa-language"></i> IELTS</a></li>
+                    <li><a href="TOFEL.html"><i class="fas fa-globe-americas"></i> TOEFL</a></li>
+                    <li><a href="aboutDrwaleed.html"><i class="fas fa-user-md"></i> About</a></li>
+                    <li><a href="contact.html"><i class="fas fa-envelope"></i> Contact</a></li>
+                </ul>
+                <div class="search-bar">
+                    <input type="search" placeholder="Search dictionary..." aria-label="Search dictionary">
+                    <button type="submit"><i class="fas fa-search"></i></button>
+                </div>
+            </div>
+        </nav>
+    </header>
+
+    <!-- Hero -->
+    <section class="hero">
+        <div class="hero-content">
+            <span class="hero-badge"><i class="fas fa-star"></i> Coming Soon</span>
+            <h2>Jihan Universal <span>Dictionary</span></h2>
+            <p>The Ultimate Trilingual Dictionary - English, Arabic, Kurdish. Over 100,000+ entries with detailed definitions, translations, and examples.</p>
+        </div>
+    </section>
+
+    <!-- Coming Soon Main -->
+    <section class="coming-soon-main">
+        <div class="section-header">
+            <span class="section-subtitle"><i class="fas fa-clock"></i> Coming Soon</span>
+            <h2 class="section-title">The <span>Jihan Dictionary</span> Project</h2>
+            <p style="max-width:700px;margin:0 auto;color:var(--gray);">A comprehensive trilingual dictionary by Dr. Waleed Hussien Zakhourani</p>
+        </div>
+
+        <div class="book-showcase">
+            <div class="book-cover-large">
+                <div class="book-3d">
+                    <div class="book-icon"><i class="fas fa-book-open"></i></div>
+                    <h2>JIHAN</h2>
+                    <div class="subtitle">Universal Dictionary</div>
+                    <div class="languages">
+                        <span>🇬🇧 English</span>
+                        <span>🇸🇦 Arabic</span>
+                        <span>🇰🇼 Kurdish</span>
+                    </div>
+                    <div class="author">Dr. Waleed Hussien Zakhourani</div>
+                </div>
+            </div>
+
+            <div class="countdown-section">
+                <h3><i class="fas fa-hourglass-half"></i> Launch Countdown</h3>
+                <p>Jihan Dictionary is coming soon! Be the first to get access.</p>
+                <div class="countdown-timer" id="countdownTimer">
+                    <div class="countdown-item">
+                        <span class="number" id="days">00</span>
+                        <span class="label">Days</span>
+                    </div>
+                    <div class="countdown-item">
+                        <span class="number" id="hours">00</span>
+                        <span class="label">Hours</span>
+                    </div>
+                    <div class="countdown-item">
+                        <span class="number" id="minutes">00</span>
+                        <span class="label">Minutes</span>
+                    </div>
+                    <div class="countdown-item">
+                        <span class="number" id="seconds">00</span>
+                        <span class="label">Seconds</span>
+                    </div>
+                </div>
+                <div style="margin-top:2rem;">
+                    <a href="#" class="btn" style="background:var(--gradient-gold);color:var(--dark);padding:1rem 3rem;border-radius:50px;font-weight:700;text-decoration:none;display:inline-block;transition:all 0.3s;">
+                        <i class="fas fa-bell"></i> Notify Me When Launched
+                    </a>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Features -->
+    <section style="padding:2rem 2rem 4rem;background:var(--light);">
+        <div class="section-header">
+            <span class="section-subtitle"><i class="fas fa-cogs"></i> Features</span>
+            <h2 class="section-title">What Makes <span>Jihan</span> Special</h2>
+        </div>
+        <div class="features-grid">
+            <div class="feature-card">
+                <div class="icon"><i class="fas fa-globe"></i></div>
+                <h3>Trilingual</h3>
+                <p>English, Arabic, and Kurdish translations with cultural context and usage examples.</p>
+            </div>
+            <div class="feature-card">
+                <div class="icon"><i class="fas fa-microphone"></i></div>
+                <h3>Pronunciation Guide</h3>
+                <p>IPA pronunciation for every entry with audio support coming soon.</p>
+            </div>
+            <div class="feature-card">
+                <div class="icon"><i class="fas fa-search"></i></div>
+                <h3>Smart Search</h3>
+                <p>Advanced search with suggestions, filters, and auto-complete.</p>
+            </div>
+            <div class="feature-card">
+                <div class="icon"><i class="fas fa-bookmark"></i></div>
+                <h3>Favorites & History</h3>
+                <p>Save words to favorites and track your search history.</p>
+            </div>
+            <div class="feature-card">
+                <div class="icon"><i class="fas fa-bolt"></i></div>
+                <h3>Quick Access</h3>
+                <p>Mobile-optimized with fast loading and offline support.</p>
+            </div>
+            <div class="feature-card">
+                <div class="icon"><i class="fas fa-robot"></i></div>
+                <h3>AI Integration</h3>
+                <p>AI-powered translations and contextual suggestions.</p>
+            </div>
+        </div>
+    </section>
+
+    <!-- Dictionary Preview -->
+    <section class="dictionary-preview">
+        <div class="preview-container">
+            <div class="section-header">
+                <span class="section-subtitle"><i class="fas fa-book-open"></i> Preview</span>
+                <h2 class="section-title">Sample <span>Dictionary Entries</span></h2>
+                <p style="max-width:700px;margin:0 auto;color:var(--gray);">Explore how Jihan Dictionary will work - Click the language buttons to filter</p>
+            </div>
+
+            <div class="language-selector">
+                <button class="lang-btn active" data-lang="all"><i class="fas fa-globe"></i> All</button>
+                <button class="lang-btn" data-lang="english"><i class="fas fa-flag-usa"></i> English</button>
+                <button class="lang-btn" data-lang="arabic"><i class="fas fa-flag"></i> Arabic</button>
+                <button class="lang-btn" data-lang="kurdish"><i class="fas fa-flag"></i> Kurdish</button>
+            </div>
+
+            <div class="search-preview">
+                <input type="text" id="previewSearch" placeholder="Search sample entries..." oninput="filterEntries()">
+                <button onclick="filterEntries()"><i class="fas fa-search"></i> Search</button>
+            </div>
+
+            <div class="entries-grid" id="entriesGrid">
+                <!-- Entries populated by JavaScript -->
+            </div>
+        </div>
+    </section>
+
+    <!-- CTA -->
+    <section style="padding:4rem 2rem;background:var(--gradient-primary);color:var(--white);text-align:center;">
+        <div style="max-width:800px;margin:0 auto;">
+            <h2 style="font-size:2.5rem;margin-bottom:1rem;">Ready to Explore Jihan?</h2>
+            <p style="font-size:1.2rem;margin-bottom:2rem;opacity:0.9;">Get notified when the Jihan Universal Dictionary launches</p>
+            <div style="display:flex;gap:1rem;max-width:500px;margin:0 auto;flex-wrap:wrap;justify-content:center;">
+                <input type="email" placeholder="Enter your email" style="flex:1;padding:1rem 1.5rem;border:none;border-radius:50px;font-family:inherit;font-size:1rem;min-width:200px;">
+                <button style="padding:1rem 2rem;background:var(--gradient-gold);color:var(--dark);border:none;border-radius:50px;font-weight:700;cursor:pointer;transition:all 0.3s;">
+                    <i class="fas fa-paper-plane"></i> Subscribe
+                </button>
+            </div>
+        </div>
+    </section>
+
+    <!-- Footer -->
+    <footer>
+        <div class="footer-content">
+            <div class="footer-section">
+                <h3>Jihan Dictionary</h3>
+                <p>The Universal Dictionary by Dr. Waleed Hussien Zakhourani - Bridging English, Arabic, and Kurdish languages.</p>
+                <div class="social-links">
+                    <a href="#"><i class="fab fa-facebook-f"></i></a>
+                    <a href="#"><i class="fab fa-twitter"></i></a>
+                    <a href="#"><i class="fab fa-linkedin-in"></i></a>
+                    <a href="#"><i class="fab fa-instagram"></i></a>
+                </div>
+            </div>
+            <div class="footer-section">
+                <h3>Quick Links</h3>
+                <ul class="footer-links">
+                    <li><a href="index.html"><i class="fas fa-chevron-right"></i> Home</a></li>
+                    <li><a href="products.html"><i class="fas fa-chevron-right"></i> Products</a></li>
+                    <li><a href="aboutDrwaleed.html"><i class="fas fa-chevron-right"></i> About Dr. Waleed</a></li>
+                    <li><a href="contact.html"><i class="fas fa-chevron-right"></i> Contact</a></li>
+                </ul>
+            </div>
+            <div class="footer-section">
+                <h3>Support</h3>
+                <ul class="footer-links">
+                    <li><a href="#"><i class="fas fa-chevron-right"></i> FAQ</a></li>
+                    <li><a href="#"><i class="fas fa-chevron-right"></i> Privacy Policy</a></li>
+                    <li><a href="#"><i class="fas fa-chevron-right"></i> Terms of Service</a></li>
+                </ul>
+            </div>
+            <div class="footer-section">
+                <h3>Contact</h3>
+                <ul class="footer-links">
+                    <li><a href="#"><i class="fas fa-envelope"></i> info@zakhourani.com</a></li>
+                    <li><a href="#"><i class="fas fa-phone"></i> +971 4 123 4567</a></li>
+                    <li><a href="#"><i class="fas fa-map-marker-alt"></i> Dubai, UAE</a></li>
+                </ul>
+            </div>
+        </div>
+        <div class="footer-bottom">
+            <p class="copyright">© 2024 Jihan Dictionary - Zakhourani. All rights reserved.</p>
+            <div class="footer-bottom-links">
+                <a href="#">Privacy</a>
+                <a href="#">Terms</a>
+                <a href="#">Cookies</a>
+            </div>
+        </div>
+    </footer>
+
+    <!-- Back to Top -->
+    <a href="#" class="back-to-top" id="backToTop"><i class="fas fa-arrow-up"></i></a>
+
+    <script>
+        // ==============================================
+        // DICTIONARY ENTRIES DATA
+        // ==============================================
+        const dictionaryEntries = [
+            {
+                word: "Aani",
+                pronunciation: "/ˈɑːni/",
+                partOfSpeech: "n.",
+                arabic: "نوع من القرود",
+                kurdish: "(S) جۆرە مەیموونێک، (B) جۆرەکێ مەیمینکێ",
+                definition: "An ancient Egyptian name for a dog-headed baboon.",
+                example: "The Aani was often depicted in ancient Egyptian hieroglyphs.",
+                synonyms: "Baboon",
+                antonyms: "N/A"
+            },
+            {
+                word: "Aardvark",
+                pronunciation: "/ˈɑːrdvɑːrk/",
+                partOfSpeech: "n.",
+                arabic: "خنزير الأرض",
+                kurdish: "(S) بەرازی زەوی، (B) بەرازێ ئەردی",
+                definition: "A nocturnal badger-like mammal with a long snout and sticky tongue, native to Africa.",
+                example: "The aardvark uses its powerful claws to dig into termite mounds.",
+                synonyms: "Ant-bear",
+                antonyms: "N/A"
+            },
+            {
+                word: "Aardwolf",
+                pronunciation: "/ˈɑːrdwʊlf/",
+                partOfSpeech: "n.",
+                arabic: "ذئب الأرض",
+                kurdish: "(S) گورگی زەوی، (B) گورگێ ئەردی",
+                definition: "A striped hyena-like mammal of Africa that feeds mainly on termites.",
+                example: "Unlike other hyenas, the aardwolf is shy and primarily eats insects.",
+                synonyms: "Proteles",
+                antonyms: "N/A"
+            },
+            {
+                word: "Aaronic",
+                pronunciation: "/eɪˈrɒnɪk/",
+                partOfSpeech: "adj.",
+                arabic: "هاروني",
+                kurdish: "(S) پەیوەندیدار بە هارونەوە، (B) پیوەندیدار ب هارونی ڤە",
+                definition: "Pertaining to Aaron, the first high priest of the Hebrews.",
+                example: "The Aaronic priesthood is a significant concept in certain religious traditions.",
+                synonyms: "Sacerdotal",
+                antonyms: "N/A"
+            },
+            {
+                word: "Aaronical",
+                pronunciation: "/eɪˈrɒnɪkəl/",
+                partOfSpeech: "adj.",
+                arabic: "هاروني (بشكل رسمي)",
+                kurdish: "(S) بە شێوەیەکی هارونی، (B) ب شێوەیەکێ هارونی",
+                definition: "Another form of Aaronic; relating to the high priesthood.",
+                example: "The Aaronical vestments were described in detail in the ancient texts.",
+                synonyms: "Priestly",
+                antonyms: "N/A"
+            },
+            {
+                word: "Abaca",
+                pronunciation: "/ˌæbəˈkɑː/",
+                partOfSpeech: "n.",
+                arabic: "أباكا (مانيلا)",
+                kurdish: "(S) ڕووەکی ئاباکا (مانێلا) (B) ڕووەکێ ئاباکا (مانێلا)",
+                definition: "A large plant of the Philippines used for its strong fiber.",
+                example: "Abaca is used to make high-quality ropes and paper.",
+                synonyms: "Manila hemp",
+                antonyms: "N/A"
+            },
+            {
+                word: "Abacterial",
+                pronunciation: "/ˌeɪbækˈtɪəriəl/",
+                partOfSpeech: "adj.",
+                arabic: "غير بكتيري",
+                kurdish: "(S) نابەکتریایی، (B) نەبەکتریایی",
+                definition: "Not caused by or containing bacteria.",
+                example: "The doctor confirmed that the inflammation was abacterial.",
+                synonyms: "Sterile",
+                antonyms: "Bacterial"
+            },
+            {
+                word: "Abacus",
+                pronunciation: "/ˈæbəkəs/",
+                partOfSpeech: "n.",
+                arabic: "مِعداد",
+                kurdish: "(S) هەژمارکەر، (B) هەژمارکەر",
+                definition: "A manual calculating tool consisting of beads on rods.",
+                example: "The student used an abacus to solve the addition problem quickly.",
+                synonyms: "Calculating frame",
+                antonyms: "N/A"
+            },
+            {
+                word: "Abaddon",
+                pronunciation: "/əˈbædən/",
+                partOfSpeech: "n.",
+                arabic: "الهلاك",
+                kurdish: "(S) وێرانکەر، (B) وێرانکەر",
+                definition: "A Hebrew name for the place of destruction or an angel of the abyss.",
+                example: "Abaddon is mentioned as the king of an army of locusts.",
+                synonyms: "Destroyer",
+                antonyms: "N/A"
+            },
+            {
+                word: "Abaft",
+                pronunciation: "/əˈbæft/",
+                partOfSpeech: "adv.",
+                arabic: "في مؤخرة السفينة",
+                kurdish: "(S) لە پشتەوەی کەشتی، (B) ل پشتا کەشتیێ",
+                definition: "Toward the stern or back part of a ship.",
+                example: "The cargo was stored abaft the main mast.",
+                synonyms: "Astern",
+                antonyms: "Forward"
+            },
+            {
+                word: "Abacinate",
+                pronunciation: "/əˈbæsɪneɪt/",
+                partOfSpeech: "v.",
+                arabic: "سمل العين",
+                kurdish: "(S) کوێرکردن بە ئاسنی داخکراو (B) کورەکرن ب ئاسنێ داخکری",
+                definition: "To blind by holding a red-hot metal plate before the eyes.",
+                example: "Ancient tyrants would sometimes abacinate their prisoners.",
+                synonyms: "Blind",
+                antonyms: "N/A"
+            },
+            {
+                word: "Abacination",
+                pronunciation: "/əˌbæsɪˈneɪʃən/",
+                partOfSpeech: "n.",
+                arabic: "سمل العين (العملية)",
+                kurdish: "(S) پرۆسەی کوێرکردن بە ئاسن، (B) کریارا کورەکرنێ ب ئاسنی",
+                definition: "The act of blinding using hot metal.",
+                example: "Abacination was a cruel form of punishment in the Middle Ages.",
+                synonyms: "Blinding",
+                antonyms: "N/A"
+            },
+            {
+                word: "Abactor",
+                pronunciation: "/æˈbæktər/",
+                partOfSpeech: "n.",
+                arabic: "سارق الماشية",
+                kurdish: "(S) دزی مەڕ و ماڵات (B) دزێ مەر و مالاتی",
+                definition: "A person who steals entire herds of livestock.",
+                example: "The abactor was caught trying to drive the cattle across the border.",
+                synonyms: "Cattle-lifter",
+                antonyms: "N/A"
+            },
+            {
+                word: "Abacus",
+                pronunciation: "/ˈæbəkəs/",
+                partOfSpeech: "n.",
+                arabic: "مِعداد",
+                kurdish: "(S) هەژمارکەر، (B) هەژمارکەر",
+                definition: "A manual calculating tool consisting of beads on rods.",
+                example: "The student used an abacus to solve the addition problem quickly.",
+                synonyms: "Calculating frame",
+                antonyms: "N/A"
+            }
+        ];
+
+        // ==============================================
+        // RENDER DICTIONARY ENTRIES
+        // ==============================================
+        function renderEntries(entries) {
+            const grid = document.getElementById('entriesGrid');
+            
+            if (entries.length === 0) {
+                grid.innerHTML = `
+                    <div style="grid-column:1/-1;text-align:center;padding:3rem;color:var(--gray);">
+                        <i class="fas fa-search" style="font-size:3rem;display:block;margin-bottom:1rem;"></i>
+                        <p>No entries found. Try a different search.</p>
+                    </div>
+                `;
+                return;
+            }
+
+            grid.innerHTML = entries.map(entry => `
+                <div class="entry-card" data-lang="all english arabic kurdish">
+                    <div class="entry-word">
+                        ${entry.word}
+                        <span class="pronunciation">${entry.pronunciation}</span>
+                    </div>
+                    <div class="entry-part">${entry.partOfSpeech}</div>
+                    <div class="entry-translations">
+                        <span><span class="lang-tag">🇸🇦 Ar:</span> <span class="translation">${entry.arabic}</span></span>
+                        <span><span class="lang-tag">🇰🇼 Ku:</span> <span class="translation">${entry.kurdish}</span></span>
+                    </div>
+                    <div style="font-size:0.9rem;color:var(--dark);margin:0.5rem 0;">${entry.definition}</div>
+                    <div class="entry-example">"${entry.example}"</div>
+                    <div class="entry-synonyms"><strong>Synonyms:</strong> ${entry.synonyms} · <strong>Antonyms:</strong> ${entry.antonyms}</div>
+                </div>
+            `).join('');
+        }
+
+        // ==============================================
+        // FILTER ENTRIES
+        // ==============================================
+        function filterEntries() {
+            const searchTerm = document.getElementById('previewSearch').value.toLowerCase();
+            const activeLang = document.querySelector('.lang-btn.active')?.dataset.lang || 'all';
+            
+            let filtered = dictionaryEntries.filter(entry => {
+                const matchSearch = entry.word.toLowerCase().includes(searchTerm) ||
+                                  entry.definition.toLowerCase().includes(searchTerm) ||
+                                  entry.arabic.includes(searchTerm) ||
+                                  entry.kurdish.includes(searchTerm);
+                
+                if (activeLang === 'all') return matchSearch;
+                if (activeLang === 'english') return matchSearch && entry.word.toLowerCase().includes(searchTerm);
+                if (activeLang === 'arabic') return matchSearch && entry.arabic.includes(searchTerm);
+                if (activeLang === 'kurdish') return matchSearch && entry.kurdish.includes(searchTerm);
+                return matchSearch;
+            });
+            
+            renderEntries(filtered);
+        }
+
+        // ==============================================
+        // LANGUAGE SELECTOR
+        // ==============================================
+        document.querySelectorAll('.lang-btn').forEach(btn => {
+            btn.addEventListener('click', function() {
+                document.querySelectorAll('.lang-btn').forEach(b => b.classList.remove('active'));
+                this.classList.add('active');
+                filterEntries();
+            });
+        });
+
+        // ==============================================
+        // COUNTDOWN TIMER - 2 MONTHS FROM TODAY
+        // ==============================================
+        function startCountdown() {
+            const launchDate = new Date();
+            launchDate.setMonth(launchDate.getMonth() + 2);
+            launchDate.setHours(0, 0, 0, 0);
+
+            function updateTimer() {
+                const now = new Date();
+                const diff = launchDate - now;
+
+                if (diff <= 0) {
+                    document.getElementById('days').textContent = '00';
+                    document.getElementById('hours').textContent = '00';
+                    document.getElementById('minutes').textContent = '00';
+                    document.getElementById('seconds').textContent = '00';
+                    return;
+                }
+
+                const days = Math.floor(diff / (1000 * 60 * 60 * 24));
+                const hours = Math.floor((diff % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
+                const minutes = Math.floor((diff % (1000 * 60 * 60)) / (1000 * 60));
+                const seconds = Math.floor((diff % (1000 * 60)) / 1000);
+
+                document.getElementById('days').textContent = String(days).padStart(2, '0');
+                document.getElementById('hours').textContent = String(hours).padStart(2, '0');
+                document.getElementById('minutes').textContent = String(minutes).padStart(2, '0');
+                document.getElementById('seconds').textContent = String(seconds).padStart(2, '0');
+            }
+
+            updateTimer();
+            setInterval(updateTimer, 1000);
+        }
+
+        // ==============================================
+        // INIT
+        // ==============================================
+        document.addEventListener('DOMContentLoaded', function() {
+            // Render entries
+            renderEntries(dictionaryEntries);
+            
+            // Start countdown
+            startCountdown();
+
+            // Back to top
+            const backToTop = document.getElementById('backToTop');
+            window.addEventListener('scroll', function() {
+                if (window.pageYOffset > 300) {
+                    backToTop.classList.add('show');
+                } else {
+                    backToTop.classList.remove('show');
+                }
+            });
+            backToTop.addEventListener('click', function(e) {
+                e.preventDefault();
+                window.scrollTo({ top: 0, behavior: 'smooth' });
+            });
+
+            // Mobile menu
+            const menuToggle = document.getElementById('mobileMenuToggle');
+            const navLinks = document.getElementById('navLinks');
+            menuToggle?.addEventListener('click', function() {
+                this.classList.toggle('active');
+                navLinks.classList.toggle('active');
+                document.body.style.overflow = navLinks.classList.contains('active') ? 'hidden' : '';
+            });
+
+            // Notify me buttons
+            document.querySelectorAll('.btn[style*="gradient-gold"]').forEach(btn => {
+                btn.addEventListener('click', function(e) {
+                    e.preventDefault();
+                    const email = prompt('Enter your email to get notified when Jihan Dictionary launches:');
+                    if (email && email.includes('@')) {
+                        alert('✅ Thank you! You\'ll be notified when Jihan Dictionary launches.');
+                    } else if (email) {
+                        alert('❌ Please enter a valid email address.');
+                    }
+                });
+            });
+
+            // Subscribe button
+            document.querySelector('.cta-section button')?.addEventListener('click', function() {
+                const input = this.previousElementSibling;
+                if (input && input.value && input.value.includes('@')) {
+                    alert('✅ Subscribed successfully! You\'ll get updates about Jihan Dictionary.');
+                    input.value = '';
+                } else {
+                    alert('❌ Please enter a valid email address.');
+                }
+            });
+
+            console.log('📚 Jihan Dictionary - Coming Soon');
+            console.log('📅 Launch Date:', new Date(new Date().setMonth(new Date().getMonth() + 2)).toLocaleDateString());
+            console.log(`📖 ${dictionaryEntries.length} sample entries loaded`);
+        });
+    </script>
+</body>
+</html>

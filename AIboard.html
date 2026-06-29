@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Zakhourani AI · Enterprise Dashboard v6.0</title>
+    <title>Zakhourani AI · Enterprise Dashboard v6.1</title>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <link href="https://fonts.googleapis.com/css2?family=Inter:opsz,wght@14..32,400;14..32,500;14..32,600;14..32,700;14..32,800&display=swap" rel="stylesheet">
     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
@@ -543,7 +543,7 @@
             transition: width 0.6s;
         }
 
-        /* Charts */
+        /* Charts - FIXED */
         .charts-grid {
             display: grid;
             grid-template-columns: 2fr 1fr;
@@ -557,6 +557,7 @@
             border-radius: 20px;
             padding: 24px;
             backdrop-filter: blur(12px);
+            min-height: 350px;
         }
 
         .chart-container h3 {
@@ -567,7 +568,13 @@
 
         .chart-wrapper {
             position: relative;
-            height: 280px;
+            height: 300px;
+            width: 100%;
+        }
+
+        .chart-wrapper canvas {
+            width: 100% !important;
+            height: 100% !important;
         }
 
         /* Questions */
@@ -866,6 +873,7 @@
 
         @media (max-width: 1024px) {
             .charts-grid { grid-template-columns: 1fr; }
+            .chart-wrapper { height: 250px; }
         }
 
         @media (max-width: 768px) {
@@ -877,6 +885,7 @@
             .pin-digit { width: 45px; height: 55px; font-size: 22px; }
             .token-pricing { flex-direction: column; align-items: flex-start; }
             .pin-box { padding: 32px; }
+            .chart-wrapper { height: 200px; }
         }
 
         @media (max-width: 480px) {
@@ -888,6 +897,7 @@
             .timeline-grid { grid-template-columns: repeat(auto-fill, minmax(100px, 1fr)); }
             .header-actions .btn { font-size: 11px; padding: 8px 12px; }
             .header h1 { font-size: 18px; }
+            .chart-wrapper { height: 180px; }
         }
     </style>
 </head>
@@ -965,7 +975,7 @@
             <div class="stat-card">
                 <div class="icon-bg"><i class="fas fa-piggy-bank"></i></div>
                 <div class="label">Remaining Balance</div>
-                <div class="value" id="remainingBalance">$50.00</div>
+                <div class="value" id="remainingBalance" style="color: var(--warning);">$50.00</div>
                 <div class="sub-value" id="remainingTokens">= 714,285 tokens</div>
                 <div class="change warning"><i class="fas fa-hourglass-half"></i> <span id="daysRemaining">5</span> days left</div>
             </div>
@@ -1099,7 +1109,7 @@
         // ==============================================
         const TOKEN_COST_PER_MILLION = 0.07;
         const TOTAL_BUDGET = 300;
-        const CRITICAL_BALANCE = 20;
+        const MIN_BALANCE = 50; // NEVER GO BELOW $50
         const TARGET_END_DATE = new Date(2026, 7, 10);
         const START_DATE = new Date(2026, 1, 1);
         const CORRECT_PIN = "2026";
@@ -1237,8 +1247,8 @@
 
                 // Weekly patterns
                 const dayOfWeek = date.getDay();
-                if (dayOfWeek === 0 || dayOfWeek === 6) baseSpend *= 0.8; // Weekend lower
-                if (dayOfWeek === 2 || dayOfWeek === 3) baseSpend *= 1.15; // Mid-week higher
+                if (dayOfWeek === 0 || dayOfWeek === 6) baseSpend *= 0.8;
+                if (dayOfWeek === 2 || dayOfWeek === 3) baseSpend *= 1.15;
                 
                 // Monthly patterns
                 if (date.getDate() === 1) baseSpend *= 0.7;
@@ -1252,9 +1262,11 @@
                 dailySpend = Math.round(dailySpend * 100) / 100;
                 const dailyTokens = calculateTokensFromCost(dailySpend);
                 
-                if (currentBalance - dailySpend < 0) {
-                    dailySpend = Math.round(currentBalance * 100) / 100;
-                    currentBalance = 0;
+                // NEVER go below MIN_BALANCE
+                if (currentBalance - dailySpend < MIN_BALANCE) {
+                    dailySpend = Math.round((currentBalance - MIN_BALANCE) * 100) / 100;
+                    if (dailySpend < 0) dailySpend = 0;
+                    currentBalance = MIN_BALANCE;
                 } else {
                     currentBalance = Math.round((currentBalance - dailySpend) * 100) / 100;
                 }
@@ -1271,8 +1283,6 @@
                     predicted: false,
                     dayOfWeek: date.toLocaleDateString('en-US', { weekday: 'short' })
                 });
-
-                if (currentBalance <= 0.01) break;
             }
 
             return history;
@@ -1302,9 +1312,11 @@
                 dailySpend = Math.round(dailySpend * 100) / 100;
                 const dailyTokens = calculateTokensFromCost(dailySpend);
 
-                if (currentBalance - dailySpend < 0) {
-                    dailySpend = Math.round(currentBalance * 100) / 100;
-                    currentBalance = 0;
+                // NEVER go below MIN_BALANCE
+                if (currentBalance - dailySpend < MIN_BALANCE) {
+                    dailySpend = Math.round((currentBalance - MIN_BALANCE) * 100) / 100;
+                    if (dailySpend < 0) dailySpend = 0;
+                    currentBalance = MIN_BALANCE;
                 } else {
                     currentBalance = Math.round((currentBalance - dailySpend) * 100) / 100;
                 }
@@ -1321,8 +1333,6 @@
                     predicted: true,
                     dayOfWeek: date.toLocaleDateString('en-US', { weekday: 'short' })
                 });
-
-                if (currentBalance <= 0.01) break;
             }
 
             return projections;
@@ -1384,7 +1394,6 @@
                 };
             });
             
-            // Sort by count for ranking
             return baseQuestions.sort((a, b) => b.count - a.count);
         }
 
@@ -1392,9 +1401,10 @@
         // INIT
         // ==============================================
         function initDashboard() {
-            console.log('🚀 Zakhourani AI Enterprise Dashboard v6.0');
+            console.log('🚀 Zakhourani AI Enterprise Dashboard v6.1');
             console.log(`💰 Token Cost: $${TOKEN_COST_PER_MILLION} per 1M tokens`);
             console.log(`💵 Total Budget: $${TOTAL_BUDGET}`);
+            console.log(`🛡️ Minimum Balance: $${MIN_BALANCE} (never goes below)`);
             console.log(`📊 Generating data for 50+ users...`);
             
             const history = generateBudgetHistory();
@@ -1437,8 +1447,12 @@
                 const lastData = timelineData[timelineData.length - 1];
                 if (lastData && !lastData.predicted) {
                     const avgSpend = timelineData.slice(-30).reduce((sum, d) => sum + d.spend, 0) / 30;
-                    const newSpend = avgSpend * (0.85 + Math.random() * 0.3);
-                    const newBalance = Math.max(0, Math.round((lastData.balance - newSpend) * 100) / 100);
+                    let newSpend = avgSpend * (0.85 + Math.random() * 0.3);
+                    let newBalance = Math.max(MIN_BALANCE, Math.round((lastData.balance - newSpend) * 100) / 100);
+                    if (lastData.balance - newSpend < MIN_BALANCE) {
+                        newSpend = Math.round((lastData.balance - MIN_BALANCE) * 100) / 100;
+                        if (newSpend < 0) newSpend = 0;
+                    }
                     const newTokens = calculateTokensFromCost(newSpend);
                     
                     timelineData.push({
@@ -1463,19 +1477,19 @@
 
         function updateStats() {
             const lastData = timelineData[timelineData.length - 1];
-            const currentBalance = lastData ? lastData.balance : 50;
+            const currentBalance = lastData ? Math.max(MIN_BALANCE, lastData.balance) : MIN_BALANCE;
             const totalTokensUsed = lastData ? lastData.totalTokens : 0;
             
             const recent = timelineData.slice(-30);
             const avgSpend = recent.reduce((sum, d) => sum + d.spend, 0) / Math.max(1, recent.length);
             const avgTokens = calculateTokensFromCost(avgSpend);
             
-            const daysRemaining = Math.floor(currentBalance / avgSpend);
+            const daysRemaining = Math.floor((currentBalance - MIN_BALANCE) / avgSpend);
             
             document.getElementById('totalBudget').textContent = `$${TOTAL_BUDGET.toFixed(2)}`;
             document.getElementById('remainingBalance').textContent = `$${currentBalance.toFixed(2)}`;
-            document.getElementById('remainingTokens').textContent = `= ${Math.round(currentBalance / TOKEN_COST_PER_MILLION * 1000000).toLocaleString()} tokens`;
-            document.getElementById('daysRemaining').textContent = daysRemaining;
+            document.getElementById('remainingTokens').textContent = `= ${Math.round((currentBalance / TOKEN_COST_PER_MILLION) * 1000000).toLocaleString()} tokens`;
+            document.getElementById('daysRemaining').textContent = Math.max(0, daysRemaining);
             
             document.getElementById('totalTokens').textContent = Math.round(totalTokensUsed).toLocaleString();
             document.getElementById('totalTokensCost').textContent = `$${calculateCostFromTokens(totalTokensUsed).toFixed(2)}`;
@@ -1518,7 +1532,7 @@
             } else if (currentTimelineView === 'past') {
                 data = data.filter(d => !d.predicted && new Date(d.date) <= new Date());
             } else if (currentTimelineView === 'critical') {
-                data = data.filter(d => d.balance < CRITICAL_BALANCE);
+                data = data.filter(d => d.balance < MIN_BALANCE + 10);
             }
 
             const recentData = data.slice(-45);
@@ -1526,7 +1540,7 @@
             grid.innerHTML = recentData.map(d => {
                 const date = new Date(d.date);
                 const isFuture = d.predicted || date > new Date();
-                const isCritical = d.balance < CRITICAL_BALANCE;
+                const isCritical = d.balance < MIN_BALANCE + 10;
                 const isToday = date.toDateString() === new Date().toDateString();
                 const dayOfWeek = d.dayOfWeek || date.toLocaleDateString('en-US', { weekday: 'short' });
                 
@@ -1554,7 +1568,7 @@
                             <div class="fill" style="width:${progressPercent}%;background:${isCritical ? 'var(--danger)' : isFuture ? 'var(--warning)' : 'var(--success)'};"></div>
                         </div>
                         ${isFuture ? '<div class="detail">📊 Projected</div>' : ''}
-                        ${isCritical ? '<div class="detail">⚠️ Critical</div>' : ''}
+                        ${isCritical ? '<div class="detail">⚠️ Near Minimum</div>' : ''}
                     </div>
                 `;
             }).join('');
@@ -1576,7 +1590,7 @@
             
             const date = new Date(data.date);
             const isFuture = data.predicted || date > new Date();
-            const isCritical = data.balance < CRITICAL_BALANCE;
+            const isCritical = data.balance < MIN_BALANCE + 10;
 
             content.innerHTML = `
                 <div style="text-align:center;margin-bottom:16px;">
@@ -1585,7 +1599,7 @@
                         ${date.toLocaleDateString('en-US', { weekday: 'long', year: 'numeric', month: 'long', day: 'numeric' })}
                     </div>
                     ${isFuture ? '<div style="color:var(--warning);margin-top:6px;">📊 Projected Data</div>' : ''}
-                    ${isCritical ? '<div style="color:var(--danger);margin-top:6px;">⚠️ Critical Balance</div>' : ''}
+                    ${isCritical ? '<div style="color:var(--danger);margin-top:6px;">⚠️ Near Minimum Balance</div>' : ''}
                 </div>
                 <div style="display:grid;grid-template-columns:1fr 1fr 1fr;gap:12px;margin-bottom:16px;">
                     <div style="background:var(--bg-primary);padding:16px;border-radius:12px;text-align:center;">
@@ -1593,7 +1607,7 @@
                         <div style="font-size:11px;color:var(--text-secondary);">Daily Spend</div>
                     </div>
                     <div style="background:var(--bg-primary);padding:16px;border-radius:12px;text-align:center;">
-                        <div style="font-size:24px;font-weight:700;color:${isCritical ? 'var(--danger)' : 'var(--success)'};">$${data.balance.toFixed(2)}</div>
+                        <div style="font-size:24px;font-weight:700;color:${isCritical ? 'var(--warning)' : 'var(--success)'};">$${data.balance.toFixed(2)}</div>
                         <div style="font-size:11px;color:var(--text-secondary);">Remaining Balance</div>
                     </div>
                     <div style="background:var(--bg-primary);padding:16px;border-radius:12px;text-align:center;">
@@ -1605,6 +1619,7 @@
                     <div style="display:flex;justify-content:space-between;font-size:13px;flex-wrap:wrap;gap:8px;">
                         <span><strong>Total Tokens:</strong> ${Math.round(data.totalTokens || 0).toLocaleString()}</span>
                         <span><strong>Total Cost:</strong> $${calculateCostFromTokens(data.totalTokens || 0).toFixed(2)}</span>
+                        <span><strong>Min Balance:</strong> $${MIN_BALANCE}</span>
                     </div>
                 </div>
                 <div style="background:var(--bg-primary);padding:12px 16px;border-radius:10px;border:1px solid rgba(59,130,246,0.15);">
@@ -1715,7 +1730,6 @@
             const tbody = document.getElementById('usersBody');
             const data = filteredUsers || users;
             
-            // Sort by tokens used (highest first)
             const sorted = [...data].sort((a, b) => b.tokensUsed - a.tokensUsed);
 
             tbody.innerHTML = sorted.map((user, index) => {
@@ -1847,16 +1861,21 @@
         }
 
         // ==============================================
-        // CHARTS
+        // CHARTS - FIXED
         // ==============================================
         function updateCharts() {
-            updateBudgetChart();
-            updateUsageChart();
+            setTimeout(() => {
+                updateBudgetChart();
+                updateUsageChart();
+            }, 100);
         }
 
         function updateBudgetChart() {
             const ctx = document.getElementById('budgetChart').getContext('2d');
-            if (chartInstances.budget) chartInstances.budget.destroy();
+            if (chartInstances.budget) {
+                chartInstances.budget.destroy();
+                chartInstances.budget = null;
+            }
 
             const data = timelineData.slice(-180);
             const labels = data.map(d => {
@@ -1871,37 +1890,37 @@
                     datasets: [
                         {
                             label: 'Daily Spend ($)',
-                            data: data.map(d => d.spend),
+                            data: data.map(d => parseFloat(d.spend.toFixed(2))),
                             borderColor: '#3b82f6',
-                            backgroundColor: 'rgba(59, 130, 246, 0.06)',
+                            backgroundColor: 'rgba(59, 130, 246, 0.1)',
                             fill: true,
                             tension: 0.4,
                             order: 2,
-                            pointRadius: 1,
+                            pointRadius: 2,
                             borderWidth: 2
                         },
                         {
                             label: 'Balance ($)',
-                            data: data.map(d => d.balance),
+                            data: data.map(d => parseFloat(d.balance.toFixed(2))),
                             borderColor: '#22c55e',
                             borderDash: [6, 4],
                             fill: false,
                             tension: 0.4,
                             order: 1,
                             yAxisID: 'y1',
-                            pointRadius: 1,
-                            borderWidth: 2
+                            pointRadius: 1.5,
+                            borderWidth: 2.5
                         },
                         {
                             label: 'Tokens (K)',
-                            data: data.map(d => (d.tokens || 0) / 1000),
+                            data: data.map(d => parseFloat(((d.tokens || 0) / 1000).toFixed(1))),
                             borderColor: '#eab308',
-                            backgroundColor: 'rgba(234, 179, 8, 0.06)',
+                            backgroundColor: 'rgba(234, 179, 8, 0.08)',
                             fill: true,
                             tension: 0.4,
                             order: 3,
                             yAxisID: 'y2',
-                            pointRadius: 0.5,
+                            pointRadius: 1,
                             borderWidth: 1.5
                         }
                     ]
@@ -1909,34 +1928,58 @@
                 options: {
                     responsive: true,
                     maintainAspectRatio: false,
-                    interaction: { intersect: false, mode: 'index' },
+                    interaction: { 
+                        intersect: false, 
+                        mode: 'index' 
+                    },
                     plugins: {
                         legend: {
-                            labels: { color: '#94a3b8', boxWidth: 12, padding: 12, font: { size: 11 } }
+                            labels: { 
+                                color: '#94a3b8', 
+                                boxWidth: 12, 
+                                padding: 12, 
+                                font: { size: 11 } 
+                            }
                         }
                     },
                     scales: {
                         y: {
                             beginAtZero: true,
                             grid: { color: 'rgba(255,255,255,0.04)' },
-                            ticks: { color: '#94a3b8', callback: v => '$' + v.toFixed(0) }
+                            ticks: { 
+                                color: '#94a3b8', 
+                                callback: function(value) { return '$' + value.toFixed(0); },
+                                font: { size: 10 }
+                            }
                         },
                         y1: {
                             position: 'right',
                             beginAtZero: true,
                             grid: { display: false },
-                            ticks: { color: '#94a3b8', callback: v => '$' + v.toFixed(0) }
+                            ticks: { 
+                                color: '#94a3b8', 
+                                callback: function(value) { return '$' + value.toFixed(0); },
+                                font: { size: 10 }
+                            }
                         },
                         y2: {
                             position: 'right',
                             beginAtZero: true,
                             grid: { display: false },
-                            ticks: { color: '#94a3b8', callback: v => v + 'K' },
-                            display: false
+                            ticks: { 
+                                color: '#94a3b8', 
+                                callback: function(value) { return value + 'K'; },
+                                font: { size: 9 }
+                            },
+                            display: true
                         },
                         x: {
                             grid: { color: 'rgba(255,255,255,0.04)' },
-                            ticks: { color: '#94a3b8', maxTicksLimit: 15, font: { size: 9 } }
+                            ticks: { 
+                                color: '#94a3b8', 
+                                maxTicksLimit: 15, 
+                                font: { size: 9 } 
+                            }
                         }
                     }
                 }
@@ -1945,7 +1988,10 @@
 
         function updateUsageChart() {
             const ctx = document.getElementById('usageChart').getContext('2d');
-            if (chartInstances.usage) chartInstances.usage.destroy();
+            if (chartInstances.usage) {
+                chartInstances.usage.destroy();
+                chartInstances.usage = null;
+            }
 
             const categories = Object.keys(QUESTION_CATEGORIES);
             const counts = categories.map(key => {
@@ -1953,11 +1999,12 @@
                 return q ? q.count : 0;
             });
             const colors = categories.map(key => QUESTION_CATEGORIES[key].color || '#3b82f6');
+            const labels = categories.map(key => QUESTION_CATEGORIES[key].name);
 
             chartInstances.usage = new Chart(ctx, {
                 type: 'doughnut',
                 data: {
-                    labels: categories.map(key => QUESTION_CATEGORIES[key].name),
+                    labels: labels,
                     datasets: [{
                         data: counts,
                         backgroundColor: colors,
@@ -1970,7 +2017,12 @@
                     plugins: {
                         legend: {
                             position: 'bottom',
-                            labels: { color: '#94a3b8', boxWidth: 10, padding: 8, font: { size: 9 } }
+                            labels: { 
+                                color: '#94a3b8', 
+                                boxWidth: 10, 
+                                padding: 8, 
+                                font: { size: 10 } 
+                            }
                         }
                     },
                     cutout: '62%'
@@ -2001,8 +2053,14 @@
             if (dayOfWeek === 0 || dayOfWeek === 6) multiplier = 0.85;
             if (dayOfWeek === 2 || dayOfWeek === 3) multiplier = 1.1;
             
-            const newSpend = avgSpend * (0.85 + Math.random() * 0.3) * multiplier;
-            const newBalance = Math.max(0, Math.round((lastData.balance - newSpend) * 100) / 100);
+            let newSpend = avgSpend * (0.85 + Math.random() * 0.3) * multiplier;
+            let newBalance = Math.max(MIN_BALANCE, Math.round((lastData.balance - newSpend) * 100) / 100);
+            
+            if (lastData.balance - newSpend < MIN_BALANCE) {
+                newSpend = Math.round((lastData.balance - MIN_BALANCE) * 100) / 100;
+                if (newSpend < 0) newSpend = 0;
+            }
+            
             const newTokens = calculateTokensFromCost(newSpend);
             
             const newDate = new Date();
@@ -2031,12 +2089,13 @@
                 generated: new Date().toISOString(),
                 tokenCostPerMillion: TOKEN_COST_PER_MILLION,
                 totalBudget: TOTAL_BUDGET,
+                minBalance: MIN_BALANCE,
                 targetEndDate: TARGET_END_DATE,
                 summary: {
                     totalUsers: users.length,
                     totalTokens: timelineData[timelineData.length - 1]?.totalTokens || 0,
                     totalCost: calculateCostFromTokens(timelineData[timelineData.length - 1]?.totalTokens || 0),
-                    remainingBalance: timelineData[timelineData.length - 1]?.balance || 0
+                    remainingBalance: Math.max(MIN_BALANCE, timelineData[timelineData.length - 1]?.balance || MIN_BALANCE)
                 },
                 timelineData: timelineData.map(d => ({
                     date: d.date.toISOString(),
@@ -2109,8 +2168,12 @@
                     const lastData = timelineData[timelineData.length - 1];
                     if (lastData) {
                         const avgSpend = timelineData.slice(-30).reduce((sum, d) => sum + d.spend, 0) / 30;
-                        const newSpend = avgSpend * (0.85 + Math.random() * 0.3);
-                        const newBalance = Math.max(0, Math.round((lastData.balance - newSpend) * 100) / 100);
+                        let newSpend = avgSpend * (0.85 + Math.random() * 0.3);
+                        let newBalance = Math.max(MIN_BALANCE, Math.round((lastData.balance - newSpend) * 100) / 100);
+                        if (lastData.balance - newSpend < MIN_BALANCE) {
+                            newSpend = Math.round((lastData.balance - MIN_BALANCE) * 100) / 100;
+                            if (newSpend < 0) newSpend = 0;
+                        }
                         const newTokens = calculateTokensFromCost(newSpend);
                         const newDate = new Date(lastData.date);
                         newDate.setDate(newDate.getDate() + 1);

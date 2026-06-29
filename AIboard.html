@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Zakhourani AI · Enterprise Dashboard</title>
+    <title>Zakhourani AI · Complete Enterprise Dashboard</title>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <link href="https://fonts.googleapis.com/css2?family=Inter:opsz,wght@14..32,400;14..32,500;14..32,600;14..32,700;14..32,800&display=swap" rel="stylesheet">
     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
@@ -18,11 +18,11 @@
         :root {
             --bg-primary: #0a0e1a;
             --bg-secondary: #111827;
-            --bg-card: rgba(17, 24, 39, 0.92);
+            --bg-card: rgba(17, 24, 39, 0.95);
             --text-primary: #f1f5f9;
             --text-secondary: #94a3b8;
             --accent: #3b82f6;
-            --accent-glow: #2563eb;
+            --accent-light: #60a5fa;
             --success: #22c55e;
             --warning: #eab308;
             --danger: #ef4444;
@@ -34,7 +34,7 @@
             background: var(--bg-primary);
             color: var(--text-primary);
             min-height: 100vh;
-            padding: 20px;
+            padding: 16px;
         }
 
         .dashboard {
@@ -42,7 +42,7 @@
             margin: 0 auto;
         }
 
-        /* PIN Protection */
+        /* PIN */
         .pin-overlay {
             position: fixed;
             top: 0;
@@ -57,7 +57,6 @@
             z-index: 9999;
             padding: 20px;
         }
-
         .pin-overlay.hidden { display: none; }
 
         .pin-box {
@@ -78,16 +77,8 @@
             margin-bottom: 16px;
         }
 
-        .pin-box h2 {
-            font-size: 26px;
-            font-weight: 700;
-            margin-bottom: 6px;
-        }
-        .pin-box p { 
-            color: var(--text-secondary); 
-            margin-bottom: 28px; 
-            font-size: 14px;
-        }
+        .pin-box h2 { font-size: 26px; font-weight: 700; margin-bottom: 6px; }
+        .pin-box p { color: var(--text-secondary); margin-bottom: 28px; font-size: 14px; }
 
         .pin-input-group {
             display: flex;
@@ -139,12 +130,7 @@
             transform: translateY(-2px);
             box-shadow: 0 8px 30px rgba(59,130,246,0.3);
         }
-
-        .pin-btn:disabled {
-            opacity: 0.5;
-            cursor: not-allowed;
-            transform: none;
-        }
+        .pin-btn:disabled { opacity: 0.5; cursor: not-allowed; }
 
         /* Header */
         .header {
@@ -220,38 +206,19 @@
             font-size: 13px;
         }
 
-        .btn-primary {
-            background: var(--gradient-main);
-            color: white;
-        }
+        .btn-primary { background: var(--gradient-main); color: white; }
+        .btn-primary:hover { transform: translateY(-2px); box-shadow: 0 8px 25px rgba(59,130,246,0.3); }
 
-        .btn-primary:hover {
-            transform: translateY(-2px);
-            box-shadow: 0 8px 25px rgba(59,130,246,0.3);
-        }
+        .btn-secondary { background: var(--bg-secondary); color: var(--text-primary); border: 1px solid var(--border); }
+        .btn-secondary:hover { background: rgba(30,41,59,0.6); transform: translateY(-2px); }
 
-        .btn-secondary {
-            background: var(--bg-secondary);
-            color: var(--text-primary);
-            border: 1px solid var(--border);
-        }
+        .btn-warning { background: linear-gradient(135deg, #eab308, #f97316); color: white; }
+        .btn-warning:hover { transform: translateY(-2px); box-shadow: 0 8px 25px rgba(234,179,8,0.3); }
 
-        .btn-secondary:hover {
-            background: var(--bg-card-hover);
-            transform: translateY(-2px);
-        }
+        .btn-success { background: linear-gradient(135deg, #22c55e, #06b6d4); color: white; }
+        .btn-success:hover { transform: translateY(-2px); box-shadow: 0 8px 25px rgba(34,197,94,0.3); }
 
-        .btn-warning {
-            background: linear-gradient(135deg, #eab308, #f97316);
-            color: white;
-        }
-
-        .btn-warning:hover {
-            transform: translateY(-2px);
-            box-shadow: 0 8px 25px rgba(234,179,8,0.3);
-        }
-
-        /* Stats Grid */
+        /* Stats */
         .stats-grid {
             display: grid;
             grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
@@ -350,7 +317,7 @@
 
         .token-pricing .badge {
             background: rgba(59,130,246,0.12);
-            color: #60a5fa;
+            color: var(--accent-light);
             padding: 4px 16px;
             border-radius: 20px;
             font-size: 13px;
@@ -475,6 +442,118 @@
         }
 
         .question-card.top .q-icon { color: var(--warning); }
+
+        /* Timeline */
+        .timeline-section {
+            background: var(--bg-card);
+            border: 1px solid var(--border);
+            border-radius: 20px;
+            padding: 24px;
+            margin-bottom: 24px;
+            backdrop-filter: blur(12px);
+        }
+
+        .timeline-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 18px;
+            flex-wrap: wrap;
+            gap: 12px;
+        }
+
+        .timeline-header h3 {
+            font-size: 18px;
+            font-weight: 700;
+        }
+
+        .timeline-controls {
+            display: flex;
+            gap: 6px;
+            flex-wrap: wrap;
+        }
+
+        .timeline-controls button {
+            padding: 5px 16px;
+            border: 1px solid var(--border);
+            background: var(--bg-primary);
+            color: var(--text-secondary);
+            border-radius: 20px;
+            cursor: pointer;
+            font-size: 12px;
+            transition: all 0.2s;
+            font-weight: 500;
+        }
+
+        .timeline-controls button.active {
+            background: var(--gradient-main);
+            color: white;
+            border-color: transparent;
+        }
+
+        .timeline-controls button:hover:not(.active) {
+            background: var(--bg-secondary);
+        }
+
+        .timeline-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(140px, 1fr));
+            gap: 12px;
+            max-height: 420px;
+            overflow-y: auto;
+            padding-right: 6px;
+        }
+
+        .timeline-card {
+            background: var(--bg-primary);
+            border: 1px solid var(--border);
+            border-radius: 14px;
+            padding: 14px 16px;
+            transition: all 0.3s;
+            cursor: pointer;
+        }
+
+        .timeline-card:hover {
+            transform: translateY(-3px);
+            border-color: var(--accent);
+        }
+
+        .timeline-card .date {
+            font-size: 11px;
+            color: var(--text-secondary);
+            margin-bottom: 2px;
+        }
+
+        .timeline-card .day-name {
+            font-size: 12px;
+            font-weight: 600;
+            margin-bottom: 4px;
+        }
+
+        .timeline-card .amount {
+            font-size: 20px;
+            font-weight: 700;
+        }
+
+        .timeline-card .amount.positive { color: var(--success); }
+        .timeline-card .amount.negative { color: var(--danger); }
+        .timeline-card .amount.warning { color: var(--warning); }
+
+        .timeline-card .detail {
+            font-size: 10px;
+            color: var(--text-secondary);
+            margin-top: 2px;
+        }
+
+        .timeline-card.predicted {
+            border-color: rgba(59,130,246,0.2);
+            background: rgba(59,130,246,0.04);
+        }
+
+        .timeline-card.critical {
+            border-color: var(--danger);
+            background: rgba(239,68,68,0.06);
+        }
 
         /* Users Table */
         .table-container {
@@ -658,7 +737,7 @@
         }
 
         .modal-close:hover {
-            background: var(--bg-card-hover);
+            background: rgba(30,41,59,0.6);
         }
 
         .alert {
@@ -702,117 +781,6 @@
         ::-webkit-scrollbar { width: 5px; height: 5px; }
         ::-webkit-scrollbar-track { background: transparent; }
         ::-webkit-scrollbar-thumb { background: var(--accent); border-radius: 3px; }
-
-        /* Timeline */
-        .timeline-grid {
-            display: grid;
-            grid-template-columns: repeat(auto-fill, minmax(140px, 1fr));
-            gap: 12px;
-            max-height: 420px;
-            overflow-y: auto;
-            padding-right: 6px;
-        }
-
-        .timeline-card {
-            background: var(--bg-primary);
-            border: 1px solid var(--border);
-            border-radius: 14px;
-            padding: 14px 16px;
-            transition: all 0.3s;
-            cursor: pointer;
-        }
-
-        .timeline-card:hover {
-            transform: translateY(-3px);
-            border-color: var(--accent);
-        }
-
-        .timeline-card .date {
-            font-size: 11px;
-            color: var(--text-secondary);
-            margin-bottom: 2px;
-        }
-
-        .timeline-card .day-name {
-            font-size: 12px;
-            font-weight: 600;
-            margin-bottom: 4px;
-        }
-
-        .timeline-card .amount {
-            font-size: 20px;
-            font-weight: 700;
-        }
-
-        .timeline-card .amount.positive { color: var(--success); }
-        .timeline-card .amount.negative { color: var(--danger); }
-        .timeline-card .amount.warning { color: var(--warning); }
-
-        .timeline-card .detail {
-            font-size: 10px;
-            color: var(--text-secondary);
-            margin-top: 2px;
-        }
-
-        .timeline-card.predicted {
-            border-color: rgba(59,130,246,0.2);
-            background: rgba(59,130,246,0.04);
-        }
-
-        .timeline-card.critical {
-            border-color: var(--danger);
-            background: rgba(239,68,68,0.06);
-        }
-
-        .timeline-section {
-            background: var(--bg-card);
-            border: 1px solid var(--border);
-            border-radius: 20px;
-            padding: 24px;
-            margin-bottom: 24px;
-        }
-
-        .timeline-header {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            margin-bottom: 18px;
-            flex-wrap: wrap;
-            gap: 12px;
-        }
-
-        .timeline-header h3 {
-            font-size: 18px;
-            font-weight: 700;
-        }
-
-        .timeline-controls {
-            display: flex;
-            gap: 6px;
-            flex-wrap: wrap;
-        }
-
-        .timeline-controls button {
-            padding: 5px 16px;
-            border: 1px solid var(--border);
-            background: var(--bg-primary);
-            color: var(--text-secondary);
-            border-radius: 20px;
-            cursor: pointer;
-            font-size: 12px;
-            transition: all 0.2s;
-            font-weight: 500;
-        }
-
-        .timeline-controls button.active {
-            background: var(--gradient-main);
-            color: white;
-            border-color: transparent;
-        }
-
-        .timeline-controls button:hover:not(.active) {
-            background: var(--bg-secondary);
-        }
     </style>
 </head>
 <body>
@@ -859,6 +827,9 @@
                 <button class="btn btn-warning" onclick="simulateDay()">
                     <i class="fas fa-forward"></i> +1 Day
                 </button>
+                <button class="btn btn-success" onclick="resetData()">
+                    <i class="fas fa-undo"></i> Reset
+                </button>
             </div>
         </div>
 
@@ -871,7 +842,7 @@
                 <div style="color:var(--text-secondary);font-size:13px;"><i class="fas fa-info-circle"></i> DeepSeek API · Real-time consumption tracking</div>
             </div>
             <div>
-                <span class="badge"><i class="fas fa-bolt"></i> 55 Active Users</span>
+                <span class="badge"><i class="fas fa-bolt"></i> <span id="totalUsersBadge">55</span> Users</span>
                 <span class="badge" style="margin-left:8px;background:rgba(34,197,94,0.12);color:var(--success);border-color:rgba(34,197,94,0.15);">
                     <i class="fas fa-check-circle"></i> System Online
                 </span>
@@ -962,10 +933,10 @@
             <div class="questions-grid" id="questionsGrid"></div>
         </div>
 
-        <!-- Users -->
+        <!-- Users Table -->
         <div class="table-container">
             <div class="table-header">
-                <h3><i class="fas fa-users"></i> User Analytics · <span id="userCountDisplay">0</span> users</h3>
+                <h3><i class="fas fa-users"></i> All Users · <span id="userCountDisplay">0</span> users</h3>
                 <div class="table-controls">
                     <input type="text" id="searchInput" placeholder="Search users..." oninput="filterUsers()">
                     <select id="filterProvider" onchange="filterUsers()">
@@ -991,7 +962,7 @@
                             <th>Email</th>
                             <th>Provider</th>
                             <th>Tokens</th>
-                            <th>Cost</th>
+                            <th>Cost ($)</th>
                             <th>Questions</th>
                             <th>Status</th>
                             <th>Last Active</th>
@@ -1117,27 +1088,33 @@
             return (tokens / 1000000) * TOKEN_COST_PER_MILLION;
         }
 
-        function generateUsers(count = 55) {
+        function generateAllUsers(count = 55) {
             const firstNames = ['Ahmed', 'Mohammad', 'Sara', 'Nora', 'Omar', 'Laila', 'Khaled', 'Mai', 
                                'Youssef', 'Dina', 'Hassan', 'Fatima', 'Ali', 'Nadia', 'Samer', 'Rana',
                                'Waleed', 'Ghada', 'Karim', 'Layla', 'Ibrahim', 'Amira', 'Hussein', 'Zainab',
                                'Mustafa', 'Mona', 'Tarek', 'Salma', 'Rami', 'Huda', 'Yasmin', 'Kareem',
-                               'Lina', 'Sami', 'Nour', 'Rayan', 'Hana', 'Zayn', 'Maya', 'Adam'];
+                               'Lina', 'Sami', 'Nour', 'Rayan', 'Hana', 'Zayn', 'Maya', 'Adam',
+                               'Leila', 'Kamal', 'Nadia', 'Rashid', 'Samira', 'Jamal', 'Hala', 'Nabil',
+                               'Mariam', 'Ziad', 'Layth', 'Sana', 'Rayan', 'Tala', 'Yara'];
             const lastNames = ['Khalil', 'Ali', 'Hassan', 'Saeed', 'Farouk', 'Ahmed', 'Ibrahim', 'Mohamed',
                               'Hossam', 'Mahmoud', 'Nabil', 'Karim', 'Hussein', 'Said', 'Omar', 'Nasser',
-                              'Rashid', 'Malik', 'Aziz', 'Qadir', 'Rahman', 'Salem', 'Zaki', 'Nour'];
+                              'Rashid', 'Malik', 'Aziz', 'Qadir', 'Rahman', 'Salem', 'Zaki', 'Nour',
+                              'Fayad', 'Haddad', 'Mansour', 'Sabbagh'];
             const providers = ['google', 'email', 'github', 'google', 'email', 'google', 'github', 'email', 
                               'google', 'email', 'github', 'google', 'email', 'google', 'github', 'email',
                               'google', 'email', 'github', 'google', 'email', 'google', 'github', 'email',
-                              'google', 'email', 'github', 'google', 'email', 'google', 'github', 'email'];
+                              'google', 'email', 'github', 'google', 'email', 'google', 'github', 'email',
+                              'google', 'email', 'github', 'google', 'email', 'google', 'github', 'email',
+                              'google', 'email', 'github', 'google', 'email', 'google', 'github', 'email',
+                              'google', 'email', 'github', 'google', 'email', 'google', 'github'];
             
-            const statuses = ['active', 'active', 'active', 'active', 'active', 'inactive', 'premium', 'premium', 'active', 'active'];
+            const statuses = ['active', 'active', 'active', 'active', 'active', 'inactive', 'premium', 'premium', 'active', 'active', 'active', 'active'];
             
             return Array.from({ length: count }, (_, i) => {
                 const firstName = firstNames[i % firstNames.length];
-                const lastName = lastNames[Math.floor(i / 2) % lastNames.length];
+                const lastName = lastNames[Math.floor(i / 3) % lastNames.length];
                 const name = `${firstName} ${lastName}`;
-                const email = `${firstName.toLowerCase()}.${lastName.toLowerCase()}${Math.floor(Math.random() * 100)}@${['gmail.com', 'yahoo.com', 'outlook.com'][i % 3]}`;
+                const email = `${firstName.toLowerCase()}.${lastName.toLowerCase()}${Math.floor(Math.random() * 100)}@${['gmail.com', 'yahoo.com', 'outlook.com', 'hotmail.com'][i % 4]}`;
                 const tokens = Math.floor(Math.random() * 250000) + 15000;
                 const questions = Math.floor(Math.random() * 120) + 5;
                 const daysAgo = Math.floor(Math.random() * 60);
@@ -1159,7 +1136,7 @@
             });
         }
 
-        function generateQuestions() {
+        function generateAllQuestions() {
             return Object.keys(QUESTION_CATEGORIES).map(key => {
                 const baseCount = Math.floor(Math.random() * 250) + 30;
                 const multiplier = ['about_dr_waleed', 'about_ai', 'about_dictionary'].includes(key) ? 1.8 : 
@@ -1175,7 +1152,7 @@
             }).sort((a, b) => b.count - a.count);
         }
 
-        function generateBudgetData() {
+        function generateTimelineData() {
             const data = [];
             let balance = TOTAL_BUDGET;
             let totalTokens = 0;
@@ -1185,17 +1162,14 @@
                 const date = new Date(2026, 0, 1 + i);
                 let dailySpend = 2 + Math.random() * 8;
                 
-                // Weekly patterns
                 const dayOfWeek = date.getDay();
                 if (dayOfWeek === 0 || dayOfWeek === 6) dailySpend *= 0.7;
                 if (dayOfWeek === 2 || dayOfWeek === 3) dailySpend *= 1.2;
                 
-                // Monthly patterns
                 if (date.getDate() === 1) dailySpend *= 0.6;
                 if (date.getDate() === 15) dailySpend *= 1.3;
                 if (date.getDate() === 28) dailySpend *= 1.1;
                 
-                // Growth over time
                 const growthFactor = 1 + (i / days) * 0.5;
                 dailySpend *= growthFactor;
                 
@@ -1277,12 +1251,12 @@
         // INIT
         // ==============================================
         function initDashboard() {
-            const history = generateBudgetData();
+            users = generateAllUsers(55);
+            questions = generateAllQuestions();
+            
+            const history = generateTimelineData();
             const future = generateFutureData(history);
             timelineData = [...history, ...future];
-
-            users = generateUsers(55);
-            questions = generateQuestions();
 
             updateDateTime();
             updateStats();
@@ -1339,6 +1313,7 @@
             document.getElementById('questionGrowth').textContent = `+${Math.floor(Math.random() * 20) + 5}%`;
             
             document.getElementById('userCountDisplay').textContent = users.length;
+            document.getElementById('totalUsersBadge').textContent = users.length;
         }
 
         // ==============================================
@@ -1373,6 +1348,7 @@
                         <div class="date">
                             ${date.toLocaleDateString('en-US', { month: 'short', day: 'numeric' })}
                             ${isToday ? '⭐' : ''}
+                            <span style="font-size:9px;color:var(--text-secondary);">${d.dayOfWeek || ''}</span>
                         </div>
                         <div class="day-name">Day ${d.day}</div>
                         <div class="amount ${isCritical ? 'negative' : isFuture ? 'warning' : 'positive'}">
@@ -1514,7 +1490,7 @@
         }
 
         // ==============================================
-        // RENDER USERS - ALL 55 USERS
+        // RENDER ALL USERS
         // ==============================================
         function renderUsers(filteredUsers = null) {
             const tbody = document.getElementById('usersBody');
@@ -1810,6 +1786,23 @@
             showAlert(`📆 Simulated day ${simulatedDay} added!`, 'success');
         }
 
+        function resetData() {
+            if (confirm('Reset all data to initial state?')) {
+                users = generateAllUsers(55);
+                questions = generateAllQuestions();
+                const history = generateTimelineData();
+                const future = generateFutureData(history);
+                timelineData = [...history, ...future];
+                simulatedDay = 0;
+                renderTimeline();
+                renderQuestions();
+                renderUsers();
+                updateStats();
+                updateCharts();
+                showAlert('✅ Data reset successfully!', 'success');
+            }
+        }
+
         function exportReport() {
             const report = {
                 generated: new Date().toISOString(),
@@ -1831,17 +1824,25 @@
                     questions: u.questions,
                     status: u.status
                 })),
-                questions: questions
+                questions: questions,
+                timeline: timelineData.map(d => ({
+                    date: d.date.toISOString(),
+                    spend: d.spend,
+                    balance: d.balance,
+                    tokens: d.tokens,
+                    totalTokens: d.totalTokens,
+                    day: d.day
+                }))
             };
 
             const blob = new Blob([JSON.stringify(report, null, 2)], { type: 'application/json' });
             const url = URL.createObjectURL(blob);
             const a = document.createElement('a');
             a.href = url;
-            a.download = `zakhourani-report-${new Date().toISOString().slice(0,10)}.json`;
+            a.download = `zakhourani-complete-report-${new Date().toISOString().slice(0,10)}.json`;
             a.click();
             URL.revokeObjectURL(url);
-            showAlert('📥 Report exported!', 'success');
+            showAlert('📥 Complete report exported!', 'success');
         }
 
         // ==============================================

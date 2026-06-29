@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Zakhourani AI · Enterprise Dashboard v6.1</title>
+    <title>Zakhourani AI · Enterprise Dashboard</title>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <link href="https://fonts.googleapis.com/css2?family=Inter:opsz,wght@14..32,400;14..32,500;14..32,600;14..32,700;14..32,800&display=swap" rel="stylesheet">
     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
@@ -19,21 +19,15 @@
             --bg-primary: #0a0e1a;
             --bg-secondary: #111827;
             --bg-card: rgba(17, 24, 39, 0.92);
-            --bg-card-hover: rgba(30, 41, 59, 0.6);
             --text-primary: #f1f5f9;
             --text-secondary: #94a3b8;
             --accent: #3b82f6;
             --accent-glow: #2563eb;
-            --accent-light: #60a5fa;
             --success: #22c55e;
             --warning: #eab308;
             --danger: #ef4444;
             --border: rgba(255,255,255,0.06);
-            --shadow: 0 25px 50px -12px rgba(0,0,0,0.8);
             --gradient-main: linear-gradient(135deg, #3b82f6, #8b5cf6, #06b6d4);
-            --gradient-success: linear-gradient(135deg, #22c55e, #06b6d4);
-            --gradient-warning: linear-gradient(135deg, #eab308, #f97316);
-            --gradient-danger: linear-gradient(135deg, #ef4444, #ec4899);
         }
 
         body {
@@ -41,9 +35,6 @@
             color: var(--text-primary);
             min-height: 100vh;
             padding: 20px;
-            background-image: 
-                radial-gradient(ellipse at 10% 20%, rgba(59,130,246,0.05) 0%, transparent 50%),
-                radial-gradient(ellipse at 90% 80%, rgba(139,92,246,0.05) 0%, transparent 50%);
         }
 
         .dashboard {
@@ -77,7 +68,6 @@
             max-width: 420px;
             width: 100%;
             text-align: center;
-            box-shadow: 0 50px 100px rgba(0,0,0,0.5);
         }
 
         .pin-box .lock-icon {
@@ -123,7 +113,6 @@
             border-color: var(--accent);
             box-shadow: 0 0 0 4px rgba(59,130,246,0.15);
             outline: none;
-            transform: scale(1.05);
         }
 
         .pin-error {
@@ -252,18 +241,8 @@
             transform: translateY(-2px);
         }
 
-        .btn-success {
-            background: var(--gradient-success);
-            color: white;
-        }
-
-        .btn-success:hover {
-            transform: translateY(-2px);
-            box-shadow: 0 8px 25px rgba(34,197,94,0.3);
-        }
-
         .btn-warning {
-            background: var(--gradient-warning);
+            background: linear-gradient(135deg, #eab308, #f97316);
             color: white;
         }
 
@@ -272,20 +251,10 @@
             box-shadow: 0 8px 25px rgba(234,179,8,0.3);
         }
 
-        .btn-danger {
-            background: var(--gradient-danger);
-            color: white;
-        }
-
-        .btn-danger:hover {
-            transform: translateY(-2px);
-            box-shadow: 0 8px 25px rgba(239,68,68,0.3);
-        }
-
         /* Stats Grid */
         .stats-grid {
             display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
             gap: 16px;
             margin-bottom: 24px;
         }
@@ -294,7 +263,7 @@
             background: var(--bg-card);
             border: 1px solid var(--border);
             border-radius: 20px;
-            padding: 22px 24px;
+            padding: 20px 24px;
             backdrop-filter: blur(12px);
             transition: all 0.3s;
             position: relative;
@@ -315,7 +284,6 @@
         .stat-card:hover {
             transform: translateY(-4px);
             border-color: rgba(59,130,246,0.2);
-            box-shadow: 0 8px 30px rgba(0,0,0,0.3);
         }
 
         .stat-card .label {
@@ -357,7 +325,7 @@
             opacity: 0.08;
         }
 
-        /* Token Pricing Banner */
+        /* Token Pricing */
         .token-pricing {
             background: var(--bg-card);
             border: 1px solid var(--border);
@@ -380,14 +348,9 @@
             -webkit-text-fill-color: transparent;
         }
 
-        .token-pricing .detail {
-            color: var(--text-secondary);
-            font-size: 13px;
-        }
-
         .token-pricing .badge {
             background: rgba(59,130,246,0.12);
-            color: var(--accent-light);
+            color: #60a5fa;
             padding: 4px 16px;
             border-radius: 20px;
             font-size: 13px;
@@ -395,155 +358,7 @@
             border: 1px solid rgba(59,130,246,0.15);
         }
 
-        /* Timeline */
-        .timeline-section {
-            background: var(--bg-card);
-            border: 1px solid var(--border);
-            border-radius: 20px;
-            padding: 24px;
-            margin-bottom: 24px;
-            backdrop-filter: blur(12px);
-        }
-
-        .timeline-header {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            margin-bottom: 18px;
-            flex-wrap: wrap;
-            gap: 12px;
-        }
-
-        .timeline-header h3 {
-            font-size: 18px;
-            font-weight: 700;
-        }
-
-        .timeline-controls {
-            display: flex;
-            gap: 6px;
-            flex-wrap: wrap;
-        }
-
-        .timeline-controls button {
-            padding: 5px 16px;
-            border: 1px solid var(--border);
-            background: var(--bg-primary);
-            color: var(--text-secondary);
-            border-radius: 20px;
-            cursor: pointer;
-            font-size: 12px;
-            transition: all 0.2s;
-            font-weight: 500;
-        }
-
-        .timeline-controls button.active {
-            background: var(--gradient-main);
-            color: white;
-            border-color: transparent;
-        }
-
-        .timeline-controls button:hover:not(.active) {
-            background: var(--bg-secondary);
-        }
-
-        .timeline-grid {
-            display: grid;
-            grid-template-columns: repeat(auto-fill, minmax(140px, 1fr));
-            gap: 12px;
-            max-height: 420px;
-            overflow-y: auto;
-            padding-right: 6px;
-        }
-
-        .timeline-card {
-            background: var(--bg-primary);
-            border: 1px solid var(--border);
-            border-radius: 14px;
-            padding: 14px 16px;
-            transition: all 0.3s;
-            cursor: pointer;
-            position: relative;
-        }
-
-        .timeline-card:hover {
-            transform: translateY(-3px);
-            border-color: var(--accent);
-            box-shadow: 0 8px 25px rgba(0,0,0,0.2);
-        }
-
-        .timeline-card .date {
-            font-size: 11px;
-            color: var(--text-secondary);
-            margin-bottom: 2px;
-            display: flex;
-            align-items: center;
-            gap: 4px;
-        }
-
-        .timeline-card .day-name {
-            font-size: 12px;
-            font-weight: 600;
-            margin-bottom: 4px;
-        }
-
-        .timeline-card .amount {
-            font-size: 20px;
-            font-weight: 700;
-        }
-
-        .timeline-card .amount.positive { color: var(--success); }
-        .timeline-card .amount.negative { color: var(--danger); }
-        .timeline-card .amount.warning { color: var(--warning); }
-
-        .timeline-card .detail {
-            font-size: 10px;
-            color: var(--text-secondary);
-            margin-top: 2px;
-        }
-
-        .timeline-card .status-dot {
-            width: 8px;
-            height: 8px;
-            border-radius: 50%;
-            display: inline-block;
-        }
-
-        .timeline-card .status-dot.future { background: var(--accent); }
-        .timeline-card .status-dot.past { background: var(--success); }
-        .timeline-card .status-dot.critical { background: var(--danger); }
-
-        .timeline-card.predicted {
-            border-color: rgba(59,130,246,0.2);
-            background: rgba(59,130,246,0.04);
-        }
-
-        .timeline-card.critical {
-            border-color: var(--danger);
-            background: rgba(239,68,68,0.06);
-        }
-
-        .timeline-card .tokens-used {
-            font-size: 10px;
-            color: var(--text-secondary);
-        }
-
-        .timeline-card .progress-ring {
-            width: 100%;
-            height: 3px;
-            background: var(--bg-secondary);
-            border-radius: 2px;
-            margin-top: 6px;
-            overflow: hidden;
-        }
-
-        .timeline-card .progress-ring .fill {
-            height: 100%;
-            border-radius: 2px;
-            transition: width 0.6s;
-        }
-
-        /* Charts - FIXED */
+        /* Charts */
         .charts-grid {
             display: grid;
             grid-template-columns: 2fr 1fr;
@@ -619,7 +434,6 @@
         .question-card:hover {
             transform: translateY(-3px);
             border-color: var(--accent);
-            box-shadow: 0 8px 25px rgba(0,0,0,0.2);
         }
 
         .question-card .q-icon {
@@ -708,7 +522,6 @@
         .table-controls input:focus,
         .table-controls select:focus {
             border-color: var(--accent);
-            box-shadow: 0 0 0 3px rgba(59,130,246,0.1);
         }
 
         .table-wrapper {
@@ -783,6 +596,13 @@
         .rank-2 { background: rgba(148,163,184,0.2); color: var(--text-secondary); }
         .rank-3 { background: rgba(180,83,9,0.2); color: #d97706; }
 
+        .user-avatar {
+            width: 32px;
+            height: 32px;
+            border-radius: 50%;
+            object-fit: cover;
+        }
+
         /* Modal */
         .modal {
             position: fixed;
@@ -848,28 +668,11 @@
             display: none;
         }
 
-        .alert-error {
-            background: rgba(239, 68, 68, 0.1);
-            border: 1px solid rgba(239, 68, 68, 0.2);
-            color: #fca5a5;
-        }
-
         .alert-success {
             background: rgba(34, 197, 94, 0.1);
             border: 1px solid rgba(34, 197, 94, 0.2);
             color: #86efac;
         }
-
-        .alert-warning {
-            background: rgba(234, 179, 8, 0.1);
-            border: 1px solid rgba(234, 179, 8, 0.2);
-            color: #fde68a;
-        }
-
-        /* Scrollbar */
-        ::-webkit-scrollbar { width: 5px; height: 5px; }
-        ::-webkit-scrollbar-track { background: transparent; }
-        ::-webkit-scrollbar-thumb { background: var(--accent); border-radius: 3px; }
 
         @media (max-width: 1024px) {
             .charts-grid { grid-template-columns: 1fr; }
@@ -880,11 +683,8 @@
             .header h1 { font-size: 20px; }
             .stats-grid { grid-template-columns: repeat(2, 1fr); }
             .questions-grid { grid-template-columns: repeat(2, 1fr); }
-            .timeline-grid { grid-template-columns: repeat(auto-fill, minmax(120px, 1fr)); }
             .stat-card .value { font-size: 24px; }
             .pin-digit { width: 45px; height: 55px; font-size: 22px; }
-            .token-pricing { flex-direction: column; align-items: flex-start; }
-            .pin-box { padding: 32px; }
             .chart-wrapper { height: 200px; }
         }
 
@@ -894,10 +694,124 @@
             .questions-grid { grid-template-columns: 1fr; }
             .table-header { flex-direction: column; align-items: stretch; }
             .table-controls { flex-direction: column; }
-            .timeline-grid { grid-template-columns: repeat(auto-fill, minmax(100px, 1fr)); }
             .header-actions .btn { font-size: 11px; padding: 8px 12px; }
             .header h1 { font-size: 18px; }
             .chart-wrapper { height: 180px; }
+        }
+
+        ::-webkit-scrollbar { width: 5px; height: 5px; }
+        ::-webkit-scrollbar-track { background: transparent; }
+        ::-webkit-scrollbar-thumb { background: var(--accent); border-radius: 3px; }
+
+        /* Timeline */
+        .timeline-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(140px, 1fr));
+            gap: 12px;
+            max-height: 420px;
+            overflow-y: auto;
+            padding-right: 6px;
+        }
+
+        .timeline-card {
+            background: var(--bg-primary);
+            border: 1px solid var(--border);
+            border-radius: 14px;
+            padding: 14px 16px;
+            transition: all 0.3s;
+            cursor: pointer;
+        }
+
+        .timeline-card:hover {
+            transform: translateY(-3px);
+            border-color: var(--accent);
+        }
+
+        .timeline-card .date {
+            font-size: 11px;
+            color: var(--text-secondary);
+            margin-bottom: 2px;
+        }
+
+        .timeline-card .day-name {
+            font-size: 12px;
+            font-weight: 600;
+            margin-bottom: 4px;
+        }
+
+        .timeline-card .amount {
+            font-size: 20px;
+            font-weight: 700;
+        }
+
+        .timeline-card .amount.positive { color: var(--success); }
+        .timeline-card .amount.negative { color: var(--danger); }
+        .timeline-card .amount.warning { color: var(--warning); }
+
+        .timeline-card .detail {
+            font-size: 10px;
+            color: var(--text-secondary);
+            margin-top: 2px;
+        }
+
+        .timeline-card.predicted {
+            border-color: rgba(59,130,246,0.2);
+            background: rgba(59,130,246,0.04);
+        }
+
+        .timeline-card.critical {
+            border-color: var(--danger);
+            background: rgba(239,68,68,0.06);
+        }
+
+        .timeline-section {
+            background: var(--bg-card);
+            border: 1px solid var(--border);
+            border-radius: 20px;
+            padding: 24px;
+            margin-bottom: 24px;
+        }
+
+        .timeline-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 18px;
+            flex-wrap: wrap;
+            gap: 12px;
+        }
+
+        .timeline-header h3 {
+            font-size: 18px;
+            font-weight: 700;
+        }
+
+        .timeline-controls {
+            display: flex;
+            gap: 6px;
+            flex-wrap: wrap;
+        }
+
+        .timeline-controls button {
+            padding: 5px 16px;
+            border: 1px solid var(--border);
+            background: var(--bg-primary);
+            color: var(--text-secondary);
+            border-radius: 20px;
+            cursor: pointer;
+            font-size: 12px;
+            transition: all 0.2s;
+            font-weight: 500;
+        }
+
+        .timeline-controls button.active {
+            background: var(--gradient-main);
+            color: white;
+            border-color: transparent;
+        }
+
+        .timeline-controls button:hover:not(.active) {
+            background: var(--bg-secondary);
         }
     </style>
 </head>
@@ -954,10 +868,10 @@
         <div class="token-pricing">
             <div>
                 <div class="price"><i class="fas fa-coins"></i> $0.07 per 1M tokens</div>
-                <div class="detail"><i class="fas fa-info-circle"></i> DeepSeek API · Real-time consumption tracking</div>
+                <div style="color:var(--text-secondary);font-size:13px;"><i class="fas fa-info-circle"></i> DeepSeek API · Real-time consumption tracking</div>
             </div>
             <div>
-                <span class="badge"><i class="fas fa-bolt"></i> 50+ Active Users</span>
+                <span class="badge"><i class="fas fa-bolt"></i> 55 Active Users</span>
                 <span class="badge" style="margin-left:8px;background:rgba(34,197,94,0.12);color:var(--success);border-color:rgba(34,197,94,0.15);">
                     <i class="fas fa-check-circle"></i> System Online
                 </span>
@@ -1099,37 +1013,14 @@
         </div>
     </div>
 
-    <script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-app-compat.js"></script>
-    <script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-auth-compat.js"></script>
-    <script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-firestore-compat.js"></script>
-
     <script>
         // ==============================================
         // CONFIGURATION
         // ==============================================
         const TOKEN_COST_PER_MILLION = 0.07;
         const TOTAL_BUDGET = 300;
-        const MIN_BALANCE = 50; // NEVER GO BELOW $50
-        const TARGET_END_DATE = new Date(2026, 7, 10);
-        const START_DATE = new Date(2026, 1, 1);
+        const MIN_BALANCE = 50;
         const CORRECT_PIN = "2026";
-
-        // ==============================================
-        // FIREBASE
-        // ==============================================
-        const firebaseConfig = {
-            apiKey: "AIzaSyAE8wf24HXrfmpMluaFOv1OHPrf_YFfqTQ",
-            authDomain: "whaai-c388e.firebaseapp.com",
-            projectId: "whaai-c388e",
-            storageBucket: "whaai-c388e.firebasestorage.app",
-            messagingSenderId: "640598205524",
-            appId: "1:640598205524:web:c975f5e8b371b1043e39c1",
-            measurementId: "G-1MHE0JBZJR"
-        };
-
-        if (!firebase.apps.length) {
-            firebase.initializeApp(firebaseConfig);
-        }
 
         // ==============================================
         // STATE
@@ -1143,18 +1034,18 @@
         let pinAttempts = 0;
 
         const QUESTION_CATEGORIES = {
-            'about_ai': { icon: 'fa-robot', name: 'AI & Machine Learning', keywords: ['ai', 'artificial intelligence', 'machine learning', 'deep learning', 'neural networks'], color: '#3b82f6' },
-            'about_images': { icon: 'fa-image', name: 'Computer Vision', keywords: ['image', 'vision', 'photo', 'picture', 'visual recognition'], color: '#8b5cf6' },
-            'about_dr_waleed': { icon: 'fa-user-graduate', name: 'Dr. Waleed Zakhourani', keywords: ['dr waleed', 'waleed', 'zakhourani', 'founder'], color: '#eab308' },
-            'about_dictionary': { icon: 'fa-book', name: 'JIHAN Dictionary', keywords: ['dictionary', 'jihan', 'definition', 'word', 'translation', 'lexicon'], color: '#22c55e' },
-            'about_kurdish': { icon: 'fa-language', name: 'Kurdish Language', keywords: ['kurdish', 'kurdi', 'kurd', 'soran', 'kurmanji', 'kurdistan'], color: '#06b6d4' },
-            'about_computer': { icon: 'fa-laptop-code', name: 'Computer Science', keywords: ['computer', 'programming', 'coding', 'software', 'development'], color: '#f472b6' },
-            'about_health': { icon: 'fa-heartbeat', name: 'Health & Medicine', keywords: ['health', 'wellness', 'medical', 'doctor', 'disease', 'fitness'], color: '#ef4444' },
-            'about_kids': { icon: 'fa-child', name: 'Education & Kids', keywords: ['kids', 'children', 'education', 'learning', 'school', 'child'], color: '#84cc16' },
-            'about_history': { icon: 'fa-history', name: 'History & Civilization', keywords: ['history', 'historical', 'ancient', 'civilization', 'empire'], color: '#f97316' },
-            'about_science': { icon: 'fa-flask', name: 'Science & Research', keywords: ['science', 'physics', 'chemistry', 'biology', 'research', 'experiment'], color: '#14b8a6' },
-            'about_philosophy': { icon: 'fa-brain', name: 'Philosophy & Ethics', keywords: ['philosophy', 'ethics', 'logic', 'thought', 'wisdom'], color: '#8b5cf6' },
-            'about_art': { icon: 'fa-paint-brush', name: 'Art & Culture', keywords: ['art', 'culture', 'music', 'painting', 'literature', 'creative'], color: '#ec4899' }
+            'about_ai': { icon: 'fa-robot', name: 'AI & Machine Learning', color: '#3b82f6' },
+            'about_images': { icon: 'fa-image', name: 'Computer Vision', color: '#8b5cf6' },
+            'about_dr_waleed': { icon: 'fa-user-graduate', name: 'Dr. Waleed Zakhourani', color: '#eab308' },
+            'about_dictionary': { icon: 'fa-book', name: 'JIHAN Dictionary', color: '#22c55e' },
+            'about_kurdish': { icon: 'fa-language', name: 'Kurdish Language', color: '#06b6d4' },
+            'about_computer': { icon: 'fa-laptop-code', name: 'Computer Science', color: '#f472b6' },
+            'about_health': { icon: 'fa-heartbeat', name: 'Health & Medicine', color: '#ef4444' },
+            'about_kids': { icon: 'fa-child', name: 'Education & Kids', color: '#84cc16' },
+            'about_history': { icon: 'fa-history', name: 'History & Civilization', color: '#f97316' },
+            'about_science': { icon: 'fa-flask', name: 'Science & Research', color: '#14b8a6' },
+            'about_philosophy': { icon: 'fa-brain', name: 'Philosophy & Ethics', color: '#8b5cf6' },
+            'about_art': { icon: 'fa-paint-brush', name: 'Art & Culture', color: '#ec4899' }
         };
 
         // ==============================================
@@ -1226,137 +1117,27 @@
             return (tokens / 1000000) * TOKEN_COST_PER_MILLION;
         }
 
-        function generateBudgetHistory() {
-            const history = [];
-            const days = Math.min(Math.floor((new Date() - START_DATE) / (1000 * 60 * 60 * 24)), 200);
-            let currentBalance = TOTAL_BUDGET;
-            let totalTokens = 0;
-
-            for (let i = 0; i <= days; i++) {
-                const date = new Date(START_DATE);
-                date.setDate(date.getDate() + i);
-                
-                // More realistic usage patterns
-                let baseSpend;
-                if (i < 30) baseSpend = 1.0 + Math.random() * 1.5;
-                else if (i < 60) baseSpend = 2.5 + Math.random() * 2.5;
-                else if (i < 90) baseSpend = 4.5 + Math.random() * 4;
-                else if (i < 120) baseSpend = 7 + Math.random() * 5;
-                else if (i < 150) baseSpend = 9 + Math.random() * 6;
-                else baseSpend = 11 + Math.random() * 5;
-
-                // Weekly patterns
-                const dayOfWeek = date.getDay();
-                if (dayOfWeek === 0 || dayOfWeek === 6) baseSpend *= 0.8;
-                if (dayOfWeek === 2 || dayOfWeek === 3) baseSpend *= 1.15;
-                
-                // Monthly patterns
-                if (date.getDate() === 1) baseSpend *= 0.7;
-                if (date.getDate() === 15) baseSpend *= 1.2;
-                if (date.getDate() === 28) baseSpend *= 1.1;
-
-                // Growth trend
-                const growthFactor = 1 + (i / days) * 0.4;
-                let dailySpend = baseSpend * growthFactor;
-                
-                dailySpend = Math.round(dailySpend * 100) / 100;
-                const dailyTokens = calculateTokensFromCost(dailySpend);
-                
-                // NEVER go below MIN_BALANCE
-                if (currentBalance - dailySpend < MIN_BALANCE) {
-                    dailySpend = Math.round((currentBalance - MIN_BALANCE) * 100) / 100;
-                    if (dailySpend < 0) dailySpend = 0;
-                    currentBalance = MIN_BALANCE;
-                } else {
-                    currentBalance = Math.round((currentBalance - dailySpend) * 100) / 100;
-                }
-
-                totalTokens += dailyTokens;
-
-                history.push({
-                    date: date,
-                    spend: dailySpend,
-                    balance: currentBalance,
-                    tokens: dailyTokens,
-                    totalTokens: totalTokens,
-                    day: i + 1,
-                    predicted: false,
-                    dayOfWeek: date.toLocaleDateString('en-US', { weekday: 'short' })
-                });
-            }
-
-            return history;
-        }
-
-        function generateFutureProjections(history) {
-            const lastData = history[history.length - 1];
-            const recentData = history.slice(-30);
-            const avgSpend = recentData.reduce((sum, d) => sum + d.spend, 0) / Math.min(30, recentData.length);
-            const avgTokens = calculateTokensFromCost(avgSpend);
-            
-            const projections = [];
-            let currentBalance = lastData.balance;
-            let totalTokens = lastData.totalTokens;
-            let day = history.length;
-
-            for (let i = 1; i <= 15; i++) {
-                const date = new Date();
-                date.setDate(date.getDate() + i);
-                
-                const dayOfWeek = date.getDay();
-                let multiplier = 1;
-                if (dayOfWeek === 0 || dayOfWeek === 6) multiplier = 0.85;
-                if (dayOfWeek === 2 || dayOfWeek === 3) multiplier = 1.1;
-                
-                let dailySpend = avgSpend * (0.75 + Math.random() * 0.5) * multiplier;
-                dailySpend = Math.round(dailySpend * 100) / 100;
-                const dailyTokens = calculateTokensFromCost(dailySpend);
-
-                // NEVER go below MIN_BALANCE
-                if (currentBalance - dailySpend < MIN_BALANCE) {
-                    dailySpend = Math.round((currentBalance - MIN_BALANCE) * 100) / 100;
-                    if (dailySpend < 0) dailySpend = 0;
-                    currentBalance = MIN_BALANCE;
-                } else {
-                    currentBalance = Math.round((currentBalance - dailySpend) * 100) / 100;
-                }
-
-                totalTokens += dailyTokens;
-
-                projections.push({
-                    date: date,
-                    spend: dailySpend,
-                    balance: currentBalance,
-                    tokens: dailyTokens,
-                    totalTokens: totalTokens,
-                    day: day + i,
-                    predicted: true,
-                    dayOfWeek: date.toLocaleDateString('en-US', { weekday: 'short' })
-                });
-            }
-
-            return projections;
-        }
-
         function generateUsers(count = 55) {
             const firstNames = ['Ahmed', 'Mohammad', 'Sara', 'Nora', 'Omar', 'Laila', 'Khaled', 'Mai', 
                                'Youssef', 'Dina', 'Hassan', 'Fatima', 'Ali', 'Nadia', 'Samer', 'Rana',
                                'Waleed', 'Ghada', 'Karim', 'Layla', 'Ibrahim', 'Amira', 'Hussein', 'Zainab',
-                               'Mustafa', 'Mona', 'Tarek', 'Salma', 'Rami', 'Huda'];
+                               'Mustafa', 'Mona', 'Tarek', 'Salma', 'Rami', 'Huda', 'Yasmin', 'Kareem',
+                               'Lina', 'Sami', 'Nour', 'Rayan', 'Hana', 'Zayn', 'Maya', 'Adam'];
             const lastNames = ['Khalil', 'Ali', 'Hassan', 'Saeed', 'Farouk', 'Ahmed', 'Ibrahim', 'Mohamed',
                               'Hossam', 'Mahmoud', 'Nabil', 'Karim', 'Hussein', 'Said', 'Omar', 'Nasser',
                               'Rashid', 'Malik', 'Aziz', 'Qadir', 'Rahman', 'Salem', 'Zaki', 'Nour'];
             const providers = ['google', 'email', 'github', 'google', 'email', 'google', 'github', 'email', 
                               'google', 'email', 'github', 'google', 'email', 'google', 'github', 'email',
+                              'google', 'email', 'github', 'google', 'email', 'google', 'github', 'email',
                               'google', 'email', 'github', 'google', 'email', 'google', 'github', 'email'];
             
-            const statuses = ['active', 'active', 'active', 'active', 'active', 'inactive', 'premium', 'premium', 'active'];
+            const statuses = ['active', 'active', 'active', 'active', 'active', 'inactive', 'premium', 'premium', 'active', 'active'];
             
             return Array.from({ length: count }, (_, i) => {
                 const firstName = firstNames[i % firstNames.length];
-                const lastName = lastNames[Math.floor(i / 3) % lastNames.length];
+                const lastName = lastNames[Math.floor(i / 2) % lastNames.length];
                 const name = `${firstName} ${lastName}`;
-                const email = `${firstName.toLowerCase()}.${lastName.toLowerCase()}${Math.floor(Math.random() * 100)}@${['gmail.com', 'yahoo.com', 'outlook.com', 'hotmail.com'][i % 4]}`;
+                const email = `${firstName.toLowerCase()}.${lastName.toLowerCase()}${Math.floor(Math.random() * 100)}@${['gmail.com', 'yahoo.com', 'outlook.com'][i % 3]}`;
                 const tokens = Math.floor(Math.random() * 250000) + 15000;
                 const questions = Math.floor(Math.random() * 120) + 5;
                 const daysAgo = Math.floor(Math.random() * 60);
@@ -1367,7 +1148,7 @@
                     displayName: name,
                     photoURL: null,
                     provider: providers[i % providers.length],
-                    createdAt: new Date(START_DATE.getTime() + (30 + Math.random() * 180) * 24 * 60 * 60 * 1000),
+                    createdAt: new Date(2026, 0, Math.floor(Math.random() * 180) + 1),
                     lastActive: new Date(Date.now() - daysAgo * 24 * 60 * 60 * 1000 - Math.random() * 12 * 60 * 60 * 1000),
                     tokensUsed: tokens,
                     cost: calculateCostFromTokens(tokens),
@@ -1379,7 +1160,7 @@
         }
 
         function generateQuestions() {
-            const baseQuestions = Object.keys(QUESTION_CATEGORIES).map(key => {
+            return Object.keys(QUESTION_CATEGORIES).map(key => {
                 const baseCount = Math.floor(Math.random() * 250) + 30;
                 const multiplier = ['about_dr_waleed', 'about_ai', 'about_dictionary'].includes(key) ? 1.8 : 
                                   ['about_kurdish', 'about_computer'].includes(key) ? 1.4 : 1;
@@ -1388,28 +1169,117 @@
                     name: QUESTION_CATEGORIES[key].name,
                     icon: QUESTION_CATEGORIES[key].icon,
                     count: Math.floor(baseCount * multiplier),
-                    keywords: QUESTION_CATEGORIES[key].keywords,
                     color: QUESTION_CATEGORIES[key].color,
                     trend: Math.floor(Math.random() * 40) - 10
                 };
-            });
+            }).sort((a, b) => b.count - a.count);
+        }
+
+        function generateBudgetData() {
+            const data = [];
+            let balance = TOTAL_BUDGET;
+            let totalTokens = 0;
+            const days = 200;
+
+            for (let i = 0; i <= days; i++) {
+                const date = new Date(2026, 0, 1 + i);
+                let dailySpend = 2 + Math.random() * 8;
+                
+                // Weekly patterns
+                const dayOfWeek = date.getDay();
+                if (dayOfWeek === 0 || dayOfWeek === 6) dailySpend *= 0.7;
+                if (dayOfWeek === 2 || dayOfWeek === 3) dailySpend *= 1.2;
+                
+                // Monthly patterns
+                if (date.getDate() === 1) dailySpend *= 0.6;
+                if (date.getDate() === 15) dailySpend *= 1.3;
+                if (date.getDate() === 28) dailySpend *= 1.1;
+                
+                // Growth over time
+                const growthFactor = 1 + (i / days) * 0.5;
+                dailySpend *= growthFactor;
+                
+                dailySpend = Math.round(dailySpend * 100) / 100;
+                const dailyTokens = calculateTokensFromCost(dailySpend);
+                
+                if (balance - dailySpend < MIN_BALANCE) {
+                    dailySpend = Math.round((balance - MIN_BALANCE) * 100) / 100;
+                    if (dailySpend < 0) dailySpend = 0;
+                    balance = MIN_BALANCE;
+                } else {
+                    balance = Math.round((balance - dailySpend) * 100) / 100;
+                }
+                
+                totalTokens += dailyTokens;
+                
+                data.push({
+                    date: date,
+                    spend: dailySpend,
+                    balance: balance,
+                    tokens: dailyTokens,
+                    totalTokens: totalTokens,
+                    day: i + 1,
+                    predicted: false,
+                    dayOfWeek: date.toLocaleDateString('en-US', { weekday: 'short' })
+                });
+            }
             
-            return baseQuestions.sort((a, b) => b.count - a.count);
+            return data;
+        }
+
+        function generateFutureData(history) {
+            const lastData = history[history.length - 1];
+            const avgSpend = history.slice(-30).reduce((sum, d) => sum + d.spend, 0) / 30;
+            const projections = [];
+            let balance = lastData.balance;
+            let totalTokens = lastData.totalTokens;
+            let day = history.length;
+
+            for (let i = 1; i <= 15; i++) {
+                const date = new Date();
+                date.setDate(date.getDate() + i);
+                
+                const dayOfWeek = date.getDay();
+                let multiplier = 1;
+                if (dayOfWeek === 0 || dayOfWeek === 6) multiplier = 0.7;
+                if (dayOfWeek === 2 || dayOfWeek === 3) multiplier = 1.2;
+                
+                let dailySpend = avgSpend * (0.7 + Math.random() * 0.6) * multiplier;
+                dailySpend = Math.round(dailySpend * 100) / 100;
+                const dailyTokens = calculateTokensFromCost(dailySpend);
+                
+                if (balance - dailySpend < MIN_BALANCE) {
+                    dailySpend = Math.round((balance - MIN_BALANCE) * 100) / 100;
+                    if (dailySpend < 0) dailySpend = 0;
+                    balance = MIN_BALANCE;
+                } else {
+                    balance = Math.round((balance - dailySpend) * 100) / 100;
+                }
+                
+                totalTokens += dailyTokens;
+                
+                projections.push({
+                    date: date,
+                    spend: dailySpend,
+                    balance: balance,
+                    tokens: dailyTokens,
+                    totalTokens: totalTokens,
+                    day: day + i,
+                    predicted: true,
+                    dayOfWeek: date.toLocaleDateString('en-US', { weekday: 'short' })
+                });
+            }
+            
+            return projections;
         }
 
         // ==============================================
         // INIT
         // ==============================================
         function initDashboard() {
-            console.log('🚀 Zakhourani AI Enterprise Dashboard v6.1');
-            console.log(`💰 Token Cost: $${TOKEN_COST_PER_MILLION} per 1M tokens`);
-            console.log(`💵 Total Budget: $${TOTAL_BUDGET}`);
-            console.log(`🛡️ Minimum Balance: $${MIN_BALANCE} (never goes below)`);
-            console.log(`📊 Generating data for 50+ users...`);
-            
-            const history = generateBudgetHistory();
-            const projections = generateFutureProjections(history);
-            timelineData = [...history, ...projections];
+            const history = generateBudgetData();
+            const future = generateFutureData(history);
+            timelineData = [...history, ...future];
 
             users = generateUsers(55);
             questions = generateQuestions();
@@ -1423,7 +1293,6 @@
 
             setInterval(() => {
                 updateDateTime();
-                checkForNewDay();
             }, 1000);
         }
 
@@ -1438,43 +1307,6 @@
                 now.toLocaleTimeString('en-US', { hour: '2-digit', minute: '2-digit', second: '2-digit' });
         }
 
-        function checkForNewDay() {
-            const now = new Date();
-            const lastCheck = localStorage.getItem('lastDayCheck');
-            const today = now.toDateString();
-
-            if (lastCheck !== today) {
-                const lastData = timelineData[timelineData.length - 1];
-                if (lastData && !lastData.predicted) {
-                    const avgSpend = timelineData.slice(-30).reduce((sum, d) => sum + d.spend, 0) / 30;
-                    let newSpend = avgSpend * (0.85 + Math.random() * 0.3);
-                    let newBalance = Math.max(MIN_BALANCE, Math.round((lastData.balance - newSpend) * 100) / 100);
-                    if (lastData.balance - newSpend < MIN_BALANCE) {
-                        newSpend = Math.round((lastData.balance - MIN_BALANCE) * 100) / 100;
-                        if (newSpend < 0) newSpend = 0;
-                    }
-                    const newTokens = calculateTokensFromCost(newSpend);
-                    
-                    timelineData.push({
-                        date: now,
-                        spend: Math.round(newSpend * 100) / 100,
-                        balance: newBalance,
-                        tokens: newTokens,
-                        totalTokens: lastData.totalTokens + newTokens,
-                        day: timelineData.length + 1,
-                        predicted: false,
-                        dayOfWeek: now.toLocaleDateString('en-US', { weekday: 'short' })
-                    });
-
-                    localStorage.setItem('lastDayCheck', today);
-                    renderTimeline();
-                    updateStats();
-                    updateCharts();
-                    showAlert('📅 New day added! Budget updated.', 'success');
-                }
-            }
-        }
-
         function updateStats() {
             const lastData = timelineData[timelineData.length - 1];
             const currentBalance = lastData ? Math.max(MIN_BALANCE, lastData.balance) : MIN_BALANCE;
@@ -1482,36 +1314,25 @@
             
             const recent = timelineData.slice(-30);
             const avgSpend = recent.reduce((sum, d) => sum + d.spend, 0) / Math.max(1, recent.length);
-            const avgTokens = calculateTokensFromCost(avgSpend);
-            
-            const daysRemaining = Math.floor((currentBalance - MIN_BALANCE) / avgSpend);
             
             document.getElementById('totalBudget').textContent = `$${TOTAL_BUDGET.toFixed(2)}`;
             document.getElementById('remainingBalance').textContent = `$${currentBalance.toFixed(2)}`;
             document.getElementById('remainingTokens').textContent = `= ${Math.round((currentBalance / TOKEN_COST_PER_MILLION) * 1000000).toLocaleString()} tokens`;
-            document.getElementById('daysRemaining').textContent = Math.max(0, daysRemaining);
+            document.getElementById('daysRemaining').textContent = Math.max(0, Math.floor((currentBalance - MIN_BALANCE) / avgSpend));
             
             document.getElementById('totalTokens').textContent = Math.round(totalTokensUsed).toLocaleString();
             document.getElementById('totalTokensCost').textContent = `$${calculateCostFromTokens(totalTokensUsed).toFixed(2)}`;
             
-            document.getElementById('dailyAverage').textContent = `$${avgSpend.toFixed(2)}`;
-            document.getElementById('dailyTokens').textContent = Math.round(avgTokens).toLocaleString();
+            document.getElementById('tokenGrowth').textContent = `+${Math.floor(Math.random() * 15) + 8}%`;
             
-            const tokenGrowth = Math.floor(Math.random() * 15) + 8;
-            document.getElementById('tokenGrowth').textContent = `+${tokenGrowth}%`;
-            
-            // Active users
             const activeUsers = users.filter(u => {
                 const diff = Date.now() - u.lastActive.getTime();
                 return diff < 24 * 60 * 60 * 1000;
             }).length;
             document.getElementById('activeUsers').textContent = activeUsers;
             document.getElementById('totalUsersCount').textContent = users.length;
+            document.getElementById('userGrowth').textContent = `+${Math.floor(Math.random() * 12) + 3}`;
             
-            const userGrowth = Math.floor(Math.random() * 12) + 3;
-            document.getElementById('userGrowth').textContent = `+${userGrowth}`;
-            
-            // Questions
             const totalQuestions = users.reduce((sum, u) => sum + u.questions, 0);
             document.getElementById('totalQuestions').textContent = totalQuestions.toLocaleString();
             document.getElementById('dailyQuestions').textContent = Math.floor(totalQuestions / 30);
@@ -1542,31 +1363,23 @@
                 const isFuture = d.predicted || date > new Date();
                 const isCritical = d.balance < MIN_BALANCE + 10;
                 const isToday = date.toDateString() === new Date().toDateString();
-                const dayOfWeek = d.dayOfWeek || date.toLocaleDateString('en-US', { weekday: 'short' });
                 
                 let statusClass = '';
                 if (isFuture) statusClass = 'predicted';
                 if (isCritical) statusClass = 'critical';
                 
-                const progressPercent = Math.min(100, (d.spend / 20) * 100);
-
                 return `
                     <div class="timeline-card ${statusClass}" onclick="showDayDetail(${d.day})">
                         <div class="date">
-                            <span class="status-dot ${isFuture ? 'future' : isCritical ? 'critical' : 'past'}"></span>
                             ${date.toLocaleDateString('en-US', { month: 'short', day: 'numeric' })}
                             ${isToday ? '⭐' : ''}
-                            <span style="font-size:9px;color:var(--text-secondary);">${dayOfWeek}</span>
                         </div>
                         <div class="day-name">Day ${d.day}</div>
                         <div class="amount ${isCritical ? 'negative' : isFuture ? 'warning' : 'positive'}">
                             $${d.spend.toFixed(2)}
                         </div>
-                        <div class="tokens-used">${Math.round(d.tokens || 0).toLocaleString()} tokens</div>
                         <div class="detail">Balance: $${d.balance.toFixed(2)}</div>
-                        <div class="progress-ring">
-                            <div class="fill" style="width:${progressPercent}%;background:${isCritical ? 'var(--danger)' : isFuture ? 'var(--warning)' : 'var(--success)'};"></div>
-                        </div>
+                        <div class="detail">${Math.round(d.tokens || 0).toLocaleString()} tokens</div>
                         ${isFuture ? '<div class="detail">📊 Projected</div>' : ''}
                         ${isCritical ? '<div class="detail">⚠️ Near Minimum</div>' : ''}
                     </div>
@@ -1589,17 +1402,13 @@
             const content = document.getElementById('userDetailContent');
             
             const date = new Date(data.date);
-            const isFuture = data.predicted || date > new Date();
-            const isCritical = data.balance < MIN_BALANCE + 10;
-
+            
             content.innerHTML = `
                 <div style="text-align:center;margin-bottom:16px;">
                     <h2 style="font-size:24px;font-weight:800;">Day ${day}</h2>
                     <div style="color:var(--text-secondary);font-size:14px;">
                         ${date.toLocaleDateString('en-US', { weekday: 'long', year: 'numeric', month: 'long', day: 'numeric' })}
                     </div>
-                    ${isFuture ? '<div style="color:var(--warning);margin-top:6px;">📊 Projected Data</div>' : ''}
-                    ${isCritical ? '<div style="color:var(--danger);margin-top:6px;">⚠️ Near Minimum Balance</div>' : ''}
                 </div>
                 <div style="display:grid;grid-template-columns:1fr 1fr 1fr;gap:12px;margin-bottom:16px;">
                     <div style="background:var(--bg-primary);padding:16px;border-radius:12px;text-align:center;">
@@ -1607,7 +1416,7 @@
                         <div style="font-size:11px;color:var(--text-secondary);">Daily Spend</div>
                     </div>
                     <div style="background:var(--bg-primary);padding:16px;border-radius:12px;text-align:center;">
-                        <div style="font-size:24px;font-weight:700;color:${isCritical ? 'var(--warning)' : 'var(--success)'};">$${data.balance.toFixed(2)}</div>
+                        <div style="font-size:24px;font-weight:700;color:${data.balance < MIN_BALANCE + 10 ? 'var(--warning)' : 'var(--success)'};">$${data.balance.toFixed(2)}</div>
                         <div style="font-size:11px;color:var(--text-secondary);">Remaining Balance</div>
                     </div>
                     <div style="background:var(--bg-primary);padding:16px;border-radius:12px;text-align:center;">
@@ -1615,16 +1424,9 @@
                         <div style="font-size:11px;color:var(--text-secondary);">Tokens Used</div>
                     </div>
                 </div>
-                <div style="background:var(--bg-primary);padding:16px;border-radius:12px;margin-bottom:12px;">
-                    <div style="display:flex;justify-content:space-between;font-size:13px;flex-wrap:wrap;gap:8px;">
-                        <span><strong>Total Tokens:</strong> ${Math.round(data.totalTokens || 0).toLocaleString()}</span>
-                        <span><strong>Total Cost:</strong> $${calculateCostFromTokens(data.totalTokens || 0).toFixed(2)}</span>
-                        <span><strong>Min Balance:</strong> $${MIN_BALANCE}</span>
-                    </div>
-                </div>
                 <div style="background:var(--bg-primary);padding:12px 16px;border-radius:10px;border:1px solid rgba(59,130,246,0.15);">
                     <span style="font-size:12px;color:var(--text-secondary);">💰 Token Cost: <strong style="color:var(--accent);">$${TOKEN_COST_PER_MILLION}</strong> per 1M tokens</span>
-                    <span style="font-size:12px;color:var(--text-secondary);margin-left:16px;">📈 Daily Rate: <strong>${(data.spend / (data.tokens || 1) * 1000000).toFixed(4)}</strong></span>
+                    <span style="font-size:12px;color:var(--text-secondary);margin-left:16px;">📈 Total Tokens: <strong>${Math.round(data.totalTokens || 0).toLocaleString()}</strong></span>
                 </div>
             `;
 
@@ -1649,8 +1451,6 @@
             grid.innerHTML = sorted.map((q, index) => {
                 const percentage = (q.count / maxCount) * 100;
                 const isTop = index < 3;
-                const trendIcon = q.trend > 0 ? 'fa-arrow-up' : q.trend < 0 ? 'fa-arrow-down' : 'fa-minus';
-                const trendColor = q.trend > 0 ? 'var(--success)' : q.trend < 0 ? 'var(--danger)' : 'var(--text-secondary)';
                 
                 return `
                     <div class="question-card ${isTop ? 'top' : ''}" onclick="showQuestionDetail('${q.id}')">
@@ -1660,10 +1460,6 @@
                         <div class="q-bar">
                             <div class="fill" style="width: ${percentage}%;background:${q.color || 'var(--gradient-main)'};"></div>
                         </div>
-                        <div style="display:flex;justify-content:space-between;margin-top:4px;font-size:10px;color:var(--text-secondary);">
-                            <span>${Math.round(percentage)}% of total</span>
-                            <span style="color:${trendColor};"><i class="fas ${trendIcon}"></i> ${Math.abs(q.trend)}%</span>
-                        </div>
                         ${isTop ? '<span style="font-size:10px;color:var(--warning);margin-top:2px;display:block;">🏆 Trending Top</span>' : ''}
                     </div>
                 `;
@@ -1672,7 +1468,7 @@
 
         function sortQuestions(by) {
             renderQuestions(by);
-            showAlert(`Sorted by ${by === 'count' ? 'count' : 'name'}`, 'success');
+            showAlert(`Sorted by ${by}`, 'success');
         }
 
         function showQuestionDetail(id) {
@@ -1703,12 +1499,6 @@
                         <div style="font-size:11px;color:var(--text-secondary);">Trend</div>
                     </div>
                 </div>
-                <div style="background:var(--bg-primary);padding:14px;border-radius:12px;margin-bottom:12px;">
-                    <div style="font-weight:600;margin-bottom:6px;font-size:13px;">🔑 Keywords:</div>
-                    <div style="display:flex;flex-wrap:wrap;gap:4px;">
-                        ${q.keywords.map(k => `<span style="background:var(--bg-secondary);padding:3px 10px;border-radius:16px;font-size:11px;color:var(--text-secondary);border:1px solid var(--border);">#${k}</span>`).join('')}
-                    </div>
-                </div>
                 <div style="background:var(--bg-primary);padding:14px;border-radius:12px;">
                     <div style="font-weight:600;margin-bottom:6px;font-size:13px;">👤 Top Contributors:</div>
                     ${topUsers.map((u, i) => `
@@ -1724,7 +1514,7 @@
         }
 
         // ==============================================
-        // RENDER USERS
+        // RENDER USERS - ALL 55 USERS
         // ==============================================
         function renderUsers(filteredUsers = null) {
             const tbody = document.getElementById('usersBody');
@@ -1736,7 +1526,7 @@
                 const status = user.status || (user.lastActive && (Date.now() - user.lastActive.getTime()) < 86400000 ? 'active' : 'inactive');
                 const statusLabel = status === 'active' ? 'Active' : status === 'premium' ? 'Premium' : 'Inactive';
                 const statusClass = status === 'active' ? 'status-active' : status === 'premium' ? 'status-premium' : 'status-inactive';
-                const avatar = user.photoURL || `https://ui-avatars.com/api/?name=${encodeURIComponent(user.displayName || user.email)}&background=3b82f6&color=fff&bold=true&size=32`;
+                const avatar = `https://ui-avatars.com/api/?name=${encodeURIComponent(user.displayName)}&background=3b82f6&color=fff&bold=true&size=32`;
                 
                 let rankClass = '';
                 if (index === 0) rankClass = 'rank-1';
@@ -1750,9 +1540,9 @@
                         </td>
                         <td>
                             <div style="display:flex;align-items:center;gap:10px;">
-                                <img src="${avatar}" alt="${user.displayName}" style="width:32px;height:32px;border-radius:50%;object-fit:cover;">
+                                <img src="${avatar}" alt="${user.displayName}" class="user-avatar">
                                 <div>
-                                    <div style="font-weight:600;font-size:13px;">${user.displayName || 'Unknown'}</div>
+                                    <div style="font-weight:600;font-size:13px;">${user.displayName}</div>
                                     <div style="font-size:10px;color:var(--text-secondary);">${user.uid}</div>
                                 </div>
                             </div>
@@ -1762,12 +1552,12 @@
                             <span style="display:flex;align-items:center;gap:4px;font-size:12px;">
                                 <i class="fas ${user.provider === 'google' ? 'fa-google' : user.provider === 'github' ? 'fa-github' : 'fa-envelope'}" 
                                    style="color:${user.provider === 'google' ? '#ea4335' : user.provider === 'github' ? '#6e5494' : '#3b82f6'}"></i>
-                                ${user.provider || 'unknown'}
+                                ${user.provider}
                             </span>
                         </td>
-                        <td style="font-weight:600;font-size:13px;">${user.tokensUsed?.toLocaleString() || 0}</td>
-                        <td style="font-weight:600;font-size:13px;color:var(--accent);">$${(user.cost || 0).toFixed(2)}</td>
-                        <td>${user.questions || 0}</td>
+                        <td style="font-weight:600;font-size:13px;">${user.tokensUsed.toLocaleString()}</td>
+                        <td style="font-weight:600;font-size:13px;color:var(--accent);">$${user.cost.toFixed(2)}</td>
+                        <td>${user.questions}</td>
                         <td><span class="status-badge ${statusClass}">${statusLabel}</span></td>
                         <td style="font-size:12px;color:var(--text-secondary);">
                             ${user.lastActive ? new Date(user.lastActive).toLocaleDateString() : 'Never'}
@@ -1810,39 +1600,32 @@
             
             content.innerHTML = `
                 <div style="display:flex;align-items:center;gap:16px;margin-bottom:16px;">
-                    <img src="${user.photoURL || `https://ui-avatars.com/api/?name=${encodeURIComponent(user.displayName || user.email)}&background=3b82f6&color=fff&bold=true&size=72`}" 
+                    <img src="https://ui-avatars.com/api/?name=${encodeURIComponent(user.displayName)}&background=3b82f6&color=fff&bold=true&size=72" 
                          style="width:68px;height:68px;border-radius:50%;object-fit:cover;border:2px solid var(--accent);">
                     <div style="flex:1;">
                         <div style="display:flex;align-items:center;gap:8px;">
-                            <h3 style="font-size:20px;font-weight:700;">${user.displayName || 'Unknown'}</h3>
+                            <h3 style="font-size:20px;font-weight:700;">${user.displayName}</h3>
                             <span class="status-badge ${user.status === 'premium' ? 'status-premium' : 'status-active'}">${user.status || 'Active'}</span>
                         </div>
                         <div style="color:var(--text-secondary);font-size:13px;">${user.email}</div>
                         <div style="color:var(--text-secondary);font-size:12px;margin-top:2px;">
                             <i class="fas fa-${user.provider === 'google' ? 'google' : user.provider === 'github' ? 'github' : 'envelope'}"></i>
-                            ${user.provider} · Joined ${user.createdAt ? new Date(user.createdAt).toLocaleDateString() : 'Unknown'} · Rank #${rank}
+                            ${user.provider} · Rank #${rank}
                         </div>
                     </div>
                 </div>
                 <div style="display:grid;grid-template-columns:repeat(3,1fr);gap:10px;margin:14px 0;">
-                    <div style="background:var(--bg-primary);padding:14px;border-radius:10px;text-align:center;border:1px solid var(--border);">
-                        <div style="font-size:22px;font-weight:700;color:var(--accent);">${user.tokensUsed?.toLocaleString() || 0}</div>
+                    <div style="background:var(--bg-primary);padding:14px;border-radius:10px;text-align:center;">
+                        <div style="font-size:22px;font-weight:700;color:var(--accent);">${user.tokensUsed.toLocaleString()}</div>
                         <div style="font-size:11px;color:var(--text-secondary);">Tokens Used</div>
                     </div>
-                    <div style="background:var(--bg-primary);padding:14px;border-radius:10px;text-align:center;border:1px solid var(--border);">
-                        <div style="font-size:22px;font-weight:700;color:var(--success);">$${(user.cost || 0).toFixed(2)}</div>
+                    <div style="background:var(--bg-primary);padding:14px;border-radius:10px;text-align:center;">
+                        <div style="font-size:22px;font-weight:700;color:var(--success);">$${user.cost.toFixed(2)}</div>
                         <div style="font-size:11px;color:var(--text-secondary);">Total Cost</div>
                     </div>
-                    <div style="background:var(--bg-primary);padding:14px;border-radius:10px;text-align:center;border:1px solid var(--border);">
-                        <div style="font-size:22px;font-weight:700;color:var(--warning);">${user.questions || 0}</div>
+                    <div style="background:var(--bg-primary);padding:14px;border-radius:10px;text-align:center;">
+                        <div style="font-size:22px;font-weight:700;color:var(--warning);">${user.questions}</div>
                         <div style="font-size:11px;color:var(--text-secondary);">Questions Asked</div>
-                    </div>
-                </div>
-                <div style="background:var(--bg-primary);padding:12px 16px;border-radius:10px;border:1px solid rgba(59,130,246,0.1);">
-                    <div style="display:flex;justify-content:space-between;font-size:13px;flex-wrap:wrap;gap:8px;">
-                        <span><strong>💰 Token Cost:</strong> $${TOKEN_COST_PER_MILLION} per 1M</span>
-                        <span><strong>📊 Avg Token/Question:</strong> ${Math.round(user.tokensUsed / (user.questions || 1)).toLocaleString()}</span>
-                        <span><strong>📅 Last Active:</strong> ${user.lastActive ? new Date(user.lastActive).toLocaleDateString() : 'Never'}</span>
                     </div>
                 </div>
                 <div style="margin-top:12px;background:var(--bg-primary);padding:12px 16px;border-radius:10px;">
@@ -1861,13 +1644,13 @@
         }
 
         // ==============================================
-        // CHARTS - FIXED
+        // CHARTS
         // ==============================================
         function updateCharts() {
             setTimeout(() => {
                 updateBudgetChart();
                 updateUsageChart();
-            }, 100);
+            }, 200);
         }
 
         function updateBudgetChart() {
@@ -1895,8 +1678,7 @@
                             backgroundColor: 'rgba(59, 130, 246, 0.1)',
                             fill: true,
                             tension: 0.4,
-                            order: 2,
-                            pointRadius: 2,
+                            pointRadius: 1.5,
                             borderWidth: 2
                         },
                         {
@@ -1906,80 +1688,36 @@
                             borderDash: [6, 4],
                             fill: false,
                             tension: 0.4,
-                            order: 1,
                             yAxisID: 'y1',
                             pointRadius: 1.5,
                             borderWidth: 2.5
-                        },
-                        {
-                            label: 'Tokens (K)',
-                            data: data.map(d => parseFloat(((d.tokens || 0) / 1000).toFixed(1))),
-                            borderColor: '#eab308',
-                            backgroundColor: 'rgba(234, 179, 8, 0.08)',
-                            fill: true,
-                            tension: 0.4,
-                            order: 3,
-                            yAxisID: 'y2',
-                            pointRadius: 1,
-                            borderWidth: 1.5
                         }
                     ]
                 },
                 options: {
                     responsive: true,
                     maintainAspectRatio: false,
-                    interaction: { 
-                        intersect: false, 
-                        mode: 'index' 
-                    },
+                    interaction: { intersect: false, mode: 'index' },
                     plugins: {
                         legend: {
-                            labels: { 
-                                color: '#94a3b8', 
-                                boxWidth: 12, 
-                                padding: 12, 
-                                font: { size: 11 } 
-                            }
+                            labels: { color: '#94a3b8', boxWidth: 12, padding: 12, font: { size: 11 } }
                         }
                     },
                     scales: {
                         y: {
                             beginAtZero: true,
                             grid: { color: 'rgba(255,255,255,0.04)' },
-                            ticks: { 
-                                color: '#94a3b8', 
-                                callback: function(value) { return '$' + value.toFixed(0); },
-                                font: { size: 10 }
-                            }
+                            ticks: { color: '#94a3b8', callback: function(value) { return '$' + value.toFixed(0); } }
                         },
                         y1: {
                             position: 'right',
                             beginAtZero: true,
                             grid: { display: false },
-                            ticks: { 
-                                color: '#94a3b8', 
-                                callback: function(value) { return '$' + value.toFixed(0); },
-                                font: { size: 10 }
-                            }
-                        },
-                        y2: {
-                            position: 'right',
-                            beginAtZero: true,
-                            grid: { display: false },
-                            ticks: { 
-                                color: '#94a3b8', 
-                                callback: function(value) { return value + 'K'; },
-                                font: { size: 9 }
-                            },
-                            display: true
+                            ticks: { color: '#94a3b8', callback: function(value) { return '$' + value.toFixed(0); } }
                         },
                         x: {
                             grid: { color: 'rgba(255,255,255,0.04)' },
-                            ticks: { 
-                                color: '#94a3b8', 
-                                maxTicksLimit: 15, 
-                                font: { size: 9 } 
-                            }
+                            ticks: { color: '#94a3b8', maxTicksLimit: 15, font: { size: 9 } }
                         }
                     }
                 }
@@ -2017,12 +1755,7 @@
                     plugins: {
                         legend: {
                             position: 'bottom',
-                            labels: { 
-                                color: '#94a3b8', 
-                                boxWidth: 10, 
-                                padding: 8, 
-                                font: { size: 10 } 
-                            }
+                            labels: { color: '#94a3b8', boxWidth: 10, padding: 8, font: { size: 9 } }
                         }
                     },
                     cutout: '62%'
@@ -2040,7 +1773,7 @@
             renderQuestions();
             renderUsers();
             updateCharts();
-            setTimeout(() => showAlert('✅ Data refreshed successfully!', 'success'), 600);
+            setTimeout(() => showAlert('✅ Data refreshed!', 'success'), 500);
         }
 
         function simulateDay() {
@@ -2048,12 +1781,7 @@
             const lastData = timelineData[timelineData.length - 1];
             const avgSpend = timelineData.slice(-30).reduce((sum, d) => sum + d.spend, 0) / Math.max(1, timelineData.slice(-30).length);
             
-            const dayOfWeek = new Date().getDay();
-            let multiplier = 1;
-            if (dayOfWeek === 0 || dayOfWeek === 6) multiplier = 0.85;
-            if (dayOfWeek === 2 || dayOfWeek === 3) multiplier = 1.1;
-            
-            let newSpend = avgSpend * (0.85 + Math.random() * 0.3) * multiplier;
+            let newSpend = avgSpend * (0.85 + Math.random() * 0.3);
             let newBalance = Math.max(MIN_BALANCE, Math.round((lastData.balance - newSpend) * 100) / 100);
             
             if (lastData.balance - newSpend < MIN_BALANCE) {
@@ -2062,7 +1790,6 @@
             }
             
             const newTokens = calculateTokensFromCost(newSpend);
-            
             const newDate = new Date();
             newDate.setDate(newDate.getDate() + simulatedDay);
             
@@ -2074,7 +1801,6 @@
                 totalTokens: lastData.totalTokens + newTokens,
                 day: timelineData.length + 1,
                 predicted: true,
-                simulated: true,
                 dayOfWeek: newDate.toLocaleDateString('en-US', { weekday: 'short' })
             });
 
@@ -2090,22 +1816,12 @@
                 tokenCostPerMillion: TOKEN_COST_PER_MILLION,
                 totalBudget: TOTAL_BUDGET,
                 minBalance: MIN_BALANCE,
-                targetEndDate: TARGET_END_DATE,
                 summary: {
                     totalUsers: users.length,
                     totalTokens: timelineData[timelineData.length - 1]?.totalTokens || 0,
                     totalCost: calculateCostFromTokens(timelineData[timelineData.length - 1]?.totalTokens || 0),
                     remainingBalance: Math.max(MIN_BALANCE, timelineData[timelineData.length - 1]?.balance || MIN_BALANCE)
                 },
-                timelineData: timelineData.map(d => ({
-                    date: d.date.toISOString(),
-                    spend: d.spend,
-                    balance: d.balance,
-                    tokens: d.tokens,
-                    totalTokens: d.totalTokens,
-                    day: d.day,
-                    predicted: d.predicted || false
-                })),
                 users: users.map(u => ({
                     name: u.displayName,
                     email: u.email,
@@ -2113,8 +1829,7 @@
                     tokensUsed: u.tokensUsed,
                     cost: u.cost,
                     questions: u.questions,
-                    status: u.status,
-                    lastActive: u.lastActive?.toISOString()
+                    status: u.status
                 })),
                 questions: questions
             };
@@ -2123,10 +1838,10 @@
             const url = URL.createObjectURL(blob);
             const a = document.createElement('a');
             a.href = url;
-            a.download = `zakhourani-enterprise-report-${new Date().toISOString().slice(0,10)}.json`;
+            a.download = `zakhourani-report-${new Date().toISOString().slice(0,10)}.json`;
             a.click();
             URL.revokeObjectURL(url);
-            showAlert('📥 Enterprise report exported successfully!', 'success');
+            showAlert('📥 Report exported!', 'success');
         }
 
         // ==============================================
@@ -2142,55 +1857,12 @@
             });
         });
 
-        function showAlert(message, type = 'error') {
+        function showAlert(message, type = 'success') {
             const alert = document.getElementById('alert');
             alert.textContent = message;
             alert.className = `alert alert-${type}`;
             alert.style.display = 'block';
-            setTimeout(() => alert.style.display = 'none', 3500);
-        }
-
-        document.addEventListener('keydown', (e) => {
-            if (e.ctrlKey && e.key === 'r') { e.preventDefault(); refreshData(); }
-            if (e.ctrlKey && e.key === 'e') { e.preventDefault(); exportReport(); }
-            if (e.key === 'Escape') {
-                document.querySelectorAll('.modal.active').forEach(m => m.classList.remove('active'));
-            }
-        });
-
-        // Check for new day on load
-        const today = new Date().toDateString();
-        const lastCheck = localStorage.getItem('lastDayCheck');
-        if (lastCheck !== today) {
-            if (lastCheck) {
-                const daysPassed = Math.min(Math.floor((new Date(today) - new Date(lastCheck)) / (1000 * 60 * 60 * 24)), 5);
-                for (let i = 0; i < daysPassed; i++) {
-                    const lastData = timelineData[timelineData.length - 1];
-                    if (lastData) {
-                        const avgSpend = timelineData.slice(-30).reduce((sum, d) => sum + d.spend, 0) / 30;
-                        let newSpend = avgSpend * (0.85 + Math.random() * 0.3);
-                        let newBalance = Math.max(MIN_BALANCE, Math.round((lastData.balance - newSpend) * 100) / 100);
-                        if (lastData.balance - newSpend < MIN_BALANCE) {
-                            newSpend = Math.round((lastData.balance - MIN_BALANCE) * 100) / 100;
-                            if (newSpend < 0) newSpend = 0;
-                        }
-                        const newTokens = calculateTokensFromCost(newSpend);
-                        const newDate = new Date(lastData.date);
-                        newDate.setDate(newDate.getDate() + 1);
-                        timelineData.push({
-                            date: newDate,
-                            spend: Math.round(newSpend * 100) / 100,
-                            balance: newBalance,
-                            tokens: newTokens,
-                            totalTokens: lastData.totalTokens + newTokens,
-                            day: timelineData.length + 1,
-                            predicted: false,
-                            dayOfWeek: newDate.toLocaleDateString('en-US', { weekday: 'short' })
-                        });
-                    }
-                }
-            }
-            localStorage.setItem('lastDayCheck', today);
+            setTimeout(() => alert.style.display = 'none', 3000);
         }
     </script>
 </body>

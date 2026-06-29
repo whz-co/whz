@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Zakhourani AI · Admin Dashboard v3.0</title>
+    <title>Zakhourani AI · Advanced Dashboard v4.0</title>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <link href="https://fonts.googleapis.com/css2?family=Inter:opsz,wght@14..32,400;14..32,500;14..32,600;14..32,700&display=swap" rel="stylesheet">
     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
@@ -42,7 +42,7 @@
             margin: 0 auto;
         }
 
-        /* PIN PROTECTION */
+        /* PIN Protection */
         .pin-overlay {
             position: fixed;
             top: 0;
@@ -262,8 +262,8 @@
         /* Stats Grid */
         .stats-grid {
             display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
-            gap: 20px;
+            grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+            gap: 16px;
             margin-bottom: 30px;
         }
 
@@ -271,7 +271,7 @@
             background: var(--bg-card);
             border: 1px solid var(--border);
             border-radius: 20px;
-            padding: 24px;
+            padding: 20px;
             backdrop-filter: blur(12px);
             transition: transform 0.2s;
         }
@@ -282,20 +282,20 @@
 
         .stat-card .label {
             color: var(--text-secondary);
-            font-size: 13px;
+            font-size: 12px;
             font-weight: 500;
             text-transform: uppercase;
             letter-spacing: 0.5px;
         }
 
         .stat-card .value {
-            font-size: 32px;
+            font-size: 28px;
             font-weight: 700;
-            margin: 8px 0;
+            margin: 6px 0;
         }
 
         .stat-card .change {
-            font-size: 13px;
+            font-size: 12px;
             display: flex;
             align-items: center;
             gap: 4px;
@@ -303,6 +303,128 @@
 
         .change.positive { color: var(--success); }
         .change.negative { color: var(--danger); }
+        .change.warning { color: var(--warning); }
+
+        /* Timeline */
+        .timeline-section {
+            background: var(--bg-card);
+            border: 1px solid var(--border);
+            border-radius: 20px;
+            padding: 24px;
+            margin-bottom: 30px;
+        }
+
+        .timeline-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 20px;
+            flex-wrap: wrap;
+            gap: 12px;
+        }
+
+        .timeline-header h3 {
+            font-size: 18px;
+        }
+
+        .timeline-controls {
+            display: flex;
+            gap: 8px;
+            flex-wrap: wrap;
+        }
+
+        .timeline-controls button {
+            padding: 6px 16px;
+            border: 1px solid var(--border);
+            background: var(--bg-primary);
+            color: var(--text-secondary);
+            border-radius: 20px;
+            cursor: pointer;
+            font-size: 12px;
+            transition: all 0.2s;
+        }
+
+        .timeline-controls button.active {
+            background: var(--accent);
+            color: white;
+            border-color: var(--accent);
+        }
+
+        .timeline-controls button:hover:not(.active) {
+            background: var(--bg-secondary);
+        }
+
+        .timeline-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(140px, 1fr));
+            gap: 12px;
+            max-height: 400px;
+            overflow-y: auto;
+            padding-right: 8px;
+        }
+
+        .timeline-card {
+            background: var(--bg-primary);
+            border: 1px solid var(--border);
+            border-radius: 14px;
+            padding: 14px;
+            transition: all 0.2s;
+            position: relative;
+        }
+
+        .timeline-card:hover {
+            transform: translateY(-2px);
+            border-color: var(--accent);
+        }
+
+        .timeline-card .date {
+            font-size: 12px;
+            color: var(--text-secondary);
+            margin-bottom: 4px;
+        }
+
+        .timeline-card .day-name {
+            font-size: 13px;
+            font-weight: 600;
+            margin-bottom: 6px;
+        }
+
+        .timeline-card .amount {
+            font-size: 20px;
+            font-weight: 700;
+        }
+
+        .timeline-card .amount.positive { color: var(--success); }
+        .timeline-card .amount.negative { color: var(--danger); }
+        .timeline-card .amount.warning { color: var(--warning); }
+
+        .timeline-card .detail {
+            font-size: 11px;
+            color: var(--text-secondary);
+            margin-top: 4px;
+        }
+
+        .timeline-card .status-dot {
+            width: 8px;
+            height: 8px;
+            border-radius: 50%;
+            display: inline-block;
+            margin-right: 4px;
+        }
+
+        .timeline-card .status-dot.future { background: var(--accent); }
+        .timeline-card .status-dot.past { background: var(--success); }
+        .timeline-card .status-dot.critical { background: var(--danger); }
+
+        .timeline-card.predicted {
+            border-color: rgba(59,130,246,0.3);
+            background: rgba(59,130,246,0.05);
+        }
+
+        .timeline-card.critical {
+            border-color: var(--danger);
+            background: rgba(239,68,68,0.05);
+        }
 
         /* Charts Grid */
         .charts-grid {
@@ -330,7 +452,7 @@
             height: 300px;
         }
 
-        /* Most Asked Questions */
+        /* Questions Section */
         .questions-section {
             background: var(--bg-card);
             border: 1px solid var(--border);
@@ -354,7 +476,7 @@
 
         .questions-grid {
             display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
             gap: 12px;
         }
 
@@ -408,10 +530,6 @@
 
         .question-card.top {
             border-color: var(--warning);
-        }
-
-        .question-card.top .q-icon {
-            color: var(--warning);
         }
 
         /* Users Table */
@@ -493,19 +611,6 @@
             background: rgba(255,255,255,0.02);
         }
 
-        .user-avatar {
-            width: 36px;
-            height: 36px;
-            border-radius: 50%;
-            background: linear-gradient(135deg, var(--accent), var(--accent-glow));
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            font-weight: 600;
-            font-size: 14px;
-            color: white;
-        }
-
         .status-badge {
             padding: 4px 12px;
             border-radius: 20px;
@@ -522,11 +627,6 @@
         .status-inactive {
             background: rgba(239, 68, 68, 0.2);
             color: var(--danger);
-        }
-
-        .status-warning {
-            background: rgba(234, 179, 8, 0.2);
-            color: var(--warning);
         }
 
         /* Modal */
@@ -584,23 +684,6 @@
             background: var(--bg-card);
         }
 
-        /* Loading */
-        .loading-spinner {
-            display: none;
-            text-align: center;
-            padding: 40px;
-        }
-
-        .loading-spinner i {
-            font-size: 40px;
-            color: var(--accent);
-            animation: spin 1s linear infinite;
-        }
-
-        @keyframes spin {
-            to { transform: rotate(360deg); }
-        }
-
         /* Alert */
         .alert {
             padding: 16px 20px;
@@ -638,6 +721,7 @@
             .header h1 { font-size: 22px; }
             .stats-grid { grid-template-columns: repeat(2, 1fr); }
             .questions-grid { grid-template-columns: repeat(2, 1fr); }
+            .timeline-grid { grid-template-columns: repeat(auto-fill, minmax(120px, 1fr)); }
             .stat-card .value { font-size: 24px; }
             .pin-digit { width: 40px; height: 50px; font-size: 20px; }
         }
@@ -649,16 +733,16 @@
             .table-header { flex-direction: column; align-items: stretch; }
             .table-controls { flex-direction: column; }
             .pin-box { padding: 24px; }
+            .timeline-grid { grid-template-columns: repeat(auto-fill, minmax(100px, 1fr)); }
         }
 
-        /* Scrollbar */
         ::-webkit-scrollbar { width: 6px; height: 6px; }
         ::-webkit-scrollbar-track { background: transparent; }
         ::-webkit-scrollbar-thumb { background: var(--accent); border-radius: 3px; }
     </style>
 </head>
 <body>
-    <!-- PIN Protection Overlay -->
+    <!-- PIN Protection -->
     <div class="pin-overlay" id="pinOverlay">
         <div class="pin-box">
             <div class="lock-icon"><i class="fas fa-lock"></i></div>
@@ -681,8 +765,12 @@
             <div class="header-left">
                 <div class="logo"><i class="fas fa-chart-line"></i></div>
                 <div>
-                    <h1>AI Admin Dashboard</h1>
-                    <div class="header-subtitle">Zakhourani AI · Real-time Analytics & Question Tracking</div>
+                    <h1>Zakhourani AI · Budget & Usage Dashboard</h1>
+                    <div class="header-subtitle">
+                        <i class="fas fa-calendar-alt"></i> 
+                        <span id="currentDateDisplay"></span> · 
+                        <i class="fas fa-clock"></i> <span id="currentTimeDisplay"></span>
+                    </div>
                 </div>
             </div>
             <div class="header-actions">
@@ -692,11 +780,8 @@
                 <button class="btn btn-primary" onclick="exportReport()">
                     <i class="fas fa-download"></i> Export Report
                 </button>
-                <button class="btn btn-warning" onclick="resetQuestions()">
-                    <i class="fas fa-undo"></i> Reset Questions
-                </button>
-                <button class="btn btn-danger" onclick="clearCache()">
-                    <i class="fas fa-trash"></i> Clear Cache
+                <button class="btn btn-warning" onclick="simulateDay()">
+                    <i class="fas fa-forward"></i> Simulate Next Day
                 </button>
             </div>
         </div>
@@ -707,24 +792,56 @@
         <!-- Stats -->
         <div class="stats-grid" id="statsGrid">
             <div class="stat-card">
-                <div class="label">Total Users</div>
-                <div class="value" id="totalUsers">-</div>
-                <div class="change positive"><i class="fas fa-arrow-up"></i> <span id="userGrowth">0</span> this month</div>
+                <div class="label">Total Budget</div>
+                <div class="value" id="totalBudget">$300.00</div>
+                <div class="change positive"><i class="fas fa-check-circle"></i> Initial allocation</div>
             </div>
             <div class="stat-card">
-                <div class="label">Total API Calls</div>
-                <div class="value" id="totalCalls">-</div>
-                <div class="change positive"><i class="fas fa-arrow-up"></i> <span id="callGrowth">0</span> this month</div>
+                <div class="label">Remaining Balance</div>
+                <div class="value" id="remainingBalance">$50.00</div>
+                <div class="change warning"><i class="fas fa-hourglass-half"></i> <span id="daysRemaining">5</span> days left</div>
             </div>
             <div class="stat-card">
-                <div class="label">Total Questions Asked</div>
-                <div class="value" id="totalQuestions">-</div>
-                <div class="change positive"><i class="fas fa-arrow-up"></i> <span id="questionGrowth">0</span> this week</div>
+                <div class="label">Daily Average Spend</div>
+                <div class="value" id="dailyAverage">$12.50</div>
+                <div class="change positive"><i class="fas fa-chart-line"></i> Last 30 days</div>
             </div>
             <div class="stat-card">
-                <div class="label">Active Users (24h)</div>
-                <div class="value" id="activeUsers">-</div>
-                <div class="change positive"><i class="fas fa-users"></i> <span id="activePercent">0</span>% of total</div>
+                <div class="label">Projected End Date</div>
+                <div class="value" id="projectedEndDate">Aug 10, 2026</div>
+                <div class="change warning"><i class="fas fa-calendar-day"></i> <span id="daysUntilEnd">15</span> days from now</div>
+            </div>
+        </div>
+
+        <!-- Timeline - Next 15 Days -->
+        <div class="timeline-section">
+            <div class="timeline-header">
+                <h3><i class="fas fa-calendar-week"></i> Budget Timeline: 15-Day Forecast</h3>
+                <div class="timeline-controls">
+                    <button class="active" onclick="setTimelineView('all')">All</button>
+                    <button onclick="setTimelineView('future')">Future</button>
+                    <button onclick="setTimelineView('past')">Past</button>
+                    <button onclick="setTimelineView('critical')">Critical</button>
+                </div>
+            </div>
+            <div class="timeline-grid" id="timelineGrid">
+                <!-- Populated by JavaScript -->
+            </div>
+        </div>
+
+        <!-- Charts -->
+        <div class="charts-grid">
+            <div class="chart-container">
+                <h3><i class="fas fa-chart-area"></i> Budget Consumption (6 Months + Projection)</h3>
+                <div class="chart-wrapper">
+                    <canvas id="budgetChart"></canvas>
+                </div>
+            </div>
+            <div class="chart-container">
+                <h3><i class="fas fa-pie-chart"></i> Usage Breakdown</h3>
+                <div class="chart-wrapper">
+                    <canvas id="usageChart"></canvas>
+                </div>
             </div>
         </div>
 
@@ -746,22 +863,6 @@
             </div>
         </div>
 
-        <!-- Charts -->
-        <div class="charts-grid">
-            <div class="chart-container">
-                <h3><i class="fas fa-calendar-alt"></i> Daily Usage (Last 7 Days)</h3>
-                <div class="chart-wrapper">
-                    <canvas id="dailyChart"></canvas>
-                </div>
-            </div>
-            <div class="chart-container">
-                <h3><i class="fas fa-pie-chart"></i> Users by Provider</h3>
-                <div class="chart-wrapper">
-                    <canvas id="providerChart"></canvas>
-                </div>
-            </div>
-        </div>
-
         <!-- Users Table -->
         <div class="table-container">
             <div class="table-header">
@@ -774,18 +875,9 @@
                         <option value="google">Google</option>
                         <option value="github">GitHub</option>
                     </select>
-                    <select id="filterStatus" onchange="filterUsers()">
-                        <option value="all">All Status</option>
-                        <option value="active">Active</option>
-                        <option value="inactive">Inactive</option>
-                    </select>
                 </div>
             </div>
             <div class="table-wrapper">
-                <div id="loadingSpinner" class="loading-spinner">
-                    <i class="fas fa-spinner"></i>
-                    <p>Loading users...</p>
-                </div>
                 <table id="usersTable">
                     <thead>
                         <tr>
@@ -800,7 +892,7 @@
                         </tr>
                     </thead>
                     <tbody id="usersBody">
-                        <!-- Rows populated by JavaScript -->
+                        <!-- Populated by JavaScript -->
                     </tbody>
                 </table>
             </div>
@@ -810,22 +902,8 @@
         <div class="modal" id="userModal">
             <div class="modal-content">
                 <h2><i class="fas fa-user"></i> User Details</h2>
-                <div id="userDetailContent">
-                    <!-- Dynamic content -->
-                </div>
+                <div id="userDetailContent"></div>
                 <button class="modal-close" onclick="closeModal('userModal')">Close</button>
-            </div>
-        </div>
-
-        <!-- Reset Confirmation Modal -->
-        <div class="modal" id="resetModal">
-            <div class="modal-content">
-                <h2><i class="fas fa-exclamation-triangle"></i> Reset Confirmation</h2>
-                <p>Are you sure you want to reset all question tracking data? This action cannot be undone.</p>
-                <div style="display:flex; gap:12px; margin-top:20px;">
-                    <button class="btn btn-danger" onclick="confirmResetQuestions()">Yes, Reset</button>
-                    <button class="btn btn-secondary" onclick="closeModal('resetModal')">Cancel</button>
-                </div>
             </div>
         </div>
     </div>
@@ -845,12 +923,7 @@
             const inputs = document.querySelectorAll('.pin-digit');
             let pin = '';
             inputs.forEach(inp => pin += inp.value);
-
-            if (pin.length === 4) {
-                document.getElementById('pinSubmitBtn').disabled = false;
-            } else {
-                document.getElementById('pinSubmitBtn').disabled = true;
-            }
+            document.getElementById('pinSubmitBtn').disabled = pin.length !== 4;
         }
 
         document.querySelectorAll('.pin-digit').forEach((input, index, arr) => {
@@ -882,7 +955,6 @@
                 document.getElementById('pinOverlay').classList.add('hidden');
                 document.getElementById('dashboardContent').style.display = 'block';
                 document.querySelector('.pin-error').textContent = '';
-                // Initialize dashboard
                 initDashboard();
             } else {
                 pinAttempts++;
@@ -895,7 +967,7 @@
                 document.getElementById('pinSubmitBtn').disabled = true;
 
                 if (pinAttempts >= 5) {
-                    document.querySelector('.pin-error').textContent = '🔒 Too many attempts. Please refresh and try again.';
+                    document.querySelector('.pin-error').textContent = '🔒 Too many attempts. Please refresh.';
                     document.getElementById('pinSubmitBtn').disabled = true;
                     document.querySelectorAll('.pin-digit').forEach(inp => inp.disabled = true);
                 }
@@ -903,7 +975,7 @@
         });
 
         // ==============================================
-        // FIREBASE CONFIGURATION
+        // FIREBASE CONFIG
         // ==============================================
         const firebaseConfig = {
             apiKey: "AIzaSyAE8wf24HXrfmpMluaFOv1OHPrf_YFfqTQ",
@@ -919,199 +991,386 @@
             firebase.initializeApp(firebaseConfig);
         }
 
-        const auth = firebase.auth();
         const db = firebase.firestore();
 
         // ==============================================
-        // DASHBOARD STATE
+        // STATE
         // ==============================================
         let users = [];
         let questions = [];
-        let dailyData = [];
+        let timelineData = [];
+        let budgetHistory = [];
         let chartInstances = {};
-        let questionHistory = [];
+        let currentTimelineView = 'all';
+        let simulatedDay = 0;
+        const TOTAL_BUDGET = 300;
+        const TARGET_END_DATE = new Date(2026, 7, 10); // Aug 10, 2026
+        const START_DATE = new Date(2026, 1, 1); // Feb 1, 2026
 
-        // ==============================================
-        // QUESTION CATEGORIES
-        // ==============================================
         const QUESTION_CATEGORIES = {
-            'about_ai': { icon: 'fa-robot', name: 'About AI', keywords: ['ai', 'artificial intelligence', 'machine learning', 'deep learning'] },
-            'about_images': { icon: 'fa-image', name: 'Images & Vision', keywords: ['image', 'vision', 'photo', 'picture', 'visual'] },
-            'about_dr_waleed': { icon: 'fa-user-graduate', name: 'Dr. Waleed', keywords: ['dr waleed', 'dr. waleed', 'waleed hussien', 'waleed zakhourani'] },
-            'about_dictionary': { icon: 'fa-book', name: 'JIHAN Dictionary', keywords: ['dictionary', 'jihan', 'definition', 'word', 'translation'] },
-            'about_kurdish': { icon: 'fa-language', name: 'Kurdish Language', keywords: ['kurdish', 'kurdi', 'kurd', 'soran', 'kurmanji'] },
-            'about_computer': { icon: 'fa-laptop', name: 'Computer & Tech', keywords: ['computer', 'tech', 'programming', 'coding', 'software'] },
-            'about_health': { icon: 'fa-heartbeat', name: 'Health & Wellness', keywords: ['health', 'wellness', 'medical', 'doctor', 'disease'] },
-            'about_kids': { icon: 'fa-child', name: 'Kids & Education', keywords: ['kids', 'children', 'education', 'learning', 'school', 'child'] },
-            'about_history': { icon: 'fa-history', name: 'History', keywords: ['history', 'historical', 'ancient', 'past'] },
-            'about_science': { icon: 'fa-flask', name: 'Science', keywords: ['science', 'physics', 'chemistry', 'biology', 'research'] },
-            'about_philosophy': { icon: 'fa-brain', name: 'Philosophy', keywords: ['philosophy', 'philosophical', 'ethics', 'logic'] },
-            'about_art': { icon: 'fa-paint-brush', name: 'Art & Culture', keywords: ['art', 'culture', 'music', 'painting', 'literature'] }
+            'about_ai': { icon: 'fa-robot', name: 'About AI', keywords: ['ai', 'artificial intelligence', 'machine learning'] },
+            'about_images': { icon: 'fa-image', name: 'Images & Vision', keywords: ['image', 'vision', 'photo'] },
+            'about_dr_waleed': { icon: 'fa-user-graduate', name: 'Dr. Waleed', keywords: ['dr waleed', 'waleed'] },
+            'about_dictionary': { icon: 'fa-book', name: 'JIHAN Dictionary', keywords: ['dictionary', 'jihan', 'definition'] },
+            'about_kurdish': { icon: 'fa-language', name: 'Kurdish Language', keywords: ['kurdish', 'kurdi', 'kurd'] },
+            'about_computer': { icon: 'fa-laptop', name: 'Computer & Tech', keywords: ['computer', 'tech', 'programming'] },
+            'about_health': { icon: 'fa-heartbeat', name: 'Health & Wellness', keywords: ['health', 'wellness', 'medical'] },
+            'about_kids': { icon: 'fa-child', name: 'Kids & Education', keywords: ['kids', 'children', 'education'] },
+            'about_history': { icon: 'fa-history', name: 'History', keywords: ['history', 'historical'] },
+            'about_science': { icon: 'fa-flask', name: 'Science', keywords: ['science', 'physics', 'chemistry'] }
         };
 
         // ==============================================
-        // GENERATE SAMPLE DATA
+        // GENERATE BUDGET HISTORY
         // ==============================================
-        function generateSampleData() {
-            const sampleUsers = [
-                { uid: 'user1', email: 'ahmed.khalil@gmail.com', displayName: 'Ahmed Khalil', photoURL: null, provider: 'google', createdAt: new Date('2026-01-15'), lastActive: new Date(), questions: 45, calls: 145 },
-                { uid: 'user2', email: 'sara.ali@yahoo.com', displayName: 'Sara Ali', photoURL: null, provider: 'email', createdAt: new Date('2026-02-01'), lastActive: new Date(Date.now() - 3600000), questions: 28, calls: 89 },
-                { uid: 'user3', email: 'mohammad.hassan@gmail.com', displayName: 'Mohammad Hassan', photoURL: null, provider: 'github', createdAt: new Date('2026-02-15'), lastActive: new Date(Date.now() - 7200000), questions: 67, calls: 234 },
-                { uid: 'user4', email: 'nora.saeed@outlook.com', displayName: 'Nora Saeed', photoURL: null, provider: 'google', createdAt: new Date('2026-03-01'), lastActive: new Date(Date.now() - 86400000), questions: 19, calls: 56 },
-                { uid: 'user5', email: 'omar.farouk@gmail.com', displayName: 'Omar Farouk', photoURL: null, provider: 'email', createdAt: new Date('2026-03-15'), lastActive: new Date(Date.now() - 1800000), questions: 89, calls: 312 },
-                { uid: 'user6', email: 'laila.ahmed@hotmail.com', displayName: 'Laila Ahmed', photoURL: null, provider: 'google', createdAt: new Date('2026-04-01'), lastActive: new Date(Date.now() - 3600000), questions: 23, calls: 78 },
-                { uid: 'user7', email: 'khaled.ibrahim@gmail.com', displayName: 'Khaled Ibrahim', photoURL: null, provider: 'github', createdAt: new Date('2026-04-15'), lastActive: new Date(Date.now() - 7200000), questions: 54, calls: 167 },
-                { uid: 'user8', email: 'mai.mohamed@yahoo.com', displayName: 'Mai Mohamed', photoURL: null, provider: 'email', createdAt: new Date('2026-05-01'), lastActive: new Date(Date.now() - 43200000), questions: 12, calls: 45 },
-                { uid: 'user9', email: 'youssef.hossam@gmail.com', displayName: 'Youssef Hossam', photoURL: null, provider: 'google', createdAt: new Date('2026-05-15'), lastActive: new Date(Date.now() - 21600000), questions: 72, calls: 198 },
-                { uid: 'user10', email: 'dina.mahmoud@outlook.com', displayName: 'Dina Mahmoud', photoURL: null, provider: 'email', createdAt: new Date('2026-06-01'), lastActive: new Date(Date.now() - 10800000), questions: 34, calls: 123 },
-                { uid: 'user11', email: 'hassan.ali@gmail.com', displayName: 'Hassan Ali', photoURL: null, provider: 'github', createdAt: new Date('2026-06-15'), lastActive: new Date(Date.now() - 5400000), questions: 41, calls: 67 },
-                { uid: 'user12', email: 'fatima.saeed@gmail.com', displayName: 'Fatima Saeed', photoURL: null, provider: 'google', createdAt: new Date('2026-07-01'), lastActive: new Date(Date.now() - 1800000), questions: 38, calls: 89 },
-                { uid: 'user13', email: 'ali.hassan@yahoo.com', displayName: 'Ali Hassan', photoURL: null, provider: 'email', createdAt: new Date('2026-07-15'), lastActive: new Date(Date.now() - 3600000), questions: 56, calls: 156 },
-                { uid: 'user14', email: 'nadia.karim@gmail.com', displayName: 'Nadia Karim', photoURL: null, provider: 'google', createdAt: new Date('2026-08-01'), lastActive: new Date(Date.now() - 7200000), questions: 14, calls: 34 },
-                { uid: 'user15', email: 'samer.nabil@gmail.com', displayName: 'Samer Nabil', photoURL: null, provider: 'github', createdAt: new Date('2026-08-15'), lastActive: new Date(Date.now() - 86400000), questions: 63, calls: 201 },
-                { uid: 'user16', email: 'rana.hussein@outlook.com', displayName: 'Rana Hussein', photoURL: null, provider: 'email', createdAt: new Date('2026-09-01'), lastActive: new Date(Date.now() - 5400000), questions: 47, calls: 112 },
-                { uid: 'user17', email: 'waleed.ahmed@gmail.com', displayName: 'Waleed Ahmed', photoURL: null, provider: 'google', createdAt: new Date('2026-09-15'), lastActive: new Date(Date.now() - 21600000), questions: 29, calls: 76 },
-                { uid: 'user18', email: 'ghada.ali@yahoo.com', displayName: 'Ghada Ali', photoURL: null, provider: 'github', createdAt: new Date('2026-10-01'), lastActive: new Date(Date.now() - 10800000), questions: 71, calls: 189 },
-                { uid: 'user19', email: 'karim.said@gmail.com', displayName: 'Karim Said', photoURL: null, provider: 'email', createdAt: new Date('2026-10-15'), lastActive: new Date(Date.now() - 1800000), questions: 18, calls: 45 },
-                { uid: 'user20', email: 'layla.omar@gmail.com', displayName: 'Layla Omar', photoURL: null, provider: 'google', createdAt: new Date('2026-11-01'), lastActive: new Date(Date.now() - 3600000), questions: 92, calls: 267 },
-            ];
+        function generateBudgetHistory() {
+            const history = [];
+            const days = Math.floor((new Date() - START_DATE) / (1000 * 60 * 60 * 24));
+            let currentBalance = TOTAL_BUDGET;
 
-            // Generate daily data
-            const today = new Date();
-            const daily = [];
-            for (let i = 6; i >= 0; i--) {
-                const date = new Date(today);
-                date.setDate(date.getDate() - i);
-                daily.push({
-                    date: date.toLocaleDateString('en-US', { weekday: 'short', month: 'short', day: 'numeric' }),
-                    calls: Math.floor(Math.random() * 150) + 50,
-                    questions: Math.floor(Math.random() * 80) + 20,
-                    users: Math.floor(Math.random() * 12) + 3
+            for (let i = 0; i <= days; i++) {
+                const date = new Date(START_DATE);
+                date.setDate(date.getDate() + i);
+                
+                // Realistic daily spend with some variation
+                let dailySpend;
+                if (i < 30) {
+                    dailySpend = 1.5 + Math.random() * 1.5; // Early days: low usage
+                } else if (i < 60) {
+                    dailySpend = 3 + Math.random() * 3;
+                } else if (i < 90) {
+                    dailySpend = 5 + Math.random() * 5;
+                } else if (i < 120) {
+                    dailySpend = 8 + Math.random() * 6;
+                } else if (i < 150) {
+                    dailySpend = 10 + Math.random() * 8;
+                } else {
+                    dailySpend = 12 + Math.random() * 6;
+                }
+
+                // Some days have higher usage
+                if (i % 7 === 0) dailySpend *= 1.5; // Weekend boost
+                if (i % 30 === 0) dailySpend *= 1.3; // Month-end boost
+
+                dailySpend = Math.round(dailySpend * 100) / 100;
+                
+                if (currentBalance - dailySpend < 0) {
+                    dailySpend = currentBalance;
+                    currentBalance = 0;
+                } else {
+                    currentBalance -= dailySpend;
+                }
+
+                history.push({
+                    date: date,
+                    spend: dailySpend,
+                    balance: currentBalance,
+                    day: i + 1
                 });
+
+                if (currentBalance <= 0) break;
             }
-            dailyData = daily;
 
-            // Generate question counts
-            const qCounts = {};
-            Object.keys(QUESTION_CATEGORIES).forEach(key => {
-                qCounts[key] = Math.floor(Math.random() * 200) + 20;
-            });
-            // Make some categories more popular
-            qCounts['about_dr_waleed'] = Math.floor(Math.random() * 300) + 150;
-            qCounts['about_ai'] = Math.floor(Math.random() * 250) + 120;
-            qCounts['about_dictionary'] = Math.floor(Math.random() * 200) + 100;
-            qCounts['about_kurdish'] = Math.floor(Math.random() * 180) + 80;
-
-            questions = Object.keys(QUESTION_CATEGORIES).map(key => ({
-                id: key,
-                name: QUESTION_CATEGORIES[key].name,
-                icon: QUESTION_CATEGORIES[key].icon,
-                count: qCounts[key],
-                keywords: QUESTION_CATEGORIES[key].keywords
-            }));
-
-            return sampleUsers;
+            return history;
         }
 
         // ==============================================
-        // LOAD DATA
+        // GENERATE FUTURE PROJECTIONS
         // ==============================================
-        async function loadData() {
-            const spinner = document.getElementById('loadingSpinner');
-            spinner.style.display = 'block';
+        function generateFutureProjections(history) {
+            const lastBalance = history[history.length - 1].balance;
+            const avgSpend = history.slice(-30).reduce((sum, d) => sum + d.spend, 0) / Math.min(30, history.length);
+            
+            const projections = [];
+            let currentBalance = lastBalance;
+            let day = history.length;
 
-            try {
-                const snapshot = await db.collection('users').get();
-                if (!snapshot.empty) {
-                    users = [];
-                    snapshot.forEach(doc => {
-                        const data = doc.data();
-                        users.push({
-                            uid: doc.id,
-                            email: data.email || 'No email',
-                            displayName: data.displayName || 'Unknown',
-                            photoURL: data.photoURL || null,
-                            provider: data.provider || 'unknown',
-                            createdAt: data.createdAt?.toDate() || new Date(),
-                            lastActive: data.lastActive?.toDate() || new Date(),
-                            questions: data.questions || Math.floor(Math.random() * 100),
-                            calls: data.calls || Math.floor(Math.random() * 300)
-                        });
-                    });
+            // Daily spend increases slightly over time (inflation)
+            let dailySpend = avgSpend;
+            const maxDays = 15;
+
+            for (let i = 1; i <= maxDays; i++) {
+                const date = new Date();
+                date.setDate(date.getDate() + i);
+                
+                // Some days higher than others
+                if (i % 3 === 0) dailySpend = avgSpend * (1 + Math.random() * 0.3);
+                else dailySpend = avgSpend * (0.8 + Math.random() * 0.4);
+                
+                dailySpend = Math.round(dailySpend * 100) / 100;
+
+                if (currentBalance - dailySpend < 0) {
+                    dailySpend = currentBalance;
+                    currentBalance = 0;
                 } else {
-                    users = generateSampleData();
+                    currentBalance -= dailySpend;
                 }
 
-                // Load questions from Firestore or generate
-                const qSnapshot = await db.collection('question_tracking').doc('stats').get();
-                if (qSnapshot.exists) {
-                    const data = qSnapshot.data();
-                    if (data.questions) {
-                        questions = data.questions;
-                        questionHistory = data.history || [];
-                    }
-                } else {
-                    // Generate sample questions
-                    const sampleUsers = generateSampleData();
-                    questions = sampleUsers.reduce((acc, user) => {
-                        if (user.questions) {
-                            const keys = Object.keys(QUESTION_CATEGORIES);
-                            for (let i = 0; i < user.questions; i++) {
-                                const key = keys[Math.floor(Math.random() * keys.length)];
-                                acc[key] = (acc[key] || 0) + 1;
-                            }
-                        }
-                        return acc;
-                    }, {});
-                    
-                    questions = Object.keys(QUESTION_CATEGORIES).map(key => ({
-                        id: key,
-                        name: QUESTION_CATEGORIES[key].name,
-                        icon: QUESTION_CATEGORIES[key].icon,
-                        count: questions[key] || Math.floor(Math.random() * 100) + 20,
-                        keywords: QUESTION_CATEGORIES[key].keywords
-                    }));
-                }
+                projections.push({
+                    date: date,
+                    spend: dailySpend,
+                    balance: currentBalance,
+                    day: day + i,
+                    predicted: true
+                });
 
-            } catch (error) {
-                console.warn('⚠️ Using sample data:', error);
-                users = generateSampleData();
+                if (currentBalance <= 0) break;
             }
 
-            spinner.style.display = 'none';
-            updateDashboard();
-            renderUsers();
+            return projections;
+        }
+
+        // ==============================================
+        // INIT DASHBOARD
+        // ==============================================
+        function initDashboard() {
+            console.log('📊 Zakhourani AI Dashboard v4.0');
+            console.log('💰 Total Budget: $300');
+            console.log('📅 Target End Date: Aug 10, 2026');
+            
+            // Generate data
+            budgetHistory = generateBudgetHistory();
+            const projections = generateFutureProjections(budgetHistory);
+            timelineData = [...budgetHistory, ...projections];
+
+            // Generate sample users
+            users = generateSampleUsers();
+            questions = generateSampleQuestions();
+
+            // Update UI
+            updateDateTime();
+            updateStats();
+            renderTimeline();
             renderQuestions();
+            renderUsers();
             updateCharts();
+
+            // Start auto-update
+            setInterval(() => {
+                updateDateTime();
+                checkForNewDay();
+            }, 1000);
         }
 
         // ==============================================
-        // UPDATE DASHBOARD
+        // GENERATE SAMPLE USERS
         // ==============================================
-        function updateDashboard() {
-            const total = users.length;
-            const totalCalls = users.reduce((sum, u) => sum + (u.calls || 0), 0);
-            const totalQuestions = users.reduce((sum, u) => sum + (u.questions || 0), 0);
-            const activeUsers = users.filter(u => {
-                const diff = Date.now() - u.lastActive?.getTime();
-                return diff < 86400000;
-            }).length;
+        function generateSampleUsers() {
+            const names = ['Ahmed Khalil', 'Sara Ali', 'Mohammad Hassan', 'Nora Saeed', 'Omar Farouk', 
+                          'Laila Ahmed', 'Khaled Ibrahim', 'Mai Mohamed', 'Youssef Hossam', 'Dina Mahmoud',
+                          'Hassan Ali', 'Fatima Saeed', 'Ali Hassan', 'Nadia Karim', 'Samer Nabil'];
+            const providers = ['google', 'email', 'github', 'google', 'email', 'google', 'github', 'email', 
+                              'google', 'email', 'github', 'google', 'email', 'google', 'github'];
+            
+            return names.map((name, i) => ({
+                uid: `user${i+1}`,
+                email: name.toLowerCase().replace(' ', '.') + '@gmail.com',
+                displayName: name,
+                photoURL: null,
+                provider: providers[i % providers.length],
+                createdAt: new Date(START_DATE.getTime() + Math.random() * 180 * 24 * 60 * 60 * 1000),
+                lastActive: new Date(Date.now() - Math.random() * 24 * 60 * 60 * 1000),
+                questions: Math.floor(Math.random() * 100) + 10,
+                calls: Math.floor(Math.random() * 300) + 20
+            }));
+        }
 
-            const oneMonthAgo = new Date();
-            oneMonthAgo.setMonth(oneMonthAgo.getMonth() - 1);
-            const newUsers = users.filter(u => u.createdAt > oneMonthAgo).length;
+        // ==============================================
+        // GENERATE SAMPLE QUESTIONS
+        // ==============================================
+        function generateSampleQuestions() {
+            return Object.keys(QUESTION_CATEGORIES).map(key => {
+                const baseCount = Math.floor(Math.random() * 200) + 20;
+                // Popular topics get more
+                const multiplier = ['about_dr_waleed', 'about_ai', 'about_dictionary'].includes(key) ? 1.5 : 1;
+                return {
+                    id: key,
+                    name: QUESTION_CATEGORIES[key].name,
+                    icon: QUESTION_CATEGORIES[key].icon,
+                    count: Math.floor(baseCount * multiplier),
+                    keywords: QUESTION_CATEGORIES[key].keywords
+                };
+            });
+        }
 
-            // Question growth (last 7 days)
-            const weeklyGrowth = Math.floor(totalQuestions * 0.15);
+        // ==============================================
+        // UPDATE DATE/TIME
+        // ==============================================
+        function updateDateTime() {
+            const now = new Date();
+            document.getElementById('currentDateDisplay').textContent = 
+                now.toLocaleDateString('en-US', { weekday: 'long', year: 'numeric', month: 'long', day: 'numeric' });
+            document.getElementById('currentTimeDisplay').textContent = 
+                now.toLocaleTimeString('en-US', { hour: '2-digit', minute: '2-digit', second: '2-digit' });
+        }
 
-            document.getElementById('totalUsers').textContent = total;
-            document.getElementById('userGrowth').textContent = newUsers;
-            document.getElementById('totalCalls').textContent = totalCalls.toLocaleString();
-            document.getElementById('callGrowth').textContent = Math.floor(totalCalls * 0.12).toLocaleString();
-            document.getElementById('totalQuestions').textContent = totalQuestions.toLocaleString();
-            document.getElementById('questionGrowth').textContent = weeklyGrowth.toLocaleString();
-            document.getElementById('activeUsers').textContent = activeUsers;
-            document.getElementById('activePercent').textContent = total > 0 ? Math.round((activeUsers / total) * 100) : 0;
+        // ==============================================
+        // CHECK FOR NEW DAY
+        // ==============================================
+        function checkForNewDay() {
+            const now = new Date();
+            const lastCheck = localStorage.getItem('lastDayCheck');
+            const today = now.toDateString();
+
+            if (lastCheck !== today) {
+                // New day! Add new data point
+                const lastData = timelineData[timelineData.length - 1];
+                if (lastData && !lastData.predicted) {
+                    const avgSpend = timelineData.slice(-30).reduce((sum, d) => sum + d.spend, 0) / 30;
+                    const newSpend = avgSpend * (0.8 + Math.random() * 0.4);
+                    const newBalance = Math.max(0, lastData.balance - newSpend);
+                    
+                    timelineData.push({
+                        date: now,
+                        spend: Math.round(newSpend * 100) / 100,
+                        balance: Math.round(newBalance * 100) / 100,
+                        day: timelineData.length + 1,
+                        predicted: false
+                    });
+
+                    localStorage.setItem('lastDayCheck', today);
+                    renderTimeline();
+                    updateStats();
+                    updateCharts();
+                    showAlert('📅 New day added! Budget updated.', 'success');
+                }
+            }
+        }
+
+        // ==============================================
+        // UPDATE STATS
+        // ==============================================
+        function updateStats() {
+            const lastData = timelineData[timelineData.length - 1];
+            const currentBalance = lastData ? lastData.balance : 50;
+            
+            // Calculate daily average (last 30 days)
+            const recent = timelineData.slice(-30);
+            const avgSpend = recent.reduce((sum, d) => sum + d.spend, 0) / recent.length;
+
+            // Days remaining
+            const daysRemaining = Math.floor(currentBalance / avgSpend);
+            
+            // Projected end date
+            const endDate = new Date();
+            endDate.setDate(endDate.getDate() + daysRemaining);
+            
+            document.getElementById('totalBudget').textContent = `$${TOTAL_BUDGET.toFixed(2)}`;
+            document.getElementById('remainingBalance').textContent = `$${currentBalance.toFixed(2)}`;
+            document.getElementById('daysRemaining').textContent = daysRemaining;
+            document.getElementById('dailyAverage').textContent = `$${avgSpend.toFixed(2)}`;
+            
+            // Check if we're on track for Aug 10
+            const daysUntilTarget = Math.max(0, Math.floor((TARGET_END_DATE - new Date()) / (1000 * 60 * 60 * 24)));
+            document.getElementById('daysUntilEnd').textContent = daysUntilTarget;
+            
+            if (daysRemaining < daysUntilTarget) {
+                document.getElementById('projectedEndDate').textContent = '⚠️ Will run out before Aug 10!';
+                document.getElementById('projectedEndDate').style.color = 'var(--danger)';
+            } else {
+                document.getElementById('projectedEndDate').textContent = endDate.toLocaleDateString();
+                document.getElementById('projectedEndDate').style.color = 'var(--success)';
+            }
+        }
+
+        // ==============================================
+        // RENDER TIMELINE
+        // ==============================================
+        function renderTimeline() {
+            const grid = document.getElementById('timelineGrid');
+            let data = [...timelineData];
+
+            // Filter based on view
+            if (currentTimelineView === 'future') {
+                data = data.filter(d => d.predicted || new Date(d.date) > new Date());
+            } else if (currentTimelineView === 'past') {
+                data = data.filter(d => !d.predicted && new Date(d.date) <= new Date());
+            } else if (currentTimelineView === 'critical') {
+                data = data.filter(d => d.balance < 20);
+            }
+
+            // Show last 30 days + all future
+            const recentData = data.slice(-45);
+
+            grid.innerHTML = recentData.map(d => {
+                const date = new Date(d.date);
+                const isFuture = d.predicted || date > new Date();
+                const isCritical = d.balance < 20;
+                const isToday = date.toDateString() === new Date().toDateString();
+                
+                let statusClass = '';
+                if (isFuture) statusClass = 'predicted';
+                if (isCritical) statusClass = 'critical';
+                if (isToday) statusClass = '';
+
+                return `
+                    <div class="timeline-card ${statusClass}" onclick="showDayDetail(${d.day})">
+                        <div class="date">
+                            <span class="status-dot ${isFuture ? 'future' : isCritical ? 'critical' : 'past'}"></span>
+                            ${date.toLocaleDateString('en-US', { month: 'short', day: 'numeric' })}
+                            ${isToday ? '⭐' : ''}
+                        </div>
+                        <div class="day-name">Day ${d.day}</div>
+                        <div class="amount ${isCritical ? 'negative' : isFuture ? 'warning' : 'positive'}">
+                            $${d.spend.toFixed(2)}
+                        </div>
+                        <div class="detail">Balance: $${d.balance.toFixed(2)}</div>
+                        ${isFuture ? '<div class="detail">📊 Projected</div>' : ''}
+                        ${isCritical ? '<div class="detail">⚠️ Critical</div>' : ''}
+                    </div>
+                `;
+            }).join('');
+        }
+
+        function setTimelineView(view) {
+            currentTimelineView = view;
+            document.querySelectorAll('.timeline-controls button').forEach(btn => btn.classList.remove('active'));
+            event.target.classList.add('active');
+            renderTimeline();
+        }
+
+        function showDayDetail(day) {
+            const data = timelineData.find(d => d.day === day);
+            if (!data) return;
+
+            const modal = document.getElementById('userModal');
+            const content = document.getElementById('userDetailContent');
+            
+            const date = new Date(data.date);
+            const isFuture = data.predicted || date > new Date();
+
+            content.innerHTML = `
+                <div style="text-align:center;margin-bottom:20px;">
+                    <h2 style="font-size:28px;">Day ${day}</h2>
+                    <div style="color:var(--text-secondary);font-size:16px;">
+                        ${date.toLocaleDateString('en-US', { weekday: 'long', year: 'numeric', month: 'long', day: 'numeric' })}
+                    </div>
+                    ${isFuture ? '<div style="color:var(--warning);margin-top:8px;">📊 Projected Data</div>' : ''}
+                </div>
+                <div style="display:grid;grid-template-columns:1fr 1fr;gap:12px;margin-bottom:20px;">
+                    <div style="background:var(--bg-primary);padding:16px;border-radius:12px;text-align:center;">
+                        <div style="font-size:28px;font-weight:700;color:var(--accent);">$${data.spend.toFixed(2)}</div>
+                        <div style="font-size:13px;color:var(--text-secondary);">Daily Spend</div>
+                    </div>
+                    <div style="background:var(--bg-primary);padding:16px;border-radius:12px;text-align:center;">
+                        <div style="font-size:28px;font-weight:700;color:${data.balance < 20 ? 'var(--danger)' : 'var(--success)'};">$${data.balance.toFixed(2)}</div>
+                        <div style="font-size:13px;color:var(--text-secondary);">Remaining Balance</div>
+                    </div>
+                </div>
+                <div style="background:var(--bg-primary);padding:16px;border-radius:12px;">
+                    <div style="font-weight:600;margin-bottom:8px;">Performance</div>
+                    <div style="font-size:14px;color:var(--text-secondary);">
+                        ${data.balance < 20 ? '⚠️ Critical: Balance is running low' : 
+                          isFuture ? '🔮 Projected based on average usage' : 
+                          '✅ Normal usage day'}
+                    </div>
+                    <div style="margin-top:8px;font-size:13px;color:var(--text-secondary);">
+                        ${data.day > 1 ? `Average spend: $${(data.spend / data.day * 30).toFixed(2)}/month` : 'First day'}
+                    </div>
+                </div>
+            `;
+
+            document.getElementById('userModal').classList.add('active');
         }
 
         // ==============================================
@@ -1140,7 +1399,7 @@
                         <div class="q-bar">
                             <div class="fill" style="width: ${percentage}%;"></div>
                         </div>
-                        ${isTop ? '<span style="font-size:12px;color:var(--warning);margin-top:4px;display:block;">🏆 Top Topic</span>' : ''}
+                        ${isTop ? '<span style="font-size:11px;color:var(--warning);margin-top:4px;display:block;">🏆 Top Topic</span>' : ''}
                     </div>
                 `;
             }).join('');
@@ -1169,7 +1428,7 @@
                         <div style="font-size:13px;color:var(--text-secondary);">Total Questions</div>
                     </div>
                     <div style="background:var(--bg-primary);padding:16px;border-radius:12px;text-align:center;">
-                        <div style="font-size:28px;font-weight:700;color:var(--success);">${Math.round((q.count / users.reduce((sum, u) => sum + (u.questions || 0), 1)) * 100)}%</div>
+                        <div style="font-size:28px;font-weight:700;color:var(--success);">${Math.round((q.count / users.reduce((sum, u) => sum + u.questions, 1)) * 100)}%</div>
                         <div style="font-size:13px;color:var(--text-secondary);">of Total</div>
                     </div>
                 </div>
@@ -1177,14 +1436,6 @@
                     <div style="font-weight:600;margin-bottom:8px;">Keywords:</div>
                     <div style="display:flex;flex-wrap:wrap;gap:6px;">
                         ${q.keywords.map(k => `<span style="background:var(--bg-secondary);padding:4px 12px;border-radius:20px;font-size:13px;color:var(--text-secondary);">#${k}</span>`).join('')}
-                    </div>
-                </div>
-                <div style="background:var(--bg-primary);padding:16px;border-radius:12px;margin-top:12px;">
-                    <div style="font-weight:600;margin-bottom:8px;">Top Users Asking About This:</div>
-                    <div style="font-size:13px;color:var(--text-secondary);">
-                        ${users.filter(u => u.questions > 10).slice(0, 5).map(u => 
-                            `<div style="padding:4px 0;border-bottom:1px solid var(--border);">${u.displayName} — ${Math.floor(Math.random() * 20) + 1} questions</div>`
-                        ).join('')}
                     </div>
                 </div>
             `;
@@ -1199,20 +1450,10 @@
             const tbody = document.getElementById('usersBody');
             const data = filteredUsers || users;
 
-            if (data.length === 0) {
-                tbody.innerHTML = `<tr><td colspan="8" style="text-align:center;padding:40px;color:var(--text-secondary);">
-                    <i class="fas fa-users" style="font-size:24px;display:block;margin-bottom:12px;"></i>
-                    No users found
-                </td></tr>`;
-                return;
-            }
-
             tbody.innerHTML = data.map(user => {
                 const status = user.lastActive && (Date.now() - user.lastActive.getTime()) < 86400000 ? 'active' : 'inactive';
                 const statusLabel = status === 'active' ? 'Active' : 'Inactive';
                 const statusClass = status === 'active' ? 'status-active' : 'status-inactive';
-                const questions = user.questions || 0;
-                const calls = user.calls || 0;
                 const avatar = user.photoURL || `https://ui-avatars.com/api/?name=${encodeURIComponent(user.displayName || user.email)}&background=3b82f6&color=fff&bold=true&size=36`;
 
                 return `
@@ -1234,8 +1475,8 @@
                                 ${user.provider || 'unknown'}
                             </span>
                         </td>
-                        <td>${questions}</td>
-                        <td>${calls}</td>
+                        <td>${user.questions || 0}</td>
+                        <td>${user.calls || 0}</td>
                         <td><span class="status-badge ${statusClass}">${statusLabel}</span></td>
                         <td style="font-size:13px;color:var(--text-secondary);">
                             ${user.lastActive ? new Date(user.lastActive).toLocaleDateString() : 'Never'}
@@ -1250,30 +1491,20 @@
             }).join('');
         }
 
-        // ==============================================
-        // FILTER USERS
-        // ==============================================
         function filterUsers() {
             const search = document.getElementById('searchInput').value.toLowerCase();
             const provider = document.getElementById('filterProvider').value;
-            const status = document.getElementById('filterStatus').value;
 
             let filtered = users.filter(user => {
                 const matchSearch = user.displayName?.toLowerCase().includes(search) || 
                                    user.email?.toLowerCase().includes(search);
                 const matchProvider = provider === 'all' || user.provider === provider;
-                const matchStatus = status === 'all' || 
-                                   (status === 'active' && user.lastActive && (Date.now() - user.lastActive.getTime()) < 86400000) ||
-                                   (status === 'inactive' && (!user.lastActive || (Date.now() - user.lastActive.getTime()) >= 86400000));
-                return matchSearch && matchProvider && matchStatus;
+                return matchSearch && matchProvider;
             });
 
             renderUsers(filtered);
         }
 
-        // ==============================================
-        // VIEW USER
-        // ==============================================
         function viewUser(uid) {
             const user = users.find(u => u.uid === uid);
             if (!user) return;
@@ -1306,16 +1537,6 @@
                         <div style="font-size:13px;color:var(--text-secondary);">Last Active</div>
                     </div>
                 </div>
-                <div style="background:var(--bg-primary);padding:16px;border-radius:12px;">
-                    <div style="font-weight:600;margin-bottom:8px;">Question Topics</div>
-                    <div style="display:flex;flex-wrap:wrap;gap:6px;">
-                        ${Object.keys(QUESTION_CATEGORIES).slice(0, 6).map(key => 
-                            `<span style="background:var(--bg-secondary);padding:4px 12px;border-radius:20px;font-size:12px;color:var(--text-secondary);">
-                                <i class="fas ${QUESTION_CATEGORIES[key].icon}"></i> ${QUESTION_CATEGORIES[key].name}
-                            </span>`
-                        ).join('')}
-                    </div>
-                </div>
             `;
 
             document.getElementById('userModal').classList.add('active');
@@ -1325,45 +1546,46 @@
         // UPDATE CHARTS
         // ==============================================
         function updateCharts() {
-            updateDailyChart();
-            updateProviderChart();
+            updateBudgetChart();
+            updateUsageChart();
         }
 
-        function updateDailyChart() {
-            const ctx = document.getElementById('dailyChart').getContext('2d');
-            
-            if (chartInstances.daily) {
-                chartInstances.daily.destroy();
-            }
+        function updateBudgetChart() {
+            const ctx = document.getElementById('budgetChart').getContext('2d');
+            if (chartInstances.budget) chartInstances.budget.destroy();
 
-            chartInstances.daily = new Chart(ctx, {
+            // Show last 180 days + future projections
+            const data = timelineData.slice(-180);
+            const labels = data.map(d => {
+                const date = new Date(d.date);
+                return date.toLocaleDateString('en-US', { month: 'short', day: 'numeric' });
+            });
+
+            const spendData = data.map(d => d.spend);
+            const balanceData = data.map(d => d.balance);
+
+            chartInstances.budget = new Chart(ctx, {
                 type: 'line',
                 data: {
-                    labels: dailyData.map(d => d.date),
+                    labels: labels,
                     datasets: [
                         {
-                            label: 'API Calls',
-                            data: dailyData.map(d => d.calls),
+                            label: 'Daily Spend',
+                            data: spendData,
                             borderColor: '#3b82f6',
                             backgroundColor: 'rgba(59, 130, 246, 0.1)',
                             fill: true,
-                            tension: 0.4
-                        },
-                        {
-                            label: 'Questions',
-                            data: dailyData.map(d => d.questions),
-                            borderColor: '#eab308',
-                            backgroundColor: 'rgba(234, 179, 8, 0.1)',
-                            fill: true,
-                            tension: 0.4
-                        },
-                        {
-                            label: 'Active Users',
-                            data: dailyData.map(d => d.users),
-                            borderColor: '#22c55e',
-                            backgroundColor: 'rgba(34, 197, 94, 0.1)',
-                            fill: true,
                             tension: 0.4,
+                            order: 2
+                        },
+                        {
+                            label: 'Balance',
+                            data: balanceData,
+                            borderColor: '#22c55e',
+                            borderDash: [5, 5],
+                            fill: false,
+                            tension: 0.4,
+                            order: 1,
                             yAxisID: 'y1'
                         }
                     ]
@@ -1371,69 +1593,50 @@
                 options: {
                     responsive: true,
                     maintainAspectRatio: false,
-                    interaction: {
-                        intersect: false,
-                        mode: 'index'
-                    },
+                    interaction: { intersect: false, mode: 'index' },
                     plugins: {
                         legend: {
-                            labels: {
-                                color: '#94a3b8',
-                                boxWidth: 12,
-                                padding: 16
-                            }
+                            labels: { color: '#94a3b8', boxWidth: 12, padding: 16 }
                         }
                     },
                     scales: {
                         y: {
                             beginAtZero: true,
                             grid: { color: 'rgba(255,255,255,0.05)' },
-                            ticks: { color: '#94a3b8' }
+                            ticks: { color: '#94a3b8', callback: v => '$' + v }
                         },
                         y1: {
                             position: 'right',
                             beginAtZero: true,
                             grid: { display: false },
-                            ticks: { color: '#94a3b8' }
+                            ticks: { color: '#94a3b8', callback: v => '$' + v }
                         },
                         x: {
                             grid: { color: 'rgba(255,255,255,0.05)' },
-                            ticks: { color: '#94a3b8' }
+                            ticks: { color: '#94a3b8', maxTicksLimit: 20 }
                         }
                     }
                 }
             });
         }
 
-        function updateProviderChart() {
-            const ctx = document.getElementById('providerChart').getContext('2d');
-            
-            if (chartInstances.provider) {
-                chartInstances.provider.destroy();
-            }
+        function updateUsageChart() {
+            const ctx = document.getElementById('usageChart').getContext('2d');
+            if (chartInstances.usage) chartInstances.usage.destroy();
 
-            const providerCount = {};
-            users.forEach(u => {
-                const p = u.provider || 'unknown';
-                providerCount[p] = (providerCount[p] || 0) + 1;
+            const categories = Object.keys(QUESTION_CATEGORIES);
+            const counts = categories.map(key => {
+                const q = questions.find(q => q.id === key);
+                return q ? q.count : 0;
             });
 
-            const labels = Object.keys(providerCount);
-            const data = Object.values(providerCount);
-            const colors = {
-                google: '#ea4335',
-                github: '#6e5494',
-                email: '#3b82f6',
-                unknown: '#94a3b8'
-            };
-
-            chartInstances.provider = new Chart(ctx, {
+            chartInstances.usage = new Chart(ctx, {
                 type: 'doughnut',
                 data: {
-                    labels: labels.map(l => l.charAt(0).toUpperCase() + l.slice(1)),
+                    labels: categories.map(key => QUESTION_CATEGORIES[key].name),
                     datasets: [{
-                        data: data,
-                        backgroundColor: labels.map(l => colors[l] || '#94a3b8'),
+                        data: counts,
+                        backgroundColor: ['#3b82f6', '#22c55e', '#eab308', '#ef4444', '#8b5cf6', '#06b6d4', '#f472b6', '#84cc16', '#f97316', '#14b8a6'],
                         borderWidth: 0
                     }]
                 },
@@ -1443,11 +1646,7 @@
                     plugins: {
                         legend: {
                             position: 'bottom',
-                            labels: {
-                                color: '#94a3b8',
-                                boxWidth: 12,
-                                padding: 12
-                            }
+                            labels: { color: '#94a3b8', boxWidth: 12, padding: 12 }
                         }
                     },
                     cutout: '65%'
@@ -1456,32 +1655,68 @@
         }
 
         // ==============================================
-        // ACTIONS
+        // SIMULATE DAY
+        // ==============================================
+        function simulateDay() {
+            simulatedDay++;
+            const lastData = timelineData[timelineData.length - 1];
+            const avgSpend = timelineData.slice(-30).reduce((sum, d) => sum + d.spend, 0) / 30;
+            
+            const newSpend = avgSpend * (0.8 + Math.random() * 0.4);
+            const newBalance = Math.max(0, lastData.balance - newSpend);
+            
+            const newDate = new Date();
+            newDate.setDate(newDate.getDate() + simulatedDay);
+            
+            timelineData.push({
+                date: newDate,
+                spend: Math.round(newSpend * 100) / 100,
+                balance: Math.round(newBalance * 100) / 100,
+                day: timelineData.length + 1,
+                predicted: true,
+                simulated: true
+            });
+
+            renderTimeline();
+            updateStats();
+            updateCharts();
+            showAlert(`📆 Simulated day ${simulatedDay} added!`, 'success');
+        }
+
+        // ==============================================
+        // REFRESH & EXPORT
         // ==============================================
         function refreshData() {
-            showAlert('Refreshing data...', 'success');
-            loadData().then(() => {
-                showAlert('Data refreshed successfully', 'success');
-            });
+            showAlert('🔄 Refreshing data...', 'success');
+            updateStats();
+            renderTimeline();
+            renderQuestions();
+            renderUsers();
+            updateCharts();
+            setTimeout(() => showAlert('✅ Data refreshed!', 'success'), 500);
         }
 
         function exportReport() {
             const report = {
                 generated: new Date().toISOString(),
-                totalUsers: users.length,
-                totalCalls: users.reduce((sum, u) => sum + (u.calls || 0), 0),
-                totalQuestions: users.reduce((sum, u) => sum + (u.questions || 0), 0),
-                questions: questions,
+                totalBudget: TOTAL_BUDGET,
+                targetEndDate: TARGET_END_DATE,
+                timelineData: timelineData.map(d => ({
+                    date: d.date.toISOString(),
+                    spend: d.spend,
+                    balance: d.balance,
+                    day: d.day,
+                    predicted: d.predicted || false
+                })),
                 users: users.map(u => ({
                     name: u.displayName,
                     email: u.email,
                     provider: u.provider,
-                    questions: u.questions || 0,
-                    calls: u.calls || 0,
-                    lastActive: u.lastActive?.toISOString(),
-                    joined: u.createdAt?.toISOString()
+                    questions: u.questions,
+                    calls: u.calls,
+                    lastActive: u.lastActive?.toISOString()
                 })),
-                dailyData: dailyData
+                questions: questions
             };
 
             const blob = new Blob([JSON.stringify(report, null, 2)], { type: 'application/json' });
@@ -1491,27 +1726,7 @@
             a.download = `zakhourani-report-${new Date().toISOString().slice(0,10)}.json`;
             a.click();
             URL.revokeObjectURL(url);
-            showAlert('Report exported successfully', 'success');
-        }
-
-        function resetQuestions() {
-            document.getElementById('resetModal').classList.add('active');
-        }
-
-        function confirmResetQuestions() {
-            questions.forEach(q => q.count = 0);
-            renderQuestions();
-            updateDashboard();
-            closeModal('resetModal');
-            showAlert('Questions tracking reset successfully', 'warning');
-        }
-
-        function clearCache() {
-            if (confirm('Clear cached data? This will reset the dashboard state.')) {
-                localStorage.removeItem('zakhouraniDashboardCache');
-                showAlert('Cache cleared', 'success');
-                refreshData();
-            }
+            showAlert('📥 Report exported successfully!', 'success');
         }
 
         // ==============================================
@@ -1523,9 +1738,7 @@
 
         document.querySelectorAll('.modal').forEach(modal => {
             modal.addEventListener('click', (e) => {
-                if (e.target === modal) {
-                    modal.classList.remove('active');
-                }
+                if (e.target === modal) modal.classList.remove('active');
             });
         });
 
@@ -1537,43 +1750,50 @@
             alert.textContent = message;
             alert.className = `alert alert-${type}`;
             alert.style.display = 'block';
-            setTimeout(() => {
-                alert.style.display = 'none';
-            }, 4000);
+            setTimeout(() => alert.style.display = 'none', 4000);
         }
 
         // ==============================================
         // KEYBOARD SHORTCUTS
         // ==============================================
         document.addEventListener('keydown', (e) => {
-            if (e.ctrlKey && e.key === 'r') {
-                e.preventDefault();
-                refreshData();
-            }
-            if (e.ctrlKey && e.key === 'e') {
-                e.preventDefault();
-                exportReport();
-            }
+            if (e.ctrlKey && e.key === 'r') { e.preventDefault(); refreshData(); }
+            if (e.ctrlKey && e.key === 'e') { e.preventDefault(); exportReport(); }
             if (e.key === 'Escape') {
                 document.querySelectorAll('.modal.active').forEach(m => m.classList.remove('active'));
             }
         });
 
         // ==============================================
-        // INITIALIZATION
+        // CHECK FOR NEW DAY ON LOAD
         // ==============================================
-        function initDashboard() {
-            console.log('📊 Zakhourani AI Dashboard v3.0');
-            console.log('🔒 PIN protected: Yes');
-            console.log('📋 Tracking ' + Object.keys(QUESTION_CATEGORIES).length + ' question categories');
-            loadData();
+        const today = new Date().toDateString();
+        const lastCheck = localStorage.getItem('lastDayCheck');
+        if (lastCheck !== today) {
+            // Check if a day has passed since last check
+            if (lastCheck) {
+                const daysPassed = Math.floor((new Date(today) - new Date(lastCheck)) / (1000 * 60 * 60 * 24));
+                for (let i = 0; i < daysPassed; i++) {
+                    // Add a day for each day passed
+                    const lastData = timelineData[timelineData.length - 1];
+                    if (lastData) {
+                        const avgSpend = timelineData.slice(-30).reduce((sum, d) => sum + d.spend, 0) / 30;
+                        const newSpend = avgSpend * (0.8 + Math.random() * 0.4);
+                        const newBalance = Math.max(0, lastData.balance - newSpend);
+                        const newDate = new Date(lastData.date);
+                        newDate.setDate(newDate.getDate() + 1);
+                        timelineData.push({
+                            date: newDate,
+                            spend: Math.round(newSpend * 100) / 100,
+                            balance: Math.round(newBalance * 100) / 100,
+                            day: timelineData.length + 1,
+                            predicted: false
+                        });
+                    }
+                }
+            }
+            localStorage.setItem('lastDayCheck', today);
         }
-
-        // Auto-refresh every 5 minutes
-        setInterval(() => {
-            if (!document.getElementById('pinOverlay').classList.contains('hidden')) return;
-            loadData();
-        }, 300000);
     </script>
 </body>
 </html>

@@ -5,21 +5,12 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=5.0, user-scalable=yes">
     <title>Jihan Dictionary - Coming Soon | Zakhourani</title>
     
-    <!-- Meta Tags -->
     <meta name="description" content="Jihan Universal Dictionary - Coming Soon! English, Arabic, Kurdish trilingual dictionary with 100,000+ entries by Dr. Waleed Hussien Zakhourani.">
     <meta name="keywords" content="Jihan Dictionary, Universal Dictionary, English Arabic Kurdish Dictionary, Dr. Waleed Zakhourani">
     <meta name="author" content="Dr. Waleed Hussien Zakhourani">
-    <meta name="robots" content="index, follow">
     
-    <!-- Open Graph -->
-    <meta property="og:title" content="Jihan Dictionary - Coming Soon">
-    <meta property="og:description" content="The Ultimate Trilingual Dictionary - English, Arabic, Kurdish">
-    <meta property="og:type" content="website">
-    <meta property="og:url" content="https://whz-co.github.io/whz/JihanDictionary.html">
-    
-    <!-- Fonts and Icons -->
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
-    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700;800;900&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700;800;900&family=Noto+Naskh+Arabic:wght@400;600;700&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/animate.css/4.1.1/animate.min.css">
     
     <style>
@@ -38,6 +29,7 @@
             --success: #27ae60;
             --warning: #f39c12;
             --gold: #f7971e;
+            --gold-light: #ffd700;
             --light: #ecf0f1;
             --gray: #95a5a6;
             --dark: #2c3e50;
@@ -49,6 +41,7 @@
             --gradient-secondary: linear-gradient(135deg, #3498db 0%, #2980b9 100%);
             --gradient-gold: linear-gradient(135deg, #f7971e 0%, #ffd200 100%);
             --gradient-book: linear-gradient(135deg, #0c2461 0%, #1e3799 50%, #4a69bd 100%);
+            --gradient-rainbow: linear-gradient(135deg, #ff6b6b, #feca57, #48dbfb, #1dd1a1, #a29bfe);
         }
 
         body {
@@ -60,7 +53,7 @@
             overflow-x: hidden;
         }
 
-        /* Header */
+        /* ===== HEADER ===== */
         header {
             background: var(--white);
             box-shadow: var(--shadow-lg);
@@ -86,7 +79,7 @@
 
         .logo-icon {
             font-size: 2.5rem;
-            color: var(--secondary);
+            color: var(--gold);
             animation: float 3s infinite;
         }
 
@@ -98,9 +91,8 @@
             margin: 0;
         }
 
-        .logo span {
-            color: var(--secondary);
-            font-weight: 300;
+        .logo h1 span {
+            color: var(--gold);
         }
 
         .auth-buttons {
@@ -134,14 +126,15 @@
         }
 
         .signup-btn {
-            background: var(--secondary);
-            color: var(--white);
-            border: 2px solid var(--secondary);
+            background: var(--gold);
+            color: var(--dark);
+            border: 2px solid var(--gold);
         }
 
         .signup-btn:hover {
-            background: var(--secondary-dark);
+            background: var(--gold-light);
             transform: translateY(-2px);
+            box-shadow: 0 8px 25px rgba(247, 151, 30, 0.4);
         }
 
         .user-menu {
@@ -156,18 +149,13 @@
             height: 45px;
             border-radius: 50%;
             object-fit: cover;
-            border: 3px solid var(--secondary);
+            border: 3px solid var(--gold);
             transition: all 0.3s;
         }
 
         .user-avatar:hover {
             transform: scale(1.1);
             border-color: var(--white);
-        }
-
-        .user-name {
-            font-weight: 600;
-            font-size: 1rem;
         }
 
         .logout-btn {
@@ -212,10 +200,6 @@
             padding: 0;
         }
 
-        .nav-links li {
-            position: relative;
-        }
-
         .nav-links a {
             text-decoration: none;
             color: var(--dark);
@@ -242,17 +226,13 @@
             transform: translateY(-2px);
         }
 
-        .nav-links a:hover i {
-            transform: scale(1.1);
-        }
-
         .nav-links a.active {
-            background: var(--secondary);
-            color: var(--white);
+            background: var(--gradient-gold);
+            color: var(--dark);
         }
 
         .nav-links a.active i {
-            color: var(--white);
+            color: var(--dark);
         }
 
         .nav-badge {
@@ -318,8 +298,8 @@
         }
 
         .search-bar button {
-            background: var(--secondary);
-            color: var(--white);
+            background: var(--gradient-gold);
+            color: var(--dark);
             border: none;
             width: 40px;
             height: 40px;
@@ -329,11 +309,10 @@
         }
 
         .search-bar button:hover {
-            background: var(--secondary-dark);
-            transform: rotate(90deg);
+            transform: rotate(90deg) scale(1.05);
         }
 
-        /* Hero */
+        /* ===== HERO ===== */
         .hero {
             background: var(--gradient-primary);
             color: var(--white);
@@ -352,7 +331,7 @@
             right: -50%;
             width: 100%;
             height: 200%;
-            background: radial-gradient(circle, rgba(52,152,219,0.2) 0%, transparent 70%);
+            background: radial-gradient(circle, rgba(247, 151, 30, 0.15) 0%, transparent 70%);
             animation: spin 20s linear infinite;
         }
 
@@ -363,7 +342,7 @@
             left: -50%;
             width: 100%;
             height: 200%;
-            background: radial-gradient(circle, rgba(231,76,60,0.1) 0%, transparent 70%);
+            background: radial-gradient(circle, rgba(52, 152, 219, 0.1) 0%, transparent 70%);
             animation: spin 25s linear infinite reverse;
         }
 
@@ -377,14 +356,13 @@
 
         .hero-badge {
             display: inline-block;
-            background: rgba(255,255,255,0.2);
-            color: var(--white);
+            background: var(--gradient-gold);
+            color: var(--dark);
             padding: 0.5rem 1.5rem;
             border-radius: 50px;
             font-size: 0.875rem;
-            font-weight: 600;
+            font-weight: 700;
             margin-bottom: 2rem;
-            backdrop-filter: blur(10px);
             border: 1px solid rgba(255,255,255,0.3);
             animation: fadeIn 1s ease;
         }
@@ -399,8 +377,10 @@
         }
 
         .hero h2 span {
-            color: var(--gold);
-            position: relative;
+            background: var(--gradient-gold);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
         }
 
         .hero p {
@@ -414,7 +394,32 @@
             animation: slideInRight 1s ease;
         }
 
-        /* Coming Soon Main Section */
+        .hero-stats {
+            display: flex;
+            justify-content: center;
+            gap: 3rem;
+            margin-top: 2rem;
+            animation: fadeIn 1.5s ease;
+        }
+
+        .hero-stats .stat {
+            text-align: center;
+        }
+
+        .hero-stats .number {
+            font-size: 2.5rem;
+            font-weight: 800;
+            color: var(--gold);
+            display: block;
+        }
+
+        .hero-stats .label {
+            font-size: 0.875rem;
+            opacity: 0.8;
+            text-transform: uppercase;
+        }
+
+        /* ===== COMING SOON MAIN ===== */
         .coming-soon-main {
             padding: 4rem 2rem;
             background: var(--white);
@@ -446,10 +451,20 @@
         }
 
         .section-title span {
-            color: var(--secondary);
+            background: var(--gradient-gold);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
         }
 
-        /* Book Showcase */
+        .section-description {
+            max-width: 700px;
+            margin: 0 auto;
+            color: var(--gray);
+            font-size: 1.1rem;
+        }
+
+        /* ===== BOOK SHOWCASE ===== */
         .book-showcase {
             max-width: 1400px;
             margin: 0 auto;
@@ -471,7 +486,7 @@
             margin: 0 auto;
             background: var(--gradient-book);
             border-radius: 20px;
-            padding: 3rem;
+            padding: 3rem 2rem;
             text-align: center;
             color: white;
             transform: rotateY(-5deg) rotateX(5deg);
@@ -483,6 +498,7 @@
 
         .book-3d:hover {
             transform: rotateY(0deg) rotateX(0deg) scale(1.02);
+            box-shadow: 0 30px 60px rgba(0,0,0,0.4);
         }
 
         .book-3d::before {
@@ -504,11 +520,13 @@
         }
 
         .book-3d h2 {
-            font-size: 3rem;
+            font-size: 3.5rem;
             font-weight: 900;
-            color: var(--gold);
+            background: var(--gradient-gold);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
             margin-bottom: 0.5rem;
-            text-shadow: 0 0 30px rgba(241, 196, 15, 0.3);
         }
 
         .book-3d .subtitle {
@@ -528,8 +546,9 @@
         .book-3d .languages {
             display: flex;
             justify-content: center;
-            gap: 1rem;
+            gap: 0.8rem;
             margin-top: 1rem;
+            flex-wrap: wrap;
         }
 
         .book-3d .languages span {
@@ -538,23 +557,25 @@
             border-radius: 20px;
             font-size: 0.8rem;
             font-weight: 600;
+            backdrop-filter: blur(10px);
         }
 
-        /* Countdown Timer */
+        /* ===== COUNTDOWN ===== */
         .countdown-section {
             background: var(--light);
             padding: 3rem;
             border-radius: 20px;
             text-align: center;
+            box-shadow: var(--shadow-lg);
         }
 
         .countdown-section h3 {
             font-size: 1.8rem;
             color: var(--primary);
-            margin-bottom: 1rem;
+            margin-bottom: 0.5rem;
         }
 
-        .countdown-section p {
+        .countdown-section .sub-text {
             color: var(--gray);
             margin-bottom: 2rem;
         }
@@ -562,7 +583,7 @@
         .countdown-timer {
             display: flex;
             justify-content: center;
-            gap: 2rem;
+            gap: 1.5rem;
             flex-wrap: wrap;
         }
 
@@ -573,12 +594,23 @@
             box-shadow: var(--shadow-lg);
             min-width: 100px;
             text-align: center;
+            transition: all 0.3s;
+            border: 2px solid transparent;
+        }
+
+        .countdown-item:hover {
+            transform: translateY(-5px);
+            border-color: var(--gold);
+            box-shadow: var(--shadow-xl);
         }
 
         .countdown-item .number {
             font-size: 3.5rem;
             font-weight: 800;
-            color: var(--secondary);
+            background: var(--gradient-gold);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
             display: block;
             line-height: 1;
         }
@@ -591,7 +623,80 @@
             margin-top: 0.5rem;
         }
 
-        /* Dictionary Preview */
+        .countdown-item .icon {
+            font-size: 1.5rem;
+            color: var(--gold);
+            margin-bottom: 0.5rem;
+            display: block;
+        }
+
+        /* ===== FEATURES ===== */
+        .features-section {
+            padding: 4rem 2rem;
+            background: linear-gradient(135deg, var(--light) 0%, var(--white) 100%);
+        }
+
+        .features-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 2rem;
+            max-width: 1400px;
+            margin: 3rem auto;
+            padding: 0 2rem;
+        }
+
+        .feature-card {
+            text-align: center;
+            padding: 2.5rem 2rem;
+            background: var(--white);
+            border-radius: 20px;
+            box-shadow: var(--shadow-lg);
+            transition: all 0.3s;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .feature-card::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            height: 4px;
+            background: var(--gradient-gold);
+            transform: scaleX(0);
+            transition: transform 0.3s;
+        }
+
+        .feature-card:hover::before {
+            transform: scaleX(1);
+        }
+
+        .feature-card:hover {
+            transform: translateY(-10px) scale(1.02);
+            box-shadow: var(--shadow-2xl);
+        }
+
+        .feature-card .icon {
+            font-size: 3rem;
+            background: var(--gradient-gold);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+            margin-bottom: 1rem;
+        }
+
+        .feature-card h3 {
+            font-size: 1.3rem;
+            margin-bottom: 0.5rem;
+        }
+
+        .feature-card p {
+            color: var(--gray);
+            font-size: 0.95rem;
+        }
+
+        /* ===== DICTIONARY PREVIEW ===== */
         .dictionary-preview {
             padding: 4rem 2rem;
             background: var(--white);
@@ -613,7 +718,7 @@
 
         .lang-btn {
             padding: 0.75rem 2rem;
-            border: 2px solid var(--border);
+            border: 2px solid var(--light);
             border-radius: 50px;
             background: var(--white);
             color: var(--dark);
@@ -625,12 +730,14 @@
         .lang-btn:hover {
             border-color: var(--secondary);
             color: var(--secondary);
+            transform: translateY(-2px);
         }
 
         .lang-btn.active {
-            background: var(--secondary);
-            color: var(--white);
-            border-color: var(--secondary);
+            background: var(--gradient-gold);
+            color: var(--dark);
+            border-color: var(--gold);
+            box-shadow: 0 4px 15px rgba(247, 151, 30, 0.3);
         }
 
         .lang-btn i {
@@ -651,34 +758,34 @@
             border-radius: 50px;
             font-size: 1rem;
             transition: all 0.3s;
+            font-family: inherit;
         }
 
         .search-preview input:focus {
-            border-color: var(--secondary);
+            border-color: var(--gold);
             outline: none;
-            box-shadow: 0 0 0 4px rgba(52,152,219,0.1);
+            box-shadow: 0 0 0 4px rgba(247, 151, 30, 0.1);
         }
 
         .search-preview button {
             padding: 1rem 2rem;
-            background: var(--secondary);
-            color: var(--white);
+            background: var(--gradient-gold);
+            color: var(--dark);
             border: none;
             border-radius: 50px;
-            font-weight: 600;
+            font-weight: 700;
             cursor: pointer;
             transition: all 0.3s;
         }
 
         .search-preview button:hover {
-            background: var(--secondary-dark);
             transform: scale(1.05);
+            box-shadow: 0 8px 25px rgba(247, 151, 30, 0.3);
         }
 
-        /* Dictionary Entries */
         .entries-grid {
             display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(350px, 1fr));
+            grid-template-columns: repeat(auto-fill, minmax(400px, 1fr));
             gap: 1.5rem;
             margin-top: 2rem;
         }
@@ -688,36 +795,60 @@
             border: 1px solid var(--light);
             border-radius: 16px;
             padding: 1.5rem;
-            transition: all 0.3s;
+            transition: all 0.4s;
             box-shadow: var(--shadow-sm);
+            position: relative;
+            overflow: hidden;
+        }
+
+        .entry-card::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            height: 3px;
+            background: var(--gradient-gold);
+            opacity: 0;
+            transition: opacity 0.3s;
+        }
+
+        .entry-card:hover::before {
+            opacity: 1;
         }
 
         .entry-card:hover {
             transform: translateY(-5px);
             box-shadow: var(--shadow-xl);
-            border-color: var(--secondary);
+            border-color: var(--gold);
         }
 
         .entry-word {
-            font-size: 1.5rem;
+            font-size: 1.6rem;
             font-weight: 700;
             color: var(--primary);
             display: flex;
             align-items: center;
             gap: 0.5rem;
+            flex-wrap: wrap;
         }
 
         .entry-word .pronunciation {
             font-size: 0.9rem;
             color: var(--gray);
             font-weight: 400;
+            background: var(--light);
+            padding: 0.1rem 0.8rem;
+            border-radius: 20px;
         }
 
         .entry-part {
             color: var(--secondary);
-            font-size: 0.9rem;
+            font-size: 0.85rem;
             font-weight: 600;
             margin: 0.25rem 0;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
         }
 
         .entry-translations {
@@ -726,77 +857,160 @@
             flex-wrap: wrap;
             margin: 0.5rem 0;
             font-size: 0.95rem;
+            background: var(--light);
+            padding: 0.5rem 1rem;
+            border-radius: 10px;
         }
 
         .entry-translations .lang-tag {
-            font-weight: 600;
-            color: var(--gray);
+            font-weight: 700;
+            color: var(--secondary);
         }
 
         .entry-translations .translation {
             color: var(--dark);
         }
 
+        .entry-definition {
+            font-size: 0.95rem;
+            color: var(--dark);
+            margin: 0.5rem 0;
+            line-height: 1.6;
+        }
+
         .entry-example {
-            background: var(--light);
+            background: linear-gradient(135deg, rgba(247, 151, 30, 0.08) 0%, rgba(255, 215, 0, 0.08) 100%);
             padding: 0.75rem 1rem;
             border-radius: 10px;
             margin: 0.75rem 0;
             font-style: italic;
             font-size: 0.95rem;
             color: var(--dark);
+            border-left: 3px solid var(--gold);
+        }
+
+        .entry-example::before {
+            content: '"';
+            color: var(--gold);
+            font-size: 1.2rem;
+        }
+
+        .entry-example::after {
+            content: '"';
+            color: var(--gold);
+            font-size: 1.2rem;
         }
 
         .entry-synonyms {
             font-size: 0.9rem;
             color: var(--gray);
+            display: flex;
+            gap: 1rem;
+            flex-wrap: wrap;
+            padding-top: 0.5rem;
+            border-top: 1px solid var(--light);
         }
 
         .entry-synonyms strong {
             color: var(--dark);
         }
 
-        /* Features Grid */
-        .features-grid {
-            display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
-            gap: 2rem;
-            max-width: 1400px;
-            margin: 3rem auto;
-            padding: 0 2rem;
+        .entry-synonyms .syn {
+            color: var(--success);
         }
 
-        .feature-card {
+        .entry-synonyms .ant {
+            color: var(--accent);
+        }
+
+        /* ===== CTA ===== */
+        .cta-section {
+            padding: 4rem 2rem;
+            background: var(--gradient-primary);
+            color: var(--white);
             text-align: center;
-            padding: 2rem;
-            background: var(--white);
-            border-radius: 20px;
-            box-shadow: var(--shadow-lg);
-            transition: all 0.3s;
+            position: relative;
+            overflow: hidden;
         }
 
-        .feature-card:hover {
-            transform: translateY(-10px);
-            box-shadow: var(--shadow-2xl);
+        .cta-section::before {
+            content: '';
+            position: absolute;
+            top: -50%;
+            right: -50%;
+            width: 100%;
+            height: 200%;
+            background: radial-gradient(circle, rgba(247, 151, 30, 0.05) 0%, transparent 70%);
+            animation: spin 30s linear infinite;
         }
 
-        .feature-card .icon {
-            font-size: 3rem;
-            color: var(--secondary);
+        .cta-container {
+            max-width: 800px;
+            margin: 0 auto;
+            position: relative;
+            z-index: 2;
+        }
+
+        .cta-section h2 {
+            font-size: 2.5rem;
             margin-bottom: 1rem;
         }
 
-        .feature-card h3 {
-            font-size: 1.3rem;
-            margin-bottom: 0.5rem;
+        .cta-section h2 span {
+            background: var(--gradient-gold);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
         }
 
-        .feature-card p {
-            color: var(--gray);
-            font-size: 0.95rem;
+        .cta-section p {
+            font-size: 1.2rem;
+            margin-bottom: 2rem;
+            opacity: 0.9;
         }
 
-        /* Footer */
+        .cta-form {
+            display: flex;
+            gap: 1rem;
+            max-width: 500px;
+            margin: 0 auto;
+            flex-wrap: wrap;
+            justify-content: center;
+        }
+
+        .cta-form input {
+            flex: 1;
+            padding: 1rem 1.5rem;
+            border: none;
+            border-radius: 50px;
+            font-family: inherit;
+            font-size: 1rem;
+            min-width: 200px;
+            transition: all 0.3s;
+        }
+
+        .cta-form input:focus {
+            outline: 2px solid var(--gold);
+        }
+
+        .cta-form button {
+            padding: 1rem 2.5rem;
+            background: var(--gradient-gold);
+            color: var(--dark);
+            border: none;
+            border-radius: 50px;
+            font-weight: 700;
+            cursor: pointer;
+            transition: all 0.3s;
+            font-size: 1rem;
+        }
+
+        .cta-form button:hover {
+            transform: scale(1.05);
+            box-shadow: 0 8px 30px rgba(247, 151, 30, 0.4);
+        }
+
+        /* ===== FOOTER ===== */
         footer {
             background: var(--primary);
             color: var(--white);
@@ -812,7 +1026,7 @@
             left: 0;
             right: 0;
             height: 5px;
-            background: var(--gradient-secondary);
+            background: var(--gradient-gold);
         }
 
         .footer-content {
@@ -839,7 +1053,7 @@
             left: 0;
             width: 50px;
             height: 3px;
-            background: var(--secondary);
+            background: var(--gold);
         }
 
         .footer-section p {
@@ -867,7 +1081,8 @@
         }
 
         .social-links a:hover {
-            background: var(--secondary);
+            background: var(--gold);
+            color: var(--dark);
             transform: translateY(-3px) rotate(360deg);
         }
 
@@ -889,7 +1104,7 @@
         }
 
         .footer-links a:hover {
-            color: var(--secondary);
+            color: var(--gold);
             transform: translateX(5px);
         }
 
@@ -923,18 +1138,18 @@
         }
 
         .footer-bottom-links a:hover {
-            color: var(--secondary);
+            color: var(--gold);
         }
 
-        /* Back to Top */
+        /* ===== BACK TO TOP ===== */
         .back-to-top {
             position: fixed;
             bottom: 2rem;
             right: 2rem;
             width: 50px;
             height: 50px;
-            background: var(--secondary);
-            color: var(--white);
+            background: var(--gradient-gold);
+            color: var(--dark);
             border-radius: 50%;
             display: flex;
             justify-content: center;
@@ -945,6 +1160,7 @@
             visibility: hidden;
             transition: all 0.3s;
             z-index: 999;
+            font-weight: 700;
         }
 
         .back-to-top.show {
@@ -953,11 +1169,11 @@
         }
 
         .back-to-top:hover {
-            background: var(--secondary-dark);
-            transform: translateY(-5px);
+            transform: translateY(-5px) scale(1.1);
+            box-shadow: var(--shadow-2xl);
         }
 
-        /* Animations */
+        /* ===== ANIMATIONS ===== */
         @keyframes fadeIn {
             from { opacity: 0; transform: translateY(20px); }
             to { opacity: 1; transform: translateY(0); }
@@ -990,19 +1206,26 @@
             100% { transform: scale(1); }
         }
 
-        .animate-fadeIn { animation: fadeIn 1s ease; }
-        .animate-slideInLeft { animation: slideInLeft 1s ease; }
-        .animate-slideInRight { animation: slideInRight 1s ease; }
+        .animate-fadeIn { animation: fadeIn 0.6s ease; }
+        .animate-slideInLeft { animation: slideInLeft 0.8s ease; }
+        .animate-slideInRight { animation: slideInRight 0.8s ease; }
         .animate-float { animation: float 3s infinite; }
         .animate-pulse { animation: pulse 2s infinite; }
 
-        /* Responsive */
+        .delay-1 { animation-delay: 0.1s; }
+        .delay-2 { animation-delay: 0.2s; }
+        .delay-3 { animation-delay: 0.3s; }
+        .delay-4 { animation-delay: 0.4s; }
+        .delay-5 { animation-delay: 0.5s; }
+
+        /* ===== RESPONSIVE ===== */
         @media (max-width: 1024px) {
             .book-showcase {
                 grid-template-columns: 1fr;
                 gap: 2rem;
             }
             .book-3d { max-width: 350px; }
+            .entries-grid { grid-template-columns: 1fr 1fr; }
         }
 
         @media (max-width: 992px) {
@@ -1010,6 +1233,7 @@
             nav { padding: 0 2rem; }
             .hero { padding: 3rem 2rem; }
             .hero h2 { font-size: 3rem; }
+            .entries-grid { grid-template-columns: 1fr; }
         }
 
         @media (max-width: 768px) {
@@ -1033,6 +1257,8 @@
                 padding: 1rem;
                 box-shadow: var(--shadow-lg);
                 z-index: 1000;
+                max-height: 80vh;
+                overflow-y: auto;
             }
             .nav-links.active { display: flex; }
             .nav-links li { width: 100%; }
@@ -1041,7 +1267,8 @@
             .search-bar input { width: 100%; }
             .hero { margin: 1rem; padding: 2rem 1rem; }
             .hero h2 { font-size: 2.5rem; }
-            .countdown-timer { gap: 1rem; }
+            .hero-stats { flex-direction: column; gap: 1rem; }
+            .countdown-timer { gap: 0.8rem; }
             .countdown-item { min-width: 70px; padding: 1rem; }
             .countdown-item .number { font-size: 2.5rem; }
             .section-title { font-size: 2rem; }
@@ -1052,7 +1279,9 @@
             .footer-bottom { flex-direction: column; text-align: center; }
             .footer-bottom-links { justify-content: center; }
             .book-3d { padding: 2rem; }
-            .book-3d h2 { font-size: 2rem; }
+            .book-3d h2 { font-size: 2.5rem; }
+            .cta-form { flex-direction: column; }
+            .cta-form input { width: 100%; }
         }
 
         @media (max-width: 480px) {
@@ -1063,13 +1292,43 @@
             .auth-buttons { flex-direction: column; width: 100%; }
             .auth-btn { text-align: center; justify-content: center; }
             .user-menu { flex-direction: column; text-align: center; }
+            .section-title { font-size: 1.6rem; }
+            .book-3d .book-icon { font-size: 4rem; }
+            .book-3d h2 { font-size: 2rem; }
         }
 
-        /* Scrollbar */
+        /* ===== SCROLLBAR ===== */
         ::-webkit-scrollbar { width: 8px; }
         ::-webkit-scrollbar-track { background: var(--light); }
-        ::-webkit-scrollbar-thumb { background: var(--secondary); border-radius: 10px; }
-        ::-webkit-scrollbar-thumb:hover { background: var(--secondary-dark); }
+        ::-webkit-scrollbar-thumb { background: var(--gold); border-radius: 10px; }
+        ::-webkit-scrollbar-thumb:hover { background: var(--gold-light); }
+
+        /* ===== RESULTS COUNT ===== */
+        .results-count {
+            text-align: center;
+            color: var(--gray);
+            font-size: 0.95rem;
+            margin-bottom: 1.5rem;
+        }
+
+        .results-count strong {
+            color: var(--dark);
+            font-weight: 700;
+        }
+
+        /* ===== LANGUAGE BADGE ===== */
+        .lang-badge {
+            display: inline-block;
+            padding: 0.1rem 0.6rem;
+            border-radius: 12px;
+            font-size: 0.6rem;
+            font-weight: 700;
+            text-transform: uppercase;
+        }
+
+        .lang-badge.en { background: rgba(52, 152, 219, 0.15); color: var(--secondary); }
+        .lang-badge.ar { background: rgba(46, 204, 113, 0.15); color: var(--success); }
+        .lang-badge.ku { background: rgba(241, 196, 15, 0.15); color: var(--warning); }
     </style>
 </head>
 <body>
@@ -1077,7 +1336,7 @@
     <header>
         <div class="header-top">
             <div class="logo">
-                <i class="fas fa-book logo-icon"></i>
+                <i class="fas fa-book-open logo-icon"></i>
                 <h1>Jihan<span>Dictionary</span></h1>
             </div>
             <div class="auth-buttons" id="authButtons">
@@ -1114,7 +1373,21 @@
         <div class="hero-content">
             <span class="hero-badge"><i class="fas fa-star"></i> Coming Soon</span>
             <h2>Jihan Universal <span>Dictionary</span></h2>
-            <p>The Ultimate Trilingual Dictionary - English, Arabic, Kurdish. Over 100,000+ entries with detailed definitions, translations, and examples.</p>
+            <p>The Ultimate Trilingual Dictionary - English, Arabic, Kurdish. Over 100,000+ entries with detailed definitions, translations, and examples by Dr. Waleed Hussien Zakhourani.</p>
+            <div class="hero-stats">
+                <div class="stat">
+                    <span class="number">100K+</span>
+                    <span class="label">Entries</span>
+                </div>
+                <div class="stat">
+                    <span class="number">3</span>
+                    <span class="label">Languages</span>
+                </div>
+                <div class="stat">
+                    <span class="number">20+</span>
+                    <span class="label">Years Work</span>
+                </div>
+            </div>
         </div>
     </section>
 
@@ -1123,7 +1396,7 @@
         <div class="section-header">
             <span class="section-subtitle"><i class="fas fa-clock"></i> Coming Soon</span>
             <h2 class="section-title">The <span>Jihan Dictionary</span> Project</h2>
-            <p style="max-width:700px;margin:0 auto;color:var(--gray);">A comprehensive trilingual dictionary by Dr. Waleed Hussien Zakhourani</p>
+            <p class="section-description">A comprehensive trilingual dictionary by Dr. Waleed Hussien Zakhourani - bridging English, Arabic, and Kurdish languages.</p>
         </div>
 
         <div class="book-showcase">
@@ -1142,28 +1415,32 @@
             </div>
 
             <div class="countdown-section">
-                <h3><i class="fas fa-hourglass-half"></i> Launch Countdown</h3>
-                <p>Jihan Dictionary is coming soon! Be the first to get access.</p>
+                <h3><i class="fas fa-hourglass-half" style="color:var(--gold);"></i> Launch Countdown</h3>
+                <p class="sub-text">Jihan Dictionary is coming soon! Be the first to get access.</p>
                 <div class="countdown-timer" id="countdownTimer">
                     <div class="countdown-item">
+                        <span class="icon"><i class="fas fa-calendar-day"></i></span>
                         <span class="number" id="days">00</span>
                         <span class="label">Days</span>
                     </div>
                     <div class="countdown-item">
+                        <span class="icon"><i class="fas fa-clock"></i></span>
                         <span class="number" id="hours">00</span>
                         <span class="label">Hours</span>
                     </div>
                     <div class="countdown-item">
+                        <span class="icon"><i class="fas fa-minute"></i></span>
                         <span class="number" id="minutes">00</span>
                         <span class="label">Minutes</span>
                     </div>
                     <div class="countdown-item">
+                        <span class="icon"><i class="fas fa-second"></i></span>
                         <span class="number" id="seconds">00</span>
                         <span class="label">Seconds</span>
                     </div>
                 </div>
                 <div style="margin-top:2rem;">
-                    <a href="#" class="btn" style="background:var(--gradient-gold);color:var(--dark);padding:1rem 3rem;border-radius:50px;font-weight:700;text-decoration:none;display:inline-block;transition:all 0.3s;">
+                    <a href="#" class="btn" style="background:var(--gradient-gold);color:var(--dark);padding:1rem 3rem;border-radius:50px;font-weight:700;text-decoration:none;display:inline-block;transition:all 0.3s;box-shadow:0 4px 15px rgba(247,151,30,0.3);">
                         <i class="fas fa-bell"></i> Notify Me When Launched
                     </a>
                 </div>
@@ -1172,41 +1449,42 @@
     </section>
 
     <!-- Features -->
-    <section style="padding:2rem 2rem 4rem;background:var(--light);">
+    <section class="features-section">
         <div class="section-header">
             <span class="section-subtitle"><i class="fas fa-cogs"></i> Features</span>
             <h2 class="section-title">What Makes <span>Jihan</span> Special</h2>
+            <p class="section-description">Discover the powerful features that make Jihan Dictionary the ultimate trilingual reference</p>
         </div>
         <div class="features-grid">
             <div class="feature-card">
-                <div class="icon"><i class="fas fa-globe"></i></div>
+                <div class="icon"><i class="fas fa-globe-americas"></i></div>
                 <h3>Trilingual</h3>
-                <p>English, Arabic, and Kurdish translations with cultural context and usage examples.</p>
+                <p>English, Arabic, and Kurdish translations with cultural context and usage examples for each entry.</p>
             </div>
             <div class="feature-card">
-                <div class="icon"><i class="fas fa-microphone"></i></div>
+                <div class="icon"><i class="fas fa-microphone-alt"></i></div>
                 <h3>Pronunciation Guide</h3>
-                <p>IPA pronunciation for every entry with audio support coming soon.</p>
+                <p>IPA pronunciation for every entry with audio support coming soon for perfect pronunciation.</p>
             </div>
             <div class="feature-card">
-                <div class="icon"><i class="fas fa-search"></i></div>
+                <div class="icon"><i class="fas fa-search-plus"></i></div>
                 <h3>Smart Search</h3>
-                <p>Advanced search with suggestions, filters, and auto-complete.</p>
+                <p>Advanced search with suggestions, filters, auto-complete, and cross-language search capabilities.</p>
             </div>
             <div class="feature-card">
                 <div class="icon"><i class="fas fa-bookmark"></i></div>
                 <h3>Favorites & History</h3>
-                <p>Save words to favorites and track your search history.</p>
+                <p>Save words to favorites, track your search history, and create custom word lists for study.</p>
             </div>
             <div class="feature-card">
                 <div class="icon"><i class="fas fa-bolt"></i></div>
                 <h3>Quick Access</h3>
-                <p>Mobile-optimized with fast loading and offline support.</p>
+                <p>Mobile-optimized with fast loading, offline support, and instant word lookup from anywhere.</p>
             </div>
             <div class="feature-card">
                 <div class="icon"><i class="fas fa-robot"></i></div>
                 <h3>AI Integration</h3>
-                <p>AI-powered translations and contextual suggestions.</p>
+                <p>AI-powered translations, contextual suggestions, and smart word recommendations based on usage.</p>
             </div>
         </div>
     </section>
@@ -1217,7 +1495,7 @@
             <div class="section-header">
                 <span class="section-subtitle"><i class="fas fa-book-open"></i> Preview</span>
                 <h2 class="section-title">Sample <span>Dictionary Entries</span></h2>
-                <p style="max-width:700px;margin:0 auto;color:var(--gray);">Explore how Jihan Dictionary will work - Click the language buttons to filter</p>
+                <p class="section-description">Explore sample entries from the Jihan Dictionary - Click language buttons to filter</p>
             </div>
 
             <div class="language-selector">
@@ -1225,6 +1503,7 @@
                 <button class="lang-btn" data-lang="english"><i class="fas fa-flag-usa"></i> English</button>
                 <button class="lang-btn" data-lang="arabic"><i class="fas fa-flag"></i> Arabic</button>
                 <button class="lang-btn" data-lang="kurdish"><i class="fas fa-flag"></i> Kurdish</button>
+                <button class="lang-btn" data-lang="a"><i class="fas fa-font"></i> Letter A</button>
             </div>
 
             <div class="search-preview">
@@ -1232,22 +1511,29 @@
                 <button onclick="filterEntries()"><i class="fas fa-search"></i> Search</button>
             </div>
 
+            <div class="results-count" id="resultsCount">
+                Showing <strong id="countDisplay">14</strong> entries
+            </div>
+
             <div class="entries-grid" id="entriesGrid">
-                <!-- Entries populated by JavaScript -->
+                <!-- Populated by JavaScript -->
             </div>
         </div>
     </section>
 
     <!-- CTA -->
-    <section style="padding:4rem 2rem;background:var(--gradient-primary);color:var(--white);text-align:center;">
-        <div style="max-width:800px;margin:0 auto;">
-            <h2 style="font-size:2.5rem;margin-bottom:1rem;">Ready to Explore Jihan?</h2>
-            <p style="font-size:1.2rem;margin-bottom:2rem;opacity:0.9;">Get notified when the Jihan Universal Dictionary launches</p>
-            <div style="display:flex;gap:1rem;max-width:500px;margin:0 auto;flex-wrap:wrap;justify-content:center;">
-                <input type="email" placeholder="Enter your email" style="flex:1;padding:1rem 1.5rem;border:none;border-radius:50px;font-family:inherit;font-size:1rem;min-width:200px;">
-                <button style="padding:1rem 2rem;background:var(--gradient-gold);color:var(--dark);border:none;border-radius:50px;font-weight:700;cursor:pointer;transition:all 0.3s;">
-                    <i class="fas fa-paper-plane"></i> Subscribe
-                </button>
+    <section class="cta-section">
+        <div class="cta-container">
+            <h2>Ready to Explore <span>Jihan</span>?</h2>
+            <p>Get notified when the Jihan Universal Dictionary launches and be among the first to access this masterpiece.</p>
+            <div class="cta-form">
+                <input type="email" placeholder="Enter your email address">
+                <button><i class="fas fa-paper-plane"></i> Subscribe</button>
+            </div>
+            <div style="margin-top:2rem;display:flex;justify-content:center;gap:2rem;flex-wrap:wrap;">
+                <span><i class="fas fa-check-circle" style="color:var(--gold);"></i> Free access</span>
+                <span><i class="fas fa-check-circle" style="color:var(--gold);"></i> No spam</span>
+                <span><i class="fas fa-check-circle" style="color:var(--gold);"></i> Unsubscribe anytime</span>
             </div>
         </div>
     </section>
@@ -1257,12 +1543,13 @@
         <div class="footer-content">
             <div class="footer-section">
                 <h3>Jihan Dictionary</h3>
-                <p>The Universal Dictionary by Dr. Waleed Hussien Zakhourani - Bridging English, Arabic, and Kurdish languages.</p>
+                <p>The Universal Dictionary by Dr. Waleed Hussien Zakhourani - Bridging English, Arabic, and Kurdish languages with 100,000+ entries.</p>
                 <div class="social-links">
                     <a href="#"><i class="fab fa-facebook-f"></i></a>
                     <a href="#"><i class="fab fa-twitter"></i></a>
                     <a href="#"><i class="fab fa-linkedin-in"></i></a>
                     <a href="#"><i class="fab fa-instagram"></i></a>
+                    <a href="#"><i class="fab fa-youtube"></i></a>
                 </div>
             </div>
             <div class="footer-section">
@@ -1292,11 +1579,12 @@
             </div>
         </div>
         <div class="footer-bottom">
-            <p class="copyright">© 2024 Jihan Dictionary - Zakhourani. All rights reserved.</p>
+            <p class="copyright">© 2024 Jihan Dictionary - Zakhourani. All rights reserved. | By Dr. Waleed Hussien Zakhourani</p>
             <div class="footer-bottom-links">
                 <a href="#">Privacy</a>
                 <a href="#">Terms</a>
                 <a href="#">Cookies</a>
+                <a href="#">Accessibility</a>
             </div>
         </div>
     </footer>
@@ -1306,7 +1594,7 @@
 
     <script>
         // ==============================================
-        // DICTIONARY ENTRIES DATA
+        // DICTIONARY ENTRIES DATA - ALL 14 WORDS
         // ==============================================
         const dictionaryEntries = [
             {
@@ -1451,50 +1739,50 @@
                 example: "The abactor was caught trying to drive the cattle across the border.",
                 synonyms: "Cattle-lifter",
                 antonyms: "N/A"
-            },
-            {
-                word: "Abacus",
-                pronunciation: "/ˈæbəkəs/",
-                partOfSpeech: "n.",
-                arabic: "مِعداد",
-                kurdish: "(S) هەژمارکەر، (B) هەژمارکەر",
-                definition: "A manual calculating tool consisting of beads on rods.",
-                example: "The student used an abacus to solve the addition problem quickly.",
-                synonyms: "Calculating frame",
-                antonyms: "N/A"
             }
         ];
 
         // ==============================================
         // RENDER DICTIONARY ENTRIES
         // ==============================================
+        let currentFilter = 'all';
+        let searchTerm = '';
+
         function renderEntries(entries) {
             const grid = document.getElementById('entriesGrid');
+            const countDisplay = document.getElementById('countDisplay');
             
+            countDisplay.textContent = entries.length;
+
             if (entries.length === 0) {
                 grid.innerHTML = `
-                    <div style="grid-column:1/-1;text-align:center;padding:3rem;color:var(--gray);">
-                        <i class="fas fa-search" style="font-size:3rem;display:block;margin-bottom:1rem;"></i>
-                        <p>No entries found. Try a different search.</p>
+                    <div style="grid-column:1/-1;text-align:center;padding:4rem 2rem;color:var(--gray);">
+                        <i class="fas fa-search" style="font-size:4rem;display:block;margin-bottom:1rem;color:var(--gold);"></i>
+                        <h3 style="color:var(--dark);">No entries found</h3>
+                        <p>Try a different search term or filter</p>
                     </div>
                 `;
                 return;
             }
 
-            grid.innerHTML = entries.map(entry => `
-                <div class="entry-card" data-lang="all english arabic kurdish">
+            grid.innerHTML = entries.map((entry, index) => `
+                <div class="entry-card animate__animated animate__fadeInUp animate__delay-${index % 5 + 1}s">
                     <div class="entry-word">
                         ${entry.word}
                         <span class="pronunciation">${entry.pronunciation}</span>
+                        <span class="lang-badge en">EN</span>
                     </div>
                     <div class="entry-part">${entry.partOfSpeech}</div>
                     <div class="entry-translations">
                         <span><span class="lang-tag">🇸🇦 Ar:</span> <span class="translation">${entry.arabic}</span></span>
                         <span><span class="lang-tag">🇰🇼 Ku:</span> <span class="translation">${entry.kurdish}</span></span>
                     </div>
-                    <div style="font-size:0.9rem;color:var(--dark);margin:0.5rem 0;">${entry.definition}</div>
-                    <div class="entry-example">"${entry.example}"</div>
-                    <div class="entry-synonyms"><strong>Synonyms:</strong> ${entry.synonyms} · <strong>Antonyms:</strong> ${entry.antonyms}</div>
+                    <div class="entry-definition">${entry.definition}</div>
+                    <div class="entry-example">${entry.example}</div>
+                    <div class="entry-synonyms">
+                        <span><strong>Synonyms:</strong> <span class="syn">${entry.synonyms}</span></span>
+                        <span><strong>Antonyms:</strong> <span class="ant">${entry.antonyms}</span></span>
+                    </div>
                 </div>
             `).join('');
         }
@@ -1503,19 +1791,21 @@
         // FILTER ENTRIES
         // ==============================================
         function filterEntries() {
-            const searchTerm = document.getElementById('previewSearch').value.toLowerCase();
-            const activeLang = document.querySelector('.lang-btn.active')?.dataset.lang || 'all';
+            const searchInput = document.getElementById('previewSearch');
+            searchTerm = searchInput.value.toLowerCase().trim();
             
             let filtered = dictionaryEntries.filter(entry => {
                 const matchSearch = entry.word.toLowerCase().includes(searchTerm) ||
                                   entry.definition.toLowerCase().includes(searchTerm) ||
                                   entry.arabic.includes(searchTerm) ||
-                                  entry.kurdish.includes(searchTerm);
+                                  entry.kurdish.includes(searchTerm) ||
+                                  entry.example.toLowerCase().includes(searchTerm);
                 
-                if (activeLang === 'all') return matchSearch;
-                if (activeLang === 'english') return matchSearch && entry.word.toLowerCase().includes(searchTerm);
-                if (activeLang === 'arabic') return matchSearch && entry.arabic.includes(searchTerm);
-                if (activeLang === 'kurdish') return matchSearch && entry.kurdish.includes(searchTerm);
+                if (currentFilter === 'all') return matchSearch;
+                if (currentFilter === 'english') return matchSearch && entry.word.toLowerCase().includes(searchTerm);
+                if (currentFilter === 'arabic') return matchSearch && entry.arabic.includes(searchTerm);
+                if (currentFilter === 'kurdish') return matchSearch && entry.kurdish.includes(searchTerm);
+                if (currentFilter === 'a') return matchSearch && entry.word.toLowerCase().startsWith('a');
                 return matchSearch;
             });
             
@@ -1529,6 +1819,7 @@
             btn.addEventListener('click', function() {
                 document.querySelectorAll('.lang-btn').forEach(b => b.classList.remove('active'));
                 this.classList.add('active');
+                currentFilter = this.dataset.lang;
                 filterEntries();
             });
         });
@@ -1601,6 +1892,15 @@
                 document.body.style.overflow = navLinks.classList.contains('active') ? 'hidden' : '';
             });
 
+            // Close menu on link click
+            document.querySelectorAll('.nav-links a').forEach(link => {
+                link.addEventListener('click', function() {
+                    menuToggle.classList.remove('active');
+                    navLinks.classList.remove('active');
+                    document.body.style.overflow = '';
+                });
+            });
+
             // Notify me buttons
             document.querySelectorAll('.btn[style*="gradient-gold"]').forEach(btn => {
                 btn.addEventListener('click', function(e) {
@@ -1615,7 +1915,7 @@
             });
 
             // Subscribe button
-            document.querySelector('.cta-section button')?.addEventListener('click', function() {
+            document.querySelector('.cta-form button')?.addEventListener('click', function() {
                 const input = this.previousElementSibling;
                 if (input && input.value && input.value.includes('@')) {
                     alert('✅ Subscribed successfully! You\'ll get updates about Jihan Dictionary.');
@@ -1625,9 +1925,16 @@
                 }
             });
 
+            // Enter key for search
+            document.getElementById('previewSearch').addEventListener('keypress', function(e) {
+                if (e.key === 'Enter') {
+                    filterEntries();
+                }
+            });
+
             console.log('📚 Jihan Dictionary - Coming Soon');
-            console.log('📅 Launch Date:', new Date(new Date().setMonth(new Date().getMonth() + 2)).toLocaleDateString());
             console.log(`📖 ${dictionaryEntries.length} sample entries loaded`);
+            console.log('📅 Launch Date:', new Date(new Date().setMonth(new Date().getMonth() + 2)).toLocaleDateString());
         });
     </script>
 </body>

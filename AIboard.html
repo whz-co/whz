@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Zakhourani AI · Complete Enterprise Dashboard</title>
+    <title>Zakhourani AI · Enterprise Dashboard</title>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <link href="https://fonts.googleapis.com/css2?family=Inter:opsz,wght@14..32,400;14..32,500;14..32,600;14..32,700;14..32,800&display=swap" rel="stylesheet">
     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
@@ -26,8 +26,10 @@
             --success: #22c55e;
             --warning: #eab308;
             --danger: #ef4444;
+            --critical: #dc2626;
             --border: rgba(255,255,255,0.06);
             --gradient-main: linear-gradient(135deg, #3b82f6, #8b5cf6, #06b6d4);
+            --gradient-critical: linear-gradient(135deg, #dc2626, #ef4444);
         }
 
         body {
@@ -35,6 +37,9 @@
             color: var(--text-primary);
             min-height: 100vh;
             padding: 16px;
+            background-image: 
+                radial-gradient(ellipse at 10% 20%, rgba(59,130,246,0.05) 0%, transparent 50%),
+                radial-gradient(ellipse at 90% 80%, rgba(220,38,38,0.05) 0%, transparent 50%);
         }
 
         .dashboard {
@@ -179,12 +184,18 @@
         }
 
         .header-subtitle .status-badge {
-            background: rgba(34,197,94,0.15);
-            color: var(--success);
+            background: rgba(220,38,38,0.15);
+            color: var(--danger);
             padding: 3px 12px;
             border-radius: 20px;
             font-size: 11px;
             font-weight: 600;
+            animation: pulse-critical 1.5s ease-in-out infinite;
+        }
+
+        @keyframes pulse-critical {
+            0%, 100% { opacity: 1; transform: scale(1); }
+            50% { opacity: 0.6; transform: scale(0.98); }
         }
 
         .header-actions {
@@ -218,6 +229,49 @@
         .btn-success { background: linear-gradient(135deg, #22c55e, #06b6d4); color: white; }
         .btn-success:hover { transform: translateY(-2px); box-shadow: 0 8px 25px rgba(34,197,94,0.3); }
 
+        .btn-danger { background: var(--gradient-critical); color: white; }
+        .btn-danger:hover { transform: translateY(-2px); box-shadow: 0 8px 25px rgba(220,38,38,0.3); }
+
+        /* Critical Alert */
+        .critical-alert {
+            background: var(--gradient-critical);
+            color: white;
+            padding: 14px 24px;
+            border-radius: 14px;
+            margin-bottom: 24px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            flex-wrap: wrap;
+            gap: 12px;
+            animation: pulse-critical 1.5s ease-in-out infinite;
+        }
+
+        .critical-alert .alert-icon {
+            font-size: 24px;
+            margin-right: 12px;
+        }
+
+        .critical-alert .alert-text {
+            font-weight: 600;
+        }
+
+        .critical-alert .alert-action {
+            background: rgba(255,255,255,0.2);
+            padding: 8px 20px;
+            border-radius: 30px;
+            border: 1px solid rgba(255,255,255,0.3);
+            color: white;
+            cursor: pointer;
+            transition: all 0.3s;
+            font-weight: 600;
+        }
+
+        .critical-alert .alert-action:hover {
+            background: rgba(255,255,255,0.3);
+            transform: scale(1.05);
+        }
+
         /* Stats */
         .stats-grid {
             display: grid;
@@ -248,6 +302,12 @@
             opacity: 0.5;
         }
 
+        .stat-card.critical::before {
+            background: var(--gradient-critical);
+            opacity: 1;
+            animation: pulse-critical 1.5s ease-in-out infinite;
+        }
+
         .stat-card:hover {
             transform: translateY(-4px);
             border-color: rgba(59,130,246,0.2);
@@ -265,6 +325,11 @@
             font-size: 30px;
             font-weight: 800;
             margin: 6px 0 2px;
+        }
+
+        .stat-card .value.critical-value {
+            color: var(--danger);
+            animation: pulse-critical 1.5s ease-in-out infinite;
         }
 
         .stat-card .sub-value {
@@ -323,6 +388,12 @@
             font-size: 13px;
             font-weight: 600;
             border: 1px solid rgba(59,130,246,0.15);
+        }
+
+        .token-pricing .badge.danger {
+            background: rgba(220,38,38,0.12);
+            color: var(--danger);
+            border-color: rgba(220,38,38,0.15);
         }
 
         /* Charts */
@@ -569,11 +640,6 @@
             animation: pulse-critical 1.5s ease-in-out infinite;
         }
 
-        @keyframes pulse-critical {
-            0%, 100% { opacity: 1; }
-            50% { opacity: 0.5; }
-        }
-
         /* Users Table */
         .table-container {
             background: var(--bg-card);
@@ -772,6 +838,18 @@
             color: #86efac;
         }
 
+        .alert-error {
+            background: rgba(239, 68, 68, 0.1);
+            border: 1px solid rgba(239, 68, 68, 0.2);
+            color: #fca5a5;
+        }
+
+        .alert-warning {
+            background: rgba(234, 179, 8, 0.1);
+            border: 1px solid rgba(234, 179, 8, 0.2);
+            color: #fde68a;
+        }
+
         @media (max-width: 1024px) {
             .charts-grid { grid-template-columns: 1fr; }
             .chart-wrapper { height: 250px; }
@@ -784,6 +862,7 @@
             .stat-card .value { font-size: 24px; }
             .pin-digit { width: 45px; height: 55px; font-size: 22px; }
             .chart-wrapper { height: 200px; }
+            .critical-alert { flex-direction: column; text-align: center; }
         }
 
         @media (max-width: 480px) {
@@ -832,7 +911,7 @@
                         <span id="currentDateDisplay"></span>
                         <i class="fas fa-clock" style="margin-left:12px;"></i> 
                         <span id="currentTimeDisplay"></span>
-                        <span class="status-badge"><i class="fas fa-circle" style="font-size:8px;color:var(--success);margin-right:4px;"></i> Live</span>
+                        <span class="status-badge"><i class="fas fa-circle" style="font-size:8px;color:var(--danger);margin-right:4px;"></i> CRITICAL</span>
                     </div>
                 </div>
             </div>
@@ -854,6 +933,17 @@
 
         <div id="alert" class="alert"></div>
 
+        <!-- Critical Alert -->
+        <div class="critical-alert">
+            <div>
+                <span class="alert-icon"><i class="fas fa-exclamation-triangle"></i></span>
+                <span class="alert-text"><strong>⚠️ CRITICAL BALANCE:</strong> Only $30.00 remaining! Please take immediate action.</span>
+            </div>
+            <button class="alert-action" onclick="alert('Recommendations:\n1. Reduce API usage\n2. Optimize prompts\n3. Consider budget increase')">
+                <i class="fas fa-lightbulb"></i> View Recommendations
+            </button>
+        </div>
+
         <!-- Token Pricing -->
         <div class="token-pricing">
             <div>
@@ -862,9 +952,7 @@
             </div>
             <div>
                 <span class="badge"><i class="fas fa-bolt"></i> <span id="totalUsersBadge">55</span> Users</span>
-                <span class="badge" style="margin-left:8px;background:rgba(34,197,94,0.12);color:var(--success);border-color:rgba(34,197,94,0.15);">
-                    <i class="fas fa-check-circle"></i> System Online
-                </span>
+                <span class="badge danger"><i class="fas fa-exclamation-circle"></i> CRITICAL</span>
             </div>
         </div>
 
@@ -876,33 +964,33 @@
                 <div class="value" id="totalBudget">$300.00</div>
                 <div class="change positive"><i class="fas fa-check-circle"></i> Initial allocation</div>
             </div>
-            <div class="stat-card">
+            <div class="stat-card critical">
                 <div class="icon-bg"><i class="fas fa-piggy-bank"></i></div>
                 <div class="label">Remaining Balance</div>
-                <div class="value" id="remainingBalance" style="color: var(--warning);">$50.00</div>
-                <div class="sub-value" id="remainingTokens">= 714,285 tokens</div>
-                <div class="change warning"><i class="fas fa-hourglass-half"></i> <span id="daysRemaining">5</span> days left</div>
+                <div class="value critical-value" id="remainingBalance">$30.00</div>
+                <div class="sub-value" id="remainingTokens">= 428,571 tokens</div>
+                <div class="change negative"><i class="fas fa-exclamation-triangle"></i> <span id="daysRemaining">2</span> days left</div>
             </div>
             <div class="stat-card">
                 <div class="icon-bg"><i class="fas fa-token"></i></div>
                 <div class="label">Total Tokens Used</div>
-                <div class="value" id="totalTokens">3,571,428</div>
-                <div class="sub-value">≈ <span id="totalTokensCost">$250.00</span> spent</div>
-                <div class="change positive"><i class="fas fa-chart-line"></i> <span id="tokenGrowth">+12.5%</span> MoM</div>
+                <div class="value" id="totalTokens">3,857,143</div>
+                <div class="sub-value">≈ <span id="totalTokensCost">$270.00</span> spent</div>
+                <div class="change negative"><i class="fas fa-chart-line"></i> <span id="tokenGrowth">+18.2%</span> MoM</div>
             </div>
             <div class="stat-card">
                 <div class="icon-bg"><i class="fas fa-users"></i></div>
                 <div class="label">Active Users</div>
-                <div class="value" id="activeUsers">0</div>
-                <div class="sub-value"><span id="totalUsersCount">0</span> total registered</div>
+                <div class="value" id="activeUsers">42</div>
+                <div class="sub-value"><span id="totalUsersCount">55</span> total registered</div>
                 <div class="change positive"><i class="fas fa-user-plus"></i> <span id="userGrowth">+8</span> this month</div>
             </div>
             <div class="stat-card">
                 <div class="icon-bg"><i class="fas fa-question-circle"></i></div>
                 <div class="label">Questions Asked</div>
-                <div class="value" id="totalQuestions">0</div>
-                <div class="sub-value"><span id="dailyQuestions">0</span> today</div>
-                <div class="change positive"><i class="fas fa-arrow-up"></i> <span id="questionGrowth">+15%</span> weekly</div>
+                <div class="value" id="totalQuestions">4,250</div>
+                <div class="sub-value"><span id="dailyQuestions">142</span> today</div>
+                <div class="change positive"><i class="fas fa-arrow-up"></i> <span id="questionGrowth">+12%</span> weekly</div>
             </div>
         </div>
 
@@ -955,7 +1043,7 @@
         <!-- Users Table -->
         <div class="table-container">
             <div class="table-header">
-                <h3><i class="fas fa-users"></i> All Users · <span id="userCountDisplay">0</span> users</h3>
+                <h3><i class="fas fa-users"></i> All Users · <span id="userCountDisplay">55</span> users</h3>
                 <div class="table-controls">
                     <input type="text" id="searchInput" placeholder="Search users..." oninput="filterUsers()">
                     <select id="filterProvider" onchange="filterUsers()">
@@ -1010,8 +1098,10 @@
         // ==============================================
         const TOKEN_COST_PER_MILLION = 0.07;
         const TOTAL_BUDGET = 300;
-        const MIN_BALANCE = 50;
+        const MIN_BALANCE = 30; // UPDATED TO $30 - CRITICAL
         const CORRECT_PIN = "2026";
+        const START_DATE = new Date(2026, 1, 1); // Feb 1, 2026
+        const TODAY = new Date();
 
         // ==============================================
         // STATE
@@ -1136,7 +1226,6 @@
                 const name = `${firstName} ${lastName}`;
                 const email = `${firstName.toLowerCase()}.${lastName.toLowerCase()}${Math.floor(Math.random() * 100)}@${['gmail.com', 'yahoo.com', 'outlook.com', 'hotmail.com'][i % 4]}`;
                 const totalTokens = Math.floor(Math.random() * 250000) + 15000;
-                // Daily tokens: random between 500 and 8000
                 const dailyTokens = Math.floor(Math.random() * 7500) + 500;
                 const questions = Math.floor(Math.random() * 120) + 5;
                 const daysAgo = Math.floor(Math.random() * 60);
@@ -1180,11 +1269,13 @@
             const data = [];
             let balance = TOTAL_BUDGET;
             let totalTokens = 0;
-            const days = 200;
-            const now = new Date();
+            const days = Math.floor((TODAY - START_DATE) / (1000 * 60 * 60 * 24)) + 1;
+            const totalDays = Math.min(days, 200);
 
-            for (let i = 0; i <= days; i++) {
-                const date = new Date(2026, 0, 1 + i);
+            for (let i = 0; i < totalDays; i++) {
+                const date = new Date(START_DATE);
+                date.setDate(date.getDate() + i);
+                
                 let dailySpend = 2 + Math.random() * 8;
                 
                 const dayOfWeek = date.getDay();
@@ -1195,15 +1286,14 @@
                 if (date.getDate() === 15) dailySpend *= 1.3;
                 if (date.getDate() === 28) dailySpend *= 1.1;
                 
-                const growthFactor = 1 + (i / days) * 0.5;
+                const growthFactor = 1 + (i / totalDays) * 0.5;
                 dailySpend *= growthFactor;
                 
                 dailySpend = Math.round(dailySpend * 100) / 100;
                 const dailyTokens = calculateTokensFromCost(dailySpend);
                 
-                // Calculate user consumption for this day (sum of all users' daily tokens)
                 const totalDailyUserTokens = users.reduce((sum, u) => sum + (u.dailyTokens || Math.floor(Math.random() * 7500) + 500), 0);
-                const avgUserTokens = Math.round(totalDailyUserTokens / users.length);
+                const avgUserTokens = users.length > 0 ? Math.round(totalDailyUserTokens / users.length) : 0;
                 
                 if (balance - dailySpend < MIN_BALANCE) {
                     dailySpend = Math.round((balance - MIN_BALANCE) * 100) / 100;
@@ -1215,9 +1305,8 @@
                 
                 totalTokens += dailyTokens;
                 
-                // Check if date is in June 2026 (critical period)
-                const isJune = date.getMonth() === 5 && date.getFullYear() === 2026;
-                const isCritical = isJune || balance < MIN_BALANCE + 15;
+                const isCritical = balance < MIN_BALANCE + 10;
+                const isToday = date.toDateString() === TODAY.toDateString();
                 
                 data.push({
                     date: date,
@@ -1231,7 +1320,7 @@
                     avgUserTokens: avgUserTokens,
                     userCount: users.length,
                     isCritical: isCritical,
-                    isJune: isJune
+                    isToday: isToday
                 });
             }
             
@@ -1240,14 +1329,14 @@
 
         function generateFutureData(history) {
             const lastData = history[history.length - 1];
-            const avgSpend = history.slice(-30).reduce((sum, d) => sum + d.spend, 0) / 30;
+            const avgSpend = history.slice(-30).reduce((sum, d) => sum + d.spend, 0) / Math.min(30, history.length);
             const projections = [];
             let balance = lastData.balance;
             let totalTokens = lastData.totalTokens;
             let day = history.length;
 
             for (let i = 1; i <= 15; i++) {
-                const date = new Date();
+                const date = new Date(TODAY);
                 date.setDate(date.getDate() + i);
                 
                 const dayOfWeek = date.getDay();
@@ -1269,6 +1358,8 @@
                 
                 totalTokens += dailyTokens;
                 
+                const isCritical = balance < MIN_BALANCE + 10;
+                
                 projections.push({
                     date: date,
                     spend: dailySpend,
@@ -1278,10 +1369,10 @@
                     day: day + i,
                     predicted: true,
                     dayOfWeek: date.toLocaleDateString('en-US', { weekday: 'short' }),
-                    avgUserTokens: Math.round(dailyTokens / users.length),
+                    avgUserTokens: users.length > 0 ? Math.round(dailyTokens / users.length) : 0,
                     userCount: users.length,
-                    isCritical: balance < MIN_BALANCE + 15,
-                    isJune: date.getMonth() === 5 && date.getFullYear() === 2026
+                    isCritical: isCritical,
+                    isToday: false
                 });
             }
             
@@ -1308,6 +1399,7 @@
 
             setInterval(() => {
                 updateDateTime();
+                checkForNewDay();
             }, 1000);
         }
 
@@ -1320,6 +1412,47 @@
                 now.toLocaleDateString('en-US', { weekday: 'long', year: 'numeric', month: 'long', day: 'numeric' });
             document.getElementById('currentTimeDisplay').textContent = 
                 now.toLocaleTimeString('en-US', { hour: '2-digit', minute: '2-digit', second: '2-digit' });
+        }
+
+        function checkForNewDay() {
+            const now = new Date();
+            const lastCheck = localStorage.getItem('lastDayCheck');
+            const today = now.toDateString();
+
+            if (lastCheck !== today) {
+                const lastData = timelineData[timelineData.length - 1];
+                if (lastData && !lastData.predicted) {
+                    const avgSpend = timelineData.slice(-30).reduce((sum, d) => sum + d.spend, 0) / 30;
+                    let newSpend = avgSpend * (0.85 + Math.random() * 0.3);
+                    let newBalance = Math.max(MIN_BALANCE, Math.round((lastData.balance - newSpend) * 100) / 100);
+                    if (lastData.balance - newSpend < MIN_BALANCE) {
+                        newSpend = Math.round((lastData.balance - MIN_BALANCE) * 100) / 100;
+                        if (newSpend < 0) newSpend = 0;
+                    }
+                    const newTokens = calculateTokensFromCost(newSpend);
+                    
+                    timelineData.push({
+                        date: now,
+                        spend: Math.round(newSpend * 100) / 100,
+                        balance: newBalance,
+                        tokens: newTokens,
+                        totalTokens: lastData.totalTokens + newTokens,
+                        day: timelineData.length + 1,
+                        predicted: false,
+                        dayOfWeek: now.toLocaleDateString('en-US', { weekday: 'short' }),
+                        avgUserTokens: users.length > 0 ? Math.round(newTokens / users.length) : 0,
+                        userCount: users.length,
+                        isCritical: newBalance < MIN_BALANCE + 10,
+                        isToday: true
+                    });
+
+                    localStorage.setItem('lastDayCheck', today);
+                    renderTimeline();
+                    updateStats();
+                    updateCharts();
+                    showAlert('📅 New day added! Budget updated.', 'success');
+                }
+            }
         }
 
         function updateStats() {
@@ -1369,7 +1502,7 @@
             } else if (currentTimelineView === 'past') {
                 data = data.filter(d => !d.predicted && new Date(d.date) <= new Date());
             } else if (currentTimelineView === 'critical') {
-                data = data.filter(d => d.isCritical || d.balance < MIN_BALANCE + 15);
+                data = data.filter(d => d.isCritical || d.balance < MIN_BALANCE + 10);
             }
 
             const recentData = data.slice(-45);
@@ -1377,15 +1510,13 @@
             grid.innerHTML = recentData.map(d => {
                 const date = new Date(d.date);
                 const isFuture = d.predicted || date > new Date();
-                const isCritical = d.isCritical || d.balance < MIN_BALANCE + 15;
+                const isCritical = d.isCritical || d.balance < MIN_BALANCE + 10;
                 const isToday = date.toDateString() === new Date().toDateString();
-                const isJune = date.getMonth() === 5 && date.getFullYear() === 2026;
                 
                 let statusClass = '';
                 if (isFuture) statusClass = 'predicted';
-                if (isCritical || isJune) statusClass = 'critical';
+                if (isCritical) statusClass = 'critical';
                 
-                // Random sample of users for this day (3-5 users)
                 const sampleUsers = users
                     .sort(() => Math.random() - 0.5)
                     .slice(0, Math.floor(Math.random() * 3) + 3);
@@ -1398,8 +1529,7 @@
                     <div class="timeline-card ${statusClass}" onclick="showDayDetail(${d.day})">
                         <div class="date">
                             ${date.toLocaleDateString('en-US', { month: 'short', day: 'numeric' })}
-                            ${isToday ? '⭐' : ''}
-                            ${isJune ? '🔥' : ''}
+                            ${isToday ? '⭐ TODAY' : ''}
                             <span style="font-size:9px;color:var(--text-secondary);">${d.dayOfWeek || ''}</span>
                         </div>
                         <div class="day-name">Day ${d.day}</div>
@@ -1414,7 +1544,6 @@
                         </div>
                         ${isFuture ? '<div class="detail">📊 Projected</div>' : ''}
                         ${isCritical ? '<div class="detail">⚠️ CRITICAL</div>' : ''}
-                        ${isJune ? '<div class="detail">📅 June 2026</div>' : ''}
                     </div>
                 `;
             }).join('');
@@ -1435,10 +1564,9 @@
             const content = document.getElementById('userDetailContent');
             
             const date = new Date(data.date);
-            const isCritical = data.isCritical || data.balance < MIN_BALANCE + 15;
-            const isJune = date.getMonth() === 5 && date.getFullYear() === 2026;
+            const isCritical = data.isCritical || data.balance < MIN_BALANCE + 10;
+            const isToday = date.toDateString() === new Date().toDateString();
             
-            // Get top users for this day
             const topUsers = users
                 .sort((a, b) => (b.dailyTokens || 0) - (a.dailyTokens || 0))
                 .slice(0, 5);
@@ -1448,8 +1576,8 @@
                     <h2 style="font-size:24px;font-weight:800;">Day ${day}</h2>
                     <div style="color:var(--text-secondary);font-size:14px;">
                         ${date.toLocaleDateString('en-US', { weekday: 'long', year: 'numeric', month: 'long', day: 'numeric' })}
-                        ${isJune ? ' 🔥 June 2026' : ''}
-                        ${isCritical ? ' ⚠️ CRITICAL' : ''}
+                        ${isToday ? ' ⭐ TODAY' : ''}
+                        ${isCritical ? ' ⚠️ CRITICAL BALANCE' : ''}
                     </div>
                 </div>
                 <div style="display:grid;grid-template-columns:1fr 1fr 1fr;gap:12px;margin-bottom:16px;">
@@ -1858,7 +1986,6 @@
             const newDate = new Date();
             newDate.setDate(newDate.getDate() + simulatedDay);
             
-            // Update daily tokens for users randomly
             users.forEach(u => {
                 u.dailyTokens = Math.floor(Math.random() * 7500) + 500;
             });
@@ -1874,8 +2001,8 @@
                 dayOfWeek: newDate.toLocaleDateString('en-US', { weekday: 'short' }),
                 avgUserTokens: Math.round(newTokens / users.length),
                 userCount: users.length,
-                isCritical: newBalance < MIN_BALANCE + 15,
-                isJune: newDate.getMonth() === 5 && newDate.getFullYear() === 2026
+                isCritical: newBalance < MIN_BALANCE + 10,
+                isToday: false
             });
 
             renderTimeline();

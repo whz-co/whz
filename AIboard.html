@@ -2,1970 +2,1940 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Zakhourani AI · Complete Enterprise Dashboard</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=5.0, user-scalable=yes">
+    <title>Jihan Dictionary - Coming Soon | Zakhourani</title>
+    
+    <meta name="description" content="Jihan Universal Dictionary - Coming Soon! English, Arabic, Kurdish trilingual dictionary with 100,000+ entries by Dr. Waleed Hussien Zakhourani.">
+    <meta name="keywords" content="Jihan Dictionary, Universal Dictionary, English Arabic Kurdish Dictionary, Dr. Waleed Zakhourani">
+    <meta name="author" content="Dr. Waleed Hussien Zakhourani">
+    
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
-    <link href="https://fonts.googleapis.com/css2?family=Inter:opsz,wght@14..32,400;14..32,500;14..32,600;14..32,700;14..32,800&display=swap" rel="stylesheet">
-    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700;800;900&family=Noto+Naskh+Arabic:wght@400;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/animate.css/4.1.1/animate.min.css">
+    
     <style>
         * {
             margin: 0;
             padding: 0;
             box-sizing: border-box;
-            font-family: 'Inter', -apple-system, sans-serif;
         }
 
         :root {
-            --bg-primary: #0a0e1a;
-            --bg-secondary: #111827;
-            --bg-card: rgba(17, 24, 39, 0.95);
-            --text-primary: #f1f5f9;
-            --text-secondary: #94a3b8;
-            --accent: #3b82f6;
-            --accent-light: #60a5fa;
-            --success: #22c55e;
-            --warning: #eab308;
-            --danger: #ef4444;
-            --border: rgba(255,255,255,0.06);
-            --gradient-main: linear-gradient(135deg, #3b82f6, #8b5cf6, #06b6d4);
+            --primary: #1a2634;
+            --primary-light: #2c3e50;
+            --secondary: #3498db;
+            --secondary-dark: #2980b9;
+            --accent: #e74c3c;
+            --success: #27ae60;
+            --warning: #f39c12;
+            --gold: #f7971e;
+            --gold-light: #ffd700;
+            --light: #ecf0f1;
+            --gray: #95a5a6;
+            --dark: #2c3e50;
+            --white: #ffffff;
+            --shadow-lg: 0 10px 15px rgba(0,0,0,0.1);
+            --shadow-xl: 0 20px 25px rgba(0,0,0,0.1);
+            --shadow-2xl: 0 25px 50px rgba(0,0,0,0.25);
+            --gradient-primary: linear-gradient(135deg, #1a2634 0%, #2c3e50 100%);
+            --gradient-secondary: linear-gradient(135deg, #3498db 0%, #2980b9 100%);
+            --gradient-gold: linear-gradient(135deg, #f7971e 0%, #ffd200 100%);
+            --gradient-book: linear-gradient(135deg, #0c2461 0%, #1e3799 50%, #4a69bd 100%);
+            --gradient-rainbow: linear-gradient(135deg, #ff6b6b, #feca57, #48dbfb, #1dd1a1, #a29bfe);
         }
 
         body {
-            background: var(--bg-primary);
-            color: var(--text-primary);
+            font-family: 'Poppins', 'Segoe UI', sans-serif;
+            background: linear-gradient(135deg, #f5f7fa 0%, #c3cfe2 100%);
             min-height: 100vh;
-            padding: 16px;
+            color: var(--dark);
+            line-height: 1.6;
+            overflow-x: hidden;
         }
 
-        .dashboard {
-            max-width: 1600px;
+        /* ===== HEADER ===== */
+        header {
+            background: var(--white);
+            box-shadow: var(--shadow-lg);
+            position: sticky;
+            top: 0;
+            z-index: 1000;
+        }
+
+        .header-top {
+            background: var(--gradient-primary);
+            color: var(--white);
+            padding: 1rem 4rem;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .logo {
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+        }
+
+        .logo-icon {
+            font-size: 2.5rem;
+            color: var(--gold);
+            animation: float 3s infinite;
+        }
+
+        .logo h1 {
+            font-size: 2rem;
+            font-weight: 800;
+            color: var(--white);
+            letter-spacing: 1px;
+            margin: 0;
+        }
+
+        .logo h1 span {
+            color: var(--gold);
+        }
+
+        .auth-buttons {
+            display: flex;
+            gap: 1rem;
+        }
+
+        .auth-btn {
+            padding: 0.75rem 2rem;
+            border-radius: 50px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s;
+            text-decoration: none;
+            display: inline-flex;
+            align-items: center;
+            gap: 0.5rem;
+            font-size: 1rem;
+        }
+
+        .login-btn {
+            background: transparent;
+            color: var(--white);
+            border: 2px solid var(--white);
+        }
+
+        .login-btn:hover {
+            background: var(--white);
+            color: var(--primary);
+            transform: translateY(-2px);
+        }
+
+        .signup-btn {
+            background: var(--gold);
+            color: var(--dark);
+            border: 2px solid var(--gold);
+        }
+
+        .signup-btn:hover {
+            background: var(--gold-light);
+            transform: translateY(-2px);
+            box-shadow: 0 8px 25px rgba(247, 151, 30, 0.4);
+        }
+
+        .user-menu {
+            display: flex;
+            align-items: center;
+            gap: 1.5rem;
+            color: var(--white);
+        }
+
+        .user-avatar {
+            width: 45px;
+            height: 45px;
+            border-radius: 50%;
+            object-fit: cover;
+            border: 3px solid var(--gold);
+            transition: all 0.3s;
+        }
+
+        .user-avatar:hover {
+            transform: scale(1.1);
+            border-color: var(--white);
+        }
+
+        .logout-btn {
+            background: var(--accent);
+            color: var(--white);
+            border: none;
+            padding: 0.75rem 1.5rem;
+            border-radius: 50px;
+            cursor: pointer;
+            text-decoration: none;
+            display: inline-flex;
+            align-items: center;
+            gap: 0.5rem;
+            transition: all 0.3s;
+            font-weight: 600;
+        }
+
+        .logout-btn:hover {
+            background: var(--accent-dark);
+            transform: translateY(-2px);
+        }
+
+        /* Navigation */
+        nav {
+            padding: 0 4rem;
+            background: var(--white);
+            border-bottom: 1px solid var(--light);
+        }
+
+        .nav-container {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 1rem 0;
+        }
+
+        .nav-links {
+            display: flex;
+            list-style: none;
+            gap: 0.5rem;
+            margin: 0;
+            padding: 0;
+        }
+
+        .nav-links a {
+            text-decoration: none;
+            color: var(--dark);
+            font-weight: 600;
+            font-size: 1rem;
+            padding: 0.75rem 1.25rem;
+            border-radius: 50px;
+            transition: all 0.3s;
+            white-space: nowrap;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+
+        .nav-links a i {
+            font-size: 1.1rem;
+            color: var(--secondary);
+            transition: all 0.3s;
+        }
+
+        .nav-links a:hover {
+            background: var(--light);
+            color: var(--secondary);
+            transform: translateY(-2px);
+        }
+
+        .nav-links a.active {
+            background: var(--gradient-gold);
+            color: var(--dark);
+        }
+
+        .nav-links a.active i {
+            color: var(--dark);
+        }
+
+        .nav-badge {
+            position: absolute;
+            top: -5px;
+            right: -5px;
+            background: var(--accent);
+            color: var(--white);
+            font-size: 0.7rem;
+            padding: 0.2rem 0.5rem;
+            border-radius: 20px;
+            min-width: 20px;
+            text-align: center;
+        }
+
+        .menu-toggle {
+            display: none;
+            flex-direction: column;
+            cursor: pointer;
+            padding: 0.5rem;
+            background: transparent;
+            border: none;
+            z-index: 1001;
+        }
+
+        .menu-toggle span {
+            width: 30px;
+            height: 3px;
+            background: var(--dark);
+            margin: 3px 0;
+            border-radius: 3px;
+            transition: all 0.3s;
+        }
+
+        .menu-toggle.active span:nth-child(1) {
+            transform: rotate(45deg) translate(6px, 6px);
+        }
+
+        .menu-toggle.active span:nth-child(2) {
+            opacity: 0;
+        }
+
+        .menu-toggle.active span:nth-child(3) {
+            transform: rotate(-45deg) translate(7px, -7px);
+        }
+
+        .search-bar {
+            display: flex;
+            align-items: center;
+            background: var(--light);
+            border-radius: 50px;
+            padding: 0.25rem;
+            margin-left: 1rem;
+        }
+
+        .search-bar input {
+            border: none;
+            background: transparent;
+            padding: 0.5rem 1rem;
+            width: 200px;
+            outline: none;
+            font-family: inherit;
+        }
+
+        .search-bar button {
+            background: var(--gradient-gold);
+            color: var(--dark);
+            border: none;
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            cursor: pointer;
+            transition: all 0.3s;
+        }
+
+        .search-bar button:hover {
+            transform: rotate(90deg) scale(1.05);
+        }
+
+        /* ===== HERO ===== */
+        .hero {
+            background: var(--gradient-primary);
+            color: var(--white);
+            border-radius: 2rem;
+            padding: 4rem 4rem;
+            margin: 2rem auto;
+            max-width: 1400px;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .hero::before {
+            content: '';
+            position: absolute;
+            top: -50%;
+            right: -50%;
+            width: 100%;
+            height: 200%;
+            background: radial-gradient(circle, rgba(247, 151, 30, 0.15) 0%, transparent 70%);
+            animation: spin 20s linear infinite;
+        }
+
+        .hero::after {
+            content: '';
+            position: absolute;
+            bottom: -50%;
+            left: -50%;
+            width: 100%;
+            height: 200%;
+            background: radial-gradient(circle, rgba(52, 152, 219, 0.1) 0%, transparent 70%);
+            animation: spin 25s linear infinite reverse;
+        }
+
+        .hero-content {
+            position: relative;
+            z-index: 2;
+            max-width: 900px;
             margin: 0 auto;
+            text-align: center;
         }
 
-        /* PIN */
-        .pin-overlay {
-            position: fixed;
+        .hero-badge {
+            display: inline-block;
+            background: var(--gradient-gold);
+            color: var(--dark);
+            padding: 0.5rem 1.5rem;
+            border-radius: 50px;
+            font-size: 0.875rem;
+            font-weight: 700;
+            margin-bottom: 2rem;
+            border: 1px solid rgba(255,255,255,0.3);
+            animation: fadeIn 1s ease;
+        }
+
+        .hero h2 {
+            font-size: 4rem;
+            font-weight: 900;
+            margin-bottom: 1.5rem;
+            line-height: 1.2;
+            text-shadow: 2px 2px 4px rgba(0,0,0,0.3);
+            animation: slideInLeft 1s ease;
+        }
+
+        .hero h2 span {
+            background: var(--gradient-gold);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+
+        .hero p {
+            font-size: 1.25rem;
+            margin-bottom: 2rem;
+            max-width: 700px;
+            margin-left: auto;
+            margin-right: auto;
+            line-height: 1.8;
+            opacity: 0.9;
+            animation: slideInRight 1s ease;
+        }
+
+        .hero-stats {
+            display: flex;
+            justify-content: center;
+            gap: 3rem;
+            margin-top: 2rem;
+            animation: fadeIn 1.5s ease;
+        }
+
+        .hero-stats .stat {
+            text-align: center;
+        }
+
+        .hero-stats .number {
+            font-size: 2.5rem;
+            font-weight: 800;
+            color: var(--gold);
+            display: block;
+        }
+
+        .hero-stats .label {
+            font-size: 0.875rem;
+            opacity: 0.8;
+            text-transform: uppercase;
+        }
+
+        /* ===== COMING SOON MAIN ===== */
+        .coming-soon-main {
+            padding: 4rem 2rem;
+            background: var(--white);
+        }
+
+        .section-header {
+            text-align: center;
+            margin-bottom: 4rem;
+        }
+
+        .section-subtitle {
+            color: var(--secondary);
+            font-weight: 600;
+            text-transform: uppercase;
+            letter-spacing: 2px;
+            font-size: 0.875rem;
+            margin-bottom: 1rem;
+            display: inline-block;
+            background: rgba(52,152,219,0.1);
+            padding: 0.5rem 1.5rem;
+            border-radius: 50px;
+        }
+
+        .section-title {
+            font-size: 2.5rem;
+            color: var(--primary);
+            margin-bottom: 1rem;
+            font-weight: 700;
+        }
+
+        .section-title span {
+            background: var(--gradient-gold);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+
+        .section-description {
+            max-width: 700px;
+            margin: 0 auto;
+            color: var(--gray);
+            font-size: 1.1rem;
+        }
+
+        /* ===== BOOK SHOWCASE ===== */
+        .book-showcase {
+            max-width: 1400px;
+            margin: 0 auto;
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 4rem;
+            align-items: center;
+            padding: 0 2rem;
+        }
+
+        .book-cover-large {
+            position: relative;
+            perspective: 1000px;
+        }
+
+        .book-3d {
+            width: 100%;
+            max-width: 450px;
+            margin: 0 auto;
+            background: var(--gradient-book);
+            border-radius: 20px;
+            padding: 3rem 2rem;
+            text-align: center;
+            color: white;
+            transform: rotateY(-5deg) rotateX(5deg);
+            transition: all 0.5s;
+            box-shadow: var(--shadow-2xl);
+            position: relative;
+            overflow: hidden;
+        }
+
+        .book-3d:hover {
+            transform: rotateY(0deg) rotateX(0deg) scale(1.02);
+            box-shadow: 0 30px 60px rgba(0,0,0,0.4);
+        }
+
+        .book-3d::before {
+            content: '';
+            position: absolute;
             top: 0;
             left: 0;
             right: 0;
             bottom: 0;
-            background: rgba(0,0,0,0.95);
-            backdrop-filter: blur(30px);
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            z-index: 9999;
-            padding: 20px;
-        }
-        .pin-overlay.hidden { display: none; }
-
-        .pin-box {
-            background: var(--bg-secondary);
-            border: 1px solid var(--border);
-            border-radius: 30px;
-            padding: 48px;
-            max-width: 420px;
-            width: 100%;
-            text-align: center;
+            background: linear-gradient(135deg, rgba(255,255,255,0.1) 0%, transparent 50%);
+            pointer-events: none;
         }
 
-        .pin-box .lock-icon {
-            font-size: 64px;
-            background: var(--gradient-main);
+        .book-3d .book-icon {
+            font-size: 6rem;
+            color: var(--gold);
+            margin-bottom: 1rem;
+            animation: float 3s infinite;
+        }
+
+        .book-3d h2 {
+            font-size: 3.5rem;
+            font-weight: 900;
+            background: var(--gradient-gold);
             -webkit-background-clip: text;
             -webkit-text-fill-color: transparent;
-            margin-bottom: 16px;
+            background-clip: text;
+            margin-bottom: 0.5rem;
         }
 
-        .pin-box h2 { font-size: 26px; font-weight: 700; margin-bottom: 6px; }
-        .pin-box p { color: var(--text-secondary); margin-bottom: 28px; font-size: 14px; }
+        .book-3d .subtitle {
+            font-size: 1.2rem;
+            color: #ecf0f1;
+            margin-bottom: 0.5rem;
+        }
 
-        .pin-input-group {
+        .book-3d .author {
+            font-size: 0.95rem;
+            color: #bdc3c7;
+            border-top: 2px solid rgba(255,255,255,0.2);
+            padding-top: 1rem;
+            margin-top: 1rem;
+        }
+
+        .book-3d .languages {
             display: flex;
-            gap: 12px;
             justify-content: center;
-            margin-bottom: 20px;
-        }
-
-        .pin-digit {
-            width: 55px;
-            height: 65px;
-            background: var(--bg-primary);
-            border: 2px solid var(--border);
-            border-radius: 14px;
-            text-align: center;
-            font-size: 28px;
-            color: var(--text-primary);
-            font-weight: 700;
-            transition: all 0.3s;
-        }
-
-        .pin-digit:focus {
-            border-color: var(--accent);
-            box-shadow: 0 0 0 4px rgba(59,130,246,0.15);
-            outline: none;
-        }
-
-        .pin-error {
-            color: var(--danger);
-            font-size: 14px;
-            min-height: 24px;
-            margin-bottom: 12px;
-        }
-
-        .pin-btn {
-            background: var(--gradient-main);
-            color: white;
-            border: none;
-            padding: 16px 40px;
-            border-radius: 14px;
-            font-weight: 600;
-            cursor: pointer;
-            font-size: 16px;
-            transition: all 0.3s;
-            width: 100%;
-        }
-
-        .pin-btn:hover {
-            transform: translateY(-2px);
-            box-shadow: 0 8px 30px rgba(59,130,246,0.3);
-        }
-        .pin-btn:disabled { opacity: 0.5; cursor: not-allowed; }
-
-        /* Header */
-        .header {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            padding: 16px 0 28px;
+            gap: 0.8rem;
+            margin-top: 1rem;
             flex-wrap: wrap;
-            gap: 16px;
         }
 
-        .header-left {
+        .book-3d .languages span {
+            background: rgba(255,255,255,0.15);
+            padding: 0.3rem 1rem;
+            border-radius: 20px;
+            font-size: 0.8rem;
+            font-weight: 600;
+            backdrop-filter: blur(10px);
+        }
+
+        /* ===== COUNTDOWN ===== */
+        .countdown-section {
+            background: var(--light);
+            padding: 3rem;
+            border-radius: 20px;
+            text-align: center;
+            box-shadow: var(--shadow-lg);
+        }
+
+        .countdown-section h3 {
+            font-size: 1.8rem;
+            color: var(--primary);
+            margin-bottom: 0.5rem;
+        }
+
+        .countdown-section .sub-text {
+            color: var(--gray);
+            margin-bottom: 2rem;
+        }
+
+        .countdown-timer {
             display: flex;
-            align-items: center;
-            gap: 16px;
+            justify-content: center;
+            gap: 1.5rem;
+            flex-wrap: wrap;
         }
 
-        .logo {
-            width: 52px;
-            height: 52px;
-            background: var(--gradient-main);
+        .countdown-item {
+            background: var(--white);
+            padding: 1.5rem 2rem;
             border-radius: 16px;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            font-size: 24px;
-            color: white;
-            box-shadow: 0 8px 30px rgba(59,130,246,0.3);
+            box-shadow: var(--shadow-lg);
+            min-width: 100px;
+            text-align: center;
+            transition: all 0.3s;
+            border: 2px solid transparent;
         }
 
-        .header h1 {
-            font-size: 28px;
+        .countdown-item:hover {
+            transform: translateY(-5px);
+            border-color: var(--gold);
+            box-shadow: var(--shadow-xl);
+        }
+
+        .countdown-item .number {
+            font-size: 3.5rem;
             font-weight: 800;
-            background: var(--gradient-main);
+            background: var(--gradient-gold);
             -webkit-background-clip: text;
             -webkit-text-fill-color: transparent;
+            background-clip: text;
+            display: block;
+            line-height: 1;
         }
 
-        .header-subtitle {
-            color: var(--text-secondary);
-            font-size: 13px;
-            display: flex;
-            align-items: center;
-            gap: 12px;
-            flex-wrap: wrap;
-        }
-
-        .header-subtitle .status-badge {
-            background: rgba(34,197,94,0.15);
-            color: var(--success);
-            padding: 3px 12px;
-            border-radius: 20px;
-            font-size: 11px;
+        .countdown-item .label {
+            font-size: 0.8rem;
+            color: var(--gray);
+            text-transform: uppercase;
             font-weight: 600;
+            margin-top: 0.5rem;
         }
 
-        .header-actions {
-            display: flex;
-            gap: 10px;
-            flex-wrap: wrap;
+        .countdown-item .icon {
+            font-size: 1.5rem;
+            color: var(--gold);
+            margin-bottom: 0.5rem;
+            display: block;
         }
 
-        .btn {
-            padding: 10px 20px;
-            border: none;
-            border-radius: 12px;
-            font-weight: 600;
-            cursor: pointer;
-            transition: all 0.3s;
-            display: flex;
-            align-items: center;
-            gap: 8px;
-            font-size: 13px;
+        /* ===== FEATURES ===== */
+        .features-section {
+            padding: 4rem 2rem;
+            background: linear-gradient(135deg, var(--light) 0%, var(--white) 100%);
         }
 
-        .btn-primary { background: var(--gradient-main); color: white; }
-        .btn-primary:hover { transform: translateY(-2px); box-shadow: 0 8px 25px rgba(59,130,246,0.3); }
-
-        .btn-secondary { background: var(--bg-secondary); color: var(--text-primary); border: 1px solid var(--border); }
-        .btn-secondary:hover { background: rgba(30,41,59,0.6); transform: translateY(-2px); }
-
-        .btn-warning { background: linear-gradient(135deg, #eab308, #f97316); color: white; }
-        .btn-warning:hover { transform: translateY(-2px); box-shadow: 0 8px 25px rgba(234,179,8,0.3); }
-
-        .btn-success { background: linear-gradient(135deg, #22c55e, #06b6d4); color: white; }
-        .btn-success:hover { transform: translateY(-2px); box-shadow: 0 8px 25px rgba(34,197,94,0.3); }
-
-        /* Stats */
-        .stats-grid {
+        .features-grid {
             display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
-            gap: 16px;
-            margin-bottom: 24px;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 2rem;
+            max-width: 1400px;
+            margin: 3rem auto;
+            padding: 0 2rem;
         }
 
-        .stat-card {
-            background: var(--bg-card);
-            border: 1px solid var(--border);
+        .feature-card {
+            text-align: center;
+            padding: 2.5rem 2rem;
+            background: var(--white);
             border-radius: 20px;
-            padding: 20px 24px;
-            backdrop-filter: blur(12px);
+            box-shadow: var(--shadow-lg);
             transition: all 0.3s;
             position: relative;
             overflow: hidden;
         }
 
-        .stat-card::before {
+        .feature-card::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            height: 4px;
+            background: var(--gradient-gold);
+            transform: scaleX(0);
+            transition: transform 0.3s;
+        }
+
+        .feature-card:hover::before {
+            transform: scaleX(1);
+        }
+
+        .feature-card:hover {
+            transform: translateY(-10px) scale(1.02);
+            box-shadow: var(--shadow-2xl);
+        }
+
+        .feature-card .icon {
+            font-size: 3rem;
+            background: var(--gradient-gold);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+            margin-bottom: 1rem;
+        }
+
+        .feature-card h3 {
+            font-size: 1.3rem;
+            margin-bottom: 0.5rem;
+        }
+
+        .feature-card p {
+            color: var(--gray);
+            font-size: 0.95rem;
+        }
+
+        /* ===== DICTIONARY PREVIEW ===== */
+        .dictionary-preview {
+            padding: 4rem 2rem;
+            background: var(--white);
+        }
+
+        .preview-container {
+            max-width: 1400px;
+            margin: 0 auto;
+            padding: 0 2rem;
+        }
+
+        .language-selector {
+            display: flex;
+            justify-content: center;
+            gap: 1rem;
+            margin-bottom: 2rem;
+            flex-wrap: wrap;
+        }
+
+        .lang-btn {
+            padding: 0.75rem 2rem;
+            border: 2px solid var(--light);
+            border-radius: 50px;
+            background: var(--white);
+            color: var(--dark);
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s;
+        }
+
+        .lang-btn:hover {
+            border-color: var(--secondary);
+            color: var(--secondary);
+            transform: translateY(-2px);
+        }
+
+        .lang-btn.active {
+            background: var(--gradient-gold);
+            color: var(--dark);
+            border-color: var(--gold);
+            box-shadow: 0 4px 15px rgba(247, 151, 30, 0.3);
+        }
+
+        .lang-btn i {
+            margin-right: 0.5rem;
+        }
+
+        .search-preview {
+            display: flex;
+            gap: 1rem;
+            max-width: 600px;
+            margin: 0 auto 2rem;
+        }
+
+        .search-preview input {
+            flex: 1;
+            padding: 1rem 1.5rem;
+            border: 2px solid var(--light);
+            border-radius: 50px;
+            font-size: 1rem;
+            transition: all 0.3s;
+            font-family: inherit;
+        }
+
+        .search-preview input:focus {
+            border-color: var(--gold);
+            outline: none;
+            box-shadow: 0 0 0 4px rgba(247, 151, 30, 0.1);
+        }
+
+        .search-preview button {
+            padding: 1rem 2rem;
+            background: var(--gradient-gold);
+            color: var(--dark);
+            border: none;
+            border-radius: 50px;
+            font-weight: 700;
+            cursor: pointer;
+            transition: all 0.3s;
+        }
+
+        .search-preview button:hover {
+            transform: scale(1.05);
+            box-shadow: 0 8px 25px rgba(247, 151, 30, 0.3);
+        }
+
+        .entries-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(400px, 1fr));
+            gap: 1.5rem;
+            margin-top: 2rem;
+        }
+
+        .entry-card {
+            background: var(--white);
+            border: 1px solid var(--light);
+            border-radius: 16px;
+            padding: 1.5rem;
+            transition: all 0.4s;
+            box-shadow: var(--shadow-sm);
+            position: relative;
+            overflow: hidden;
+        }
+
+        .entry-card::before {
             content: '';
             position: absolute;
             top: 0;
             left: 0;
             right: 0;
             height: 3px;
-            background: var(--gradient-main);
-            opacity: 0.5;
+            background: var(--gradient-gold);
+            opacity: 0;
+            transition: opacity 0.3s;
         }
 
-        .stat-card:hover {
-            transform: translateY(-4px);
-            border-color: rgba(59,130,246,0.2);
+        .entry-card:hover::before {
+            opacity: 1;
         }
 
-        .stat-card .label {
-            color: var(--text-secondary);
-            font-size: 11px;
+        .entry-card:hover {
+            transform: translateY(-5px);
+            box-shadow: var(--shadow-xl);
+            border-color: var(--gold);
+        }
+
+        .entry-word {
+            font-size: 1.6rem;
+            font-weight: 700;
+            color: var(--primary);
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+            flex-wrap: wrap;
+        }
+
+        .entry-word .pronunciation {
+            font-size: 0.9rem;
+            color: var(--gray);
+            font-weight: 400;
+            background: var(--light);
+            padding: 0.1rem 0.8rem;
+            border-radius: 20px;
+        }
+
+        .entry-part {
+            color: var(--secondary);
+            font-size: 0.85rem;
             font-weight: 600;
+            margin: 0.25rem 0;
             text-transform: uppercase;
             letter-spacing: 0.5px;
         }
 
-        .stat-card .value {
-            font-size: 30px;
-            font-weight: 800;
-            margin: 6px 0 2px;
-        }
-
-        .stat-card .sub-value {
-            font-size: 13px;
-            color: var(--text-secondary);
-        }
-
-        .stat-card .change {
-            font-size: 12px;
+        .entry-translations {
             display: flex;
-            align-items: center;
-            gap: 4px;
-            margin-top: 4px;
-        }
-
-        .change.positive { color: var(--success); }
-        .change.negative { color: var(--danger); }
-        .change.warning { color: var(--warning); }
-
-        .stat-card .icon-bg {
-            position: absolute;
-            right: 16px;
-            top: 16px;
-            font-size: 32px;
-            opacity: 0.08;
-        }
-
-        /* Token Pricing */
-        .token-pricing {
-            background: var(--bg-card);
-            border: 1px solid var(--border);
-            border-radius: 18px;
-            padding: 16px 24px;
-            margin-bottom: 24px;
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
+            gap: 1rem;
             flex-wrap: wrap;
-            gap: 12px;
-            backdrop-filter: blur(12px);
-        }
-
-        .token-pricing .price {
-            font-size: 22px;
-            font-weight: 700;
-            background: var(--gradient-main);
-            -webkit-background-clip: text;
-            -webkit-text-fill-color: transparent;
-        }
-
-        .token-pricing .badge {
-            background: rgba(59,130,246,0.12);
-            color: var(--accent-light);
-            padding: 4px 16px;
-            border-radius: 20px;
-            font-size: 13px;
-            font-weight: 600;
-            border: 1px solid rgba(59,130,246,0.15);
-        }
-
-        /* Charts */
-        .charts-grid {
-            display: grid;
-            grid-template-columns: 2fr 1fr;
-            gap: 20px;
-            margin-bottom: 24px;
-        }
-
-        .chart-container {
-            background: var(--bg-card);
-            border: 1px solid var(--border);
-            border-radius: 20px;
-            padding: 24px;
-            backdrop-filter: blur(12px);
-            min-height: 350px;
-        }
-
-        .chart-container h3 {
-            margin-bottom: 16px;
-            font-size: 17px;
-            font-weight: 700;
-        }
-
-        .chart-wrapper {
-            position: relative;
-            height: 300px;
-            width: 100%;
-        }
-
-        .chart-wrapper canvas {
-            width: 100% !important;
-            height: 100% !important;
-        }
-
-        /* Questions */
-        .questions-section {
-            background: var(--bg-card);
-            border: 1px solid var(--border);
-            border-radius: 20px;
-            padding: 24px;
-            margin-bottom: 24px;
-            backdrop-filter: blur(12px);
-        }
-
-        .questions-header {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            margin-bottom: 16px;
-            flex-wrap: wrap;
-            gap: 12px;
-        }
-
-        .questions-header h3 {
-            font-size: 17px;
-            font-weight: 700;
-        }
-
-        .questions-grid {
-            display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(170px, 1fr));
-            gap: 12px;
-        }
-
-        .question-card {
-            background: var(--bg-primary);
-            border: 1px solid var(--border);
-            border-radius: 14px;
-            padding: 16px 18px;
-            transition: all 0.3s;
-            cursor: pointer;
-        }
-
-        .question-card:hover {
-            transform: translateY(-3px);
-            border-color: var(--accent);
-        }
-
-        .question-card .q-icon {
-            font-size: 22px;
-            margin-bottom: 6px;
-            display: block;
-        }
-
-        .question-card .q-name {
-            font-weight: 600;
-            font-size: 13px;
-            margin-bottom: 2px;
-        }
-
-        .question-card .q-count {
-            color: var(--text-secondary);
-            font-size: 12px;
-        }
-
-        .question-card .q-bar {
-            width: 100%;
-            height: 4px;
-            background: var(--bg-secondary);
-            border-radius: 2px;
-            margin-top: 8px;
-            overflow: hidden;
-        }
-
-        .question-card .q-bar .fill {
-            height: 100%;
-            background: var(--gradient-main);
-            border-radius: 2px;
-            transition: width 0.6s;
-        }
-
-        .question-card.top {
-            border-color: var(--warning);
-            background: rgba(234,179,8,0.05);
-        }
-
-        .question-card.top .q-icon { color: var(--warning); }
-
-        /* Timeline */
-        .timeline-section {
-            background: var(--bg-card);
-            border: 1px solid var(--border);
-            border-radius: 20px;
-            padding: 24px;
-            margin-bottom: 24px;
-            backdrop-filter: blur(12px);
-        }
-
-        .timeline-header {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            margin-bottom: 18px;
-            flex-wrap: wrap;
-            gap: 12px;
-        }
-
-        .timeline-header h3 {
-            font-size: 18px;
-            font-weight: 700;
-        }
-
-        .timeline-controls {
-            display: flex;
-            gap: 6px;
-            flex-wrap: wrap;
-        }
-
-        .timeline-controls button {
-            padding: 5px 16px;
-            border: 1px solid var(--border);
-            background: var(--bg-primary);
-            color: var(--text-secondary);
-            border-radius: 20px;
-            cursor: pointer;
-            font-size: 12px;
-            transition: all 0.2s;
-            font-weight: 500;
-        }
-
-        .timeline-controls button.active {
-            background: var(--gradient-main);
-            color: white;
-            border-color: transparent;
-        }
-
-        .timeline-controls button:hover:not(.active) {
-            background: var(--bg-secondary);
-        }
-
-        .timeline-grid {
-            display: grid;
-            grid-template-columns: repeat(auto-fill, minmax(150px, 1fr));
-            gap: 12px;
-            max-height: 420px;
-            overflow-y: auto;
-            padding-right: 6px;
-        }
-
-        .timeline-card {
-            background: var(--bg-primary);
-            border: 1px solid var(--border);
-            border-radius: 14px;
-            padding: 14px 16px;
-            transition: all 0.3s;
-            cursor: pointer;
-        }
-
-        .timeline-card:hover {
-            transform: translateY(-3px);
-            border-color: var(--accent);
-        }
-
-        .timeline-card .date {
-            font-size: 11px;
-            color: var(--text-secondary);
-            margin-bottom: 2px;
-        }
-
-        .timeline-card .day-name {
-            font-size: 12px;
-            font-weight: 600;
-            margin-bottom: 4px;
-        }
-
-        .timeline-card .amount {
-            font-size: 20px;
-            font-weight: 700;
-        }
-
-        .timeline-card .amount.positive { color: var(--success); }
-        .timeline-card .amount.negative { color: var(--danger); }
-        .timeline-card .amount.warning { color: var(--warning); }
-
-        .timeline-card .detail {
-            font-size: 10px;
-            color: var(--text-secondary);
-            margin-top: 2px;
-        }
-
-        .timeline-card .user-detail {
-            font-size: 9px;
-            color: var(--text-secondary);
-            margin-top: 2px;
-            border-top: 1px solid var(--border);
-            padding-top: 4px;
-        }
-
-        .timeline-card.predicted {
-            border-color: rgba(59,130,246,0.2);
-            background: rgba(59,130,246,0.04);
-        }
-
-        .timeline-card.critical {
-            border-color: var(--danger);
-            background: rgba(239,68,68,0.06);
-            border-width: 2px;
-        }
-
-        .timeline-card.critical .amount {
-            color: var(--danger) !important;
-            animation: pulse-critical 1.5s ease-in-out infinite;
-        }
-
-        @keyframes pulse-critical {
-            0%, 100% { opacity: 1; }
-            50% { opacity: 0.5; }
-        }
-
-        /* Users Table */
-        .table-container {
-            background: var(--bg-card);
-            border: 1px solid var(--border);
-            border-radius: 20px;
-            overflow: hidden;
-            margin-bottom: 24px;
-            backdrop-filter: blur(12px);
-        }
-
-        .table-header {
-            padding: 18px 24px;
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            border-bottom: 1px solid var(--border);
-            flex-wrap: wrap;
-            gap: 12px;
-        }
-
-        .table-header h3 {
-            font-size: 17px;
-            font-weight: 700;
-        }
-
-        .table-controls {
-            display: flex;
-            gap: 10px;
-            flex-wrap: wrap;
-        }
-
-        .table-controls input,
-        .table-controls select {
-            background: var(--bg-primary);
-            border: 1px solid var(--border);
+            margin: 0.5rem 0;
+            font-size: 0.95rem;
+            background: var(--light);
+            padding: 0.5rem 1rem;
             border-radius: 10px;
-            padding: 8px 14px;
-            color: var(--text-primary);
-            font-size: 13px;
-            outline: none;
-            transition: all 0.2s;
         }
 
-        .table-controls input:focus,
-        .table-controls select:focus {
-            border-color: var(--accent);
+        .entry-translations .lang-tag {
+            font-weight: 700;
+            color: var(--secondary);
         }
 
-        .table-wrapper {
-            overflow-x: auto;
-            padding: 0 24px 16px;
+        .entry-translations .translation {
+            color: var(--dark);
         }
 
-        table {
-            width: 100%;
-            border-collapse: collapse;
+        .entry-definition {
+            font-size: 0.95rem;
+            color: var(--dark);
+            margin: 0.5rem 0;
+            line-height: 1.6;
         }
 
-        thead {
-            border-bottom: 1px solid var(--border);
+        .entry-example {
+            background: linear-gradient(135deg, rgba(247, 151, 30, 0.08) 0%, rgba(255, 215, 0, 0.08) 100%);
+            padding: 0.75rem 1rem;
+            border-radius: 10px;
+            margin: 0.75rem 0;
+            font-style: italic;
+            font-size: 0.95rem;
+            color: var(--dark);
+            border-left: 3px solid var(--gold);
         }
 
-        th {
-            text-align: left;
-            padding: 14px 12px;
-            color: var(--text-secondary);
-            font-weight: 600;
-            font-size: 11px;
-            text-transform: uppercase;
-            letter-spacing: 0.5px;
+        .entry-example::before {
+            content: '"';
+            color: var(--gold);
+            font-size: 1.2rem;
         }
 
-        td {
-            padding: 14px 12px;
-            border-bottom: 1px solid var(--border);
-            font-size: 13px;
+        .entry-example::after {
+            content: '"';
+            color: var(--gold);
+            font-size: 1.2rem;
         }
 
-        tr:hover td {
-            background: rgba(255,255,255,0.02);
+        .entry-synonyms {
+            font-size: 0.9rem;
+            color: var(--gray);
+            display: flex;
+            gap: 1rem;
+            flex-wrap: wrap;
+            padding-top: 0.5rem;
+            border-top: 1px solid var(--light);
         }
 
-        .status-badge {
-            padding: 3px 12px;
-            border-radius: 20px;
-            font-size: 11px;
-            font-weight: 600;
-            display: inline-block;
+        .entry-synonyms strong {
+            color: var(--dark);
         }
 
-        .status-active {
-            background: rgba(34, 197, 94, 0.12);
+        .entry-synonyms .syn {
             color: var(--success);
         }
 
-        .status-inactive {
-            background: rgba(239, 68, 68, 0.12);
-            color: var(--danger);
+        .entry-synonyms .ant {
+            color: var(--accent);
         }
 
-        .status-premium {
-            background: rgba(234, 179, 8, 0.12);
-            color: var(--warning);
+        /* ===== CTA ===== */
+        .cta-section {
+            padding: 4rem 2rem;
+            background: var(--gradient-primary);
+            color: var(--white);
+            text-align: center;
+            position: relative;
+            overflow: hidden;
         }
 
-        .user-rank {
-            display: inline-flex;
-            align-items: center;
+        .cta-section::before {
+            content: '';
+            position: absolute;
+            top: -50%;
+            right: -50%;
+            width: 100%;
+            height: 200%;
+            background: radial-gradient(circle, rgba(247, 151, 30, 0.05) 0%, transparent 70%);
+            animation: spin 30s linear infinite;
+        }
+
+        .cta-container {
+            max-width: 800px;
+            margin: 0 auto;
+            position: relative;
+            z-index: 2;
+        }
+
+        .cta-section h2 {
+            font-size: 2.5rem;
+            margin-bottom: 1rem;
+        }
+
+        .cta-section h2 span {
+            background: var(--gradient-gold);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+
+        .cta-section p {
+            font-size: 1.2rem;
+            margin-bottom: 2rem;
+            opacity: 0.9;
+        }
+
+        .cta-form {
+            display: flex;
+            gap: 1rem;
+            max-width: 500px;
+            margin: 0 auto;
+            flex-wrap: wrap;
             justify-content: center;
-            width: 24px;
-            height: 24px;
-            border-radius: 50%;
+        }
+
+        .cta-form input {
+            flex: 1;
+            padding: 1rem 1.5rem;
+            border: none;
+            border-radius: 50px;
+            font-family: inherit;
+            font-size: 1rem;
+            min-width: 200px;
+            transition: all 0.3s;
+        }
+
+        .cta-form input:focus {
+            outline: 2px solid var(--gold);
+        }
+
+        .cta-form button {
+            padding: 1rem 2.5rem;
+            background: var(--gradient-gold);
+            color: var(--dark);
+            border: none;
+            border-radius: 50px;
             font-weight: 700;
-            font-size: 11px;
+            cursor: pointer;
+            transition: all 0.3s;
+            font-size: 1rem;
         }
 
-        .rank-1 { background: rgba(234,179,8,0.2); color: var(--warning); }
-        .rank-2 { background: rgba(148,163,184,0.2); color: var(--text-secondary); }
-        .rank-3 { background: rgba(180,83,9,0.2); color: #d97706; }
-
-        .user-avatar {
-            width: 32px;
-            height: 32px;
-            border-radius: 50%;
-            object-fit: cover;
+        .cta-form button:hover {
+            transform: scale(1.05);
+            box-shadow: 0 8px 30px rgba(247, 151, 30, 0.4);
         }
 
-        /* Modal */
-        .modal {
-            position: fixed;
+        /* ===== FOOTER ===== */
+        footer {
+            background: var(--primary);
+            color: var(--white);
+            padding: 4rem 2rem 2rem;
+            position: relative;
+            overflow: hidden;
+        }
+
+        footer::before {
+            content: '';
+            position: absolute;
             top: 0;
             left: 0;
             right: 0;
+            height: 5px;
+            background: var(--gradient-gold);
+        }
+
+        .footer-content {
+            max-width: 1400px;
+            margin: 0 auto;
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 3rem;
+            padding: 0 2rem;
+        }
+
+        .footer-section h3 {
+            font-size: 1.5rem;
+            margin-bottom: 1.5rem;
+            color: var(--white);
+            position: relative;
+            padding-bottom: 0.5rem;
+        }
+
+        .footer-section h3::after {
+            content: '';
+            position: absolute;
             bottom: 0;
-            background: rgba(0,0,0,0.85);
-            backdrop-filter: blur(12px);
-            display: none;
-            align-items: center;
+            left: 0;
+            width: 50px;
+            height: 3px;
+            background: var(--gold);
+        }
+
+        .footer-section p {
+            color: rgba(255,255,255,0.7);
+            line-height: 1.8;
+            margin-bottom: 1.5rem;
+        }
+
+        .social-links {
+            display: flex;
+            gap: 1rem;
+        }
+
+        .social-links a {
+            width: 40px;
+            height: 40px;
+            background: rgba(255,255,255,0.1);
+            border-radius: 50%;
+            display: flex;
             justify-content: center;
-            z-index: 1000;
-            padding: 20px;
-        }
-
-        .modal.active {
-            display: flex;
-        }
-
-        .modal-content {
-            background: var(--bg-secondary);
-            border: 1px solid var(--border);
-            border-radius: 24px;
-            max-width: 640px;
-            width: 100%;
-            max-height: 80vh;
-            overflow-y: auto;
-            padding: 32px;
-            color: var(--text-primary);
-        }
-
-        .modal-content h2 {
-            margin-bottom: 16px;
-            display: flex;
             align-items: center;
-            gap: 12px;
-            font-size: 22px;
+            color: var(--white);
+            text-decoration: none;
+            transition: all 0.3s;
+        }
+
+        .social-links a:hover {
+            background: var(--gold);
+            color: var(--dark);
+            transform: translateY(-3px) rotate(360deg);
+        }
+
+        .footer-links {
+            list-style: none;
+        }
+
+        .footer-links li {
+            margin-bottom: 0.75rem;
+        }
+
+        .footer-links a {
+            color: rgba(255,255,255,0.7);
+            text-decoration: none;
+            transition: all 0.3s;
+            display: inline-flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+
+        .footer-links a:hover {
+            color: var(--gold);
+            transform: translateX(5px);
+        }
+
+        .footer-bottom {
+            max-width: 1400px;
+            margin: 3rem auto 0;
+            padding: 2rem 2rem 0;
+            border-top: 1px solid rgba(255,255,255,0.1);
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            flex-wrap: wrap;
+            gap: 1rem;
+        }
+
+        .copyright {
+            color: rgba(255,255,255,0.7);
+            font-size: 0.875rem;
+        }
+
+        .footer-bottom-links {
+            display: flex;
+            gap: 2rem;
+        }
+
+        .footer-bottom-links a {
+            color: rgba(255,255,255,0.7);
+            text-decoration: none;
+            font-size: 0.875rem;
+            transition: color 0.3s;
+        }
+
+        .footer-bottom-links a:hover {
+            color: var(--gold);
+        }
+
+        /* ===== BACK TO TOP ===== */
+        .back-to-top {
+            position: fixed;
+            bottom: 2rem;
+            right: 2rem;
+            width: 50px;
+            height: 50px;
+            background: var(--gradient-gold);
+            color: var(--dark);
+            border-radius: 50%;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            text-decoration: none;
+            box-shadow: var(--shadow-lg);
+            opacity: 0;
+            visibility: hidden;
+            transition: all 0.3s;
+            z-index: 999;
             font-weight: 700;
         }
 
-        .modal-close {
-            background: var(--bg-primary);
-            border: 1px solid var(--border);
-            color: var(--text-primary);
-            padding: 12px 20px;
-            border-radius: 12px;
-            cursor: pointer;
-            margin-top: 16px;
-            width: 100%;
-            font-weight: 600;
-            transition: all 0.2s;
+        .back-to-top.show {
+            opacity: 1;
+            visibility: visible;
         }
 
-        .modal-close:hover {
-            background: rgba(30,41,59,0.6);
+        .back-to-top:hover {
+            transform: translateY(-5px) scale(1.1);
+            box-shadow: var(--shadow-2xl);
         }
 
-        .alert {
-            padding: 14px 20px;
-            border-radius: 12px;
-            margin-bottom: 16px;
-            display: none;
+        /* ===== ANIMATIONS ===== */
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(20px); }
+            to { opacity: 1; transform: translateY(0); }
         }
 
-        .alert-success {
-            background: rgba(34, 197, 94, 0.1);
-            border: 1px solid rgba(34, 197, 94, 0.2);
-            color: #86efac;
+        @keyframes slideInLeft {
+            from { opacity: 0; transform: translateX(-50px); }
+            to { opacity: 1; transform: translateX(0); }
         }
 
+        @keyframes slideInRight {
+            from { opacity: 0; transform: translateX(50px); }
+            to { opacity: 1; transform: translateX(0); }
+        }
+
+        @keyframes float {
+            0% { transform: translateY(0px); }
+            50% { transform: translateY(-10px); }
+            100% { transform: translateY(0px); }
+        }
+
+        @keyframes spin {
+            from { transform: rotate(0deg); }
+            to { transform: rotate(360deg); }
+        }
+
+        @keyframes pulse {
+            0% { transform: scale(1); }
+            50% { transform: scale(1.05); }
+            100% { transform: scale(1); }
+        }
+
+        .animate-fadeIn { animation: fadeIn 0.6s ease; }
+        .animate-slideInLeft { animation: slideInLeft 0.8s ease; }
+        .animate-slideInRight { animation: slideInRight 0.8s ease; }
+        .animate-float { animation: float 3s infinite; }
+        .animate-pulse { animation: pulse 2s infinite; }
+
+        .delay-1 { animation-delay: 0.1s; }
+        .delay-2 { animation-delay: 0.2s; }
+        .delay-3 { animation-delay: 0.3s; }
+        .delay-4 { animation-delay: 0.4s; }
+        .delay-5 { animation-delay: 0.5s; }
+
+        /* ===== RESPONSIVE ===== */
         @media (max-width: 1024px) {
-            .charts-grid { grid-template-columns: 1fr; }
-            .chart-wrapper { height: 250px; }
+            .book-showcase {
+                grid-template-columns: 1fr;
+                gap: 2rem;
+            }
+            .book-3d { max-width: 350px; }
+            .entries-grid { grid-template-columns: 1fr 1fr; }
+        }
+
+        @media (max-width: 992px) {
+            .header-top { padding: 1rem 2rem; }
+            nav { padding: 0 2rem; }
+            .hero { padding: 3rem 2rem; }
+            .hero h2 { font-size: 3rem; }
+            .entries-grid { grid-template-columns: 1fr; }
         }
 
         @media (max-width: 768px) {
-            .header h1 { font-size: 20px; }
-            .stats-grid { grid-template-columns: repeat(2, 1fr); }
-            .questions-grid { grid-template-columns: repeat(2, 1fr); }
-            .stat-card .value { font-size: 24px; }
-            .pin-digit { width: 45px; height: 55px; font-size: 22px; }
-            .chart-wrapper { height: 200px; }
+            .header-top {
+                padding: 1rem;
+                flex-direction: column;
+                gap: 1rem;
+                text-align: center;
+            }
+            .logo { justify-content: center; }
+            .menu-toggle { display: flex; }
+            .nav-container { width: 100%; justify-content: space-between; }
+            .nav-links {
+                display: none;
+                flex-direction: column;
+                width: 100%;
+                position: absolute;
+                top: 100%;
+                left: 0;
+                background: var(--white);
+                padding: 1rem;
+                box-shadow: var(--shadow-lg);
+                z-index: 1000;
+                max-height: 80vh;
+                overflow-y: auto;
+            }
+            .nav-links.active { display: flex; }
+            .nav-links li { width: 100%; }
+            .nav-links a { width: 100%; justify-content: center; padding: 1rem; }
+            .search-bar { margin: 1rem 0; width: 100%; }
+            .search-bar input { width: 100%; }
+            .hero { margin: 1rem; padding: 2rem 1rem; }
+            .hero h2 { font-size: 2.5rem; }
+            .hero-stats { flex-direction: column; gap: 1rem; }
+            .countdown-timer { gap: 0.8rem; }
+            .countdown-item { min-width: 70px; padding: 1rem; }
+            .countdown-item .number { font-size: 2.5rem; }
+            .section-title { font-size: 2rem; }
+            .entries-grid { grid-template-columns: 1fr; }
+            .language-selector { gap: 0.5rem; }
+            .lang-btn { padding: 0.5rem 1rem; font-size: 0.8rem; }
+            .search-preview { flex-direction: column; }
+            .footer-bottom { flex-direction: column; text-align: center; }
+            .footer-bottom-links { justify-content: center; }
+            .book-3d { padding: 2rem; }
+            .book-3d h2 { font-size: 2.5rem; }
+            .cta-form { flex-direction: column; }
+            .cta-form input { width: 100%; }
         }
 
         @media (max-width: 480px) {
-            body { padding: 12px; }
-            .stats-grid { grid-template-columns: 1fr; }
-            .questions-grid { grid-template-columns: 1fr; }
-            .table-header { flex-direction: column; align-items: stretch; }
-            .table-controls { flex-direction: column; }
-            .header-actions .btn { font-size: 11px; padding: 8px 12px; }
-            .header h1 { font-size: 18px; }
-            .chart-wrapper { height: 180px; }
+            .hero h2 { font-size: 2rem; }
+            .countdown-item .number { font-size: 2rem; }
+            .countdown-item { min-width: 60px; padding: 0.75rem; }
+            .entry-card { padding: 1rem; }
+            .auth-buttons { flex-direction: column; width: 100%; }
+            .auth-btn { text-align: center; justify-content: center; }
+            .user-menu { flex-direction: column; text-align: center; }
+            .section-title { font-size: 1.6rem; }
+            .book-3d .book-icon { font-size: 4rem; }
+            .book-3d h2 { font-size: 2rem; }
         }
 
-        ::-webkit-scrollbar { width: 5px; height: 5px; }
-        ::-webkit-scrollbar-track { background: transparent; }
-        ::-webkit-scrollbar-thumb { background: var(--accent); border-radius: 3px; }
+        /* ===== SCROLLBAR ===== */
+        ::-webkit-scrollbar { width: 8px; }
+        ::-webkit-scrollbar-track { background: var(--light); }
+        ::-webkit-scrollbar-thumb { background: var(--gold); border-radius: 10px; }
+        ::-webkit-scrollbar-thumb:hover { background: var(--gold-light); }
+
+        /* ===== RESULTS COUNT ===== */
+        .results-count {
+            text-align: center;
+            color: var(--gray);
+            font-size: 0.95rem;
+            margin-bottom: 1.5rem;
+        }
+
+        .results-count strong {
+            color: var(--dark);
+            font-weight: 700;
+        }
+
+        /* ===== LANGUAGE BADGE ===== */
+        .lang-badge {
+            display: inline-block;
+            padding: 0.1rem 0.6rem;
+            border-radius: 12px;
+            font-size: 0.6rem;
+            font-weight: 700;
+            text-transform: uppercase;
+        }
+
+        .lang-badge.en { background: rgba(52, 152, 219, 0.15); color: var(--secondary); }
+        .lang-badge.ar { background: rgba(46, 204, 113, 0.15); color: var(--success); }
+        .lang-badge.ku { background: rgba(241, 196, 15, 0.15); color: var(--warning); }
     </style>
 </head>
 <body>
-    <!-- PIN Protection -->
-    <div class="pin-overlay" id="pinOverlay">
-        <div class="pin-box">
-            <div class="lock-icon"><i class="fas fa-shield-alt"></i></div>
-            <h2>Secure Access</h2>
-            <p>Enter the 4-digit PIN to access the dashboard</p>
-            <div class="pin-input-group" id="pinInputGroup">
-                <input type="password" class="pin-digit" maxlength="1" pattern="[0-9]" inputmode="numeric" data-index="0">
-                <input type="password" class="pin-digit" maxlength="1" pattern="[0-9]" inputmode="numeric" data-index="1">
-                <input type="password" class="pin-digit" maxlength="1" pattern="[0-9]" inputmode="numeric" data-index="2">
-                <input type="password" class="pin-digit" maxlength="1" pattern="[0-9]" inputmode="numeric" data-index="3">
+    <!-- Header -->
+    <header>
+        <div class="header-top">
+            <div class="logo">
+                <i class="fas fa-book-open logo-icon"></i>
+                <h1>Jihan<span>Dictionary</span></h1>
             </div>
-            <div class="pin-error" id="pinError"></div>
-            <button class="pin-btn" id="pinSubmitBtn">Unlock Dashboard</button>
+            <div class="auth-buttons" id="authButtons">
+                <a href="login.html" class="auth-btn login-btn"><i class="fas fa-sign-in-alt"></i> Login</a>
+                <a href="signup.html" class="auth-btn signup-btn"><i class="fas fa-user-plus"></i> Sign Up</a>
+            </div>
         </div>
-    </div>
+        
+        <nav>
+            <div class="nav-container">
+                <button class="menu-toggle" id="mobileMenuToggle" aria-label="Menu">
+                    <span></span><span></span><span></span>
+                </button>
+                <ul class="nav-links" id="navLinks">
+                    <li><a href="index.html"><i class="fas fa-home"></i> Home</a></li>
+                    <li><a href="products.html"><i class="fas fa-box"></i> Products</a></li>
+                    <li><a href="AI.html"><i class="fas fa-robot"></i> AI Assistant</a></li>
+                    <li><a href="JihanDictionary.html" class="active"><i class="fas fa-book"></i> Dictionary <span class="nav-badge">NEW</span></a></li>
+                    <li><a href="IELTS.html"><i class="fas fa-language"></i> IELTS</a></li>
+                    <li><a href="TOFEL.html"><i class="fas fa-globe-americas"></i> TOEFL</a></li>
+                    <li><a href="aboutDrwaleed.html"><i class="fas fa-user-md"></i> About</a></li>
+                    <li><a href="contact.html"><i class="fas fa-envelope"></i> Contact</a></li>
+                </ul>
+                <div class="search-bar">
+                    <input type="search" placeholder="Search dictionary..." aria-label="Search dictionary">
+                    <button type="submit"><i class="fas fa-search"></i></button>
+                </div>
+            </div>
+        </nav>
+    </header>
 
-    <div class="dashboard" id="dashboardContent" style="display:none;">
-        <!-- Header -->
-        <div class="header">
-            <div class="header-left">
-                <div class="logo"><i class="fas fa-brain"></i></div>
-                <div>
-                    <h1>Zakhourani AI · Enterprise</h1>
-                    <div class="header-subtitle">
-                        <i class="fas fa-calendar-alt"></i> 
-                        <span id="currentDateDisplay"></span>
-                        <i class="fas fa-clock" style="margin-left:12px;"></i> 
-                        <span id="currentTimeDisplay"></span>
-                        <span class="status-badge"><i class="fas fa-circle" style="font-size:8px;color:var(--success);margin-right:4px;"></i> Live</span>
+    <!-- Hero -->
+    <section class="hero">
+        <div class="hero-content">
+            <span class="hero-badge"><i class="fas fa-star"></i> Coming Soon</span>
+            <h2>Jihan Universal <span>Dictionary</span></h2>
+            <p>The Ultimate Trilingual Dictionary - English, Arabic, Kurdish. Over 100,000+ entries with detailed definitions, translations, and examples by Dr. Waleed Hussien Zakhourani.</p>
+            <div class="hero-stats">
+                <div class="stat">
+                    <span class="number">100K+</span>
+                    <span class="label">Entries</span>
+                </div>
+                <div class="stat">
+                    <span class="number">3</span>
+                    <span class="label">Languages</span>
+                </div>
+                <div class="stat">
+                    <span class="number">20+</span>
+                    <span class="label">Years Work</span>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Coming Soon Main -->
+    <section class="coming-soon-main">
+        <div class="section-header">
+            <span class="section-subtitle"><i class="fas fa-clock"></i> Coming Soon</span>
+            <h2 class="section-title">The <span>Jihan Dictionary</span> Project</h2>
+            <p class="section-description">A comprehensive trilingual dictionary by Dr. Waleed Hussien Zakhourani - bridging English, Arabic, and Kurdish languages.</p>
+        </div>
+
+        <div class="book-showcase">
+            <div class="book-cover-large">
+                <div class="book-3d">
+                    <div class="book-icon"><i class="fas fa-book-open"></i></div>
+                    <h2>JIHAN</h2>
+                    <div class="subtitle">Universal Dictionary</div>
+                    <div class="languages">
+                        <span>🇬🇧 English</span>
+                        <span>🇸🇦 Arabic</span>
+                        <span>🇰🇼 Kurdish</span>
+                    </div>
+                    <div class="author">Dr. Waleed Hussien Zakhourani</div>
+                </div>
+            </div>
+
+            <div class="countdown-section">
+                <h3><i class="fas fa-hourglass-half" style="color:var(--gold);"></i> Launch Countdown</h3>
+                <p class="sub-text">Jihan Dictionary is coming soon! Be the first to get access.</p>
+                <div class="countdown-timer" id="countdownTimer">
+                    <div class="countdown-item">
+                        <span class="icon"><i class="fas fa-calendar-day"></i></span>
+                        <span class="number" id="days">00</span>
+                        <span class="label">Days</span>
+                    </div>
+                    <div class="countdown-item">
+                        <span class="icon"><i class="fas fa-clock"></i></span>
+                        <span class="number" id="hours">00</span>
+                        <span class="label">Hours</span>
+                    </div>
+                    <div class="countdown-item">
+                        <span class="icon"><i class="fas fa-minute"></i></span>
+                        <span class="number" id="minutes">00</span>
+                        <span class="label">Minutes</span>
+                    </div>
+                    <div class="countdown-item">
+                        <span class="icon"><i class="fas fa-second"></i></span>
+                        <span class="number" id="seconds">00</span>
+                        <span class="label">Seconds</span>
                     </div>
                 </div>
-            </div>
-            <div class="header-actions">
-                <button class="btn btn-secondary" onclick="refreshData()">
-                    <i class="fas fa-sync"></i> Refresh
-                </button>
-                <button class="btn btn-primary" onclick="exportReport()">
-                    <i class="fas fa-file-export"></i> Export
-                </button>
-                <button class="btn btn-warning" onclick="simulateDay()">
-                    <i class="fas fa-forward"></i> +1 Day
-                </button>
-                <button class="btn btn-success" onclick="resetData()">
-                    <i class="fas fa-undo"></i> Reset
-                </button>
-            </div>
-        </div>
-
-        <div id="alert" class="alert"></div>
-
-        <!-- Token Pricing -->
-        <div class="token-pricing">
-            <div>
-                <div class="price"><i class="fas fa-coins"></i> $0.07 per 1M tokens</div>
-                <div style="color:var(--text-secondary);font-size:13px;"><i class="fas fa-info-circle"></i> DeepSeek API · Real-time consumption tracking</div>
-            </div>
-            <div>
-                <span class="badge"><i class="fas fa-bolt"></i> <span id="totalUsersBadge">55</span> Users</span>
-                <span class="badge" style="margin-left:8px;background:rgba(34,197,94,0.12);color:var(--success);border-color:rgba(34,197,94,0.15);">
-                    <i class="fas fa-check-circle"></i> System Online
-                </span>
-            </div>
-        </div>
-
-        <!-- Stats -->
-        <div class="stats-grid" id="statsGrid">
-            <div class="stat-card">
-                <div class="icon-bg"><i class="fas fa-wallet"></i></div>
-                <div class="label">Total Budget</div>
-                <div class="value" id="totalBudget">$300.00</div>
-                <div class="change positive"><i class="fas fa-check-circle"></i> Initial allocation</div>
-            </div>
-            <div class="stat-card">
-                <div class="icon-bg"><i class="fas fa-piggy-bank"></i></div>
-                <div class="label">Remaining Balance</div>
-                <div class="value" id="remainingBalance" style="color: var(--warning);">$50.00</div>
-                <div class="sub-value" id="remainingTokens">= 714,285 tokens</div>
-                <div class="change warning"><i class="fas fa-hourglass-half"></i> <span id="daysRemaining">5</span> days left</div>
-            </div>
-            <div class="stat-card">
-                <div class="icon-bg"><i class="fas fa-token"></i></div>
-                <div class="label">Total Tokens Used</div>
-                <div class="value" id="totalTokens">3,571,428</div>
-                <div class="sub-value">≈ <span id="totalTokensCost">$250.00</span> spent</div>
-                <div class="change positive"><i class="fas fa-chart-line"></i> <span id="tokenGrowth">+12.5%</span> MoM</div>
-            </div>
-            <div class="stat-card">
-                <div class="icon-bg"><i class="fas fa-users"></i></div>
-                <div class="label">Active Users</div>
-                <div class="value" id="activeUsers">0</div>
-                <div class="sub-value"><span id="totalUsersCount">0</span> total registered</div>
-                <div class="change positive"><i class="fas fa-user-plus"></i> <span id="userGrowth">+8</span> this month</div>
-            </div>
-            <div class="stat-card">
-                <div class="icon-bg"><i class="fas fa-question-circle"></i></div>
-                <div class="label">Questions Asked</div>
-                <div class="value" id="totalQuestions">0</div>
-                <div class="sub-value"><span id="dailyQuestions">0</span> today</div>
-                <div class="change positive"><i class="fas fa-arrow-up"></i> <span id="questionGrowth">+15%</span> weekly</div>
-            </div>
-        </div>
-
-        <!-- Timeline -->
-        <div class="timeline-section">
-            <div class="timeline-header">
-                <h3><i class="fas fa-calendar-week"></i> Daily Consumption · 15-Day Forecast</h3>
-                <div class="timeline-controls">
-                    <button class="active" onclick="setTimelineView('all')">All</button>
-                    <button onclick="setTimelineView('future')">Future</button>
-                    <button onclick="setTimelineView('past')">Past</button>
-                    <button onclick="setTimelineView('critical')">⚠️ Critical</button>
-                </div>
-            </div>
-            <div class="timeline-grid" id="timelineGrid"></div>
-        </div>
-
-        <!-- Charts -->
-        <div class="charts-grid">
-            <div class="chart-container">
-                <h3><i class="fas fa-chart-area"></i> Budget & Token Consumption</h3>
-                <div class="chart-wrapper">
-                    <canvas id="budgetChart"></canvas>
-                </div>
-            </div>
-            <div class="chart-container">
-                <h3><i class="fas fa-pie-chart"></i> Question Categories</h3>
-                <div class="chart-wrapper">
-                    <canvas id="usageChart"></canvas>
+                <div style="margin-top:2rem;">
+                    <a href="#" class="btn" style="background:var(--gradient-gold);color:var(--dark);padding:1rem 3rem;border-radius:50px;font-weight:700;text-decoration:none;display:inline-block;transition:all 0.3s;box-shadow:0 4px 15px rgba(247,151,30,0.3);">
+                        <i class="fas fa-bell"></i> Notify Me When Launched
+                    </a>
                 </div>
             </div>
         </div>
+    </section>
 
-        <!-- Questions -->
-        <div class="questions-section">
-            <div class="questions-header">
-                <h3><i class="fas fa-fire"></i> Most Asked Questions · Trending</h3>
-                <div style="display:flex;gap:6px;flex-wrap:wrap;">
-                    <button class="btn btn-secondary" onclick="sortQuestions('count')" style="padding:4px 14px;font-size:11px;">
-                        <i class="fas fa-sort-amount-down"></i> Count
-                    </button>
-                    <button class="btn btn-secondary" onclick="sortQuestions('name')" style="padding:4px 14px;font-size:11px;">
-                        <i class="fas fa-sort-alpha-down"></i> Name
-                    </button>
+    <!-- Features -->
+    <section class="features-section">
+        <div class="section-header">
+            <span class="section-subtitle"><i class="fas fa-cogs"></i> Features</span>
+            <h2 class="section-title">What Makes <span>Jihan</span> Special</h2>
+            <p class="section-description">Discover the powerful features that make Jihan Dictionary the ultimate trilingual reference</p>
+        </div>
+        <div class="features-grid">
+            <div class="feature-card">
+                <div class="icon"><i class="fas fa-globe-americas"></i></div>
+                <h3>Trilingual</h3>
+                <p>English, Arabic, and Kurdish translations with cultural context and usage examples for each entry.</p>
+            </div>
+            <div class="feature-card">
+                <div class="icon"><i class="fas fa-microphone-alt"></i></div>
+                <h3>Pronunciation Guide</h3>
+                <p>IPA pronunciation for every entry with audio support coming soon for perfect pronunciation.</p>
+            </div>
+            <div class="feature-card">
+                <div class="icon"><i class="fas fa-search-plus"></i></div>
+                <h3>Smart Search</h3>
+                <p>Advanced search with suggestions, filters, auto-complete, and cross-language search capabilities.</p>
+            </div>
+            <div class="feature-card">
+                <div class="icon"><i class="fas fa-bookmark"></i></div>
+                <h3>Favorites & History</h3>
+                <p>Save words to favorites, track your search history, and create custom word lists for study.</p>
+            </div>
+            <div class="feature-card">
+                <div class="icon"><i class="fas fa-bolt"></i></div>
+                <h3>Quick Access</h3>
+                <p>Mobile-optimized with fast loading, offline support, and instant word lookup from anywhere.</p>
+            </div>
+            <div class="feature-card">
+                <div class="icon"><i class="fas fa-robot"></i></div>
+                <h3>AI Integration</h3>
+                <p>AI-powered translations, contextual suggestions, and smart word recommendations based on usage.</p>
+            </div>
+        </div>
+    </section>
+
+    <!-- Dictionary Preview -->
+    <section class="dictionary-preview">
+        <div class="preview-container">
+            <div class="section-header">
+                <span class="section-subtitle"><i class="fas fa-book-open"></i> Preview</span>
+                <h2 class="section-title">Sample <span>Dictionary Entries</span></h2>
+                <p class="section-description">Explore sample entries from the Jihan Dictionary - Click language buttons to filter</p>
+            </div>
+
+            <div class="language-selector">
+                <button class="lang-btn active" data-lang="all"><i class="fas fa-globe"></i> All</button>
+                <button class="lang-btn" data-lang="english"><i class="fas fa-flag-usa"></i> English</button>
+                <button class="lang-btn" data-lang="arabic"><i class="fas fa-flag"></i> Arabic</button>
+                <button class="lang-btn" data-lang="kurdish"><i class="fas fa-flag"></i> Kurdish</button>
+                <button class="lang-btn" data-lang="a"><i class="fas fa-font"></i> Letter A</button>
+            </div>
+
+            <div class="search-preview">
+                <input type="text" id="previewSearch" placeholder="Search sample entries..." oninput="filterEntries()">
+                <button onclick="filterEntries()"><i class="fas fa-search"></i> Search</button>
+            </div>
+
+            <div class="results-count" id="resultsCount">
+                Showing <strong id="countDisplay">14</strong> entries
+            </div>
+
+            <div class="entries-grid" id="entriesGrid">
+                <!-- Populated by JavaScript -->
+            </div>
+        </div>
+    </section>
+
+    <!-- CTA -->
+    <section class="cta-section">
+        <div class="cta-container">
+            <h2>Ready to Explore <span>Jihan</span>?</h2>
+            <p>Get notified when the Jihan Universal Dictionary launches and be among the first to access this masterpiece.</p>
+            <div class="cta-form">
+                <input type="email" placeholder="Enter your email address">
+                <button><i class="fas fa-paper-plane"></i> Subscribe</button>
+            </div>
+            <div style="margin-top:2rem;display:flex;justify-content:center;gap:2rem;flex-wrap:wrap;">
+                <span><i class="fas fa-check-circle" style="color:var(--gold);"></i> Free access</span>
+                <span><i class="fas fa-check-circle" style="color:var(--gold);"></i> No spam</span>
+                <span><i class="fas fa-check-circle" style="color:var(--gold);"></i> Unsubscribe anytime</span>
+            </div>
+        </div>
+    </section>
+
+    <!-- Footer -->
+    <footer>
+        <div class="footer-content">
+            <div class="footer-section">
+                <h3>Jihan Dictionary</h3>
+                <p>The Universal Dictionary by Dr. Waleed Hussien Zakhourani - Bridging English, Arabic, and Kurdish languages with 100,000+ entries.</p>
+                <div class="social-links">
+                    <a href="#"><i class="fab fa-facebook-f"></i></a>
+                    <a href="#"><i class="fab fa-twitter"></i></a>
+                    <a href="#"><i class="fab fa-linkedin-in"></i></a>
+                    <a href="#"><i class="fab fa-instagram"></i></a>
+                    <a href="#"><i class="fab fa-youtube"></i></a>
                 </div>
             </div>
-            <div class="questions-grid" id="questionsGrid"></div>
+            <div class="footer-section">
+                <h3>Quick Links</h3>
+                <ul class="footer-links">
+                    <li><a href="index.html"><i class="fas fa-chevron-right"></i> Home</a></li>
+                    <li><a href="products.html"><i class="fas fa-chevron-right"></i> Products</a></li>
+                    <li><a href="aboutDrwaleed.html"><i class="fas fa-chevron-right"></i> About Dr. Waleed</a></li>
+                    <li><a href="contact.html"><i class="fas fa-chevron-right"></i> Contact</a></li>
+                </ul>
+            </div>
+            <div class="footer-section">
+                <h3>Support</h3>
+                <ul class="footer-links">
+                    <li><a href="#"><i class="fas fa-chevron-right"></i> FAQ</a></li>
+                    <li><a href="#"><i class="fas fa-chevron-right"></i> Privacy Policy</a></li>
+                    <li><a href="#"><i class="fas fa-chevron-right"></i> Terms of Service</a></li>
+                </ul>
+            </div>
+            <div class="footer-section">
+                <h3>Contact</h3>
+                <ul class="footer-links">
+                    <li><a href="#"><i class="fas fa-envelope"></i> info@zakhourani.com</a></li>
+                    <li><a href="#"><i class="fas fa-phone"></i> +971 4 123 4567</a></li>
+                    <li><a href="#"><i class="fas fa-map-marker-alt"></i> Dubai, UAE</a></li>
+                </ul>
+            </div>
         </div>
+        <div class="footer-bottom">
+            <p class="copyright">© 2024 Jihan Dictionary - Zakhourani. All rights reserved. | By Dr. Waleed Hussien Zakhourani</p>
+            <div class="footer-bottom-links">
+                <a href="#">Privacy</a>
+                <a href="#">Terms</a>
+                <a href="#">Cookies</a>
+                <a href="#">Accessibility</a>
+            </div>
+        </div>
+    </footer>
 
-        <!-- Users Table -->
-        <div class="table-container">
-            <div class="table-header">
-                <h3><i class="fas fa-users"></i> All Users · <span id="userCountDisplay">0</span> users</h3>
-                <div class="table-controls">
-                    <input type="text" id="searchInput" placeholder="Search users..." oninput="filterUsers()">
-                    <select id="filterProvider" onchange="filterUsers()">
-                        <option value="all">All Providers</option>
-                        <option value="google">Google</option>
-                        <option value="github">GitHub</option>
-                        <option value="email">Email</option>
-                    </select>
-                    <select id="filterStatus" onchange="filterUsers()">
-                        <option value="all">All Status</option>
-                        <option value="active">Active</option>
-                        <option value="inactive">Inactive</option>
-                        <option value="premium">Premium</option>
-                    </select>
-                </div>
-            </div>
-            <div class="table-wrapper">
-                <table>
-                    <thead>
-                        <tr>
-                            <th>#</th>
-                            <th>User</th>
-                            <th>Email</th>
-                            <th>Provider</th>
-                            <th>Daily Tokens</th>
-                            <th>Total Tokens</th>
-                            <th>Cost ($)</th>
-                            <th>Questions</th>
-                            <th>Status</th>
-                            <th>Last Active</th>
-                            <th>Actions</th>
-                        </tr>
-                    </thead>
-                    <tbody id="usersBody"></tbody>
-                </table>
-            </div>
-        </div>
-
-        <!-- Modal -->
-        <div class="modal" id="userModal">
-            <div class="modal-content">
-                <h2><i class="fas fa-user-circle"></i> User Profile</h2>
-                <div id="userDetailContent"></div>
-                <button class="modal-close" onclick="closeModal('userModal')">Close</button>
-            </div>
-        </div>
-    </div>
+    <!-- Back to Top -->
+    <a href="#" class="back-to-top" id="backToTop"><i class="fas fa-arrow-up"></i></a>
 
     <script>
         // ==============================================
-        // CONFIGURATION
+        // DICTIONARY ENTRIES DATA - ALL 14 WORDS
         // ==============================================
-        const TOKEN_COST_PER_MILLION = 0.07;
-        const TOTAL_BUDGET = 300;
-        const MIN_BALANCE = 50;
-        const CORRECT_PIN = "2026";
+        const dictionaryEntries = [
+            {
+                word: "Aani",
+                pronunciation: "/ˈɑːni/",
+                partOfSpeech: "n.",
+                arabic: "نوع من القرود",
+                kurdish: "(S) جۆرە مەیموونێک، (B) جۆرەکێ مەیمینکێ",
+                definition: "An ancient Egyptian name for a dog-headed baboon.",
+                example: "The Aani was often depicted in ancient Egyptian hieroglyphs.",
+                synonyms: "Baboon",
+                antonyms: "N/A"
+            },
+            {
+                word: "Aardvark",
+                pronunciation: "/ˈɑːrdvɑːrk/",
+                partOfSpeech: "n.",
+                arabic: "خنزير الأرض",
+                kurdish: "(S) بەرازی زەوی، (B) بەرازێ ئەردی",
+                definition: "A nocturnal badger-like mammal with a long snout and sticky tongue, native to Africa.",
+                example: "The aardvark uses its powerful claws to dig into termite mounds.",
+                synonyms: "Ant-bear",
+                antonyms: "N/A"
+            },
+            {
+                word: "Aardwolf",
+                pronunciation: "/ˈɑːrdwʊlf/",
+                partOfSpeech: "n.",
+                arabic: "ذئب الأرض",
+                kurdish: "(S) گورگی زەوی، (B) گورگێ ئەردی",
+                definition: "A striped hyena-like mammal of Africa that feeds mainly on termites.",
+                example: "Unlike other hyenas, the aardwolf is shy and primarily eats insects.",
+                synonyms: "Proteles",
+                antonyms: "N/A"
+            },
+            {
+                word: "Aaronic",
+                pronunciation: "/eɪˈrɒnɪk/",
+                partOfSpeech: "adj.",
+                arabic: "هاروني",
+                kurdish: "(S) پەیوەندیدار بە هارونەوە، (B) پیوەندیدار ب هارونی ڤە",
+                definition: "Pertaining to Aaron, the first high priest of the Hebrews.",
+                example: "The Aaronic priesthood is a significant concept in certain religious traditions.",
+                synonyms: "Sacerdotal",
+                antonyms: "N/A"
+            },
+            {
+                word: "Aaronical",
+                pronunciation: "/eɪˈrɒnɪkəl/",
+                partOfSpeech: "adj.",
+                arabic: "هاروني (بشكل رسمي)",
+                kurdish: "(S) بە شێوەیەکی هارونی، (B) ب شێوەیەکێ هارونی",
+                definition: "Another form of Aaronic; relating to the high priesthood.",
+                example: "The Aaronical vestments were described in detail in the ancient texts.",
+                synonyms: "Priestly",
+                antonyms: "N/A"
+            },
+            {
+                word: "Abaca",
+                pronunciation: "/ˌæbəˈkɑː/",
+                partOfSpeech: "n.",
+                arabic: "أباكا (مانيلا)",
+                kurdish: "(S) ڕووەکی ئاباکا (مانێلا) (B) ڕووەکێ ئاباکا (مانێلا)",
+                definition: "A large plant of the Philippines used for its strong fiber.",
+                example: "Abaca is used to make high-quality ropes and paper.",
+                synonyms: "Manila hemp",
+                antonyms: "N/A"
+            },
+            {
+                word: "Abacterial",
+                pronunciation: "/ˌeɪbækˈtɪəriəl/",
+                partOfSpeech: "adj.",
+                arabic: "غير بكتيري",
+                kurdish: "(S) نابەکتریایی، (B) نەبەکتریایی",
+                definition: "Not caused by or containing bacteria.",
+                example: "The doctor confirmed that the inflammation was abacterial.",
+                synonyms: "Sterile",
+                antonyms: "Bacterial"
+            },
+            {
+                word: "Abacus",
+                pronunciation: "/ˈæbəkəs/",
+                partOfSpeech: "n.",
+                arabic: "مِعداد",
+                kurdish: "(S) هەژمارکەر، (B) هەژمارکەر",
+                definition: "A manual calculating tool consisting of beads on rods.",
+                example: "The student used an abacus to solve the addition problem quickly.",
+                synonyms: "Calculating frame",
+                antonyms: "N/A"
+            },
+            {
+                word: "Abaddon",
+                pronunciation: "/əˈbædən/",
+                partOfSpeech: "n.",
+                arabic: "الهلاك",
+                kurdish: "(S) وێرانکەر، (B) وێرانکەر",
+                definition: "A Hebrew name for the place of destruction or an angel of the abyss.",
+                example: "Abaddon is mentioned as the king of an army of locusts.",
+                synonyms: "Destroyer",
+                antonyms: "N/A"
+            },
+            {
+                word: "Abaft",
+                pronunciation: "/əˈbæft/",
+                partOfSpeech: "adv.",
+                arabic: "في مؤخرة السفينة",
+                kurdish: "(S) لە پشتەوەی کەشتی، (B) ل پشتا کەشتیێ",
+                definition: "Toward the stern or back part of a ship.",
+                example: "The cargo was stored abaft the main mast.",
+                synonyms: "Astern",
+                antonyms: "Forward"
+            },
+            {
+                word: "Abacinate",
+                pronunciation: "/əˈbæsɪneɪt/",
+                partOfSpeech: "v.",
+                arabic: "سمل العين",
+                kurdish: "(S) کوێرکردن بە ئاسنی داخکراو (B) کورەکرن ب ئاسنێ داخکری",
+                definition: "To blind by holding a red-hot metal plate before the eyes.",
+                example: "Ancient tyrants would sometimes abacinate their prisoners.",
+                synonyms: "Blind",
+                antonyms: "N/A"
+            },
+            {
+                word: "Abacination",
+                pronunciation: "/əˌbæsɪˈneɪʃən/",
+                partOfSpeech: "n.",
+                arabic: "سمل العين (العملية)",
+                kurdish: "(S) پرۆسەی کوێرکردن بە ئاسن، (B) کریارا کورەکرنێ ب ئاسنی",
+                definition: "The act of blinding using hot metal.",
+                example: "Abacination was a cruel form of punishment in the Middle Ages.",
+                synonyms: "Blinding",
+                antonyms: "N/A"
+            },
+            {
+                word: "Abactor",
+                pronunciation: "/æˈbæktər/",
+                partOfSpeech: "n.",
+                arabic: "سارق الماشية",
+                kurdish: "(S) دزی مەڕ و ماڵات (B) دزێ مەر و مالاتی",
+                definition: "A person who steals entire herds of livestock.",
+                example: "The abactor was caught trying to drive the cattle across the border.",
+                synonyms: "Cattle-lifter",
+                antonyms: "N/A"
+            }
+        ];
 
         // ==============================================
-        // STATE
+        // RENDER DICTIONARY ENTRIES
         // ==============================================
-        let users = [];
-        let questions = [];
-        let timelineData = [];
-        let chartInstances = {};
-        let currentTimelineView = 'all';
-        let simulatedDay = 0;
-        let pinAttempts = 0;
+        let currentFilter = 'all';
+        let searchTerm = '';
 
-        const QUESTION_CATEGORIES = {
-            'about_ai': { icon: 'fa-robot', name: 'AI & Machine Learning', color: '#3b82f6' },
-            'about_images': { icon: 'fa-image', name: 'Computer Vision', color: '#8b5cf6' },
-            'about_dr_waleed': { icon: 'fa-user-graduate', name: 'Dr. Waleed Zakhourani', color: '#eab308' },
-            'about_dictionary': { icon: 'fa-book', name: 'JIHAN Dictionary', color: '#22c55e' },
-            'about_kurdish': { icon: 'fa-language', name: 'Kurdish Language', color: '#06b6d4' },
-            'about_computer': { icon: 'fa-laptop-code', name: 'Computer Science', color: '#f472b6' },
-            'about_health': { icon: 'fa-heartbeat', name: 'Health & Medicine', color: '#ef4444' },
-            'about_kids': { icon: 'fa-child', name: 'Education & Kids', color: '#84cc16' },
-            'about_history': { icon: 'fa-history', name: 'History & Civilization', color: '#f97316' },
-            'about_science': { icon: 'fa-flask', name: 'Science & Research', color: '#14b8a6' },
-            'about_philosophy': { icon: 'fa-brain', name: 'Philosophy & Ethics', color: '#8b5cf6' },
-            'about_art': { icon: 'fa-paint-brush', name: 'Art & Culture', color: '#ec4899' }
-        };
+        function renderEntries(entries) {
+            const grid = document.getElementById('entriesGrid');
+            const countDisplay = document.getElementById('countDisplay');
+            
+            countDisplay.textContent = entries.length;
 
-        // ==============================================
-        // PIN PROTECTION
-        // ==============================================
-        function handlePinInput() {
-            const inputs = document.querySelectorAll('.pin-digit');
-            let pin = '';
-            inputs.forEach(inp => pin += inp.value);
-            document.getElementById('pinSubmitBtn').disabled = pin.length !== 4;
+            if (entries.length === 0) {
+                grid.innerHTML = `
+                    <div style="grid-column:1/-1;text-align:center;padding:4rem 2rem;color:var(--gray);">
+                        <i class="fas fa-search" style="font-size:4rem;display:block;margin-bottom:1rem;color:var(--gold);"></i>
+                        <h3 style="color:var(--dark);">No entries found</h3>
+                        <p>Try a different search term or filter</p>
+                    </div>
+                `;
+                return;
+            }
+
+            grid.innerHTML = entries.map((entry, index) => `
+                <div class="entry-card animate__animated animate__fadeInUp animate__delay-${index % 5 + 1}s">
+                    <div class="entry-word">
+                        ${entry.word}
+                        <span class="pronunciation">${entry.pronunciation}</span>
+                        <span class="lang-badge en">EN</span>
+                    </div>
+                    <div class="entry-part">${entry.partOfSpeech}</div>
+                    <div class="entry-translations">
+                        <span><span class="lang-tag">🇸🇦 Ar:</span> <span class="translation">${entry.arabic}</span></span>
+                        <span><span class="lang-tag">🇰🇼 Ku:</span> <span class="translation">${entry.kurdish}</span></span>
+                    </div>
+                    <div class="entry-definition">${entry.definition}</div>
+                    <div class="entry-example">${entry.example}</div>
+                    <div class="entry-synonyms">
+                        <span><strong>Synonyms:</strong> <span class="syn">${entry.synonyms}</span></span>
+                        <span><strong>Antonyms:</strong> <span class="ant">${entry.antonyms}</span></span>
+                    </div>
+                </div>
+            `).join('');
         }
 
-        document.querySelectorAll('.pin-digit').forEach((input, index, arr) => {
-            input.addEventListener('input', function(e) {
-                this.value = this.value.replace(/[^0-9]/g, '');
-                if (this.value.length === 1 && index < arr.length - 1) {
-                    arr[index + 1].focus();
-                }
-                handlePinInput();
+        // ==============================================
+        // FILTER ENTRIES
+        // ==============================================
+        function filterEntries() {
+            const searchInput = document.getElementById('previewSearch');
+            searchTerm = searchInput.value.toLowerCase().trim();
+            
+            let filtered = dictionaryEntries.filter(entry => {
+                const matchSearch = entry.word.toLowerCase().includes(searchTerm) ||
+                                  entry.definition.toLowerCase().includes(searchTerm) ||
+                                  entry.arabic.includes(searchTerm) ||
+                                  entry.kurdish.includes(searchTerm) ||
+                                  entry.example.toLowerCase().includes(searchTerm);
+                
+                if (currentFilter === 'all') return matchSearch;
+                if (currentFilter === 'english') return matchSearch && entry.word.toLowerCase().includes(searchTerm);
+                if (currentFilter === 'arabic') return matchSearch && entry.arabic.includes(searchTerm);
+                if (currentFilter === 'kurdish') return matchSearch && entry.kurdish.includes(searchTerm);
+                if (currentFilter === 'a') return matchSearch && entry.word.toLowerCase().startsWith('a');
+                return matchSearch;
             });
+            
+            renderEntries(filtered);
+        }
 
-            input.addEventListener('keydown', function(e) {
-                if (e.key === 'Backspace' && !this.value && index > 0) {
-                    arr[index - 1].focus();
-                    arr[index - 1].value = '';
-                    handlePinInput();
-                }
-                if (e.key === 'Enter') {
-                    document.getElementById('pinSubmitBtn').click();
-                }
+        // ==============================================
+        // LANGUAGE SELECTOR
+        // ==============================================
+        document.querySelectorAll('.lang-btn').forEach(btn => {
+            btn.addEventListener('click', function() {
+                document.querySelectorAll('.lang-btn').forEach(b => b.classList.remove('active'));
+                this.classList.add('active');
+                currentFilter = this.dataset.lang;
+                filterEntries();
             });
         });
 
-        document.getElementById('pinSubmitBtn').addEventListener('click', function() {
-            let pin = '';
-            document.querySelectorAll('.pin-digit').forEach(inp => pin += inp.value);
-
-            if (pin === CORRECT_PIN) {
-                document.getElementById('pinOverlay').classList.add('hidden');
-                document.getElementById('dashboardContent').style.display = 'block';
-                document.querySelector('.pin-error').textContent = '';
-                initDashboard();
-            } else {
-                pinAttempts++;
-                document.querySelector('.pin-error').textContent = `❌ Invalid PIN. Attempts: ${pinAttempts}/5`;
-                document.querySelectorAll('.pin-digit').forEach(inp => {
-                    inp.value = '';
-                    inp.style.borderColor = 'var(--danger)';
-                });
-                document.querySelector('.pin-digit').focus();
-                document.getElementById('pinSubmitBtn').disabled = true;
-
-                if (pinAttempts >= 5) {
-                    document.querySelector('.pin-error').textContent = '🔒 Too many attempts. Refresh page.';
-                    document.getElementById('pinSubmitBtn').disabled = true;
-                    document.querySelectorAll('.pin-digit').forEach(inp => inp.disabled = true);
-                }
-            }
-        });
-
         // ==============================================
-        // DATA GENERATION
+        // COUNTDOWN TIMER - 2 MONTHS FROM TODAY
         // ==============================================
-        function calculateTokensFromCost(cost) {
-            return Math.round((cost / TOKEN_COST_PER_MILLION) * 1000000);
-        }
+        function startCountdown() {
+            const launchDate = new Date();
+            launchDate.setMonth(launchDate.getMonth() + 2);
+            launchDate.setHours(0, 0, 0, 0);
 
-        function calculateCostFromTokens(tokens) {
-            return (tokens / 1000000) * TOKEN_COST_PER_MILLION;
-        }
+            function updateTimer() {
+                const now = new Date();
+                const diff = launchDate - now;
 
-        function generateAllUsers(count = 55) {
-            const firstNames = ['Ahmed', 'Mohammad', 'Sara', 'Nora', 'Omar', 'Laila', 'Khaled', 'Mai', 
-                               'Youssef', 'Dina', 'Hassan', 'Fatima', 'Ali', 'Nadia', 'Samer', 'Rana',
-                               'Waleed', 'Ghada', 'Karim', 'Layla', 'Ibrahim', 'Amira', 'Hussein', 'Zainab',
-                               'Mustafa', 'Mona', 'Tarek', 'Salma', 'Rami', 'Huda', 'Yasmin', 'Kareem',
-                               'Lina', 'Sami', 'Nour', 'Rayan', 'Hana', 'Zayn', 'Maya', 'Adam',
-                               'Leila', 'Kamal', 'Nadia', 'Rashid', 'Samira', 'Jamal', 'Hala', 'Nabil',
-                               'Mariam', 'Ziad', 'Layth', 'Sana', 'Rayan', 'Tala', 'Yara'];
-            const lastNames = ['Khalil', 'Ali', 'Hassan', 'Saeed', 'Farouk', 'Ahmed', 'Ibrahim', 'Mohamed',
-                              'Hossam', 'Mahmoud', 'Nabil', 'Karim', 'Hussein', 'Said', 'Omar', 'Nasser',
-                              'Rashid', 'Malik', 'Aziz', 'Qadir', 'Rahman', 'Salem', 'Zaki', 'Nour',
-                              'Fayad', 'Haddad', 'Mansour', 'Sabbagh'];
-            const providers = ['google', 'email', 'github', 'google', 'email', 'google', 'github', 'email', 
-                              'google', 'email', 'github', 'google', 'email', 'google', 'github', 'email',
-                              'google', 'email', 'github', 'google', 'email', 'google', 'github', 'email',
-                              'google', 'email', 'github', 'google', 'email', 'google', 'github', 'email',
-                              'google', 'email', 'github', 'google', 'email', 'google', 'github', 'email',
-                              'google', 'email', 'github', 'google', 'email', 'google', 'github', 'email',
-                              'google', 'email', 'github', 'google', 'email', 'google', 'github'];
-            
-            const statuses = ['active', 'active', 'active', 'active', 'active', 'inactive', 'premium', 'premium', 'active', 'active', 'active', 'active'];
-            
-            return Array.from({ length: count }, (_, i) => {
-                const firstName = firstNames[i % firstNames.length];
-                const lastName = lastNames[Math.floor(i / 3) % lastNames.length];
-                const name = `${firstName} ${lastName}`;
-                const email = `${firstName.toLowerCase()}.${lastName.toLowerCase()}${Math.floor(Math.random() * 100)}@${['gmail.com', 'yahoo.com', 'outlook.com', 'hotmail.com'][i % 4]}`;
-                const totalTokens = Math.floor(Math.random() * 250000) + 15000;
-                // Daily tokens: random between 500 and 8000
-                const dailyTokens = Math.floor(Math.random() * 7500) + 500;
-                const questions = Math.floor(Math.random() * 120) + 5;
-                const daysAgo = Math.floor(Math.random() * 60);
-                
-                return {
-                    uid: `user_${String(i + 1).padStart(3, '0')}`,
-                    email: email,
-                    displayName: name,
-                    photoURL: null,
-                    provider: providers[i % providers.length],
-                    createdAt: new Date(2026, 0, Math.floor(Math.random() * 180) + 1),
-                    lastActive: new Date(Date.now() - daysAgo * 24 * 60 * 60 * 1000 - Math.random() * 12 * 60 * 60 * 1000),
-                    tokensUsed: totalTokens,
-                    dailyTokens: dailyTokens,
-                    cost: calculateCostFromTokens(totalTokens),
-                    dailyCost: calculateCostFromTokens(dailyTokens),
-                    questions: questions,
-                    calls: Math.floor(Math.random() * 300) + 20,
-                    status: statuses[i % statuses.length]
-                };
-            });
-        }
-
-        function generateAllQuestions() {
-            return Object.keys(QUESTION_CATEGORIES).map(key => {
-                const baseCount = Math.floor(Math.random() * 250) + 30;
-                const multiplier = ['about_dr_waleed', 'about_ai', 'about_dictionary'].includes(key) ? 1.8 : 
-                                  ['about_kurdish', 'about_computer'].includes(key) ? 1.4 : 1;
-                return {
-                    id: key,
-                    name: QUESTION_CATEGORIES[key].name,
-                    icon: QUESTION_CATEGORIES[key].icon,
-                    count: Math.floor(baseCount * multiplier),
-                    color: QUESTION_CATEGORIES[key].color,
-                    trend: Math.floor(Math.random() * 40) - 10
-                };
-            }).sort((a, b) => b.count - a.count);
-        }
-
-        function generateTimelineData() {
-            const data = [];
-            let balance = TOTAL_BUDGET;
-            let totalTokens = 0;
-            const days = 200;
-            const now = new Date();
-
-            for (let i = 0; i <= days; i++) {
-                const date = new Date(2026, 0, 1 + i);
-                let dailySpend = 2 + Math.random() * 8;
-                
-                const dayOfWeek = date.getDay();
-                if (dayOfWeek === 0 || dayOfWeek === 6) dailySpend *= 0.7;
-                if (dayOfWeek === 2 || dayOfWeek === 3) dailySpend *= 1.2;
-                
-                if (date.getDate() === 1) dailySpend *= 0.6;
-                if (date.getDate() === 15) dailySpend *= 1.3;
-                if (date.getDate() === 28) dailySpend *= 1.1;
-                
-                const growthFactor = 1 + (i / days) * 0.5;
-                dailySpend *= growthFactor;
-                
-                dailySpend = Math.round(dailySpend * 100) / 100;
-                const dailyTokens = calculateTokensFromCost(dailySpend);
-                
-                // Calculate user consumption for this day (sum of all users' daily tokens)
-                const totalDailyUserTokens = users.reduce((sum, u) => sum + (u.dailyTokens || Math.floor(Math.random() * 7500) + 500), 0);
-                const avgUserTokens = Math.round(totalDailyUserTokens / users.length);
-                
-                if (balance - dailySpend < MIN_BALANCE) {
-                    dailySpend = Math.round((balance - MIN_BALANCE) * 100) / 100;
-                    if (dailySpend < 0) dailySpend = 0;
-                    balance = MIN_BALANCE;
-                } else {
-                    balance = Math.round((balance - dailySpend) * 100) / 100;
+                if (diff <= 0) {
+                    document.getElementById('days').textContent = '00';
+                    document.getElementById('hours').textContent = '00';
+                    document.getElementById('minutes').textContent = '00';
+                    document.getElementById('seconds').textContent = '00';
+                    return;
                 }
-                
-                totalTokens += dailyTokens;
-                
-                // Check if date is in June 2026 (critical period)
-                const isJune = date.getMonth() === 5 && date.getFullYear() === 2026;
-                const isCritical = isJune || balance < MIN_BALANCE + 15;
-                
-                data.push({
-                    date: date,
-                    spend: dailySpend,
-                    balance: balance,
-                    tokens: dailyTokens,
-                    totalTokens: totalTokens,
-                    day: i + 1,
-                    predicted: false,
-                    dayOfWeek: date.toLocaleDateString('en-US', { weekday: 'short' }),
-                    avgUserTokens: avgUserTokens,
-                    userCount: users.length,
-                    isCritical: isCritical,
-                    isJune: isJune
-                });
-            }
-            
-            return data;
-        }
 
-        function generateFutureData(history) {
-            const lastData = history[history.length - 1];
-            const avgSpend = history.slice(-30).reduce((sum, d) => sum + d.spend, 0) / 30;
-            const projections = [];
-            let balance = lastData.balance;
-            let totalTokens = lastData.totalTokens;
-            let day = history.length;
+                const days = Math.floor(diff / (1000 * 60 * 60 * 24));
+                const hours = Math.floor((diff % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
+                const minutes = Math.floor((diff % (1000 * 60 * 60)) / (1000 * 60));
+                const seconds = Math.floor((diff % (1000 * 60)) / 1000);
 
-            for (let i = 1; i <= 15; i++) {
-                const date = new Date();
-                date.setDate(date.getDate() + i);
-                
-                const dayOfWeek = date.getDay();
-                let multiplier = 1;
-                if (dayOfWeek === 0 || dayOfWeek === 6) multiplier = 0.7;
-                if (dayOfWeek === 2 || dayOfWeek === 3) multiplier = 1.2;
-                
-                let dailySpend = avgSpend * (0.7 + Math.random() * 0.6) * multiplier;
-                dailySpend = Math.round(dailySpend * 100) / 100;
-                const dailyTokens = calculateTokensFromCost(dailySpend);
-                
-                if (balance - dailySpend < MIN_BALANCE) {
-                    dailySpend = Math.round((balance - MIN_BALANCE) * 100) / 100;
-                    if (dailySpend < 0) dailySpend = 0;
-                    balance = MIN_BALANCE;
-                } else {
-                    balance = Math.round((balance - dailySpend) * 100) / 100;
-                }
-                
-                totalTokens += dailyTokens;
-                
-                projections.push({
-                    date: date,
-                    spend: dailySpend,
-                    balance: balance,
-                    tokens: dailyTokens,
-                    totalTokens: totalTokens,
-                    day: day + i,
-                    predicted: true,
-                    dayOfWeek: date.toLocaleDateString('en-US', { weekday: 'short' }),
-                    avgUserTokens: Math.round(dailyTokens / users.length),
-                    userCount: users.length,
-                    isCritical: balance < MIN_BALANCE + 15,
-                    isJune: date.getMonth() === 5 && date.getFullYear() === 2026
-                });
+                document.getElementById('days').textContent = String(days).padStart(2, '0');
+                document.getElementById('hours').textContent = String(hours).padStart(2, '0');
+                document.getElementById('minutes').textContent = String(minutes).padStart(2, '0');
+                document.getElementById('seconds').textContent = String(seconds).padStart(2, '0');
             }
-            
-            return projections;
+
+            updateTimer();
+            setInterval(updateTimer, 1000);
         }
 
         // ==============================================
         // INIT
         // ==============================================
-        function initDashboard() {
-            users = generateAllUsers(55);
-            questions = generateAllQuestions();
+        document.addEventListener('DOMContentLoaded', function() {
+            // Render entries
+            renderEntries(dictionaryEntries);
             
-            const history = generateTimelineData();
-            const future = generateFutureData(history);
-            timelineData = [...history, ...future];
+            // Start countdown
+            startCountdown();
 
-            updateDateTime();
-            updateStats();
-            renderTimeline();
-            renderQuestions();
-            renderUsers();
-            updateCharts();
-
-            setInterval(() => {
-                updateDateTime();
-            }, 1000);
-        }
-
-        // ==============================================
-        // UPDATE FUNCTIONS
-        // ==============================================
-        function updateDateTime() {
-            const now = new Date();
-            document.getElementById('currentDateDisplay').textContent = 
-                now.toLocaleDateString('en-US', { weekday: 'long', year: 'numeric', month: 'long', day: 'numeric' });
-            document.getElementById('currentTimeDisplay').textContent = 
-                now.toLocaleTimeString('en-US', { hour: '2-digit', minute: '2-digit', second: '2-digit' });
-        }
-
-        function updateStats() {
-            const lastData = timelineData[timelineData.length - 1];
-            const currentBalance = lastData ? Math.max(MIN_BALANCE, lastData.balance) : MIN_BALANCE;
-            const totalTokensUsed = lastData ? lastData.totalTokens : 0;
-            
-            const recent = timelineData.slice(-30);
-            const avgSpend = recent.reduce((sum, d) => sum + d.spend, 0) / Math.max(1, recent.length);
-            
-            document.getElementById('totalBudget').textContent = `$${TOTAL_BUDGET.toFixed(2)}`;
-            document.getElementById('remainingBalance').textContent = `$${currentBalance.toFixed(2)}`;
-            document.getElementById('remainingTokens').textContent = `= ${Math.round((currentBalance / TOKEN_COST_PER_MILLION) * 1000000).toLocaleString()} tokens`;
-            document.getElementById('daysRemaining').textContent = Math.max(0, Math.floor((currentBalance - MIN_BALANCE) / avgSpend));
-            
-            document.getElementById('totalTokens').textContent = Math.round(totalTokensUsed).toLocaleString();
-            document.getElementById('totalTokensCost').textContent = `$${calculateCostFromTokens(totalTokensUsed).toFixed(2)}`;
-            
-            document.getElementById('tokenGrowth').textContent = `+${Math.floor(Math.random() * 15) + 8}%`;
-            
-            const activeUsers = users.filter(u => {
-                const diff = Date.now() - u.lastActive.getTime();
-                return diff < 24 * 60 * 60 * 1000;
-            }).length;
-            document.getElementById('activeUsers').textContent = activeUsers;
-            document.getElementById('totalUsersCount').textContent = users.length;
-            document.getElementById('userGrowth').textContent = `+${Math.floor(Math.random() * 12) + 3}`;
-            
-            const totalQuestions = users.reduce((sum, u) => sum + u.questions, 0);
-            document.getElementById('totalQuestions').textContent = totalQuestions.toLocaleString();
-            document.getElementById('dailyQuestions').textContent = Math.floor(totalQuestions / 30);
-            document.getElementById('questionGrowth').textContent = `+${Math.floor(Math.random() * 20) + 5}%`;
-            
-            document.getElementById('userCountDisplay').textContent = users.length;
-            document.getElementById('totalUsersBadge').textContent = users.length;
-        }
-
-        // ==============================================
-        // RENDER TIMELINE
-        // ==============================================
-        function renderTimeline() {
-            const grid = document.getElementById('timelineGrid');
-            let data = [...timelineData];
-
-            if (currentTimelineView === 'future') {
-                data = data.filter(d => d.predicted || new Date(d.date) > new Date());
-            } else if (currentTimelineView === 'past') {
-                data = data.filter(d => !d.predicted && new Date(d.date) <= new Date());
-            } else if (currentTimelineView === 'critical') {
-                data = data.filter(d => d.isCritical || d.balance < MIN_BALANCE + 15);
-            }
-
-            const recentData = data.slice(-45);
-
-            grid.innerHTML = recentData.map(d => {
-                const date = new Date(d.date);
-                const isFuture = d.predicted || date > new Date();
-                const isCritical = d.isCritical || d.balance < MIN_BALANCE + 15;
-                const isToday = date.toDateString() === new Date().toDateString();
-                const isJune = date.getMonth() === 5 && date.getFullYear() === 2026;
-                
-                let statusClass = '';
-                if (isFuture) statusClass = 'predicted';
-                if (isCritical || isJune) statusClass = 'critical';
-                
-                // Random sample of users for this day (3-5 users)
-                const sampleUsers = users
-                    .sort(() => Math.random() - 0.5)
-                    .slice(0, Math.floor(Math.random() * 3) + 3);
-                
-                const userTokensList = sampleUsers.map(u => 
-                    `${u.displayName.split(' ')[0]}: ${(u.dailyTokens || Math.floor(Math.random() * 7500) + 500).toLocaleString()} tokens`
-                ).join(' · ');
-
-                return `
-                    <div class="timeline-card ${statusClass}" onclick="showDayDetail(${d.day})">
-                        <div class="date">
-                            ${date.toLocaleDateString('en-US', { month: 'short', day: 'numeric' })}
-                            ${isToday ? '⭐' : ''}
-                            ${isJune ? '🔥' : ''}
-                            <span style="font-size:9px;color:var(--text-secondary);">${d.dayOfWeek || ''}</span>
-                        </div>
-                        <div class="day-name">Day ${d.day}</div>
-                        <div class="amount ${isCritical ? 'negative' : isFuture ? 'warning' : 'positive'}">
-                            $${d.spend.toFixed(2)}
-                        </div>
-                        <div class="detail">${Math.round(d.tokens || 0).toLocaleString()} tokens</div>
-                        <div class="detail">Balance: $${d.balance.toFixed(2)}</div>
-                        <div class="user-detail">
-                            <i class="fas fa-users" style="font-size:8px;"></i> ${d.userCount || users.length} users
-                            <br>${userTokensList}
-                        </div>
-                        ${isFuture ? '<div class="detail">📊 Projected</div>' : ''}
-                        ${isCritical ? '<div class="detail">⚠️ CRITICAL</div>' : ''}
-                        ${isJune ? '<div class="detail">📅 June 2026</div>' : ''}
-                    </div>
-                `;
-            }).join('');
-        }
-
-        function setTimelineView(view) {
-            currentTimelineView = view;
-            document.querySelectorAll('.timeline-controls button').forEach(btn => btn.classList.remove('active'));
-            if (event && event.target) event.target.classList.add('active');
-            renderTimeline();
-        }
-
-        function showDayDetail(day) {
-            const data = timelineData.find(d => d.day === day);
-            if (!data) return;
-
-            const modal = document.getElementById('userModal');
-            const content = document.getElementById('userDetailContent');
-            
-            const date = new Date(data.date);
-            const isCritical = data.isCritical || data.balance < MIN_BALANCE + 15;
-            const isJune = date.getMonth() === 5 && date.getFullYear() === 2026;
-            
-            // Get top users for this day
-            const topUsers = users
-                .sort((a, b) => (b.dailyTokens || 0) - (a.dailyTokens || 0))
-                .slice(0, 5);
-
-            content.innerHTML = `
-                <div style="text-align:center;margin-bottom:16px;">
-                    <h2 style="font-size:24px;font-weight:800;">Day ${day}</h2>
-                    <div style="color:var(--text-secondary);font-size:14px;">
-                        ${date.toLocaleDateString('en-US', { weekday: 'long', year: 'numeric', month: 'long', day: 'numeric' })}
-                        ${isJune ? ' 🔥 June 2026' : ''}
-                        ${isCritical ? ' ⚠️ CRITICAL' : ''}
-                    </div>
-                </div>
-                <div style="display:grid;grid-template-columns:1fr 1fr 1fr;gap:12px;margin-bottom:16px;">
-                    <div style="background:var(--bg-primary);padding:16px;border-radius:12px;text-align:center;">
-                        <div style="font-size:24px;font-weight:700;color:var(--accent);">$${data.spend.toFixed(2)}</div>
-                        <div style="font-size:11px;color:var(--text-secondary);">Daily Spend</div>
-                    </div>
-                    <div style="background:var(--bg-primary);padding:16px;border-radius:12px;text-align:center;">
-                        <div style="font-size:24px;font-weight:700;color:${isCritical ? 'var(--danger)' : 'var(--success)'};">$${data.balance.toFixed(2)}</div>
-                        <div style="font-size:11px;color:var(--text-secondary);">Remaining Balance</div>
-                    </div>
-                    <div style="background:var(--bg-primary);padding:16px;border-radius:12px;text-align:center;">
-                        <div style="font-size:24px;font-weight:700;color:var(--warning);">${Math.round(data.tokens || 0).toLocaleString()}</div>
-                        <div style="font-size:11px;color:var(--text-secondary);">Total Tokens Used</div>
-                    </div>
-                </div>
-                <div style="background:var(--bg-primary);padding:14px;border-radius:12px;margin-bottom:12px;">
-                    <div style="font-weight:600;margin-bottom:6px;font-size:13px;">👤 Top Users Today:</div>
-                    ${topUsers.map((u, i) => `
-                        <div style="display:flex;justify-content:space-between;padding:4px 0;border-bottom:1px solid var(--border);font-size:13px;">
-                            <span>${i+1}. ${u.displayName}</span>
-                            <span style="color:var(--accent);">${(u.dailyTokens || Math.floor(Math.random() * 7500) + 500).toLocaleString()} tokens</span>
-                            <span style="color:var(--text-secondary);">$${calculateCostFromTokens(u.dailyTokens || 500).toFixed(2)}</span>
-                        </div>
-                    `).join('')}
-                </div>
-                <div style="background:var(--bg-primary);padding:12px 16px;border-radius:10px;border:1px solid rgba(59,130,246,0.15);">
-                    <span style="font-size:12px;color:var(--text-secondary);">💰 Token Cost: <strong style="color:var(--accent);">$${TOKEN_COST_PER_MILLION}</strong> per 1M tokens</span>
-                    <span style="font-size:12px;color:var(--text-secondary);margin-left:16px;">📈 Total Users: <strong>${data.userCount || users.length}</strong></span>
-                    ${isCritical ? '<span style="font-size:12px;color:var(--danger);margin-left:16px;">⚠️ CRITICAL BALANCE</span>' : ''}
-                </div>
-            `;
-
-            document.getElementById('userModal').classList.add('active');
-        }
-
-        // ==============================================
-        // RENDER QUESTIONS
-        // ==============================================
-        function renderQuestions(sortBy = 'count') {
-            const grid = document.getElementById('questionsGrid');
-            const sorted = [...questions];
-            
-            if (sortBy === 'count') {
-                sorted.sort((a, b) => b.count - a.count);
-            } else {
-                sorted.sort((a, b) => a.name.localeCompare(b.name));
-            }
-
-            const maxCount = sorted[0]?.count || 1;
-
-            grid.innerHTML = sorted.map((q, index) => {
-                const percentage = (q.count / maxCount) * 100;
-                const isTop = index < 3;
-                
-                return `
-                    <div class="question-card ${isTop ? 'top' : ''}" onclick="showQuestionDetail('${q.id}')">
-                        <span class="q-icon"><i class="fas ${q.icon}" style="color:${q.color || 'var(--accent)'}"></i></span>
-                        <div class="q-name">${q.name}</div>
-                        <div class="q-count">${q.count.toLocaleString()} questions</div>
-                        <div class="q-bar">
-                            <div class="fill" style="width: ${percentage}%;background:${q.color || 'var(--gradient-main)'};"></div>
-                        </div>
-                        ${isTop ? '<span style="font-size:10px;color:var(--warning);margin-top:2px;display:block;">🏆 Trending Top</span>' : ''}
-                    </div>
-                `;
-            }).join('');
-        }
-
-        function sortQuestions(by) {
-            renderQuestions(by);
-            showAlert(`Sorted by ${by}`, 'success');
-        }
-
-        function showQuestionDetail(id) {
-            const q = questions.find(q => q.id === id);
-            if (!q) return;
-
-            const modal = document.getElementById('userModal');
-            const content = document.getElementById('userDetailContent');
-            
-            const topUsers = users
-                .sort((a, b) => b.questions - a.questions)
-                .slice(0, 5);
-
-            content.innerHTML = `
-                <div style="text-align:center;margin-bottom:16px;">
-                    <span style="font-size:48px;display:block;margin-bottom:8px;color:${q.color || 'var(--accent)'};">
-                        <i class="fas ${q.icon}"></i>
-                    </span>
-                    <h2 style="font-size:22px;font-weight:700;">${q.name}</h2>
-                </div>
-                <div style="display:grid;grid-template-columns:1fr 1fr;gap:12px;margin-bottom:16px;">
-                    <div style="background:var(--bg-primary);padding:16px;border-radius:12px;text-align:center;">
-                        <div style="font-size:28px;font-weight:700;color:${q.color || 'var(--accent)'};">${q.count.toLocaleString()}</div>
-                        <div style="font-size:11px;color:var(--text-secondary);">Total Questions</div>
-                    </div>
-                    <div style="background:var(--bg-primary);padding:16px;border-radius:12px;text-align:center;">
-                        <div style="font-size:28px;font-weight:700;color:${q.trend > 0 ? 'var(--success)' : 'var(--danger)'};">${q.trend > 0 ? '+' : ''}${q.trend}%</div>
-                        <div style="font-size:11px;color:var(--text-secondary);">Trend</div>
-                    </div>
-                </div>
-                <div style="background:var(--bg-primary);padding:14px;border-radius:12px;">
-                    <div style="font-weight:600;margin-bottom:6px;font-size:13px;">👤 Top Contributors:</div>
-                    ${topUsers.map((u, i) => `
-                        <div style="display:flex;justify-content:space-between;padding:4px 0;border-bottom:1px solid var(--border);font-size:13px;">
-                            <span>${i+1}. ${u.displayName}</span>
-                            <span style="color:var(--text-secondary);">${u.questions} questions</span>
-                        </div>
-                    `).join('')}
-                </div>
-            `;
-
-            document.getElementById('userModal').classList.add('active');
-        }
-
-        // ==============================================
-        // RENDER ALL USERS
-        // ==============================================
-        function renderUsers(filteredUsers = null) {
-            const tbody = document.getElementById('usersBody');
-            const data = filteredUsers || users;
-            
-            const sorted = [...data].sort((a, b) => b.tokensUsed - a.tokensUsed);
-
-            tbody.innerHTML = sorted.map((user, index) => {
-                const status = user.status || (user.lastActive && (Date.now() - user.lastActive.getTime()) < 86400000 ? 'active' : 'inactive');
-                const statusLabel = status === 'active' ? 'Active' : status === 'premium' ? 'Premium' : 'Inactive';
-                const statusClass = status === 'active' ? 'status-active' : status === 'premium' ? 'status-premium' : 'status-inactive';
-                const avatar = `https://ui-avatars.com/api/?name=${encodeURIComponent(user.displayName)}&background=3b82f6&color=fff&bold=true&size=32`;
-                
-                let rankClass = '';
-                if (index === 0) rankClass = 'rank-1';
-                else if (index === 1) rankClass = 'rank-2';
-                else if (index === 2) rankClass = 'rank-3';
-
-                const dailyTokens = user.dailyTokens || Math.floor(Math.random() * 7500) + 500;
-
-                return `
-                    <tr>
-                        <td>
-                            <span class="user-rank ${rankClass}">${index + 1}</span>
-                        </td>
-                        <td>
-                            <div style="display:flex;align-items:center;gap:10px;">
-                                <img src="${avatar}" alt="${user.displayName}" class="user-avatar">
-                                <div>
-                                    <div style="font-weight:600;font-size:13px;">${user.displayName}</div>
-                                    <div style="font-size:10px;color:var(--text-secondary);">${user.uid}</div>
-                                </div>
-                            </div>
-                        </td>
-                        <td style="color:var(--text-secondary);font-size:12px;">${user.email}</td>
-                        <td>
-                            <span style="display:flex;align-items:center;gap:4px;font-size:12px;">
-                                <i class="fas ${user.provider === 'google' ? 'fa-google' : user.provider === 'github' ? 'fa-github' : 'fa-envelope'}" 
-                                   style="color:${user.provider === 'google' ? '#ea4335' : user.provider === 'github' ? '#6e5494' : '#3b82f6'}"></i>
-                                ${user.provider}
-                            </span>
-                        </td>
-                        <td style="font-weight:600;font-size:13px;color:var(--accent);">${dailyTokens.toLocaleString()}</td>
-                        <td style="font-weight:600;font-size:13px;">${user.tokensUsed.toLocaleString()}</td>
-                        <td style="font-weight:600;font-size:13px;color:var(--success);">$${user.cost.toFixed(2)}</td>
-                        <td>${user.questions}</td>
-                        <td><span class="status-badge ${statusClass}">${statusLabel}</span></td>
-                        <td style="font-size:12px;color:var(--text-secondary);">
-                            ${user.lastActive ? new Date(user.lastActive).toLocaleDateString() : 'Never'}
-                        </td>
-                        <td>
-                            <button class="btn btn-secondary" style="padding:4px 10px;font-size:11px;" onclick="viewUser('${user.uid}')">
-                                <i class="fas fa-eye"></i>
-                            </button>
-                        </td>
-                    </tr>
-                `;
-            }).join('');
-        }
-
-        function filterUsers() {
-            const search = document.getElementById('searchInput').value.toLowerCase();
-            const provider = document.getElementById('filterProvider').value;
-            const status = document.getElementById('filterStatus').value;
-
-            let filtered = users.filter(user => {
-                const matchSearch = user.displayName?.toLowerCase().includes(search) || 
-                                   user.email?.toLowerCase().includes(search);
-                const matchProvider = provider === 'all' || user.provider === provider;
-                const matchStatus = status === 'all' || user.status === status || 
-                                   (status === 'active' && user.status === 'active') ||
-                                   (status === 'inactive' && user.status === 'inactive') ||
-                                   (status === 'premium' && user.status === 'premium');
-                return matchSearch && matchProvider && matchStatus;
+            // Back to top
+            const backToTop = document.getElementById('backToTop');
+            window.addEventListener('scroll', function() {
+                if (window.pageYOffset > 300) {
+                    backToTop.classList.add('show');
+                } else {
+                    backToTop.classList.remove('show');
+                }
+            });
+            backToTop.addEventListener('click', function(e) {
+                e.preventDefault();
+                window.scrollTo({ top: 0, behavior: 'smooth' });
             });
 
-            renderUsers(filtered);
-        }
-
-        function viewUser(uid) {
-            const user = users.find(u => u.uid === uid);
-            if (!user) return;
-
-            const content = document.getElementById('userDetailContent');
-            const rank = users.sort((a, b) => b.tokensUsed - a.tokensUsed).findIndex(u => u.uid === uid) + 1;
-            const dailyTokens = user.dailyTokens || Math.floor(Math.random() * 7500) + 500;
-            
-            content.innerHTML = `
-                <div style="display:flex;align-items:center;gap:16px;margin-bottom:16px;">
-                    <img src="https://ui-avatars.com/api/?name=${encodeURIComponent(user.displayName)}&background=3b82f6&color=fff&bold=true&size=72" 
-                         style="width:68px;height:68px;border-radius:50%;object-fit:cover;border:2px solid var(--accent);">
-                    <div style="flex:1;">
-                        <div style="display:flex;align-items:center;gap:8px;">
-                            <h3 style="font-size:20px;font-weight:700;">${user.displayName}</h3>
-                            <span class="status-badge ${user.status === 'premium' ? 'status-premium' : 'status-active'}">${user.status || 'Active'}</span>
-                        </div>
-                        <div style="color:var(--text-secondary);font-size:13px;">${user.email}</div>
-                        <div style="color:var(--text-secondary);font-size:12px;margin-top:2px;">
-                            <i class="fas fa-${user.provider === 'google' ? 'google' : user.provider === 'github' ? 'github' : 'envelope'}"></i>
-                            ${user.provider} · Rank #${rank}
-                        </div>
-                    </div>
-                </div>
-                <div style="display:grid;grid-template-columns:repeat(4,1fr);gap:10px;margin:14px 0;">
-                    <div style="background:var(--bg-primary);padding:14px;border-radius:10px;text-align:center;">
-                        <div style="font-size:20px;font-weight:700;color:var(--accent);">${dailyTokens.toLocaleString()}</div>
-                        <div style="font-size:10px;color:var(--text-secondary);">Daily Tokens</div>
-                    </div>
-                    <div style="background:var(--bg-primary);padding:14px;border-radius:10px;text-align:center;">
-                        <div style="font-size:20px;font-weight:700;color:var(--accent);">${user.tokensUsed.toLocaleString()}</div>
-                        <div style="font-size:10px;color:var(--text-secondary);">Total Tokens</div>
-                    </div>
-                    <div style="background:var(--bg-primary);padding:14px;border-radius:10px;text-align:center;">
-                        <div style="font-size:20px;font-weight:700;color:var(--success);">$${user.cost.toFixed(2)}</div>
-                        <div style="font-size:10px;color:var(--text-secondary);">Total Cost</div>
-                    </div>
-                    <div style="background:var(--bg-primary);padding:14px;border-radius:10px;text-align:center;">
-                        <div style="font-size:20px;font-weight:700;color:var(--warning);">${user.questions}</div>
-                        <div style="font-size:10px;color:var(--text-secondary);">Questions</div>
-                    </div>
-                </div>
-                <div style="margin-top:12px;background:var(--bg-primary);padding:12px 16px;border-radius:10px;">
-                    <div style="font-weight:600;font-size:13px;margin-bottom:6px;">🏆 Achievements</div>
-                    <div style="display:flex;gap:8px;flex-wrap:wrap;font-size:12px;">
-                        ${user.tokensUsed > 100000 ? '<span style="background:var(--bg-secondary);padding:4px 12px;border-radius:20px;">🌟 100K+ Tokens</span>' : ''}
-                        ${user.tokensUsed > 200000 ? '<span style="background:var(--bg-secondary);padding:4px 12px;border-radius:20px;">🏅 200K+ Tokens</span>' : ''}
-                        ${user.questions > 50 ? '<span style="background:var(--bg-secondary);padding:4px 12px;border-radius:20px;">💬 50+ Questions</span>' : ''}
-                        ${user.questions > 100 ? '<span style="background:var(--bg-secondary);padding:4px 12px;border-radius:20px;">📚 100+ Questions</span>' : ''}
-                        ${rank <= 3 ? '<span style="background:rgba(234,179,8,0.15);padding:4px 12px;border-radius:20px;color:var(--warning);">👑 Top 3 User</span>' : ''}
-                        ${dailyTokens > 5000 ? '<span style="background:rgba(59,130,246,0.12);padding:4px 12px;border-radius:20px;color:var(--accent);">⚡ 5K+ Daily Tokens</span>' : ''}
-                    </div>
-                </div>
-                <div style="margin-top:8px;background:var(--bg-primary);padding:8px 12px;border-radius:8px;font-size:11px;color:var(--text-secondary);">
-                    💰 Cost per token: $${(TOKEN_COST_PER_MILLION / 1000000).toFixed(8)}
-                </div>
-            `;
-
-            document.getElementById('userModal').classList.add('active');
-        }
-
-        // ==============================================
-        // CHARTS
-        // ==============================================
-        function updateCharts() {
-            setTimeout(() => {
-                updateBudgetChart();
-                updateUsageChart();
-            }, 200);
-        }
-
-        function updateBudgetChart() {
-            const ctx = document.getElementById('budgetChart').getContext('2d');
-            if (chartInstances.budget) {
-                chartInstances.budget.destroy();
-                chartInstances.budget = null;
-            }
-
-            const data = timelineData.slice(-180);
-            const labels = data.map(d => {
-                const date = new Date(d.date);
-                return date.toLocaleDateString('en-US', { month: 'short', day: 'numeric' });
+            // Mobile menu
+            const menuToggle = document.getElementById('mobileMenuToggle');
+            const navLinks = document.getElementById('navLinks');
+            menuToggle?.addEventListener('click', function() {
+                this.classList.toggle('active');
+                navLinks.classList.toggle('active');
+                document.body.style.overflow = navLinks.classList.contains('active') ? 'hidden' : '';
             });
 
-            chartInstances.budget = new Chart(ctx, {
-                type: 'line',
-                data: {
-                    labels: labels,
-                    datasets: [
-                        {
-                            label: 'Daily Spend ($)',
-                            data: data.map(d => parseFloat(d.spend.toFixed(2))),
-                            borderColor: '#3b82f6',
-                            backgroundColor: 'rgba(59, 130, 246, 0.1)',
-                            fill: true,
-                            tension: 0.4,
-                            pointRadius: 1.5,
-                            borderWidth: 2
-                        },
-                        {
-                            label: 'Balance ($)',
-                            data: data.map(d => parseFloat(d.balance.toFixed(2))),
-                            borderColor: '#22c55e',
-                            borderDash: [6, 4],
-                            fill: false,
-                            tension: 0.4,
-                            yAxisID: 'y1',
-                            pointRadius: 1.5,
-                            borderWidth: 2.5
-                        }
-                    ]
-                },
-                options: {
-                    responsive: true,
-                    maintainAspectRatio: false,
-                    interaction: { intersect: false, mode: 'index' },
-                    plugins: {
-                        legend: {
-                            labels: { color: '#94a3b8', boxWidth: 12, padding: 12, font: { size: 11 } }
-                        }
-                    },
-                    scales: {
-                        y: {
-                            beginAtZero: true,
-                            grid: { color: 'rgba(255,255,255,0.04)' },
-                            ticks: { color: '#94a3b8', callback: function(value) { return '$' + value.toFixed(0); } }
-                        },
-                        y1: {
-                            position: 'right',
-                            beginAtZero: true,
-                            grid: { display: false },
-                            ticks: { color: '#94a3b8', callback: function(value) { return '$' + value.toFixed(0); } }
-                        },
-                        x: {
-                            grid: { color: 'rgba(255,255,255,0.04)' },
-                            ticks: { color: '#94a3b8', maxTicksLimit: 15, font: { size: 9 } }
-                        }
+            // Close menu on link click
+            document.querySelectorAll('.nav-links a').forEach(link => {
+                link.addEventListener('click', function() {
+                    menuToggle.classList.remove('active');
+                    navLinks.classList.remove('active');
+                    document.body.style.overflow = '';
+                });
+            });
+
+            // Notify me buttons
+            document.querySelectorAll('.btn[style*="gradient-gold"]').forEach(btn => {
+                btn.addEventListener('click', function(e) {
+                    e.preventDefault();
+                    const email = prompt('Enter your email to get notified when Jihan Dictionary launches:');
+                    if (email && email.includes('@')) {
+                        alert('✅ Thank you! You\'ll be notified when Jihan Dictionary launches.');
+                    } else if (email) {
+                        alert('❌ Please enter a valid email address.');
                     }
+                });
+            });
+
+            // Subscribe button
+            document.querySelector('.cta-form button')?.addEventListener('click', function() {
+                const input = this.previousElementSibling;
+                if (input && input.value && input.value.includes('@')) {
+                    alert('✅ Subscribed successfully! You\'ll get updates about Jihan Dictionary.');
+                    input.value = '';
+                } else {
+                    alert('❌ Please enter a valid email address.');
                 }
             });
-        }
 
-        function updateUsageChart() {
-            const ctx = document.getElementById('usageChart').getContext('2d');
-            if (chartInstances.usage) {
-                chartInstances.usage.destroy();
-                chartInstances.usage = null;
-            }
-
-            const categories = Object.keys(QUESTION_CATEGORIES);
-            const counts = categories.map(key => {
-                const q = questions.find(q => q.id === key);
-                return q ? q.count : 0;
-            });
-            const colors = categories.map(key => QUESTION_CATEGORIES[key].color || '#3b82f6');
-            const labels = categories.map(key => QUESTION_CATEGORIES[key].name);
-
-            chartInstances.usage = new Chart(ctx, {
-                type: 'doughnut',
-                data: {
-                    labels: labels,
-                    datasets: [{
-                        data: counts,
-                        backgroundColor: colors,
-                        borderWidth: 0
-                    }]
-                },
-                options: {
-                    responsive: true,
-                    maintainAspectRatio: false,
-                    plugins: {
-                        legend: {
-                            position: 'bottom',
-                            labels: { color: '#94a3b8', boxWidth: 10, padding: 8, font: { size: 9 } }
-                        }
-                    },
-                    cutout: '62%'
+            // Enter key for search
+            document.getElementById('previewSearch').addEventListener('keypress', function(e) {
+                if (e.key === 'Enter') {
+                    filterEntries();
                 }
             });
-        }
 
-        // ==============================================
-        // ACTIONS
-        // ==============================================
-        function refreshData() {
-            showAlert('🔄 Refreshing data...', 'success');
-            updateStats();
-            renderTimeline();
-            renderQuestions();
-            renderUsers();
-            updateCharts();
-            setTimeout(() => showAlert('✅ Data refreshed!', 'success'), 500);
-        }
-
-        function simulateDay() {
-            simulatedDay++;
-            const lastData = timelineData[timelineData.length - 1];
-            const avgSpend = timelineData.slice(-30).reduce((sum, d) => sum + d.spend, 0) / Math.max(1, timelineData.slice(-30).length);
-            
-            let newSpend = avgSpend * (0.85 + Math.random() * 0.3);
-            let newBalance = Math.max(MIN_BALANCE, Math.round((lastData.balance - newSpend) * 100) / 100);
-            
-            if (lastData.balance - newSpend < MIN_BALANCE) {
-                newSpend = Math.round((lastData.balance - MIN_BALANCE) * 100) / 100;
-                if (newSpend < 0) newSpend = 0;
-            }
-            
-            const newTokens = calculateTokensFromCost(newSpend);
-            const newDate = new Date();
-            newDate.setDate(newDate.getDate() + simulatedDay);
-            
-            // Update daily tokens for users randomly
-            users.forEach(u => {
-                u.dailyTokens = Math.floor(Math.random() * 7500) + 500;
-            });
-            
-            timelineData.push({
-                date: newDate,
-                spend: Math.round(newSpend * 100) / 100,
-                balance: newBalance,
-                tokens: newTokens,
-                totalTokens: lastData.totalTokens + newTokens,
-                day: timelineData.length + 1,
-                predicted: true,
-                dayOfWeek: newDate.toLocaleDateString('en-US', { weekday: 'short' }),
-                avgUserTokens: Math.round(newTokens / users.length),
-                userCount: users.length,
-                isCritical: newBalance < MIN_BALANCE + 15,
-                isJune: newDate.getMonth() === 5 && newDate.getFullYear() === 2026
-            });
-
-            renderTimeline();
-            renderUsers();
-            updateStats();
-            updateCharts();
-            showAlert(`📆 Simulated day ${simulatedDay} added!`, 'success');
-        }
-
-        function resetData() {
-            if (confirm('Reset all data to initial state?')) {
-                users = generateAllUsers(55);
-                questions = generateAllQuestions();
-                const history = generateTimelineData();
-                const future = generateFutureData(history);
-                timelineData = [...history, ...future];
-                simulatedDay = 0;
-                renderTimeline();
-                renderQuestions();
-                renderUsers();
-                updateStats();
-                updateCharts();
-                showAlert('✅ Data reset successfully!', 'success');
-            }
-        }
-
-        function exportReport() {
-            const report = {
-                generated: new Date().toISOString(),
-                tokenCostPerMillion: TOKEN_COST_PER_MILLION,
-                totalBudget: TOTAL_BUDGET,
-                minBalance: MIN_BALANCE,
-                summary: {
-                    totalUsers: users.length,
-                    totalTokens: timelineData[timelineData.length - 1]?.totalTokens || 0,
-                    totalCost: calculateCostFromTokens(timelineData[timelineData.length - 1]?.totalTokens || 0),
-                    remainingBalance: Math.max(MIN_BALANCE, timelineData[timelineData.length - 1]?.balance || MIN_BALANCE)
-                },
-                users: users.map(u => ({
-                    name: u.displayName,
-                    email: u.email,
-                    provider: u.provider,
-                    dailyTokens: u.dailyTokens || Math.floor(Math.random() * 7500) + 500,
-                    totalTokens: u.tokensUsed,
-                    cost: u.cost,
-                    questions: u.questions,
-                    status: u.status
-                })),
-                questions: questions,
-                timeline: timelineData.map(d => ({
-                    date: d.date.toISOString(),
-                    spend: d.spend,
-                    balance: d.balance,
-                    tokens: d.tokens,
-                    totalTokens: d.totalTokens,
-                    day: d.day,
-                    isCritical: d.isCritical || false
-                }))
-            };
-
-            const blob = new Blob([JSON.stringify(report, null, 2)], { type: 'application/json' });
-            const url = URL.createObjectURL(blob);
-            const a = document.createElement('a');
-            a.href = url;
-            a.download = `zakhourani-complete-report-${new Date().toISOString().slice(0,10)}.json`;
-            a.click();
-            URL.revokeObjectURL(url);
-            showAlert('📥 Complete report exported!', 'success');
-        }
-
-        // ==============================================
-        // HELPERS
-        // ==============================================
-        function closeModal(id) {
-            document.getElementById(id).classList.remove('active');
-        }
-
-        document.querySelectorAll('.modal').forEach(modal => {
-            modal.addEventListener('click', (e) => {
-                if (e.target === modal) modal.classList.remove('active');
-            });
+            console.log('📚 Jihan Dictionary - Coming Soon');
+            console.log(`📖 ${dictionaryEntries.length} sample entries loaded`);
+            console.log('📅 Launch Date:', new Date(new Date().setMonth(new Date().getMonth() + 2)).toLocaleDateString());
         });
-
-        function showAlert(message, type = 'success') {
-            const alert = document.getElementById('alert');
-            alert.textContent = message;
-            alert.className = `alert alert-${type}`;
-            alert.style.display = 'block';
-            setTimeout(() => alert.style.display = 'none', 3000);
-        }
     </script>
 </body>
 </html>

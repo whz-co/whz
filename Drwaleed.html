@@ -3,10 +3,9 @@
 <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>Zakhourani AI · Dashboard</title>
+    <title>AIboard - Supabase Data Viewer</title>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" />
     <link href="https://fonts.googleapis.com/css2?family=Inter:opsz,wght@14..32,400;14..32,500;14..32,600;14..32,700;14..32,800&display=swap" rel="stylesheet" />
-    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
     <style>
         * { margin:0; padding:0; box-sizing:border-box; font-family:'Inter',sans-serif; }
@@ -16,12 +15,11 @@
             --accent-light:#60a5fa; --success:#22c55e; --warning:#eab308; --danger:#ef4444;
             --border:rgba(255,255,255,0.06);
             --gradient-main:linear-gradient(135deg,#3b82f6,#8b5cf6,#06b6d4);
-            --gradient-critical:linear-gradient(135deg,#dc2626,#ef4444);
         }
         body { background:var(--bg-primary); color:var(--text-primary); min-height:100vh; padding:16px; }
-        .dashboard { max-width:1600px; margin:0 auto; }
+        .container { max-width:1600px; margin:0 auto; }
 
-        /* Loading Screen */
+        /* Loading */
         .loading-screen {
             position:fixed; top:0; left:0; right:0; bottom:0;
             background:var(--bg-primary); display:flex; align-items:center; justify-content:center;
@@ -31,40 +29,26 @@
         .loader { width:50px; height:50px; border:3px solid var(--border); border-top-color:var(--accent); border-radius:50%; animation:spin 1s linear infinite; }
         @keyframes spin { to { transform:rotate(360deg); } }
         .loading-text { color:var(--text-secondary); font-size:14px; }
+        .loading-progress { width:400px; max-width:80%; height:4px; background:var(--border); border-radius:2px; overflow:hidden; }
+        .loading-progress-bar { height:100%; background:var(--gradient-main); width:0%; transition:width 0.5s; }
 
-        /* Payment Modal */
-        .payment-modal {
-            position:fixed; top:0; left:0; right:0; bottom:0;
-            background:rgba(0,0,0,0.95); backdrop-filter:blur(30px);
-            display:none; align-items:center; justify-content:center; z-index:9998; padding:20px;
+        /* Header */
+        .header {
+            display:flex; justify-content:space-between; align-items:center; padding:16px 0 28px; flex-wrap:wrap; gap:16px;
         }
-        .payment-modal.active { display:flex; }
-        .payment-box {
-            background:var(--bg-secondary); border:1px solid var(--border); border-radius:30px;
-            padding:48px; max-width:500px; width:100%;
+        .header-left { display:flex; align-items:center; gap:16px; }
+        .logo {
+            width:52px; height:52px; background:var(--gradient-main); border-radius:16px;
+            display:flex; align-items:center; justify-content:center; font-size:24px; color:white;
+            box-shadow:0 8px 30px rgba(59,130,246,0.3);
         }
-        .payment-box .card-icon { font-size:48px; color:var(--accent); margin-bottom:16px; text-align:center; }
-        .payment-box h2 { font-size:24px; font-weight:700; margin-bottom:6px; text-align:center; }
-        .payment-box p { color:var(--text-secondary); text-align:center; margin-bottom:24px; }
-        .form-group { margin-bottom:16px; }
-        .form-group label { display:block; color:var(--text-secondary); font-size:13px; margin-bottom:4px; font-weight:600; }
-        .form-group input {
-            width:100%; padding:12px 16px; background:var(--bg-primary); border:1px solid var(--border);
-            border-radius:12px; color:var(--text-primary); font-size:14px; transition:all 0.3s;
+        .header h1 { font-size:28px; font-weight:800; background:var(--gradient-main); -webkit-background-clip:text; -webkit-text-fill-color:transparent; }
+        .header-subtitle { color:var(--text-secondary); font-size:13px; display:flex; align-items:center; gap:12px; flex-wrap:wrap; }
+        .status-badge {
+            padding:3px 12px; border-radius:20px; font-size:11px; font-weight:600;
+            background:rgba(34,197,94,0.15); color:var(--success);
         }
-        .form-group input:focus { border-color:var(--accent); outline:none; box-shadow:0 0 0 4px rgba(59,130,246,0.15); }
-        .form-row { display:grid; grid-template-columns:1fr 1fr; gap:12px; }
-        .pay-btn {
-            width:100%; padding:14px; background:var(--gradient-main); color:white; border:none;
-            border-radius:14px; font-weight:700; font-size:16px; cursor:pointer; transition:all 0.3s; margin-top:8px;
-        }
-        .pay-btn:hover { transform:translateY(-2px); box-shadow:0 8px 30px rgba(59,130,246,0.3); }
-        .pay-btn:disabled { opacity:0.5; cursor:not-allowed; }
-        .close-btn {
-            width:100%; padding:12px; background:var(--bg-primary); color:var(--text-primary);
-            border:1px solid var(--border); border-radius:12px; cursor:pointer; margin-top:8px; font-weight:600;
-        }
-        .close-btn:hover { background:rgba(30,41,59,0.6); }
+        .status-badge.error { background:rgba(239,68,68,0.15); color:var(--danger); }
 
         .btn {
             padding:10px 20px; border:none; border-radius:12px; font-weight:600; cursor:pointer;
@@ -73,96 +57,105 @@
         .btn-primary { background:var(--gradient-main); color:white; }
         .btn-primary:hover { transform:translateY(-2px); box-shadow:0 8px 25px rgba(59,130,246,0.3); }
         .btn-secondary { background:var(--bg-secondary); color:var(--text-primary); border:1px solid var(--border); }
+        .btn-secondary:hover { background:rgba(30,41,59,0.6); }
         .btn-success { background:linear-gradient(135deg,#22c55e,#06b6d4); color:white; }
-        .btn-danger { background:var(--gradient-critical); color:white; }
+        .btn-danger { background:linear-gradient(135deg,#dc2626,#ef4444); color:white; }
 
-        .header { display:flex; justify-content:space-between; align-items:center; padding:16px 0 28px; flex-wrap:wrap; gap:16px; }
-        .header-left { display:flex; align-items:center; gap:16px; }
-        .logo { width:52px; height:52px; background:var(--gradient-main); border-radius:16px; display:flex; align-items:center; justify-content:center; font-size:24px; color:white; box-shadow:0 8px 30px rgba(59,130,246,0.3); }
-        .header h1 { font-size:28px; font-weight:800; background:var(--gradient-main); -webkit-background-clip:text; -webkit-text-fill-color:transparent; }
-        .header-subtitle { color:var(--text-secondary); font-size:13px; display:flex; align-items:center; gap:12px; flex-wrap:wrap; }
-        .status-badge { background:rgba(220,38,38,0.15); color:var(--danger); padding:3px 12px; border-radius:20px; font-size:11px; font-weight:600; animation:pulse-critical 1.5s ease-in-out infinite; }
-        @keyframes pulse-critical { 0%,100%{opacity:1;transform:scale(1)} 50%{opacity:0.6;transform:scale(0.98)} }
-
-        .critical-alert {
-            background:var(--gradient-critical); color:white; padding:14px 24px; border-radius:14px;
-            margin-bottom:24px; display:flex; justify-content:space-between; align-items:center; flex-wrap:wrap; gap:12px;
-            animation:pulse-critical 1.5s ease-in-out infinite;
+        /* Stats Grid */
+        .stats-grid {
+            display:grid; grid-template-columns:repeat(auto-fit,minmax(200px,1fr)); gap:16px; margin-bottom:24px;
         }
-        .stats-grid { display:grid; grid-template-columns:repeat(auto-fit,minmax(200px,1fr)); gap:16px; margin-bottom:24px; }
         .stat-card {
             background:var(--bg-card); border:1px solid var(--border); border-radius:20px; padding:20px 24px;
             backdrop-filter:blur(12px); transition:all 0.3s; position:relative; overflow:hidden;
         }
         .stat-card::before { content:''; position:absolute; top:0; left:0; right:0; height:3px; background:var(--gradient-main); opacity:0.5; }
-        .stat-card.critical::before { background:var(--gradient-critical); opacity:1; animation:pulse-critical 1.5s ease-in-out infinite; }
         .stat-card .label { color:var(--text-secondary); font-size:11px; font-weight:600; text-transform:uppercase; letter-spacing:0.5px; }
         .stat-card .value { font-size:30px; font-weight:800; margin:6px 0 2px; }
-        .stat-card .value.critical-value { color:var(--danger); animation:pulse-critical 1.5s ease-in-out infinite; }
         .stat-card .icon-bg { position:absolute; right:16px; top:16px; font-size:32px; opacity:0.08; }
 
-        .token-pricing {
-            background:var(--bg-card); border:1px solid var(--border); border-radius:18px; padding:16px 24px;
-            margin-bottom:24px; display:flex; justify-content:space-between; align-items:center; flex-wrap:wrap; gap:12px;
+        /* Table List */
+        .table-list {
+            display:grid; grid-template-columns:repeat(auto-fill,minmax(300px,1fr)); gap:16px; margin-bottom:24px;
         }
-        .token-pricing .price { font-size:22px; font-weight:700; background:var(--gradient-main); -webkit-background-clip:text; -webkit-text-fill-color:transparent; }
-        .charts-grid { display:grid; grid-template-columns:2fr 1fr; gap:20px; margin-bottom:24px; }
-        .chart-container { background:var(--bg-card); border:1px solid var(--border); border-radius:20px; padding:24px; min-height:350px; }
-        .chart-wrapper { position:relative; height:300px; width:100%; }
+        .table-card {
+            background:var(--bg-card); border:1px solid var(--border); border-radius:20px;
+            padding:20px 24px; backdrop-filter:blur(12px); transition:all 0.3s; cursor:pointer;
+        }
+        .table-card:hover { transform:translateY(-4px); border-color:var(--accent); }
+        .table-card .table-name { font-size:18px; font-weight:700; display:flex; align-items:center; gap:12px; }
+        .table-card .table-name i { color:var(--accent); }
+        .table-card .table-count { color:var(--text-secondary); font-size:13px; margin-top:4px; }
+        .table-card .table-status { font-size:12px; margin-top:8px; }
+        .table-card .table-status .badge { padding:2px 12px; border-radius:12px; font-size:11px; font-weight:600; }
+        .badge-success { background:rgba(34,197,94,0.15); color:var(--success); }
+        .badge-warning { background:rgba(234,179,8,0.15); color:var(--warning); }
+        .badge-danger { background:rgba(239,68,68,0.15); color:var(--danger); }
 
-        .timeline-section { background:var(--bg-card); border:1px solid var(--border); border-radius:20px; padding:24px; margin-bottom:24px; }
-        .timeline-grid { display:grid; grid-template-columns:repeat(auto-fill,minmax(160px,1fr)); gap:12px; max-height:500px; overflow-y:auto; padding-right:6px; }
-        .timeline-card {
-            background:var(--bg-primary); border:1px solid var(--border); border-radius:14px; padding:14px 16px;
-            transition:all 0.3s; cursor:pointer;
+        /* Data Viewer */
+        .data-viewer {
+            background:var(--bg-card); border:1px solid var(--border); border-radius:20px;
+            padding:24px; backdrop-filter:blur(12px); margin-bottom:24px;
         }
-        .timeline-card:hover { transform:translateY(-3px); border-color:var(--accent); }
-        .timeline-card .amount { font-size:20px; font-weight:700; }
-        .timeline-card .amount.positive { color:var(--success); }
-        .timeline-card .amount.negative { color:var(--danger); }
-        .timeline-card.critical { border-color:var(--danger); background:rgba(239,68,68,0.06); border-width:2px; }
-        .timeline-card.today { border-color:var(--accent); background:rgba(59,130,246,0.06); border-width:2px; }
-        .timeline-card.missing { border-color:var(--warning); background:rgba(234,179,8,0.06); border-style:dashed; }
+        .data-viewer .viewer-header {
+            display:flex; justify-content:space-between; align-items:center; margin-bottom:16px; flex-wrap:wrap; gap:12px;
+        }
+        .data-viewer .viewer-header h3 { font-size:17px; font-weight:700; }
+        .data-viewer .viewer-controls { display:flex; gap:10px; flex-wrap:wrap; align-items:center; }
+        .data-viewer .viewer-controls select,
+        .data-viewer .viewer-controls input {
+            background:var(--bg-primary); border:1px solid var(--border); border-radius:10px;
+            padding:8px 14px; color:var(--text-primary); font-size:13px; outline:none;
+        }
+        .data-viewer .viewer-controls select:focus,
+        .data-viewer .viewer-controls input:focus { border-color:var(--accent); }
+        .table-wrapper { overflow-x:auto; max-height:500px; overflow-y:auto; }
+        table { width:100%; border-collapse:collapse; font-size:13px; }
+        th {
+            text-align:left; padding:12px; color:var(--text-secondary); font-weight:600;
+            font-size:11px; text-transform:uppercase; letter-spacing:0.5px;
+            position:sticky; top:0; background:var(--bg-card); z-index:10;
+            border-bottom:2px solid var(--border);
+        }
+        td { padding:12px; border-bottom:1px solid var(--border); max-width:200px; overflow:hidden; text-overflow:ellipsis; white-space:nowrap; }
+        tr:hover td { background:rgba(255,255,255,0.02); }
+        .cell-null { color:var(--text-secondary); font-style:italic; }
+        .cell-boolean { display:inline-block; padding:2px 10px; border-radius:12px; font-size:11px; font-weight:600; }
+        .cell-boolean.true { background:rgba(34,197,94,0.15); color:var(--success); }
+        .cell-boolean.false { background:rgba(239,68,68,0.15); color:var(--danger); }
 
-        .table-container { background:var(--bg-card); border:1px solid var(--border); border-radius:20px; overflow:hidden; margin-bottom:24px; }
-        .table-wrapper { overflow-x:auto; padding:0 24px 16px; }
-        table { width:100%; border-collapse:collapse; }
-        th { text-align:left; padding:14px 12px; color:var(--text-secondary); font-weight:600; font-size:11px; text-transform:uppercase; letter-spacing:0.5px; }
-        td { padding:14px 12px; border-bottom:1px solid var(--border); font-size:13px; }
-        .status-badge { padding:3px 12px; border-radius:20px; font-size:11px; font-weight:600; display:inline-block; }
-        .status-active { background:rgba(34,197,94,0.12); color:var(--success); }
-        .status-inactive { background:rgba(239,68,68,0.12); color:var(--danger); }
-        .status-premium { background:rgba(234,179,8,0.12); color:var(--warning); }
-        .user-rank { display:inline-flex; align-items:center; justify-content:center; width:24px; height:24px; border-radius:50%; font-weight:700; font-size:11px; }
-        .rank-1 { background:rgba(234,179,8,0.2); color:var(--warning); }
-        .rank-2 { background:rgba(148,163,184,0.2); color:var(--text-secondary); }
-        .rank-3 { background:rgba(180,83,9,0.2); color:#d97706; }
-        .user-avatar { width:32px; height:32px; border-radius:50%; object-fit:cover; }
+        /* Schema Viewer */
+        .schema-viewer {
+            background:var(--bg-card); border:1px solid var(--border); border-radius:20px;
+            padding:24px; backdrop-filter:blur(12px);
+        }
+        .schema-viewer .schema-header { display:flex; justify-content:space-between; align-items:center; margin-bottom:16px; flex-wrap:wrap; gap:12px; }
+        .schema-viewer h3 { font-size:17px; font-weight:700; }
+        .schema-grid { display:grid; gap:12px; }
+        .schema-item {
+            background:var(--bg-primary); border:1px solid var(--border); border-radius:12px; padding:12px 16px;
+            display:grid; grid-template-columns:auto 1fr auto; gap:12px; align-items:center;
+        }
+        .schema-item .col-name { font-weight:600; color:var(--accent-light); }
+        .schema-item .col-type { color:var(--text-secondary); font-size:12px; }
+        .col-pk { color:var(--warning); font-size:10px; font-weight:600; }
+        .col-fk { color:var(--accent); font-size:10px; font-weight:600; }
 
-        .modal {
-            position:fixed; top:0; left:0; right:0; bottom:0; background:rgba(0,0,0,0.85); backdrop-filter:blur(12px);
-            display:none; align-items:center; justify-content:center; z-index:9999; padding:20px;
+        .alert {
+            padding:14px 20px; border-radius:12px; margin-bottom:16px; display:none;
         }
-        .modal.active { display:flex; }
-        .modal-content {
-            background:var(--bg-secondary); border:1px solid var(--border); border-radius:24px;
-            max-width:640px; width:100%; max-height:80vh; overflow-y:auto; padding:32px; color:var(--text-primary);
-        }
-        .alert { padding:14px 20px; border-radius:12px; margin-bottom:16px; display:none; }
         .alert-success { background:rgba(34,197,94,0.1); border:1px solid rgba(34,197,94,0.2); color:#86efac; }
         .alert-error { background:rgba(239,68,68,0.1); border:1px solid rgba(239,68,68,0.2); color:#fca5a5; }
         .alert-info { background:rgba(59,130,246,0.1); border:1px solid rgba(59,130,246,0.2); color:#60a5fa; }
 
-        .filter-controls { display:flex; gap:10px; flex-wrap:wrap; align-items:center; }
-        .filter-controls select, .filter-controls input {
-            background:var(--bg-primary); border:1px solid var(--border); border-radius:10px;
-            padding:8px 14px; color:var(--text-primary); font-size:13px; outline:none;
-        }
-        .filter-controls select:focus, .filter-controls input:focus { border-color:var(--accent); }
+        .hidden { display:none !important; }
 
-        @media (max-width:1024px){ .charts-grid { grid-template-columns:1fr; } }
-        @media (max-width:768px){ .stats-grid { grid-template-columns:repeat(2,1fr); } }
-        @media (max-width:480px){ .stats-grid { grid-template-columns:1fr; } }
+        @media (max-width:768px) {
+            .stats-grid { grid-template-columns:repeat(2,1fr); }
+            .table-list { grid-template-columns:1fr; }
+            .schema-item { grid-template-columns:1fr; gap:4px; }
+        }
+        @media (max-width:480px) { .stats-grid { grid-template-columns:1fr; } }
     </style>
 </head>
 <body>
@@ -170,1061 +163,554 @@
     <!-- Loading Screen -->
     <div class="loading-screen" id="loadingScreen">
         <div class="loader"></div>
-        <div class="loading-text">🔄 Loading data from Supabase...</div>
-        <div class="loading-text" style="font-size:12px;color:var(--text-secondary);" id="loadingStatus">Connecting...</div>
+        <div class="loading-text" id="loadingText">🔌 Connecting to Supabase...</div>
+        <div class="loading-progress"><div class="loading-progress-bar" id="loadingProgress"></div></div>
+        <div class="loading-text" style="font-size:12px;color:var(--text-secondary);" id="loadingDetail">Initializing...</div>
     </div>
 
-    <!-- Payment Modal -->
-    <div class="payment-modal" id="paymentModal">
-        <div class="payment-box">
-            <div class="card-icon"><i class="fas fa-credit-card"></i></div>
-            <h2>💳 Add Balance</h2>
-            <p>Only <strong>"Talandilovan"</strong> is authorized</p>
-            <div id="paymentAlert" class="alert"></div>
-            <form id="paymentForm" onsubmit="processPayment(event)">
-                <div class="form-group">
-                    <label>Card Holder Name</label>
-                    <input type="text" id="cardHolder" placeholder="Talandilovan" required value="Talandilovan" />
-                </div>
-                <div class="form-group">
-                    <label>Card Number</label>
-                    <input type="text" id="cardNumber" placeholder="4111 1111 1111 1111" required maxlength="19" oninput="formatCardNumber(this)" />
-                </div>
-                <div class="form-row">
-                    <div class="form-group">
-                        <label>Expiry Date</label>
-                        <input type="text" id="cardExpiry" placeholder="MM/YY" required maxlength="5" oninput="formatExpiry(this)" />
-                    </div>
-                    <div class="form-group">
-                        <label>CVV</label>
-                        <input type="password" id="cardCVV" placeholder="***" required maxlength="3" />
-                    </div>
-                </div>
-                <div class="form-group">
-                    <label>Amount to Add ($)</label>
-                    <input type="number" id="paymentAmount" placeholder="50" required min="10" value="50" />
-                </div>
-                <button type="submit" class="pay-btn" id="payBtn">
-                    <i class="fas fa-lock"></i> Pay with Visa
-                </button>
-            </form>
-            <button class="close-btn" onclick="closePaymentModal()">Cancel</button>
-        </div>
-    </div>
-
-    <div class="dashboard" id="dashboardContent" style="display:none;">
+    <div class="container" id="dashboardContent" style="display:none;">
         <!-- Header -->
         <div class="header">
             <div class="header-left">
-                <div class="logo"><i class="fas fa-brain"></i></div>
+                <div class="logo"><i class="fas fa-database"></i></div>
                 <div>
-                    <h1>Zakhourani AI · Dashboard</h1>
+                    <h1>AIboard · Supabase Data Viewer</h1>
                     <div class="header-subtitle">
-                        <i class="fas fa-calendar-alt"></i> <span id="currentDateDisplay"></span>
-                        <i class="fas fa-clock" style="margin-left:12px;"></i> <span id="currentTimeDisplay"></span>
-                        <span class="status-badge"><i class="fas fa-circle" style="font-size:8px;color:var(--danger);margin-right:4px;"></i> LIVE</span>
-                        <span style="font-size:11px;color:var(--text-secondary);background:var(--bg-primary);padding:2px 12px;border-radius:12px;" id="dataStatus">✅ Supabase Connected</span>
+                        <i class="fas fa-server"></i> <span id="supabaseUrl"></span>
+                        <span class="status-badge" id="connectionStatus"><i class="fas fa-check-circle"></i> Connected</span>
                     </div>
                 </div>
             </div>
             <div class="header-actions">
-                <button class="btn btn-success" onclick="openPaymentModal()">
-                    <i class="fas fa-credit-card"></i> Add Balance
-                </button>
                 <button class="btn btn-secondary" onclick="refreshData()"><i class="fas fa-sync"></i> Refresh</button>
-                <button class="btn btn-primary" onclick="exportReport()"><i class="fas fa-file-export"></i> Export</button>
-                <button class="btn btn-danger" onclick="checkMissingDays()"><i class="fas fa-calendar-plus"></i> Fill Gaps</button>
+                <button class="btn btn-primary" onclick="exportSchema()"><i class="fas fa-file-export"></i> Export Schema</button>
+                <button class="btn btn-success" onclick="showSQL()"><i class="fas fa-code"></i> Show SQL</button>
             </div>
         </div>
 
         <div id="alert" class="alert"></div>
 
-        <!-- Critical Alert -->
-        <div class="critical-alert" id="criticalAlert">
-            <div>
-                <span class="alert-icon"><i class="fas fa-exclamation-triangle"></i></span>
-                <span class="alert-text"><strong>⚠️ CRITICAL BALANCE:</strong> <span id="criticalBalanceText">$30.00</span> remaining!</span>
-            </div>
-            <button class="btn btn-success" onclick="openPaymentModal()" style="background:rgba(255,255,255,0.2);color:white;border:1px solid rgba(255,255,255,0.3);">
-                <i class="fas fa-credit-card"></i> Add Funds
-            </button>
-        </div>
-
-        <!-- Token Pricing -->
-        <div class="token-pricing">
-            <div>
-                <div class="price"><i class="fas fa-coins"></i> $0.07 per 1M tokens</div>
-                <div style="color:var(--text-secondary);font-size:13px;"><i class="fas fa-info-circle"></i> DeepSeek API</div>
-            </div>
-            <div>
-                <span class="badge" style="background:rgba(59,130,246,0.12);color:var(--accent-light);padding:4px 16px;border-radius:20px;font-size:13px;font-weight:600;border:1px solid rgba(59,130,246,0.15);">
-                    <i class="fas fa-users"></i> <span id="totalUsersBadge">0</span> Users
-                </span>
-                <span class="badge" style="background:rgba(34,197,94,0.12);color:var(--success);padding:4px 16px;border-radius:20px;font-size:13px;font-weight:600;border:1px solid rgba(34,197,94,0.15);">
-                    <i class="fas fa-calendar"></i> <span id="totalDaysBadge">0</span> Days
-                </span>
-            </div>
-        </div>
-
         <!-- Stats -->
-        <div class="stats-grid">
+        <div class="stats-grid" id="statsGrid">
             <div class="stat-card">
-                <div class="icon-bg"><i class="fas fa-wallet"></i></div>
-                <div class="label">Initial Budget</div>
-                <div class="value" id="totalBudget">$1,000.00</div>
-            </div>
-            <div class="stat-card critical" id="balanceCard">
-                <div class="icon-bg"><i class="fas fa-piggy-bank"></i></div>
-                <div class="label">Remaining Balance</div>
-                <div class="value critical-value" id="remainingBalance">$--</div>
-                <div class="sub-value" id="remainingTokens">-- tokens</div>
+                <div class="icon-bg"><i class="fas fa-table"></i></div>
+                <div class="label">Total Tables</div>
+                <div class="value" id="totalTables">0</div>
             </div>
             <div class="stat-card">
-                <div class="icon-bg"><i class="fas fa-token"></i></div>
-                <div class="label">Total Tokens Used</div>
-                <div class="value" id="totalTokens">0</div>
-                <div class="sub-value">≈ $<span id="totalTokensCost">0.00</span> spent</div>
+                <div class="icon-bg"><i class="fas fa-database"></i></div>
+                <div class="label">Total Records</div>
+                <div class="value" id="totalRecords">0</div>
             </div>
             <div class="stat-card">
-                <div class="icon-bg"><i class="fas fa-users"></i></div>
-                <div class="label">Total Users</div>
-                <div class="value" id="totalUsers">0</div>
-                <div class="sub-value"><span id="activeUsers">0</span> active</div>
+                <div class="icon-bg"><i class="fas fa-columns"></i></div>
+                <div class="label">Total Columns</div>
+                <div class="value" id="totalColumns">0</div>
             </div>
             <div class="stat-card">
-                <div class="icon-bg"><i class="fas fa-question-circle"></i></div>
-                <div class="label">Total Questions</div>
-                <div class="value" id="totalQuestions">0</div>
-                <div class="sub-value"><span id="dailyQuestions">0</span> today</div>
+                <div class="icon-bg"><i class="fas fa-clock"></i></div>
+                <div class="label">Last Updated</div>
+                <div class="value" id="lastUpdated" style="font-size:20px;">-</div>
             </div>
         </div>
 
-        <!-- Timeline -->
-        <div class="timeline-section">
-            <div class="timeline-header" style="display:flex;justify-content:space-between;align-items:center;margin-bottom:18px;flex-wrap:wrap;gap:12px;">
-                <h3><i class="fas fa-calendar-week"></i> Daily History</h3>
-                <div class="filter-controls">
-                    <select id="timelineFilter" onchange="filterTimeline()">
-                        <option value="all">All Time</option>
-                        <option value="2026">2026</option>
-                        <option value="2027">2027</option>
-                        <option value="2028">2028</option>
-                        <option value="critical">⚠️ Critical</option>
-                        <option value="missing">❓ Missing Days</option>
+        <!-- Table List -->
+        <h3 style="margin-bottom:12px;"><i class="fas fa-list"></i> Tables in Database</h3>
+        <div class="table-list" id="tableList"></div>
+
+        <!-- Data Viewer -->
+        <div class="data-viewer" id="dataViewer">
+            <div class="viewer-header">
+                <h3><i class="fas fa-eye"></i> <span id="viewerTitle">Table Data</span></h3>
+                <div class="viewer-controls">
+                    <select id="tableSelector" onchange="loadTableData()">
+                        <option value="">Select a table...</option>
                     </select>
-                    <button class="btn btn-secondary" onclick="resetTimelineFilter()" style="padding:4px 14px;font-size:11px;">
-                        <i class="fas fa-undo"></i> Reset
+                    <input type="text" id="searchInput" placeholder="Search..." oninput="searchTableData()" />
+                    <button class="btn btn-secondary" onclick="loadTableData()" style="padding:6px 14px;font-size:11px;">
+                        <i class="fas fa-sync"></i> Load
                     </button>
                 </div>
             </div>
-            <div class="timeline-grid" id="timelineGrid">
-                <div style="text-align:center;padding:40px;color:var(--text-secondary);width:100%;">
-                    <i class="fas fa-spinner fa-spin" style="font-size:24px;"></i>
-                    <div style="margin-top:12px;">Loading timeline...</div>
+            <div class="table-wrapper" id="tableDataWrapper">
+                <div style="text-align:center;padding:40px;color:var(--text-secondary);">
+                    <i class="fas fa-hand-pointer" style="font-size:32px;display:block;margin-bottom:12px;"></i>
+                    Select a table from the dropdown to view data
                 </div>
             </div>
+            <div style="margin-top:12px;font-size:12px;color:var(--text-secondary);" id="recordCount">-</div>
         </div>
 
-        <!-- Charts -->
-        <div class="charts-grid">
-            <div class="chart-container">
-                <h3><i class="fas fa-chart-area"></i> Spend & Balance History</h3>
-                <div class="chart-wrapper"><canvas id="budgetChart"></canvas></div>
+        <!-- Schema Viewer -->
+        <div class="schema-viewer" id="schemaViewer">
+            <div class="schema-header">
+                <h3><i class="fas fa-code"></i> Database Schema</h3>
+                <button class="btn btn-secondary" onclick="toggleSchema()" style="padding:6px 14px;font-size:11px;">
+                    <i class="fas fa-chevron-down"></i> Toggle
+                </button>
             </div>
-            <div class="chart-container">
-                <h3><i class="fas fa-pie-chart"></i> Question Categories</h3>
-                <div class="chart-wrapper"><canvas id="usageChart"></canvas></div>
-            </div>
-        </div>
-
-        <!-- Users Table -->
-        <div class="table-container">
-            <div class="table-header" style="padding:18px 24px;display:flex;justify-content:space-between;align-items:center;border-bottom:1px solid var(--border);flex-wrap:wrap;gap:12px;">
-                <h3><i class="fas fa-users"></i> Users · <span id="userCountDisplay">0</span></h3>
-                <div class="filter-controls">
-                    <input type="text" id="searchInput" placeholder="Search..." oninput="filterUsers()" />
-                    <select id="filterProvider" onchange="filterUsers()">
-                        <option value="all">All Providers</option>
-                        <option value="google">Google</option>
-                        <option value="github">GitHub</option>
-                        <option value="email">Email</option>
-                    </select>
-                    <select id="filterStatus" onchange="filterUsers()">
-                        <option value="all">All Status</option>
-                        <option value="active">Active</option>
-                        <option value="inactive">Inactive</option>
-                        <option value="premium">Premium</option>
-                    </select>
-                </div>
-            </div>
-            <div class="table-wrapper">
-                <table>
-                    <thead>
-                        <tr>
-                            <th>#</th>
-                            <th>User</th>
-                            <th>Email</th>
-                            <th>Provider</th>
-                            <th>Daily Tokens</th>
-                            <th>Total Tokens</th>
-                            <th>Cost ($)</th>
-                            <th>Questions</th>
-                            <th>Status</th>
-                            <th>Last Active</th>
-                        </tr>
-                    </thead>
-                    <tbody id="usersBody">
-                        <tr><td colspan="10" style="text-align:center;padding:40px;color:var(--text-secondary);">Loading users...</td></tr>
-                    </tbody>
-                </table>
-            </div>
-        </div>
-
-        <!-- Modal -->
-        <div class="modal" id="userModal">
-            <div class="modal-content">
-                <h2><i class="fas fa-user-circle"></i> User Profile</h2>
-                <div id="userDetailContent"></div>
-                <button class="btn btn-secondary" onclick="closeModal('userModal')" style="margin-top:16px;width:100%;">Close</button>
+            <div id="schemaContent">
+                <div style="text-align:center;padding:20px;color:var(--text-secondary);">Loading schema...</div>
             </div>
         </div>
     </div>
 
     <script>
         // ============================================================
-        // SUPABASE CONFIG
+        // SUPABASE CONFIG - YOUR KEY INTEGRATED
         // ============================================================
         const SUPABASE_URL = 'https://wkgldyfxsmkjyalrldtq.supabase.co';
         const SUPABASE_ANON_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6IndrZ2xkeWZ4c21ranlhbGxyZHRxIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NzczNTg0OTQsImV4cCI6MjA5MjkzNDQ5NH0.WgXSHB6teuUiEKYgeR2ADAK-8A_6VnbEl-wv0RSuxjA';
-        const supabase = window.supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
 
         // ============================================================
-        // CONFIG
+        // STATE
         // ============================================================
-        const TOKEN_COST_PER_MILLION = 0.07;
-        const MIN_BALANCE = 30;
-        const AUTHORIZED_CARD_HOLDER = 'Talandilovan';
-        const START_DATE = new Date('2026-02-10');
-
-        let users = [];
-        let questions = [];
-        let timelineData = [];
-        let chartInstances = {};
-        let currentFilter = 'all';
-        let isLoading = true;
+        let supabase = null;
+        let allTables = [];
+        let tableData = {};
+        let tableSchemas = {};
+        let currentTable = '';
+        let searchTerm = '';
 
         // ============================================================
-        // PAYMENT SYSTEM
+        // INIT
         // ============================================================
-        function openPaymentModal() {
-            document.getElementById('paymentModal').classList.add('active');
-            document.getElementById('paymentAlert').style.display = 'none';
-        }
-
-        function closePaymentModal() {
-            document.getElementById('paymentModal').classList.remove('active');
-        }
-
-        function formatCardNumber(input) {
-            let value = input.value.replace(/\D/g, '');
-            if (value.length > 16) value = value.slice(0, 16);
-            let formatted = '';
-            for (let i = 0; i < value.length; i++) {
-                if (i > 0 && i % 4 === 0) formatted += ' ';
-                formatted += value[i];
-            }
-            input.value = formatted;
-        }
-
-        function formatExpiry(input) {
-            let value = input.value.replace(/\D/g, '');
-            if (value.length > 4) value = value.slice(0, 4);
-            if (value.length > 2) {
-                input.value = value.slice(0, 2) + '/' + value.slice(2);
-            } else {
-                input.value = value;
-            }
-        }
-
-        async function processPayment(e) {
-            e.preventDefault();
-            const btn = document.getElementById('payBtn');
-            btn.disabled = true;
-            btn.innerHTML = '<i class="fas fa-spinner fa-spin"></i> Processing...';
-
-            const cardHolder = document.getElementById('cardHolder').value.trim();
-            const cardNumber = document.getElementById('cardNumber').value.replace(/\s/g, '');
-            const cardExpiry = document.getElementById('cardExpiry').value;
-            const cardCVV = document.getElementById('cardCVV').value;
-            const amount = parseFloat(document.getElementById('paymentAmount').value);
-
-            if (cardHolder.toLowerCase() !== AUTHORIZED_CARD_HOLDER.toLowerCase()) {
-                showPaymentAlert('❌ Only Talandilovan is authorized!', 'error');
-                btn.disabled = false;
-                btn.innerHTML = '<i class="fas fa-lock"></i> Pay with Visa';
-                return;
-            }
-
-            if (cardNumber.length < 16) {
-                showPaymentAlert('❌ Invalid card number!', 'error');
-                btn.disabled = false;
-                btn.innerHTML = '<i class="fas fa-lock"></i> Pay with Visa';
-                return;
-            }
-
-            if (!cardExpiry.match(/^\d{2}\/\d{2}$/)) {
-                showPaymentAlert('❌ Invalid expiry date!', 'error');
-                btn.disabled = false;
-                btn.innerHTML = '<i class="fas fa-lock"></i> Pay with Visa';
-                return;
-            }
-
-            if (cardCVV.length < 3) {
-                showPaymentAlert('❌ Invalid CVV!', 'error');
-                btn.disabled = false;
-                btn.innerHTML = '<i class="fas fa-lock"></i> Pay with Visa';
-                return;
-            }
-
-            if (amount < 10) {
-                showPaymentAlert('❌ Minimum amount is $10.', 'error');
-                btn.disabled = false;
-                btn.innerHTML = '<i class="fas fa-lock"></i> Pay with Visa';
-                return;
-            }
-
+        async function init() {
             try {
-                const transactionId = 'txn_' + Date.now() + '_' + Math.random().toString(36).substr(2, 9);
-                await supabase.from('transactions').insert({
-                    transaction_id: transactionId,
-                    card_holder_name: cardHolder,
-                    card_number: cardNumber.slice(-4),
-                    amount: amount,
-                    status: 'completed'
-                });
+                updateLoading('🔌 Connecting to Supabase...', 10);
+                supabase = window.supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
+                document.getElementById('supabaseUrl').textContent = SUPABASE_URL;
 
-                const { data: balanceData } = await supabase
-                    .from('daily_usage')
-                    .select('balance, total_tokens, day_number')
-                    .order('date', { ascending: false })
-                    .limit(1);
+                updateLoading('📡 Testing connection...', 20);
+                
+                // Try to get tables by querying pg_tables or information_schema
+                updateLoading('📊 Fetching table list...', 40);
+                await fetchTableList();
 
-                const currentBalance = balanceData?.[0]?.balance || 30;
-                const totalTokens = balanceData?.[0]?.total_tokens || 0;
-                const dayNumber = balanceData?.[0]?.day_number || 1;
-                const newBalance = currentBalance + amount;
-                const today = new Date().toISOString().split('T')[0];
+                if (allTables.length === 0) {
+                    // If no tables found, try with known table names
+                    const knownTables = ['users', 'daily_usage', 'transactions', 'questions'];
+                    for (const table of knownTables) {
+                        try {
+                            const { count, error } = await supabase
+                                .from(table)
+                                .select('*', { count: 'exact', head: true });
+                            if (!error || error.code !== '42P01') {
+                                allTables.push(table);
+                            }
+                        } catch (e) {}
+                    }
+                    allTables = [...new Set(allTables)];
+                }
 
-                await supabase.from('daily_usage').upsert({
-                    date: today,
-                    total_spend: 0,
-                    balance: newBalance,
-                    tokens_used: 0,
-                    total_tokens: totalTokens,
-                    day_number: dayNumber + 1,
-                    user_count: users.length || 1200,
-                    is_critical: newBalance < 40
-                }, { onConflict: 'date' });
+                updateLoading('📈 Loading schema...', 60);
+                await fetchAllSchemas();
 
-                showPaymentAlert(`✅ Added $${amount.toFixed(2)} successfully!`, 'success');
+                updateLoading('📋 Loading data...', 80);
+                await loadAllTableCounts();
+
+                updateLoading('✅ Done!', 100);
                 setTimeout(() => {
-                    closePaymentModal();
-                    refreshData();
-                }, 1500);
+                    document.getElementById('loadingScreen').classList.add('hidden');
+                    document.getElementById('dashboardContent').style.display = 'block';
+                    renderDashboard();
+                    updateStats();
+                    if (allTables.length > 0) {
+                        document.getElementById('tableSelector').value = allTables[0];
+                        loadTableData();
+                    }
+                }, 500);
 
             } catch (error) {
-                console.error('Payment error:', error);
-                showPaymentAlert('❌ Payment failed! Please try again.', 'error');
+                console.error('Init error:', error);
+                document.getElementById('loadingText').textContent = '❌ Error connecting to Supabase';
+                document.getElementById('loadingDetail').textContent = error.message || 'Check your credentials';
+                document.getElementById('connectionStatus').className = 'status-badge error';
+                document.getElementById('connectionStatus').innerHTML = '<i class="fas fa-times-circle"></i> Error';
+                showAlert('❌ Failed to connect: ' + (error.message || 'Unknown error'), 'error');
+                
+                // Try with known tables anyway
+                allTables = ['users', 'daily_usage', 'transactions', 'questions'];
+                await fetchAllSchemas();
+                await loadAllTableCounts();
+                setTimeout(() => {
+                    document.getElementById('loadingScreen').classList.add('hidden');
+                    document.getElementById('dashboardContent').style.display = 'block';
+                    renderDashboard();
+                    updateStats();
+                    if (allTables.length > 0) {
+                        document.getElementById('tableSelector').value = allTables[0];
+                        loadTableData();
+                    }
+                }, 1000);
             }
-
-            btn.disabled = false;
-            btn.innerHTML = '<i class="fas fa-lock"></i> Pay with Visa';
         }
 
-        function showPaymentAlert(message, type) {
-            const alert = document.getElementById('paymentAlert');
-            alert.textContent = message;
-            alert.className = `alert alert-${type}`;
-            alert.style.display = 'block';
-        }
-
-        document.getElementById('paymentModal').addEventListener('click', function(e) {
-            if (e.target === this) closePaymentModal();
-        });
-
         // ============================================================
-        // DATA FETCHING FROM SUPABASE
+        // FETCH TABLE LIST
         // ============================================================
-        async function fetchAllData() {
+        async function fetchTableList() {
             try {
-                document.getElementById('loadingStatus').textContent = '📊 Fetching users...';
-
-                // 1. Fetch users
-                const { data: usersData, error: uErr } = await supabase.from('users').select('*');
-                if (uErr) throw uErr;
-                if (usersData && usersData.length > 0) {
-                    users = usersData.map(u => ({
-                        uid: u.uid,
-                        email: u.email,
-                        displayName: u.display_name,
-                        provider: u.provider,
-                        status: u.status || 'active',
-                        tokensUsed: u.tokens_used || 0,
-                        dailyTokens: u.daily_tokens || 0,
-                        cost: u.cost || 0,
-                        questions: u.questions || 0,
-                        lastActive: new Date(u.last_active),
-                        createdAt: new Date(u.created_at)
-                    }));
+                // Try to query pg_tables using RPC
+                const { data, error } = await supabase.rpc('get_tables');
+                if (!error && data && data.length > 0) {
+                    allTables = data.map(t => t.table_name || t).filter(t => t && !t.startsWith('_') && !t.startsWith('pg_'));
+                    return;
                 }
+            } catch (e) {}
 
-                document.getElementById('loadingStatus').textContent = '📈 Fetching daily data...';
+            // Try information_schema
+            try {
+                const { data, error } = await supabase
+                    .from('information_schema.tables')
+                    .select('table_name')
+                    .eq('table_schema', 'public')
+                    .eq('table_type', 'BASE TABLE')
+                    .limit(20);
 
-                // 2. Fetch daily usage
-                const { data: tData, error: tErr } = await supabase
-                    .from('daily_usage')
-                    .select('*')
-                    .order('date', { ascending: true });
-
-                if (tErr) throw tErr;
-
-                if (tData && tData.length > 0) {
-                    timelineData = tData.map(d => ({
-                        date: new Date(d.date),
-                        spend: d.total_spend,
-                        balance: d.balance,
-                        tokens: d.tokens_used,
-                        totalTokens: d.total_tokens,
-                        day: d.day_number,
-                        userCount: d.user_count,
-                        isCritical: d.is_critical || false,
-                        isToday: new Date(d.date).toDateString() === new Date().toDateString()
-                    }));
+                if (!error && data && data.length > 0) {
+                    allTables = data.map(t => t.table_name).filter(t => !t.startsWith('_') && !t.startsWith('pg_'));
+                    return;
                 }
+            } catch (e) {}
 
-                document.getElementById('loadingStatus').textContent = '❓ Fetching questions...';
-
-                // 3. Fetch questions
-                const { data: qData, error: qErr } = await supabase.from('questions').select('*');
-                if (qErr) throw qErr;
-                if (qData && qData.length > 0) {
-                    questions = qData.map(q => ({
-                        id: q.id,
-                        name: q.name,
-                        icon: q.icon || 'fa-question',
-                        count: q.count || 0,
-                        color: q.color || '#3b82f6',
-                        trend: q.trend || 0
-                    }));
-                }
-
-                // 4. Check for missing days and fill them
-                document.getElementById('loadingStatus').textContent = '🔍 Checking for missing days...';
-                await checkAndFillMissingDays();
-
-                // 5. Update UI
-                document.getElementById('loadingStatus').textContent = '✅ Done!';
-                hideLoading();
-                updateDateTime();
-                updateStats();
-                renderTimeline();
-                renderUsers();
-                updateCharts();
-
-                // 6. Set up auto-update
-                setupAutoUpdate();
-
-            } catch (err) {
-                console.error('Fetch error:', err);
-                document.getElementById('loadingStatus').textContent = '⚠️ Error loading data';
-                showAlert('⚠️ Error loading from Supabase. Check console.', 'error');
-                // Try to recover with sample data
-                generateSampleData();
-                hideLoading();
+            // Fallback: Try common tables
+            const commonTables = ['users', 'daily_usage', 'transactions', 'questions'];
+            const foundTables = [];
+            for (const table of commonTables) {
+                try {
+                    const { data, error } = await supabase
+                        .from(table)
+                        .select('count', { count: 'exact', head: true });
+                    if (!error || error.code !== '42P01') {
+                        foundTables.push(table);
+                    }
+                } catch (e) {}
             }
+            allTables = foundTables;
         }
 
         // ============================================================
-        // CHECK AND FILL MISSING DAYS
+        // FETCH SCHEMA
         // ============================================================
-        async function checkAndFillMissingDays() {
-            const today = new Date();
-            today.setHours(0, 0, 0, 0);
+        async function fetchAllSchemas() {
+            for (const table of allTables) {
+                try {
+                    const { data, error } = await supabase
+                        .from(table)
+                        .select('*')
+                        .limit(1);
 
-            // Get all dates that should exist
-            const allDates = [];
-            let currentDate = new Date(START_DATE);
-            while (currentDate <= today) {
-                allDates.push(new Date(currentDate));
-                currentDate.setDate(currentDate.getDate() + 1);
-            }
+                    if (error) {
+                        tableSchemas[table] = { error: error.message, columns: [] };
+                        continue;
+                    }
 
-            // Find missing dates
-            const existingDates = new Set(timelineData.map(d => d.date.toISOString().split('T')[0]));
-            const missingDates = allDates.filter(d => !existingDates.has(d.toISOString().split('T')[0]));
-
-            if (missingDates.length > 0) {
-                console.log(`Found ${missingDates.length} missing days. Filling...`);
-
-                let lastBalance = timelineData.length > 0 ? timelineData[timelineData.length - 1].balance : 1000;
-                let lastTotalTokens = timelineData.length > 0 ? timelineData[timelineData.length - 1].totalTokens : 0;
-                let lastDay = timelineData.length > 0 ? timelineData[timelineData.length - 1].day : 0;
-
-                for (const date of missingDates) {
-                    const dailySpend = 0.30 + Math.random() * 0.60;
-                    const dailyTokens = Math.round((dailySpend / 0.07) * 1000000);
-
-                    if (lastBalance - dailySpend < MIN_BALANCE) {
-                        // Critical balance - reduce spend
-                        const newSpend = Math.max(0, lastBalance - MIN_BALANCE);
-                        if (newSpend > 0) {
-                            lastBalance = MIN_BALANCE;
-                        }
+                    if (data && data.length > 0) {
+                        const columns = Object.keys(data[0]).map(col => ({
+                            name: col,
+                            type: typeof data[0][col],
+                            sample: data[0][col],
+                            isNullable: data[0][col] === null
+                        }));
+                        tableSchemas[table] = { columns, sample: data[0] };
                     } else {
-                        lastBalance -= dailySpend;
+                        tableSchemas[table] = { columns: [], sample: null };
                     }
-                    lastBalance = Math.round(lastBalance * 100) / 100;
+                } catch (e) {
+                    tableSchemas[table] = { error: e.message, columns: [] };
+                }
+            }
+        }
 
-                    lastTotalTokens += dailyTokens;
-                    lastDay += 1;
+        // ============================================================
+        // LOAD TABLE COUNTS
+        // ============================================================
+        async function loadAllTableCounts() {
+            for (const table of allTables) {
+                try {
+                    const { count, error } = await supabase
+                        .from(table)
+                        .select('*', { count: 'exact', head: true });
 
-                    const newEntry = {
-                        date: date,
-                        spend: Math.round(dailySpend * 100) / 100,
-                        balance: Math.max(MIN_BALANCE, lastBalance),
-                        tokens: dailyTokens,
-                        totalTokens: lastTotalTokens,
-                        day: lastDay,
-                        userCount: users.length || 1200,
-                        isCritical: lastBalance < 40,
-                        isToday: date.toISOString().split('T')[0] === today.toISOString().split('T')[0]
-                    };
-
-                    timelineData.push(newEntry);
-
-                    // Save to Supabase
-                    try {
-                        await supabase.from('daily_usage').upsert({
-                            date: date.toISOString().split('T')[0],
-                            total_spend: newEntry.spend,
-                            balance: newEntry.balance,
-                            tokens_used: newEntry.tokens,
-                            total_tokens: newEntry.totalTokens,
-                            day_number: newEntry.day,
-                            user_count: newEntry.userCount,
-                            is_critical: newEntry.isCritical
-                        }, { onConflict: 'date' });
-                    } catch (e) {
-                        console.log('Save error for', date, e);
+                    if (!error) {
+                        tableData[table] = { count: count || 0, loaded: false };
+                    } else {
+                        tableData[table] = { count: 0, loaded: false };
                     }
-                }
-
-                // Sort timeline data by date
-                timelineData.sort((a, b) => a.date - b.date);
-
-                if (missingDates.length > 0) {
-                    showAlert(`✅ Filled ${missingDates.length} missing days!`, 'success');
+                } catch (e) {
+                    tableData[table] = { count: 0, loaded: false };
                 }
             }
         }
 
         // ============================================================
-        // CHECK MISSING DAYS (Manual Trigger)
+        // LOAD TABLE DATA
         // ============================================================
-        async function checkMissingDays() {
-            showAlert('🔍 Checking for missing days...', 'info');
-            await checkAndFillMissingDays();
-            updateStats();
-            renderTimeline();
-            updateCharts();
-            showAlert('✅ Missing days filled!', 'success');
-        }
+        async function loadTableData() {
+            const table = document.getElementById('tableSelector').value;
+            if (!table) return;
 
-        // ============================================================
-        // SAMPLE DATA FALLBACK
-        // ============================================================
-        function generateSampleData() {
-            const today = new Date();
-            const start = new Date('2026-02-10');
-            let balance = 1000;
-            let totalTokens = 0;
-            timelineData = [];
+            currentTable = table;
+            document.getElementById('viewerTitle').textContent = `Table: ${table}`;
 
-            for (let d = new Date(start); d <= today; d.setDate(d.getDate() + 1)) {
-                const spend = 0.30 + Math.random() * 0.60;
-                const tokens = Math.round((spend / 0.07) * 1000000);
-                if (balance - spend < 30) {
-                    balance = 30;
-                } else {
-                    balance -= spend;
-                }
-                totalTokens += tokens;
-                timelineData.push({
-                    date: new Date(d),
-                    spend: Math.round(spend * 100) / 100,
-                    balance: Math.round(balance * 100) / 100,
-                    tokens: tokens,
-                    totalTokens: totalTokens,
-                    day: timelineData.length + 1,
-                    userCount: 1200 + Math.floor(Math.random() * 50),
-                    isCritical: balance < 40,
-                    isToday: d.toDateString() === today.toDateString()
-                });
-            }
+            try {
+                const { data, error } = await supabase
+                    .from(table)
+                    .select('*')
+                    .limit(100);
 
-            // Sample users
-            users = [];
-            const names = ['Ahmed', 'Mohammad', 'Sara', 'Nora', 'Omar', 'Laila'];
-            const lastNames = ['Khalil', 'Ali', 'Hassan', 'Saeed'];
-            for (let i = 1; i <= 1200; i++) {
-                const firstName = names[i % names.length];
-                const lastName = lastNames[i % lastNames.length];
-                users.push({
-                    uid: 'user_' + String(i).padStart(5, '0'),
-                    email: firstName.toLowerCase() + '.' + lastName.toLowerCase() + i + '@gmail.com',
-                    displayName: firstName + ' ' + lastName,
-                    provider: ['google', 'email', 'github'][i % 3],
-                    status: ['active', 'active', 'active', 'premium', 'inactive'][i % 5],
-                    tokensUsed: Math.floor(Math.random() * 400000 + 100000),
-                    dailyTokens: Math.floor(Math.random() * 12000 + 2000),
-                    cost: Math.random() * 20 + 5,
-                    questions: Math.floor(Math.random() * 300 + 20),
-                    lastActive: new Date(Date.now() - Math.random() * 90 * 24 * 60 * 60 * 1000)
-                });
-            }
+                if (error) throw error;
 
-            questions = [
-                { id: 'about_ai', name: 'AI & Machine Learning', icon: 'fa-robot', count: 12500, color: '#3b82f6',
-                    trend: 15 },
-                { id: 'about_chatgpt', name: 'ChatGPT & LLMs', icon: 'fa-comment-dots', count: 11200, color: '#10a37f',
-                    trend: 25 },
-                { id: 'about_dr_waleed', name: 'Dr. Waleed Zakhourani', icon: 'fa-user-graduate', count: 9800,
-                    color: '#eab308', trend: 22 }
-            ];
-        }
+                tableData[table].data = data || [];
+                tableData[table].loaded = true;
 
-        // ============================================================
-        // LOADING / UI HELPERS
-        // ============================================================
-        function hideLoading() {
-            document.getElementById('loadingScreen').classList.add('hidden');
-            document.getElementById('dashboardContent').style.display = 'block';
-        }
+                renderTableData(table, data || []);
+                document.getElementById('recordCount').textContent =
+                    `Showing ${(data || []).length} of ${tableData[table].count || '?'} records`;
 
-        // ============================================================
-        // UPDATE FUNCTIONS
-        // ============================================================
-        function updateDateTime() {
-            const now = new Date();
-            document.getElementById('currentDateDisplay').textContent = now.toLocaleDateString('en-US', {
-                weekday: 'long',
-                year: 'numeric',
-                month: 'long',
-                day: 'numeric'
-            });
-            document.getElementById('currentTimeDisplay').textContent = now.toLocaleTimeString('en-US', {
-                hour: '2-digit',
-                minute: '2-digit',
-                second: '2-digit'
-            });
-        }
-
-        function updateStats() {
-            const lastData = timelineData[timelineData.length - 1] || { balance: 30, totalTokens: 0 };
-            const currentBalance = Math.max(MIN_BALANCE, lastData.balance || MIN_BALANCE);
-            const totalTokensUsed = lastData.totalTokens || 0;
-
-            document.getElementById('totalBudget').textContent = `$1,000.00`;
-            document.getElementById('remainingBalance').textContent = `$${currentBalance.toFixed(2)}`;
-            document.getElementById('criticalBalanceText').textContent = `$${currentBalance.toFixed(2)}`;
-            document.getElementById('remainingTokens').textContent =
-                `= ${Math.round((currentBalance / TOKEN_COST_PER_MILLION) * 1000000).toLocaleString()} tokens`;
-            document.getElementById('totalTokens').textContent = Math.round(totalTokensUsed).toLocaleString();
-            document.getElementById('totalTokensCost').textContent =
-                `${(totalTokensUsed / 1000000 * TOKEN_COST_PER_MILLION).toFixed(2)}`;
-
-            const activeUsers = users.filter(u => (Date.now() - new Date(u.lastActive).getTime()) < 30 * 24 * 60 * 60 * 1000)
-                .length;
-            document.getElementById('totalUsers').textContent = users.length.toLocaleString();
-            document.getElementById('activeUsers').textContent = activeUsers.toLocaleString();
-            document.getElementById('totalUsersBadge').textContent = users.length.toLocaleString();
-            document.getElementById('totalDaysBadge').textContent = timelineData.length.toLocaleString();
-            document.getElementById('userCountDisplay').textContent = users.length.toLocaleString();
-
-            const totalQuestions = users.reduce((sum, u) => sum + (u.questions || 0), 0);
-            document.getElementById('totalQuestions').textContent = totalQuestions.toLocaleString();
-            document.getElementById('dailyQuestions').textContent =
-                Math.floor(totalQuestions / Math.max(1, timelineData.length / 30));
-
-            // Update balance card
-            const balanceCard = document.getElementById('balanceCard');
-            if (currentBalance < 40) {
-                balanceCard.classList.add('critical');
-                document.getElementById('criticalAlert').style.display = 'flex';
-            } else {
-                balanceCard.classList.remove('critical');
-                document.getElementById('criticalAlert').style.display = 'none';
+            } catch (error) {
+                console.error('Error loading table data:', error);
+                showAlert(`❌ Error loading table "${table}": ${error.message}`, 'error');
+                const wrapper = document.getElementById('tableDataWrapper');
+                wrapper.innerHTML = `<div style="text-align:center;padding:40px;color:var(--danger);">
+                    <i class="fas fa-exclamation-triangle" style="font-size:32px;display:block;margin-bottom:12px;"></i>
+                    Error loading data: ${error.message}
+                </div>`;
             }
         }
 
         // ============================================================
-        // TIMELINE RENDER
+        // RENDER TABLE DATA
         // ============================================================
-        function renderTimeline() {
-            const grid = document.getElementById('timelineGrid');
-            let data = [...timelineData];
+        function renderTableData(table, data) {
+            const wrapper = document.getElementById('tableDataWrapper');
 
-            // Apply filter
-            if (currentFilter === '2026') {
-                data = data.filter(d => d.date.getFullYear() === 2026);
-            } else if (currentFilter === '2027') {
-                data = data.filter(d => d.date.getFullYear() === 2027);
-            } else if (currentFilter === '2028') {
-                data = data.filter(d => d.date.getFullYear() === 2028);
-            } else if (currentFilter === 'critical') {
-                data = data.filter(d => d.isCritical || d.balance < MIN_BALANCE + 10);
-            } else if (currentFilter === 'missing') {
-                // Show only missing days (will be empty if none)
-                const allDates = [];
-                let currentDate = new Date(START_DATE);
-                const today = new Date();
-                while (currentDate <= today) {
-                    allDates.push(currentDate.toISOString().split('T')[0]);
-                    currentDate.setDate(currentDate.getDate() + 1);
-                }
-                const existingDates = new Set(timelineData.map(d => d.date.toISOString().split('T')[0]));
-                const missingDates = allDates.filter(d => !existingDates.has(d));
-                data = data.filter(d => missingDates.includes(d.date.toISOString().split('T')[0]));
-            }
-
-            // Show last 100 days or all if less
-            const displayData = data.length > 100 ? data.slice(-100) : data;
-
-            if (displayData.length === 0) {
-                grid.innerHTML =
-                    `<div style="text-align:center;padding:40px;color:var(--text-secondary);width:100%;">No data available for this filter</div>`;
+            if (!data || data.length === 0) {
+                wrapper.innerHTML = `<div style="text-align:center;padding:40px;color:var(--text-secondary);">
+                    <i class="fas fa-inbox" style="font-size:32px;display:block;margin-bottom:12px;"></i>
+                    No data found in "${table}"
+                </div>`;
                 return;
             }
 
-            grid.innerHTML = displayData.map(d => {
-                const date = new Date(d.date);
-                const isCritical = d.isCritical || d.balance < MIN_BALANCE + 10;
-                const isToday = date.toDateString() === new Date().toDateString();
-                const isMissing = currentFilter === 'missing';
+            const columns = Object.keys(data[0]);
+            const search = searchTerm.toLowerCase();
 
-                let classes = '';
-                if (isCritical) classes += ' critical';
-                if (isToday) classes += ' today';
-                if (isMissing) classes += ' missing';
+            let filteredData = data;
+            if (search) {
+                filteredData = data.filter(row => {
+                    return Object.values(row).some(val =>
+                        String(val).toLowerCase().includes(search)
+                    );
+                });
+            }
 
-                return `<div class="timeline-card ${classes}" onclick="showDayDetail(${d.day})">
-                    <div class="date">
-                        ${date.toLocaleDateString('en-US', { month: 'short', day: 'numeric', year: 'numeric' })}
-                        ${isToday ? ' ⭐ TODAY' : ''}
-                        ${isMissing ? ' ❓ MISSING' : ''}
+            let html = '<table><thead><tr>';
+            columns.forEach(col => {
+                html += `<th>${col}</th>`;
+            });
+            html += '</tr></thead><tbody>';
+
+            filteredData.forEach(row => {
+                html += '<tr>';
+                columns.forEach(col => {
+                    const val = row[col];
+                    let display = '';
+
+                    if (val === null || val === undefined) {
+                        display = '<span class="cell-null">null</span>';
+                    } else if (typeof val === 'boolean') {
+                        display = `<span class="cell-boolean ${val}">${val}</span>`;
+                    } else if (val instanceof Date || (typeof val === 'object' && val !== null && val.toISOString)) {
+                        display = new Date(val).toLocaleString();
+                    } else if (typeof val === 'object') {
+                        display = JSON.stringify(val).substring(0, 50) + (JSON.stringify(val).length > 50 ? '...' : '');
+                    } else {
+                        display = String(val);
+                        if (display.length > 50) display = display.substring(0, 50) + '...';
+                    }
+
+                    html += `<td title="${String(val)}">${display}</td>`;
+                });
+                html += '</tr>';
+            });
+
+            html += '</tbody></table>';
+
+            if (filteredData.length === 0 && search) {
+                html = `<div style="text-align:center;padding:40px;color:var(--text-secondary);">
+                    <i class="fas fa-search" style="font-size:32px;display:block;margin-bottom:12px;"></i>
+                    No results found for "${search}"
+                </div>`;
+            }
+
+            wrapper.innerHTML = html;
+        }
+
+        // ============================================================
+        // SEARCH TABLE DATA
+        // ============================================================
+        function searchTableData() {
+            searchTerm = document.getElementById('searchInput').value;
+            if (currentTable && tableData[currentTable]?.data) {
+                renderTableData(currentTable, tableData[currentTable].data);
+            }
+        }
+
+        // ============================================================
+        // RENDER DASHBOARD
+        // ============================================================
+        function renderDashboard() {
+            // Render table list
+            const list = document.getElementById('tableList');
+            
+            if (allTables.length === 0) {
+                list.innerHTML = `<div style="text-align:center;padding:40px;color:var(--text-secondary);grid-column:1/-1;">
+                    <i class="fas fa-database" style="font-size:32px;display:block;margin-bottom:12px;"></i>
+                    No tables found in database. Create tables first.
+                </div>`;
+                return;
+            }
+
+            list.innerHTML = allTables.map(table => {
+                const count = tableData[table]?.count || 0;
+                const schema = tableSchemas[table];
+                const hasError = schema?.error;
+                const colCount = schema?.columns?.length || 0;
+
+                let statusClass = 'badge-success';
+                let statusText = '✅ Active';
+                if (hasError) { statusClass = 'badge-danger';
+                    statusText = '❌ Error'; } else if (count === 0) { statusClass = 'badge-warning';
+                    statusText = '⚠️ Empty'; }
+
+                return `<div class="table-card" onclick="selectTable('${table}')">
+                    <div class="table-name">
+                        <i class="fas fa-table"></i> ${table}
                     </div>
-                    <div class="day-name">Day ${d.day}</div>
-                    <div class="amount ${isCritical ? 'negative' : 'positive'}">$${d.spend.toFixed(2)}</div>
-                    <div class="detail">${Math.round(d.tokens || 0).toLocaleString()} tokens</div>
-                    <div class="detail">Balance: $${d.balance.toFixed(2)}</div>
-                    <div class="detail"><i class="fas fa-users"></i> ${d.userCount || users.length}</div>
-                    ${isCritical ? '<div class="detail" style="color:var(--danger);font-weight:600;">⚠️ CRITICAL</div>' : ''}
+                    <div class="table-count">
+                        <i class="fas fa-database"></i> ${count.toLocaleString()} records
+                        <span style="margin-left:12px;"><i class="fas fa-columns"></i> ${colCount} columns</span>
+                    </div>
+                    <div class="table-status">
+                        <span class="badge ${statusClass}">${statusText}</span>
+                        ${schema?.columns?.length > 0 ? `<span style="margin-left:8px;font-size:11px;color:var(--text-secondary);">
+                            ${schema.columns.slice(0, 3).map(c => c.name).join(', ')}${schema.columns.length > 3 ? '...' : ''}
+                        </span>` : ''}
+                    </div>
                 </div>`;
             }).join('');
-        }
 
-        function filterTimeline() {
-            const filter = document.getElementById('timelineFilter').value;
-            currentFilter = filter;
-            renderTimeline();
-        }
+            // Populate table selector
+            const selector = document.getElementById('tableSelector');
+            selector.innerHTML = '<option value="">Select a table...</option>' +
+                allTables.map(table =>
+                    `<option value="${table}">${table} (${tableData[table]?.count || 0} records)</option>`
+                ).join('');
 
-        function resetTimelineFilter() {
-            document.getElementById('timelineFilter').value = 'all';
-            currentFilter = 'all';
-            renderTimeline();
-        }
-
-        function showDayDetail(day) {
-            const data = timelineData.find(d => d.day === day);
-            if (!data) return;
-            const modal = document.getElementById('userModal');
-            const content = document.getElementById('userDetailContent');
-            const date = new Date(data.date);
-
-            content.innerHTML = `
-                <div style="text-align:center;margin-bottom:16px;">
-                    <h2 style="font-size:24px;font-weight:800;">Day ${day}</h2>
-                    <div style="color:var(--text-secondary);font-size:14px;">
-                        ${date.toLocaleDateString('en-US', { weekday: 'long', year: 'numeric', month: 'long', day: 'numeric' })}
-                        ${data.isToday ? ' ⭐ TODAY' : ''}
-                    </div>
-                </div>
-                <div style="display:grid;grid-template-columns:1fr 1fr 1fr;gap:12px;margin-bottom:16px;">
-                    <div style="background:var(--bg-primary);padding:16px;border-radius:12px;text-align:center;">
-                        <div style="font-size:24px;font-weight:700;color:var(--accent);">$${data.spend.toFixed(2)}</div>
-                        <div style="font-size:11px;color:var(--text-secondary);">Daily Spend</div>
-                    </div>
-                    <div style="background:var(--bg-primary);padding:16px;border-radius:12px;text-align:center;">
-                        <div style="font-size:24px;font-weight:700;color:${data.isCritical ? 'var(--danger)' : 'var(--success)'};">$${data.balance.toFixed(2)}</div>
-                        <div style="font-size:11px;color:var(--text-secondary);">Remaining Balance</div>
-                    </div>
-                    <div style="background:var(--bg-primary);padding:16px;border-radius:12px;text-align:center;">
-                        <div style="font-size:24px;font-weight:700;color:var(--warning);">${Math.round(data.tokens || 0).toLocaleString()}</div>
-                        <div style="font-size:11px;color:var(--text-secondary);">Tokens Used</div>
-                    </div>
-                </div>
-                <div style="background:var(--bg-primary);padding:14px;border-radius:12px;">
-                    <div style="font-weight:600;margin-bottom:6px;font-size:13px;">📊 Summary</div>
-                    <div style="display:grid;grid-template-columns:1fr 1fr;gap:8px;font-size:13px;">
-                        <div>Total Users: <strong>${data.userCount || users.length}</strong></div>
-                        <div>Day of Week: <strong>${date.toLocaleDateString('en-US', { weekday: 'long' })}</strong></div>
-                        <div>Month: <strong>${date.toLocaleDateString('en-US', { month: 'long', year: 'numeric' })}</strong></div>
-                        <div>Status: <strong style="color:${data.isCritical ? 'var(--danger)' : 'var(--success)'};">${data.isCritical ? '⚠️ CRITICAL' : '✅ NORMAL'}</strong></div>
-                    </div>
-                </div>
-            `;
-            document.getElementById('userModal').classList.add('active');
+            // Render schema
+            renderSchema();
         }
 
         // ============================================================
-        // USERS RENDER
+        // RENDER SCHEMA
         // ============================================================
-        function renderUsers(filteredUsers = null) {
-            const tbody = document.getElementById('usersBody');
-            const data = filteredUsers || users;
-            const sorted = [...data].sort((a, b) => b.tokensUsed - a.tokensUsed);
-            const displayData = sorted.slice(0, 100);
+        function renderSchema() {
+            const content = document.getElementById('schemaContent');
 
-            if (displayData.length === 0) {
-                tbody.innerHTML =
-                    `<tr><td colspan="10" style="text-align:center;padding:40px;color:var(--text-secondary);">No users found</td></tr>`;
+            if (allTables.length === 0) {
+                content.innerHTML = `<div style="text-align:center;padding:20px;color:var(--text-secondary);">No tables found</div>`;
                 return;
             }
 
-            tbody.innerHTML = displayData.map((user, index) => {
-                const status = user.status || 'active';
-                const statusClass = status === 'active' ? 'status-active' : status === 'premium' ? 'status-premium' :
-                    'status-inactive';
-                const avatar =
-                    `https://ui-avatars.com/api/?name=${encodeURIComponent(user.displayName)}&background=3b82f6&color=fff&bold=true&size=32`;
+            let html = '';
+            for (const table of allTables) {
+                const schema = tableSchemas[table];
+                const count = tableData[table]?.count || 0;
 
-                let rankClass = '';
-                if (index === 0) rankClass = 'rank-1';
-                else if (index === 1) rankClass = 'rank-2';
-                else if (index === 2) rankClass = 'rank-3';
-
-                return `<tr>
-                    <td><span class="user-rank ${rankClass}">${index + 1}</span></td>
-                    <td>
-                        <div style="display:flex;align-items:center;gap:10px;">
-                            <img src="${avatar}" alt="${user.displayName}" class="user-avatar">
-                            <div>
-                                <div style="font-weight:600;font-size:13px;">${user.displayName}</div>
-                                <div style="font-size:10px;color:var(--text-secondary);">${user.uid}</div>
-                            </div>
+                html += `<div style="margin-bottom:16px;">
+                    <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:8px;">
+                        <div style="font-weight:600;font-size:15px;color:var(--accent-light);">
+                            <i class="fas fa-table"></i> ${table}
+                            <span style="font-size:12px;color:var(--text-secondary);font-weight:400;margin-left:8px;">
+                                (${count.toLocaleString()} records)
+                            </span>
                         </div>
-                    </td>
-                    <td style="color:var(--text-secondary);font-size:12px;">${user.email}</td>
-                    <td>
-                        <span style="display:flex;align-items:center;gap:4px;font-size:12px;">
-                            <i class="fas ${user.provider === 'google' ? 'fa-google' : user.provider === 'github' ? 'fa-github' : 'fa-envelope'}"></i>
-                            ${user.provider}
-                        </span>
-                    </td>
-                    <td style="font-weight:600;font-size:13px;color:var(--accent);">${(user.dailyTokens || 0).toLocaleString()}</td>
-                    <td style="font-weight:600;font-size:13px;">${user.tokensUsed.toLocaleString()}</td>
-                    <td style="font-weight:600;font-size:13px;color:var(--success);">$${user.cost.toFixed(2)}</td>
-                    <td>${user.questions}</td>
-                    <td><span class="status-badge ${statusClass}">${status}</span></td>
-                    <td style="font-size:12px;color:var(--text-secondary);">${user.lastActive ? new Date(user.lastActive).toLocaleDateString() : 'Never'}</td>
-                </tr>`;
-            }).join('');
-        }
+                    </div>`;
 
-        function filterUsers() {
-            const search = document.getElementById('searchInput').value.toLowerCase();
-            const provider = document.getElementById('filterProvider').value;
-            const status = document.getElementById('filterStatus').value;
-
-            let filtered = users.filter(user => {
-                const matchSearch = user.displayName?.toLowerCase().includes(search) || user.email?.toLowerCase()
-                    .includes(search);
-                const matchProvider = provider === 'all' || user.provider === provider;
-                const matchStatus = status === 'all' || user.status === status;
-                return matchSearch && matchProvider && matchStatus;
-            });
-            renderUsers(filtered);
-        }
-
-        // ============================================================
-        // CHARTS
-        // ============================================================
-        function updateCharts() {
-            setTimeout(() => {
-                updateBudgetChart();
-                updateUsageChart();
-            }, 200);
-        }
-
-        function updateBudgetChart() {
-            const ctx = document.getElementById('budgetChart').getContext('2d');
-            if (chartInstances.budget) {
-                chartInstances.budget.destroy();
-            }
-
-            const data = timelineData;
-            const labels = data.map(d => new Date(d.date).toLocaleDateString('en-US', { month: 'short', day: 'numeric' }));
-
-            chartInstances.budget = new Chart(ctx, {
-                type: 'line',
-                data: {
-                    labels: labels,
-                    datasets: [{
-                        label: 'Daily Spend ($)',
-                        data: data.map(d => parseFloat(d.spend.toFixed(2))),
-                        borderColor: '#3b82f6',
-                        backgroundColor: 'rgba(59,130,246,0.1)',
-                        fill: true,
-                        tension: 0.4,
-                        pointRadius: 0.5,
-                        borderWidth: 2
-                    }, {
-                        label: 'Balance ($)',
-                        data: data.map(d => parseFloat(d.balance.toFixed(2))),
-                        borderColor: '#22c55e',
-                        borderDash: [6, 4],
-                        fill: false,
-                        tension: 0.4,
-                        yAxisID: 'y1',
-                        pointRadius: 0.5,
-                        borderWidth: 2.5
-                    }]
-                },
-                options: {
-                    responsive: true,
-                    maintainAspectRatio: false,
-                    interaction: { intersect: false, mode: 'index' },
-                    plugins: {
-                        legend: {
-                            labels: { color: '#94a3b8', boxWidth: 12, padding: 12, font: { size: 11 } }
-                        }
-                    },
-                    scales: {
-                        y: {
-                            beginAtZero: true,
-                            grid: { color: 'rgba(255,255,255,0.04)' },
-                            ticks: { color: '#94a3b8', callback: v => '$' + v.toFixed(0) }
-                        },
-                        y1: {
-                            position: 'right',
-                            beginAtZero: true,
-                            grid: { display: false },
-                            ticks: { color: '#94a3b8', callback: v => '$' + v.toFixed(0) }
-                        },
-                        x: {
-                            grid: { color: 'rgba(255,255,255,0.04)' },
-                            ticks: { color: '#94a3b8', maxTicksLimit: 30, font: { size: 8 } }
-                        }
-                    }
+                if (schema?.error) {
+                    html += `<div style="color:var(--danger);font-size:12px;padding:8px;background:rgba(239,68,68,0.05);border-radius:8px;">
+                        Error: ${schema.error}
+                    </div>`;
+                } else if (schema?.columns && schema.columns.length > 0) {
+                    html += '<div class="schema-grid">';
+                    schema.columns.forEach(col => {
+                        const isPK = col.name === 'id' || col.name === 'uid' || col.name === 'user_id';
+                        const isFK = col.name.includes('_id') && col.name !== 'id';
+                        html += `<div class="schema-item">
+                            <span class="col-name">${col.name}</span>
+                            <span class="col-type">${col.type}${col.isNullable ? ' (nullable)' : ''}</span>
+                            <span>
+                                ${isPK ? '<span class="col-pk">🔑 PK</span>' : ''}
+                                ${isFK ? '<span class="col-fk">🔗 FK</span>' : ''}
+                                ${col.sample !== undefined && col.sample !== null ? `<span style="font-size:10px;color:var(--text-secondary);">sample: ${String(col.sample).substring(0,20)}</span>` : ''}
+                            </span>
+                        </div>`;
+                    });
+                    html += '</div>';
+                } else {
+                    html += `<div style="color:var(--text-secondary);font-size:12px;padding:8px;">No schema information available</div>`;
                 }
-            });
-        }
 
-        function updateUsageChart() {
-            const ctx = document.getElementById('usageChart').getContext('2d');
-            if (chartInstances.usage) {
-                chartInstances.usage.destroy();
+                html += '</div>';
             }
 
-            if (questions.length === 0) {
-                // Show empty state
-                chartInstances.usage = new Chart(ctx, {
-                    type: 'doughnut',
-                    data: {
-                        labels: ['No Data'],
-                        datasets: [{ data: [1], backgroundColor: ['#3b82f6'], borderWidth: 0 }]
-                    },
-                    options: {
-                        responsive: true,
-                        maintainAspectRatio: false,
-                        plugins: {
-                            legend: { labels: { color: '#94a3b8' } }
-                        },
-                        cutout: '62%'
-                    }
-                });
-                return;
+            content.innerHTML = html;
+        }
+
+        // ============================================================
+        // UPDATE STATS
+        // ============================================================
+        function updateStats() {
+            const totalTables = allTables.length;
+            const totalRecords = Object.values(tableData).reduce((sum, d) => sum + (d.count || 0), 0);
+            const totalColumns = Object.values(tableSchemas).reduce((sum, s) => sum + (s?.columns?.length || 0), 0);
+
+            document.getElementById('totalTables').textContent = totalTables;
+            document.getElementById('totalRecords').textContent = totalRecords.toLocaleString();
+            document.getElementById('totalColumns').textContent = totalColumns;
+            document.getElementById('lastUpdated').textContent = new Date().toLocaleString();
+        }
+
+        // ============================================================
+        // UI HELPERS
+        // ============================================================
+        function updateLoading(text, progress) {
+            document.getElementById('loadingText').textContent = text;
+            document.getElementById('loadingProgress').style.width = progress + '%';
+            if (progress < 30) document.getElementById('loadingDetail').textContent = 'Connecting...';
+            else if (progress < 60) document.getElementById('loadingDetail').textContent = 'Fetching data...';
+            else if (progress < 90) document.getElementById('loadingDetail').textContent = 'Processing...';
+            else document.getElementById('loadingDetail').textContent = 'Ready!';
+        }
+
+        function selectTable(table) {
+            document.getElementById('tableSelector').value = table;
+            loadTableData();
+            document.getElementById('dataViewer').scrollIntoView({ behavior: 'smooth' });
+        }
+
+        function toggleSchema() {
+            const content = document.getElementById('schemaContent');
+            if (content.style.display === 'none') {
+                content.style.display = 'block';
+            } else {
+                content.style.display = 'none';
             }
-
-            const colors = ['#3b82f6', '#8b5cf6', '#eab308', '#22c55e', '#06b6d4', '#f472b6', '#ef4444', '#84cc16', '#f97316',
-                '#14b8a6', '#8b5cf6', '#ec4899'
-            ];
-            const labels = questions.map(q => q.name);
-            const counts = questions.map(q => q.count);
-
-            chartInstances.usage = new Chart(ctx, {
-                type: 'doughnut',
-                data: {
-                    labels: labels,
-                    datasets: [{
-                        data: counts,
-                        backgroundColor: colors.slice(0, labels.length),
-                        borderWidth: 0
-                    }]
-                },
-                options: {
-                    responsive: true,
-                    maintainAspectRatio: false,
-                    plugins: {
-                        legend: {
-                            position: 'bottom',
-                            labels: { color: '#94a3b8', boxWidth: 10, padding: 8, font: { size: 9 } }
-                        }
-                    },
-                    cutout: '62%'
-                }
-            });
         }
 
-        // ============================================================
-        // AUTO-UPDATE SETUP
-        // ============================================================
-        function setupAutoUpdate() {
-            // Update clock every second
-            setInterval(updateDateTime, 1000);
-
-            // Check for new day every 5 minutes
-            setInterval(async () => {
-                await checkAndFillMissingDays();
-                updateStats();
-                renderTimeline();
-                updateCharts();
-            }, 300000);
-
-            // Refresh stats every 30 seconds
-            setInterval(updateStats, 30000);
-        }
-
-        // ============================================================
-        // ACTIONS
-        // ============================================================
-        function refreshData() {
-            showAlert('🔄 Refreshing data from Supabase...', 'info');
-            fetchAllData();
-        }
-
-        function closeModal(id) {
-            document.getElementById(id).classList.remove('active');
-        }
-
-        document.querySelectorAll('.modal').forEach(m => {
-            m.addEventListener('click', (e) => {
-                if (e.target === m) m.classList.remove('active');
-            });
-        });
-
-        function showAlert(message, type = 'success') {
+        function showAlert(message, type = 'info') {
             const alert = document.getElementById('alert');
             alert.textContent = message;
             alert.className = `alert alert-${type}`;
@@ -1232,44 +718,128 @@
             setTimeout(() => alert.style.display = 'none', 5000);
         }
 
-        function exportReport() {
-            const report = {
+        function refreshData() {
+            showAlert('🔄 Refreshing data...', 'info');
+            fetchAllSchemas();
+            loadAllTableCounts();
+            setTimeout(() => {
+                renderDashboard();
+                updateStats();
+                if (currentTable) loadTableData();
+                showAlert('✅ Data refreshed!', 'success');
+            }, 1000);
+        }
+
+        function exportSchema() {
+            const schema = {
                 generated: new Date().toISOString(),
-                tokenCostPerMillion: TOKEN_COST_PER_MILLION,
-                totalDays: timelineData.length,
-                summary: {
-                    totalUsers: users.length,
-                    totalTokens: timelineData[timelineData.length - 1]?.totalTokens || 0,
-                    totalCost: (timelineData[timelineData.length - 1]?.totalTokens || 0) / 1000000 * TOKEN_COST_PER_MILLION,
-                    remainingBalance: Math.max(MIN_BALANCE, timelineData[timelineData.length - 1]?.balance || MIN_BALANCE)
-                },
-                dateRange: {
-                    start: timelineData[0]?.date || '2026-02-10',
-                    end: timelineData[timelineData.length - 1]?.date || new Date().toISOString()
-                },
-                users: users.slice(0, 50).map(u => ({
-                    name: u.displayName,
-                    email: u.email,
-                    tokens: u.tokensUsed,
-                    cost: u.cost,
-                    questions: u.questions
-                }))
+                supabaseUrl: SUPABASE_URL,
+                tables: {}
             };
 
-            const blob = new Blob([JSON.stringify(report, null, 2)], { type: 'application/json' });
+            for (const table of allTables) {
+                schema.tables[table] = {
+                    columns: tableSchemas[table]?.columns || [],
+                    recordCount: tableData[table]?.count || 0,
+                    hasData: !!tableData[table]?.data
+                };
+            }
+
+            const blob = new Blob([JSON.stringify(schema, null, 2)], { type: 'application/json' });
             const url = URL.createObjectURL(blob);
             const a = document.createElement('a');
             a.href = url;
-            a.download = `zakhourani-report-${new Date().toISOString().slice(0,10)}.json`;
+            a.download = `schema-export-${new Date().toISOString().slice(0,10)}.json`;
             a.click();
             URL.revokeObjectURL(url);
-            showAlert('📥 Report exported!', 'success');
+            showAlert('📥 Schema exported!', 'success');
+        }
+
+        function showSQL() {
+            let sql = '-- ============================================================\n';
+            sql += `-- SUPABASE DATABASE SCHEMA\n`;
+            sql += `-- Generated: ${new Date().toISOString()}\n`;
+            sql += `-- Tables: ${allTables.join(', ')}\n`;
+            sql += '-- ============================================================\n\n';
+
+            for (const table of allTables) {
+                const schema = tableSchemas[table];
+                if (!schema?.columns || schema.columns.length === 0) continue;
+
+                sql += `-- Table: ${table}\n`;
+                sql += `CREATE TABLE IF NOT EXISTS ${table} (\n`;
+
+                const cols = schema.columns.map(col => {
+                    let type = col.type;
+                    // Map JavaScript types to SQL types
+                    if (type === 'string') type = 'TEXT';
+                    else if (type === 'number') type = 'NUMERIC';
+                    else if (type === 'boolean') type = 'BOOLEAN';
+                    else if (type === 'object') type = 'JSONB';
+                    else if (type === 'bigint') type = 'BIGINT';
+                    else if (type.includes('timestamp')) type = 'TIMESTAMPTZ';
+                    else if (type.includes('date')) type = 'DATE';
+
+                    const nullable = col.isNullable !== false ? '' : ' NOT NULL';
+                    const pk = (col.name === 'id' || col.name === 'uid') ? ' PRIMARY KEY' : '';
+                    return `    ${col.name} ${type}${nullable}${pk}`;
+                });
+
+                sql += cols.join(',\n');
+                sql += '\n);\n\n';
+            }
+
+            // Show in modal
+            const modal = document.createElement('div');
+            modal.style.cssText = `
+                position:fixed; top:0; left:0; right:0; bottom:0;
+                background:rgba(0,0,0,0.95); z-index:99999;
+                display:flex; align-items:center; justify-content:center; padding:20px;
+            `;
+            modal.innerHTML = `
+                <div style="background:var(--bg-secondary);border:1px solid var(--border);border-radius:24px;
+                    max-width:900px; width:100%; max-height:90vh; padding:32px; overflow:hidden; display:flex; flex-direction:column;">
+                    <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:16px;">
+                        <h2 style="font-size:20px;font-weight:700;"><i class="fas fa-code"></i> SQL Schema</h2>
+                        <button onclick="this.closest('div[style]').remove()" style="background:var(--bg-primary);border:1px solid var(--border);color:var(--text-primary);padding:8px 20px;border-radius:12px;cursor:pointer;font-weight:600;">Close</button>
+                    </div>
+                    <div style="overflow-y:auto;flex:1;background:var(--bg-primary);border-radius:12px;padding:16px;">
+                        <pre style="color:var(--text-secondary);font-family:'Courier New',monospace;font-size:12px;white-space:pre-wrap;word-wrap:break-word;">${sql}</pre>
+                    </div>
+                    <div style="margin-top:12px;display:flex;gap:8px;">
+                        <button onclick="navigator.clipboard.writeText(this.parentElement.previousElementSibling.textContent);showAlert('✅ Copied!','success')" 
+                            style="padding:8px 16px;background:var(--accent);color:white;border:none;border-radius:8px;cursor:pointer;font-weight:600;">
+                            <i class="fas fa-copy"></i> Copy
+                        </button>
+                        <button onclick="downloadSQL()" 
+                            style="padding:8px 16px;background:var(--success);color:white;border:none;border-radius:8px;cursor:pointer;font-weight:600;">
+                            <i class="fas fa-download"></i> Download
+                        </button>
+                    </div>
+                </div>
+            `;
+            document.body.appendChild(modal);
+
+            window._sqlContent = sql;
+        }
+
+        function downloadSQL() {
+            if (window._sqlContent) {
+                const blob = new Blob([window._sqlContent], { type: 'text/plain' });
+                const url = URL.createObjectURL(blob);
+                const a = document.createElement('a');
+                a.href = url;
+                a.download = `schema-${new Date().toISOString().slice(0,10)}.sql`;
+                a.click();
+                URL.revokeObjectURL(url);
+                showAlert('📥 SQL downloaded!', 'success');
+            }
         }
 
         // ============================================================
-        // INIT
+        // START
         // ============================================================
-        fetchAllData();
+        init();
     </script>
 </body>
 </html>

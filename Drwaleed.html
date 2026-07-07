@@ -1,845 +1,1600 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="en" dir="ltr">
 <head>
-    <meta charset="UTF-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>AIboard - Supabase Data Viewer</title>
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" />
-    <link href="https://fonts.googleapis.com/css2?family=Inter:opsz,wght@14..32,400;14..32,500;14..32,600;14..32,700;14..32,800&display=swap" rel="stylesheet" />
-    <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>My Bets - X Lodon | رهاناتي</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link href="https://fonts.googleapis.com/css2?family=Tajawal:wght@400;500;700&display=swap" rel="stylesheet">
+    
+    <script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-app-compat.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-auth-compat.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-firestore-compat.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2/dist/umd/supabase.min.js"></script>
+    
     <style>
-        * { margin:0; padding:0; box-sizing:border-box; font-family:'Inter',sans-serif; }
         :root {
-            --bg-primary:#0a0e1a; --bg-secondary:#111827; --bg-card:rgba(17,24,39,0.95);
-            --text-primary:#f1f5f9; --text-secondary:#94a3b8; --accent:#3b82f6;
-            --accent-light:#60a5fa; --success:#22c55e; --warning:#eab308; --danger:#ef4444;
-            --border:rgba(255,255,255,0.06);
-            --gradient-main:linear-gradient(135deg,#3b82f6,#8b5cf6,#06b6d4);
+            --bg: #0a0f1a;
+            --bg2: #111827;
+            --bg3: #1a2332;
+            --green: #00ff9d;
+            --orange: #ff9800;
+            --red: #ff5252;
+            --blue: #00bcd4;
+            --purple: #9c27b0;
+            --text: #ffffff;
+            --text2: #a0a8c9;
         }
-        body { background:var(--bg-primary); color:var(--text-primary); min-height:100vh; padding:16px; }
-        .container { max-width:1600px; margin:0 auto; }
-
-        /* Loading */
-        .loading-screen {
-            position:fixed; top:0; left:0; right:0; bottom:0;
-            background:var(--bg-primary); display:flex; align-items:center; justify-content:center;
-            z-index:9999; flex-direction:column; gap:20px;
+        
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        body { 
+            background: var(--bg); 
+            color: var(--text); 
+            font-family: 'Segoe UI', 'Tajawal', sans-serif; 
+            min-height: 100vh; 
         }
-        .loading-screen.hidden { display:none; }
-        .loader { width:50px; height:50px; border:3px solid var(--border); border-top-color:var(--accent); border-radius:50%; animation:spin 1s linear infinite; }
-        @keyframes spin { to { transform:rotate(360deg); } }
-        .loading-text { color:var(--text-secondary); font-size:14px; }
-        .loading-progress { width:400px; max-width:80%; height:4px; background:var(--border); border-radius:2px; overflow:hidden; }
-        .loading-progress-bar { height:100%; background:var(--gradient-main); width:0%; transition:width 0.5s; }
-
-        /* Header */
-        .header {
-            display:flex; justify-content:space-between; align-items:center; padding:16px 0 28px; flex-wrap:wrap; gap:16px;
+        
+        .header { 
+            background: var(--bg2); 
+            padding: 12px 15px; 
+            border-bottom: 2px solid var(--green); 
+            position: sticky; 
+            top: 0; 
+            z-index: 100; 
         }
-        .header-left { display:flex; align-items:center; gap:16px; }
-        .logo {
-            width:52px; height:52px; background:var(--gradient-main); border-radius:16px;
-            display:flex; align-items:center; justify-content:center; font-size:24px; color:white;
-            box-shadow:0 8px 30px rgba(59,130,246,0.3);
+        .header-top { 
+            display: flex; 
+            align-items: center; 
+            justify-content: space-between; 
+            margin-bottom: 10px; 
+            flex-wrap: wrap; 
+            gap: 10px; 
         }
-        .header h1 { font-size:28px; font-weight:800; background:var(--gradient-main); -webkit-background-clip:text; -webkit-text-fill-color:transparent; }
-        .header-subtitle { color:var(--text-secondary); font-size:13px; display:flex; align-items:center; gap:12px; flex-wrap:wrap; }
-        .status-badge {
-            padding:3px 12px; border-radius:20px; font-size:11px; font-weight:600;
-            background:rgba(34,197,94,0.15); color:var(--success);
+        .header-left { display: flex; align-items: center; gap: 10px; }
+        .back-btn { color: var(--green); text-decoration: none; font-size: 20px; transition: transform 0.2s; }
+        .back-btn:hover { transform: scale(1.1); }
+        .lang-toggle { 
+            background: var(--bg3); 
+            border: 1px solid var(--green); 
+            color: var(--green); 
+            padding: 5px 12px; 
+            border-radius: 20px; 
+            cursor: pointer; 
+            font-size: 12px;
+            transition: all 0.2s;
         }
-        .status-badge.error { background:rgba(239,68,68,0.15); color:var(--danger); }
-
-        .btn {
-            padding:10px 20px; border:none; border-radius:12px; font-weight:600; cursor:pointer;
-            transition:all 0.3s; display:inline-flex; align-items:center; gap:8px; font-size:13px;
+        .lang-toggle:hover { background: var(--green); color: black; }
+        
+        .tabs { 
+            display: flex; 
+            gap: 5px; 
+            overflow-x: auto; 
+            padding-bottom: 3px; 
+            scrollbar-width: none;
         }
-        .btn-primary { background:var(--gradient-main); color:white; }
-        .btn-primary:hover { transform:translateY(-2px); box-shadow:0 8px 25px rgba(59,130,246,0.3); }
-        .btn-secondary { background:var(--bg-secondary); color:var(--text-primary); border:1px solid var(--border); }
-        .btn-secondary:hover { background:rgba(30,41,59,0.6); }
-        .btn-success { background:linear-gradient(135deg,#22c55e,#06b6d4); color:white; }
-        .btn-danger { background:linear-gradient(135deg,#dc2626,#ef4444); color:white; }
-
+        .tabs::-webkit-scrollbar { display: none; }
+        .tab { 
+            padding: 8px 14px; 
+            background: var(--bg3); 
+            border-radius: 20px; 
+            color: var(--text); 
+            text-decoration: none; 
+            font-size: 12px; 
+            white-space: nowrap;
+            transition: all 0.2s;
+        }
+        .tab:hover { background: rgba(0,255,157,0.2); }
+        .tab.active { background: var(--green); color: black; font-weight: bold; }
+        
+        .container { max-width: 1200px; margin: 0 auto; padding: 15px; }
+        
+        /* Balance & Win Rate Bar */
+        .balance-bar { 
+            background: linear-gradient(135deg, var(--bg2), var(--bg3)); 
+            padding: 15px 20px; 
+            border-radius: 16px; 
+            margin-bottom: 15px; 
+            display: flex; 
+            justify-content: space-between; 
+            align-items: center; 
+            border: 1px solid rgba(0,255,157,0.2); 
+            flex-wrap: wrap; 
+            gap: 10px; 
+        }
+        .balance-label { font-size: 13px; color: var(--text2); }
+        .balance-amount { font-size: 26px; font-weight: bold; color: var(--green); }
+        
+        .win-rate-bar { 
+            height: 4px; 
+            background: var(--bg3); 
+            border-radius: 2px; 
+            margin-bottom: 15px; 
+            overflow: hidden; 
+        }
+        .win-rate-fill { 
+            height: 100%; 
+            background: linear-gradient(90deg, var(--green), #4caf50); 
+            border-radius: 2px; 
+            transition: width 0.5s ease; 
+        }
+        
         /* Stats Grid */
-        .stats-grid {
-            display:grid; grid-template-columns:repeat(auto-fit,minmax(200px,1fr)); gap:16px; margin-bottom:24px;
+        .stats-grid { 
+            display: grid; 
+            grid-template-columns: repeat(5, 1fr); 
+            gap: 10px; 
+            margin-bottom: 20px; 
         }
-        .stat-card {
-            background:var(--bg-card); border:1px solid var(--border); border-radius:20px; padding:20px 24px;
-            backdrop-filter:blur(12px); transition:all 0.3s; position:relative; overflow:hidden;
+        .stat-box { 
+            background: var(--bg2); 
+            padding: 15px 10px; 
+            border-radius: 12px; 
+            text-align: center; 
+            border: 1px solid rgba(255,255,255,0.05); 
+            transition: all 0.2s; 
         }
-        .stat-card::before { content:''; position:absolute; top:0; left:0; right:0; height:3px; background:var(--gradient-main); opacity:0.5; }
-        .stat-card .label { color:var(--text-secondary); font-size:11px; font-weight:600; text-transform:uppercase; letter-spacing:0.5px; }
-        .stat-card .value { font-size:30px; font-weight:800; margin:6px 0 2px; }
-        .stat-card .icon-bg { position:absolute; right:16px; top:16px; font-size:32px; opacity:0.08; }
-
-        /* Table List */
-        .table-list {
-            display:grid; grid-template-columns:repeat(auto-fill,minmax(300px,1fr)); gap:16px; margin-bottom:24px;
+        .stat-box:hover { 
+            transform: translateY(-2px); 
+            border-color: rgba(0,255,157,0.2); 
+            box-shadow: 0 4px 15px rgba(0,0,0,0.3);
         }
-        .table-card {
-            background:var(--bg-card); border:1px solid var(--border); border-radius:20px;
-            padding:20px 24px; backdrop-filter:blur(12px); transition:all 0.3s; cursor:pointer;
+        .stat-box .val { font-size: 22px; font-weight: bold; }
+        .stat-box .val.win { color: #4caf50; }
+        .stat-box .val.lose { color: var(--red); }
+        .stat-box .val.neutral { color: var(--orange); }
+        .stat-box .lbl { font-size: 10px; color: var(--text2); margin-top: 4px; text-transform: uppercase; letter-spacing: 0.5px; }
+        .stat-box .sub { font-size: 10px; margin-top: 3px; }
+        
+        /* Filters */
+        .filter-row { 
+            display: flex; 
+            gap: 6px; 
+            margin-bottom: 20px; 
+            flex-wrap: wrap; 
+            overflow-x: auto;
+            padding-bottom: 5px;
         }
-        .table-card:hover { transform:translateY(-4px); border-color:var(--accent); }
-        .table-card .table-name { font-size:18px; font-weight:700; display:flex; align-items:center; gap:12px; }
-        .table-card .table-name i { color:var(--accent); }
-        .table-card .table-count { color:var(--text-secondary); font-size:13px; margin-top:4px; }
-        .table-card .table-status { font-size:12px; margin-top:8px; }
-        .table-card .table-status .badge { padding:2px 12px; border-radius:12px; font-size:11px; font-weight:600; }
-        .badge-success { background:rgba(34,197,94,0.15); color:var(--success); }
-        .badge-warning { background:rgba(234,179,8,0.15); color:var(--warning); }
-        .badge-danger { background:rgba(239,68,68,0.15); color:var(--danger); }
-
-        /* Data Viewer */
-        .data-viewer {
-            background:var(--bg-card); border:1px solid var(--border); border-radius:20px;
-            padding:24px; backdrop-filter:blur(12px); margin-bottom:24px;
+        .filter-chip { 
+            padding: 8px 14px; 
+            background: var(--bg3); 
+            border: 1px solid transparent;
+            border-radius: 25px; 
+            color: var(--text2); 
+            font-size: 12px; 
+            font-weight: 600; 
+            cursor: pointer; 
+            transition: all 0.2s; 
+            white-space: nowrap;
         }
-        .data-viewer .viewer-header {
-            display:flex; justify-content:space-between; align-items:center; margin-bottom:16px; flex-wrap:wrap; gap:12px;
+        .filter-chip:hover { border-color: var(--green); color: var(--text); }
+        .filter-chip.active { background: var(--green); color: black; border-color: var(--green); }
+        .filter-chip .count { 
+            background: rgba(0,0,0,0.2); 
+            padding: 2px 7px; 
+            border-radius: 12px; 
+            margin-left: 5px; 
+            font-size: 10px; 
         }
-        .data-viewer .viewer-header h3 { font-size:17px; font-weight:700; }
-        .data-viewer .viewer-controls { display:flex; gap:10px; flex-wrap:wrap; align-items:center; }
-        .data-viewer .viewer-controls select,
-        .data-viewer .viewer-controls input {
-            background:var(--bg-primary); border:1px solid var(--border); border-radius:10px;
-            padding:8px 14px; color:var(--text-primary); font-size:13px; outline:none;
+        
+        /* Bet Cards */
+        .bet-card { 
+            background: var(--bg2); 
+            border-radius: 16px; 
+            padding: 16px; 
+            margin-bottom: 12px; 
+            border-left: 5px solid var(--orange); 
+            cursor: pointer; 
+            transition: all 0.3s; 
+            animation: fadeIn 0.3s ease; 
+            position: relative;
         }
-        .data-viewer .viewer-controls select:focus,
-        .data-viewer .viewer-controls input:focus { border-color:var(--accent); }
-        .table-wrapper { overflow-x:auto; max-height:500px; overflow-y:auto; }
-        table { width:100%; border-collapse:collapse; font-size:13px; }
-        th {
-            text-align:left; padding:12px; color:var(--text-secondary); font-weight:600;
-            font-size:11px; text-transform:uppercase; letter-spacing:0.5px;
-            position:sticky; top:0; background:var(--bg-card); z-index:10;
-            border-bottom:2px solid var(--border);
+        .bet-card:hover { 
+            transform: translateX(3px); 
+            background: var(--bg3); 
+            box-shadow: 0 4px 20px rgba(0,0,0,0.3);
         }
-        td { padding:12px; border-bottom:1px solid var(--border); max-width:200px; overflow:hidden; text-overflow:ellipsis; white-space:nowrap; }
-        tr:hover td { background:rgba(255,255,255,0.02); }
-        .cell-null { color:var(--text-secondary); font-style:italic; }
-        .cell-boolean { display:inline-block; padding:2px 10px; border-radius:12px; font-size:11px; font-weight:600; }
-        .cell-boolean.true { background:rgba(34,197,94,0.15); color:var(--success); }
-        .cell-boolean.false { background:rgba(239,68,68,0.15); color:var(--danger); }
-
-        /* Schema Viewer */
-        .schema-viewer {
-            background:var(--bg-card); border:1px solid var(--border); border-radius:20px;
-            padding:24px; backdrop-filter:blur(12px);
+        .bet-card.won { border-left-color: #4caf50; background: linear-gradient(135deg, var(--bg2), #0a1a0f); }
+        .bet-card.lost { border-left-color: var(--red); background: linear-gradient(135deg, var(--bg2), #1a0a0a); }
+        .bet-card.active { border-left-color: var(--orange); }
+        .bet-card.cancelled { border-left-color: var(--purple); background: linear-gradient(135deg, var(--bg2), #1a0a2a); opacity: 0.85; }
+        .bet-card.cashed-out { border-left-color: var(--blue); background: linear-gradient(135deg, var(--bg2), #0a2a2a); opacity: 0.85; }
+        
+        @keyframes fadeIn { from { opacity: 0; transform: translateY(10px); } to { opacity: 1; transform: translateY(0); } }
+        
+        .bet-top { 
+            display: flex; 
+            justify-content: space-between; 
+            align-items: center; 
+            margin-bottom: 12px; 
+            flex-wrap: wrap; 
+            gap: 8px; 
         }
-        .schema-viewer .schema-header { display:flex; justify-content:space-between; align-items:center; margin-bottom:16px; flex-wrap:wrap; gap:12px; }
-        .schema-viewer h3 { font-size:17px; font-weight:700; }
-        .schema-grid { display:grid; gap:12px; }
-        .schema-item {
-            background:var(--bg-primary); border:1px solid var(--border); border-radius:12px; padding:12px 16px;
-            display:grid; grid-template-columns:auto 1fr auto; gap:12px; align-items:center;
+        .bet-type-tag { 
+            padding: 4px 12px; 
+            border-radius: 20px; 
+            font-size: 10px; 
+            font-weight: 700; 
+            letter-spacing: 0.5px;
         }
-        .schema-item .col-name { font-weight:600; color:var(--accent-light); }
-        .schema-item .col-type { color:var(--text-secondary); font-size:12px; }
-        .col-pk { color:var(--warning); font-size:10px; font-weight:600; }
-        .col-fk { color:var(--accent); font-size:10px; font-weight:600; }
-
-        .alert {
-            padding:14px 20px; border-radius:12px; margin-bottom:16px; display:none;
+        .bet-type-tag.single { background: rgba(0,255,157,0.15); color: var(--green); }
+        .bet-type-tag.accumulator { background: rgba(255,152,0,0.15); color: var(--orange); }
+        .bet-ticket-num { 
+            font-size: 10px; 
+            color: var(--text2); 
+            font-family: monospace; 
+            background: rgba(0,0,0,0.3); 
+            padding: 2px 8px; 
+            border-radius: 8px; 
         }
-        .alert-success { background:rgba(34,197,94,0.1); border:1px solid rgba(34,197,94,0.2); color:#86efac; }
-        .alert-error { background:rgba(239,68,68,0.1); border:1px solid rgba(239,68,68,0.2); color:#fca5a5; }
-        .alert-info { background:rgba(59,130,246,0.1); border:1px solid rgba(59,130,246,0.2); color:#60a5fa; }
-
-        .hidden { display:none !important; }
-
-        @media (max-width:768px) {
-            .stats-grid { grid-template-columns:repeat(2,1fr); }
-            .table-list { grid-template-columns:1fr; }
-            .schema-item { grid-template-columns:1fr; gap:4px; }
+        
+        .bet-status-badge {
+            display: inline-flex;
+            align-items: center;
+            gap: 5px;
+            padding: 5px 12px;
+            border-radius: 20px;
+            font-size: 11px;
+            font-weight: bold;
         }
-        @media (max-width:480px) { .stats-grid { grid-template-columns:1fr; } }
+        .bet-status-badge.won { background: rgba(76,175,80,0.2); color: #4caf50; }
+        .bet-status-badge.lost { background: rgba(255,82,82,0.2); color: var(--red); }
+        .bet-status-badge.active { background: rgba(255,152,0,0.2); color: var(--orange); animation: pulse 2s infinite; }
+        .bet-status-badge.cancelled { background: rgba(156,39,176,0.2); color: var(--purple); }
+        .bet-status-badge.cashed-out { background: rgba(0,188,212,0.2); color: var(--blue); }
+        @keyframes pulse { 0%,100% { opacity: 1; } 50% { opacity: 0.6; } }
+        
+        .bet-body { margin-bottom: 12px; }
+        .bet-match-row {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            margin-bottom: 8px;
+            flex-wrap: wrap;
+        }
+        .team-logo-small { 
+            width: 32px; 
+            height: 32px; 
+            object-fit: contain; 
+            border-radius: 50%; 
+            background: rgba(255,255,255,0.1); 
+            padding: 4px; 
+        }
+        .bet-match-name { 
+            font-weight: 600; 
+            font-size: 14px; 
+            display: flex; 
+            align-items: center; 
+            gap: 8px; 
+            flex-wrap: wrap; 
+        }
+        .bet-pick { color: var(--green); font-size: 12px; margin-top: 4px; }
+        .bet-odds { color: var(--orange); font-size: 13px; font-weight: bold; }
+        .bet-league { font-size: 10px; color: var(--text2); margin-top: 4px; }
+        
+        .bet-score-display {
+            display: inline-flex;
+            align-items: center;
+            gap: 5px;
+            background: rgba(0,0,0,0.3);
+            padding: 4px 10px;
+            border-radius: 8px;
+            font-size: 13px;
+            font-weight: bold;
+            font-family: monospace;
+        }
+        
+        .bet-details-grid { 
+            display: grid; 
+            grid-template-columns: repeat(4, 1fr); 
+            gap: 10px; 
+            margin: 12px 0; 
+            font-size: 11px; 
+        }
+        .bet-detail { text-align: center; }
+        .bet-detail .lbl { color: var(--text2); font-size: 9px; text-transform: uppercase; letter-spacing: 0.5px; }
+        .bet-detail .val { font-weight: 700; font-size: 13px; margin-top: 2px; }
+        
+        .selections-container { 
+            margin-top: 10px; 
+            padding: 10px; 
+            background: rgba(0,0,0,0.2); 
+            border-radius: 8px; 
+            border: 1px solid rgba(255,255,255,0.05);
+        }
+        .selection-item { 
+            display: flex; 
+            align-items: center; 
+            gap: 8px; 
+            padding: 6px 0; 
+            border-bottom: 1px solid rgba(255,255,255,0.05); 
+            font-size: 11px; 
+        }
+        .selection-item:last-child { border-bottom: none; }
+        .selection-match { flex: 1; font-weight: 500; }
+        .selection-pick { color: var(--green); font-size: 10px; }
+        .selection-odds { color: var(--orange); font-weight: bold; }
+        .selection-status { font-size: 14px; }
+        
+        .settlement-timer { 
+            font-family: monospace; 
+            font-size: 11px; 
+            background: rgba(0,0,0,0.3); 
+            padding: 4px 10px; 
+            border-radius: 8px; 
+            display: inline-block; 
+            margin-top: 8px; 
+        }
+        .settlement-timer.urgent { color: var(--orange); animation: pulse 1s infinite; }
+        
+        .bet-result-row { 
+            padding: 10px; 
+            border-radius: 8px; 
+            margin-top: 10px; 
+            font-size: 12px; 
+            background: rgba(0,0,0,0.2);
+        }
+        .bet-result-row.won { border-left: 3px solid #4caf50; }
+        .bet-result-row.lost { border-left: 3px solid var(--red); }
+        
+        .bet-timestamps { 
+            font-size: 10px; 
+            color: var(--text2); 
+            margin-top: 8px; 
+            display: flex; 
+            justify-content: space-between; 
+            flex-wrap: wrap; 
+            gap: 8px; 
+        }
+        
+        .bet-actions { 
+            display: flex; 
+            gap: 10px; 
+            margin-top: 12px; 
+            padding-top: 12px; 
+            border-top: 1px solid rgba(255,255,255,0.05); 
+        }
+        .cancel-btn { 
+            background: rgba(255,82,82,0.15); 
+            color: var(--red); 
+            border: 1px solid var(--red); 
+            padding: 6px 14px; 
+            border-radius: 20px; 
+            font-size: 11px; 
+            cursor: pointer; 
+            transition: all 0.2s; 
+            font-weight: 600;
+        }
+        .cancel-btn:hover { background: var(--red); color: white; }
+        .cashout-btn { 
+            background: rgba(0,188,212,0.15); 
+            color: var(--blue); 
+            border: 1px solid var(--blue); 
+            padding: 6px 14px; 
+            border-radius: 20px; 
+            font-size: 11px; 
+            cursor: pointer; 
+            transition: all 0.2s; 
+            font-weight: 600;
+        }
+        .cashout-btn:hover { background: var(--blue); color: black; }
+        .btn-disabled {
+            opacity: 0.4;
+            cursor: not-allowed;
+            pointer-events: none;
+        }
+        
+        /* Modal */
+        .modal-overlay { 
+            position: fixed; 
+            top: 0; left: 0; right: 0; bottom: 0; 
+            background: rgba(0,0,0,0.95); 
+            z-index: 1000; 
+            display: none; 
+            align-items: center; 
+            justify-content: center; 
+            padding: 15px; 
+        }
+        .modal-overlay.show { display: flex; }
+        .modal-content { 
+            background: var(--bg2); 
+            border-radius: 20px; 
+            padding: 25px; 
+            max-width: 550px; 
+            width: 100%; 
+            max-height: 85vh; 
+            overflow-y: auto; 
+            border: 2px solid var(--green); 
+        }
+        .modal-close { 
+            background: none; 
+            border: none; 
+            color: var(--text2); 
+            font-size: 24px; 
+            cursor: pointer; 
+            float: right; 
+            transition: color 0.2s;
+        }
+        .modal-close:hover { color: var(--red); }
+        .modal-section { margin-bottom: 20px; }
+        .modal-section h4 { 
+            color: var(--green); 
+            font-size: 14px; 
+            margin-bottom: 10px; 
+            border-bottom: 1px solid rgba(0,255,157,0.2); 
+            padding-bottom: 6px; 
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+        .modal-row { 
+            display: flex; 
+            justify-content: space-between; 
+            padding: 8px 0; 
+            border-bottom: 1px solid rgba(255,255,255,0.05); 
+            font-size: 13px; 
+            flex-wrap: wrap; 
+            gap: 8px; 
+        }
+        .modal-row .lbl { color: var(--text2); }
+        
+        /* Empty State */
+        .empty-state { 
+            text-align: center; 
+            padding: 60px 20px; 
+            color: var(--text2); 
+        }
+        .empty-state i { font-size: 60px; opacity: 0.2; margin-bottom: 15px; display: block; }
+        
+        /* Export Button */
+        .export-btn { 
+            background: rgba(0,255,157,0.1); 
+            border: 1px solid var(--green); 
+            color: var(--green); 
+            padding: 8px 14px; 
+            border-radius: 20px; 
+            cursor: pointer; 
+            font-size: 11px; 
+            transition: all 0.2s; 
+            font-weight: 600;
+        }
+        .export-btn:hover { background: var(--green); color: black; }
+        
+        /* Loading */
+        .loading-spinner { 
+            display: inline-block; 
+            width: 20px; 
+            height: 20px; 
+            border: 2px solid var(--green); 
+            border-top-color: transparent; 
+            border-radius: 50%; 
+            animation: spin 0.6s linear infinite; 
+        }
+        @keyframes spin { to { transform: rotate(360deg); } }
+        
+        .notification { 
+            position: fixed; 
+            top: 20px; 
+            right: 20px; 
+            padding: 12px 20px; 
+            border-radius: 10px; 
+            z-index: 9999; 
+            font-size: 13px; 
+            font-weight: bold;
+            animation: slideIn 0.3s ease; 
+            box-shadow: 0 4px 15px rgba(0,0,0,0.4);
+            max-width: 350px;
+        }
+        .notification.success { background: #4caf50; color: white; }
+        .notification.error { background: var(--red); color: white; }
+        .notification.info { background: var(--orange); color: black; }
+        @keyframes slideIn { from { transform: translateX(100%); opacity: 0; } to { transform: translateX(0); opacity: 1; } }
+        
+        /* Auto-settle indicator */
+        .auto-settle-badge {
+            display: inline-flex;
+            align-items: center;
+            gap: 4px;
+            background: rgba(0,255,157,0.1);
+            color: var(--green);
+            padding: 3px 8px;
+            border-radius: 10px;
+            font-size: 9px;
+            font-weight: bold;
+        }
+        
+        @media (max-width: 768px) {
+            .stats-grid { grid-template-columns: repeat(3, 1fr); }
+            .bet-details-grid { grid-template-columns: repeat(2, 1fr); }
+        }
+        @media (max-width: 400px) {
+            .stats-grid { grid-template-columns: repeat(2, 1fr); }
+        }
     </style>
 </head>
 <body>
-
-    <!-- Loading Screen -->
-    <div class="loading-screen" id="loadingScreen">
-        <div class="loader"></div>
-        <div class="loading-text" id="loadingText">🔌 Connecting to Supabase...</div>
-        <div class="loading-progress"><div class="loading-progress-bar" id="loadingProgress"></div></div>
-        <div class="loading-text" style="font-size:12px;color:var(--text-secondary);" id="loadingDetail">Initializing...</div>
-    </div>
-
-    <div class="container" id="dashboardContent" style="display:none;">
-        <!-- Header -->
-        <div class="header">
+    <div class="header">
+        <div class="header-top">
             <div class="header-left">
-                <div class="logo"><i class="fas fa-database"></i></div>
-                <div>
-                    <h1>AIboard · Supabase Data Viewer</h1>
-                    <div class="header-subtitle">
-                        <i class="fas fa-server"></i> <span id="supabaseUrl"></span>
-                        <span class="status-badge" id="connectionStatus"><i class="fas fa-check-circle"></i> Connected</span>
-                    </div>
-                </div>
+                <a href="betting-sport.html" class="back-btn"><i class="fas fa-arrow-left"></i></a>
+                <h1 style="font-size:18px;"><i class="fas fa-futbol"></i> <span class="en">My Bets</span><span class="ar" style="display:none;">رهاناتي</span></h1>
+                <span class="auto-settle-badge"><i class="fas fa-robot"></i> AUTO-SETTLE</span>
             </div>
-            <div class="header-actions">
-                <button class="btn btn-secondary" onclick="refreshData()"><i class="fas fa-sync"></i> Refresh</button>
-                <button class="btn btn-primary" onclick="exportSchema()"><i class="fas fa-file-export"></i> Export Schema</button>
-                <button class="btn btn-success" onclick="showSQL()"><i class="fas fa-code"></i> Show SQL</button>
+            <div style="display:flex; gap:10px; align-items:center;">
+                <button class="export-btn" onclick="exportBetsToCSV()"><i class="fas fa-download"></i> <span class="en">Export</span><span class="ar" style="display:none;">تصدير</span></button>
+                <button class="lang-toggle" onclick="toggleLanguage()"><span class="en">عربي</span><span class="ar" style="display:none;">English</span></button>
             </div>
         </div>
-
-        <div id="alert" class="alert"></div>
-
-        <!-- Stats -->
-        <div class="stats-grid" id="statsGrid">
-            <div class="stat-card">
-                <div class="icon-bg"><i class="fas fa-table"></i></div>
-                <div class="label">Total Tables</div>
-                <div class="value" id="totalTables">0</div>
+        <div class="tabs">
+            <a href="betting-sport.html" class="tab"><span class="en">Home</span><span class="ar" style="display:none;">الرئيسية</span></a>
+            <a href="live-matches.html" class="tab"><span class="en">Live</span><span class="ar" style="display:none;">مباشر</span></a>
+            <a href="upcoming-matches.html" class="tab"><span class="en">Upcoming</span><span class="ar" style="display:none;">القادمة</span></a>
+            <a href="finished-matches.html" class="tab"><span class="en">Results</span><span class="ar" style="display:none;">النتائج</span></a>
+            <a href="my-bets.html" class="tab active"><span class="en">My Bets</span><span class="ar" style="display:none;">رهاناتي</span></a>
+        </div>
+    </div>
+    
+    <div class="container">
+        <div class="balance-bar">
+            <div>
+                <div class="balance-label"><i class="fas fa-wallet"></i> <span class="en">Available Balance</span><span class="ar" style="display:none;">الرصيد المتاح</span></div>
+                <div class="balance-amount" id="balance-display">$0.00</div>
             </div>
-            <div class="stat-card">
-                <div class="icon-bg"><i class="fas fa-database"></i></div>
-                <div class="label">Total Records</div>
-                <div class="value" id="totalRecords">0</div>
-            </div>
-            <div class="stat-card">
-                <div class="icon-bg"><i class="fas fa-columns"></i></div>
-                <div class="label">Total Columns</div>
-                <div class="value" id="totalColumns">0</div>
-            </div>
-            <div class="stat-card">
-                <div class="icon-bg"><i class="fas fa-clock"></i></div>
-                <div class="label">Last Updated</div>
-                <div class="value" id="lastUpdated" style="font-size:20px;">-</div>
+            <div>
+                <div class="balance-label"><i class="fas fa-chart-pie"></i> <span class="en">Win Rate</span><span class="ar" style="display:none;">نسبة الفوز</span></div>
+                <div class="balance-amount" id="win-rate-display" style="font-size:20px;">0%</div>
             </div>
         </div>
-
-        <!-- Table List -->
-        <h3 style="margin-bottom:12px;"><i class="fas fa-list"></i> Tables in Database</h3>
-        <div class="table-list" id="tableList"></div>
-
-        <!-- Data Viewer -->
-        <div class="data-viewer" id="dataViewer">
-            <div class="viewer-header">
-                <h3><i class="fas fa-eye"></i> <span id="viewerTitle">Table Data</span></h3>
-                <div class="viewer-controls">
-                    <select id="tableSelector" onchange="loadTableData()">
-                        <option value="">Select a table...</option>
-                    </select>
-                    <input type="text" id="searchInput" placeholder="Search..." oninput="searchTableData()" />
-                    <button class="btn btn-secondary" onclick="loadTableData()" style="padding:6px 14px;font-size:11px;">
-                        <i class="fas fa-sync"></i> Load
-                    </button>
-                </div>
-            </div>
-            <div class="table-wrapper" id="tableDataWrapper">
-                <div style="text-align:center;padding:40px;color:var(--text-secondary);">
-                    <i class="fas fa-hand-pointer" style="font-size:32px;display:block;margin-bottom:12px;"></i>
-                    Select a table from the dropdown to view data
-                </div>
-            </div>
-            <div style="margin-top:12px;font-size:12px;color:var(--text-secondary);" id="recordCount">-</div>
+        
+        <div class="win-rate-bar"><div class="win-rate-fill" id="win-rate-fill" style="width:0%"></div></div>
+        
+        <div class="stats-grid">
+            <div class="stat-box"><div class="val neutral" id="total-bets">0</div><div class="lbl"><span class="en">Total Bets</span><span class="ar" style="display:none;">إجمالي الرهانات</span></div></div>
+            <div class="stat-box"><div class="val win" id="total-won">0</div><div class="lbl"><span class="en">Won</span><span class="ar" style="display:none;">فائز</span></div><div class="sub" id="won-amount" style="color:#4caf50;">$0</div></div>
+            <div class="stat-box"><div class="val lose" id="total-lost">0</div><div class="lbl"><span class="en">Lost</span><span class="ar" style="display:none;">خاسر</span></div><div class="sub" id="lost-amount" style="color:var(--red);">$0</div></div>
+            <div class="stat-box"><div class="val neutral" id="total-active">0</div><div class="lbl"><span class="en">Active</span><span class="ar" style="display:none;">نشط</span></div></div>
+            <div class="stat-box"><div class="val" id="total-pl" style="color:var(--green);">$0</div><div class="lbl"><span class="en">Net P/L</span><span class="ar" style="display:none;">صافي الربح</span></div></div>
         </div>
-
-        <!-- Schema Viewer -->
-        <div class="schema-viewer" id="schemaViewer">
-            <div class="schema-header">
-                <h3><i class="fas fa-code"></i> Database Schema</h3>
-                <button class="btn btn-secondary" onclick="toggleSchema()" style="padding:6px 14px;font-size:11px;">
-                    <i class="fas fa-chevron-down"></i> Toggle
-                </button>
+        
+        <div class="filter-row">
+            <button class="filter-chip active" data-filter="all"><span class="en">All</span><span class="ar" style="display:none;">الكل</span> <span class="count" id="cnt-all">0</span></button>
+            <button class="filter-chip" data-filter="active"><span class="en">Active</span><span class="ar" style="display:none;">نشط</span> <span class="count" id="cnt-active">0</span></button>
+            <button class="filter-chip" data-filter="won"><span class="en">Won</span><span class="ar" style="display:none;">فائز</span> <span class="count" id="cnt-won">0</span></button>
+            <button class="filter-chip" data-filter="lost"><span class="en">Lost</span><span class="ar" style="display:none;">خاسر</span> <span class="count" id="cnt-lost">0</span></button>
+            <button class="filter-chip" data-filter="cancelled"><span class="en">Cancelled</span><span class="ar" style="display:none;">ملغي</span> <span class="count" id="cnt-cancelled">0</span></button>
+            <button class="filter-chip" data-filter="cashed-out"><span class="en">Cashed Out</span><span class="ar" style="display:none;">مسحوب</span> <span class="count" id="cnt-cashed-out">0</span></button>
+        </div>
+        
+        <div id="bet-list-container">
+            <div style="text-align:center;padding:60px;">
+                <div class="loading-spinner" style="width:40px;height:40px;border-width:3px;"></div>
+                <div style="margin-top:15px;color:var(--text2);">Loading your bets...</div>
             </div>
-            <div id="schemaContent">
-                <div style="text-align:center;padding:20px;color:var(--text-secondary);">Loading schema...</div>
-            </div>
+        </div>
+    </div>
+    
+    <div class="modal-overlay" id="bet-modal" onclick="closeModal(event)">
+        <div class="modal-content" onclick="event.stopPropagation()">
+            <button class="modal-close" onclick="closeModal()">&times;</button>
+            <div id="modal-body"></div>
         </div>
     </div>
 
     <script>
-        // ============================================================
-        // SUPABASE CONFIG - YOUR KEY INTEGRATED
-        // ============================================================
-        const SUPABASE_URL = 'https://wkgldyfxsmkjyalrldtq.supabase.co';
-        const SUPABASE_ANON_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6IndrZ2xkeWZ4c21ranlhbGxyZHRxIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NzczNTg0OTQsImV4cCI6MjA5MjkzNDQ5NH0.WgXSHB6teuUiEKYgeR2ADAK-8A_6VnbEl-wv0RSuxjA';
-
-        // ============================================================
-        // STATE
-        // ============================================================
-        let supabase = null;
-        let allTables = [];
-        let tableData = {};
-        let tableSchemas = {};
-        let currentTable = '';
-        let searchTerm = '';
-
-        // ============================================================
-        // INIT
-        // ============================================================
-        async function init() {
+        // ============================================
+        // MY BETS - AUTO-SETTLE SYSTEM v6.0
+        // Fully Automated Win/Loss Determination
+        // Cancel: Before match start only
+        // Cashout: During live match only
+        // ============================================
+        
+        const SUPABASE_URL = 'https://jnazybaeajyynpyoszmy.supabase.co';
+        const SUPABASE_ANON_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImpuYXp5YmFlYWp5eW5weW9zem15Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3NzcyNzgwMDMsImV4cCI6MjA5Mjg1NDAwM30.P_8V-_s6DQDiYekZX1yaNup48WBRaLhb3ILAkvzTDTY';
+        const API_BASE = 'https://muddy-wildflower-a70d.dilovantalan.workers.dev';
+        
+        let supabaseClient = supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
+        
+        const firebaseConfig = {
+            apiKey: "AIzaSyA72Yo_YGqno9PX25p3yQBvyflcaM-NqEM",
+            authDomain: "x-bet-prod-jd.firebaseapp.com",
+            projectId: "x-bet-prod-jd",
+            storageBucket: "x-bet-prod-jd.firebasestorage.app",
+            messagingSenderId: "499334334535",
+            appId: "1:499334334535:web:bebc1bf817e24d9e3c4962"
+        };
+        
+        if (!firebase.apps.length) firebase.initializeApp(firebaseConfig);
+        const db = firebase.firestore();
+        const auth = firebase.auth();
+        
+        let allBets = [];
+        let currentFilter = 'all';
+        let refreshInterval = null;
+        let settleInterval = null;
+        let settlementTimers = [];
+        let settledBets = new Set();
+        
+        // ===== LANGUAGE =====
+        function toggleLanguage() {
+            const isArabic = document.body.classList.toggle('arabic');
+            localStorage.setItem('lang', isArabic ? 'ar' : 'en');
+            document.documentElement.dir = isArabic ? 'rtl' : 'ltr';
+            document.querySelectorAll('.en').forEach(el => el.style.display = isArabic ? 'none' : '');
+            document.querySelectorAll('.ar').forEach(el => el.style.display = isArabic ? '' : 'none');
+        }
+        if (localStorage.getItem('lang') === 'ar') toggleLanguage();
+        
+        function escapeHtml(str) {
+            if (!str) return '';
+            return String(str).replace(/[&<>]/g, m => ({'&':'&amp;','<':'&lt;','>':'&gt;'}[m]));
+        }
+        
+        function showNotification(message, type = 'info') {
+            const n = document.createElement('div');
+            n.className = `notification ${type}`;
+            n.innerHTML = message;
+            document.body.appendChild(n);
+            setTimeout(() => n.remove(), 3500);
+        }
+        
+        // ===== WALLET =====
+        async function loadBalance() {
             try {
-                updateLoading('🔌 Connecting to Supabase...', 10);
-                supabase = window.supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
-                document.getElementById('supabaseUrl').textContent = SUPABASE_URL;
-
-                updateLoading('📡 Testing connection...', 20);
-                
-                // Try to get tables by querying pg_tables or information_schema
-                updateLoading('📊 Fetching table list...', 40);
-                await fetchTableList();
-
-                if (allTables.length === 0) {
-                    // If no tables found, try with known table names
-                    const knownTables = ['users', 'daily_usage', 'transactions', 'questions'];
-                    for (const table of knownTables) {
-                        try {
-                            const { count, error } = await supabase
-                                .from(table)
-                                .select('*', { count: 'exact', head: true });
-                            if (!error || error.code !== '42P01') {
-                                allTables.push(table);
-                            }
-                        } catch (e) {}
-                    }
-                    allTables = [...new Set(allTables)];
-                }
-
-                updateLoading('📈 Loading schema...', 60);
-                await fetchAllSchemas();
-
-                updateLoading('📋 Loading data...', 80);
-                await loadAllTableCounts();
-
-                updateLoading('✅ Done!', 100);
-                setTimeout(() => {
-                    document.getElementById('loadingScreen').classList.add('hidden');
-                    document.getElementById('dashboardContent').style.display = 'block';
-                    renderDashboard();
-                    updateStats();
-                    if (allTables.length > 0) {
-                        document.getElementById('tableSelector').value = allTables[0];
-                        loadTableData();
-                    }
-                }, 500);
-
-            } catch (error) {
-                console.error('Init error:', error);
-                document.getElementById('loadingText').textContent = '❌ Error connecting to Supabase';
-                document.getElementById('loadingDetail').textContent = error.message || 'Check your credentials';
-                document.getElementById('connectionStatus').className = 'status-badge error';
-                document.getElementById('connectionStatus').innerHTML = '<i class="fas fa-times-circle"></i> Error';
-                showAlert('❌ Failed to connect: ' + (error.message || 'Unknown error'), 'error');
-                
-                // Try with known tables anyway
-                allTables = ['users', 'daily_usage', 'transactions', 'questions'];
-                await fetchAllSchemas();
-                await loadAllTableCounts();
-                setTimeout(() => {
-                    document.getElementById('loadingScreen').classList.add('hidden');
-                    document.getElementById('dashboardContent').style.display = 'block';
-                    renderDashboard();
-                    updateStats();
-                    if (allTables.length > 0) {
-                        document.getElementById('tableSelector').value = allTables[0];
-                        loadTableData();
-                    }
-                }, 1000);
-            }
+                const user = auth.currentUser;
+                if (!user) return 0;
+                const doc = await db.collection('wallets').doc(user.uid).get();
+                const balance = doc.exists ? (doc.data().balance || 0) : 1000;
+                document.getElementById('balance-display').textContent = `$${balance.toFixed(2)}`;
+                return balance;
+            } catch(e) { return 0; }
         }
-
-        // ============================================================
-        // FETCH TABLE LIST
-        // ============================================================
-        async function fetchTableList() {
-            try {
-                // Try to query pg_tables using RPC
-                const { data, error } = await supabase.rpc('get_tables');
-                if (!error && data && data.length > 0) {
-                    allTables = data.map(t => t.table_name || t).filter(t => t && !t.startsWith('_') && !t.startsWith('pg_'));
-                    return;
-                }
-            } catch (e) {}
-
-            // Try information_schema
-            try {
-                const { data, error } = await supabase
-                    .from('information_schema.tables')
-                    .select('table_name')
-                    .eq('table_schema', 'public')
-                    .eq('table_type', 'BASE TABLE')
-                    .limit(20);
-
-                if (!error && data && data.length > 0) {
-                    allTables = data.map(t => t.table_name).filter(t => !t.startsWith('_') && !t.startsWith('pg_'));
-                    return;
-                }
-            } catch (e) {}
-
-            // Fallback: Try common tables
-            const commonTables = ['users', 'daily_usage', 'transactions', 'questions'];
-            const foundTables = [];
-            for (const table of commonTables) {
-                try {
-                    const { data, error } = await supabase
-                        .from(table)
-                        .select('count', { count: 'exact', head: true });
-                    if (!error || error.code !== '42P01') {
-                        foundTables.push(table);
-                    }
-                } catch (e) {}
-            }
-            allTables = foundTables;
-        }
-
-        // ============================================================
-        // FETCH SCHEMA
-        // ============================================================
-        async function fetchAllSchemas() {
-            for (const table of allTables) {
-                try {
-                    const { data, error } = await supabase
-                        .from(table)
-                        .select('*')
-                        .limit(1);
-
-                    if (error) {
-                        tableSchemas[table] = { error: error.message, columns: [] };
-                        continue;
-                    }
-
-                    if (data && data.length > 0) {
-                        const columns = Object.keys(data[0]).map(col => ({
-                            name: col,
-                            type: typeof data[0][col],
-                            sample: data[0][col],
-                            isNullable: data[0][col] === null
-                        }));
-                        tableSchemas[table] = { columns, sample: data[0] };
-                    } else {
-                        tableSchemas[table] = { columns: [], sample: null };
-                    }
-                } catch (e) {
-                    tableSchemas[table] = { error: e.message, columns: [] };
-                }
-            }
-        }
-
-        // ============================================================
-        // LOAD TABLE COUNTS
-        // ============================================================
-        async function loadAllTableCounts() {
-            for (const table of allTables) {
-                try {
-                    const { count, error } = await supabase
-                        .from(table)
-                        .select('*', { count: 'exact', head: true });
-
-                    if (!error) {
-                        tableData[table] = { count: count || 0, loaded: false };
-                    } else {
-                        tableData[table] = { count: 0, loaded: false };
-                    }
-                } catch (e) {
-                    tableData[table] = { count: 0, loaded: false };
-                }
-            }
-        }
-
-        // ============================================================
-        // LOAD TABLE DATA
-        // ============================================================
-        async function loadTableData() {
-            const table = document.getElementById('tableSelector').value;
-            if (!table) return;
-
-            currentTable = table;
-            document.getElementById('viewerTitle').textContent = `Table: ${table}`;
-
-            try {
-                const { data, error } = await supabase
-                    .from(table)
-                    .select('*')
-                    .limit(100);
-
-                if (error) throw error;
-
-                tableData[table].data = data || [];
-                tableData[table].loaded = true;
-
-                renderTableData(table, data || []);
-                document.getElementById('recordCount').textContent =
-                    `Showing ${(data || []).length} of ${tableData[table].count || '?'} records`;
-
-            } catch (error) {
-                console.error('Error loading table data:', error);
-                showAlert(`❌ Error loading table "${table}": ${error.message}`, 'error');
-                const wrapper = document.getElementById('tableDataWrapper');
-                wrapper.innerHTML = `<div style="text-align:center;padding:40px;color:var(--danger);">
-                    <i class="fas fa-exclamation-triangle" style="font-size:32px;display:block;margin-bottom:12px;"></i>
-                    Error loading data: ${error.message}
-                </div>`;
-            }
-        }
-
-        // ============================================================
-        // RENDER TABLE DATA
-        // ============================================================
-        function renderTableData(table, data) {
-            const wrapper = document.getElementById('tableDataWrapper');
-
-            if (!data || data.length === 0) {
-                wrapper.innerHTML = `<div style="text-align:center;padding:40px;color:var(--text-secondary);">
-                    <i class="fas fa-inbox" style="font-size:32px;display:block;margin-bottom:12px;"></i>
-                    No data found in "${table}"
-                </div>`;
-                return;
-            }
-
-            const columns = Object.keys(data[0]);
-            const search = searchTerm.toLowerCase();
-
-            let filteredData = data;
-            if (search) {
-                filteredData = data.filter(row => {
-                    return Object.values(row).some(val =>
-                        String(val).toLowerCase().includes(search)
-                    );
+        
+        async function updateWalletBalance(userId, amount) {
+            const walletRef = db.collection('wallets').doc(userId);
+            await db.runTransaction(async (t) => {
+                const doc = await t.get(walletRef);
+                const current = doc.exists ? (doc.data().balance || 0) : 0;
+                t.update(walletRef, { 
+                    balance: current + amount, 
+                    updated_at: new Date().toISOString() 
                 });
-            }
-
-            let html = '<table><thead><tr>';
-            columns.forEach(col => {
-                html += `<th>${col}</th>`;
-            });
-            html += '</tr></thead><tbody>';
-
-            filteredData.forEach(row => {
-                html += '<tr>';
-                columns.forEach(col => {
-                    const val = row[col];
-                    let display = '';
-
-                    if (val === null || val === undefined) {
-                        display = '<span class="cell-null">null</span>';
-                    } else if (typeof val === 'boolean') {
-                        display = `<span class="cell-boolean ${val}">${val}</span>`;
-                    } else if (val instanceof Date || (typeof val === 'object' && val !== null && val.toISOString)) {
-                        display = new Date(val).toLocaleString();
-                    } else if (typeof val === 'object') {
-                        display = JSON.stringify(val).substring(0, 50) + (JSON.stringify(val).length > 50 ? '...' : '');
-                    } else {
-                        display = String(val);
-                        if (display.length > 50) display = display.substring(0, 50) + '...';
-                    }
-
-                    html += `<td title="${String(val)}">${display}</td>`;
+                const txRef = db.collection('transactions').doc();
+                t.set(txRef, {
+                    user_id: userId, amount, type: amount > 0 ? 'bet_win' : 'bet_loss',
+                    balance_before: current, balance_after: current + amount,
+                    timestamp: new Date().toISOString()
                 });
-                html += '</tr>';
             });
-
-            html += '</tbody></table>';
-
-            if (filteredData.length === 0 && search) {
-                html = `<div style="text-align:center;padding:40px;color:var(--text-secondary);">
-                    <i class="fas fa-search" style="font-size:32px;display:block;margin-bottom:12px;"></i>
-                    No results found for "${search}"
-                </div>`;
-            }
-
-            wrapper.innerHTML = html;
         }
-
-        // ============================================================
-        // SEARCH TABLE DATA
-        // ============================================================
-        function searchTableData() {
-            searchTerm = document.getElementById('searchInput').value;
-            if (currentTable && tableData[currentTable]?.data) {
-                renderTableData(currentTable, tableData[currentTable].data);
-            }
+        
+        // ===== FETCH MATCH FROM API =====
+        async function fetchMatchFromAPI(fixtureId) {
+            try {
+                const response = await fetch(`${API_BASE}/api/fixture/${fixtureId}`);
+                if (!response.ok) return null;
+                const data = await response.json();
+                
+                if (data.success && data.fixture) {
+                    const f = data.fixture;
+                    const goals = f.goals || { home: 0, away: 0 };
+                    const score = f.score || { fulltime: { home: 0, away: 0 }, halftime: { home: 0, away: 0 } };
+                    
+                    return {
+                        fixture_id: f.fixture?.id || fixtureId,
+                        status: f.fixture?.status?.short || 'NS',
+                        elapsed: f.fixture?.status?.elapsed || 0,
+                        home_team: { name: f.teams?.home?.name || 'Home', logo: f.teams?.home?.logo || '' },
+                        away_team: { name: f.teams?.away?.name || 'Away', logo: f.teams?.away?.logo || '' },
+                        league_name: f.league?.name || '',
+                        league_logo: f.league?.logo || '',
+                        start_time: f.fixture?.date || '',
+                        goals_home: goals.home || score.fulltime?.home || 0,
+                        goals_away: goals.away || score.fulltime?.away || 0,
+                        ht_home: score.halftime?.home || 0,
+                        ht_away: score.halftime?.away || 0
+                    };
+                }
+                return null;
+            } catch(e) { return null; }
         }
-
-        // ============================================================
-        // RENDER DASHBOARD
-        // ============================================================
-        function renderDashboard() {
-            // Render table list
-            const list = document.getElementById('tableList');
+        
+        async function getMatchDetails(fixtureId) {
+            if (!fixtureId) return null;
             
-            if (allTables.length === 0) {
-                list.innerHTML = `<div style="text-align:center;padding:40px;color:var(--text-secondary);grid-column:1/-1;">
-                    <i class="fas fa-database" style="font-size:32px;display:block;margin-bottom:12px;"></i>
-                    No tables found in database. Create tables first.
-                </div>`;
-                return;
-            }
-
-            list.innerHTML = allTables.map(table => {
-                const count = tableData[table]?.count || 0;
-                const schema = tableSchemas[table];
-                const hasError = schema?.error;
-                const colCount = schema?.columns?.length || 0;
-
-                let statusClass = 'badge-success';
-                let statusText = '✅ Active';
-                if (hasError) { statusClass = 'badge-danger';
-                    statusText = '❌ Error'; } else if (count === 0) { statusClass = 'badge-warning';
-                    statusText = '⚠️ Empty'; }
-
-                return `<div class="table-card" onclick="selectTable('${table}')">
-                    <div class="table-name">
-                        <i class="fas fa-table"></i> ${table}
-                    </div>
-                    <div class="table-count">
-                        <i class="fas fa-database"></i> ${count.toLocaleString()} records
-                        <span style="margin-left:12px;"><i class="fas fa-columns"></i> ${colCount} columns</span>
-                    </div>
-                    <div class="table-status">
-                        <span class="badge ${statusClass}">${statusText}</span>
-                        ${schema?.columns?.length > 0 ? `<span style="margin-left:8px;font-size:11px;color:var(--text-secondary);">
-                            ${schema.columns.slice(0, 3).map(c => c.name).join(', ')}${schema.columns.length > 3 ? '...' : ''}
-                        </span>` : ''}
-                    </div>
-                </div>`;
-            }).join('');
-
-            // Populate table selector
-            const selector = document.getElementById('tableSelector');
-            selector.innerHTML = '<option value="">Select a table...</option>' +
-                allTables.map(table =>
-                    `<option value="${table}">${table} (${tableData[table]?.count || 0} records)</option>`
-                ).join('');
-
-            // Render schema
-            renderSchema();
-        }
-
-        // ============================================================
-        // RENDER SCHEMA
-        // ============================================================
-        function renderSchema() {
-            const content = document.getElementById('schemaContent');
-
-            if (allTables.length === 0) {
-                content.innerHTML = `<div style="text-align:center;padding:20px;color:var(--text-secondary);">No tables found</div>`;
-                return;
-            }
-
-            let html = '';
-            for (const table of allTables) {
-                const schema = tableSchemas[table];
-                const count = tableData[table]?.count || 0;
-
-                html += `<div style="margin-bottom:16px;">
-                    <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:8px;">
-                        <div style="font-weight:600;font-size:15px;color:var(--accent-light);">
-                            <i class="fas fa-table"></i> ${table}
-                            <span style="font-size:12px;color:var(--text-secondary);font-weight:400;margin-left:8px;">
-                                (${count.toLocaleString()} records)
-                            </span>
-                        </div>
-                    </div>`;
-
-                if (schema?.error) {
-                    html += `<div style="color:var(--danger);font-size:12px;padding:8px;background:rgba(239,68,68,0.05);border-radius:8px;">
-                        Error: ${schema.error}
-                    </div>`;
-                } else if (schema?.columns && schema.columns.length > 0) {
-                    html += '<div class="schema-grid">';
-                    schema.columns.forEach(col => {
-                        const isPK = col.name === 'id' || col.name === 'uid' || col.name === 'user_id';
-                        const isFK = col.name.includes('_id') && col.name !== 'id';
-                        html += `<div class="schema-item">
-                            <span class="col-name">${col.name}</span>
-                            <span class="col-type">${col.type}${col.isNullable ? ' (nullable)' : ''}</span>
-                            <span>
-                                ${isPK ? '<span class="col-pk">🔑 PK</span>' : ''}
-                                ${isFK ? '<span class="col-fk">🔗 FK</span>' : ''}
-                                ${col.sample !== undefined && col.sample !== null ? `<span style="font-size:10px;color:var(--text-secondary);">sample: ${String(col.sample).substring(0,20)}</span>` : ''}
-                            </span>
-                        </div>`;
-                    });
-                    html += '</div>';
-                } else {
-                    html += `<div style="color:var(--text-secondary);font-size:12px;padding:8px;">No schema information available</div>`;
+            try {
+                const { data, error } = await supabaseClient
+                    .from('sports_matches')
+                    .select('*')
+                    .eq('fixture_id', parseInt(fixtureId))
+                    .maybeSingle();
+                
+                if (!error && data) {
+                    let homeTeam = data.home_team, awayTeam = data.away_team;
+                    if (typeof homeTeam === 'string') try { homeTeam = JSON.parse(homeTeam); } catch(e) {}
+                    if (typeof awayTeam === 'string') try { awayTeam = JSON.parse(awayTeam); } catch(e) {}
+                    
+                    return {
+                        fixture_id: data.fixture_id,
+                        status: data.status,
+                        elapsed: data.elapsed || 0,
+                        home_team: homeTeam || { name: 'Home', logo: '' },
+                        away_team: awayTeam || { name: 'Away', logo: '' },
+                        league_name: data.league_name || '',
+                        start_time: data.start_time || '',
+                        goals_home: data.score?.home || 0,
+                        goals_away: data.score?.away || 0,
+                        ht_home: data.score?.halftime?.home || 0,
+                        ht_away: data.score?.halftime?.away || 0
+                    };
                 }
-
-                html += '</div>';
-            }
-
-            content.innerHTML = html;
+            } catch(e) {}
+            
+            return await fetchMatchFromAPI(fixtureId);
         }
-
-        // ============================================================
-        // UPDATE STATS
-        // ============================================================
-        function updateStats() {
-            const totalTables = allTables.length;
-            const totalRecords = Object.values(tableData).reduce((sum, d) => sum + (d.count || 0), 0);
-            const totalColumns = Object.values(tableSchemas).reduce((sum, s) => sum + (s?.columns?.length || 0), 0);
-
-            document.getElementById('totalTables').textContent = totalTables;
-            document.getElementById('totalRecords').textContent = totalRecords.toLocaleString();
-            document.getElementById('totalColumns').textContent = totalColumns;
-            document.getElementById('lastUpdated').textContent = new Date().toLocaleString();
-        }
-
-        // ============================================================
-        // UI HELPERS
-        // ============================================================
-        function updateLoading(text, progress) {
-            document.getElementById('loadingText').textContent = text;
-            document.getElementById('loadingProgress').style.width = progress + '%';
-            if (progress < 30) document.getElementById('loadingDetail').textContent = 'Connecting...';
-            else if (progress < 60) document.getElementById('loadingDetail').textContent = 'Fetching data...';
-            else if (progress < 90) document.getElementById('loadingDetail').textContent = 'Processing...';
-            else document.getElementById('loadingDetail').textContent = 'Ready!';
-        }
-
-        function selectTable(table) {
-            document.getElementById('tableSelector').value = table;
-            loadTableData();
-            document.getElementById('dataViewer').scrollIntoView({ behavior: 'smooth' });
-        }
-
-        function toggleSchema() {
-            const content = document.getElementById('schemaContent');
-            if (content.style.display === 'none') {
-                content.style.display = 'block';
-            } else {
-                content.style.display = 'none';
-            }
-        }
-
-        function showAlert(message, type = 'info') {
-            const alert = document.getElementById('alert');
-            alert.textContent = message;
-            alert.className = `alert alert-${type}`;
-            alert.style.display = 'block';
-            setTimeout(() => alert.style.display = 'none', 5000);
-        }
-
-        function refreshData() {
-            showAlert('🔄 Refreshing data...', 'info');
-            fetchAllSchemas();
-            loadAllTableCounts();
-            setTimeout(() => {
-                renderDashboard();
-                updateStats();
-                if (currentTable) loadTableData();
-                showAlert('✅ Data refreshed!', 'success');
-            }, 1000);
-        }
-
-        function exportSchema() {
-            const schema = {
-                generated: new Date().toISOString(),
-                supabaseUrl: SUPABASE_URL,
-                tables: {}
+        
+        // ===== AUTO-SETTLE LOGIC =====
+        function determineBetResult(bet, match) {
+            if (!match || !bet) return null;
+            
+            const goals = { home: match.goals_home || 0, away: match.goals_away || 0 };
+            const htGoals = { home: match.ht_home || 0, away: match.ht_away || 0 };
+            const totalGoals = goals.home + goals.away;
+            const htTotal = htGoals.home + htGoals.away;
+            
+            const betType = bet.bet_type;
+            let won = false;
+            let reason = '';
+            
+            // Single bet settlement logic
+            const settlementRules = {
+                'home': () => { won = goals.home > goals.away; reason = `${goals.home}-${goals.away}`; },
+                'draw': () => { won = goals.home === goals.away; reason = `${goals.home}-${goals.away}`; },
+                'away': () => { won = goals.away > goals.home; reason = `${goals.home}-${goals.away}`; },
+                '1X': () => { won = goals.home >= goals.away; reason = `${goals.home}-${goals.away}`; },
+                '12': () => { won = goals.home !== goals.away; reason = `${goals.home}-${goals.away}`; },
+                'X2': () => { won = goals.away >= goals.home; reason = `${goals.home}-${goals.away}`; },
+                'home_dnb': () => { won = goals.home > goals.away; reason = `${goals.home}-${goals.away}`; },
+                'away_dnb': () => { won = goals.away > goals.home; reason = `${goals.home}-${goals.away}`; },
+                'over05': () => { won = totalGoals > 0.5; reason = `${totalGoals} goals`; },
+                'under05': () => { won = totalGoals < 0.5; reason = `${totalGoals} goals`; },
+                'over15': () => { won = totalGoals > 1.5; reason = `${totalGoals} goals`; },
+                'under15': () => { won = totalGoals < 1.5; reason = `${totalGoals} goals`; },
+                'over25': () => { won = totalGoals > 2.5; reason = `${totalGoals} goals`; },
+                'under25': () => { won = totalGoals < 2.5; reason = `${totalGoals} goals`; },
+                'over35': () => { won = totalGoals > 3.5; reason = `${totalGoals} goals`; },
+                'under35': () => { won = totalGoals < 3.5; reason = `${totalGoals} goals`; },
+                'over45': () => { won = totalGoals > 4.5; reason = `${totalGoals} goals`; },
+                'under45': () => { won = totalGoals < 4.5; reason = `${totalGoals} goals`; },
+                'over55': () => { won = totalGoals > 5.5; reason = `${totalGoals} goals`; },
+                'under55': () => { won = totalGoals < 5.5; reason = `${totalGoals} goals`; },
+                'btts_yes': () => { won = goals.home > 0 && goals.away > 0; reason = `BTTS ${won ? 'Yes' : 'No'}`; },
+                'btts_no': () => { won = !(goals.home > 0 && goals.away > 0); reason = `BTTS ${won ? 'No' : 'Yes'}`; },
+                'ht_home': () => { won = htGoals.home > htGoals.away; reason = `HT ${htGoals.home}-${htGoals.away}`; },
+                'ht_draw': () => { won = htGoals.home === htGoals.away; reason = `HT ${htGoals.home}-${htGoals.away}`; },
+                'ht_away': () => { won = htGoals.away > htGoals.home; reason = `HT ${htGoals.home}-${htGoals.away}`; },
+                'ht_over05': () => { won = htTotal > 0.5; reason = `HT ${htTotal} goals`; },
+                'ht_under05': () => { won = htTotal < 0.5; reason = `HT ${htTotal} goals`; },
+                'ht_over15': () => { won = htTotal > 1.5; reason = `HT ${htTotal} goals`; },
+                'ht_under15': () => { won = htTotal < 1.5; reason = `HT ${htTotal} goals`; },
             };
-
-            for (const table of allTables) {
-                schema.tables[table] = {
-                    columns: tableSchemas[table]?.columns || [],
-                    recordCount: tableData[table]?.count || 0,
-                    hasData: !!tableData[table]?.data
-                };
+            
+            // Check specific rules
+            if (settlementRules[betType]) {
+                settlementRules[betType]();
+                return { won, reason: `${reason} | ${betType}` };
             }
-
-            const blob = new Blob([JSON.stringify(schema, null, 2)], { type: 'application/json' });
-            const url = URL.createObjectURL(blob);
-            const a = document.createElement('a');
-            a.href = url;
-            a.download = `schema-export-${new Date().toISOString().slice(0,10)}.json`;
-            a.click();
-            URL.revokeObjectURL(url);
-            showAlert('📥 Schema exported!', 'success');
+            
+            // Check over/under patterns
+            if (betType.startsWith('over')) {
+                const threshold = parseFloat(betType.replace('over', '').replace('_', '.'));
+                if (!isNaN(threshold)) {
+                    won = totalGoals > threshold;
+                    return { won, reason: `${totalGoals} goals vs O${threshold}` };
+                }
+            }
+            if (betType.startsWith('under')) {
+                const threshold = parseFloat(betType.replace('under', '').replace('_', '.'));
+                if (!isNaN(threshold)) {
+                    won = totalGoals < threshold;
+                    return { won, reason: `${totalGoals} goals vs U${threshold}` };
+                }
+            }
+            
+            // Asian handicap
+            if (betType.startsWith('ah_home_')) {
+                const handicap = parseFloat(betType.replace('ah_home_', '').replace('_', '.'));
+                if (!isNaN(handicap)) {
+                    const adjustedHome = goals.home + handicap;
+                    won = adjustedHome > goals.away;
+                    return { won, reason: `AH Home ${handicap}: ${goals.home}+${handicap}=${adjustedHome} vs ${goals.away}` };
+                }
+            }
+            if (betType.startsWith('ah_away_')) {
+                const handicap = parseFloat(betType.replace('ah_away_', '').replace('_', '.'));
+                if (!isNaN(handicap)) {
+                    const adjustedAway = goals.away + handicap;
+                    won = adjustedAway > goals.home;
+                    return { won, reason: `AH Away ${handicap}: ${goals.away}+${handicap}=${adjustedAway} vs ${goals.home}` };
+                }
+            }
+            
+            // Exact score
+            if (betType.startsWith('exact_score_')) {
+                const parts = betType.replace('exact_score_', '').split('_');
+                const expectedHome = parseInt(parts[0]);
+                const expectedAway = parseInt(parts[1]);
+                won = goals.home === expectedHome && goals.away === expectedAway;
+                return { won, reason: `Exact ${expectedHome}-${expectedAway} vs ${goals.home}-${goals.away}` };
+            }
+            
+            // Total goals exact
+            if (betType.startsWith('total_goals_')) {
+                const goalStr = betType.replace('total_goals_', '');
+                if (goalStr === '7plus') {
+                    won = totalGoals >= 7;
+                    return { won, reason: `Total: ${totalGoals} (7+)` };
+                }
+                const expected = parseInt(goalStr);
+                won = totalGoals === expected;
+                return { won, reason: `Total: ${totalGoals} (expected ${expected})` };
+            }
+            
+            // HT/FT
+            if (betType.startsWith('ht_ft_')) {
+                const parts = betType.replace('ht_ft_', '').split('_');
+                const htResult = parts[0]; // home, draw, away
+                const ftResult = parts[1];
+                
+                let actualHT = 'draw';
+                if (htGoals.home > htGoals.away) actualHT = 'home';
+                else if (htGoals.away > htGoals.home) actualHT = 'away';
+                
+                let actualFT = 'draw';
+                if (goals.home > goals.away) actualFT = 'home';
+                else if (goals.away > goals.home) actualFT = 'away';
+                
+                won = (htResult === actualHT && ftResult === actualFT);
+                return { won, reason: `HT/FT: ${actualHT}/${actualFT} (bet ${htResult}/${ftResult})` };
+            }
+            
+            // Clean sheets
+            if (betType === 'home_clean_sheet_yes') {
+                won = goals.away === 0;
+                return { won, reason: `Home CS: ${goals.away === 0 ? 'Yes' : 'No'}` };
+            }
+            if (betType === 'home_clean_sheet_no') {
+                won = goals.away > 0;
+                return { won, reason: `Home CS: ${goals.away > 0 ? 'No (conceded)' : 'Yes'}` };
+            }
+            if (betType === 'away_clean_sheet_yes') {
+                won = goals.home === 0;
+                return { won, reason: `Away CS: ${goals.home === 0 ? 'Yes' : 'No'}` };
+            }
+            if (betType === 'away_clean_sheet_no') {
+                won = goals.home > 0;
+                return { won, reason: `Away CS: ${goals.home > 0 ? 'No (conceded)' : 'Yes'}` };
+            }
+            
+            // Second half
+            if (betType.startsWith('2h_')) {
+                const shGoals = { home: goals.home - htGoals.home, away: goals.away - htGoals.away };
+                const shTotal = shGoals.home + shGoals.away;
+                
+                if (betType === '2h_home') won = shGoals.home > shGoals.away;
+                else if (betType === '2h_draw') won = shGoals.home === shGoals.away;
+                else if (betType === '2h_away') won = shGoals.away > shGoals.home;
+                else if (betType === '2h_over05') won = shTotal > 0.5;
+                else if (betType === '2h_under05') won = shTotal < 0.5;
+                else if (betType === '2h_over15') won = shTotal > 1.5;
+                else if (betType === '2h_under15') won = shTotal < 1.5;
+                else if (betType === '2h_btts_yes') won = shGoals.home > 0 && shGoals.away > 0;
+                else if (betType === '2h_btts_no') won = !(shGoals.home > 0 && shGoals.away > 0);
+                return { won, reason: `2H: ${shGoals.home}-${shGoals.away}` };
+            }
+            
+            // Default: check if bet type contains goal-related keywords
+            if (betType.includes('home_over')) {
+                const threshold = parseFloat(betType.match(/[\d.]+/)?.[0] || '0.5');
+                won = goals.home > threshold;
+                return { won, reason: `Home ${goals.home} goals vs ${threshold}` };
+            }
+            if (betType.includes('home_under')) {
+                const threshold = parseFloat(betType.match(/[\d.]+/)?.[0] || '0.5');
+                won = goals.home < threshold;
+                return { won, reason: `Home ${goals.home} goals vs ${threshold}` };
+            }
+            if (betType.includes('away_over')) {
+                const threshold = parseFloat(betType.match(/[\d.]+/)?.[0] || '0.5');
+                won = goals.away > threshold;
+                return { won, reason: `Away ${goals.away} goals vs ${threshold}` };
+            }
+            if (betType.includes('away_under')) {
+                const threshold = parseFloat(betType.match(/[\d.]+/)?.[0] || '0.5');
+                won = goals.away < threshold;
+                return { won, reason: `Away ${goals.away} goals vs ${threshold}` };
+            }
+            
+            return null; // Cannot determine
         }
-
-        function showSQL() {
-            let sql = '-- ============================================================\n';
-            sql += `-- SUPABASE DATABASE SCHEMA\n`;
-            sql += `-- Generated: ${new Date().toISOString()}\n`;
-            sql += `-- Tables: ${allTables.join(', ')}\n`;
-            sql += '-- ============================================================\n\n';
-
-            for (const table of allTables) {
-                const schema = tableSchemas[table];
-                if (!schema?.columns || schema.columns.length === 0) continue;
-
-                sql += `-- Table: ${table}\n`;
-                sql += `CREATE TABLE IF NOT EXISTS ${table} (\n`;
-
-                const cols = schema.columns.map(col => {
-                    let type = col.type;
-                    // Map JavaScript types to SQL types
-                    if (type === 'string') type = 'TEXT';
-                    else if (type === 'number') type = 'NUMERIC';
-                    else if (type === 'boolean') type = 'BOOLEAN';
-                    else if (type === 'object') type = 'JSONB';
-                    else if (type === 'bigint') type = 'BIGINT';
-                    else if (type.includes('timestamp')) type = 'TIMESTAMPTZ';
-                    else if (type.includes('date')) type = 'DATE';
-
-                    const nullable = col.isNullable !== false ? '' : ' NOT NULL';
-                    const pk = (col.name === 'id' || col.name === 'uid') ? ' PRIMARY KEY' : '';
-                    return `    ${col.name} ${type}${nullable}${pk}`;
-                });
-
-                sql += cols.join(',\n');
-                sql += '\n);\n\n';
+        
+        async function autoSettleBets() {
+            const activeBets = allBets.filter(b => b.status === 'active' && !settledBets.has(b.id));
+            if (activeBets.length === 0) return;
+            
+            console.log(`🔍 Checking ${activeBets.length} active bets for settlement...`);
+            
+            for (const bet of activeBets) {
+                if (!bet.fixture_id) continue;
+                
+                try {
+                    const match = await getMatchDetails(bet.fixture_id);
+                    if (!match) continue;
+                    
+                    // Only settle finished matches
+                    if (match.status !== 'finished') continue;
+                    
+                    let result;
+                    if (bet.bet_type === 'accumulator' && bet.selections) {
+                        // Accumulator settlement
+                        let allWon = true;
+                        let selectionResults = [];
+                        
+                        for (const sel of bet.selections) {
+                            const selMatch = await getMatchDetails(sel.fixtureId);
+                            if (selMatch && selMatch.status === 'finished') {
+                                const selResult = determineBetResult({ bet_type: sel.betType }, selMatch);
+                                if (selResult) {
+                                    selectionResults.push({ ...sel, won: selResult.won, reason: selResult.reason });
+                                    if (!selResult.won) allWon = false;
+                                } else {
+                                    allWon = false;
+                                }
+                            } else {
+                                allWon = false; // Match not finished yet
+                                break;
+                            }
+                        }
+                        
+                        if (selectionResults.length === bet.selections.length) {
+                            result = { won: allWon, reason: `Acca: ${allWon ? 'ALL WON' : 'At least one lost'}` };
+                        }
+                    } else {
+                        // Single bet settlement
+                        result = determineBetResult(bet, match);
+                    }
+                    
+                    if (result) {
+                        await settleBet(bet, result);
+                        settledBets.add(bet.id);
+                    }
+                } catch(e) {
+                    console.error(`Settle error for bet ${bet.id}:`, e);
+                }
             }
-
-            // Show in modal
-            const modal = document.createElement('div');
-            modal.style.cssText = `
-                position:fixed; top:0; left:0; right:0; bottom:0;
-                background:rgba(0,0,0,0.95); z-index:99999;
-                display:flex; align-items:center; justify-content:center; padding:20px;
-            `;
-            modal.innerHTML = `
-                <div style="background:var(--bg-secondary);border:1px solid var(--border);border-radius:24px;
-                    max-width:900px; width:100%; max-height:90vh; padding:32px; overflow:hidden; display:flex; flex-direction:column;">
-                    <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:16px;">
-                        <h2 style="font-size:20px;font-weight:700;"><i class="fas fa-code"></i> SQL Schema</h2>
-                        <button onclick="this.closest('div[style]').remove()" style="background:var(--bg-primary);border:1px solid var(--border);color:var(--text-primary);padding:8px 20px;border-radius:12px;cursor:pointer;font-weight:600;">Close</button>
+        }
+        
+        async function settleBet(bet, result) {
+            const newStatus = result.won ? 'won' : 'lost';
+            const payout = result.won ? (bet.amount * bet.odds) : 0;
+            const profit = result.won ? (payout - bet.amount) : -bet.amount;
+            
+            console.log(`⚖️ Settling bet ${bet.id}: ${newStatus.toUpperCase()} - ${result.reason}`);
+            
+            try {
+                const { error } = await supabaseClient
+                    .from('bets')
+                    .update({
+                        status: newStatus,
+                        payout: payout,
+                        settlement_reason: result.reason,
+                        settled_at: new Date().toISOString(),
+                        updated_at: new Date().toISOString()
+                    })
+                    .eq('id', bet.id)
+                    .eq('status', 'active');
+                
+                if (error) throw error;
+                
+                // Credit winnings to wallet
+                if (result.won && payout > 0) {
+                    await updateWalletBalance(bet.user_id, payout);
+                }
+                
+                // Update local data
+                bet.status = newStatus;
+                bet.payout = payout;
+                bet.settlement_reason = result.reason;
+                bet.settled_at = new Date().toISOString();
+                
+                showNotification(
+                    `${result.won ? '🏆' : '❌'} Bet ${result.won ? 'WON' : 'LOST'}: ${escapeHtml(bet.match_name || 'Match')} - ${result.won ? '+' : '-'}$${Math.abs(profit).toFixed(2)}`,
+                    result.won ? 'success' : 'error'
+                );
+                
+                await loadBalance();
+                updateStats();
+                updateCounts();
+                filterBets(currentFilter);
+                
+            } catch(e) {
+                console.error('Settlement error:', e);
+            }
+        }
+        
+        // ===== CANCEL BET =====
+        async function cancelBet(betId) {
+            const bet = allBets.find(b => b.id === betId);
+            if (!bet || bet.status !== 'active') {
+                showNotification('❌ Cannot cancel this bet', 'error');
+                return;
+            }
+            
+            if (settledBets.has(betId)) {
+                showNotification('❌ This bet has been processed', 'error');
+                return;
+            }
+            
+            // Check if match has started
+            let matchStarted = false;
+            if (bet.fixture_id) {
+                const match = await getMatchDetails(bet.fixture_id);
+                if (match) {
+                    const now = new Date();
+                    const kickoff = new Date(match.start_time);
+                    matchStarted = match.status === 'live' || match.status === 'finished' || kickoff < now;
+                }
+            }
+            
+            if (matchStarted) {
+                showNotification('❌ Cannot cancel - Match has started! Use Cash Out instead.', 'error');
+                return;
+            }
+            
+            const feePercent = 5;
+            const refundAmount = bet.amount * (1 - feePercent / 100);
+            const fee = bet.amount - refundAmount;
+            
+            if (!confirm(`Cancel this bet?\n\nStake: $${bet.amount.toFixed(2)}\nRefund: $${refundAmount.toFixed(2)}\nFee (${feePercent}%): $${fee.toFixed(2)}`)) return;
+            
+            try {
+                const { error } = await supabaseClient
+                    .from('bets')
+                    .update({
+                        status: 'cancelled',
+                        cancellation_fee: fee,
+                        refund_amount: refundAmount,
+                        cancelled_at: new Date().toISOString(),
+                        settlement_reason: `Cancelled before match - ${feePercent}% fee`,
+                        updated_at: new Date().toISOString()
+                    })
+                    .eq('id', betId)
+                    .eq('status', 'active');
+                
+                if (error) throw error;
+                
+                settledBets.add(betId);
+                await updateWalletBalance(bet.user_id, refundAmount);
+                
+                bet.status = 'cancelled';
+                showNotification(`✅ Cancelled! Refunded: $${refundAmount.toFixed(2)}`, 'success');
+                await loadBalance();
+                updateStats();
+                updateCounts();
+                filterBets(currentFilter);
+                
+            } catch(e) {
+                showNotification(`Error: ${e.message}`, 'error');
+            }
+        }
+        
+        // ===== CASHOUT BET =====
+        async function cashoutBet(betId) {
+            const bet = allBets.find(b => b.id === betId);
+            if (!bet || bet.status !== 'active') {
+                showNotification('❌ Cannot cash out this bet', 'error');
+                return;
+            }
+            
+            if (settledBets.has(betId)) {
+                showNotification('❌ This bet has been processed', 'error');
+                return;
+            }
+            
+            // Check if match is live
+            let matchLive = false;
+            let elapsed = 0;
+            let score = { home: 0, away: 0 };
+            
+            if (bet.fixture_id) {
+                const match = await getMatchDetails(bet.fixture_id);
+                if (match) {
+                    matchLive = match.status === 'live';
+                    elapsed = match.elapsed || 0;
+                    score = { home: match.goals_home || 0, away: match.goals_away || 0 };
+                }
+            }
+            
+            if (!matchLive) {
+                showNotification('❌ Cash Out only available during live matches', 'error');
+                return;
+            }
+            
+            let cashoutPercent = 0.7;
+            if (elapsed < 30) cashoutPercent = 0.85;
+            else if (elapsed < 60) cashoutPercent = 0.75;
+            else cashoutPercent = 0.65;
+            
+            const cashoutValue = bet.amount * bet.odds * cashoutPercent;
+            const fee = (bet.amount * bet.odds) - cashoutValue;
+            
+            if (!confirm(`Cash Out?\n\nStake: $${bet.amount.toFixed(2)} @ ${bet.odds}\nCash Out: $${cashoutValue.toFixed(2)}\nFee: $${fee.toFixed(2)}\nMatch: ${elapsed}' ${score.home}-${score.away}`)) return;
+            
+            try {
+                const { error } = await supabaseClient
+                    .from('bets')
+                    .update({
+                        status: 'cashed-out',
+                        cashout_amount: cashoutValue,
+                        cashout_fee: fee,
+                        cashed_out_at: new Date().toISOString(),
+                        settlement_reason: `Cashed out at ${elapsed}' - Score: ${score.home}-${score.away}`,
+                        updated_at: new Date().toISOString()
+                    })
+                    .eq('id', betId)
+                    .eq('status', 'active');
+                
+                if (error) throw error;
+                
+                settledBets.add(betId);
+                await updateWalletBalance(bet.user_id, cashoutValue);
+                
+                bet.status = 'cashed-out';
+                showNotification(`✅ Cashed Out! Received: $${cashoutValue.toFixed(2)}`, 'success');
+                await loadBalance();
+                updateStats();
+                updateCounts();
+                filterBets(currentFilter);
+                
+            } catch(e) {
+                showNotification(`Error: ${e.message}`, 'error');
+            }
+        }
+        
+        // ===== LOAD BETS =====
+        async function loadBets() {
+            const user = auth.currentUser;
+            if (!user) return;
+            
+            try {
+                const { data, error } = await supabaseClient
+                    .from('bets')
+                    .select('*')
+                    .eq('user_id', user.uid)
+                    .order('placed_at', { ascending: false });
+                
+                if (error) throw error;
+                
+                allBets = data || [];
+                
+                // Enrich with match data
+                const matchCache = {};
+                for (let bet of allBets) {
+                    if (bet.fixture_id) {
+                        if (!matchCache[bet.fixture_id]) {
+                            matchCache[bet.fixture_id] = await getMatchDetails(bet.fixture_id);
+                        }
+                        const match = matchCache[bet.fixture_id];
+                        if (match) {
+                            bet._match = match;
+                            bet.match_name = `${match.home_team?.name || 'Home'} vs ${match.away_team?.name || 'Away'}`;
+                            bet._homeTeam = match.home_team;
+                            bet._awayTeam = match.away_team;
+                            bet._league = match.league_name;
+                            bet._kickoff = match.start_time;
+                            bet._matchStatus = match.status;
+                            bet._elapsed = match.elapsed;
+                            bet._score = { home: match.goals_home || 0, away: match.goals_away || 0 };
+                        }
+                    }
+                    if (!bet.match_name) bet.match_name = `Match #${bet.fixture_id || 'N/A'}`;
+                }
+                
+                updateStats();
+                updateCounts();
+                filterBets(currentFilter);
+                startSettlementTimers();
+                
+                // Auto-settle check
+                await autoSettleBets();
+                
+            } catch(e) {
+                console.error('Load error:', e);
+                document.getElementById('bet-list-container').innerHTML = 
+                    `<div class="empty-state"><i class="fas fa-exclamation-triangle"></i><p>Error loading bets</p><small>${escapeHtml(e.message)}</small></div>`;
+            }
+        }
+        
+        function startSettlementTimers() {
+            settlementTimers.forEach(clearInterval);
+            settlementTimers = [];
+            
+            allBets.filter(b => b.status === 'active').forEach(bet => {
+                const timerEl = document.getElementById(`timer-${bet.id}`);
+                if (!timerEl) return;
+                
+                const updateTimer = () => {
+                    const kickoff = bet._kickoff ? new Date(bet._kickoff) : null;
+                    if (!kickoff) {
+                        timerEl.textContent = 'TBD';
+                        return;
+                    }
+                    
+                    const estimatedEnd = new Date(kickoff.getTime() + 115 * 60000);
+                    const now = new Date();
+                    const diff = estimatedEnd - now;
+                    
+                    if (diff <= 0) {
+                        timerEl.innerHTML = '<span style="color:#4caf50;">Settling...</span>';
+                    } else {
+                        const h = Math.floor(diff / 3600000);
+                        const m = Math.floor((diff % 3600000) / 60000);
+                        timerEl.textContent = h > 0 ? `${h}h ${m}m` : `${m}m`;
+                        if (m < 10 && h === 0) timerEl.classList.add('urgent');
+                    }
+                };
+                
+                updateTimer();
+                settlementTimers.push(setInterval(updateTimer, 60000));
+            });
+        }
+        
+        function formatBetTypeName(betType) {
+            const names = {
+                'home': '🏠 Home Win', 'draw': '🤝 Draw', 'away': '✈️ Away Win',
+                '1X': 'Home or Draw', '12': 'Home or Away', 'X2': 'Draw or Away',
+                'home_dnb': 'Home DNB', 'away_dnb': 'Away DNB',
+                'over25': 'Over 2.5', 'under25': 'Under 2.5',
+                'over15': 'Over 1.5', 'under15': 'Under 1.5',
+                'over35': 'Over 3.5', 'under35': 'Under 3.5',
+                'btts_yes': 'BTTS Yes', 'btts_no': 'BTTS No',
+                'accumulator': 'Accumulator'
+            };
+            return names[betType] || betType.replace(/_/g, ' ').replace(/\b\w/g, l => l.toUpperCase());
+        }
+        
+        function updateStats() {
+            const total = allBets.length;
+            const won = allBets.filter(b => b.status === 'won');
+            const lost = allBets.filter(b => b.status === 'lost');
+            const active = allBets.filter(b => b.status === 'active');
+            
+            let wonAmt = 0, lostAmt = 0, netProfit = 0;
+            
+            won.forEach(b => { wonAmt += parseFloat(b.payout || b.potential_win || 0); netProfit += parseFloat(b.payout || b.potential_win || 0) - parseFloat(b.amount || 0); });
+            lost.forEach(b => { lostAmt += parseFloat(b.amount || 0); netProfit -= parseFloat(b.amount || 0); });
+            allBets.filter(b => b.status === 'cashed-out').forEach(b => { netProfit += parseFloat(b.cashout_amount || 0) - parseFloat(b.amount || 0); });
+            
+            const winRate = (won.length + lost.length) > 0 ? ((won.length / (won.length + lost.length)) * 100).toFixed(1) : 0;
+            
+            document.getElementById('total-bets').textContent = total;
+            document.getElementById('total-won').textContent = won.length;
+            document.getElementById('total-lost').textContent = lost.length;
+            document.getElementById('total-active').textContent = active.length;
+            document.getElementById('won-amount').textContent = `$${wonAmt.toFixed(2)}`;
+            document.getElementById('lost-amount').textContent = `$${lostAmt.toFixed(2)}`;
+            document.getElementById('win-rate-display').textContent = `${winRate}%`;
+            document.getElementById('win-rate-fill').style.width = `${winRate}%`;
+            
+            const plEl = document.getElementById('total-pl');
+            plEl.textContent = (netProfit >= 0 ? '+' : '') + '$' + netProfit.toFixed(2);
+            plEl.style.color = netProfit >= 0 ? '#4caf50' : 'var(--red)';
+        }
+        
+        function updateCounts() {
+            const counts = {
+                all: allBets.length,
+                active: allBets.filter(b => b.status === 'active').length,
+                won: allBets.filter(b => b.status === 'won').length,
+                lost: allBets.filter(b => b.status === 'lost').length,
+                cancelled: allBets.filter(b => b.status === 'cancelled').length,
+                'cashed-out': allBets.filter(b => b.status === 'cashed-out').length
+            };
+            
+            for (const [key, val] of Object.entries(counts)) {
+                const el = document.getElementById(`cnt-${key}`);
+                if (el) el.textContent = val;
+            }
+        }
+        
+        function filterBets(filter) {
+            currentFilter = filter;
+            let filtered = allBets;
+            
+            if (filter !== 'all') {
+                filtered = allBets.filter(b => b.status === filter);
+            }
+            
+            const container = document.getElementById('bet-list-container');
+            
+            if (!filtered.length) {
+                container.innerHTML = `
+                    <div class="empty-state">
+                        <i class="fas fa-ticket-alt"></i>
+                        <p>No ${filter === 'all' ? '' : filter} bets found</p>
+                        <small>Place bets from live or upcoming matches</small>
+                    </div>`;
+                return;
+            }
+            
+            container.innerHTML = filtered.map(b => createBetCard(b)).join('');
+            startSettlementTimers();
+        }
+        
+        function createBetCard(bet) {
+            const isAcc = bet.bet_type === 'accumulator';
+            const amount = parseFloat(bet.amount || 0);
+            const odds = parseFloat(bet.odds || 2);
+            const payout = parseFloat(bet.payout || bet.potential_win || 0);
+            const profit = bet.status === 'won' ? payout - amount : (bet.status === 'lost' ? -amount : 
+                           bet.status === 'cashed-out' ? (parseFloat(bet.cashout_amount || 0) - amount) : 0);
+            const ticket = 'XL' + (bet.id?.toString().slice(-8) || '00000000').toUpperCase();
+            const placed = bet.placed_at ? new Date(bet.placed_at) : new Date();
+            
+            const isActive = bet.status === 'active';
+            const matchStarted = bet._matchStatus === 'live' || bet._matchStatus === 'finished' || 
+                                (bet._kickoff && new Date(bet._kickoff) < new Date());
+            const canCancel = isActive && !matchStarted && !settledBets.has(bet.id);
+            const canCashout = isActive && bet._matchStatus === 'live' && !settledBets.has(bet.id);
+            
+            const homeTeam = bet._homeTeam || { name: 'Home', logo: '' };
+            const awayTeam = bet._awayTeam || { name: 'Away', logo: '' };
+            const homeLogo = homeTeam.logo || `https://ui-avatars.com/api/?name=${encodeURIComponent(homeTeam.name?.substring(0,2) || 'H')}&size=32&background=1a2332&color=00ff9d`;
+            const awayLogo = awayTeam.logo || `https://ui-avatars.com/api/?name=${encodeURIComponent(awayTeam.name?.substring(0,2) || 'A')}&size=32&background=1a2332&color=ff9800`;
+            
+            let selectionsHtml = '';
+            if (isAcc && bet.selections?.length > 0) {
+                selectionsHtml = `
+                    <div class="selections-container">
+                        <div style="font-size:10px;color:var(--text2);margin-bottom:5px;">📋 ${bet.selections.length} Selections</div>
+                        ${bet.selections.map(s => `
+                            <div class="selection-item">
+                                <span class="selection-match">${escapeHtml(s.matchName)}</span>
+                                <span class="selection-pick">${escapeHtml(s.betTypeName)}</span>
+                                <span class="selection-odds">@${s.odds}</span>
+                            </div>
+                        `).join('')}
+                    </div>`;
+            }
+            
+            const scoreDisplay = bet._score ? 
+                `<span class="bet-score-display">${bet._score.home} - ${bet._score.away}</span>` : '';
+            
+            return `
+                <div class="bet-card ${bet.status}" onclick="showDetails('${bet.id}')">
+                    <div class="bet-top">
+                        <div>
+                            <span class="bet-type-tag ${isAcc ? 'accumulator' : 'single'}">${isAcc ? 'ACCUMULATOR' : 'SINGLE'}</span>
+                            <span class="bet-ticket-num">#${ticket}</span>
+                        </div>
+                        <span class="bet-status-badge ${bet.status}">
+                            ${bet.status === 'won' ? '🏆 WON' : 
+                              bet.status === 'lost' ? '❌ LOST' : 
+                              bet.status === 'cancelled' ? '⛔ CANCELLED' : 
+                              bet.status === 'cashed-out' ? '💰 CASHED OUT' : 
+                              '⏳ ACTIVE'}
+                        </span>
                     </div>
-                    <div style="overflow-y:auto;flex:1;background:var(--bg-primary);border-radius:12px;padding:16px;">
-                        <pre style="color:var(--text-secondary);font-family:'Courier New',monospace;font-size:12px;white-space:pre-wrap;word-wrap:break-word;">${sql}</pre>
+                    <div class="bet-body">
+                        <div class="bet-match-row">
+                            <img class="team-logo-small" src="${homeLogo}" onerror="this.style.display='none'" alt="">
+                            <div class="bet-match-name">
+                                ${escapeHtml(homeTeam.name || 'Home')} 
+                                <span style="color:var(--text2);">vs</span> 
+                                ${escapeHtml(awayTeam.name || 'Away')}
+                                ${scoreDisplay}
+                            </div>
+                            <img class="team-logo-small" src="${awayLogo}" onerror="this.style.display='none'" alt="">
+                        </div>
+                        <div class="bet-league">${escapeHtml(bet._league || '')} ${bet._elapsed ? `| ${bet._elapsed}'` : ''}</div>
+                        <div class="bet-pick">
+                            ${escapeHtml(formatBetTypeName(bet.bet_type))} 
+                            <span class="bet-odds">@${odds.toFixed(2)}</span>
+                        </div>
                     </div>
-                    <div style="margin-top:12px;display:flex;gap:8px;">
-                        <button onclick="navigator.clipboard.writeText(this.parentElement.previousElementSibling.textContent);showAlert('✅ Copied!','success')" 
-                            style="padding:8px 16px;background:var(--accent);color:white;border:none;border-radius:8px;cursor:pointer;font-weight:600;">
-                            <i class="fas fa-copy"></i> Copy
-                        </button>
-                        <button onclick="downloadSQL()" 
-                            style="padding:8px 16px;background:var(--success);color:white;border:none;border-radius:8px;cursor:pointer;font-weight:600;">
-                            <i class="fas fa-download"></i> Download
-                        </button>
+                    ${selectionsHtml}
+                    <div class="bet-details-grid">
+                        <div class="bet-detail"><div class="lbl">Stake</div><div class="val">$${amount.toFixed(2)}</div></div>
+                        <div class="bet-detail"><div class="lbl">${isActive ? 'Potential' : 'Payout'}</div><div class="val" style="color:${bet.status === 'won' ? '#4caf50' : bet.status === 'lost' ? 'var(--red)' : '#fff'}">$${payout.toFixed(2)}</div></div>
+                        <div class="bet-detail"><div class="lbl">P/L</div><div class="val" style="color:${profit >= 0 ? '#4caf50' : 'var(--red)'}">${profit >= 0 ? '+' : ''}$${Math.abs(profit).toFixed(2)}</div></div>
+                        ${isActive ? `<div class="bet-detail"><div class="lbl">Est. Settlement</div><div class="val"><span class="settlement-timer" id="timer-${bet.id}">Calculating...</span></div></div>` : ''}
                     </div>
+                    ${bet.settlement_reason ? `<div class="bet-result-row ${bet.status}"><i class="fas fa-gavel"></i> ${escapeHtml(bet.settlement_reason)}</div>` : ''}
+                    <div class="bet-timestamps">
+                        <span><i class="far fa-calendar-alt"></i> ${placed.toLocaleString()}</span>
+                        ${bet.settled_at ? `<span><i class="fas fa-check-double"></i> Settled: ${new Date(bet.settled_at).toLocaleString()}</span>` : ''}
+                    </div>
+                    ${isActive ? `
+                        <div class="bet-actions">
+                            ${canCancel ? `<button class="cancel-btn" onclick="event.stopPropagation();cancelBet('${bet.id}')"><i class="fas fa-ban"></i> Cancel</button>` : 
+                              (isActive && matchStarted ? `<span style="font-size:10px;color:var(--text2);">Cannot cancel - match started</span>` : '')}
+                            ${canCashout ? `<button class="cashout-btn" onclick="event.stopPropagation();cashoutBet('${bet.id}')"><i class="fas fa-money-bill-wave"></i> Cash Out</button>` : 
+                              (isActive && !matchStarted ? `<span style="font-size:10px;color:var(--text2);">Cash out available when live</span>` : '')}
+                        </div>
+                    ` : ''}
                 </div>
             `;
-            document.body.appendChild(modal);
-
-            window._sqlContent = sql;
         }
-
-        function downloadSQL() {
-            if (window._sqlContent) {
-                const blob = new Blob([window._sqlContent], { type: 'text/plain' });
-                const url = URL.createObjectURL(blob);
-                const a = document.createElement('a');
-                a.href = url;
-                a.download = `schema-${new Date().toISOString().slice(0,10)}.sql`;
-                a.click();
-                URL.revokeObjectURL(url);
-                showAlert('📥 SQL downloaded!', 'success');
+        
+        function showDetails(betId) {
+            const bet = allBets.find(b => b.id === betId);
+            if (!bet) return;
+            
+            const modal = document.getElementById('bet-modal');
+            const body = document.getElementById('modal-body');
+            const amount = parseFloat(bet.amount || 0);
+            const payout = parseFloat(bet.payout || bet.potential_win || 0);
+            const profit = bet.status === 'won' ? payout - amount : (bet.status === 'lost' ? -amount : 
+                           bet.status === 'cashed-out' ? (parseFloat(bet.cashout_amount || 0) - amount) : 0);
+            const ticket = 'XL' + (bet.id?.toString().slice(-8) || '00000000').toUpperCase();
+            const placed = bet.placed_at ? new Date(bet.placed_at) : new Date();
+            
+            const homeTeam = bet._homeTeam || { name: 'Home', logo: '' };
+            const awayTeam = bet._awayTeam || { name: 'Away', logo: '' };
+            
+            let selectionsHtml = '';
+            if (bet.bet_type === 'accumulator' && bet.selections?.length > 0) {
+                selectionsHtml = `
+                    <div class="modal-section">
+                        <h4><i class="fas fa-layer-group"></i> Accumulator Selections (${bet.selections.length})</h4>
+                        ${bet.selections.map((s, i) => `
+                            <div class="modal-row">
+                                <span class="lbl">#${i+1}</span>
+                                <span>${escapeHtml(s.matchName)} - ${escapeHtml(s.betTypeName)} @ ${s.odds}</span>
+                            </div>
+                        `).join('')}
+                    </div>`;
+            }
+            
+            body.innerHTML = `
+                <div class="modal-section">
+                    <h4><i class="fas fa-ticket-alt"></i> Ticket #${ticket}</h4>
+                    <div class="modal-row"><span class="lbl">Type</span><span>${bet.bet_type === 'accumulator' ? 'Accumulator' : 'Single'}</span></div>
+                    <div class="modal-row"><span class="lbl">Status</span><span>${bet.status?.toUpperCase()}</span></div>
+                    <div class="modal-row"><span class="lbl">Match</span><span>${escapeHtml(homeTeam.name)} vs ${escapeHtml(awayTeam.name)}</span></div>
+                    <div class="modal-row"><span class="lbl">League</span><span>${escapeHtml(bet._league || 'N/A')}</span></div>
+                </div>
+                
+                <div class="modal-section">
+                    <h4><i class="fas fa-info-circle"></i> Bet Details</h4>
+                    <div class="modal-row"><span class="lbl">Pick</span><span>${escapeHtml(formatBetTypeName(bet.bet_type))}</span></div>
+                    <div class="modal-row"><span class="lbl">Odds</span><span>${parseFloat(bet.odds || 2).toFixed(2)}</span></div>
+                    <div class="modal-row"><span class="lbl">Placed</span><span>${placed.toLocaleString()}</span></div>
+                    ${bet.settled_at ? `<div class="modal-row"><span class="lbl">Settled</span><span>${new Date(bet.settled_at).toLocaleString()}</span></div>` : ''}
+                </div>
+                
+                ${selectionsHtml}
+                
+                <div class="modal-section">
+                    <h4><i class="fas fa-chart-line"></i> Financial Summary</h4>
+                    <div class="modal-row"><span class="lbl">Stake</span><span>$${amount.toFixed(2)}</span></div>
+                    <div class="modal-row"><span class="lbl">Potential Win</span><span>$${parseFloat(bet.potential_win || 0).toFixed(2)}</span></div>
+                    <div class="modal-row"><span class="lbl">Actual Payout</span><span>$${payout.toFixed(2)}</span></div>
+                    <div class="modal-row"><span class="lbl">Profit/Loss</span><span style="color:${profit >= 0 ? '#4caf50' : 'var(--red)'}">${profit >= 0 ? '+' : ''}$${profit.toFixed(2)}</span></div>
+                    ${bet.cancellation_fee ? `<div class="modal-row"><span class="lbl">Cancel Fee</span><span>$${bet.cancellation_fee.toFixed(2)}</span></div>` : ''}
+                    ${bet.refund_amount ? `<div class="modal-row"><span class="lbl">Refund</span><span>$${bet.refund_amount.toFixed(2)}</span></div>` : ''}
+                    ${bet.cashout_amount ? `<div class="modal-row"><span class="lbl">Cash Out</span><span>$${bet.cashout_amount.toFixed(2)}</span></div>` : ''}
+                </div>
+                
+                ${bet.settlement_reason ? `
+                <div class="modal-section">
+                    <h4><i class="fas fa-gavel"></i> Settlement</h4>
+                    <div class="modal-row"><span class="lbl">Reason</span><span>${escapeHtml(bet.settlement_reason)}</span></div>
+                </div>` : ''}
+                
+                <div class="modal-section">
+                    <h4><i class="fas fa-headset"></i> Support</h4>
+                    <div class="modal-row"><span class="lbl">Ticket</span><span><strong>${ticket}</strong></span></div>
+                    <div class="modal-row"><span class="lbl">Email</span><span>support@xlodon.co.uk</span></div>
+                </div>
+            `;
+            
+            modal.classList.add('show');
+        }
+        
+        function closeModal(event) {
+            if (!event || event.target === document.getElementById('bet-modal')) {
+                document.getElementById('bet-modal').classList.remove('show');
             }
         }
-
-        // ============================================================
-        // START
-        // ============================================================
-        init();
+        
+        function exportBetsToCSV() {
+            if (!allBets.length) { alert('No bets to export'); return; }
+            
+            const headers = ['Ticket','Date','Type','Match','Pick','Odds','Stake','Payout','P/L','Status','Settlement'];
+            const rows = allBets.map(b => {
+                const amount = parseFloat(b.amount || 0);
+                const payout = parseFloat(b.payout || b.potential_win || 0);
+                const profit = b.status === 'won' ? payout - amount : (b.status === 'lost' ? -amount : 0);
+                return [
+                    'XL' + (b.id?.toString().slice(-8) || '00000000').toUpperCase(),
+                    new Date(b.placed_at).toLocaleDateString(),
+                    b.bet_type === 'accumulator' ? 'Acca' : 'Single',
+                    b.match_name || '',
+                    formatBetTypeName(b.bet_type),
+                    parseFloat(b.odds || 2).toFixed(2),
+                    amount.toFixed(2),
+                    payout.toFixed(2),
+                    (profit >= 0 ? '+' : '') + profit.toFixed(2),
+                    b.status,
+                    b.settlement_reason || ''
+                ];
+            });
+            
+            const csv = headers.join(',') + '\n' + rows.map(r => r.map(c => `"${c}"`).join(',')).join('\n');
+            const blob = new Blob([csv], { type: 'text/csv' });
+            const a = document.createElement('a');
+            a.href = URL.createObjectURL(blob);
+            a.download = `xlodon-bets-${new Date().toISOString().split('T')[0]}.csv`;
+            a.click();
+        }
+        
+        // ===== INITIALIZATION =====
+        auth.onAuthStateChanged(async (user) => {
+            if (!user) {
+                window.location.href = '../login.html';
+                return;
+            }
+            
+            await loadBalance();
+            await loadBets();
+            
+            // Auto-refresh every 30s
+            refreshInterval = setInterval(async () => {
+                await loadBets();
+                await loadBalance();
+            }, 30000);
+            
+            // Auto-settle check every 60s
+            settleInterval = setInterval(async () => {
+                await autoSettleBets();
+                await loadBalance();
+            }, 60000);
+        });
+        
+        // Filter chips
+        document.querySelectorAll('.filter-chip').forEach(chip => {
+            chip.addEventListener('click', function() {
+                document.querySelectorAll('.filter-chip').forEach(c => c.classList.remove('active'));
+                this.classList.add('active');
+                filterBets(this.dataset.filter);
+            });
+        });
+        
+        // Keyboard shortcut to close modal
+        document.addEventListener('keydown', (e) => {
+            if (e.key === 'Escape') closeModal();
+        });
+        
+        window.addEventListener('beforeunload', () => {
+            if (refreshInterval) clearInterval(refreshInterval);
+            if (settleInterval) clearInterval(settleInterval);
+            settlementTimers.forEach(clearInterval);
+        });
+        
+        // Expose functions
+        window.toggleLanguage = toggleLanguage;
+        window.closeModal = closeModal;
+        window.cancelBet = cancelBet;
+        window.cashoutBet = cashoutBet;
+        window.showDetails = showDetails;
+        window.exportBetsToCSV = exportBetsToCSV;
+        
+        console.log('✅ My Bets v6.0 - AUTO-SETTLE SYSTEM READY');
+        console.log('   - Automatic win/loss determination');
+        console.log('   - Cancel: BEFORE match start only');
+        console.log('   - Cash Out: DURING live match only');
+        console.log('   - Team names & logos from API');
+        console.log('   - Auto-refresh every 30s');
+        console.log('   - Auto-settle check every 60s');
     </script>
 </body>
 </html>

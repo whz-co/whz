@@ -3,430 +3,834 @@
 <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>AIboard - Supabase Data Viewer</title>
+    <title>Zakhourani AI - Dashboard</title>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" />
     <link href="https://fonts.googleapis.com/css2?family=Inter:opsz,wght@14..32,400;14..32,500;14..32,600;14..32,700;14..32,800&display=swap" rel="stylesheet" />
     <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
     <style>
-        * { margin:0; padding:0; box-sizing:border-box; font-family:'Inter',sans-serif; }
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Inter', sans-serif;
+        }
+        
         :root {
-            --bg-primary:#0a0e1a; --bg-secondary:#111827; --bg-card:rgba(17,24,39,0.95);
-            --text-primary:#f1f5f9; --text-secondary:#94a3b8; --accent:#3b82f6;
-            --accent-light:#60a5fa; --success:#22c55e; --warning:#eab308; --danger:#ef4444;
-            --border:rgba(255,255,255,0.06);
-            --gradient-main:linear-gradient(135deg,#3b82f6,#8b5cf6,#06b6d4);
+            --bg-primary: #0a0e1a;
+            --bg-secondary: #111827;
+            --bg-card: rgba(17, 24, 39, 0.95);
+            --text-primary: #f1f5f9;
+            --text-secondary: #94a3b8;
+            --accent: #3b82f6;
+            --accent-light: #60a5fa;
+            --success: #22c55e;
+            --warning: #eab308;
+            --danger: #ef4444;
+            --border: rgba(255, 255, 255, 0.06);
+            --gradient-main: linear-gradient(135deg, #3b82f6, #8b5cf6, #06b6d4);
+            --gradient-critical: linear-gradient(135deg, #dc2626, #ef4444);
         }
-        body { background:var(--bg-primary); color:var(--text-primary); min-height:100vh; padding:16px; }
-        .container { max-width:1600px; margin:0 auto; }
-
-        .loading-screen {
-            position:fixed; top:0; left:0; right:0; bottom:0;
-            background:var(--bg-primary); display:flex; align-items:center; justify-content:center;
-            z-index:9999; flex-direction:column; gap:20px;
+        
+        body {
+            background: var(--bg-primary);
+            color: var(--text-primary);
+            min-height: 100vh;
+            padding: 20px;
         }
-        .loading-screen.hidden { display:none; }
-        .loader { width:50px; height:50px; border:3px solid var(--border); border-top-color:var(--accent); border-radius:50%; animation:spin 1s linear infinite; }
-        @keyframes spin { to { transform:rotate(360deg); } }
-        .loading-text { color:var(--text-secondary); font-size:14px; }
-        .loading-progress { width:400px; max-width:80%; height:4px; background:var(--border); border-radius:2px; overflow:hidden; }
-        .loading-progress-bar { height:100%; background:var(--gradient-main); width:0%; transition:width 0.5s; }
-
+        
+        .container {
+            max-width: 1400px;
+            margin: 0 auto;
+        }
+        
+        /* Loading Screen */
+        .loader-overlay {
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: var(--bg-primary);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            z-index: 9999;
+            flex-direction: column;
+            gap: 20px;
+        }
+        
+        .loader-overlay.hidden {
+            display: none;
+        }
+        
+        .spinner {
+            width: 50px;
+            height: 50px;
+            border: 3px solid var(--border);
+            border-top: 3px solid var(--accent);
+            border-radius: 50%;
+            animation: spin 0.8s linear infinite;
+        }
+        
+        @keyframes spin {
+            to {
+                transform: rotate(360deg);
+            }
+        }
+        
+        .loader-text {
+            color: var(--text-secondary);
+            font-size: 14px;
+        }
+        
+        .loader-bar {
+            width: 300px;
+            height: 3px;
+            background: var(--border);
+            border-radius: 2px;
+            overflow: hidden;
+        }
+        
+        .loader-bar-fill {
+            height: 100%;
+            background: var(--gradient-main);
+            width: 0%;
+            transition: width 0.3s;
+        }
+        
+        /* Header */
         .header {
-            display:flex; justify-content:space-between; align-items:center; padding:16px 0 28px; flex-wrap:wrap; gap:16px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 20px 0 30px;
+            flex-wrap: wrap;
+            gap: 15px;
         }
-        .header-left { display:flex; align-items:center; gap:16px; }
+        
+        .header-left {
+            display: flex;
+            align-items: center;
+            gap: 15px;
+        }
+        
         .logo {
-            width:52px; height:52px; background:var(--gradient-main); border-radius:16px;
-            display:flex; align-items:center; justify-content:center; font-size:24px; color:white;
-            box-shadow:0 8px 30px rgba(59,130,246,0.3);
+            width: 48px;
+            height: 48px;
+            background: var(--gradient-main);
+            border-radius: 14px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 22px;
+            color: white;
+            box-shadow: 0 8px 30px rgba(59, 130, 246, 0.3);
         }
-        .header h1 { font-size:28px; font-weight:800; background:var(--gradient-main); -webkit-background-clip:text; -webkit-text-fill-color:transparent; }
-        .header-subtitle { color:var(--text-secondary); font-size:13px; display:flex; align-items:center; gap:12px; flex-wrap:wrap; }
-        .status-badge {
-            padding:3px 12px; border-radius:20px; font-size:11px; font-weight:600;
-            background:rgba(34,197,94,0.15); color:var(--success);
+        
+        .header h1 {
+            font-size: 24px;
+            font-weight: 800;
+            background: var(--gradient-main);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
         }
-        .status-badge.error { background:rgba(239,68,68,0.15); color:var(--danger); }
-
+        
+        .header-subtitle {
+            color: var(--text-secondary);
+            font-size: 13px;
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            flex-wrap: wrap;
+        }
+        
+        .badge {
+            padding: 4px 14px;
+            border-radius: 20px;
+            font-size: 11px;
+            font-weight: 600;
+            display: inline-block;
+        }
+        
+        .badge-success {
+            background: rgba(34, 197, 94, 0.15);
+            color: var(--success);
+        }
+        
+        .badge-danger {
+            background: rgba(239, 68, 68, 0.15);
+            color: var(--danger);
+        }
+        
+        .badge-warning {
+            background: rgba(234, 179, 8, 0.15);
+            color: var(--warning);
+        }
+        
+        .badge-info {
+            background: rgba(59, 130, 246, 0.15);
+            color: var(--accent-light);
+        }
+        
         .btn {
-            padding:10px 20px; border:none; border-radius:12px; font-weight:600; cursor:pointer;
-            transition:all 0.3s; display:inline-flex; align-items:center; gap:8px; font-size:13px;
+            padding: 9px 18px;
+            border: none;
+            border-radius: 10px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s;
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+            font-size: 13px;
         }
-        .btn-primary { background:var(--gradient-main); color:white; }
-        .btn-primary:hover { transform:translateY(-2px); box-shadow:0 8px 25px rgba(59,130,246,0.3); }
-        .btn-secondary { background:var(--bg-secondary); color:var(--text-primary); border:1px solid var(--border); }
-        .btn-secondary:hover { background:rgba(30,41,59,0.6); }
-        .btn-success { background:linear-gradient(135deg,#22c55e,#06b6d4); color:white; }
-        .btn-danger { background:linear-gradient(135deg,#dc2626,#ef4444); color:white; }
-
+        
+        .btn-primary {
+            background: var(--gradient-main);
+            color: white;
+        }
+        
+        .btn-primary:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 8px 25px rgba(59, 130, 246, 0.3);
+        }
+        
+        .btn-secondary {
+            background: var(--bg-secondary);
+            color: var(--text-primary);
+            border: 1px solid var(--border);
+        }
+        
+        .btn-secondary:hover {
+            background: rgba(30, 41, 59, 0.6);
+        }
+        
+        .btn-success {
+            background: linear-gradient(135deg, #22c55e, #06b6d4);
+            color: white;
+        }
+        
+        .btn-success:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 8px 25px rgba(34, 197, 94, 0.3);
+        }
+        
+        /* Stats */
         .stats-grid {
-            display:grid; grid-template-columns:repeat(auto-fit,minmax(200px,1fr)); gap:16px; margin-bottom:24px;
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
+            gap: 16px;
+            margin-bottom: 24px;
         }
+        
         .stat-card {
-            background:var(--bg-card); border:1px solid var(--border); border-radius:20px; padding:20px 24px;
-            backdrop-filter:blur(12px); transition:all 0.3s; position:relative; overflow:hidden;
+            background: var(--bg-card);
+            border: 1px solid var(--border);
+            border-radius: 16px;
+            padding: 18px 22px;
+            backdrop-filter: blur(12px);
+            transition: all 0.3s;
+            position: relative;
+            overflow: hidden;
         }
-        .stat-card::before { content:''; position:absolute; top:0; left:0; right:0; height:3px; background:var(--gradient-main); opacity:0.5; }
-        .stat-card .label { color:var(--text-secondary); font-size:11px; font-weight:600; text-transform:uppercase; letter-spacing:0.5px; }
-        .stat-card .value { font-size:30px; font-weight:800; margin:6px 0 2px; }
-        .stat-card .icon-bg { position:absolute; right:16px; top:16px; font-size:32px; opacity:0.08; }
-
-        .table-list {
-            display:grid; grid-template-columns:repeat(auto-fill,minmax(300px,1fr)); gap:16px; margin-bottom:24px;
+        
+        .stat-card::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            height: 3px;
+            background: var(--gradient-main);
+            opacity: 0.5;
         }
+        
+        .stat-card.danger::before {
+            background: var(--gradient-critical);
+            opacity: 1;
+            animation: pulse 1.5s ease-in-out infinite;
+        }
+        
+        @keyframes pulse {
+            0%,
+            100% {
+                opacity: 1;
+            }
+            50% {
+                opacity: 0.5;
+            }
+        }
+        
+        .stat-card .label {
+            color: var(--text-secondary);
+            font-size: 11px;
+            font-weight: 600;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+        }
+        
+        .stat-card .value {
+            font-size: 28px;
+            font-weight: 800;
+            margin: 4px 0 2px;
+        }
+        
+        .stat-card .value.danger {
+            color: var(--danger);
+        }
+        
+        .stat-card .sub {
+            font-size: 12px;
+            color: var(--text-secondary);
+        }
+        
+        .stat-card .icon {
+            position: absolute;
+            right: 16px;
+            top: 16px;
+            font-size: 28px;
+            opacity: 0.08;
+        }
+        
+        /* Table List */
+        .section-title {
+            font-size: 16px;
+            font-weight: 700;
+            margin-bottom: 14px;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+        
+        .table-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+            gap: 14px;
+            margin-bottom: 24px;
+        }
+        
         .table-card {
-            background:var(--bg-card); border:1px solid var(--border); border-radius:20px;
-            padding:20px 24px; backdrop-filter:blur(12px); transition:all 0.3s; cursor:pointer;
+            background: var(--bg-card);
+            border: 1px solid var(--border);
+            border-radius: 16px;
+            padding: 18px 22px;
+            backdrop-filter: blur(12px);
+            transition: all 0.3s;
+            cursor: pointer;
         }
-        .table-card:hover { transform:translateY(-4px); border-color:var(--accent); }
-        .table-card .table-name { font-size:18px; font-weight:700; display:flex; align-items:center; gap:12px; }
-        .table-card .table-name i { color:var(--accent); }
-        .table-card .table-count { color:var(--text-secondary); font-size:13px; margin-top:4px; }
-        .table-card .table-status { font-size:12px; margin-top:8px; }
-        .table-card .table-status .badge { padding:2px 12px; border-radius:12px; font-size:11px; font-weight:600; }
-        .badge-success { background:rgba(34,197,94,0.15); color:var(--success); }
-        .badge-warning { background:rgba(234,179,8,0.15); color:var(--warning); }
-        .badge-danger { background:rgba(239,68,68,0.15); color:var(--danger); }
-
-        .data-viewer {
-            background:var(--bg-card); border:1px solid var(--border); border-radius:20px;
-            padding:24px; backdrop-filter:blur(12px); margin-bottom:24px;
+        
+        .table-card:hover {
+            transform: translateY(-4px);
+            border-color: var(--accent);
+            box-shadow: 0 8px 30px rgba(59, 130, 246, 0.1);
         }
-        .data-viewer .viewer-header {
-            display:flex; justify-content:space-between; align-items:center; margin-bottom:16px; flex-wrap:wrap; gap:12px;
+        
+        .table-card .name {
+            font-size: 17px;
+            font-weight: 700;
+            display: flex;
+            align-items: center;
+            gap: 10px;
         }
-        .data-viewer .viewer-header h3 { font-size:17px; font-weight:700; }
-        .data-viewer .viewer-controls { display:flex; gap:10px; flex-wrap:wrap; align-items:center; }
-        .data-viewer .viewer-controls select,
-        .data-viewer .viewer-controls input {
-            background:var(--bg-primary); border:1px solid var(--border); border-radius:10px;
-            padding:8px 14px; color:var(--text-primary); font-size:13px; outline:none;
+        
+        .table-card .name i {
+            color: var(--accent);
         }
-        .data-viewer .viewer-controls select:focus,
-        .data-viewer .viewer-controls input:focus { border-color:var(--accent); }
-        .table-wrapper { overflow-x:auto; max-height:500px; overflow-y:auto; }
-        table { width:100%; border-collapse:collapse; font-size:13px; }
-        th {
-            text-align:left; padding:12px; color:var(--text-secondary); font-weight:600;
-            font-size:11px; text-transform:uppercase; letter-spacing:0.5px;
-            position:sticky; top:0; background:var(--bg-card); z-index:10;
-            border-bottom:2px solid var(--border);
+        
+        .table-card .info {
+            color: var(--text-secondary);
+            font-size: 13px;
+            margin-top: 6px;
         }
-        td { padding:12px; border-bottom:1px solid var(--border); max-width:200px; overflow:hidden; text-overflow:ellipsis; white-space:nowrap; }
-        tr:hover td { background:rgba(255,255,255,0.02); }
-        .cell-null { color:var(--text-secondary); font-style:italic; }
-        .cell-boolean { display:inline-block; padding:2px 10px; border-radius:12px; font-size:11px; font-weight:600; }
-        .cell-boolean.true { background:rgba(34,197,94,0.15); color:var(--success); }
-        .cell-boolean.false { background:rgba(239,68,68,0.15); color:var(--danger); }
-
-        .schema-viewer {
-            background:var(--bg-card); border:1px solid var(--border); border-radius:20px;
-            padding:24px; backdrop-filter:blur(12px);
+        
+        .table-card .info span {
+            margin-right: 16px;
         }
-        .schema-viewer .schema-header { display:flex; justify-content:space-between; align-items:center; margin-bottom:16px; flex-wrap:wrap; gap:12px; }
-        .schema-viewer h3 { font-size:17px; font-weight:700; }
-        .schema-grid { display:grid; gap:12px; }
+        
+        .table-card .status {
+            margin-top: 10px;
+            font-size: 12px;
+        }
+        
+        /* Data Viewer */
+        .viewer {
+            background: var(--bg-card);
+            border: 1px solid var(--border);
+            border-radius: 16px;
+            padding: 22px;
+            backdrop-filter: blur(12px);
+            margin-bottom: 24px;
+        }
+        
+        .viewer-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            flex-wrap: wrap;
+            gap: 12px;
+            margin-bottom: 16px;
+        }
+        
+        .viewer-header h3 {
+            font-size: 16px;
+            font-weight: 700;
+        }
+        
+        .viewer-controls {
+            display: flex;
+            gap: 10px;
+            flex-wrap: wrap;
+            align-items: center;
+        }
+        
+        .viewer-controls select,
+        .viewer-controls input {
+            background: var(--bg-primary);
+            border: 1px solid var(--border);
+            border-radius: 8px;
+            padding: 7px 14px;
+            color: var(--text-primary);
+            font-size: 13px;
+            outline: none;
+        }
+        
+        .viewer-controls select:focus,
+        .viewer-controls input:focus {
+            border-color: var(--accent);
+        }
+        
+        .table-wrap {
+            overflow-x: auto;
+            max-height: 480px;
+            overflow-y: auto;
+        }
+        
+        .table-wrap table {
+            width: 100%;
+            border-collapse: collapse;
+            font-size: 13px;
+        }
+        
+        .table-wrap th {
+            text-align: left;
+            padding: 10px 12px;
+            color: var(--text-secondary);
+            font-weight: 600;
+            font-size: 11px;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+            position: sticky;
+            top: 0;
+            background: var(--bg-card);
+            z-index: 10;
+            border-bottom: 2px solid var(--border);
+        }
+        
+        .table-wrap td {
+            padding: 10px 12px;
+            border-bottom: 1px solid var(--border);
+            max-width: 200px;
+            overflow: hidden;
+            text-overflow: ellipsis;
+            white-space: nowrap;
+        }
+        
+        .table-wrap tr:hover td {
+            background: rgba(255, 255, 255, 0.02);
+        }
+        
+        .null {
+            color: var(--text-secondary);
+            font-style: italic;
+        }
+        
+        .bool {
+            display: inline-block;
+            padding: 2px 10px;
+            border-radius: 12px;
+            font-size: 11px;
+            font-weight: 600;
+        }
+        
+        .bool.true {
+            background: rgba(34, 197, 94, 0.15);
+            color: var(--success);
+        }
+        
+        .bool.false {
+            background: rgba(239, 68, 68, 0.15);
+            color: var(--danger);
+        }
+        
+        .empty-state {
+            text-align: center;
+            padding: 40px;
+            color: var(--text-secondary);
+        }
+        
+        .empty-state i {
+            font-size: 32px;
+            display: block;
+            margin-bottom: 12px;
+        }
+        
+        .record-count {
+            margin-top: 12px;
+            font-size: 12px;
+            color: var(--text-secondary);
+        }
+        
+        /* Schema Viewer */
+        .schema-section {
+            background: var(--bg-card);
+            border: 1px solid var(--border);
+            border-radius: 16px;
+            padding: 22px;
+            backdrop-filter: blur(12px);
+        }
+        
+        .schema-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            flex-wrap: wrap;
+            gap: 12px;
+            margin-bottom: 16px;
+        }
+        
+        .schema-header h3 {
+            font-size: 16px;
+            font-weight: 700;
+        }
+        
+        .schema-grid {
+            display: grid;
+            gap: 10px;
+        }
+        
         .schema-item {
-            background:var(--bg-primary); border:1px solid var(--border); border-radius:12px; padding:12px 16px;
-            display:grid; grid-template-columns:auto 1fr auto; gap:12px; align-items:center;
+            background: var(--bg-primary);
+            border: 1px solid var(--border);
+            border-radius: 10px;
+            padding: 10px 16px;
+            display: grid;
+            grid-template-columns: auto 1fr auto;
+            gap: 12px;
+            align-items: center;
         }
-        .schema-item .col-name { font-weight:600; color:var(--accent-light); }
-        .schema-item .col-type { color:var(--text-secondary); font-size:12px; }
-        .col-pk { color:var(--warning); font-size:10px; font-weight:600; }
-        .col-fk { color:var(--accent); font-size:10px; font-weight:600; }
-
+        
+        .schema-item .col {
+            font-weight: 600;
+            color: var(--accent-light);
+        }
+        
+        .schema-item .type {
+            color: var(--text-secondary);
+            font-size: 12px;
+        }
+        
+        .schema-item .tag {
+            font-size: 10px;
+            font-weight: 600;
+        }
+        
+        .tag-pk {
+            color: var(--warning);
+        }
+        
+        .tag-fk {
+            color: var(--accent);
+        }
+        
         .alert {
-            padding:14px 20px; border-radius:12px; margin-bottom:16px; display:none;
+            padding: 12px 18px;
+            border-radius: 10px;
+            margin-bottom: 16px;
+            display: none;
         }
-        .alert-success { background:rgba(34,197,94,0.1); border:1px solid rgba(34,197,94,0.2); color:#86efac; }
-        .alert-error { background:rgba(239,68,68,0.1); border:1px solid rgba(239,68,68,0.2); color:#fca5a5; }
-        .alert-info { background:rgba(59,130,246,0.1); border:1px solid rgba(59,130,246,0.2); color:#60a5fa; }
-
-        .hidden { display:none !important; }
-
-        @media (max-width:768px) {
-            .stats-grid { grid-template-columns:repeat(2,1fr); }
-            .table-list { grid-template-columns:1fr; }
-            .schema-item { grid-template-columns:1fr; gap:4px; }
+        
+        .alert-success {
+            background: rgba(34, 197, 94, 0.1);
+            border: 1px solid rgba(34, 197, 94, 0.2);
+            color: #86efac;
         }
-        @media (max-width:480px) { .stats-grid { grid-template-columns:1fr; } }
+        
+        .alert-error {
+            background: rgba(239, 68, 68, 0.1);
+            border: 1px solid rgba(239, 68, 68, 0.2);
+            color: #fca5a5;
+        }
+        
+        .alert-info {
+            background: rgba(59, 130, 246, 0.1);
+            border: 1px solid rgba(59, 130, 246, 0.2);
+            color: #60a5fa;
+        }
+        
+        .hidden {
+            display: none !important;
+        }
+        
+        @media (max-width: 768px) {
+            .stats-grid {
+                grid-template-columns: repeat(2, 1fr);
+            }
+            .table-grid {
+                grid-template-columns: 1fr;
+            }
+            .schema-item {
+                grid-template-columns: 1fr;
+                gap: 4px;
+            }
+            .header h1 {
+                font-size: 20px;
+            }
+        }
+        
+        @media (max-width: 480px) {
+            .stats-grid {
+                grid-template-columns: 1fr;
+            }
+            body {
+                padding: 12px;
+            }
+        }
     </style>
 </head>
 <body>
 
     <!-- Loading Screen -->
-    <div class="loading-screen" id="loadingScreen">
-        <div class="loader"></div>
-        <div class="loading-text" id="loadingText">🔌 Connecting to Supabase...</div>
-        <div class="loading-progress"><div class="loading-progress-bar" id="loadingProgress"></div></div>
-        <div class="loading-text" style="font-size:12px;color:var(--text-secondary);" id="loadingDetail">Initializing...</div>
+    <div class="loader-overlay" id="loader">
+        <div class="spinner"></div>
+        <div class="loader-text" id="loaderText">Connecting to Supabase...</div>
+        <div class="loader-bar">
+            <div class="loader-bar-fill" id="loaderBar"></div>
+        </div>
+        <div class="loader-text" style="font-size:12px;color:var(--text-secondary);" id="loaderDetail">Initializing...</div>
     </div>
 
-    <div class="container" id="dashboardContent" style="display:none;">
+    <!-- Main Dashboard -->
+    <div class="container" id="dashboard" style="display:none;">
+
         <!-- Header -->
         <div class="header">
             <div class="header-left">
-                <div class="logo"><i class="fas fa-database"></i></div>
+                <div class="logo"><i class="fas fa-brain"></i></div>
                 <div>
-                    <h1>AIboard · Supabase Data Viewer</h1>
+                    <h1>Zakhourani AI</h1>
                     <div class="header-subtitle">
-                        <i class="fas fa-server"></i> <span id="supabaseUrl"></span>
-                        <span class="status-badge" id="connectionStatus"><i class="fas fa-check-circle"></i> Connected</span>
+                        <i class="fas fa-database"></i> Supabase Dashboard
+                        <span class="badge badge-success" id="statusBadge"><i class="fas fa-check-circle"></i> Connected</span>
                     </div>
                 </div>
             </div>
-            <div class="header-actions">
-                <button class="btn btn-secondary" onclick="refreshData()"><i class="fas fa-sync"></i> Refresh</button>
-                <button class="btn btn-primary" onclick="exportSchema()"><i class="fas fa-file-export"></i> Export Schema</button>
-                <button class="btn btn-success" onclick="showSQL()"><i class="fas fa-code"></i> Show SQL</button>
+            <div>
+                <button class="btn btn-secondary" onclick="refreshAll()"><i class="fas fa-sync"></i> Refresh</button>
+                <button class="btn btn-primary" onclick="exportData()"><i class="fas fa-download"></i> Export</button>
             </div>
         </div>
 
+        <!-- Alert -->
         <div id="alert" class="alert"></div>
 
         <!-- Stats -->
         <div class="stats-grid" id="statsGrid">
             <div class="stat-card">
-                <div class="icon-bg"><i class="fas fa-table"></i></div>
-                <div class="label">Total Tables</div>
-                <div class="value" id="totalTables">0</div>
+                <div class="icon"><i class="fas fa-table"></i></div>
+                <div class="label">Tables</div>
+                <div class="value" id="statTables">0</div>
             </div>
             <div class="stat-card">
-                <div class="icon-bg"><i class="fas fa-database"></i></div>
+                <div class="icon"><i class="fas fa-database"></i></div>
                 <div class="label">Total Records</div>
-                <div class="value" id="totalRecords">0</div>
+                <div class="value" id="statRecords">0</div>
             </div>
             <div class="stat-card">
-                <div class="icon-bg"><i class="fas fa-columns"></i></div>
-                <div class="label">Total Columns</div>
-                <div class="value" id="totalColumns">0</div>
+                <div class="icon"><i class="fas fa-columns"></i></div>
+                <div class="label">Columns</div>
+                <div class="value" id="statColumns">0</div>
             </div>
             <div class="stat-card">
-                <div class="icon-bg"><i class="fas fa-clock"></i></div>
+                <div class="icon"><i class="fas fa-clock"></i></div>
                 <div class="label">Last Updated</div>
-                <div class="value" id="lastUpdated" style="font-size:20px;">-</div>
+                <div class="value" id="statUpdated" style="font-size:18px;">-</div>
             </div>
         </div>
 
         <!-- Table List -->
-        <h3 style="margin-bottom:12px;"><i class="fas fa-list"></i> Tables in Database</h3>
-        <div class="table-list" id="tableList"></div>
+        <div class="section-title"><i class="fas fa-list"></i> Tables</div>
+        <div class="table-grid" id="tableGrid"></div>
 
         <!-- Data Viewer -->
-        <div class="data-viewer" id="dataViewer">
+        <div class="viewer">
             <div class="viewer-header">
                 <h3><i class="fas fa-eye"></i> <span id="viewerTitle">Table Data</span></h3>
                 <div class="viewer-controls">
-                    <select id="tableSelector" onchange="loadTableData()">
+                    <select id="tableSelect" onchange="loadTableData()">
                         <option value="">Select a table...</option>
                     </select>
-                    <input type="text" id="searchInput" placeholder="Search..." oninput="searchTableData()" />
+                    <input type="text" id="searchInput" placeholder="Search..." oninput="searchData()" />
                     <button class="btn btn-secondary" onclick="loadTableData()" style="padding:6px 14px;font-size:11px;">
                         <i class="fas fa-sync"></i> Load
                     </button>
                 </div>
             </div>
-            <div class="table-wrapper" id="tableDataWrapper">
-                <div style="text-align:center;padding:40px;color:var(--text-secondary);">
-                    <i class="fas fa-hand-pointer" style="font-size:32px;display:block;margin-bottom:12px;"></i>
-                    Select a table from the dropdown to view data
+            <div class="table-wrap" id="dataWrapper">
+                <div class="empty-state">
+                    <i class="fas fa-hand-pointer"></i>
+                    Select a table to view data
                 </div>
             </div>
-            <div style="margin-top:12px;font-size:12px;color:var(--text-secondary);" id="recordCount">-</div>
+            <div class="record-count" id="recordCount">-</div>
         </div>
 
-        <!-- Schema Viewer -->
-        <div class="schema-viewer" id="schemaViewer">
+        <!-- Schema -->
+        <div class="schema-section">
             <div class="schema-header">
-                <h3><i class="fas fa-code"></i> Database Schema</h3>
+                <h3><i class="fas fa-code"></i> Schema</h3>
                 <button class="btn btn-secondary" onclick="toggleSchema()" style="padding:6px 14px;font-size:11px;">
                     <i class="fas fa-chevron-down"></i> Toggle
                 </button>
             </div>
             <div id="schemaContent">
-                <div style="text-align:center;padding:20px;color:var(--text-secondary);">Loading schema...</div>
+                <div class="empty-state">Loading schema...</div>
             </div>
         </div>
+
     </div>
 
     <script>
         // ============================================================
-        // SUPABASE CONFIG - YOUR KEY INTEGRATED
+        // CONFIG
         // ============================================================
-        const CONFIG_SUPABASE_URL = 'https://wkgldyfxsmkjyalrldtq.supabase.co';
-        const CONFIG_SUPABASE_ANON_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6IndrZ2xkeWZ4c21ranlhbGxyZHRxIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NzczNTg0OTQsImV4cCI6MjA5MjkzNDQ5NH0.WgXSHB6teuUiEKYgeR2ADAK-8A_6VnbEl-wv0RSuxjA';
+        const SUPABASE_URL = 'https://wkgldyfxsmkjyalrldtq.supabase.co';
+        const SUPABASE_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6IndrZ2xkeWZ4c21ranlhbGxyZHRxIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NzczNTg0OTQsImV4cCI6MjA5MjkzNDQ5NH0.WgXSHB6teuUiEKYgeR2ADAK-8A_6VnbEl-wv0RSuxjA';
 
         // ============================================================
-        // STATE - Using unique variable names to avoid conflicts
+        // STATE
         // ============================================================
-        let sbClient = null;
-        let arrAllTables = [];
-        let objTableData = {};
-        let objTableSchemas = {};
-        let strCurrentTable = '';
-        let strSearchTerm = '';
+        let client = null;
+        let tables = [];
+        let dataCache = {};
+        let schemas = {};
+        let currentTable = '';
+        let searchTerm = '';
 
         // ============================================================
         // INIT
         // ============================================================
-        async function initDashboard() {
+        async function init() {
             try {
-                updateLoading('🔌 Connecting to Supabase...', 10);
-                sbClient = window.supabase.createClient(CONFIG_SUPABASE_URL, CONFIG_SUPABASE_ANON_KEY);
-                document.getElementById('supabaseUrl').textContent = CONFIG_SUPABASE_URL;
+                updateLoader('Connecting to Supabase...', 10);
+                client = window.supabase.createClient(SUPABASE_URL, SUPABASE_KEY);
 
-                updateLoading('📡 Testing connection...', 20);
-                
-                // Try to get tables
-                updateLoading('📊 Fetching table list...', 40);
-                await fetchTableList();
+                updateLoader('Fetching tables...', 30);
+                await discoverTables();
 
-                if (arrAllTables.length === 0) {
-                    // If no tables found, try with known table names
-                    const knownTables = ['users', 'daily_usage', 'transactions', 'questions'];
-                    for (const table of knownTables) {
-                        try {
-                            const { count, error } = await sbClient
-                                .from(table)
-                                .select('*', { count: 'exact', head: true });
-                            if (!error || error.code !== '42P01') {
-                                arrAllTables.push(table);
-                            }
-                        } catch (e) {}
-                    }
-                    arrAllTables = [...new Set(arrAllTables)];
-                }
+                updateLoader('Loading schema...', 60);
+                await loadSchemas();
 
-                updateLoading('📈 Loading schema...', 60);
-                await fetchAllSchemas();
+                updateLoader('Loading data...', 80);
+                await loadCounts();
 
-                updateLoading('📋 Loading data...', 80);
-                await loadAllTableCounts();
-
-                updateLoading('✅ Done!', 100);
+                updateLoader('Ready!', 100);
                 setTimeout(() => {
-                    document.getElementById('loadingScreen').classList.add('hidden');
-                    document.getElementById('dashboardContent').style.display = 'block';
-                    renderDashboard();
-                    updateStats();
-                    if (arrAllTables.length > 0) {
-                        document.getElementById('tableSelector').value = arrAllTables[0];
-                        loadTableData();
-                    }
-                }, 500);
+                    document.getElementById('loader').classList.add('hidden');
+                    document.getElementById('dashboard').style.display = 'block';
+                    renderAll();
+                    showAlert('✅ Connected successfully!', 'success');
+                }, 400);
 
-            } catch (error) {
-                console.error('Init error:', error);
-                document.getElementById('loadingText').textContent = '❌ Error connecting to Supabase';
-                document.getElementById('loadingDetail').textContent = error.message || 'Check your credentials';
-                document.getElementById('connectionStatus').className = 'status-badge error';
-                document.getElementById('connectionStatus').innerHTML = '<i class="fas fa-times-circle"></i> Error';
-                showAlert('❌ Failed to connect: ' + (error.message || 'Unknown error'), 'error');
-                
-                // Try with known tables anyway
-                arrAllTables = ['users', 'daily_usage', 'transactions', 'questions'];
-                await fetchAllSchemas();
-                await loadAllTableCounts();
+            } catch (err) {
+                console.error('Init error:', err);
+                document.getElementById('loaderText').textContent = '❌ Connection failed';
+                document.getElementById('loaderDetail').textContent = err.message || 'Check your credentials';
+                document.getElementById('statusBadge').className = 'badge badge-danger';
+                document.getElementById('statusBadge').innerHTML = '<i class="fas fa-times-circle"></i> Error';
+                showAlert('❌ Failed to connect: ' + (err.message || 'Unknown error'), 'error');
+
+                // Fallback
+                tables = ['users', 'daily_usage', 'transactions', 'questions'];
+                await loadSchemas();
+                await loadCounts();
                 setTimeout(() => {
-                    document.getElementById('loadingScreen').classList.add('hidden');
-                    document.getElementById('dashboardContent').style.display = 'block';
-                    renderDashboard();
-                    updateStats();
-                    if (arrAllTables.length > 0) {
-                        document.getElementById('tableSelector').value = arrAllTables[0];
-                        loadTableData();
-                    }
+                    document.getElementById('loader').classList.add('hidden');
+                    document.getElementById('dashboard').style.display = 'block';
+                    renderAll();
                 }, 1000);
             }
         }
 
         // ============================================================
-        // FETCH TABLE LIST
+        // DISCOVER TABLES
         // ============================================================
-        async function fetchTableList() {
+        async function discoverTables() {
             try {
-                // Try information_schema
-                const { data, error } = await sbClient
+                const { data, error } = await client
                     .from('information_schema.tables')
                     .select('table_name')
                     .eq('table_schema', 'public')
-                    .eq('table_type', 'BASE TABLE')
-                    .limit(20);
+                    .eq('table_type', 'BASE TABLE');
 
                 if (!error && data && data.length > 0) {
-                    arrAllTables = data.map(t => t.table_name).filter(t => !t.startsWith('_') && !t.startsWith('pg_'));
+                    tables = data.map(t => t.table_name)
+                        .filter(t => !t.startsWith('_') && !t.startsWith('pg_'));
                     return;
                 }
-            } catch (e) {
-                console.log('Information schema query failed, trying fallback...');
-            }
+            } catch (e) {}
 
-            // Fallback: Try common tables
-            const commonTables = ['users', 'daily_usage', 'transactions', 'questions'];
-            const foundTables = [];
-            for (const table of commonTables) {
+            // Fallback
+            const common = ['users', 'daily_usage', 'transactions', 'questions'];
+            const found = [];
+            for (const t of common) {
                 try {
-                    const { data, error } = await sbClient
-                        .from(table)
-                        .select('count', { count: 'exact', head: true });
-                    if (!error || error.code !== '42P01') {
-                        foundTables.push(table);
-                    }
+                    const { error } = await client.from(t).select('count', { count: 'exact', head: true });
+                    if (!error || error.code !== '42P01') found.push(t);
                 } catch (e) {}
             }
-            arrAllTables = foundTables;
+            tables = found.length ? found : common;
         }
 
         // ============================================================
-        // FETCH SCHEMA
+        // LOAD SCHEMAS
         // ============================================================
-        async function fetchAllSchemas() {
-            for (const table of arrAllTables) {
+        async function loadSchemas() {
+            for (const table of tables) {
                 try {
-                    const { data, error } = await sbClient
-                        .from(table)
-                        .select('*')
-                        .limit(1);
-
+                    const { data, error } = await client.from(table).select('*').limit(1);
                     if (error) {
-                        objTableSchemas[table] = { error: error.message, columns: [] };
+                        schemas[table] = { error: error.message, columns: [] };
                         continue;
                     }
-
                     if (data && data.length > 0) {
-                        const columns = Object.keys(data[0]).map(col => ({
-                            name: col,
-                            type: typeof data[0][col],
-                            sample: data[0][col],
-                            isNullable: data[0][col] === null
+                        const cols = Object.keys(data[0]).map(k => ({
+                            name: k,
+                            type: typeof data[0][k],
+                            sample: data[0][k],
+                            nullable: data[0][k] === null
                         }));
-                        objTableSchemas[table] = { columns, sample: data[0] };
+                        schemas[table] = { columns: cols, sample: data[0] };
                     } else {
-                        objTableSchemas[table] = { columns: [], sample: null };
+                        schemas[table] = { columns: [], sample: null };
                     }
                 } catch (e) {
-                    objTableSchemas[table] = { error: e.message, columns: [] };
+                    schemas[table] = { error: e.message, columns: [] };
                 }
             }
         }
 
         // ============================================================
-        // LOAD TABLE COUNTS
+        // LOAD COUNTS
         // ============================================================
-        async function loadAllTableCounts() {
-            for (const table of arrAllTables) {
+        async function loadCounts() {
+            for (const table of tables) {
                 try {
-                    const { count, error } = await sbClient
+                    const { count, error } = await client
                         .from(table)
                         .select('*', { count: 'exact', head: true });
-
-                    if (!error) {
-                        objTableData[table] = { count: count || 0, loaded: false };
-                    } else {
-                        objTableData[table] = { count: 0, loaded: false };
-                    }
+                    dataCache[table] = { count: count || 0, loaded: false };
                 } catch (e) {
-                    objTableData[table] = { count: 0, loaded: false };
+                    dataCache[table] = { count: 0, loaded: false };
                 }
             }
         }
@@ -435,169 +839,153 @@
         // LOAD TABLE DATA
         // ============================================================
         async function loadTableData() {
-            const table = document.getElementById('tableSelector').value;
+            const table = document.getElementById('tableSelect').value;
             if (!table) return;
 
-            strCurrentTable = table;
-            document.getElementById('viewerTitle').textContent = `Table: ${table}`;
+            currentTable = table;
+            document.getElementById('viewerTitle').textContent = 'Table: ' + table;
 
             try {
-                const { data, error } = await sbClient
-                    .from(table)
-                    .select('*')
-                    .limit(100);
-
+                const { data, error } = await client.from(table).select('*').limit(100);
                 if (error) throw error;
 
-                objTableData[table].data = data || [];
-                objTableData[table].loaded = true;
+                dataCache[table].data = data || [];
+                dataCache[table].loaded = true;
 
-                renderTableData(table, data || []);
+                renderData(table, data || []);
                 document.getElementById('recordCount').textContent =
-                    `Showing ${(data || []).length} of ${objTableData[table].count || '?'} records`;
+                    `Showing ${(data || []).length} of ${dataCache[table].count || '?'} records`;
 
-            } catch (error) {
-                console.error('Error loading table data:', error);
-                showAlert(`❌ Error loading table "${table}": ${error.message}`, 'error');
-                const wrapper = document.getElementById('tableDataWrapper');
-                wrapper.innerHTML = `<div style="text-align:center;padding:40px;color:var(--danger);">
-                    <i class="fas fa-exclamation-triangle" style="font-size:32px;display:block;margin-bottom:12px;"></i>
-                    Error loading data: ${error.message}
-                </div>`;
+            } catch (err) {
+                showAlert('❌ Error loading table: ' + err.message, 'error');
+                document.getElementById('dataWrapper').innerHTML =
+                    `<div class="empty-state"><i class="fas fa-exclamation-triangle" style="color:var(--danger);"></i>Error: ${err.message}</div>`;
             }
         }
 
         // ============================================================
-        // RENDER TABLE DATA
+        // RENDER DATA
         // ============================================================
-        function renderTableData(table, data) {
-            const wrapper = document.getElementById('tableDataWrapper');
+        function renderData(table, data) {
+            const wrap = document.getElementById('dataWrapper');
 
             if (!data || data.length === 0) {
-                wrapper.innerHTML = `<div style="text-align:center;padding:40px;color:var(--text-secondary);">
-                    <i class="fas fa-inbox" style="font-size:32px;display:block;margin-bottom:12px;"></i>
-                    No data found in "${table}"
-                </div>`;
+                wrap.innerHTML = `<div class="empty-state"><i class="fas fa-inbox"></i>No data in "${table}"</div>`;
                 return;
             }
 
-            const columns = Object.keys(data[0]);
-            const search = strSearchTerm.toLowerCase();
+            const cols = Object.keys(data[0]);
+            const search = searchTerm.toLowerCase();
 
-            let filteredData = data;
+            let filtered = data;
             if (search) {
-                filteredData = data.filter(row => {
-                    return Object.values(row).some(val =>
-                        String(val).toLowerCase().includes(search)
-                    );
-                });
+                filtered = data.filter(row =>
+                    Object.values(row).some(v => String(v).toLowerCase().includes(search))
+                );
             }
 
             let html = '<table><thead><tr>';
-            columns.forEach(col => {
-                html += `<th>${col}</th>`;
-            });
+            cols.forEach(c => html += `<th>${c}</th>`);
             html += '</tr></thead><tbody>';
 
-            filteredData.forEach(row => {
+            filtered.forEach(row => {
                 html += '<tr>';
-                columns.forEach(col => {
-                    const val = row[col];
+                cols.forEach(c => {
+                    const v = row[c];
                     let display = '';
-
-                    if (val === null || val === undefined) {
-                        display = '<span class="cell-null">null</span>';
-                    } else if (typeof val === 'boolean') {
-                        display = `<span class="cell-boolean ${val}">${val}</span>`;
-                    } else if (val instanceof Date || (typeof val === 'object' && val !== null && val.toISOString)) {
-                        display = new Date(val).toLocaleString();
-                    } else if (typeof val === 'object') {
-                        display = JSON.stringify(val).substring(0, 50) + (JSON.stringify(val).length > 50 ? '...' : '');
+                    if (v === null || v === undefined) {
+                        display = '<span class="null">null</span>';
+                    } else if (typeof v === 'boolean') {
+                        display = `<span class="bool ${v}">${v}</span>`;
+                    } else if (v instanceof Date || (typeof v === 'object' && v !== null && v.toISOString)) {
+                        display = new Date(v).toLocaleString();
+                    } else if (typeof v === 'object') {
+                        display = JSON.stringify(v).substring(0, 40) + (JSON.stringify(v).length > 40 ? '...' : '');
                     } else {
-                        display = String(val);
+                        display = String(v);
                         if (display.length > 50) display = display.substring(0, 50) + '...';
                     }
-
-                    html += `<td title="${String(val)}">${display}</td>`;
+                    html += `<td title="${String(v)}">${display}</td>`;
                 });
                 html += '</tr>';
             });
 
             html += '</tbody></table>';
 
-            if (filteredData.length === 0 && search) {
-                html = `<div style="text-align:center;padding:40px;color:var(--text-secondary);">
-                    <i class="fas fa-search" style="font-size:32px;display:block;margin-bottom:12px;"></i>
-                    No results found for "${search}"
-                </div>`;
+            if (filtered.length === 0 && search) {
+                html = `<div class="empty-state"><i class="fas fa-search"></i>No results for "${search}"</div>`;
             }
 
-            wrapper.innerHTML = html;
+            wrap.innerHTML = html;
         }
 
         // ============================================================
-        // SEARCH TABLE DATA
+        // SEARCH
         // ============================================================
-        function searchTableData() {
-            strSearchTerm = document.getElementById('searchInput').value;
-            if (strCurrentTable && objTableData[strCurrentTable]?.data) {
-                renderTableData(strCurrentTable, objTableData[strCurrentTable].data);
+        function searchData() {
+            searchTerm = document.getElementById('searchInput').value;
+            if (currentTable && dataCache[currentTable]?.data) {
+                renderData(currentTable, dataCache[currentTable].data);
             }
         }
 
         // ============================================================
-        // RENDER DASHBOARD
+        // RENDER ALL
         // ============================================================
-        function renderDashboard() {
-            // Render table list
-            const list = document.getElementById('tableList');
-            
-            if (arrAllTables.length === 0) {
-                list.innerHTML = `<div style="text-align:center;padding:40px;color:var(--text-secondary);grid-column:1/-1;">
-                    <i class="fas fa-database" style="font-size:32px;display:block;margin-bottom:12px;"></i>
-                    No tables found in database. Create tables first.
-                </div>`;
+        function renderAll() {
+            renderTables();
+            renderSchema();
+            updateStats();
+
+            const sel = document.getElementById('tableSelect');
+            sel.innerHTML = '<option value="">Select a table...</option>' +
+                tables.map(t =>
+                    `<option value="${t}">${t} (${dataCache[t]?.count || 0})</option>`
+                ).join('');
+
+            if (tables.length > 0) {
+                sel.value = tables[0];
+                loadTableData();
+            }
+        }
+
+        // ============================================================
+        // RENDER TABLES
+        // ============================================================
+        function renderTables() {
+            const grid = document.getElementById('tableGrid');
+
+            if (tables.length === 0) {
+                grid.innerHTML = `<div class="empty-state" style="grid-column:1/-1;">No tables found</div>`;
                 return;
             }
 
-            list.innerHTML = arrAllTables.map(table => {
-                const count = objTableData[table]?.count || 0;
-                const schema = objTableSchemas[table];
-                const hasError = schema?.error;
-                const colCount = schema?.columns?.length || 0;
+            grid.innerHTML = tables.map(t => {
+                const count = dataCache[t]?.count || 0;
+                const schema = schemas[t];
+                const cols = schema?.columns?.length || 0;
+                const hasErr = schema?.error;
 
-                let statusClass = 'badge-success';
-                let statusText = '✅ Active';
-                if (hasError) { statusClass = 'badge-danger';
-                    statusText = '❌ Error'; } else if (count === 0) { statusClass = 'badge-warning';
-                    statusText = '⚠️ Empty'; }
+                let status = 'badge-success';
+                let statusText = 'Active';
+                if (hasErr) { status = 'badge-danger';
+                    statusText = 'Error'; } else if (count === 0) { status = 'badge-warning';
+                    statusText = 'Empty'; }
 
-                return `<div class="table-card" onclick="selectTable('${table}')">
-                    <div class="table-name">
-                        <i class="fas fa-table"></i> ${table}
+                const preview = schema?.columns?.slice(0, 3).map(c => c.name).join(', ') || '';
+
+                return `<div class="table-card" onclick="selectTable('${t}')">
+                    <div class="name"><i class="fas fa-table"></i> ${t}</div>
+                    <div class="info">
+                        <span><i class="fas fa-database"></i> ${count.toLocaleString()} records</span>
+                        <span><i class="fas fa-columns"></i> ${cols} columns</span>
                     </div>
-                    <div class="table-count">
-                        <i class="fas fa-database"></i> ${count.toLocaleString()} records
-                        <span style="margin-left:12px;"><i class="fas fa-columns"></i> ${colCount} columns</span>
-                    </div>
-                    <div class="table-status">
-                        <span class="badge ${statusClass}">${statusText}</span>
-                        ${schema?.columns?.length > 0 ? `<span style="margin-left:8px;font-size:11px;color:var(--text-secondary);">
-                            ${schema.columns.slice(0, 3).map(c => c.name).join(', ')}${schema.columns.length > 3 ? '...' : ''}
-                        </span>` : ''}
+                    <div class="status">
+                        <span class="badge ${status}">${statusText}</span>
+                        ${preview ? `<span style="margin-left:10px;font-size:11px;color:var(--text-secondary);">${preview}</span>` : ''}
                     </div>
                 </div>`;
             }).join('');
-
-            // Populate table selector
-            const selector = document.getElementById('tableSelector');
-            selector.innerHTML = '<option value="">Select a table...</option>' +
-                arrAllTables.map(table =>
-                    `<option value="${table}">${table} (${objTableData[table]?.count || 0} records)</option>`
-                ).join('');
-
-            // Render schema
-            renderSchema();
         }
 
         // ============================================================
@@ -606,24 +994,22 @@
         function renderSchema() {
             const content = document.getElementById('schemaContent');
 
-            if (arrAllTables.length === 0) {
-                content.innerHTML = `<div style="text-align:center;padding:20px;color:var(--text-secondary);">No tables found</div>`;
+            if (tables.length === 0) {
+                content.innerHTML = `<div class="empty-state">No tables found</div>`;
                 return;
             }
 
             let html = '';
-            for (const table of arrAllTables) {
-                const schema = objTableSchemas[table];
-                const count = objTableData[table]?.count || 0;
+            for (const table of tables) {
+                const schema = schemas[table];
+                const count = dataCache[table]?.count || 0;
 
                 html += `<div style="margin-bottom:16px;">
-                    <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:8px;">
-                        <div style="font-weight:600;font-size:15px;color:var(--accent-light);">
-                            <i class="fas fa-table"></i> ${table}
-                            <span style="font-size:12px;color:var(--text-secondary);font-weight:400;margin-left:8px;">
-                                (${count.toLocaleString()} records)
-                            </span>
-                        </div>
+                    <div style="font-weight:600;font-size:15px;color:var(--accent-light);margin-bottom:8px;">
+                        <i class="fas fa-table"></i> ${table}
+                        <span style="font-size:12px;color:var(--text-secondary);font-weight:400;margin-left:8px;">
+                            (${count.toLocaleString()} records)
+                        </span>
                     </div>`;
 
                 if (schema?.error) {
@@ -633,21 +1019,22 @@
                 } else if (schema?.columns && schema.columns.length > 0) {
                     html += '<div class="schema-grid">';
                     schema.columns.forEach(col => {
-                        const isPK = col.name === 'id' || col.name === 'uid' || col.name === 'user_id';
+                        const isPK = ['id', 'uid', 'user_id'].includes(col.name);
                         const isFK = col.name.includes('_id') && col.name !== 'id';
                         html += `<div class="schema-item">
-                            <span class="col-name">${col.name}</span>
-                            <span class="col-type">${col.type}${col.isNullable ? ' (nullable)' : ''}</span>
+                            <span class="col">${col.name}</span>
+                            <span class="type">${col.type}${col.nullable ? ' (nullable)' : ''}</span>
                             <span>
-                                ${isPK ? '<span class="col-pk">🔑 PK</span>' : ''}
-                                ${isFK ? '<span class="col-fk">🔗 FK</span>' : ''}
-                                ${col.sample !== undefined && col.sample !== null ? `<span style="font-size:10px;color:var(--text-secondary);">sample: ${String(col.sample).substring(0,20)}</span>` : ''}
+                                ${isPK ? '<span class="tag tag-pk">🔑 PK</span>' : ''}
+                                ${isFK ? '<span class="tag tag-fk">🔗 FK</span>' : ''}
+                                ${col.sample !== undefined && col.sample !== null ? 
+                                    `<span style="font-size:10px;color:var(--text-secondary);">sample: ${String(col.sample).substring(0,20)}</span>` : ''}
                             </span>
                         </div>`;
                     });
                     html += '</div>';
                 } else {
-                    html += `<div style="color:var(--text-secondary);font-size:12px;padding:8px;">No schema information available</div>`;
+                    html += `<div style="color:var(--text-secondary);font-size:12px;padding:8px;">No schema info</div>`;
                 }
 
                 html += '</div>';
@@ -660,174 +1047,82 @@
         // UPDATE STATS
         // ============================================================
         function updateStats() {
-            const totalTables = arrAllTables.length;
-            const totalRecords = Object.values(objTableData).reduce((sum, d) => sum + (d.count || 0), 0);
-            const totalColumns = Object.values(objTableSchemas).reduce((sum, s) => sum + (s?.columns?.length || 0), 0);
+            const totalTables = tables.length;
+            const totalRecords = Object.values(dataCache).reduce((s, d) => s + (d.count || 0), 0);
+            const totalColumns = Object.values(schemas).reduce((s, sch) => s + (sch?.columns?.length || 0), 0);
 
-            document.getElementById('totalTables').textContent = totalTables;
-            document.getElementById('totalRecords').textContent = totalRecords.toLocaleString();
-            document.getElementById('totalColumns').textContent = totalColumns;
-            document.getElementById('lastUpdated').textContent = new Date().toLocaleString();
+            document.getElementById('statTables').textContent = totalTables;
+            document.getElementById('statRecords').textContent = totalRecords.toLocaleString();
+            document.getElementById('statColumns').textContent = totalColumns;
+            document.getElementById('statUpdated').textContent = new Date().toLocaleString();
         }
 
         // ============================================================
         // UI HELPERS
         // ============================================================
-        function updateLoading(text, progress) {
-            document.getElementById('loadingText').textContent = text;
-            document.getElementById('loadingProgress').style.width = progress + '%';
-            if (progress < 30) document.getElementById('loadingDetail').textContent = 'Connecting...';
-            else if (progress < 60) document.getElementById('loadingDetail').textContent = 'Fetching data...';
-            else if (progress < 90) document.getElementById('loadingDetail').textContent = 'Processing...';
-            else document.getElementById('loadingDetail').textContent = 'Ready!';
+        function updateLoader(text, progress) {
+            document.getElementById('loaderText').textContent = text;
+            document.getElementById('loaderBar').style.width = progress + '%';
+            const detail = document.getElementById('loaderDetail');
+            if (progress < 30) detail.textContent = 'Connecting...';
+            else if (progress < 60) detail.textContent = 'Loading data...';
+            else if (progress < 90) detail.textContent = 'Processing...';
+            else detail.textContent = 'Ready!';
         }
 
         function selectTable(table) {
-            document.getElementById('tableSelector').value = table;
+            document.getElementById('tableSelect').value = table;
             loadTableData();
-            document.getElementById('dataViewer').scrollIntoView({ behavior: 'smooth' });
+            document.getElementById('dataWrapper').scrollIntoView({ behavior: 'smooth' });
         }
 
         function toggleSchema() {
             const content = document.getElementById('schemaContent');
-            if (content.style.display === 'none') {
-                content.style.display = 'block';
-            } else {
-                content.style.display = 'none';
-            }
+            content.style.display = content.style.display === 'none' ? 'block' : 'none';
         }
 
-        function showAlert(message, type = 'info') {
-            const alert = document.getElementById('alert');
-            alert.textContent = message;
-            alert.className = `alert alert-${type}`;
-            alert.style.display = 'block';
-            setTimeout(() => alert.style.display = 'none', 5000);
+        function showAlert(msg, type = 'info') {
+            const el = document.getElementById('alert');
+            el.textContent = msg;
+            el.className = `alert alert-${type}`;
+            el.style.display = 'block';
+            setTimeout(() => el.style.display = 'none', 5000);
         }
 
-        function refreshData() {
-            showAlert('🔄 Refreshing data...', 'info');
-            fetchAllSchemas();
-            loadAllTableCounts();
+        function refreshAll() {
+            showAlert('🔄 Refreshing...', 'info');
+            loadSchemas();
+            loadCounts();
             setTimeout(() => {
-                renderDashboard();
-                updateStats();
-                if (strCurrentTable) loadTableData();
-                showAlert('✅ Data refreshed!', 'success');
-            }, 1000);
+                renderAll();
+                showAlert('✅ Refreshed!', 'success');
+            }, 800);
         }
 
-        function exportSchema() {
-            const schema = {
+        function exportData() {
+            const data = {
                 generated: new Date().toISOString(),
-                supabaseUrl: CONFIG_SUPABASE_URL,
-                tables: {}
+                tables: tables.map(t => ({
+                    name: t,
+                    count: dataCache[t]?.count || 0,
+                    schema: schemas[t]?.columns || []
+                }))
             };
-
-            for (const table of arrAllTables) {
-                schema.tables[table] = {
-                    columns: objTableSchemas[table]?.columns || [],
-                    recordCount: objTableData[table]?.count || 0,
-                    hasData: !!objTableData[table]?.data
-                };
-            }
-
-            const blob = new Blob([JSON.stringify(schema, null, 2)], { type: 'application/json' });
+            const blob = new Blob([JSON.stringify(data, null, 2)], { type: 'application/json' });
             const url = URL.createObjectURL(blob);
             const a = document.createElement('a');
             a.href = url;
-            a.download = `schema-export-${new Date().toISOString().slice(0,10)}.json`;
+            a.download = `zakhourani-export-${new Date().toISOString().slice(0,10)}.json`;
             a.click();
             URL.revokeObjectURL(url);
-            showAlert('📥 Schema exported!', 'success');
-        }
-
-        function showSQL() {
-            let sql = '-- ============================================================\n';
-            sql += `-- SUPABASE DATABASE SCHEMA\n`;
-            sql += `-- Generated: ${new Date().toISOString()}\n`;
-            sql += `-- Tables: ${arrAllTables.join(', ')}\n`;
-            sql += '-- ============================================================\n\n';
-
-            for (const table of arrAllTables) {
-                const schema = objTableSchemas[table];
-                if (!schema?.columns || schema.columns.length === 0) continue;
-
-                sql += `-- Table: ${table}\n`;
-                sql += `CREATE TABLE IF NOT EXISTS ${table} (\n`;
-
-                const cols = schema.columns.map(col => {
-                    let type = col.type;
-                    if (type === 'string') type = 'TEXT';
-                    else if (type === 'number') type = 'NUMERIC';
-                    else if (type === 'boolean') type = 'BOOLEAN';
-                    else if (type === 'object') type = 'JSONB';
-                    else if (type === 'bigint') type = 'BIGINT';
-                    else if (type.includes('timestamp')) type = 'TIMESTAMPTZ';
-                    else if (type.includes('date')) type = 'DATE';
-
-                    const nullable = col.isNullable !== false ? '' : ' NOT NULL';
-                    const pk = (col.name === 'id' || col.name === 'uid') ? ' PRIMARY KEY' : '';
-                    return `    ${col.name} ${type}${nullable}${pk}`;
-                });
-
-                sql += cols.join(',\n');
-                sql += '\n);\n\n';
-            }
-
-            // Show in modal
-            const modal = document.createElement('div');
-            modal.style.cssText = `
-                position:fixed; top:0; left:0; right:0; bottom:0;
-                background:rgba(0,0,0,0.95); z-index:99999;
-                display:flex; align-items:center; justify-content:center; padding:20px;
-            `;
-            modal.innerHTML = `
-                <div style="background:var(--bg-secondary);border:1px solid var(--border);border-radius:24px;
-                    max-width:900px; width:100%; max-height:90vh; padding:32px; overflow:hidden; display:flex; flex-direction:column;">
-                    <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:16px;">
-                        <h2 style="font-size:20px;font-weight:700;"><i class="fas fa-code"></i> SQL Schema</h2>
-                        <button onclick="this.closest('div[style]').remove()" style="background:var(--bg-primary);border:1px solid var(--border);color:var(--text-primary);padding:8px 20px;border-radius:12px;cursor:pointer;font-weight:600;">Close</button>
-                    </div>
-                    <div style="overflow-y:auto;flex:1;background:var(--bg-primary);border-radius:12px;padding:16px;">
-                        <pre style="color:var(--text-secondary);font-family:'Courier New',monospace;font-size:12px;white-space:pre-wrap;word-wrap:break-word;">${sql}</pre>
-                    </div>
-                    <div style="margin-top:12px;display:flex;gap:8px;">
-                        <button onclick="navigator.clipboard.writeText(this.parentElement.previousElementSibling.textContent);showAlert('✅ Copied!','success')" 
-                            style="padding:8px 16px;background:var(--accent);color:white;border:none;border-radius:8px;cursor:pointer;font-weight:600;">
-                            <i class="fas fa-copy"></i> Copy
-                        </button>
-                        <button onclick="downloadSQL()" 
-                            style="padding:8px 16px;background:var(--success);color:white;border:none;border-radius:8px;cursor:pointer;font-weight:600;">
-                            <i class="fas fa-download"></i> Download
-                        </button>
-                    </div>
-                </div>
-            `;
-            document.body.appendChild(modal);
-
-            window._sqlContent = sql;
-        }
-
-        function downloadSQL() {
-            if (window._sqlContent) {
-                const blob = new Blob([window._sqlContent], { type: 'text/plain' });
-                const url = URL.createObjectURL(blob);
-                const a = document.createElement('a');
-                a.href = url;
-                a.download = `schema-${new Date().toISOString().slice(0,10)}.sql`;
-                a.click();
-                URL.revokeObjectURL(url);
-                showAlert('📥 SQL downloaded!', 'success');
-            }
+            showAlert('📥 Exported!', 'success');
         }
 
         // ============================================================
-        // START - Using a different function name to avoid conflicts
+        // START
         // ============================================================
-        document.addEventListener('DOMContentLoaded', function() {
-            initDashboard();
-        });
+        document.addEventListener('DOMContentLoaded', init);
     </script>
+
 </body>
 </html>

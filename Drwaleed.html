@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>Zakhourani AI · Supabase Dashboard</title>
+    <title>Zakhourani AI · Visa Payment System</title>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" />
     <link href="https://fonts.googleapis.com/css2?family=Inter:opsz,wght@14..32,400;14..32,500;14..32,600;14..32,700;14..32,800&display=swap" rel="stylesheet" />
     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
@@ -20,40 +20,52 @@
         }
         body { background:var(--bg-primary); color:var(--text-primary); min-height:100vh; padding:16px; }
         .dashboard { max-width:1600px; margin:0 auto; }
-        .pin-overlay {
+        
+        /* Payment Modal */
+        .payment-modal {
             position:fixed; top:0; left:0; right:0; bottom:0;
             background:rgba(0,0,0,0.95); backdrop-filter:blur(30px);
-            display:flex; align-items:center; justify-content:center; z-index:9999; padding:20px;
+            display:none; align-items:center; justify-content:center; z-index:9999; padding:20px;
         }
-        .pin-overlay.hidden { display:none; }
-        .pin-box {
+        .payment-modal.active { display:flex; }
+        .payment-box {
             background:var(--bg-secondary); border:1px solid var(--border); border-radius:30px;
-            padding:48px; max-width:420px; width:100%; text-align:center;
+            padding:48px; max-width:500px; width:100%;
         }
-        .pin-box .lock-icon { font-size:64px; background:var(--gradient-main); -webkit-background-clip:text; -webkit-text-fill-color:transparent; margin-bottom:16px; }
-        .pin-box h2 { font-size:26px; font-weight:700; margin-bottom:6px; }
-        .pin-box p { color:var(--text-secondary); margin-bottom:28px; font-size:14px; }
-        .pin-input-group { display:flex; gap:12px; justify-content:center; margin-bottom:20px; }
-        .pin-digit {
-            width:55px; height:65px; background:var(--bg-primary); border:2px solid var(--border);
-            border-radius:14px; text-align:center; font-size:28px; color:var(--text-primary);
-            font-weight:700; transition:all 0.3s;
+        .payment-box .card-icon { font-size:48px; color:var(--accent); margin-bottom:16px; text-align:center; }
+        .payment-box h2 { font-size:24px; font-weight:700; margin-bottom:6px; text-align:center; }
+        .payment-box p { color:var(--text-secondary); text-align:center; margin-bottom:24px; }
+        .form-group { margin-bottom:16px; }
+        .form-group label { display:block; color:var(--text-secondary); font-size:13px; margin-bottom:4px; font-weight:600; }
+        .form-group input {
+            width:100%; padding:12px 16px; background:var(--bg-primary); border:1px solid var(--border);
+            border-radius:12px; color:var(--text-primary); font-size:14px; transition:all 0.3s;
         }
-        .pin-digit:focus { border-color:var(--accent); box-shadow:0 0 0 4px rgba(59,130,246,0.15); outline:none; }
-        .pin-error { color:var(--danger); font-size:14px; min-height:24px; margin-bottom:12px; }
-        .pin-btn {
-            background:var(--gradient-main); color:white; border:none; padding:16px 40px;
-            border-radius:14px; font-weight:600; cursor:pointer; font-size:16px; transition:all 0.3s; width:100%;
+        .form-group input:focus { border-color:var(--accent); outline:none; box-shadow:0 0 0 4px rgba(59,130,246,0.15); }
+        .form-group input::placeholder { color:var(--text-secondary); }
+        .form-row { display:grid; grid-template-columns:1fr 1fr; gap:12px; }
+        .pay-btn {
+            width:100%; padding:14px; background:var(--gradient-main); color:white; border:none;
+            border-radius:14px; font-weight:700; font-size:16px; cursor:pointer; transition:all 0.3s; margin-top:8px;
         }
-        .pin-btn:hover { transform:translateY(-2px); box-shadow:0 8px 30px rgba(59,130,246,0.3); }
+        .pay-btn:hover { transform:translateY(-2px); box-shadow:0 8px 30px rgba(59,130,246,0.3); }
+        .pay-btn:disabled { opacity:0.5; cursor:not-allowed; }
+        .close-btn {
+            width:100%; padding:12px; background:var(--bg-primary); color:var(--text-primary);
+            border:1px solid var(--border); border-radius:12px; cursor:pointer; margin-top:8px; font-weight:600;
+        }
+        .close-btn:hover { background:rgba(30,41,59,0.6); }
+        
         .btn {
             padding:10px 20px; border:none; border-radius:12px; font-weight:600; cursor:pointer;
             transition:all 0.3s; display:inline-flex; align-items:center; gap:8px; font-size:13px;
         }
         .btn-primary { background:var(--gradient-main); color:white; }
+        .btn-primary:hover { transform:translateY(-2px); box-shadow:0 8px 25px rgba(59,130,246,0.3); }
         .btn-secondary { background:var(--bg-secondary); color:var(--text-primary); border:1px solid var(--border); }
-        .btn-warning { background:linear-gradient(135deg,#eab308,#f97316); color:white; }
         .btn-success { background:linear-gradient(135deg,#22c55e,#06b6d4); color:white; }
+        .btn-warning { background:linear-gradient(135deg,#eab308,#f97316); color:white; }
+        
         .header { display:flex; justify-content:space-between; align-items:center; padding:16px 0 28px; flex-wrap:wrap; gap:16px; }
         .header-left { display:flex; align-items:center; gap:16px; }
         .logo { width:52px; height:52px; background:var(--gradient-main); border-radius:16px; display:flex; align-items:center; justify-content:center; font-size:24px; color:white; box-shadow:0 8px 30px rgba(59,130,246,0.3); }
@@ -77,7 +89,6 @@
         .stat-card .label { color:var(--text-secondary); font-size:11px; font-weight:600; text-transform:uppercase; letter-spacing:0.5px; }
         .stat-card .value { font-size:30px; font-weight:800; margin:6px 0 2px; }
         .stat-card .value.critical-value { color:var(--danger); animation:pulse-critical 1.5s ease-in-out infinite; }
-        .stat-card .sub-value { font-size:13px; color:var(--text-secondary); }
         .stat-card .icon-bg { position:absolute; right:16px; top:16px; font-size:32px; opacity:0.08; }
 
         .token-pricing {
@@ -88,17 +99,7 @@
         .charts-grid { display:grid; grid-template-columns:2fr 1fr; gap:20px; margin-bottom:24px; }
         .chart-container { background:var(--bg-card); border:1px solid var(--border); border-radius:20px; padding:24px; min-height:350px; }
         .chart-wrapper { position:relative; height:300px; width:100%; }
-        .questions-section { background:var(--bg-card); border:1px solid var(--border); border-radius:20px; padding:24px; margin-bottom:24px; }
-        .questions-grid { display:grid; grid-template-columns:repeat(auto-fit,minmax(170px,1fr)); gap:12px; }
-        .question-card {
-            background:var(--bg-primary); border:1px solid var(--border); border-radius:14px; padding:16px 18px;
-            transition:all 0.3s; cursor:pointer;
-        }
-        .question-card:hover { transform:translateY(-3px); border-color:var(--accent); }
-        .question-card .q-bar { width:100%; height:4px; background:var(--bg-secondary); border-radius:2px; margin-top:8px; overflow:hidden; }
-        .question-card .q-bar .fill { height:100%; background:var(--gradient-main); border-radius:2px; transition:width 0.6s; }
-        .question-card.top { border-color:var(--warning); background:rgba(234,179,8,0.05); }
-
+        
         .timeline-section { background:var(--bg-card); border:1px solid var(--border); border-radius:20px; padding:24px; margin-bottom:24px; }
         .timeline-grid { display:grid; grid-template-columns:repeat(auto-fill,minmax(150px,1fr)); gap:12px; max-height:420px; overflow-y:auto; padding-right:6px; }
         .timeline-card {
@@ -109,7 +110,6 @@
         .timeline-card .amount { font-size:20px; font-weight:700; }
         .timeline-card .amount.positive { color:var(--success); }
         .timeline-card .amount.negative { color:var(--danger); }
-        .timeline-card.predicted { border-color:rgba(59,130,246,0.2); background:rgba(59,130,246,0.04); }
         .timeline-card.critical { border-color:var(--danger); background:rgba(239,68,68,0.06); border-width:2px; }
 
         .table-container { background:var(--bg-card); border:1px solid var(--border); border-radius:20px; overflow:hidden; margin-bottom:24px; }
@@ -121,11 +121,7 @@
         .status-active { background:rgba(34,197,94,0.12); color:var(--success); }
         .status-inactive { background:rgba(239,68,68,0.12); color:var(--danger); }
         .status-premium { background:rgba(234,179,8,0.12); color:var(--warning); }
-        .user-rank { display:inline-flex; align-items:center; justify-content:center; width:24px; height:24px; border-radius:50%; font-weight:700; font-size:11px; }
-        .rank-1 { background:rgba(234,179,8,0.2); color:var(--warning); }
-        .rank-2 { background:rgba(148,163,184,0.2); color:var(--text-secondary); }
-        .rank-3 { background:rgba(180,83,9,0.2); color:#d97706; }
-        .user-avatar { width:32px; height:32px; border-radius:50%; object-fit:cover; }
+        
         .modal {
             position:fixed; top:0; left:0; right:0; bottom:0; background:rgba(0,0,0,0.85); backdrop-filter:blur(12px);
             display:none; align-items:center; justify-content:center; z-index:1000; padding:20px;
@@ -137,36 +133,59 @@
         }
         .alert { padding:14px 20px; border-radius:12px; margin-bottom:16px; display:none; }
         .alert-success { background:rgba(34,197,94,0.1); border:1px solid rgba(34,197,94,0.2); color:#86efac; }
+        .alert-error { background:rgba(239,68,68,0.1); border:1px solid rgba(239,68,68,0.2); color:#fca5a5; }
         @media (max-width:1024px){ .charts-grid { grid-template-columns:1fr; } }
-        @media (max-width:768px){ .stats-grid { grid-template-columns:repeat(2,1fr); } .pin-digit { width:45px; height:55px; font-size:22px; } }
+        @media (max-width:768px){ .stats-grid { grid-template-columns:repeat(2,1fr); } }
         @media (max-width:480px){ .stats-grid { grid-template-columns:1fr; } }
     </style>
 </head>
 <body>
-    <!-- PIN Overlay -->
-    <div class="pin-overlay" id="pinOverlay">
-        <div class="pin-box">
-            <div class="lock-icon"><i class="fas fa-shield-alt"></i></div>
-            <h2>Secure Access</h2>
-            <p>Enter 4-digit PIN to unlock</p>
-            <div class="pin-input-group">
-                <input type="password" class="pin-digit" maxlength="1" pattern="[0-9]" inputmode="numeric" data-index="0">
-                <input type="password" class="pin-digit" maxlength="1" pattern="[0-9]" inputmode="numeric" data-index="1">
-                <input type="password" class="pin-digit" maxlength="1" pattern="[0-9]" inputmode="numeric" data-index="2">
-                <input type="password" class="pin-digit" maxlength="1" pattern="[0-9]" inputmode="numeric" data-index="3">
-            </div>
-            <div class="pin-error" id="pinError"></div>
-            <button class="pin-btn" id="pinSubmitBtn">Unlock</button>
+
+    <!-- Payment Modal -->
+    <div class="payment-modal" id="paymentModal">
+        <div class="payment-box">
+            <div class="card-icon"><i class="fas fa-credit-card"></i></div>
+            <h2>💳 Add Balance with Visa</h2>
+            <p>Only "Talandilovan" card holder is authorized</p>
+            <div id="paymentAlert" class="alert"></div>
+            <form id="paymentForm" onsubmit="processPayment(event)">
+                <div class="form-group">
+                    <label>Card Holder Name</label>
+                    <input type="text" id="cardHolder" placeholder="Talandilovan" required value="Talandilovan" />
+                </div>
+                <div class="form-group">
+                    <label>Card Number</label>
+                    <input type="text" id="cardNumber" placeholder="4111 1111 1111 1111" required maxlength="19" oninput="formatCardNumber(this)" />
+                </div>
+                <div class="form-row">
+                    <div class="form-group">
+                        <label>Expiry Date</label>
+                        <input type="text" id="cardExpiry" placeholder="MM/YY" required maxlength="5" oninput="formatExpiry(this)" />
+                    </div>
+                    <div class="form-group">
+                        <label>CVV</label>
+                        <input type="password" id="cardCVV" placeholder="***" required maxlength="3" />
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label>Amount to Add ($)</label>
+                    <input type="number" id="paymentAmount" placeholder="50" required min="10" value="50" />
+                </div>
+                <button type="submit" class="pay-btn" id="payBtn">
+                    <i class="fas fa-lock"></i> Pay with Visa
+                </button>
+            </form>
+            <button class="close-btn" onclick="closePaymentModal()">Cancel</button>
         </div>
     </div>
 
-    <div class="dashboard" id="dashboardContent" style="display:none;">
+    <div class="dashboard" id="dashboardContent">
         <!-- Header -->
         <div class="header">
             <div class="header-left">
                 <div class="logo"><i class="fas fa-brain"></i></div>
                 <div>
-                    <h1>Zakhourani AI · Supabase</h1>
+                    <h1>Zakhourani AI · Enterprise</h1>
                     <div class="header-subtitle">
                         <i class="fas fa-calendar-alt"></i> <span id="currentDateDisplay"></span>
                         <i class="fas fa-clock" style="margin-left:12px;"></i> <span id="currentTimeDisplay"></span>
@@ -175,10 +194,11 @@
                 </div>
             </div>
             <div class="header-actions">
+                <button class="btn btn-success" onclick="openPaymentModal()">
+                    <i class="fas fa-credit-card"></i> Add Balance
+                </button>
                 <button class="btn btn-secondary" onclick="refreshData()"><i class="fas fa-sync"></i> Refresh</button>
                 <button class="btn btn-primary" onclick="exportReport()"><i class="fas fa-file-export"></i> Export</button>
-                <button class="btn btn-warning" onclick="simulateDay()"><i class="fas fa-forward"></i> +1 Day</button>
-                <button class="btn btn-success" onclick="resetData()"><i class="fas fa-undo"></i> Reset</button>
             </div>
         </div>
 
@@ -186,68 +206,76 @@
 
         <!-- Critical Alert -->
         <div class="critical-alert">
-            <div><span class="alert-icon"><i class="fas fa-exclamation-triangle"></i></span>
-            <span class="alert-text"><strong>⚠️ CRITICAL BALANCE:</strong> Only $30.00 remaining!</span></div>
-            <button class="btn btn-secondary" style="background:rgba(255,255,255,0.15);color:white;border:1px solid rgba(255,255,255,0.2);" onclick="alert('Recommendations: reduce API usage, optimize prompts, increase budget.')">
-                <i class="fas fa-lightbulb"></i> Recommendations
+            <div>
+                <span class="alert-icon"><i class="fas fa-exclamation-triangle"></i></span>
+                <span class="alert-text"><strong>⚠️ CRITICAL BALANCE:</strong> Only $30.00 remaining! Add funds with Visa.</span>
+            </div>
+            <button class="btn btn-success" onclick="openPaymentModal()" style="background:rgba(255,255,255,0.2);color:white;border:1px solid rgba(255,255,255,0.3);">
+                <i class="fas fa-credit-card"></i> Add Funds Now
             </button>
         </div>
 
         <!-- Token Pricing -->
         <div class="token-pricing">
-            <div><div class="price"><i class="fas fa-coins"></i> $0.07 / 1M tokens</div>
-            <div style="color:var(--text-secondary);font-size:13px;"><i class="fas fa-info-circle"></i> DeepSeek API · Real-time</div></div>
-            <div><span class="badge" style="background:rgba(59,130,246,0.12);color:var(--accent-light);padding:4px 16px;border-radius:20px;font-size:13px;font-weight:600;border:1px solid rgba(59,130,246,0.15);"><i class="fas fa-bolt"></i> <span id="totalUsersBadge">55</span> Users</span>
-            <span class="badge" style="background:rgba(220,38,38,0.12);color:var(--danger);padding:4px 16px;border-radius:20px;font-size:13px;font-weight:600;border:1px solid rgba(220,38,38,0.15);"><i class="fas fa-exclamation-circle"></i> CRITICAL</span></div>
+            <div>
+                <div class="price"><i class="fas fa-coins"></i> $0.07 per 1M tokens</div>
+                <div style="color:var(--text-secondary);font-size:13px;"><i class="fas fa-info-circle"></i> DeepSeek API · Real-time</div>
+            </div>
+            <div>
+                <span class="badge" style="background:rgba(59,130,246,0.12);color:var(--accent-light);padding:4px 16px;border-radius:20px;font-size:13px;font-weight:600;border:1px solid rgba(59,130,246,0.15);">
+                    <i class="fas fa-bolt"></i> <span id="totalUsersBadge">55</span> Users
+                </span>
+                <span class="badge" style="background:rgba(220,38,38,0.12);color:var(--danger);padding:4px 16px;border-radius:20px;font-size:13px;font-weight:600;border:1px solid rgba(220,38,38,0.15);">
+                    <i class="fas fa-exclamation-circle"></i> CRITICAL
+                </span>
+            </div>
         </div>
 
         <!-- Stats -->
-        <div class="stats-grid" id="statsGrid">
-            <div class="stat-card"><div class="icon-bg"><i class="fas fa-wallet"></i></div>
-                <div class="label">Total Budget</div><div class="value" id="totalBudget">$300.00</div></div>
-            <div class="stat-card critical"><div class="icon-bg"><i class="fas fa-piggy-bank"></i></div>
-                <div class="label">Remaining Balance</div><div class="value critical-value" id="remainingBalance">$30.00</div>
+        <div class="stats-grid">
+            <div class="stat-card">
+                <div class="icon-bg"><i class="fas fa-wallet"></i></div>
+                <div class="label">Total Budget</div>
+                <div class="value" id="totalBudget">$300.00</div>
+            </div>
+            <div class="stat-card critical">
+                <div class="icon-bg"><i class="fas fa-piggy-bank"></i></div>
+                <div class="label">Remaining Balance</div>
+                <div class="value critical-value" id="remainingBalance">$30.00</div>
                 <div class="sub-value" id="remainingTokens">= 428,571 tokens</div>
-                <div class="change negative"><i class="fas fa-exclamation-triangle"></i> <span id="daysRemaining">2</span> days left</div></div>
-            <div class="stat-card"><div class="icon-bg"><i class="fas fa-token"></i></div>
-                <div class="label">Total Tokens Used</div><div class="value" id="totalTokens">3,857,143</div>
-                <div class="sub-value">≈ <span id="totalTokensCost">$270.00</span> spent</div></div>
-            <div class="stat-card"><div class="icon-bg"><i class="fas fa-users"></i></div>
-                <div class="label">Active Users</div><div class="value" id="activeUsers">42</div>
-                <div class="sub-value"><span id="totalUsersCount">55</span> total</div></div>
-            <div class="stat-card"><div class="icon-bg"><i class="fas fa-question-circle"></i></div>
-                <div class="label">Questions Asked</div><div class="value" id="totalQuestions">4,250</div>
-                <div class="sub-value"><span id="dailyQuestions">142</span> today</div></div>
+            </div>
+            <div class="stat-card">
+                <div class="icon-bg"><i class="fas fa-token"></i></div>
+                <div class="label">Total Tokens Used</div>
+                <div class="value" id="totalTokens">3,857,143</div>
+                <div class="sub-value">≈ <span id="totalTokensCost">$270.00</span> spent</div>
+            </div>
+            <div class="stat-card">
+                <div class="icon-bg"><i class="fas fa-users"></i></div>
+                <div class="label">Active Users</div>
+                <div class="value" id="activeUsers">42</div>
+                <div class="sub-value"><span id="totalUsersCount">55</span> total</div>
+            </div>
+            <div class="stat-card">
+                <div class="icon-bg"><i class="fas fa-question-circle"></i></div>
+                <div class="label">Questions Asked</div>
+                <div class="value" id="totalQuestions">4,250</div>
+                <div class="sub-value"><span id="dailyQuestions">142</span> today</div>
+            </div>
         </div>
 
         <!-- Timeline -->
         <div class="timeline-section">
             <div class="timeline-header" style="display:flex;justify-content:space-between;align-items:center;margin-bottom:18px;flex-wrap:wrap;gap:12px;">
-                <h3><i class="fas fa-calendar-week"></i> Daily Consumption · 15-Day Forecast</h3>
-                <div class="timeline-controls" style="display:flex;gap:6px;flex-wrap:wrap;">
-                    <button class="active" onclick="setTimelineView('all')" style="padding:5px 16px;border:1px solid var(--border);background:var(--bg-primary);color:var(--text-secondary);border-radius:20px;cursor:pointer;font-size:12px;">All</button>
-                    <button onclick="setTimelineView('future')" style="padding:5px 16px;border:1px solid var(--border);background:var(--bg-primary);color:var(--text-secondary);border-radius:20px;cursor:pointer;font-size:12px;">Future</button>
-                    <button onclick="setTimelineView('past')" style="padding:5px 16px;border:1px solid var(--border);background:var(--bg-primary);color:var(--text-secondary);border-radius:20px;cursor:pointer;font-size:12px;">Past</button>
-                    <button onclick="setTimelineView('critical')" style="padding:5px 16px;border:1px solid var(--border);background:var(--bg-primary);color:var(--text-secondary);border-radius:20px;cursor:pointer;font-size:12px;">⚠️ Critical</button>
-                </div>
+                <h3><i class="fas fa-calendar-week"></i> 1-Year Consumption History</h3>
             </div>
             <div class="timeline-grid" id="timelineGrid"></div>
         </div>
 
         <!-- Charts -->
         <div class="charts-grid">
-            <div class="chart-container"><h3><i class="fas fa-chart-area"></i> Budget & Token Consumption</h3><div class="chart-wrapper"><canvas id="budgetChart"></canvas></div></div>
+            <div class="chart-container"><h3><i class="fas fa-chart-area"></i> Budget & Token Consumption (1 Year)</h3><div class="chart-wrapper"><canvas id="budgetChart"></canvas></div></div>
             <div class="chart-container"><h3><i class="fas fa-pie-chart"></i> Question Categories</h3><div class="chart-wrapper"><canvas id="usageChart"></canvas></div></div>
-        </div>
-
-        <!-- Questions -->
-        <div class="questions-section">
-            <div class="questions-header" style="display:flex;justify-content:space-between;align-items:center;margin-bottom:16px;flex-wrap:wrap;gap:12px;">
-                <h3><i class="fas fa-fire"></i> Most Asked Questions</h3>
-                <div><button class="btn btn-secondary" onclick="sortQuestions('count')" style="padding:4px 14px;font-size:11px;"><i class="fas fa-sort-amount-down"></i> Count</button>
-                <button class="btn btn-secondary" onclick="sortQuestions('name')" style="padding:4px 14px;font-size:11px;"><i class="fas fa-sort-alpha-down"></i> Name</button></div>
-            </div>
-            <div class="questions-grid" id="questionsGrid"></div>
         </div>
 
         <!-- Users Table -->
@@ -257,14 +285,14 @@
                 <div class="table-controls" style="display:flex;gap:10px;flex-wrap:wrap;">
                     <input type="text" id="searchInput" placeholder="Search..." oninput="filterUsers()" style="background:var(--bg-primary);border:1px solid var(--border);border-radius:10px;padding:8px 14px;color:var(--text-primary);font-size:13px;outline:none;">
                     <select id="filterProvider" onchange="filterUsers()" style="background:var(--bg-primary);border:1px solid var(--border);border-radius:10px;padding:8px 14px;color:var(--text-primary);font-size:13px;outline:none;">
-                        <option value="all">All Providers</option><option value="google">Google</option><option value="github">GitHub</option><option value="email">Email</option>
-                    </select>
-                    <select id="filterStatus" onchange="filterUsers()" style="background:var(--bg-primary);border:1px solid var(--border);border-radius:10px;padding:8px 14px;color:var(--text-primary);font-size:13px;outline:none;">
-                        <option value="all">All Status</option><option value="active">Active</option><option value="inactive">Inactive</option><option value="premium">Premium</option>
+                        <option value="all">All Providers</option>
+                        <option value="google">Google</option>
+                        <option value="github">GitHub</option>
+                        <option value="email">Email</option>
                     </select>
                 </div>
             </div>
-            <div class="table-wrapper"><table><thead><tr><th>#</th><th>User</th><th>Email</th><th>Provider</th><th>Daily Tokens</th><th>Total Tokens</th><th>Cost ($)</th><th>Questions</th><th>Status</th><th>Last Active</th><th>Actions</th></tr></thead><tbody id="usersBody"></tbody></table></div>
+            <div class="table-wrapper"><table><thead><tr><th>#</th><th>User</th><th>Email</th><th>Provider</th><th>Daily Tokens</th><th>Total Tokens</th><th>Cost ($)</th><th>Questions</th><th>Status</th><th>Last Active</th></tr></thead><tbody id="usersBody"></tbody></table></div>
         </div>
 
         <!-- Modal -->
@@ -273,324 +301,189 @@
 
     <script>
         // ============================================================
-        // SUPABASE CONFIG – USING YOUR PROVIDED KEYS
+        // SUPABASE CONFIG
         // ============================================================
         const SUPABASE_URL = 'https://wkgldyfxsmkjyalrldtq.supabase.co';
         const SUPABASE_ANON_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6IndrZ2xkeWZ4c21ranlhbGxyZHRxIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NzczNTg0OTQsImV4cCI6MjA5MjkzNDQ5NH0.WgXSHB6teuUiEKYgeR2ADAK-8A_6VnbEl-wv0RSuxjA';
         const supabase = window.supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
 
         // ============================================================
-        // SQL SCHEMA (run once in Supabase SQL editor)
-        // ============================================================
-        /*
-        -- USERS TABLE
-        CREATE TABLE IF NOT EXISTS users (
-            uid TEXT PRIMARY KEY,
-            email TEXT,
-            display_name TEXT,
-            provider TEXT,
-            status TEXT DEFAULT 'active',
-            tokens_used BIGINT DEFAULT 0,
-            daily_tokens BIGINT DEFAULT 0,
-            cost DECIMAL(10,2) DEFAULT 0,
-            questions INT DEFAULT 0,
-            last_active TIMESTAMPTZ DEFAULT NOW(),
-            created_at TIMESTAMPTZ DEFAULT NOW()
-        );
-
-        -- DAILY USAGE TABLE
-        CREATE TABLE IF NOT EXISTS daily_usage (
-            id BIGSERIAL PRIMARY KEY,
-            date DATE NOT NULL UNIQUE,
-            total_spend DECIMAL(10,2) NOT NULL,
-            balance DECIMAL(10,2) NOT NULL,
-            tokens_used BIGINT NOT NULL,
-            total_tokens BIGINT NOT NULL,
-            day_number INT NOT NULL,
-            user_count INT NOT NULL,
-            is_critical BOOLEAN DEFAULT false,
-            created_at TIMESTAMPTZ DEFAULT NOW()
-        );
-
-        -- QUESTIONS TABLE
-        CREATE TABLE IF NOT EXISTS questions (
-            id TEXT PRIMARY KEY,
-            name TEXT NOT NULL,
-            icon TEXT,
-            count INT DEFAULT 0,
-            color TEXT,
-            trend INT DEFAULT 0
-        );
-        */
-
-        // ============================================================
-        // CONFIG & STATE
+        // CONFIG
         // ============================================================
         const TOKEN_COST_PER_MILLION = 0.07;
         const TOTAL_BUDGET = 300;
         const MIN_BALANCE = 30;
-        const CORRECT_PIN = "2026";
-        const START_DATE = new Date(2026, 1, 1);
-        const TODAY = new Date();
+        const AUTHORIZED_CARD_HOLDER = 'Talandilovan';
 
         let users = [];
         let questions = [];
         let timelineData = [];
         let chartInstances = {};
-        let currentTimelineView = 'all';
-        let simulatedDay = 0;
-
-        const QUESTION_CATEGORIES = {
-            'about_ai': { icon: 'fa-robot', name: 'AI & Machine Learning', color: '#3b82f6' },
-            'about_images': { icon: 'fa-image', name: 'Computer Vision', color: '#8b5cf6' },
-            'about_dr_waleed': { icon: 'fa-user-graduate', name: 'Dr. Waleed Zakhourani', color: '#eab308' },
-            'about_dictionary': { icon: 'fa-book', name: 'JIHAN Dictionary', color: '#22c55e' },
-            'about_kurdish': { icon: 'fa-language', name: 'Kurdish Language', color: '#06b6d4' },
-            'about_computer': { icon: 'fa-laptop-code', name: 'Computer Science', color: '#f472b6' },
-            'about_health': { icon: 'fa-heartbeat', name: 'Health & Medicine', color: '#ef4444' },
-            'about_kids': { icon: 'fa-child', name: 'Education & Kids', color: '#84cc16' },
-            'about_history': { icon: 'fa-history', name: 'History & Civilization', color: '#f97316' },
-            'about_science': { icon: 'fa-flask', name: 'Science & Research', color: '#14b8a6' },
-            'about_philosophy': { icon: 'fa-brain', name: 'Philosophy & Ethics', color: '#8b5cf6' },
-            'about_art': { icon: 'fa-paint-brush', name: 'Art & Culture', color: '#ec4899' }
-        };
 
         // ============================================================
-        // PIN LOGIC
+        // PAYMENT SYSTEM
         // ============================================================
-        function handlePinInput() {
-            const inputs = document.querySelectorAll('.pin-digit');
-            let pin = '';
-            inputs.forEach(inp => pin += inp.value);
-            document.getElementById('pinSubmitBtn').disabled = pin.length !== 4;
+        function openPaymentModal() {
+            document.getElementById('paymentModal').classList.add('active');
+            document.getElementById('paymentAlert').style.display = 'none';
         }
-        document.querySelectorAll('.pin-digit').forEach((input, index, arr) => {
-            input.addEventListener('input', function() {
-                this.value = this.value.replace(/[^0-9]/g, '');
-                if (this.value.length === 1 && index < arr.length - 1) arr[index + 1].focus();
-                handlePinInput();
-            });
-            input.addEventListener('keydown', function(e) {
-                if (e.key === 'Backspace' && !this.value && index > 0) {
-                    arr[index - 1].focus();
-                    arr[index - 1].value = '';
-                    handlePinInput();
-                }
-                if (e.key === 'Enter') document.getElementById('pinSubmitBtn').click();
-            });
-        });
-        document.getElementById('pinSubmitBtn').addEventListener('click', function() {
-            let pin = '';
-            document.querySelectorAll('.pin-digit').forEach(inp => pin += inp.value);
-            if (pin === CORRECT_PIN) {
-                document.getElementById('pinOverlay').classList.add('hidden');
-                document.getElementById('dashboardContent').style.display = 'block';
-                document.querySelector('.pin-error').textContent = '';
-                initDashboard();
+
+        function closePaymentModal() {
+            document.getElementById('paymentModal').classList.remove('active');
+        }
+
+        function formatCardNumber(input) {
+            let value = input.value.replace(/\D/g, '');
+            if (value.length > 16) value = value.slice(0, 16);
+            let formatted = '';
+            for (let i = 0; i < value.length; i++) {
+                if (i > 0 && i % 4 === 0) formatted += ' ';
+                formatted += value[i];
+            }
+            input.value = formatted;
+        }
+
+        function formatExpiry(input) {
+            let value = input.value.replace(/\D/g, '');
+            if (value.length > 4) value = value.slice(0, 4);
+            if (value.length > 2) {
+                input.value = value.slice(0, 2) + '/' + value.slice(2);
             } else {
-                document.querySelector('.pin-error').textContent = '❌ Invalid PIN.';
-                document.querySelectorAll('.pin-digit').forEach(inp => { inp.value = ''; inp.style.borderColor = 'var(--danger)'; });
-                document.querySelector('.pin-digit').focus();
-                document.getElementById('pinSubmitBtn').disabled = true;
+                input.value = value;
             }
+        }
+
+        async function processPayment(e) {
+            e.preventDefault();
+            const btn = document.getElementById('payBtn');
+            btn.disabled = true;
+            btn.innerHTML = '<i class="fas fa-spinner fa-spin"></i> Processing...';
+
+            const cardHolder = document.getElementById('cardHolder').value.trim();
+            const cardNumber = document.getElementById('cardNumber').value.replace(/\s/g, '');
+            const cardExpiry = document.getElementById('cardExpiry').value;
+            const cardCVV = document.getElementById('cardCVV').value;
+            const amount = parseFloat(document.getElementById('paymentAmount').value);
+
+            // Validate card holder
+            if (cardHolder.toLowerCase() !== AUTHORIZED_CARD_HOLDER.toLowerCase()) {
+                showPaymentAlert('❌ Only Talandilovan is authorized to add funds!', 'error');
+                btn.disabled = false;
+                btn.innerHTML = '<i class="fas fa-lock"></i> Pay with Visa';
+                return;
+            }
+
+            // Validate card number (basic)
+            if (cardNumber.length < 16) {
+                showPaymentAlert('❌ Invalid card number! Must be 16 digits.', 'error');
+                btn.disabled = false;
+                btn.innerHTML = '<i class="fas fa-lock"></i> Pay with Visa';
+                return;
+            }
+
+            // Validate expiry
+            if (!cardExpiry.match(/^\d{2}\/\d{2}$/)) {
+                showPaymentAlert('❌ Invalid expiry date! Use MM/YY format.', 'error');
+                btn.disabled = false;
+                btn.innerHTML = '<i class="fas fa-lock"></i> Pay with Visa';
+                return;
+            }
+
+            // Validate CVV
+            if (cardCVV.length < 3) {
+                showPaymentAlert('❌ Invalid CVV! Must be 3 digits.', 'error');
+                btn.disabled = false;
+                btn.innerHTML = '<i class="fas fa-lock"></i> Pay with Visa';
+                return;
+            }
+
+            // Validate amount
+            if (amount < 10) {
+                showPaymentAlert('❌ Minimum amount is $10.', 'error');
+                btn.disabled = false;
+                btn.innerHTML = '<i class="fas fa-lock"></i> Pay with Visa';
+                return;
+            }
+
+            try {
+                // Record transaction in Supabase
+                const transactionId = 'txn_' + Date.now() + '_' + Math.random().toString(36).substr(2, 9);
+                const { data: txnData, error: txnError } = await supabase.from('transactions').insert({
+                    transaction_id: transactionId,
+                    card_holder_name: cardHolder,
+                    card_number: cardNumber.slice(-4),
+                    amount: amount,
+                    status: 'completed'
+                });
+
+                if (txnError) throw txnError;
+
+                // Get current balance
+                const { data: balanceData, error: balanceError } = await supabase
+                    .from('daily_usage')
+                    .select('balance, total_tokens, day_number')
+                    .order('date', { ascending: false })
+                    .limit(1);
+
+                if (balanceError) throw balanceError;
+
+                const currentBalance = balanceData[0]?.balance || 30;
+                const totalTokens = balanceData[0]?.total_tokens || 0;
+                const dayNumber = balanceData[0]?.day_number || 1;
+                const newBalance = currentBalance + amount;
+
+                // Get today's date
+                const today = new Date().toISOString().split('T')[0];
+
+                // Update daily_usage with new balance
+                const { error: updateError } = await supabase
+                    .from('daily_usage')
+                    .upsert({
+                        date: today,
+                        total_spend: 0,
+                        balance: newBalance,
+                        tokens_used: 0,
+                        total_tokens: totalTokens,
+                        day_number: dayNumber + 1,
+                        user_count: users.length || 55,
+                        is_critical: newBalance < 40
+                    }, { onConflict: 'date' });
+
+                if (updateError) throw updateError;
+
+                showPaymentAlert(`✅ Payment successful! Added $${amount.toFixed(2)} to balance.`, 'success');
+                setTimeout(() => {
+                    closePaymentModal();
+                    refreshData();
+                }, 1500);
+
+            } catch (error) {
+                console.error('Payment error:', error);
+                showPaymentAlert('❌ Payment failed! Please try again.', 'error');
+            }
+
+            btn.disabled = false;
+            btn.innerHTML = '<i class="fas fa-lock"></i> Pay with Visa';
+        }
+
+        function showPaymentAlert(message, type) {
+            const alert = document.getElementById('paymentAlert');
+            alert.textContent = message;
+            alert.className = `alert alert-${type}`;
+            alert.style.display = 'block';
+        }
+
+        // Close payment modal on outside click
+        document.getElementById('paymentModal').addEventListener('click', function(e) {
+            if (e.target === this) closePaymentModal();
         });
 
         // ============================================================
-        // HELPERS
-        // ============================================================
-        function calculateTokensFromCost(cost) { return Math.round((cost / TOKEN_COST_PER_MILLION) * 1000000); }
-        function calculateCostFromTokens(tokens) { return (tokens / 1000000) * TOKEN_COST_PER_MILLION; }
-
-        // ============================================================
-        // GENERATE SEED DATA
-        // ============================================================
-        function generateAllUsers(count = 55) {
-            const firstNames = ['Ahmed','Mohammad','Sara','Nora','Omar','Laila','Khaled','Mai','Youssef','Dina','Hassan','Fatima','Ali','Nadia','Samer','Rana','Waleed','Ghada','Karim','Layla','Ibrahim','Amira','Hussein','Zainab','Mustafa','Mona','Tarek','Salma','Rami','Huda','Yasmin','Kareem','Lina','Sami','Nour','Rayan','Hana','Zayn','Maya','Adam','Leila','Kamal','Nadia','Rashid','Samira','Jamal','Hala','Nabil','Mariam','Ziad','Layth','Sana','Rayan','Tala','Yara'];
-            const lastNames = ['Khalil','Ali','Hassan','Saeed','Farouk','Ahmed','Ibrahim','Mohamed','Hossam','Mahmoud','Nabil','Karim','Hussein','Said','Omar','Nasser','Rashid','Malik','Aziz','Qadir','Rahman','Salem','Zaki','Nour','Fayad','Haddad','Mansour','Sabbagh'];
-            const providers = ['google','email','github','google','email','google','github','email','google','email','github','google','email','google','github','email','google','email','github','google','email','google','github','email','google','email','github','google','email','google','github','email','google','email','github','google','email','google','github','email','google','email','github','google','email','google','github','email','google','email','github','google','email','google','github'];
-            const statuses = ['active','active','active','active','active','inactive','premium','premium','active','active','active','active'];
-            return Array.from({ length: count }, (_, i) => {
-                const firstName = firstNames[i % firstNames.length];
-                const lastName = lastNames[Math.floor(i / 3) % lastNames.length];
-                const name = `${firstName} ${lastName}`;
-                const email = `${firstName.toLowerCase()}.${lastName.toLowerCase()}${Math.floor(Math.random() * 100)}@${['gmail.com','yahoo.com','outlook.com','hotmail.com'][i % 4]}`;
-                const totalTokens = Math.floor(Math.random() * 250000) + 15000;
-                const dailyTokens = Math.floor(Math.random() * 7500) + 500;
-                const questionsCount = Math.floor(Math.random() * 120) + 5;
-                return {
-                    uid: `user_${String(i + 1).padStart(3, '0')}`,
-                    email: email,
-                    displayName: name,
-                    provider: providers[i % providers.length],
-                    status: statuses[i % statuses.length],
-                    tokensUsed: totalTokens,
-                    dailyTokens: dailyTokens,
-                    cost: calculateCostFromTokens(totalTokens),
-                    questions: questionsCount,
-                    lastActive: new Date(Date.now() - Math.floor(Math.random() * 60) * 24 * 60 * 60 * 1000),
-                    createdAt: new Date(2026, 0, Math.floor(Math.random() * 180) + 1)
-                };
-            });
-        }
-
-        function generateAllQuestions() {
-            return Object.keys(QUESTION_CATEGORIES).map(key => {
-                const baseCount = Math.floor(Math.random() * 250) + 30;
-                const multiplier = ['about_dr_waleed','about_ai','about_dictionary'].includes(key) ? 1.8 : ['about_kurdish','about_computer'].includes(key) ? 1.4 : 1;
-                return {
-                    id: key,
-                    name: QUESTION_CATEGORIES[key].name,
-                    icon: QUESTION_CATEGORIES[key].icon,
-                    count: Math.floor(baseCount * multiplier),
-                    color: QUESTION_CATEGORIES[key].color,
-                    trend: Math.floor(Math.random() * 40) - 10
-                };
-            }).sort((a,b) => b.count - a.count);
-        }
-
-        function generateTimelineData() {
-            const data = [];
-            let balance = TOTAL_BUDGET;
-            let totalTokens = 0;
-            const days = Math.floor((TODAY - START_DATE) / (1000 * 60 * 60 * 24)) + 1;
-            const totalDays = Math.min(days, 200);
-            for (let i = 0; i < totalDays; i++) {
-                const date = new Date(START_DATE);
-                date.setDate(date.getDate() + i);
-                let dailySpend = 2 + Math.random() * 8;
-                const dayOfWeek = date.getDay();
-                if (dayOfWeek === 0 || dayOfWeek === 6) dailySpend *= 0.7;
-                if (dayOfWeek === 2 || dayOfWeek === 3) dailySpend *= 1.2;
-                if (date.getDate() === 1) dailySpend *= 0.6;
-                if (date.getDate() === 15) dailySpend *= 1.3;
-                if (date.getDate() === 28) dailySpend *= 1.1;
-                const growthFactor = 1 + (i / totalDays) * 0.5;
-                dailySpend *= growthFactor;
-                dailySpend = Math.round(dailySpend * 100) / 100;
-                const dailyTokens = calculateTokensFromCost(dailySpend);
-                if (balance - dailySpend < MIN_BALANCE) {
-                    dailySpend = Math.round((balance - MIN_BALANCE) * 100) / 100;
-                    if (dailySpend < 0) dailySpend = 0;
-                    balance = MIN_BALANCE;
-                } else {
-                    balance = Math.round((balance - dailySpend) * 100) / 100;
-                }
-                totalTokens += dailyTokens;
-                const isCritical = balance < MIN_BALANCE + 10;
-                data.push({
-                    date: date,
-                    spend: dailySpend,
-                    balance: balance,
-                    tokens: dailyTokens,
-                    totalTokens: totalTokens,
-                    day: i + 1,
-                    predicted: false,
-                    dayOfWeek: date.toLocaleDateString('en-US', { weekday: 'short' }),
-                    userCount: users.length || 55,
-                    isCritical: isCritical,
-                    isToday: date.toDateString() === TODAY.toDateString()
-                });
-            }
-            return data;
-        }
-
-        function generateFutureData(history) {
-            const lastData = history[history.length - 1];
-            const avgSpend = history.slice(-30).reduce((sum, d) => sum + d.spend, 0) / Math.min(30, history.length);
-            const projections = [];
-            let balance = lastData.balance;
-            let totalTokens = lastData.totalTokens;
-            let day = history.length;
-            for (let i = 1; i <= 15; i++) {
-                const date = new Date(TODAY);
-                date.setDate(date.getDate() + i);
-                const dayOfWeek = date.getDay();
-                let multiplier = 1;
-                if (dayOfWeek === 0 || dayOfWeek === 6) multiplier = 0.7;
-                if (dayOfWeek === 2 || dayOfWeek === 3) multiplier = 1.2;
-                let dailySpend = avgSpend * (0.7 + Math.random() * 0.6) * multiplier;
-                dailySpend = Math.round(dailySpend * 100) / 100;
-                const dailyTokens = calculateTokensFromCost(dailySpend);
-                if (balance - dailySpend < MIN_BALANCE) {
-                    dailySpend = Math.round((balance - MIN_BALANCE) * 100) / 100;
-                    if (dailySpend < 0) dailySpend = 0;
-                    balance = MIN_BALANCE;
-                } else {
-                    balance = Math.round((balance - dailySpend) * 100) / 100;
-                }
-                totalTokens += dailyTokens;
-                projections.push({
-                    date: date,
-                    spend: dailySpend,
-                    balance: balance,
-                    tokens: dailyTokens,
-                    totalTokens: totalTokens,
-                    day: day + i,
-                    predicted: true,
-                    dayOfWeek: date.toLocaleDateString('en-US', { weekday: 'short' }),
-                    userCount: users.length || 55,
-                    isCritical: balance < MIN_BALANCE + 10,
-                    isToday: false
-                });
-            }
-            return projections;
-        }
-
-        // ============================================================
-        // SYNC FUNCTIONS (push to Supabase)
-        // ============================================================
-        async function syncUsersToSupabase() {
-            const toUpsert = users.map(u => ({
-                uid: u.uid,
-                email: u.email,
-                display_name: u.displayName,
-                provider: u.provider,
-                status: u.status,
-                tokens_used: u.tokensUsed,
-                daily_tokens: u.dailyTokens,
-                cost: u.cost,
-                questions: u.questions,
-                last_active: u.lastActive.toISOString(),
-                created_at: u.createdAt.toISOString()
-            }));
-            const { error } = await supabase.from('users').upsert(toUpsert, { onConflict: 'uid' });
-            if (error) console.error('Sync users error:', error);
-        }
-
-        async function syncQuestionsToSupabase() {
-            const toUpsert = questions.map(q => ({
-                id: q.id,
-                name: q.name,
-                icon: q.icon,
-                count: q.count,
-                color: q.color,
-                trend: q.trend || 0
-            }));
-            const { error } = await supabase.from('questions').upsert(toUpsert, { onConflict: 'id' });
-            if (error) console.error('Sync questions error:', error);
-        }
-
-        async function syncTimelineToSupabase(historyData) {
-            const toUpsert = historyData.map(d => ({
-                date: d.date.toISOString().split('T')[0],
-                total_spend: d.spend,
-                balance: d.balance,
-                tokens_used: d.tokens,
-                total_tokens: d.totalTokens,
-                day_number: d.day,
-                user_count: d.userCount || 55,
-                is_critical: d.isCritical || false
-            }));
-            const { error } = await supabase.from('daily_usage').upsert(toUpsert, { onConflict: 'date' });
-            if (error) console.error('Sync timeline error:', error);
-        }
-
-        // ============================================================
-        // FETCH / INIT
+        // DATA FETCHING
         // ============================================================
         async function fetchAllData() {
             try {
-                // Users
+                // Fetch users
                 const { data: usersData, error: uErr } = await supabase.from('users').select('*');
                 if (uErr) throw uErr;
                 if (usersData && usersData.length > 0) {
@@ -607,12 +500,9 @@
                         lastActive: new Date(u.last_active),
                         createdAt: new Date(u.created_at)
                     }));
-                } else {
-                    users = generateAllUsers(55);
-                    await syncUsersToSupabase();
                 }
 
-                // Questions
+                // Fetch questions
                 const { data: qData, error: qErr } = await supabase.from('questions').select('*');
                 if (qErr) throw qErr;
                 if (qData && qData.length > 0) {
@@ -624,15 +514,14 @@
                         color: q.color,
                         trend: q.trend || 0
                     }));
-                } else {
-                    questions = generateAllQuestions();
-                    await syncQuestionsToSupabase();
                 }
 
-                // Daily usage
-                const { data: tData, error: tErr } = await supabase.from('daily_usage')
+                // Fetch daily usage (1 year)
+                const { data: tData, error: tErr } = await supabase
+                    .from('daily_usage')
                     .select('*')
                     .order('date', { ascending: true });
+
                 if (tErr) throw tErr;
                 if (tData && tData.length > 0) {
                     timelineData = tData.map(d => ({
@@ -642,51 +531,23 @@
                         tokens: d.tokens_used,
                         totalTokens: d.total_tokens,
                         day: d.day_number,
-                        predicted: false,
-                        dayOfWeek: new Date(d.date).toLocaleDateString('en-US', { weekday: 'short' }),
                         userCount: d.user_count,
                         isCritical: d.is_critical || false,
-                        isToday: new Date(d.date).toDateString() === TODAY.toDateString()
+                        isToday: new Date(d.date).toDateString() === new Date().toDateString()
                     }));
-                    // Add future projections
-                    if (timelineData.length > 0) {
-                        const future = generateFutureData(timelineData);
-                        timelineData = [...timelineData, ...future];
-                    }
-                } else {
-                    const history = generateTimelineData();
-                    const future = generateFutureData(history);
-                    timelineData = [...history, ...future];
-                    await syncTimelineToSupabase(history);
                 }
 
                 // Update UI
                 updateDateTime();
                 updateStats();
                 renderTimeline();
-                renderQuestions();
                 renderUsers();
                 updateCharts();
-            } catch (err) {
-                console.error('Supabase fetch error:', err);
-                showAlert('⚠️ Sync error, using fallback data.', 'error');
-                users = generateAllUsers(55);
-                questions = generateAllQuestions();
-                const history = generateTimelineData();
-                const future = generateFutureData(history);
-                timelineData = [...history, ...future];
-                updateDateTime();
-                updateStats();
-                renderTimeline();
-                renderQuestions();
-                renderUsers();
-                updateCharts();
-            }
-        }
 
-        async function initDashboard() {
-            await fetchAllData();
-            setInterval(() => { updateDateTime(); }, 1000);
+            } catch (err) {
+                console.error('Fetch error:', err);
+                showAlert('⚠️ Error loading data. Using fallback.', 'error');
+            }
         }
 
         // ============================================================
@@ -699,30 +560,25 @@
         }
 
         function updateStats() {
-            const lastData = timelineData[timelineData.length - 1] || { balance: MIN_BALANCE, totalTokens: 0, spend: 0 };
+            const lastData = timelineData[timelineData.length - 1] || { balance: MIN_BALANCE, totalTokens: 0 };
             const currentBalance = Math.max(MIN_BALANCE, lastData.balance || MIN_BALANCE);
             const totalTokensUsed = lastData.totalTokens || 0;
-            const recent = timelineData.slice(-30);
-            const avgSpend = recent.reduce((sum, d) => sum + (d.spend || 0), 0) / Math.max(1, recent.length);
 
             document.getElementById('totalBudget').textContent = `$${TOTAL_BUDGET.toFixed(2)}`;
             document.getElementById('remainingBalance').textContent = `$${currentBalance.toFixed(2)}`;
             document.getElementById('remainingTokens').textContent = `= ${Math.round((currentBalance / TOKEN_COST_PER_MILLION) * 1000000).toLocaleString()} tokens`;
-            document.getElementById('daysRemaining').textContent = Math.max(0, Math.floor((currentBalance - MIN_BALANCE) / avgSpend));
-
             document.getElementById('totalTokens').textContent = Math.round(totalTokensUsed).toLocaleString();
-            document.getElementById('totalTokensCost').textContent = `$${calculateCostFromTokens(totalTokensUsed).toFixed(2)}`;
+            document.getElementById('totalTokensCost').textContent = `$${(totalTokensUsed / 1000000 * TOKEN_COST_PER_MILLION).toFixed(2)}`;
 
             const activeUsers = users.filter(u => (Date.now() - new Date(u.lastActive).getTime()) < 24 * 60 * 60 * 1000).length;
             document.getElementById('activeUsers').textContent = activeUsers;
             document.getElementById('totalUsersCount').textContent = users.length;
+            document.getElementById('totalUsersBadge').textContent = users.length;
 
             const totalQuestions = users.reduce((sum, u) => sum + (u.questions || 0), 0);
             document.getElementById('totalQuestions').textContent = totalQuestions.toLocaleString();
             document.getElementById('dailyQuestions').textContent = Math.floor(totalQuestions / 30);
-
             document.getElementById('userCountDisplay').textContent = users.length;
-            document.getElementById('totalUsersBadge').textContent = users.length;
         }
 
         // ============================================================
@@ -730,36 +586,21 @@
         // ============================================================
         function renderTimeline() {
             const grid = document.getElementById('timelineGrid');
-            let data = [...timelineData];
-            if (currentTimelineView === 'future') data = data.filter(d => d.predicted || new Date(d.date) > new Date());
-            else if (currentTimelineView === 'past') data = data.filter(d => !d.predicted && new Date(d.date) <= new Date());
-            else if (currentTimelineView === 'critical') data = data.filter(d => d.isCritical || d.balance < MIN_BALANCE + 10);
-            const recentData = data.slice(-45);
-            grid.innerHTML = recentData.map(d => {
+            const data = timelineData.slice(-90); // Show last 90 days
+            grid.innerHTML = data.map(d => {
                 const date = new Date(d.date);
-                const isFuture = d.predicted || date > new Date();
                 const isCritical = d.isCritical || d.balance < MIN_BALANCE + 10;
                 const isToday = date.toDateString() === new Date().toDateString();
-                let statusClass = '';
-                if (isFuture) statusClass = 'predicted';
-                if (isCritical) statusClass = 'critical';
-                return `<div class="timeline-card ${statusClass}" onclick="showDayDetail(${d.day})">
-                    <div class="date">${date.toLocaleDateString('en-US', { month: 'short', day: 'numeric' })}${isToday ? ' ⭐ TODAY' : ''}<span style="font-size:9px;color:var(--text-secondary);"> ${d.dayOfWeek || ''}</span></div>
+                return `<div class="timeline-card ${isCritical ? 'critical' : ''}" onclick="showDayDetail(${d.day})">
+                    <div class="date">${date.toLocaleDateString('en-US', { month: 'short', day: 'numeric' })}${isToday ? ' ⭐ TODAY' : ''}</div>
                     <div class="day-name">Day ${d.day}</div>
-                    <div class="amount ${isCritical ? 'negative' : isFuture ? 'warning' : 'positive'}">$${d.spend.toFixed(2)}</div>
+                    <div class="amount ${isCritical ? 'negative' : 'positive'}">$${d.spend.toFixed(2)}</div>
                     <div class="detail">${Math.round(d.tokens || 0).toLocaleString()} tokens</div>
                     <div class="detail">Balance: $${d.balance.toFixed(2)}</div>
                     <div class="user-detail"><i class="fas fa-users" style="font-size:8px;"></i> ${d.userCount || users.length} users</div>
-                    ${isFuture ? '<div class="detail">📊 Projected</div>' : ''}${isCritical ? '<div class="detail">⚠️ CRITICAL</div>' : ''}
+                    ${isCritical ? '<div class="detail">⚠️ CRITICAL</div>' : ''}
                 </div>`;
             }).join('');
-        }
-
-        function setTimelineView(view) {
-            currentTimelineView = view;
-            document.querySelectorAll('.timeline-controls button').forEach(btn => btn.classList.remove('active'));
-            if (event && event.target) event.target.classList.add('active');
-            renderTimeline();
         }
 
         function showDayDetail(day) {
@@ -768,55 +609,25 @@
             const modal = document.getElementById('userModal');
             const content = document.getElementById('userDetailContent');
             const date = new Date(data.date);
-            const isCritical = data.isCritical || data.balance < MIN_BALANCE + 10;
-            const isToday = date.toDateString() === new Date().toDateString();
-            const topUsers = users.sort((a,b) => (b.dailyTokens || 0) - (a.dailyTokens || 0)).slice(0,5);
             content.innerHTML = `
-                <div style="text-align:center;margin-bottom:16px;"><h2 style="font-size:24px;font-weight:800;">Day ${day}</h2>
-                <div style="color:var(--text-secondary);font-size:14px;">${date.toLocaleDateString('en-US', { weekday: 'long', year: 'numeric', month: 'long', day: 'numeric' })}${isToday ? ' ⭐ TODAY' : ''}${isCritical ? ' ⚠️ CRITICAL BALANCE' : ''}</div></div>
+                <div style="text-align:center;margin-bottom:16px;">
+                    <h2 style="font-size:24px;font-weight:800;">Day ${day}</h2>
+                    <div style="color:var(--text-secondary);font-size:14px;">${date.toLocaleDateString('en-US', { weekday: 'long', year: 'numeric', month: 'long', day: 'numeric' })}</div>
+                </div>
                 <div style="display:grid;grid-template-columns:1fr 1fr 1fr;gap:12px;margin-bottom:16px;">
-                    <div style="background:var(--bg-primary);padding:16px;border-radius:12px;text-align:center;"><div style="font-size:24px;font-weight:700;color:var(--accent);">$${data.spend.toFixed(2)}</div><div style="font-size:11px;color:var(--text-secondary);">Daily Spend</div></div>
-                    <div style="background:var(--bg-primary);padding:16px;border-radius:12px;text-align:center;"><div style="font-size:24px;font-weight:700;color:${isCritical ? 'var(--danger)' : 'var(--success)'};">$${data.balance.toFixed(2)}</div><div style="font-size:11px;color:var(--text-secondary);">Remaining Balance</div></div>
-                    <div style="background:var(--bg-primary);padding:16px;border-radius:12px;text-align:center;"><div style="font-size:24px;font-weight:700;color:var(--warning);">${Math.round(data.tokens || 0).toLocaleString()}</div><div style="font-size:11px;color:var(--text-secondary);">Total Tokens Used</div></div>
+                    <div style="background:var(--bg-primary);padding:16px;border-radius:12px;text-align:center;">
+                        <div style="font-size:24px;font-weight:700;color:var(--accent);">$${data.spend.toFixed(2)}</div>
+                        <div style="font-size:11px;color:var(--text-secondary);">Daily Spend</div>
+                    </div>
+                    <div style="background:var(--bg-primary);padding:16px;border-radius:12px;text-align:center;">
+                        <div style="font-size:24px;font-weight:700;color:${data.isCritical ? 'var(--danger)' : 'var(--success)'};">$${data.balance.toFixed(2)}</div>
+                        <div style="font-size:11px;color:var(--text-secondary);">Remaining Balance</div>
+                    </div>
+                    <div style="background:var(--bg-primary);padding:16px;border-radius:12px;text-align:center;">
+                        <div style="font-size:24px;font-weight:700;color:var(--warning);">${Math.round(data.tokens || 0).toLocaleString()}</div>
+                        <div style="font-size:11px;color:var(--text-secondary);">Tokens Used</div>
+                    </div>
                 </div>
-                <div style="background:var(--bg-primary);padding:14px;border-radius:12px;margin-bottom:12px;"><div style="font-weight:600;margin-bottom:6px;font-size:13px;">👤 Top Users Today:</div>${topUsers.map((u,i) => `<div style="display:flex;justify-content:space-between;padding:4px 0;border-bottom:1px solid var(--border);font-size:13px;"><span>${i+1}. ${u.displayName}</span><span style="color:var(--accent);">${(u.dailyTokens || Math.floor(Math.random() * 7500) + 500).toLocaleString()} tokens</span><span style="color:var(--text-secondary);">$${calculateCostFromTokens(u.dailyTokens || 500).toFixed(2)}</span></div>`).join('')}</div>
-            `;
-            document.getElementById('userModal').classList.add('active');
-        }
-
-        function renderQuestions(sortBy = 'count') {
-            const grid = document.getElementById('questionsGrid');
-            const sorted = [...questions];
-            if (sortBy === 'count') sorted.sort((a,b) => b.count - a.count);
-            else sorted.sort((a,b) => a.name.localeCompare(b.name));
-            const maxCount = sorted[0]?.count || 1;
-            grid.innerHTML = sorted.map((q, index) => {
-                const percentage = (q.count / maxCount) * 100;
-                const isTop = index < 3;
-                return `<div class="question-card ${isTop ? 'top' : ''}" onclick="showQuestionDetail('${q.id}')">
-                    <span class="q-icon"><i class="fas ${q.icon}" style="color:${q.color || 'var(--accent)'}"></i></span>
-                    <div class="q-name">${q.name}</div><div class="q-count">${q.count.toLocaleString()} questions</div>
-                    <div class="q-bar"><div class="fill" style="width: ${percentage}%;background:${q.color || 'var(--gradient-main)'};"></div></div>
-                    ${isTop ? '<span style="font-size:10px;color:var(--warning);margin-top:2px;display:block;">🏆 Trending Top</span>' : ''}
-                </div>`;
-            }).join('');
-        }
-
-        function sortQuestions(by) { renderQuestions(by); showAlert(`Sorted by ${by}`, 'success'); }
-
-        function showQuestionDetail(id) {
-            const q = questions.find(q => q.id === id);
-            if (!q) return;
-            const modal = document.getElementById('userModal');
-            const content = document.getElementById('userDetailContent');
-            const topUsers = users.sort((a,b) => b.questions - a.questions).slice(0,5);
-            content.innerHTML = `
-                <div style="text-align:center;margin-bottom:16px;"><span style="font-size:48px;display:block;margin-bottom:8px;color:${q.color || 'var(--accent)'};"><i class="fas ${q.icon}"></i></span><h2 style="font-size:22px;font-weight:700;">${q.name}</h2></div>
-                <div style="display:grid;grid-template-columns:1fr 1fr;gap:12px;margin-bottom:16px;">
-                    <div style="background:var(--bg-primary);padding:16px;border-radius:12px;text-align:center;"><div style="font-size:28px;font-weight:700;color:${q.color || 'var(--accent)'};">${q.count.toLocaleString()}</div><div style="font-size:11px;color:var(--text-secondary);">Total Questions</div></div>
-                    <div style="background:var(--bg-primary);padding:16px;border-radius:12px;text-align:center;"><div style="font-size:28px;font-weight:700;color:${q.trend > 0 ? 'var(--success)' : 'var(--danger)'};">${q.trend > 0 ? '+' : ''}${q.trend}%</div><div style="font-size:11px;color:var(--text-secondary);">Trend</div></div>
-                </div>
-                <div style="background:var(--bg-primary);padding:14px;border-radius:12px;"><div style="font-weight:600;margin-bottom:6px;font-size:13px;">👤 Top Contributors:</div>${topUsers.map((u,i) => `<div style="display:flex;justify-content:space-between;padding:4px 0;border-bottom:1px solid var(--border);font-size:13px;"><span>${i+1}. ${u.displayName}</span><span style="color:var(--text-secondary);">${u.questions} questions</span></div>`).join('')}</div>
             `;
             document.getElementById('userModal').classList.add('active');
         }
@@ -827,26 +638,23 @@
             const sorted = [...data].sort((a,b) => b.tokensUsed - a.tokensUsed);
             tbody.innerHTML = sorted.map((user, index) => {
                 const status = user.status || 'active';
-                const statusLabel = status === 'active' ? 'Active' : status === 'premium' ? 'Premium' : 'Inactive';
                 const statusClass = status === 'active' ? 'status-active' : status === 'premium' ? 'status-premium' : 'status-inactive';
                 const avatar = `https://ui-avatars.com/api/?name=${encodeURIComponent(user.displayName)}&background=3b82f6&color=fff&bold=true&size=32`;
                 let rankClass = '';
                 if (index === 0) rankClass = 'rank-1';
                 else if (index === 1) rankClass = 'rank-2';
                 else if (index === 2) rankClass = 'rank-3';
-                const dailyTokens = user.dailyTokens || Math.floor(Math.random() * 7500) + 500;
                 return `<tr>
                     <td><span class="user-rank ${rankClass}">${index + 1}</span></td>
                     <td><div style="display:flex;align-items:center;gap:10px;"><img src="${avatar}" alt="${user.displayName}" class="user-avatar"><div><div style="font-weight:600;font-size:13px;">${user.displayName}</div><div style="font-size:10px;color:var(--text-secondary);">${user.uid}</div></div></div></td>
                     <td style="color:var(--text-secondary);font-size:12px;">${user.email}</td>
-                    <td><span style="display:flex;align-items:center;gap:4px;font-size:12px;"><i class="fas ${user.provider === 'google' ? 'fa-google' : user.provider === 'github' ? 'fa-github' : 'fa-envelope'}" style="color:${user.provider === 'google' ? '#ea4335' : user.provider === 'github' ? '#6e5494' : '#3b82f6'}"></i>${user.provider}</span></td>
-                    <td style="font-weight:600;font-size:13px;color:var(--accent);">${dailyTokens.toLocaleString()}</td>
+                    <td><span style="display:flex;align-items:center;gap:4px;font-size:12px;"><i class="fas ${user.provider === 'google' ? 'fa-google' : user.provider === 'github' ? 'fa-github' : 'fa-envelope'}"></i>${user.provider}</span></td>
+                    <td style="font-weight:600;font-size:13px;color:var(--accent);">${(user.dailyTokens || 0).toLocaleString()}</td>
                     <td style="font-weight:600;font-size:13px;">${user.tokensUsed.toLocaleString()}</td>
                     <td style="font-weight:600;font-size:13px;color:var(--success);">$${user.cost.toFixed(2)}</td>
                     <td>${user.questions}</td>
-                    <td><span class="status-badge ${statusClass}">${statusLabel}</span></td>
+                    <td><span class="status-badge ${statusClass}">${status}</span></td>
                     <td style="font-size:12px;color:var(--text-secondary);">${user.lastActive ? new Date(user.lastActive).toLocaleDateString() : 'Never'}</td>
-                    <td><button class="btn btn-secondary" style="padding:4px 10px;font-size:11px;" onclick="viewUser('${user.uid}')"><i class="fas fa-eye"></i></button></td>
                 </tr>`;
             }).join('');
         }
@@ -854,37 +662,12 @@
         function filterUsers() {
             const search = document.getElementById('searchInput').value.toLowerCase();
             const provider = document.getElementById('filterProvider').value;
-            const status = document.getElementById('filterStatus').value;
             let filtered = users.filter(user => {
                 const matchSearch = user.displayName?.toLowerCase().includes(search) || user.email?.toLowerCase().includes(search);
                 const matchProvider = provider === 'all' || user.provider === provider;
-                const matchStatus = status === 'all' || user.status === status;
-                return matchSearch && matchProvider && matchStatus;
+                return matchSearch && matchProvider;
             });
             renderUsers(filtered);
-        }
-
-        function viewUser(uid) {
-            const user = users.find(u => u.uid === uid);
-            if (!user) return;
-            const content = document.getElementById('userDetailContent');
-            const rank = users.sort((a,b) => b.tokensUsed - a.tokensUsed).findIndex(u => u.uid === uid) + 1;
-            const dailyTokens = user.dailyTokens || Math.floor(Math.random() * 7500) + 500;
-            content.innerHTML = `
-                <div style="display:flex;align-items:center;gap:16px;margin-bottom:16px;">
-                    <img src="https://ui-avatars.com/api/?name=${encodeURIComponent(user.displayName)}&background=3b82f6&color=fff&bold=true&size=72" style="width:68px;height:68px;border-radius:50%;object-fit:cover;border:2px solid var(--accent);">
-                    <div style="flex:1;"><div style="display:flex;align-items:center;gap:8px;"><h3 style="font-size:20px;font-weight:700;">${user.displayName}</h3><span class="status-badge ${user.status === 'premium' ? 'status-premium' : 'status-active'}">${user.status || 'Active'}</span></div>
-                    <div style="color:var(--text-secondary);font-size:13px;">${user.email}</div><div style="color:var(--text-secondary);font-size:12px;margin-top:2px;"><i class="fas fa-${user.provider === 'google' ? 'google' : user.provider === 'github' ? 'github' : 'envelope'}"></i> ${user.provider} · Rank #${rank}</div></div>
-                </div>
-                <div style="display:grid;grid-template-columns:repeat(4,1fr);gap:10px;margin:14px 0;">
-                    <div style="background:var(--bg-primary);padding:14px;border-radius:10px;text-align:center;"><div style="font-size:20px;font-weight:700;color:var(--accent);">${dailyTokens.toLocaleString()}</div><div style="font-size:10px;color:var(--text-secondary);">Daily Tokens</div></div>
-                    <div style="background:var(--bg-primary);padding:14px;border-radius:10px;text-align:center;"><div style="font-size:20px;font-weight:700;color:var(--accent);">${user.tokensUsed.toLocaleString()}</div><div style="font-size:10px;color:var(--text-secondary);">Total Tokens</div></div>
-                    <div style="background:var(--bg-primary);padding:14px;border-radius:10px;text-align:center;"><div style="font-size:20px;font-weight:700;color:var(--success);">$${user.cost.toFixed(2)}</div><div style="font-size:10px;color:var(--text-secondary);">Total Cost</div></div>
-                    <div style="background:var(--bg-primary);padding:14px;border-radius:10px;text-align:center;"><div style="font-size:20px;font-weight:700;color:var(--warning);">${user.questions}</div><div style="font-size:10px;color:var(--text-secondary);">Questions</div></div>
-                </div>
-                <div style="margin-top:12px;background:var(--bg-primary);padding:12px 16px;border-radius:10px;"><div style="font-weight:600;font-size:13px;margin-bottom:6px;">🏆 Achievements</div><div style="display:flex;gap:8px;flex-wrap:wrap;font-size:12px;">${user.tokensUsed > 100000 ? '<span style="background:var(--bg-secondary);padding:4px 12px;border-radius:20px;">🌟 100K+ Tokens</span>' : ''}${user.tokensUsed > 200000 ? '<span style="background:var(--bg-secondary);padding:4px 12px;border-radius:20px;">🏅 200K+ Tokens</span>' : ''}${user.questions > 50 ? '<span style="background:var(--bg-secondary);padding:4px 12px;border-radius:20px;">💬 50+ Questions</span>' : ''}${user.questions > 100 ? '<span style="background:var(--bg-secondary);padding:4px 12px;border-radius:20px;">📚 100+ Questions</span>' : ''}${rank <= 3 ? '<span style="background:rgba(234,179,8,0.15);padding:4px 12px;border-radius:20px;color:var(--warning);">👑 Top 3 User</span>' : ''}${dailyTokens > 5000 ? '<span style="background:rgba(59,130,246,0.12);padding:4px 12px;border-radius:20px;color:var(--accent);">⚡ 5K+ Daily Tokens</span>' : ''}</div></div>
-            `;
-            document.getElementById('userModal').classList.add('active');
         }
 
         // ============================================================
@@ -899,25 +682,25 @@
 
         function updateBudgetChart() {
             const ctx = document.getElementById('budgetChart').getContext('2d');
-            if (chartInstances.budget) { chartInstances.budget.destroy(); chartInstances.budget = null; }
-            const data = timelineData.slice(-180);
+            if (chartInstances.budget) { chartInstances.budget.destroy(); }
+            const data = timelineData.slice(-365);
             const labels = data.map(d => new Date(d.date).toLocaleDateString('en-US', { month: 'short', day: 'numeric' }));
             chartInstances.budget = new Chart(ctx, {
                 type: 'line',
                 data: {
                     labels: labels,
                     datasets: [
-                        { label: 'Daily Spend ($)', data: data.map(d => parseFloat(d.spend.toFixed(2))), borderColor: '#3b82f6', backgroundColor: 'rgba(59, 130, 246, 0.1)', fill: true, tension: 0.4, pointRadius: 1.5, borderWidth: 2 },
-                        { label: 'Balance ($)', data: data.map(d => parseFloat(d.balance.toFixed(2))), borderColor: '#22c55e', borderDash: [6,4], fill: false, tension: 0.4, yAxisID: 'y1', pointRadius: 1.5, borderWidth: 2.5 }
+                        { label: 'Daily Spend ($)', data: data.map(d => parseFloat(d.spend.toFixed(2))), borderColor: '#3b82f6', backgroundColor: 'rgba(59,130,246,0.1)', fill: true, tension: 0.4, pointRadius: 1, borderWidth: 2 },
+                        { label: 'Balance ($)', data: data.map(d => parseFloat(d.balance.toFixed(2))), borderColor: '#22c55e', borderDash: [6,4], fill: false, tension: 0.4, yAxisID: 'y1', pointRadius: 1, borderWidth: 2.5 }
                     ]
                 },
                 options: {
-                    responsive: true, maintainAspectRatio: false, interaction: { intersect: false, mode: 'index' },
+                    responsive: true, maintainAspectRatio: false,
                     plugins: { legend: { labels: { color: '#94a3b8', boxWidth: 12, padding: 12, font: { size: 11 } } } },
                     scales: {
                         y: { beginAtZero: true, grid: { color: 'rgba(255,255,255,0.04)' }, ticks: { color: '#94a3b8', callback: v => '$' + v.toFixed(0) } },
                         y1: { position: 'right', beginAtZero: true, grid: { display: false }, ticks: { color: '#94a3b8', callback: v => '$' + v.toFixed(0) } },
-                        x: { grid: { color: 'rgba(255,255,255,0.04)' }, ticks: { color: '#94a3b8', maxTicksLimit: 15, font: { size: 9 } } }
+                        x: { grid: { color: 'rgba(255,255,255,0.04)' }, ticks: { color: '#94a3b8', maxTicksLimit: 30, font: { size: 8 } } }
                     }
                 }
             });
@@ -925,24 +708,36 @@
 
         function updateUsageChart() {
             const ctx = document.getElementById('usageChart').getContext('2d');
-            if (chartInstances.usage) { chartInstances.usage.destroy(); chartInstances.usage = null; }
-            const categories = Object.keys(QUESTION_CATEGORIES);
-            const counts = categories.map(key => { const q = questions.find(q => q.id === key); return q ? q.count : 0; });
-            const colors = categories.map(key => QUESTION_CATEGORIES[key].color || '#3b82f6');
-            const labels = categories.map(key => QUESTION_CATEGORIES[key].name);
+            if (chartInstances.usage) { chartInstances.usage.destroy(); }
+            const colors = ['#3b82f6','#8b5cf6','#eab308','#22c55e','#06b6d4','#f472b6','#ef4444','#84cc16','#f97316','#14b8a6','#8b5cf6','#ec4899'];
+            const labels = questions.map(q => q.name);
+            const counts = questions.map(q => q.count);
             chartInstances.usage = new Chart(ctx, {
                 type: 'doughnut',
-                data: { labels: labels, datasets: [{ data: counts, backgroundColor: colors, borderWidth: 0 }] },
-                options: { responsive: true, maintainAspectRatio: false, plugins: { legend: { position: 'bottom', labels: { color: '#94a3b8', boxWidth: 10, padding: 8, font: { size: 9 } } } }, cutout: '62%' }
+                data: { labels: labels, datasets: [{ data: counts, backgroundColor: colors.slice(0, labels.length), borderWidth: 0 }] },
+                options: {
+                    responsive: true, maintainAspectRatio: false,
+                    plugins: { legend: { position: 'bottom', labels: { color: '#94a3b8', boxWidth: 10, padding: 8, font: { size: 9 } } } },
+                    cutout: '62%'
+                }
             });
         }
 
         // ============================================================
         // ACTIONS
         // ============================================================
-        function refreshData() { showAlert('🔄 Refreshing...', 'success'); fetchAllData(); }
-        function closeModal(id) { document.getElementById(id).classList.remove('active'); }
-        document.querySelectorAll('.modal').forEach(m => m.addEventListener('click', (e) => { if (e.target === m) m.classList.remove('active'); }));
+        function refreshData() {
+            showAlert('🔄 Refreshing data...', 'success');
+            fetchAllData();
+        }
+
+        function closeModal(id) {
+            document.getElementById(id).classList.remove('active');
+        }
+
+        document.querySelectorAll('.modal').forEach(m => {
+            m.addEventListener('click', (e) => { if (e.target === m) m.classList.remove('active'); });
+        });
 
         function showAlert(message, type = 'success') {
             const alert = document.getElementById('alert');
@@ -950,45 +745,6 @@
             alert.className = `alert alert-${type}`;
             alert.style.display = 'block';
             setTimeout(() => alert.style.display = 'none', 3000);
-        }
-
-        function simulateDay() {
-            simulatedDay++;
-            const lastData = timelineData[timelineData.length - 1];
-            const avgSpend = timelineData.slice(-30).reduce((sum, d) => sum + d.spend, 0) / Math.max(1, timelineData.slice(-30).length);
-            let newSpend = avgSpend * (0.85 + Math.random() * 0.3);
-            let newBalance = Math.max(MIN_BALANCE, Math.round((lastData.balance - newSpend) * 100) / 100);
-            if (lastData.balance - newSpend < MIN_BALANCE) { newSpend = Math.round((lastData.balance - MIN_BALANCE) * 100) / 100; if (newSpend < 0) newSpend = 0; }
-            const newTokens = calculateTokensFromCost(newSpend);
-            const newDate = new Date(); newDate.setDate(newDate.getDate() + simulatedDay);
-            users.forEach(u => { u.dailyTokens = Math.floor(Math.random() * 7500) + 500; });
-            const newEntry = {
-                date: newDate, spend: Math.round(newSpend * 100) / 100, balance: newBalance,
-                tokens: newTokens, totalTokens: lastData.totalTokens + newTokens,
-                day: timelineData.length + 1, predicted: true,
-                dayOfWeek: newDate.toLocaleDateString('en-US', { weekday: 'short' }),
-                userCount: users.length, isCritical: newBalance < MIN_BALANCE + 10, isToday: false
-            };
-            timelineData.push(newEntry);
-            renderTimeline(); renderUsers(); updateStats(); updateCharts();
-            syncTimelineToSupabase([newEntry]);
-            showAlert(`📆 Simulated day ${simulatedDay} added!`, 'success');
-        }
-
-        function resetData() {
-            if (confirm('Reset all data to initial state?')) {
-                users = generateAllUsers(55);
-                questions = generateAllQuestions();
-                const history = generateTimelineData();
-                const future = generateFutureData(history);
-                timelineData = [...history, ...future];
-                simulatedDay = 0;
-                syncUsersToSupabase();
-                syncQuestionsToSupabase();
-                syncTimelineToSupabase(history);
-                renderTimeline(); renderQuestions(); renderUsers(); updateStats(); updateCharts();
-                showAlert('✅ Data reset successfully!', 'success');
-            }
         }
 
         function exportReport() {
@@ -1000,20 +756,27 @@
                 summary: {
                     totalUsers: users.length,
                     totalTokens: timelineData[timelineData.length - 1]?.totalTokens || 0,
-                    totalCost: calculateCostFromTokens(timelineData[timelineData.length - 1]?.totalTokens || 0),
+                    totalCost: (timelineData[timelineData.length - 1]?.totalTokens || 0) / 1000000 * TOKEN_COST_PER_MILLION,
                     remainingBalance: Math.max(MIN_BALANCE, timelineData[timelineData.length - 1]?.balance || MIN_BALANCE)
                 },
-                users: users.map(u => ({ name: u.displayName, email: u.email, provider: u.provider, dailyTokens: u.dailyTokens || 0, totalTokens: u.tokensUsed, cost: u.cost, questions: u.questions, status: u.status })),
-                questions: questions,
-                timeline: timelineData.map(d => ({ date: d.date.toISOString(), spend: d.spend, balance: d.balance, tokens: d.tokens, totalTokens: d.totalTokens, day: d.day, isCritical: d.isCritical || false }))
+                users: users.map(u => ({ name: u.displayName, email: u.email, provider: u.provider, totalTokens: u.tokensUsed, cost: u.cost, questions: u.questions })),
+                timeline: timelineData.map(d => ({ date: d.date.toISOString(), spend: d.spend, balance: d.balance, tokens: d.tokens }))
             };
             const blob = new Blob([JSON.stringify(report, null, 2)], { type: 'application/json' });
             const url = URL.createObjectURL(blob);
             const a = document.createElement('a');
-            a.href = url; a.download = `zakhourani-report-${new Date().toISOString().slice(0,10)}.json`;
-            a.click(); URL.revokeObjectURL(url);
+            a.href = url;
+            a.download = `zakhourani-report-${new Date().toISOString().slice(0,10)}.json`;
+            a.click();
+            URL.revokeObjectURL(url);
             showAlert('📥 Report exported!', 'success');
         }
+
+        // ============================================================
+        // INIT
+        // ============================================================
+        fetchAllData();
+        setInterval(() => { updateDateTime(); }, 1000);
     </script>
 </body>
 </html>

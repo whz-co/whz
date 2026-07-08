@@ -591,12 +591,11 @@
 
     <script>
         // ====================================================================
-        //  CONFIGURATION - No API Keys Here! 
-        //  All keys are securely stored in Cloudflare Worker
+        //  CONFIGURATION - Your Cloudflare Worker URL is already set!
         // ====================================================================
         const CONFIG = {
-            // ⚠️ REPLACE THIS WITH YOUR CLOUDFLARE WORKER URL ⚠️
-            workerUrl: 'https://aged-recipe-80db.your-subdomain.workers.dev',
+            // ✅ Your actual Cloudflare Worker URL
+            workerUrl: 'https://aged-recipe-80db.wabdo3762.workers.dev/',
             dailyLimit: 50
         };
 
@@ -724,34 +723,39 @@
             try {
                 setStatus('Thinking...', true);
                 
+                console.log('📡 Calling Cloudflare Worker:', CONFIG.workerUrl);
+                
                 const response = await fetch(CONFIG.workerUrl, {
                     method: 'POST',
                     headers: {
-                        'Content-Type': 'application/json'
+                        'Content-Type': 'application/json',
+                        'Accept': 'application/json'
                     },
                     body: JSON.stringify({
                         prompt: prompt,
-                        history: history
+                        history: history || []
                     })
                 });
 
                 if (!response.ok) {
-                    throw new Error(`Server error: ${response.status}`);
+                    const errorText = await response.text();
+                    throw new Error(`Server error (${response.status}): ${errorText}`);
                 }
 
                 const data = await response.json();
+                console.log('✅ Worker response:', data);
                 
                 if (data.success) {
                     setStatus('Online', true);
                     return {
                         reply: data.reply,
-                        engine: data.engine || 'unknown'
+                        engine: data.engine || 'cloud'
                     };
                 } else {
                     throw new Error(data.error || 'Unknown error from server');
                 }
             } catch (error) {
-                console.error('Cloudflare AI error:', error);
+                console.error('❌ Cloudflare AI error:', error);
                 setStatus('Error', false);
                 showToast('⚠️ Connection error: ' + error.message, 4000);
                 throw error;
@@ -771,16 +775,16 @@
                 return "I'm Zakhourani AI, an intelligent assistant created by Zakhourani Developers. I'm here to help answer your questions!";
             }
             if (lower.includes('weather')) {
-                return "I don't have access to real-time weather data, but I can help you check weather websites like weather.com or your local weather service.";
+                return "I don't have access to real-time weather data, but I can help you check weather websites.";
             }
             if (lower.includes('help')) {
-                return "I can help you with:\n• Answering general knowledge questions\n• Explaining complex topics simply\n• Writing and editing text\n• Brainstorming ideas\n• And much more! Just ask me anything.";
+                return "I can help you with:\n• Answering general knowledge questions\n• Explaining complex topics simply\n• Writing and editing text\n• Brainstorming ideas\n• And much more!";
             }
             if (lower.includes('thank')) {
                 return "You're welcome! It's my pleasure to help. Is there anything else you'd like to know?";
             }
             
-            return "I'm Zakhourani AI, your intelligent assistant. I'm currently processing your request through our secure cloud infrastructure. For the best experience, please try asking a more specific question!";
+            return "I'm Zakhourani AI, your intelligent assistant. I'm currently processing your request through our secure cloud infrastructure.";
         }
 
         // ====================================================================
@@ -861,7 +865,6 @@
             try {
                 let result;
                 try {
-                    // Try Cloudflare Worker first
                     result = await callCloudflareAI(text, history);
                     loadingDiv.remove();
                     addMessage(result.reply, 'assistant', result.engine);
@@ -935,18 +938,17 @@
             messageInput.focus();
             setStatus('Online', true);
             showToast('🤖 Zakhourani AI is ready (Secure Cloud Mode)', 2000);
+            console.log('✅ Zakhourani AI initialized with Worker URL:', CONFIG.workerUrl);
         }
 
         init();
 
-        // Handle visibility change to reset usage when day changes
         document.addEventListener('visibilitychange', () => {
             if (!document.hidden) {
                 checkAndResetUsage();
             }
         });
 
-        // Auto-focus input on load
         document.addEventListener('click', () => {
             if (!isProcessing && document.activeElement !== messageInput) {
                 messageInput.focus();

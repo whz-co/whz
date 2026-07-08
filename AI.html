@@ -603,12 +603,15 @@
         .word { display: inline; animation: wordAppear 0.12s ease; }
         @keyframes wordAppear { from { opacity: 0; transform: translateY(3px); } to { opacity: 1; transform: translateY(0); } }
         
-        /* Input Area */
+        /* Input Area - Mobile Fixed */
         .input-area {
             padding: 10px 20px;
             background: var(--bg-surface);
             border-top: 1px solid var(--border);
             flex-shrink: 0;
+            min-height: 70px;
+            z-index: 10;
+            position: relative;
         }
         .input-wrapper {
             display: flex;
@@ -727,7 +730,8 @@
         }
         .engine-badge.gemini { border-color: rgba(59,130,246,0.3); color: var(--accent); }
         .engine-badge.chatgpt { border-color: rgba(16,185,129,0.3); color: var(--success); }
-        .engine-badge.deepseek { border-color: rgba(139,92,246,0.3); color: #8b5cf6; }
+        .engine-badge.openrouter { border-color: rgba(139,92,246,0.3); color: #8b5cf6; }
+        .engine-badge.deepseek { border-color: rgba(245,158,11,0.3); color: var(--premium-gold); }
         .engine-badge.online { border-color: rgba(59,130,246,0.3); color: var(--accent); }
         
         /* Responsive */
@@ -745,7 +749,13 @@
             .chat-header { padding: 6px 12px; }
             .chat-header .chat-title { font-size: 13px; }
             #chatContainer { padding: 10px 12px; }
-            .input-area { padding: 6px 12px; }
+            .input-area { 
+                padding: 8px 12px; 
+                min-height: 60px;
+            }
+            .input-wrapper { padding: 2px 2px 2px 12px; }
+            #messageInput { font-size: 14px; padding: 8px 0; }
+            #sendButton { padding: 6px 12px; font-size: 13px; }
             .message { max-width: 95%; font-size: 0.85rem; padding: 8px 12px; }
             .welcome { padding: 20px 16px; margin: 16px auto; }
             .welcome .suggestions-grid { grid-template-columns: 1fr; }
@@ -761,8 +771,13 @@
             .sidebar { max-height: 150px; }
             .sidebar .conversation-list { max-height: 50px; }
             .sidebar-brand span { font-size: 13px; }
-            #sendButton { padding: 6px 12px; font-size: 0.8rem; }
-            #messageInput { font-size: 0.85rem; padding: 8px 0; }
+            .input-area { 
+                padding: 6px 10px; 
+                min-height: 50px;
+            }
+            .input-wrapper { border-radius: 25px; }
+            #sendButton { padding: 5px 10px; font-size: 12px; }
+            #messageInput { font-size: 13px; padding: 6px 0; }
         }
     </style>
 </head>
@@ -924,7 +939,6 @@
         //  CONFIGURATION
         // ============================================================
         const CONFIG = {
-            // ⚠️ MAKE SURE THIS IS YOUR ACTUAL WORKER URL ⚠️
             workerUrl: 'https://aged-recipe-80db.wabdo3762.workers.dev/',
             dailyLimit: 50,
             isPremium: false,
@@ -943,7 +957,8 @@
             usage: { date: new Date().toDateString(), count: 0 },
             stopTyping: false,
             user: null,
-            isOnline: true
+            isOnline: true,
+            _onlineToastShown: false
         };
 
         // ============================================================
@@ -1032,7 +1047,7 @@
         }
 
         // ============================================================
-        //  SOUND SYSTEM - FIXED AUDIOCONTEXT ISSUE
+        //  SOUND SYSTEM
         // ============================================================
         let audioCtx = null;
         let audioInitialized = false;
@@ -1562,9 +1577,12 @@
                 const formattedContent = formatRichText(content);
                 html += `<div class="msg-content" id="msg-${Date.now()}">${formattedContent}</div>`;
                 if (engine) {
-                    const engineClass = engine.toLowerCase().includes('gemini') ? 'gemini' : 
-                                      engine.toLowerCase().includes('chatgpt') ? 'chatgpt' : 
-                                      engine.toLowerCase().includes('deepseek') ? 'deepseek' : 'online';
+                    const engineLower = engine.toLowerCase();
+                    let engineClass = 'online';
+                    if (engineLower.includes('gemini')) engineClass = 'gemini';
+                    else if (engineLower.includes('chatgpt')) engineClass = 'chatgpt';
+                    else if (engineLower.includes('openrouter')) engineClass = 'openrouter';
+                    else if (engineLower.includes('deepseek')) engineClass = 'deepseek';
                     html += `<div class="engine-badge ${engineClass}"><i class="fas fa-microchip"></i> ${engine}</div>`;
                 }
             } else {
@@ -1807,7 +1825,7 @@
         }
 
         // ============================================================
-        //  AI CALL - FIXED FOR ONLINE MODE
+        //  AI CALL
         // ============================================================
         async function callCloudflareAI(prompt, history) {
             try {
@@ -1873,7 +1891,7 @@
         }
 
         // ============================================================
-        //  SEND MESSAGE - FIXED FOR ONLINE MODE
+        //  SEND MESSAGE
         // ============================================================
         async function sendMessage() {
             const text = DOM.messageInput.value.trim();
@@ -1905,21 +1923,15 @@
             try {
                 let result;
                 try {
-                    // Try to get response from Cloudflare Worker (Online Mode)
                     result = await callCloudflareAI(text, history);
                     typingDiv.remove();
+                    addMessage(result.reply, 'assistant', result.engine);
                     
-                    // Show online badge
-                    const engineDisplay = result.engine || 'Zakhourani AI';
-                    addMessage(result.reply, 'assistant', engineDisplay);
-                    
-                    // Show online status toast occasionally
                     if (!state._onlineToastShown) {
                         showToast('🌐 Online mode active', 1500);
                         state._onlineToastShown = true;
                     }
                 } catch (workerError) {
-                    // Fallback to local responses if worker fails
                     console.warn('Worker failed, using local fallback');
                     typingDiv.remove();
                     const fallbackReply = getLocalResponse(text);
@@ -1951,6 +1963,34 @@
             DOM.themeIcon.className = isLight ? 'fas fa-sun' : 'fas fa-moon';
             localStorage.setItem('zakhourani_theme', isLight ? 'light' : 'dark');
             playSuccessSound();
+        }
+
+        // ============================================================
+        //  TEST WORKER CONNECTION
+        // ============================================================
+        async function testWorkerConnection() {
+            try {
+                console.log('🔍 Testing Worker connection...');
+                const response = await fetch(CONFIG.workerUrl, {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({
+                        prompt: 'Test connection',
+                        history: []
+                    })
+                });
+                const data = await response.json();
+                if (data.success) {
+                    console.log('✅ Worker is online! Engine:', data.engine);
+                    state.isOnline = true;
+                } else {
+                    console.warn('⚠️ Worker returned error:', data.error);
+                    state.isOnline = false;
+                }
+            } catch (error) {
+                console.warn('⚠️ Worker connection test failed:', error.message);
+                state.isOnline = false;
+            }
         }
 
         // ============================================================
@@ -2011,34 +2051,6 @@
         });
 
         // ============================================================
-        //  TEST WORKER CONNECTION ON START
-        // ============================================================
-        async function testWorkerConnection() {
-            try {
-                console.log('🔍 Testing Worker connection...');
-                const response = await fetch(CONFIG.workerUrl, {
-                    method: 'POST',
-                    headers: { 'Content-Type': 'application/json' },
-                    body: JSON.stringify({
-                        prompt: 'Test connection',
-                        history: []
-                    })
-                });
-                const data = await response.json();
-                if (data.success) {
-                    console.log('✅ Worker is online! Engine:', data.engine);
-                    state.isOnline = true;
-                } else {
-                    console.warn('⚠️ Worker returned error:', data.error);
-                    state.isOnline = false;
-                }
-            } catch (error) {
-                console.warn('⚠️ Worker connection test failed:', error.message);
-                state.isOnline = false;
-            }
-        }
-
-        // ============================================================
         //  AUTH STATE OBSERVER
         // ============================================================
         function init() {
@@ -2061,7 +2073,6 @@
                     loadUsage();
                     loadConversations();
                     
-                    // Test worker connection
                     testWorkerConnection();
                     
                     updateLoader('Ready!', 100);

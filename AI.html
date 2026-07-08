@@ -12,6 +12,11 @@
     <!-- Google Fonts -->
     <link href="https://fonts.googleapis.com/css2?family=Inter:opsz,wght@14..32,400;14..32,500;14..32,600;14..32,700;14..32,800;14..32,900&display=swap" rel="stylesheet">
     
+    <!-- Firebase SDK -->
+    <script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-app-compat.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-auth-compat.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-firestore-compat.js"></script>
+    
     <style>
         /* ============================================================
            GLOBAL RESET & VARIABLES
@@ -104,6 +109,59 @@
         }
         
         /* ============================================================
+           LOADER
+           ============================================================ */
+        #loader {
+            position: fixed;
+            inset: 0;
+            background: var(--bg-primary);
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            z-index: 9999;
+            gap: 16px;
+            transition: opacity 0.6s;
+        }
+        
+        #loader.hidden {
+            opacity: 0;
+            pointer-events: none;
+        }
+        
+        .loader-spinner {
+            width: 44px;
+            height: 44px;
+            border: 3px solid var(--border);
+            border-top-color: var(--accent);
+            border-radius: 50%;
+            animation: spin 0.8s linear infinite;
+        }
+        
+        @keyframes spin { to { transform: rotate(360deg); } }
+        
+        .loader-text {
+            color: var(--text-secondary);
+            font-size: 14px;
+        }
+        
+        .loader-progress {
+            width: 240px;
+            height: 3px;
+            background: var(--border);
+            border-radius: 2px;
+            overflow: hidden;
+        }
+        
+        .loader-progress-fill {
+            height: 100%;
+            background: var(--accent-gradient);
+            width: 0%;
+            transition: width 0.4s;
+            border-radius: 2px;
+        }
+        
+        /* ============================================================
            APP LAYOUT
            ============================================================ */
         #app {
@@ -139,7 +197,7 @@
         }
         
         .sidebar-header {
-            padding: 16px 16px 12px;
+            padding: 14px 16px 10px;
             border-bottom: 1px solid var(--border);
         }
         
@@ -204,7 +262,7 @@
         
         /* User Profile in Sidebar */
         .user-profile {
-            padding: 12px 16px;
+            padding: 10px 16px;
             border-bottom: 1px solid var(--border);
             display: flex;
             align-items: center;
@@ -225,6 +283,13 @@
             flex-shrink: 0;
         }
         
+        .user-avatar img {
+            width: 100%;
+            height: 100%;
+            border-radius: 50%;
+            object-fit: cover;
+        }
+        
         .user-info {
             flex: 1;
             min-width: 0;
@@ -238,12 +303,21 @@
             text-overflow: ellipsis;
         }
         
+        .user-info .email {
+            font-size: 11px;
+            color: var(--text-secondary);
+            white-space: nowrap;
+            overflow: hidden;
+            text-overflow: ellipsis;
+        }
+        
         .user-info .balance {
             font-size: 12px;
             color: var(--text-secondary);
             display: flex;
             align-items: center;
             gap: 6px;
+            margin-top: 2px;
         }
         
         .user-info .balance .count {
@@ -271,19 +345,42 @@
         .balance-fill.warning { background: var(--warning); }
         .balance-fill.danger { background: var(--danger); }
         
+        /* Logout button */
+        .logout-btn {
+            background: var(--bg-surface);
+            border: 1px solid var(--border);
+            color: var(--text-secondary);
+            width: 30px;
+            height: 30px;
+            border-radius: 8px;
+            cursor: pointer;
+            transition: var(--transition);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 13px;
+            flex-shrink: 0;
+        }
+        
+        .logout-btn:hover {
+            background: rgba(239,68,68,0.1);
+            border-color: var(--danger);
+            color: var(--danger);
+        }
+        
         /* Conversation List */
         .conversation-list {
             flex: 1;
             overflow-y: auto;
-            padding: 8px 12px;
+            padding: 6px 10px;
         }
         
         .conversation-list::-webkit-scrollbar { width: 3px; }
         .conversation-list::-webkit-scrollbar-thumb { background: var(--border); border-radius: 10px; }
         
         .conv-item {
-            padding: 10px 12px;
-            border-radius: 10px;
+            padding: 8px 10px;
+            border-radius: 8px;
             cursor: pointer;
             transition: var(--transition);
             margin-bottom: 2px;
@@ -295,8 +392,8 @@
         }
         
         .conv-item.active {
-            background: rgba(59,130,246,0.1);
-            border: 1px solid rgba(59,130,246,0.2);
+            background: rgba(59,130,246,0.08);
+            border: 1px solid rgba(59,130,246,0.15);
         }
         
         .conv-item .conv-title {
@@ -308,7 +405,7 @@
         }
         
         .conv-item .conv-meta {
-            font-size: 11px;
+            font-size: 10px;
             color: var(--text-secondary);
             display: flex;
             justify-content: space-between;
@@ -317,11 +414,11 @@
         
         .conv-item .conv-actions {
             position: absolute;
-            right: 8px;
+            right: 6px;
             top: 50%;
             transform: translateY(-50%);
             display: none;
-            gap: 4px;
+            gap: 3px;
         }
         
         .conv-item:hover .conv-actions {
@@ -332,11 +429,11 @@
             background: var(--bg-surface);
             border: 1px solid var(--border);
             color: var(--text-secondary);
-            width: 24px;
-            height: 24px;
-            border-radius: 6px;
+            width: 22px;
+            height: 22px;
+            border-radius: 5px;
             cursor: pointer;
-            font-size: 10px;
+            font-size: 9px;
             transition: var(--transition);
             display: flex;
             align-items: center;
@@ -365,7 +462,7 @@
         
         /* Chat Header */
         .chat-header {
-            padding: 12px 20px;
+            padding: 10px 20px;
             border-bottom: 1px solid var(--border);
             display: flex;
             align-items: center;
@@ -390,21 +487,22 @@
         
         .chat-header .chat-actions {
             display: flex;
-            gap: 6px;
+            gap: 4px;
         }
         
         .chat-header .chat-actions button {
             background: var(--bg-surface);
             border: 1px solid var(--border);
             color: var(--text-secondary);
-            width: 32px;
-            height: 32px;
-            border-radius: 8px;
+            width: 30px;
+            height: 30px;
+            border-radius: 6px;
             cursor: pointer;
             transition: var(--transition);
             display: flex;
             align-items: center;
             justify-content: center;
+            font-size: 13px;
         }
         
         .chat-header .chat-actions button:hover {
@@ -432,16 +530,16 @@
         .welcome {
             text-align: center;
             max-width: 480px;
-            margin: 40px auto;
+            margin: 30px auto;
             background: var(--bg-surface);
             border-radius: 20px;
-            padding: 32px 24px;
+            padding: 28px 20px;
             border: 1px solid var(--border);
         }
         
         .welcome-icon {
             font-size: 3.5rem;
-            margin-bottom: 12px;
+            margin-bottom: 10px;
             animation: floatIcon 3s ease-in-out infinite;
         }
         
@@ -451,13 +549,13 @@
         }
         
         .welcome h2 {
-            font-size: 1.5rem;
+            font-size: 1.4rem;
             font-weight: 700;
             background: var(--accent-gradient);
             -webkit-background-clip: text;
             -webkit-text-fill-color: transparent;
             background-clip: text;
-            margin-bottom: 6px;
+            margin-bottom: 4px;
         }
         
         .welcome p {
@@ -468,18 +566,18 @@
         .welcome .suggestions-grid {
             display: grid;
             grid-template-columns: 1fr 1fr;
-            gap: 8px;
-            margin-top: 16px;
+            gap: 6px;
+            margin-top: 14px;
         }
         
         .welcome .suggestions-grid .chip {
-            padding: 10px 12px;
+            padding: 8px 12px;
             background: var(--bg-surface);
             border: 1px solid var(--border);
-            border-radius: 10px;
+            border-radius: 8px;
             cursor: pointer;
             transition: var(--transition);
-            font-size: 13px;
+            font-size: 12px;
             color: var(--text-secondary);
             text-align: center;
         }
@@ -492,9 +590,9 @@
         
         /* Messages */
         .message {
-            margin: 8px 0;
-            padding: 12px 16px;
-            border-radius: 16px;
+            margin: 6px 0;
+            padding: 10px 14px;
+            border-radius: 14px;
             max-width: 85%;
             word-wrap: break-word;
             line-height: 1.6;
@@ -532,10 +630,10 @@
         
         .message .msg-actions {
             position: absolute;
-            top: 6px;
-            right: 6px;
+            top: 4px;
+            right: 4px;
             display: flex;
-            gap: 4px;
+            gap: 3px;
             opacity: 0;
             transition: var(--transition);
         }
@@ -546,11 +644,11 @@
             background: var(--bg-surface);
             border: 1px solid var(--border);
             color: var(--text-secondary);
-            width: 24px;
-            height: 24px;
-            border-radius: 6px;
+            width: 22px;
+            height: 22px;
+            border-radius: 4px;
             cursor: pointer;
-            font-size: 0.65rem;
+            font-size: 0.6rem;
             transition: var(--transition);
             display: flex;
             align-items: center;
@@ -569,20 +667,20 @@
             margin-right: auto;
             display: flex;
             align-items: center;
-            gap: 12px;
-            padding: 12px 18px;
-            border-radius: 16px;
+            gap: 10px;
+            padding: 10px 16px;
+            border-radius: 14px;
             border-bottom-left-radius: 4px;
         }
         
         .typing-dots {
             display: flex;
-            gap: 4px;
+            gap: 3px;
         }
         
         .typing-dots span {
-            width: 7px;
-            height: 7px;
+            width: 6px;
+            height: 6px;
             background: var(--text-secondary);
             border-radius: 50%;
             animation: typingDot 1.4s infinite;
@@ -597,7 +695,7 @@
         }
         
         .typing-label {
-            font-size: 0.85rem;
+            font-size: 0.8rem;
             color: var(--text-secondary);
         }
         
@@ -606,14 +704,14 @@
             background: var(--bg-surface);
             border: 1px solid var(--border);
             color: var(--text-secondary);
-            padding: 4px 12px;
-            border-radius: 20px;
+            padding: 3px 10px;
+            border-radius: 16px;
             cursor: pointer;
-            font-size: 12px;
+            font-size: 11px;
             transition: var(--transition);
             display: flex;
             align-items: center;
-            gap: 6px;
+            gap: 4px;
             margin-left: auto;
         }
         
@@ -653,7 +751,7 @@
            INPUT AREA
            ============================================================ */
         .input-area {
-            padding: 12px 20px;
+            padding: 10px 20px;
             background: var(--bg-surface);
             border-top: 1px solid var(--border);
             flex-shrink: 0;
@@ -665,7 +763,7 @@
             background: var(--bg-card);
             border: 1px solid var(--border);
             border-radius: 50px;
-            padding: 4px 4px 4px 18px;
+            padding: 4px 4px 4px 16px;
             transition: var(--transition);
         }
         
@@ -694,7 +792,7 @@
             border: none;
             color: white;
             border-radius: 50px;
-            padding: 8px 20px;
+            padding: 8px 18px;
             font-weight: 600;
             cursor: pointer;
             transition: var(--transition);
@@ -759,7 +857,7 @@
             background: var(--bg-card);
             border: 1px solid var(--border);
             border-radius: 20px;
-            max-width: 420px;
+            max-width: 400px;
             width: 100%;
             padding: 28px;
             text-align: center;
@@ -788,7 +886,7 @@
         }
         
         .modal .modal-close {
-            margin-top: 16px;
+            margin-top: 14px;
             padding: 10px 24px;
             background: var(--accent-gradient);
             border: none;
@@ -831,50 +929,54 @@
             
             .sidebar {
                 width: 100%;
-                max-height: 200px;
+                max-height: 180px;
                 border-right: none;
                 border-bottom: 1px solid var(--border);
             }
             
             .sidebar .conversation-list {
-                max-height: 80px;
+                max-height: 70px;
             }
             
             .sidebar .user-profile {
-                padding: 8px 12px;
+                padding: 6px 12px;
             }
             
             .sidebar-header {
-                padding: 10px 12px 8px;
+                padding: 8px 12px 6px;
             }
             
-            .new-chat-btn { font-size: 12px; padding: 8px; }
-            .conv-item { padding: 6px 10px; }
-            .conv-item .conv-title { font-size: 12px; }
+            .new-chat-btn { font-size: 12px; padding: 6px; }
+            .conv-item { padding: 5px 8px; }
+            .conv-item .conv-title { font-size: 11px; }
+            .conv-item .conv-meta { font-size: 9px; }
             
-            .chat-header { padding: 8px 14px; }
+            .chat-header { padding: 6px 12px; }
             .chat-header .chat-title { font-size: 13px; }
-            #chatContainer { padding: 12px 14px; }
-            .input-area { padding: 8px 14px; }
-            .message { max-width: 92%; font-size: 0.9rem; padding: 10px 14px; }
-            .welcome { padding: 24px 16px; margin: 20px auto; }
+            #chatContainer { padding: 10px 12px; }
+            .input-area { padding: 6px 12px; }
+            .message { max-width: 92%; font-size: 0.85rem; padding: 8px 12px; }
+            .welcome { padding: 20px 16px; margin: 16px auto; }
             .welcome .suggestions-grid { grid-template-columns: 1fr; }
             
             .conv-item .conv-actions {
                 display: flex;
-                opacity: 0.5;
+                opacity: 0.4;
             }
+            
+            .user-avatar { width: 30px; height: 30px; font-size: 12px; }
+            .user-info .name { font-size: 12px; }
+            .user-info .email { font-size: 10px; }
+            .user-info .balance { font-size: 10px; }
+            .logout-btn { width: 26px; height: 26px; font-size: 11px; }
         }
         
         @media (max-width: 480px) {
             #app { border-radius: 12px; }
-            .sidebar { max-height: 160px; }
-            .sidebar .conversation-list { max-height: 60px; }
+            .sidebar { max-height: 150px; }
+            .sidebar .conversation-list { max-height: 50px; }
             .sidebar-brand span { font-size: 13px; }
-            .user-avatar { width: 30px; height: 30px; font-size: 12px; }
-            .user-info .name { font-size: 12px; }
-            .user-info .balance { font-size: 10px; }
-            #sendButton { padding: 6px 14px; font-size: 0.8rem; }
+            #sendButton { padding: 6px 12px; font-size: 0.8rem; }
             #messageInput { font-size: 0.85rem; padding: 8px 0; }
         }
     </style>
@@ -883,6 +985,17 @@
 
     <!-- PARTICLES -->
     <div class="particles" id="particles"></div>
+
+    <!-- ============================================================
+    LOADER
+    ============================================================ -->
+    <div id="loader">
+        <div class="loader-spinner"></div>
+        <div class="loader-text" id="loaderText">Authenticating...</div>
+        <div class="loader-progress">
+            <div class="loader-progress-fill" id="progressFill"></div>
+        </div>
+    </div>
 
     <!-- ============================================================
     TOAST
@@ -909,9 +1022,30 @@
     </div>
 
     <!-- ============================================================
+    AUTH MODAL (Show when not logged in)
+    ============================================================ -->
+    <div class="modal" id="authModal">
+        <div class="modal-content">
+            <div class="modal-icon">🔐</div>
+            <h2>Welcome Back</h2>
+            <p style="margin-bottom:16px;">Please login to continue using Zakhourani AI</p>
+            
+            <div style="display:flex;flex-direction:column;gap:10px;text-align:left;">
+                <input type="email" id="authEmail" placeholder="Email" style="background:var(--bg-primary);border:1px solid var(--border);border-radius:8px;padding:10px 14px;color:var(--text-primary);font-size:14px;outline:none;width:100%;">
+                <input type="password" id="authPassword" placeholder="Password" style="background:var(--bg-primary);border:1px solid var(--border);border-radius:8px;padding:10px 14px;color:var(--text-primary);font-size:14px;outline:none;width:100%;">
+                <div style="display:flex;gap:8px;">
+                    <button class="modal-close" id="authLoginBtn" style="flex:1;">Login</button>
+                    <button class="modal-close secondary" id="authRegisterBtn" style="flex:1;">Register</button>
+                </div>
+                <div id="authError" style="color:var(--danger);font-size:13px;text-align:center;min-height:20px;"></div>
+            </div>
+        </div>
+    </div>
+
+    <!-- ============================================================
     APP
     ============================================================ -->
-    <div id="app">
+    <div id="app" style="display:none;">
 
         <!-- ============================================================
         SIDEBAR
@@ -932,7 +1066,8 @@
             <div class="user-profile">
                 <div class="user-avatar" id="userAvatar">Z</div>
                 <div class="user-info">
-                    <div class="name" id="userName">Guest User</div>
+                    <div class="name" id="userName">Loading...</div>
+                    <div class="email" id="userEmail">user@email.com</div>
                     <div class="balance">
                         <i class="fas fa-gem"></i>
                         <span>Balance: <span class="count" id="balanceCount">50</span> / 50</span>
@@ -941,6 +1076,9 @@
                         <div class="balance-fill" id="balanceFill" style="width: 100%;"></div>
                     </div>
                 </div>
+                <button class="logout-btn" id="logoutBtn" title="Logout">
+                    <i class="fas fa-sign-out-alt"></i>
+                </button>
             </div>
 
             <!-- Conversation List -->
@@ -969,6 +1107,9 @@
                     </button>
                     <button onclick="exportChat()" title="Export Chat">
                         <i class="fas fa-download"></i>
+                    </button>
+                    <button onclick="toggleTheme()" title="Toggle Theme">
+                        <i class="fas fa-moon" id="themeIcon"></i>
                     </button>
                 </div>
             </div>
@@ -1004,14 +1145,26 @@
     ============================================================ -->
     <script>
         // ============================================================
+        //  FIREBASE CONFIGURATION
+        // ============================================================
+        const firebaseConfig = {
+            apiKey: "AIzaSyAE8wf24HXrfmpMluaFOv1OHPrf_YFfqTQ",
+            authDomain: "www.whzco.com",
+            projectId: "whaai-c388e",
+            storageBucket: "whaai-c388e.firebasestorage.app",
+            messagingSenderId: "640598205524",
+            appId: "1:640598205524:web:c975f5e8b371b1043e39c1",
+            measurementId: "G-1MHE0JBZJR"
+        };
+
+        // ============================================================
         //  CONFIGURATION
         // ============================================================
         const CONFIG = {
             workerUrl: 'https://aged-recipe-80db.wabdo3762.workers.dev/',
             dailyLimit: 50,
             isPremium: false,
-            soundEnabled: false,
-            userName: 'Guest User'
+            soundEnabled: false
         };
 
         // ============================================================
@@ -1024,13 +1177,18 @@
             isTyping: false,
             typingTimer: null,
             usage: { date: new Date().toDateString(), count: 0 },
-            stopTyping: false
+            stopTyping: false,
+            user: null
         };
 
         // ============================================================
         //  DOM REFS
         // ============================================================
         const DOM = {
+            app: document.getElementById('app'),
+            loader: document.getElementById('loader'),
+            loaderText: document.getElementById('loaderText'),
+            progressFill: document.getElementById('progressFill'),
             chatContainer: document.getElementById('chatContainer'),
             welcomeMsg: document.getElementById('welcomeMessage'),
             messageInput: document.getElementById('messageInput'),
@@ -1042,9 +1200,18 @@
             balanceCount: document.getElementById('balanceCount'),
             balanceFill: document.getElementById('balanceFill'),
             userName: document.getElementById('userName'),
+            userEmail: document.getElementById('userEmail'),
             userAvatar: document.getElementById('userAvatar'),
             limitModal: document.getElementById('limitModal'),
-            limitTimer: document.getElementById('limitTimer')
+            limitTimer: document.getElementById('limitTimer'),
+            authModal: document.getElementById('authModal'),
+            authEmail: document.getElementById('authEmail'),
+            authPassword: document.getElementById('authPassword'),
+            authError: document.getElementById('authError'),
+            authLoginBtn: document.getElementById('authLoginBtn'),
+            authRegisterBtn: document.getElementById('authRegisterBtn'),
+            logoutBtn: document.getElementById('logoutBtn'),
+            themeIcon: document.getElementById('themeIcon')
         };
 
         // ============================================================
@@ -1094,34 +1261,106 @@
             return Date.now().toString(36) + Math.random().toString(36).substr(2, 5);
         }
 
-        function playSound(type = 'typing') {
-            if (!CONFIG.soundEnabled) return;
-            try {
-                const ctx = new(window.AudioContext || window.webkitAudioContext)();
-                const osc = ctx.createOscillator();
-                const gain = ctx.createGain();
-                osc.connect(gain);
-                gain.connect(ctx.destination);
-                if (type === 'typing') {
-                    osc.frequency.value = 600 + Math.random() * 200;
-                    gain.gain.value = 0.03;
-                    osc.start();
-                    osc.stop(ctx.currentTime + 0.03);
-                } else if (type === 'send') {
-                    osc.frequency.value = 800;
-                    gain.gain.value = 0.06;
-                    osc.start();
-                    osc.stop(ctx.currentTime + 0.06);
-                }
-            } catch (e) {}
+        function updateLoader(text, percent) {
+            DOM.loaderText.textContent = text;
+            DOM.progressFill.style.width = percent + '%';
         }
 
         // ============================================================
-        //  USAGE TRACKING
+        //  FIREBASE AUTH
+        // ============================================================
+        let auth = null;
+
+        function initFirebase() {
+            if (!firebase.apps.length) {
+                firebase.initializeApp(firebaseConfig);
+            }
+            auth = firebase.auth();
+            return auth;
+        }
+
+        function showAuthModal() {
+            DOM.authModal.classList.add('active');
+            DOM.authError.textContent = '';
+            DOM.authEmail.value = '';
+            DOM.authPassword.value = '';
+        }
+
+        function hideAuthModal() {
+            DOM.authModal.classList.remove('active');
+        }
+
+        async function handleLogin() {
+            const email = DOM.authEmail.value.trim();
+            const password = DOM.authPassword.value;
+            if (!email || !password) {
+                DOM.authError.textContent = 'Please enter email and password';
+                return;
+            }
+            try {
+                DOM.authError.textContent = 'Logging in...';
+                const result = await auth.signInWithEmailAndPassword(email, password);
+                DOM.authError.textContent = '';
+                hideAuthModal();
+                showToast('✅ Welcome back, ' + (result.user.displayName || result.user.email));
+            } catch (error) {
+                DOM.authError.textContent = error.message;
+            }
+        }
+
+        async function handleRegister() {
+            const email = DOM.authEmail.value.trim();
+            const password = DOM.authPassword.value;
+            if (!email || !password) {
+                DOM.authError.textContent = 'Please enter email and password';
+                return;
+            }
+            if (password.length < 6) {
+                DOM.authError.textContent = 'Password must be at least 6 characters';
+                return;
+            }
+            try {
+                DOM.authError.textContent = 'Creating account...';
+                const result = await auth.createUserWithEmailAndPassword(email, password);
+                DOM.authError.textContent = '';
+                hideAuthModal();
+                showToast('🎉 Account created! Welcome!');
+            } catch (error) {
+                DOM.authError.textContent = error.message;
+            }
+        }
+
+        // ============================================================
+        //  USER MANAGEMENT
+        // ============================================================
+        function updateUserUI(user) {
+            if (user) {
+                const displayName = user.displayName || user.email.split('@')[0];
+                const initial = displayName.charAt(0).toUpperCase();
+                
+                DOM.userName.textContent = displayName;
+                DOM.userEmail.textContent = user.email || '';
+                DOM.userAvatar.textContent = initial;
+                DOM.userAvatar.style.backgroundImage = user.photoURL ? `url(${user.photoURL})` : '';
+                
+                // Show app
+                DOM.app.style.display = 'flex';
+                DOM.loader.classList.add('hidden');
+            } else {
+                DOM.app.style.display = 'none';
+                DOM.loader.classList.remove('hidden');
+                updateLoader('Please login...', 50);
+                showAuthModal();
+            }
+        }
+
+        // ============================================================
+        //  USAGE TRACKING (Per User)
         // ============================================================
         function loadUsage() {
+            const key = `zakhourani_usage_${state.user ? state.user.uid : 'guest'}`;
             try {
-                const saved = localStorage.getItem('zakhourani_usage');
+                const saved = localStorage.getItem(key);
                 if (saved) {
                     const data = JSON.parse(saved);
                     state.usage = data;
@@ -1137,8 +1376,9 @@
         }
 
         function saveUsage() {
+            const key = `zakhourani_usage_${state.user ? state.user.uid : 'guest'}`;
             try {
-                localStorage.setItem('zakhourani_usage', JSON.stringify(state.usage));
+                localStorage.setItem(key, JSON.stringify(state.usage));
             } catch (e) {}
         }
 
@@ -1193,11 +1433,15 @@
         }
 
         // ============================================================
-        //  CONVERSATIONS
+        //  CONVERSATIONS (Per User)
         // ============================================================
+        function getStorageKey() {
+            return `zakhourani_conversations_${state.user ? state.user.uid : 'guest'}`;
+        }
+
         function loadConversations() {
             try {
-                const saved = localStorage.getItem('zakhourani_conversations');
+                const saved = localStorage.getItem(getStorageKey());
                 if (saved) {
                     state.conversations = JSON.parse(saved);
                 }
@@ -1205,7 +1449,6 @@
                 state.conversations = {};
             }
             
-            // If no conversations, create a default one
             if (Object.keys(state.conversations).length === 0) {
                 const id = generateId();
                 state.conversations[id] = {
@@ -1218,7 +1461,6 @@
                 saveConversations();
             }
             
-            // Set current to first conversation
             const keys = Object.keys(state.conversations);
             state.currentId = keys[0];
             renderConversations();
@@ -1227,7 +1469,7 @@
 
         function saveConversations() {
             try {
-                localStorage.setItem('zakhourani_conversations', JSON.stringify(state.conversations));
+                localStorage.setItem(getStorageKey(), JSON.stringify(state.conversations));
             } catch (e) {}
         }
 
@@ -1246,7 +1488,7 @@
                 
                 const lastMsg = conv.messages.length > 0 ? conv.messages[conv.messages.length - 1] : null;
                 const preview = lastMsg ? (lastMsg.role === 'user' ? 'You: ' : 'AI: ') + 
-                    lastMsg.content.substring(0, 50) + (lastMsg.content.length > 50 ? '...' : '') : 'Empty conversation';
+                    lastMsg.content.substring(0, 45) + (lastMsg.content.length > 45 ? '...' : '') : 'Empty conversation';
                 
                 div.innerHTML = `
                     <div class="conv-title">${escapeHtml(conv.title)}</div>
@@ -1280,7 +1522,6 @@
             DOM.chatTitle.textContent = conv.title || 'New Conversation';
             DOM.chatDate.textContent = new Date(conv.createdAt).toLocaleDateString();
             
-            // Clear chat container
             DOM.chatContainer.innerHTML = '';
             
             if (conv.messages.length === 0) {
@@ -1288,7 +1529,6 @@
                 return;
             }
             
-            // Render messages
             conv.messages.forEach(msg => {
                 appendMessageToDOM(msg.content, msg.role, msg.timestamp);
             });
@@ -1360,7 +1600,6 @@
         function updateConversationTitle(id, firstMessage) {
             const conv = state.conversations[id];
             if (!conv || conv.title !== 'New Conversation') return;
-            // Auto-rename based on first message
             const title = firstMessage.length > 30 ? firstMessage.substring(0, 30) + '...' : firstMessage;
             conv.title = title;
             conv.updatedAt = new Date().toISOString();
@@ -1410,7 +1649,7 @@
         }
 
         // ============================================================
-        //  WORD-BY-WORD TYPING EFFECT
+        //  WORD-BY-WORD TYPING
         // ============================================================
         function typeWriter(element, text, speed = 15) {
             const words = text.split(' ');
@@ -1418,7 +1657,6 @@
             state.isTyping = true;
             state.stopTyping = false;
             
-            // Add stop button
             const stopBtn = document.createElement('button');
             stopBtn.className = 'stop-btn';
             stopBtn.innerHTML = '<i class="fas fa-stop"></i> Stop';
@@ -1443,10 +1681,6 @@
                     element.innerHTML = escapeHtml(currentText).replace(/\n/g, '<br>') + 
                         `<span class="typing-cursor"></span>`;
                     
-                    if (CONFIG.soundEnabled && index % 2 === 0) {
-                        playSound('typing');
-                    }
-                    
                     index++;
                     DOM.chatContainer.scrollTop = DOM.chatContainer.scrollHeight;
                     state.typingTimer = setTimeout(type, speed + Math.random() * 20);
@@ -1454,7 +1688,6 @@
                     element.innerHTML = text.replace(/\n/g, '<br>');
                     state.isTyping = false;
                     stopBtn.remove();
-                    playSound('send');
                 }
             }
             
@@ -1504,7 +1737,6 @@
             conv.messages.push(msg);
             conv.updatedAt = new Date().toISOString();
             
-            // Auto-rename if first user message
             if (role === 'user' && conv.messages.length === 1) {
                 updateConversationTitle(state.currentId, content);
             }
@@ -1515,7 +1747,7 @@
         }
 
         // ============================================================
-        //  EDIT LAST MESSAGE
+        //  EDIT / CLEAR / EXPORT
         // ============================================================
         function editLastMessage() {
             const conv = state.conversations[state.currentId];
@@ -1524,7 +1756,6 @@
                 return;
             }
             
-            // Find last user message
             let lastUserIndex = -1;
             for (let i = conv.messages.length - 1; i >= 0; i--) {
                 if (conv.messages[i].role === 'user') {
@@ -1541,7 +1772,6 @@
             const lastMsg = conv.messages[lastUserIndex];
             const newText = prompt('Edit your message:', lastMsg.content);
             if (newText && newText.trim()) {
-                // Remove all messages after this one
                 conv.messages = conv.messages.slice(0, lastUserIndex);
                 conv.messages.push({ role: 'user', content: newText.trim(), timestamp: getTime() });
                 conv.updatedAt = new Date().toISOString();
@@ -1551,9 +1781,6 @@
             }
         }
 
-        // ============================================================
-        //  CLEAR / EXPORT
-        // ============================================================
         function clearCurrentChat() {
             const conv = state.conversations[state.currentId];
             if (!conv || conv.messages.length === 0) {
@@ -1619,7 +1846,7 @@
                 return "Hello! I'm Zakhourani AI, your premium intelligent assistant. How can I help you today?";
             }
             if (lower.includes('who are you')) {
-                return "I'm Zakhourani AI, a premium intelligent assistant created by Zakhourani Developers. I'm here to help you with any questions you have, from learning to understanding complex topics.";
+                return "I'm Zakhourani AI, a premium intelligent assistant created by Zakhourani Developers. I'm here to help you with any questions you have.";
             }
             if (lower.includes('help')) {
                 return "I can help you with:\n• Answering general knowledge questions\n• Explaining complex topics simply\n• Writing and editing text\n• Brainstorming ideas\n• Learning English\n• And much more!";
@@ -1645,9 +1872,7 @@
 
             addMessage(text, 'user');
             DOM.messageInput.value = '';
-            playSound('send');
 
-            // Typing indicator
             const typingDiv = document.createElement('div');
             typingDiv.className = 'typing-indicator';
             typingDiv.innerHTML = `
@@ -1687,6 +1912,16 @@
         }
 
         // ============================================================
+        //  THEME
+        // ============================================================
+        function toggleTheme() {
+            document.body.classList.toggle('light');
+            const isLight = document.body.classList.contains('light');
+            DOM.themeIcon.className = isLight ? 'fas fa-sun' : 'fas fa-moon';
+            localStorage.setItem('zakhourani_theme', isLight ? 'light' : 'dark');
+        }
+
+        // ============================================================
         //  EVENT LISTENERS
         // ============================================================
         DOM.sendBtn.addEventListener('click', sendMessage);
@@ -1698,10 +1933,8 @@
             }
         });
 
-        // New chat button
         document.getElementById('newChatBtn').addEventListener('click', createNewConversation);
 
-        // Suggestion chips (welcome page)
         document.querySelectorAll('.welcome .chip').forEach(chip => {
             chip.addEventListener('click', () => {
                 DOM.messageInput.value = chip.dataset.prompt;
@@ -1709,7 +1942,19 @@
             });
         });
 
-        // Limit modal buttons
+        DOM.authLoginBtn.addEventListener('click', handleLogin);
+        DOM.authRegisterBtn.addEventListener('click', handleRegister);
+
+        DOM.authEmail.addEventListener('keydown', (e) => { if (e.key === 'Enter') handleLogin(); });
+        DOM.authPassword.addEventListener('keydown', (e) => { if (e.key === 'Enter') handleLogin(); });
+
+        DOM.logoutBtn.addEventListener('click', async () => {
+            if (confirm('Logout?')) {
+                await auth.signOut();
+                showToast('👋 Logged out');
+            }
+        });
+
         document.getElementById('upgradeFromLimit').addEventListener('click', () => {
             DOM.limitModal.classList.remove('active');
             showToast('🚀 Premium coming soon!', 3000);
@@ -1718,7 +1963,6 @@
             DOM.limitModal.classList.remove('active');
         });
 
-        // Keyboard shortcuts
         document.addEventListener('keydown', (e) => {
             if (e.ctrlKey && e.key === 'n') { e.preventDefault(); createNewConversation(); }
             if (e.key === 'Escape') {
@@ -1733,68 +1977,52 @@
         });
 
         // ============================================================
-        //  THEME TOGGLE
-        // ============================================================
-        function toggleTheme() {
-            document.body.classList.toggle('light');
-            const isLight = document.body.classList.contains('light');
-            localStorage.setItem('zakhourani_theme', isLight ? 'light' : 'dark');
-        }
-
-        // ============================================================
-        //  INITIALIZATION
+        //  AUTH STATE OBSERVER
         // ============================================================
         function init() {
+            createParticles();
+            
             // Load theme
             if (localStorage.getItem('zakhourani_theme') === 'light') {
                 document.body.classList.add('light');
+                DOM.themeIcon.className = 'fas fa-sun';
             }
-
-            createParticles();
-            loadUsage();
-            loadConversations();
             
-            // Set user name from localStorage or prompt
-            const savedName = localStorage.getItem('zakhourani_username');
-            if (savedName) {
-                CONFIG.userName = savedName;
-                DOM.userName.textContent = savedName;
-                DOM.userAvatar.textContent = savedName.charAt(0).toUpperCase();
-            } else {
-                const name = prompt('Welcome! Please enter your name:') || 'Guest';
-                CONFIG.userName = name;
-                DOM.userName.textContent = name;
-                DOM.userAvatar.textContent = name.charAt(0).toUpperCase();
-                localStorage.setItem('zakhourani_username', name);
-            }
-
-            DOM.messageInput.focus();
-            showToast('🤖 Zakhourani AI ready', 2000);
-            console.log('✅ Zakhourani AI initialized');
+            // Init Firebase
+            const firebaseAuth = initFirebase();
+            
+            // Auth state listener
+            firebaseAuth.onAuthStateChanged((user) => {
+                updateLoader('Authenticating...', 30);
+                
+                if (user) {
+                    state.user = user;
+                    updateLoader('Loading data...', 60);
+                    
+                    // Update user UI
+                    updateUserUI(user);
+                    
+                    // Load data
+                    loadUsage();
+                    loadConversations();
+                    
+                    updateLoader('Ready!', 100);
+                    setTimeout(() => {
+                        DOM.loader.classList.add('hidden');
+                        DOM.app.style.display = 'flex';
+                        DOM.messageInput.focus();
+                        showToast('🤖 Welcome back, ' + (user.displayName || user.email.split('@')[0]) + '!', 2000);
+                    }, 300);
+                } else {
+                    state.user = null;
+                    updateLoader('Please login...', 50);
+                    DOM.app.style.display = 'none';
+                    showAuthModal();
+                }
+            });
         }
 
-        // Handle visibility change
-        document.addEventListener('visibilitychange', () => {
-            if (!document.hidden) {
-                const today = new Date().toDateString();
-                if (state.usage.date !== today) {
-                    state.usage = { date: today, count: 0 };
-                    saveUsage();
-                    updateBalance();
-                }
-            }
-        });
-
-        // Auto-focus on click (desktop only)
-        document.addEventListener('click', () => {
-            if (!state.isProcessing && !state.isTyping && 
-                document.activeElement !== DOM.messageInput &&
-                window.innerWidth > 768) {
-                DOM.messageInput.focus();
-            }
-        });
-
-        // Start
+        // Start the app
         init();
     </script>
 </body>

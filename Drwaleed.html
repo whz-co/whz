@@ -3,10 +3,11 @@
 <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>Zakhourani AI - Database Dashboard</title>
+    <title>Zakhourani AI - Analytics Platform</title>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" />
     <link href="https://fonts.googleapis.com/css2?family=Inter:opsz,wght@14..32,400;14..32,500;14..32,600;14..32,700;14..32,800&display=swap" rel="stylesheet" />
     <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js@4"></script>
     <style>
         * {
             margin: 0;
@@ -30,161 +31,96 @@
             --pink: #ec4899;
             --border: rgba(255, 255, 255, 0.06);
             --gradient-main: linear-gradient(135deg, #3b82f6, #8b5cf6, #06b6d4);
-            --shadow-glow: 0 8px 32px rgba(59, 130, 246, 0.2);
         }
         
         body {
             background: var(--bg-primary);
             color: var(--text-primary);
             min-height: 100vh;
-            padding: 20px;
         }
         
-        .container {
-            max-width: 1400px;
-            margin: 0 auto;
-        }
-        
-        .loader-overlay {
-            position: fixed;
-            top: 0;
-            left: 0;
-            right: 0;
-            bottom: 0;
-            background: var(--bg-primary);
+        /* Navigation */
+        .nav {
+            background: var(--bg-secondary);
+            border-bottom: 1px solid var(--border);
+            padding: 0 24px;
             display: flex;
             align-items: center;
-            justify-content: center;
-            z-index: 9999;
-            flex-direction: column;
-            gap: 20px;
-        }
-        
-        .loader-overlay.hidden {
-            display: none;
-        }
-        
-        .spinner {
-            width: 50px;
-            height: 50px;
-            border: 3px solid var(--border);
-            border-top: 3px solid var(--accent);
-            border-radius: 50%;
-            animation: spin 0.8s linear infinite;
-        }
-        
-        @keyframes spin {
-            to { transform: rotate(360deg); }
-        }
-        
-        .loader-text {
-            color: var(--text-secondary);
-            font-size: 14px;
-        }
-        
-        .loader-bar {
-            width: 300px;
-            height: 3px;
-            background: var(--border);
-            border-radius: 2px;
-            overflow: hidden;
-        }
-        
-        .loader-bar-fill {
-            height: 100%;
-            background: var(--gradient-main);
-            width: 0%;
-            transition: width 0.3s;
-        }
-        
-        .header {
-            display: flex;
             justify-content: space-between;
-            align-items: center;
-            padding: 20px 0 30px;
-            flex-wrap: wrap;
-            gap: 15px;
+            height: 64px;
+            position: sticky;
+            top: 0;
+            z-index: 100;
+            backdrop-filter: blur(12px);
         }
         
-        .header-left {
+        .nav-brand {
             display: flex;
             align-items: center;
-            gap: 15px;
-        }
-        
-        .logo {
-            width: 48px;
-            height: 48px;
-            background: var(--gradient-main);
-            border-radius: 14px;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            font-size: 22px;
-            color: white;
-            box-shadow: var(--shadow-glow);
-        }
-        
-        .header h1 {
-            font-size: 24px;
+            gap: 12px;
             font-weight: 800;
+            font-size: 18px;
             background: var(--gradient-main);
             -webkit-background-clip: text;
             -webkit-text-fill-color: transparent;
         }
         
-        .header-subtitle {
-            color: var(--text-secondary);
-            font-size: 13px;
+        .nav-brand .logo {
+            width: 36px;
+            height: 36px;
+            background: var(--gradient-main);
+            border-radius: 10px;
             display: flex;
             align-items: center;
-            gap: 12px;
-            flex-wrap: wrap;
+            justify-content: center;
+            font-size: 16px;
+            color: white;
+            -webkit-text-fill-color: white;
         }
         
-        .badge {
-            padding: 4px 14px;
-            border-radius: 20px;
-            font-size: 11px;
-            font-weight: 600;
-            display: inline-block;
+        .nav-tabs {
+            display: flex;
+            gap: 4px;
         }
         
-        .badge-success {
-            background: rgba(34, 197, 94, 0.15);
-            color: var(--success);
+        .nav-tab {
+            padding: 8px 20px;
+            border-radius: 8px;
+            cursor: pointer;
+            font-weight: 500;
+            font-size: 14px;
+            transition: all 0.3s;
+            color: var(--text-secondary);
+            background: transparent;
+            border: none;
         }
         
-        .badge-danger {
-            background: rgba(239, 68, 68, 0.15);
-            color: var(--danger);
+        .nav-tab:hover {
+            background: rgba(255,255,255,0.05);
+            color: var(--text-primary);
         }
         
-        .badge-warning {
-            background: rgba(234, 179, 8, 0.15);
-            color: var(--warning);
-        }
-        
-        .badge-info {
-            background: rgba(59, 130, 246, 0.15);
+        .nav-tab.active {
+            background: rgba(59,130,246,0.15);
             color: var(--accent-light);
         }
         
-        .badge-purple {
-            background: rgba(139, 92, 246, 0.15);
-            color: var(--purple);
+        .nav-actions {
+            display: flex;
+            gap: 8px;
+            align-items: center;
         }
         
         .btn {
-            padding: 9px 18px;
+            padding: 8px 16px;
             border: none;
-            border-radius: 10px;
+            border-radius: 8px;
             font-weight: 600;
             cursor: pointer;
             transition: all 0.3s;
             display: inline-flex;
             align-items: center;
-            gap: 8px;
+            gap: 6px;
             font-size: 13px;
         }
         
@@ -194,18 +130,18 @@
         }
         
         .btn-primary:hover {
-            transform: translateY(-2px);
-            box-shadow: var(--shadow-glow);
+            transform: translateY(-1px);
+            box-shadow: 0 8px 25px rgba(59,130,246,0.3);
         }
         
         .btn-secondary {
-            background: var(--bg-secondary);
+            background: var(--bg-primary);
             color: var(--text-primary);
             border: 1px solid var(--border);
         }
         
         .btn-secondary:hover {
-            background: rgba(30, 41, 59, 0.6);
+            background: rgba(255,255,255,0.05);
         }
         
         .btn-success {
@@ -213,14 +149,75 @@
             color: white;
         }
         
-        .btn-success:hover {
-            transform: translateY(-2px);
-            box-shadow: 0 8px 25px rgba(34, 197, 94, 0.3);
+        .btn-sm {
+            padding: 5px 12px;
+            font-size: 11px;
         }
         
+        /* Main Content */
+        .main {
+            padding: 24px;
+            max-width: 1600px;
+            margin: 0 auto;
+        }
+        
+        /* Date Range Selector */
+        .date-range {
+            display: flex;
+            gap: 8px;
+            margin-bottom: 24px;
+            flex-wrap: wrap;
+            align-items: center;
+        }
+        
+        .date-range .label {
+            color: var(--text-secondary);
+            font-size: 13px;
+            font-weight: 600;
+            margin-right: 8px;
+        }
+        
+        .date-btn {
+            padding: 6px 16px;
+            border-radius: 20px;
+            cursor: pointer;
+            font-size: 12px;
+            font-weight: 600;
+            border: 1px solid var(--border);
+            background: transparent;
+            color: var(--text-secondary);
+            transition: all 0.3s;
+        }
+        
+        .date-btn:hover {
+            border-color: var(--accent);
+            color: var(--accent-light);
+        }
+        
+        .date-btn.active {
+            background: var(--accent);
+            color: white;
+            border-color: var(--accent);
+        }
+        
+        .date-input {
+            background: var(--bg-secondary);
+            border: 1px solid var(--border);
+            border-radius: 8px;
+            padding: 6px 12px;
+            color: var(--text-primary);
+            font-size: 12px;
+            outline: none;
+        }
+        
+        .date-input:focus {
+            border-color: var(--accent);
+        }
+        
+        /* Stats Cards */
         .stats-grid {
             display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
+            grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
             gap: 16px;
             margin-bottom: 24px;
         }
@@ -229,11 +226,11 @@
             background: var(--bg-card);
             border: 1px solid var(--border);
             border-radius: 16px;
-            padding: 18px 22px;
+            padding: 20px 24px;
             backdrop-filter: blur(12px);
-            transition: all 0.3s;
             position: relative;
             overflow: hidden;
+            transition: all 0.3s;
         }
         
         .stat-card::before {
@@ -244,7 +241,19 @@
             right: 0;
             height: 3px;
             background: var(--gradient-main);
-            opacity: 0.5;
+        }
+        
+        .stat-card:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 12px 40px rgba(59,130,246,0.15);
+        }
+        
+        .stat-card .icon {
+            position: absolute;
+            right: 20px;
+            top: 20px;
+            font-size: 32px;
+            opacity: 0.08;
         }
         
         .stat-card .label {
@@ -253,164 +262,102 @@
             font-weight: 600;
             text-transform: uppercase;
             letter-spacing: 0.5px;
+            margin-bottom: 8px;
         }
         
         .stat-card .value {
-            font-size: 28px;
+            font-size: 32px;
             font-weight: 800;
-            margin: 4px 0 2px;
+            background: var(--gradient-main);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            line-height: 1.2;
         }
         
-        .stat-card .sub {
+        .stat-card .change {
             font-size: 12px;
-            color: var(--text-secondary);
+            font-weight: 600;
+            margin-top: 4px;
         }
         
-        .stat-card .icon {
-            position: absolute;
-            right: 16px;
-            top: 16px;
-            font-size: 28px;
-            opacity: 0.08;
-        }
+        .change-positive { color: var(--success); }
+        .change-negative { color: var(--danger); }
+        .change-neutral { color: var(--text-secondary); }
         
-        .main-grid {
+        /* Charts Section */
+        .charts-grid {
             display: grid;
-            grid-template-columns: 280px 1fr;
+            grid-template-columns: 2fr 1fr;
             gap: 20px;
             margin-bottom: 24px;
         }
         
         @media (max-width: 1024px) {
-            .main-grid {
+            .charts-grid {
                 grid-template-columns: 1fr;
             }
         }
         
-        .sidebar {
+        .chart-card {
             background: var(--bg-card);
             border: 1px solid var(--border);
             border-radius: 16px;
-            padding: 20px;
-            backdrop-filter: blur(12px);
-            max-height: 600px;
-            overflow-y: auto;
-        }
-        
-        .sidebar::-webkit-scrollbar {
-            width: 4px;
-        }
-        
-        .sidebar::-webkit-scrollbar-track {
-            background: var(--border);
-            border-radius: 2px;
-        }
-        
-        .sidebar::-webkit-scrollbar-thumb {
-            background: var(--accent);
-            border-radius: 2px;
-        }
-        
-        .sidebar h3 {
-            font-size: 14px;
-            font-weight: 700;
-            margin-bottom: 16px;
-            display: flex;
-            align-items: center;
-            gap: 10px;
-        }
-        
-        .sidebar .table-item {
-            padding: 10px 14px;
-            border-radius: 10px;
-            cursor: pointer;
-            transition: all 0.3s;
-            border: 1px solid transparent;
-            margin-bottom: 6px;
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-        }
-        
-        .sidebar .table-item:hover {
-            background: rgba(255, 255, 255, 0.03);
-            border-color: var(--border);
-        }
-        
-        .sidebar .table-item.active {
-            background: rgba(59, 130, 246, 0.1);
-            border-color: var(--accent);
-        }
-        
-        .sidebar .table-item .name {
-            font-weight: 500;
-            font-size: 13px;
-            display: flex;
-            align-items: center;
-            gap: 8px;
-        }
-        
-        .sidebar .table-item .name i {
-            color: var(--accent-light);
-            font-size: 14px;
-        }
-        
-        .sidebar .table-item .count {
-            font-size: 11px;
-            color: var(--text-secondary);
-            background: var(--bg-primary);
-            padding: 2px 10px;
-            border-radius: 12px;
-        }
-        
-        .content-area {
-            background: var(--bg-card);
-            border: 1px solid var(--border);
-            border-radius: 16px;
-            padding: 20px;
+            padding: 24px;
             backdrop-filter: blur(12px);
         }
         
-        .content-header {
+        .chart-header {
             display: flex;
             justify-content: space-between;
             align-items: center;
+            margin-bottom: 20px;
             flex-wrap: wrap;
             gap: 12px;
-            margin-bottom: 16px;
         }
         
-        .content-header h3 {
+        .chart-header h3 {
             font-size: 16px;
             font-weight: 700;
-            display: flex;
-            align-items: center;
-            gap: 10px;
         }
         
-        .content-controls {
+        .chart-container {
+            position: relative;
+            height: 350px;
+        }
+        
+        /* Table Data Section */
+        .data-section {
+            background: var(--bg-card);
+            border: 1px solid var(--border);
+            border-radius: 16px;
+            padding: 24px;
+            backdrop-filter: blur(12px);
+            margin-bottom: 24px;
+        }
+        
+        .data-header {
             display: flex;
-            gap: 10px;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 16px;
             flex-wrap: wrap;
+            gap: 12px;
+        }
+        
+        .data-header h3 {
+            font-size: 16px;
+            font-weight: 700;
+        }
+        
+        .data-controls {
+            display: flex;
+            gap: 8px;
             align-items: center;
+            flex-wrap: wrap;
         }
         
-        .content-controls input {
-            background: var(--bg-primary);
-            border: 1px solid var(--border);
-            border-radius: 8px;
-            padding: 7px 14px;
-            color: var(--text-primary);
-            font-size: 13px;
-            outline: none;
-            min-width: 200px;
-        }
-        
-        .content-controls input:focus {
-            border-color: var(--accent);
-        }
-        
-        .content-controls select {
+        .data-controls select,
+        .data-controls input {
             background: var(--bg-primary);
             border: 1px solid var(--border);
             border-radius: 8px;
@@ -420,13 +367,14 @@
             outline: none;
         }
         
-        .content-controls select:focus {
+        .data-controls input:focus,
+        .data-controls select:focus {
             border-color: var(--accent);
         }
         
         .table-wrap {
             overflow-x: auto;
-            max-height: 500px;
+            max-height: 400px;
             overflow-y: auto;
         }
         
@@ -445,13 +393,13 @@
             border-radius: 2px;
         }
         
-        .table-wrap table {
+        table {
             width: 100%;
             border-collapse: collapse;
             font-size: 13px;
         }
         
-        .table-wrap th {
+        th {
             text-align: left;
             padding: 10px 12px;
             color: var(--text-secondary);
@@ -466,7 +414,7 @@
             border-bottom: 2px solid var(--border);
         }
         
-        .table-wrap td {
+        td {
             padding: 10px 12px;
             border-bottom: 1px solid var(--border);
             max-width: 300px;
@@ -475,31 +423,95 @@
             white-space: nowrap;
         }
         
-        .table-wrap tr:hover td {
-            background: rgba(255, 255, 255, 0.02);
+        tr:hover td {
+            background: rgba(255,255,255,0.02);
         }
         
-        .null {
-            color: var(--text-secondary);
-            font-style: italic;
-        }
+        .null { color: var(--text-secondary); font-style: italic; }
         
         .bool {
-            display: inline-block;
             padding: 2px 10px;
             border-radius: 12px;
             font-size: 11px;
             font-weight: 600;
         }
         
-        .bool.true {
-            background: rgba(34, 197, 94, 0.15);
-            color: var(--success);
+        .bool.true { background: rgba(34,197,94,0.15); color: var(--success); }
+        .bool.false { background: rgba(239,68,68,0.15); color: var(--danger); }
+        
+        .badge {
+            padding: 4px 12px;
+            border-radius: 20px;
+            font-size: 11px;
+            font-weight: 600;
         }
         
-        .bool.false {
-            background: rgba(239, 68, 68, 0.15);
-            color: var(--danger);
+        .badge-success { background: rgba(34,197,94,0.15); color: var(--success); }
+        .badge-info { background: rgba(59,130,246,0.15); color: var(--accent-light); }
+        .badge-warning { background: rgba(234,179,8,0.15); color: var(--warning); }
+        
+        /* Alert */
+        .alert {
+            padding: 12px 18px;
+            border-radius: 10px;
+            margin-bottom: 16px;
+            display: none;
+            font-size: 14px;
+        }
+        
+        .alert-success { background: rgba(34,197,94,0.1); border: 1px solid rgba(34,197,94,0.2); color: #86efac; }
+        .alert-error { background: rgba(239,68,68,0.1); border: 1px solid rgba(239,68,68,0.2); color: #fca5a5; }
+        .alert-info { background: rgba(59,130,246,0.1); border: 1px solid rgba(59,130,246,0.2); color: #60a5fa; }
+        
+        /* Loader */
+        .loader-overlay {
+            position: fixed;
+            top: 0; left: 0; right: 0; bottom: 0;
+            background: var(--bg-primary);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            z-index: 9999;
+            flex-direction: column;
+            gap: 20px;
+        }
+        
+        .loader-overlay.hidden { display: none; }
+        
+        .spinner {
+            width: 50px;
+            height: 50px;
+            border: 3px solid var(--border);
+            border-top: 3px solid var(--accent);
+            border-radius: 50%;
+            animation: spin 0.8s linear infinite;
+        }
+        
+        @keyframes spin { to { transform: rotate(360deg); } }
+        
+        .loader-text { color: var(--text-secondary); font-size: 14px; }
+        
+        .loader-bar {
+            width: 300px;
+            height: 3px;
+            background: var(--border);
+            border-radius: 2px;
+            overflow: hidden;
+        }
+        
+        .loader-bar-fill {
+            height: 100%;
+            background: var(--gradient-main);
+            width: 0%;
+            transition: width 0.3s;
+        }
+        
+        .page {
+            display: none;
+        }
+        
+        .page.active {
+            display: block;
         }
         
         .empty-state {
@@ -514,125 +526,16 @@
             margin-bottom: 12px;
         }
         
-        .record-count {
-            margin-top: 12px;
-            font-size: 12px;
-            color: var(--text-secondary);
-        }
-        
-        .schema-section {
-            margin-top: 20px;
-            background: var(--bg-card);
-            border: 1px solid var(--border);
-            border-radius: 16px;
-            padding: 20px;
-            backdrop-filter: blur(12px);
-        }
-        
-        .schema-header {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            flex-wrap: wrap;
-            gap: 12px;
-            margin-bottom: 16px;
-        }
-        
-        .schema-header h3 {
-            font-size: 15px;
-            font-weight: 700;
-            display: flex;
-            align-items: center;
-            gap: 10px;
-        }
-        
-        .schema-grid {
-            display: grid;
-            gap: 8px;
-        }
-        
-        .schema-item {
-            background: var(--bg-primary);
-            border: 1px solid var(--border);
-            border-radius: 8px;
-            padding: 8px 14px;
-            display: grid;
-            grid-template-columns: auto 1fr auto;
-            gap: 12px;
-            align-items: center;
-        }
-        
-        .schema-item .col {
-            font-weight: 600;
-            color: var(--accent-light);
-        }
-        
-        .schema-item .type {
-            color: var(--text-secondary);
-            font-size: 12px;
-        }
-        
-        .schema-item .tag {
-            font-size: 10px;
-            font-weight: 600;
-        }
-        
-        .tag-pk {
-            color: var(--warning);
-        }
-        
-        .tag-fk {
-            color: var(--accent);
-        }
-        
-        .alert {
-            padding: 12px 18px;
-            border-radius: 10px;
-            margin-bottom: 16px;
-            display: none;
-        }
-        
-        .alert-success {
-            background: rgba(34, 197, 94, 0.1);
-            border: 1px solid rgba(34, 197, 94, 0.2);
-            color: #86efac;
-        }
-        
-        .alert-error {
-            background: rgba(239, 68, 68, 0.1);
-            border: 1px solid rgba(239, 68, 68, 0.2);
-            color: #fca5a5;
-        }
-        
-        .alert-info {
-            background: rgba(59, 130, 246, 0.1);
-            border: 1px solid rgba(59, 130, 246, 0.2);
-            color: #60a5fa;
-        }
-        
-        .alert-warning {
-            background: rgba(234, 179, 8, 0.1);
-            border: 1px solid rgba(234, 179, 8, 0.2);
-            color: #fcd34d;
-        }
-        
-        .hidden {
-            display: none !important;
-        }
-        
         @media (max-width: 768px) {
             .stats-grid {
                 grid-template-columns: repeat(2, 1fr);
             }
-            .header h1 {
-                font-size: 20px;
+            .nav-tab {
+                padding: 6px 12px;
+                font-size: 12px;
             }
-            .schema-item {
-                grid-template-columns: 1fr;
-                gap: 4px;
-            }
-            .content-controls input {
-                min-width: 150px;
+            .main {
+                padding: 16px;
             }
         }
         
@@ -640,8 +543,8 @@
             .stats-grid {
                 grid-template-columns: 1fr;
             }
-            body {
-                padding: 12px;
+            .nav-tab {
+                display: none;
             }
         }
     </style>
@@ -651,125 +554,184 @@
     <!-- Loading Screen -->
     <div class="loader-overlay" id="loader">
         <div class="spinner"></div>
-        <div class="loader-text" id="loaderText">Connecting to Supabase...</div>
+        <div class="loader-text" id="loaderText">Initializing Platform...</div>
         <div class="loader-bar">
             <div class="loader-bar-fill" id="loaderBar"></div>
         </div>
-        <div class="loader-text" style="font-size:12px;color:var(--text-secondary);" id="loaderDetail">Initializing...</div>
+        <div class="loader-text" style="font-size:12px;color:var(--text-secondary);" id="loaderDetail">Connecting to database...</div>
     </div>
 
-    <!-- Main Dashboard -->
-    <div class="container" id="dashboard" style="display:none;">
-
-        <!-- Header -->
-        <div class="header">
-            <div class="header-left">
-                <div class="logo"><i class="fas fa-brain"></i></div>
-                <div>
-                    <h1>Zakhourani AI Database</h1>
-                    <div class="header-subtitle">
-                        <i class="fas fa-server"></i> Supabase Explorer
-                        <span class="badge badge-success" id="statusBadge"><i class="fas fa-check-circle"></i> Connected</span>
-                        <span class="badge badge-info" id="tableCountBadge">0 tables</span>
-                    </div>
-                </div>
-            </div>
-            <div>
-                <button class="btn btn-secondary" onclick="refreshAll()"><i class="fas fa-sync"></i> Refresh</button>
-                <button class="btn btn-primary" onclick="exportData()"><i class="fas fa-download"></i> Export</button>
-            </div>
+    <!-- Navigation -->
+    <nav class="nav">
+        <div class="nav-brand">
+            <div class="logo"><i class="fas fa-brain"></i></div>
+            Zakhourani AI
         </div>
+        <div class="nav-tabs">
+            <button class="nav-tab active" onclick="switchPage('dashboard')">
+                <i class="fas fa-chart-line"></i> Dashboard
+            </button>
+            <button class="nav-tab" onclick="switchPage('data')">
+                <i class="fas fa-database"></i> Data Explorer
+            </button>
+            <button class="nav-tab" onclick="switchPage('daily')">
+                <i class="fas fa-calendar-check"></i> Daily Report
+            </button>
+        </div>
+        <div class="nav-actions">
+            <span class="badge badge-success" id="statusBadge">
+                <i class="fas fa-circle" style="font-size:6px;"></i> Live
+            </span>
+            <button class="btn btn-secondary btn-sm" onclick="refreshAll()">
+                <i class="fas fa-sync"></i>
+            </button>
+        </div>
+    </nav>
 
-        <!-- Alert -->
+    <div class="main">
         <div id="alert" class="alert"></div>
 
-        <!-- Stats -->
-        <div class="stats-grid" id="statsGrid">
-            <div class="stat-card">
-                <div class="icon"><i class="fas fa-table"></i></div>
-                <div class="label">Tables</div>
-                <div class="value" id="statTables">0</div>
-                <div class="sub">in public schema</div>
+        <!-- Dashboard Page -->
+        <div class="page active" id="page-dashboard">
+            <!-- Date Range -->
+            <div class="date-range">
+                <span class="label"><i class="fas fa-calendar"></i> Period:</span>
+                <button class="date-btn" onclick="setDateRange(30)">30 Days</button>
+                <button class="date-btn" onclick="setDateRange(90)">90 Days</button>
+                <button class="date-btn active" onclick="setDateRange(180)">6 Months</button>
+                <button class="date-btn" onclick="setDateRange(365)">1 Year</button>
+                <button class="date-btn" onclick="setDateRange(730)">2 Years</button>
+                <button class="date-btn" onclick="setDateRange(0)">All Time</button>
+                <span style="margin-left:16px;font-size:12px;color:var(--text-secondary);">
+                    From: <input type="date" class="date-input" id="dateFrom" onchange="customDateRange()">
+                    To: <input type="date" class="date-input" id="dateTo" onchange="customDateRange()">
+                </span>
             </div>
-            <div class="stat-card">
-                <div class="icon"><i class="fas fa-database"></i></div>
-                <div class="label">Total Records</div>
-                <div class="value" id="statRecords">0</div>
-                <div class="sub">across all tables</div>
-            </div>
-            <div class="stat-card">
-                <div class="icon"><i class="fas fa-columns"></i></div>
-                <div class="label">Total Columns</div>
-                <div class="value" id="statColumns">0</div>
-                <div class="sub">in all tables</div>
-            </div>
-            <div class="stat-card">
-                <div class="icon"><i class="fas fa-clock"></i></div>
-                <div class="label">Last Updated</div>
-                <div class="value" id="statUpdated" style="font-size:18px;">-</div>
-                <div class="sub">real-time</div>
-            </div>
-        </div>
 
-        <!-- Main Grid -->
-        <div class="main-grid">
-            <!-- Sidebar -->
-            <div class="sidebar" id="sidebar">
-                <h3><i class="fas fa-list"></i> Tables</h3>
-                <div id="tableList">
-                    <div class="empty-state" style="padding:20px;">
-                        <i class="fas fa-spinner fa-spin"></i>
-                        Loading tables...
+            <!-- Stats -->
+            <div class="stats-grid" id="statsGrid">
+                <div class="stat-card">
+                    <div class="icon"><i class="fas fa-users"></i></div>
+                    <div class="label">Total Users</div>
+                    <div class="value" id="statUsers">-</div>
+                    <div class="change" id="changeUsers">-</div>
+                </div>
+                <div class="stat-card">
+                    <div class="icon"><i class="fas fa-chart-bar"></i></div>
+                    <div class="label">Daily Usage</div>
+                    <div class="value" id="statUsage">-</div>
+                    <div class="change" id="changeUsage">-</div>
+                </div>
+                <div class="stat-card">
+                    <div class="icon"><i class="fas fa-exchange-alt"></i></div>
+                    <div class="label">Transactions</div>
+                    <div class="value" id="statTransactions">-</div>
+                    <div class="change" id="changeTransactions">-</div>
+                </div>
+                <div class="stat-card">
+                    <div class="icon"><i class="fas fa-question-circle"></i></div>
+                    <div class="label">Questions</div>
+                    <div class="value" id="statQuestions">-</div>
+                    <div class="change" id="changeQuestions">-</div>
+                </div>
+            </div>
+
+            <!-- Charts -->
+            <div class="charts-grid">
+                <div class="chart-card">
+                    <div class="chart-header">
+                        <h3><i class="fas fa-chart-line"></i> Growth Trends</h3>
+                        <div>
+                            <button class="btn btn-secondary btn-sm" onclick="toggleChartMetric()">
+                                <i class="fas fa-exchange-alt"></i> Switch Metric
+                            </button>
+                        </div>
+                    </div>
+                    <div class="chart-container">
+                        <canvas id="trendChart"></canvas>
+                    </div>
+                </div>
+                <div class="chart-card">
+                    <div class="chart-header">
+                        <h3><i class="fas fa-chart-pie"></i> Distribution</h3>
+                    </div>
+                    <div class="chart-container">
+                        <canvas id="pieChart"></canvas>
                     </div>
                 </div>
             </div>
 
-            <!-- Content -->
-            <div class="content-area">
-                <div class="content-header">
-                    <h3><i class="fas fa-eye"></i> <span id="viewerTitle">Select a table</span></h3>
-                    <div class="content-controls">
-                        <input type="text" id="searchInput" placeholder="🔍 Search data..." oninput="searchData()" />
-                        <button class="btn btn-secondary" onclick="loadTableData()" style="padding:6px 14px;font-size:11px;">
-                            <i class="fas fa-sync"></i> Load
-                        </button>
-                        <select id="limitSelect" onchange="loadTableData()" style="padding:6px 10px;font-size:11px;">
-                            <option value="10">10 rows</option>
-                            <option value="25" selected>25 rows</option>
+            <!-- Daily Breakdown -->
+            <div class="chart-card">
+                <div class="chart-header">
+                    <h3><i class="fas fa-calendar-day"></i> Daily Breakdown (Last 30 Days)</h3>
+                </div>
+                <div class="chart-container">
+                    <canvas id="dailyChart"></canvas>
+                </div>
+            </div>
+        </div>
+
+        <!-- Data Explorer Page -->
+        <div class="page" id="page-data">
+            <div class="data-section">
+                <div class="data-header">
+                    <h3><i class="fas fa-database"></i> <span id="dataTitle">Data Explorer</span></h3>
+                    <div class="data-controls">
+                        <select id="tableSelect" onchange="loadTableData()">
+                            <option value="">Select table...</option>
+                        </select>
+                        <input type="text" id="searchInput" placeholder="🔍 Search..." oninput="searchData()" />
+                        <select id="limitSelect" onchange="loadTableData()">
+                            <option value="25">25 rows</option>
                             <option value="50">50 rows</option>
                             <option value="100">100 rows</option>
                             <option value="500">500 rows</option>
+                            <option value="1000">1000 rows</option>
                         </select>
+                        <button class="btn btn-secondary btn-sm" onclick="exportCSV()">
+                            <i class="fas fa-download"></i> CSV
+                        </button>
                     </div>
                 </div>
                 <div class="table-wrap" id="dataWrapper">
                     <div class="empty-state">
                         <i class="fas fa-hand-pointer"></i>
-                        Select a table from the sidebar to view data
+                        Select a table to view data
                     </div>
                 </div>
-                <div class="record-count" id="recordCount">-</div>
+                <div style="margin-top:12px;font-size:12px;color:var(--text-secondary);" id="recordCount"></div>
             </div>
         </div>
 
-        <!-- Schema Viewer -->
-        <div class="schema-section">
-            <div class="schema-header">
-                <h3><i class="fas fa-code"></i> Table Schema</h3>
-                <button class="btn btn-secondary" onclick="toggleSchema()" style="padding:6px 14px;font-size:11px;">
-                    <i class="fas fa-chevron-down"></i> Toggle
-                </button>
-            </div>
-            <div id="schemaContent">
-                <div class="empty-state">Select a table to view schema</div>
+        <!-- Daily Report Page -->
+        <div class="page" id="page-daily">
+            <div class="data-section">
+                <div class="data-header">
+                    <h3><i class="fas fa-calendar-check"></i> Daily Report - <span id="dailyDate"></span></h3>
+                    <div class="data-controls">
+                        <input type="date" class="date-input" id="dailyDateInput" onchange="loadDailyReport()" />
+                        <button class="btn btn-primary btn-sm" onclick="loadDailyReport()">
+                            <i class="fas fa-sync"></i> Load
+                        </button>
+                        <button class="btn btn-secondary btn-sm" onclick="exportDailyPDF()">
+                            <i class="fas fa-file-pdf"></i> Export
+                        </button>
+                    </div>
+                </div>
+                <div id="dailyReport">
+                    <div class="empty-state">
+                        <i class="fas fa-calendar-alt"></i>
+                        Select a date to view the daily report
+                    </div>
+                </div>
             </div>
         </div>
-
     </div>
 
     <script>
         // ============================================================
-        // YOUR SUPABASE CREDENTIALS - UPDATED!
+        // CONFIGURATION
         // ============================================================
         const SUPABASE_URL = 'https://wkgldyfxsmkjyallrdtq.supabase.co';
         const SUPABASE_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6IndrZ2xkeWZ4c21ranlhbGxyZHRxIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NzczNTg0OTQsImV4cCI6MjA5MjkzNDQ5NH0.WgXSHB6teuUiEKYgeR2ADAK-8A_6VnbEl-wv0RSuxjA';
@@ -779,61 +741,53 @@
         // ============================================================
         let client = null;
         let tables = [];
-        let tableData = {};
         let tableSchemas = {};
         let tableCounts = {};
         let currentTable = '';
         let searchTerm = '';
+        let dateRange = 180; // Default 6 months
+        let currentPage = 'dashboard';
+        let trendMetric = 'users'; // users, usage, transactions, questions
+        let trendChart = null;
+        let pieChart = null;
+        let dailyChart = null;
 
         // ============================================================
-        // INIT
+        // INITIALIZATION
         // ============================================================
         async function init() {
             try {
                 updateLoader('Connecting to Supabase...', 10);
-                
-                // Initialize Supabase client
                 client = window.supabase.createClient(SUPABASE_URL, SUPABASE_KEY);
 
                 updateLoader('Discovering tables...', 30);
                 await discoverTables();
 
-                updateLoader('Loading table schemas...', 50);
+                updateLoader('Loading schemas...', 50);
                 await loadAllSchemas();
 
-                updateLoader('Loading table counts...', 70);
+                updateLoader('Loading counts...', 70);
                 await loadAllCounts();
 
-                updateLoader('Ready!', 100);
+                updateLoader('Preparing dashboard...', 90);
+                
                 setTimeout(() => {
                     document.getElementById('loader').classList.add('hidden');
-                    document.getElementById('dashboard').style.display = 'block';
                     renderAll();
-                    showAlert(`✅ Connected successfully! Found ${tables.length} tables.`, 'success');
-                }, 400);
+                    initializeCharts();
+                    updateDashboardData();
+                    setupAutoRefresh();
+                    showAlert('✅ Platform ready! Data up to today.', 'success');
+                }, 500);
 
             } catch (err) {
                 console.error('Init error:', err);
+                updateLoader('Error connecting', 100);
                 document.getElementById('loaderText').textContent = '❌ Connection failed';
-                document.getElementById('loaderDetail').textContent = err.message || 'Check your credentials';
-                document.getElementById('statusBadge').className = 'badge badge-danger';
-                document.getElementById('statusBadge').innerHTML = '<i class="fas fa-times-circle"></i> Error';
-                showAlert('❌ Failed to connect: ' + (err.message || 'Unknown error'), 'error');
-                
-                // Try fallback with common tables
-                try {
-                    tables = ['users', 'daily_usage', 'transactions', 'questions'];
-                    await loadAllSchemas();
-                    await loadAllCounts();
-                    setTimeout(() => {
-                        document.getElementById('loader').classList.add('hidden');
-                        document.getElementById('dashboard').style.display = 'block';
-                        renderAll();
-                        showAlert('⚠️ Using fallback tables (some may not exist)', 'warning');
-                    }, 1000);
-                } catch (e) {
-                    showAlert('❌ Fatal error: ' + e.message, 'error');
-                }
+                document.getElementById('loaderDetail').textContent = err.message;
+                document.getElementById('statusBadge').className = 'badge badge-warning';
+                document.getElementById('statusBadge').innerHTML = '<i class="fas fa-exclamation-circle"></i> Error';
+                showAlert('❌ Failed: ' + err.message, 'error');
             }
         }
 
@@ -841,150 +795,447 @@
         // DISCOVER TABLES
         // ============================================================
         async function discoverTables() {
-            try {
-                // Try to get tables from information_schema
-                const { data, error } = await client
-                    .from('information_schema.tables')
-                    .select('table_name')
-                    .eq('table_schema', 'public')
-                    .eq('table_type', 'BASE TABLE');
-
-                if (!error && data && data.length > 0) {
-                    tables = data.map(t => t.table_name)
-                        .filter(t => !t.startsWith('_') && !t.startsWith('pg_'));
-                    return;
-                }
-            } catch (e) {
-                console.warn('Could not query information_schema:', e);
-            }
-
-            // Try common table names
-            const commonTables = ['users', 'daily_usage', 'transactions', 'questions', 'profiles', 'posts', 'comments'];
+            const commonTables = ['users', 'daily_usage', 'transactions', 'questions', 'profiles', 'posts', 'comments', 'metrics', 'analytics'];
             const found = [];
+            
             for (const t of commonTables) {
                 try {
                     const { error } = await client.from(t).select('count', { count: 'exact', head: true });
                     if (!error || error.code !== '42P01') {
                         found.push(t);
                     }
+                } catch (e) {
+                    // Table doesn't exist, skip
+                }
+            }
+            
+            if (found.length === 0) {
+                // Fallback to users table
+                try {
+                    const { error } = await client.from('users').select('count', { count: 'exact', head: true });
+                    if (!error) found.push('users');
                 } catch (e) {}
             }
-            tables = found.length ? found : ['users'];
+            
+            tables = found.length > 0 ? found : ['users'];
         }
 
         // ============================================================
-        // LOAD ALL SCHEMAS
+        // LOAD SCHEMAS
         // ============================================================
         async function loadAllSchemas() {
             for (const table of tables) {
                 try {
                     const { data, error } = await client.from(table).select('*').limit(1);
-                    if (error) {
-                        tableSchemas[table] = { error: error.message, columns: [] };
-                        continue;
-                    }
-                    if (data && data.length > 0) {
-                        const cols = Object.keys(data[0]).map(k => ({
-                            name: k,
-                            type: typeof data[0][k],
-                            sample: data[0][k],
-                            nullable: data[0][k] === null
-                        }));
-                        tableSchemas[table] = { columns: cols, sample: data[0] };
-                    } else {
-                        tableSchemas[table] = { columns: [], sample: null };
+                    if (!error && data && data.length > 0) {
+                        tableSchemas[table] = Object.keys(data[0]);
                     }
                 } catch (e) {
-                    tableSchemas[table] = { error: e.message, columns: [] };
+                    tableSchemas[table] = [];
                 }
             }
         }
 
         // ============================================================
-        // LOAD ALL COUNTS
+        // LOAD COUNTS
         // ============================================================
         async function loadAllCounts() {
-            let records = 0;
             for (const table of tables) {
                 try {
                     const { count, error } = await client
                         .from(table)
                         .select('*', { count: 'exact', head: true });
-                    if (error) {
-                        tableCounts[table] = 0;
-                        continue;
+                    if (!error) {
+                        tableCounts[table] = count || 0;
                     }
-                    tableCounts[table] = count || 0;
-                    records += count || 0;
                 } catch (e) {
                     tableCounts[table] = 0;
                 }
             }
-            document.getElementById('statRecords').textContent = records.toLocaleString();
         }
 
         // ============================================================
-        // LOAD TABLE DATA
+        // DASHBOARD DATA
         // ============================================================
-        async function loadTableData(tableName = null) {
-            const table = tableName || currentTable;
-            if (!table) return;
+        async function updateDashboardData() {
+            const today = new Date();
+            const fromDate = new Date(today);
+            
+            if (dateRange > 0) {
+                fromDate.setDate(fromDate.getDate() - dateRange);
+            } else {
+                fromDate.setFullYear(fromDate.getFullYear() - 2); // 2 years for "All Time"
+            }
+            
+            const fromISO = fromDate.toISOString();
+            const toISO = today.toISOString();
 
-            currentTable = table;
-            document.getElementById('viewerTitle').textContent = `Table: ${table}`;
+            // Update stats
+            const stats = {
+                users: tableCounts['users'] || 0,
+                usage: tableCounts['daily_usage'] || 0,
+                transactions: tableCounts['transactions'] || 0,
+                questions: tableCounts['questions'] || 0
+            };
 
-            const limit = parseInt(document.getElementById('limitSelect').value) || 25;
+            document.getElementById('statUsers').textContent = stats.users.toLocaleString();
+            document.getElementById('statUsage').textContent = stats.usage.toLocaleString();
+            document.getElementById('statTransactions').textContent = stats.transactions.toLocaleString();
+            document.getElementById('statQuestions').textContent = stats.questions.toLocaleString();
 
+            // Try to get growth data
             try {
-                // Check if we have cached data
-                if (tableData[table] && tableData[table].timestamp > Date.now() - 30000) {
-                    renderData(table, tableData[table].data, limit);
-                    return;
+                // Get counts from the start of the range for comparison
+                const prevCounts = {};
+                for (const table of ['users', 'daily_usage', 'transactions', 'questions']) {
+                    try {
+                        const { data, error } = await client
+                            .from(table)
+                            .select('created_at')
+                            .lt('created_at', fromISO)
+                            .order('created_at', { ascending: false });
+                        
+                        if (!error && data) {
+                            prevCounts[table] = data.length;
+                        }
+                    } catch (e) {
+                        prevCounts[table] = 0;
+                    }
                 }
 
-                const { data, error } = await client.from(table).select('*').limit(limit);
-                if (error) throw error;
-
-                tableData[table] = {
-                    data: data || [],
-                    timestamp: Date.now(),
-                    total: tableCounts[table] || 0
+                // Calculate growth percentages
+                const growth = {
+                    users: calculateGrowth(prevCounts['users'] || 0, stats.users),
+                    usage: calculateGrowth(prevCounts['daily_usage'] || 0, stats.usage),
+                    transactions: calculateGrowth(prevCounts['transactions'] || 0, stats.transactions),
+                    questions: calculateGrowth(prevCounts['questions'] || 0, stats.questions)
                 };
 
-                renderData(table, data || [], limit);
-                document.getElementById('recordCount').textContent =
-                    `Showing ${(data || []).length} of ${tableCounts[table] || '?'} records (limit: ${limit})`;
+                updateGrowthDisplay('changeUsers', growth.users);
+                updateGrowthDisplay('changeUsage', growth.usage);
+                updateGrowthDisplay('changeTransactions', growth.transactions);
+                updateGrowthDisplay('changeQuestions', growth.questions);
 
-                // Also render schema
-                renderSchema(table);
+            } catch (e) {
+                console.warn('Could not calculate growth:', e);
+            }
 
-            } catch (err) {
-                // If we have cached data, use it
-                if (tableData[table]) {
-                    renderData(table, tableData[table].data, limit);
-                    showAlert('⚠️ Using cached data (fresh data unavailable)', 'warning');
-                } else {
-                    showAlert('❌ Error loading table: ' + err.message, 'error');
-                    document.getElementById('dataWrapper').innerHTML =
-                        `<div class="empty-state"><i class="fas fa-exclamation-triangle" style="color:var(--danger);"></i>Error: ${err.message}</div>`;
-                }
+            // Update charts
+            await updateTrendChart(fromISO, toISO);
+            await updatePieChart(stats);
+            await updateDailyChart();
+        }
+
+        function calculateGrowth(previous, current) {
+            if (previous === 0) return current > 0 ? 100 : 0;
+            return ((current - previous) / previous) * 100;
+        }
+
+        function updateGrowthDisplay(elementId, growth) {
+            const el = document.getElementById(elementId);
+            if (growth > 0) {
+                el.className = 'change change-positive';
+                el.textContent = `↑ ${growth.toFixed(1)}%`;
+            } else if (growth < 0) {
+                el.className = 'change change-negative';
+                el.textContent = `↓ ${Math.abs(growth).toFixed(1)}%`;
+            } else {
+                el.className = 'change change-neutral';
+                el.textContent = 'No change';
             }
         }
 
         // ============================================================
-        // RENDER DATA
+        // CHARTS
         // ============================================================
-        function renderData(table, data, limit) {
-            const wrap = document.getElementById('dataWrapper');
+        function initializeCharts() {
+            // Trend Chart
+            const trendCtx = document.getElementById('trendChart').getContext('2d');
+            trendChart = new Chart(trendCtx, {
+                type: 'line',
+                data: {
+                    labels: [],
+                    datasets: [{
+                        label: 'Growth',
+                        data: [],
+                        borderColor: '#3b82f6',
+                        backgroundColor: 'rgba(59, 130, 246, 0.1)',
+                        borderWidth: 2,
+                        fill: true,
+                        tension: 0.4,
+                        pointRadius: 2,
+                        pointHoverRadius: 6
+                    }]
+                },
+                options: {
+                    responsive: true,
+                    maintainAspectRatio: false,
+                    plugins: {
+                        legend: { display: false }
+                    },
+                    scales: {
+                        x: { 
+                            ticks: { color: '#94a3b8', font: { size: 11 } },
+                            grid: { color: 'rgba(255,255,255,0.05)' }
+                        },
+                        y: { 
+                            ticks: { color: '#94a3b8', font: { size: 11 } },
+                            grid: { color: 'rgba(255,255,255,0.05)' },
+                            beginAtZero: true
+                        }
+                    }
+                }
+            });
 
-            if (!data || data.length === 0) {
-                wrap.innerHTML = `<div class="empty-state"><i class="fas fa-inbox"></i>No data in "${table}"</div>`;
-                return;
+            // Pie Chart
+            const pieCtx = document.getElementById('pieChart').getContext('2d');
+            pieChart = new Chart(pieCtx, {
+                type: 'doughnut',
+                data: {
+                    labels: ['Users', 'Usage', 'Transactions', 'Questions'],
+                    datasets: [{
+                        data: [0, 0, 0, 0],
+                        backgroundColor: ['#3b82f6', '#8b5cf6', '#22c55e', '#eab308'],
+                        borderColor: 'rgba(17,24,39,0.95)',
+                        borderWidth: 3
+                    }]
+                },
+                options: {
+                    responsive: true,
+                    maintainAspectRatio: false,
+                    plugins: {
+                        legend: {
+                            position: 'bottom',
+                            labels: { color: '#94a3b8', padding: 15, font: { size: 12 } }
+                        }
+                    }
+                }
+            });
+
+            // Daily Chart
+            const dailyCtx = document.getElementById('dailyChart').getContext('2d');
+            dailyChart = new Chart(dailyCtx, {
+                type: 'bar',
+                data: {
+                    labels: [],
+                    datasets: [{
+                        label: 'Daily Activity',
+                        data: [],
+                        backgroundColor: 'rgba(59, 130, 246, 0.6)',
+                        borderColor: '#3b82f6',
+                        borderWidth: 1,
+                        borderRadius: 4
+                    }]
+                },
+                options: {
+                    responsive: true,
+                    maintainAspectRatio: false,
+                    plugins: {
+                        legend: { display: false }
+                    },
+                    scales: {
+                        x: { 
+                            ticks: { color: '#94a3b8', font: { size: 10 } },
+                            grid: { color: 'rgba(255,255,255,0.05)' }
+                        },
+                        y: { 
+                            ticks: { color: '#94a3b8', font: { size: 11 } },
+                            grid: { color: 'rgba(255,255,255,0.05)' },
+                            beginAtZero: true
+                        }
+                    }
+                }
+            });
+        }
+
+        async function updateTrendChart(fromISO, toISO) {
+            // Generate monthly labels
+            const labels = [];
+            const data = [];
+            const from = new Date(fromISO);
+            const to = new Date(toISO);
+            
+            let current = new Date(from);
+            while (current <= to) {
+                const monthLabel = current.toLocaleString('default', { month: 'short', year: '2-digit' });
+                labels.push(monthLabel);
+                
+                // Get count for this month
+                const nextMonth = new Date(current);
+                nextMonth.setMonth(nextMonth.getMonth() + 1);
+                
+                try {
+                    const { count, error } = await client
+                        .from(trendMetric === 'users' ? 'users' : trendMetric === 'usage' ? 'daily_usage' : trendMetric === 'transactions' ? 'transactions' : 'questions')
+                        .select('*', { count: 'exact', head: true })
+                        .gte('created_at', current.toISOString())
+                        .lt('created_at', nextMonth.toISOString());
+                    
+                    data.push(error ? 0 : (count || 0));
+                } catch (e) {
+                    data.push(0);
+                }
+                
+                current.setMonth(current.getMonth() + 1);
             }
 
+            trendChart.data.labels = labels;
+            trendChart.data.datasets[0].data = data;
+            trendChart.data.datasets[0].label = trendMetric.charAt(0).toUpperCase() + trendMetric.slice(1);
+            trendChart.update();
+        }
+
+        async function updatePieChart(stats) {
+            pieChart.data.datasets[0].data = [
+                stats.users,
+                stats.usage,
+                stats.transactions,
+                stats.questions
+            ];
+            pieChart.update();
+        }
+
+        async function updateDailyChart() {
+            const labels = [];
+            const data = [];
+            
+            for (let i = 29; i >= 0; i--) {
+                const date = new Date();
+                date.setDate(date.getDate() - i);
+                const dateStr = date.toISOString().split('T')[0];
+                labels.push(dateStr.substring(5)); // MM-DD format
+                
+                const nextDate = new Date(date);
+                nextDate.setDate(nextDate.getDate() + 1);
+                
+                try {
+                    const { count, error } = await client
+                        .from('daily_usage')
+                        .select('*', { count: 'exact', head: true })
+                        .gte('created_at', date.toISOString())
+                        .lt('created_at', nextDate.toISOString());
+                    
+                    data.push(error ? 0 : (count || 0));
+                } catch (e) {
+                    data.push(0);
+                }
+            }
+
+            dailyChart.data.labels = labels;
+            dailyChart.data.datasets[0].data = data;
+            dailyChart.update();
+        }
+
+        function toggleChartMetric() {
+            const metrics = ['users', 'usage', 'transactions', 'questions'];
+            const currentIndex = metrics.indexOf(trendMetric);
+            trendMetric = metrics[(currentIndex + 1) % metrics.length];
+            updateDashboardData();
+        }
+
+        // ============================================================
+        // DATE RANGE
+        // ============================================================
+        function setDateRange(days) {
+            dateRange = days;
+            
+            // Update active button
+            document.querySelectorAll('.date-btn').forEach(btn => {
+                btn.classList.remove('active');
+            });
+            event.target.classList.add('active');
+            
+            updateDashboardData();
+        }
+
+        function customDateRange() {
+            const from = document.getElementById('dateFrom').value;
+            const to = document.getElementById('dateTo').value;
+            
+            if (from && to) {
+                const fromDate = new Date(from);
+                const toDate = new Date(to);
+                dateRange = Math.ceil((toDate - fromDate) / (1000 * 60 * 60 * 24));
+                
+                document.querySelectorAll('.date-btn').forEach(btn => {
+                    btn.classList.remove('active');
+                });
+                
+                updateDashboardData();
+            }
+        }
+
+        // ============================================================
+        // PAGE SWITCHING
+        // ============================================================
+        function switchPage(page) {
+            currentPage = page;
+            
+            // Update tabs
+            document.querySelectorAll('.nav-tab').forEach(tab => {
+                tab.classList.remove('active');
+            });
+            event.target.classList.add('active');
+            
+            // Show page
+            document.querySelectorAll('.page').forEach(p => {
+                p.classList.remove('active');
+            });
+            document.getElementById(`page-${page}`).classList.add('active');
+            
+            // Refresh content
+            if (page === 'dashboard') {
+                updateDashboardData();
+            }
+        }
+
+        // ============================================================
+        // DATA EXPLORER
+        // ============================================================
+        function renderAll() {
+            const select = document.getElementById('tableSelect');
+            select.innerHTML = '<option value="">Select table...</option>' +
+                tables.map(t => `<option value="${t}">${t} (${(tableCounts[t] || 0).toLocaleString()} rows)</option>`).join('');
+            
+            document.getElementById('dailyDate').textContent = new Date().toLocaleDateString('en-US', {
+                weekday: 'long', year: 'numeric', month: 'long', day: 'numeric'
+            });
+            document.getElementById('dailyDateInput').value = new Date().toISOString().split('T')[0];
+        }
+
+        async function loadTableData() {
+            const table = document.getElementById('tableSelect').value;
+            if (!table) return;
+            
+            currentTable = table;
+            document.getElementById('dataTitle').textContent = `Table: ${table}`;
+            
+            const limit = parseInt(document.getElementById('limitSelect').value) || 25;
+            
+            try {
+                const { data, error } = await client.from(table).select('*').limit(limit);
+                if (error) throw error;
+                
+                renderDataTable(data || []);
+                document.getElementById('recordCount').textContent = 
+                    `Showing ${(data || []).length} of ${(tableCounts[table] || 0).toLocaleString()} records`;
+                
+            } catch (err) {
+                showAlert('Error: ' + err.message, 'error');
+            }
+        }
+
+        function renderDataTable(data) {
+            const wrap = document.getElementById('dataWrapper');
+            
+            if (!data || data.length === 0) {
+                wrap.innerHTML = '<div class="empty-state"><i class="fas fa-inbox"></i>No data found</div>';
+                return;
+            }
+            
             const cols = Object.keys(data[0]);
             const search = searchTerm.toLowerCase();
-
+            
             let filtered = data;
             if (search) {
                 filtered = data.filter(row =>
@@ -994,11 +1245,11 @@
                     })
                 );
             }
-
+            
             let html = '<table><thead><tr>';
             cols.forEach(c => html += `<th>${c}</th>`);
             html += '</tr></thead><tbody>';
-
+            
             filtered.forEach(row => {
                 html += '<tr>';
                 cols.forEach(c => {
@@ -1008,198 +1259,174 @@
                         display = '<span class="null">null</span>';
                     } else if (typeof v === 'boolean') {
                         display = `<span class="bool ${v}">${v}</span>`;
-                    } else if (v instanceof Date || (typeof v === 'object' && v !== null && v.toISOString)) {
-                        display = new Date(v).toLocaleString();
                     } else if (typeof v === 'object') {
-                        const jsonStr = JSON.stringify(v);
-                        display = jsonStr.substring(0, 50) + (jsonStr.length > 50 ? '...' : '');
+                        display = JSON.stringify(v).substring(0, 50) + '...';
                     } else {
-                        display = String(v);
-                        if (display.length > 100) display = display.substring(0, 100) + '...';
+                        display = String(v).substring(0, 100);
                     }
                     html += `<td title="${String(v)}">${display}</td>`;
                 });
                 html += '</tr>';
             });
-
+            
             html += '</tbody></table>';
-
+            
             if (filtered.length === 0 && search) {
                 html = `<div class="empty-state"><i class="fas fa-search"></i>No results for "${search}"</div>`;
             }
-
+            
             wrap.innerHTML = html;
         }
 
-        // ============================================================
-        // RENDER SCHEMA
-        // ============================================================
-        function renderSchema(table) {
-            const content = document.getElementById('schemaContent');
-            const schema = tableSchemas[table];
-
-            if (!schema || schema.error) {
-                content.innerHTML = `<div class="empty-state">${schema?.error || 'No schema available'}</div>`;
-                return;
-            }
-
-            if (!schema.columns || schema.columns.length === 0) {
-                content.innerHTML = `<div class="empty-state">No columns found in "${table}"</div>`;
-                return;
-            }
-
-            let html = '<div class="schema-grid">';
-            schema.columns.forEach(col => {
-                const isPK = ['id', 'uid', 'user_id'].includes(col.name);
-                const isFK = col.name.includes('_id') && col.name !== 'id';
-                html += `<div class="schema-item">
-                    <span class="col">${col.name}</span>
-                    <span class="type">${col.type}${col.nullable ? ' (nullable)' : ''}</span>
-                    <span>
-                        ${isPK ? '<span class="tag tag-pk">🔑 PK</span>' : ''}
-                        ${isFK ? '<span class="tag tag-fk">🔗 FK</span>' : ''}
-                        ${col.sample !== undefined && col.sample !== null ? 
-                            `<span style="font-size:10px;color:var(--text-secondary);">sample: ${String(col.sample).substring(0,20)}</span>` : ''}
-                    </span>
-                </div>`;
-            });
-            html += '</div>';
-            content.innerHTML = html;
-        }
-
-        // ============================================================
-        // RENDER ALL
-        // ============================================================
-        function renderAll() {
-            renderTables();
-            renderStats();
-
-            // Auto-select first table
-            if (tables.length > 0) {
-                const firstTable = tables[0];
-                // Highlight it in sidebar
-                document.querySelectorAll('.table-item').forEach(el => {
-                    if (el.dataset.table === firstTable) {
-                        el.classList.add('active');
-                    }
-                });
-                loadTableData(firstTable);
-            }
-        }
-
-        // ============================================================
-        // RENDER TABLES
-        // ============================================================
-        function renderTables() {
-            const list = document.getElementById('tableList');
-
-            if (tables.length === 0) {
-                list.innerHTML = `<div class="empty-state" style="padding:20px;">No tables found</div>`;
-                return;
-            }
-
-            list.innerHTML = tables.map(t => {
-                const count = tableCounts[t] || 0;
-                return `<div class="table-item" data-table="${t}" onclick="selectTable('${t}')">
-                    <span class="name"><i class="fas fa-table"></i> ${t}</span>
-                    <span class="count">${count.toLocaleString()}</span>
-                </div>`;
-            }).join('');
-
-            document.getElementById('tableCountBadge').textContent = `${tables.length} tables`;
-        }
-
-        // ============================================================
-        // RENDER STATS
-        // ============================================================
-        function renderStats() {
-            const totalTables = tables.length;
-            const totalRecords = Object.values(tableCounts).reduce((s, c) => s + c, 0);
-            const totalColumns = Object.values(tableSchemas).reduce((s, sch) => s + (sch?.columns?.length || 0), 0);
-
-            document.getElementById('statTables').textContent = totalTables;
-            document.getElementById('statRecords').textContent = totalRecords.toLocaleString();
-            document.getElementById('statColumns').textContent = totalColumns;
-            document.getElementById('statUpdated').textContent = new Date().toLocaleString();
-        }
-
-        // ============================================================
-        // SELECT TABLE
-        // ============================================================
-        function selectTable(table) {
-            // Update active state in sidebar
-            document.querySelectorAll('.table-item').forEach(el => {
-                el.classList.toggle('active', el.dataset.table === table);
-            });
-            
-            // Load the table data
-            loadTableData(table);
-        }
-
-        // ============================================================
-        // SEARCH DATA
-        // ============================================================
         function searchData() {
             searchTerm = document.getElementById('searchInput').value;
-            if (currentTable && tableData[currentTable]?.data) {
-                renderData(currentTable, tableData[currentTable].data);
+            loadTableData();
+        }
+
+        function exportCSV() {
+            const table = currentTable;
+            if (!table) {
+                showAlert('Please select a table first', 'warning');
+                return;
             }
-        }
-
-        // ============================================================
-        // TOGGLE SCHEMA
-        // ============================================================
-        function toggleSchema() {
-            const content = document.getElementById('schemaContent');
-            content.style.display = content.style.display === 'none' ? 'block' : 'none';
-        }
-
-        // ============================================================
-        // REFRESH ALL
-        // ============================================================
-        async function refreshAll() {
-            showAlert('🔄 Refreshing data...', 'info');
-            await loadAllSchemas();
-            await loadAllCounts();
-            renderAll();
-            showAlert('✅ Data refreshed!', 'success');
-        }
-
-        // ============================================================
-        // EXPORT DATA
-        // ============================================================
-        function exportData() {
-            const data = {
-                generated: new Date().toISOString(),
-                tables: tables.map(t => ({
-                    name: t,
-                    count: tableCounts[t] || 0,
-                    schema: tableSchemas[t]?.columns || [],
-                    data: tableData[t]?.data || []
-                }))
-            };
             
-            const blob = new Blob([JSON.stringify(data, null, 2)], { type: 'application/json' });
+            // Get current data from the table
+            const rows = document.querySelectorAll('#dataWrapper table tr');
+            let csv = '';
+            
+            rows.forEach((row, index) => {
+                const cells = row.querySelectorAll(index === 0 ? 'th' : 'td');
+                const values = Array.from(cells).map(cell => cell.textContent.replace(/,/g, ';'));
+                csv += values.join(',') + '\n';
+            });
+            
+            const blob = new Blob([csv], { type: 'text/csv' });
             const url = URL.createObjectURL(blob);
             const a = document.createElement('a');
             a.href = url;
-            a.download = `zakhourani-export-${new Date().toISOString().slice(0,10)}.json`;
+            a.download = `${table}_export_${new Date().toISOString().split('T')[0]}.csv`;
             a.click();
             URL.revokeObjectURL(url);
-            showAlert('📥 Data exported successfully!', 'success');
+            
+            showAlert('CSV exported!', 'success');
         }
 
         // ============================================================
-        // UI HELPERS
+        // DAILY REPORT
         // ============================================================
+        async function loadDailyReport() {
+            const dateInput = document.getElementById('dailyDateInput').value;
+            const date = dateInput ? new Date(dateInput) : new Date();
+            const nextDate = new Date(date);
+            nextDate.setDate(nextDate.getDate() + 1);
+            
+            document.getElementById('dailyDate').textContent = date.toLocaleDateString('en-US', {
+                weekday: 'long', year: 'numeric', month: 'long', day: 'numeric'
+            });
+            
+            const report = document.getElementById('dailyReport');
+            report.innerHTML = '<div style="text-align:center;padding:40px;"><i class="fas fa-spinner fa-spin"></i> Loading report...</div>';
+            
+            let html = '<div style="display:grid;gap:16px;">';
+            
+            // Get stats for each table for the selected date
+            for (const table of tables) {
+                try {
+                    const { count, error } = await client
+                        .from(table)
+                        .select('*', { count: 'exact', head: true })
+                        .gte('created_at', date.toISOString())
+                        .lt('created_at', nextDate.toISOString());
+                    
+                    html += `
+                        <div style="background:var(--bg-primary);border:1px solid var(--border);border-radius:12px;padding:16px;">
+                            <div style="display:flex;justify-content:space-between;align-items:center;">
+                                <span style="font-weight:600;font-size:14px;">
+                                    <i class="fas fa-table" style="color:var(--accent);"></i> ${table}
+                                </span>
+                                <span style="font-size:24px;font-weight:800;color:var(--accent-light);">
+                                    ${error ? 'N/A' : (count || 0).toLocaleString()}
+                                </span>
+                            </div>
+                            <div style="font-size:12px;color:var(--text-secondary);margin-top:4px;">
+                                New records added on ${date.toLocaleDateString()}
+                            </div>
+                        </div>`;
+                } catch (e) {
+                    html += `
+                        <div style="background:var(--bg-primary);border:1px solid var(--border);border-radius:12px;padding:16px;">
+                            <span style="color:var(--text-secondary);">${table}: Unable to load</span>
+                        </div>`;
+                }
+            }
+            
+            html += '</div>';
+            
+            // Summary
+            html += `
+                <div style="margin-top:16px;padding:16px;background:rgba(59,130,246,0.1);border:1px solid rgba(59,130,246,0.2);border-radius:12px;">
+                    <h4 style="margin-bottom:8px;font-size:14px;"><i class="fas fa-info-circle"></i> Summary</h4>
+                    <p style="font-size:13px;color:var(--text-secondary);">
+                        Report generated for ${date.toLocaleDateString('en-US', { weekday: 'long', year: 'numeric', month: 'long', day: 'numeric' })}.
+                        Data includes all records created on this date across ${tables.length} tables.
+                    </p>
+                </div>`;
+            
+            report.innerHTML = html;
+        }
+
+        function exportDailyPDF() {
+            showAlert('PDF export feature coming soon! Currently you can print the page (Ctrl+P).', 'info');
+        }
+
+        // ============================================================
+        // AUTO REFRESH
+        // ============================================================
+        function setupAutoRefresh() {
+            // Refresh every 5 minutes
+            setInterval(() => {
+                console.log('Auto-refreshing...');
+                loadAllCounts();
+                if (currentPage === 'dashboard') {
+                    updateDashboardData();
+                }
+            }, 300000); // 5 minutes
+            
+            // Also refresh at midnight
+            const now = new Date();
+            const midnight = new Date(now);
+            midnight.setHours(24, 0, 0, 0);
+            const msUntilMidnight = midnight - now;
+            
+            setTimeout(() => {
+                refreshAll();
+                // Then set daily refresh
+                setInterval(refreshAll, 86400000); // Every 24 hours
+            }, msUntilMidnight);
+        }
+
+        // ============================================================
+        // UTILITIES
+        // ============================================================
+        async function refreshAll() {
+            showAlert('🔄 Refreshing all data...', 'info');
+            await loadAllCounts();
+            renderAll();
+            if (currentPage === 'dashboard') {
+                await updateDashboardData();
+            }
+            showAlert('✅ Data refreshed!', 'success');
+        }
+
         function updateLoader(text, progress) {
             document.getElementById('loaderText').textContent = text;
             document.getElementById('loaderBar').style.width = progress + '%';
+            
             const detail = document.getElementById('loaderDetail');
             if (progress < 30) detail.textContent = 'Connecting to database...';
-            else if (progress < 60) detail.textContent = 'Loading schema...';
-            else if (progress < 90) detail.textContent = 'Loading data...';
-            else detail.textContent = 'Dashboard ready!';
+            else if (progress < 60) detail.textContent = 'Loading tables and schemas...';
+            else if (progress < 90) detail.textContent = 'Preparing analytics...';
+            else detail.textContent = 'Almost ready...';
         }
 
         function showAlert(msg, type = 'info') {

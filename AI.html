@@ -17,6 +17,9 @@
     <script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-auth-compat.js"></script>
     <script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-firestore-compat.js"></script>
     
+    <!-- Markdown Library for rich formatting -->
+    <script src="https://cdn.jsdelivr.net/npm/marked/marked.min.js"></script>
+    
     <style>
         /* ============================================================
            GLOBAL RESET & VARIABLES
@@ -54,7 +57,6 @@
             --sidebar-width: 280px;
         }
         
-        /* Light Theme */
         .light {
             --bg-primary: #f1f5f9;
             --bg-secondary: #ffffff;
@@ -80,9 +82,7 @@
             overflow: hidden;
         }
         
-        /* ============================================================
-           PARTICLES
-           ============================================================ */
+        /* Particles */
         .particles {
             position: fixed;
             top: 0;
@@ -108,9 +108,7 @@
             75% { transform: translateY(-120px) translateX(60px) scale(1.1); }
         }
         
-        /* ============================================================
-           LOADER
-           ============================================================ */
+        /* Loader */
         #loader {
             position: fixed;
             inset: 0;
@@ -123,11 +121,7 @@
             gap: 16px;
             transition: opacity 0.6s;
         }
-        
-        #loader.hidden {
-            opacity: 0;
-            pointer-events: none;
-        }
+        #loader.hidden { opacity: 0; pointer-events: none; }
         
         .loader-spinner {
             width: 44px;
@@ -137,33 +131,13 @@
             border-radius: 50%;
             animation: spin 0.8s linear infinite;
         }
-        
         @keyframes spin { to { transform: rotate(360deg); } }
         
-        .loader-text {
-            color: var(--text-secondary);
-            font-size: 14px;
-        }
+        .loader-text { color: var(--text-secondary); font-size: 14px; }
+        .loader-progress { width: 240px; height: 3px; background: var(--border); border-radius: 2px; overflow: hidden; }
+        .loader-progress-fill { height: 100%; background: var(--accent-gradient); width: 0%; transition: width 0.4s; border-radius: 2px; }
         
-        .loader-progress {
-            width: 240px;
-            height: 3px;
-            background: var(--border);
-            border-radius: 2px;
-            overflow: hidden;
-        }
-        
-        .loader-progress-fill {
-            height: 100%;
-            background: var(--accent-gradient);
-            width: 0%;
-            transition: width 0.4s;
-            border-radius: 2px;
-        }
-        
-        /* ============================================================
-           APP LAYOUT
-           ============================================================ */
+        /* App */
         #app {
             width: 100%;
             max-width: 1500px;
@@ -182,9 +156,7 @@
             transition: var(--transition);
         }
         
-        /* ============================================================
-           SIDEBAR
-           ============================================================ */
+        /* Sidebar */
         .sidebar {
             width: var(--sidebar-width);
             background: var(--bg-sidebar);
@@ -223,11 +195,7 @@
             box-shadow: 0 4px 16px rgba(59,130,246,0.3);
         }
         
-        .sidebar-brand span {
-            font-weight: 700;
-            font-size: 16px;
-        }
-        
+        .sidebar-brand span { font-weight: 700; font-size: 16px; }
         .sidebar-brand .premium-badge {
             font-size: 9px;
             background: var(--premium-gradient);
@@ -254,13 +222,8 @@
             justify-content: center;
             gap: 8px;
         }
+        .new-chat-btn:hover { transform: translateY(-1px); box-shadow: 0 8px 24px rgba(59,130,246,0.3); }
         
-        .new-chat-btn:hover {
-            transform: translateY(-1px);
-            box-shadow: 0 8px 24px rgba(59,130,246,0.3);
-        }
-        
-        /* User Profile in Sidebar */
         .user-profile {
             padding: 10px 16px;
             border-bottom: 1px solid var(--border);
@@ -282,48 +245,13 @@
             font-weight: 700;
             flex-shrink: 0;
         }
+        .user-avatar img { width: 100%; height: 100%; border-radius: 50%; object-fit: cover; }
         
-        .user-avatar img {
-            width: 100%;
-            height: 100%;
-            border-radius: 50%;
-            object-fit: cover;
-        }
-        
-        .user-info {
-            flex: 1;
-            min-width: 0;
-        }
-        
-        .user-info .name {
-            font-weight: 600;
-            font-size: 14px;
-            white-space: nowrap;
-            overflow: hidden;
-            text-overflow: ellipsis;
-        }
-        
-        .user-info .email {
-            font-size: 11px;
-            color: var(--text-secondary);
-            white-space: nowrap;
-            overflow: hidden;
-            text-overflow: ellipsis;
-        }
-        
-        .user-info .balance {
-            font-size: 12px;
-            color: var(--text-secondary);
-            display: flex;
-            align-items: center;
-            gap: 6px;
-            margin-top: 2px;
-        }
-        
-        .user-info .balance .count {
-            color: var(--accent);
-            font-weight: 600;
-        }
+        .user-info { flex: 1; min-width: 0; }
+        .user-info .name { font-weight: 600; font-size: 14px; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+        .user-info .email { font-size: 11px; color: var(--text-secondary); white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+        .user-info .balance { font-size: 12px; color: var(--text-secondary); display: flex; align-items: center; gap: 6px; margin-top: 2px; }
+        .user-info .balance .count { color: var(--accent); font-weight: 600; }
         
         .balance-bar {
             width: 100%;
@@ -333,7 +261,6 @@
             margin-top: 4px;
             overflow: hidden;
         }
-        
         .balance-fill {
             height: 100%;
             background: var(--accent-gradient);
@@ -341,11 +268,9 @@
             transition: width 0.8s cubic-bezier(0.4, 0, 0.2, 1);
             width: 0%;
         }
-        
         .balance-fill.warning { background: var(--warning); }
         .balance-fill.danger { background: var(--danger); }
         
-        /* Logout button */
         .logout-btn {
             background: var(--bg-surface);
             border: 1px solid var(--border);
@@ -361,20 +286,13 @@
             font-size: 13px;
             flex-shrink: 0;
         }
+        .logout-btn:hover { background: rgba(239,68,68,0.1); border-color: var(--danger); color: var(--danger); }
         
-        .logout-btn:hover {
-            background: rgba(239,68,68,0.1);
-            border-color: var(--danger);
-            color: var(--danger);
-        }
-        
-        /* Conversation List */
         .conversation-list {
             flex: 1;
             overflow-y: auto;
             padding: 6px 10px;
         }
-        
         .conversation-list::-webkit-scrollbar { width: 3px; }
         .conversation-list::-webkit-scrollbar-thumb { background: var(--border); border-radius: 10px; }
         
@@ -386,32 +304,10 @@
             margin-bottom: 2px;
             position: relative;
         }
-        
-        .conv-item:hover {
-            background: rgba(255,255,255,0.04);
-        }
-        
-        .conv-item.active {
-            background: rgba(59,130,246,0.08);
-            border: 1px solid rgba(59,130,246,0.15);
-        }
-        
-        .conv-item .conv-title {
-            font-size: 13px;
-            font-weight: 500;
-            white-space: nowrap;
-            overflow: hidden;
-            text-overflow: ellipsis;
-        }
-        
-        .conv-item .conv-meta {
-            font-size: 10px;
-            color: var(--text-secondary);
-            display: flex;
-            justify-content: space-between;
-            margin-top: 2px;
-        }
-        
+        .conv-item:hover { background: rgba(255,255,255,0.04); }
+        .conv-item.active { background: rgba(59,130,246,0.08); border: 1px solid rgba(59,130,246,0.15); }
+        .conv-item .conv-title { font-size: 13px; font-weight: 500; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+        .conv-item .conv-meta { font-size: 10px; color: var(--text-secondary); display: flex; justify-content: space-between; margin-top: 2px; }
         .conv-item .conv-actions {
             position: absolute;
             right: 6px;
@@ -420,11 +316,7 @@
             display: none;
             gap: 3px;
         }
-        
-        .conv-item:hover .conv-actions {
-            display: flex;
-        }
-        
+        .conv-item:hover .conv-actions { display: flex; }
         .conv-item .conv-actions button {
             background: var(--bg-surface);
             border: 1px solid var(--border);
@@ -439,28 +331,12 @@
             align-items: center;
             justify-content: center;
         }
+        .conv-item .conv-actions button:hover { background: rgba(255,255,255,0.1); color: var(--text-primary); }
+        .conv-item .conv-actions button.delete:hover { color: var(--danger); border-color: var(--danger); }
         
-        .conv-item .conv-actions button:hover {
-            background: rgba(255,255,255,0.1);
-            color: var(--text-primary);
-        }
+        /* Main Chat */
+        .main-chat { flex: 1; display: flex; flex-direction: column; min-width: 0; }
         
-        .conv-item .conv-actions button.delete:hover {
-            color: var(--danger);
-            border-color: var(--danger);
-        }
-        
-        /* ============================================================
-           MAIN CHAT AREA
-           ============================================================ */
-        .main-chat {
-            flex: 1;
-            display: flex;
-            flex-direction: column;
-            min-width: 0;
-        }
-        
-        /* Chat Header */
         .chat-header {
             padding: 10px 20px;
             border-bottom: 1px solid var(--border);
@@ -470,26 +346,9 @@
             flex-shrink: 0;
             background: var(--bg-surface);
         }
-        
-        .chat-header .chat-title {
-            font-weight: 600;
-            font-size: 15px;
-            display: flex;
-            align-items: center;
-            gap: 8px;
-        }
-        
-        .chat-header .chat-title .date {
-            font-weight: 400;
-            font-size: 12px;
-            color: var(--text-secondary);
-        }
-        
-        .chat-header .chat-actions {
-            display: flex;
-            gap: 4px;
-        }
-        
+        .chat-header .chat-title { font-weight: 600; font-size: 15px; display: flex; align-items: center; gap: 8px; }
+        .chat-header .chat-title .date { font-weight: 400; font-size: 12px; color: var(--text-secondary); }
+        .chat-header .chat-actions { display: flex; gap: 4px; }
         .chat-header .chat-actions button {
             background: var(--bg-surface);
             border: 1px solid var(--border);
@@ -504,25 +363,16 @@
             justify-content: center;
             font-size: 13px;
         }
+        .chat-header .chat-actions button:hover { background: rgba(255,255,255,0.06); color: var(--text-primary); }
+        .chat-header .chat-actions button.danger:hover { color: var(--danger); border-color: var(--danger); }
         
-        .chat-header .chat-actions button:hover {
-            background: rgba(255,255,255,0.06);
-            color: var(--text-primary);
-        }
-        
-        .chat-header .chat-actions button.danger:hover {
-            color: var(--danger);
-            border-color: var(--danger);
-        }
-        
-        /* Messages Container */
+        /* Chat Container */
         #chatContainer {
             flex: 1;
             overflow-y: auto;
             padding: 16px 20px;
             scroll-behavior: smooth;
         }
-        
         #chatContainer::-webkit-scrollbar { width: 4px; }
         #chatContainer::-webkit-scrollbar-thumb { background: var(--border); border-radius: 10px; }
         
@@ -536,40 +386,11 @@
             padding: 28px 20px;
             border: 1px solid var(--border);
         }
-        
-        .welcome-icon {
-            font-size: 3.5rem;
-            margin-bottom: 10px;
-            animation: floatIcon 3s ease-in-out infinite;
-        }
-        
-        @keyframes floatIcon {
-            0%, 100% { transform: translateY(0); }
-            50% { transform: translateY(-12px); }
-        }
-        
-        .welcome h2 {
-            font-size: 1.4rem;
-            font-weight: 700;
-            background: var(--accent-gradient);
-            -webkit-background-clip: text;
-            -webkit-text-fill-color: transparent;
-            background-clip: text;
-            margin-bottom: 4px;
-        }
-        
-        .welcome p {
-            color: var(--text-secondary);
-            font-size: 0.9rem;
-        }
-        
-        .welcome .suggestions-grid {
-            display: grid;
-            grid-template-columns: 1fr 1fr;
-            gap: 6px;
-            margin-top: 14px;
-        }
-        
+        .welcome-icon { font-size: 3.5rem; margin-bottom: 10px; animation: floatIcon 3s ease-in-out infinite; }
+        @keyframes floatIcon { 0%, 100% { transform: translateY(0); } 50% { transform: translateY(-12px); } }
+        .welcome h2 { font-size: 1.4rem; font-weight: 700; background: var(--accent-gradient); -webkit-background-clip: text; -webkit-text-fill-color: transparent; background-clip: text; margin-bottom: 4px; }
+        .welcome p { color: var(--text-secondary); font-size: 0.9rem; }
+        .welcome .suggestions-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 6px; margin-top: 14px; }
         .welcome .suggestions-grid .chip {
             padding: 8px 12px;
             background: var(--bg-surface);
@@ -581,30 +402,21 @@
             color: var(--text-secondary);
             text-align: center;
         }
+        .welcome .suggestions-grid .chip:hover { background: rgba(255,255,255,0.06); border-color: var(--accent); color: var(--text-primary); }
         
-        .welcome .suggestions-grid .chip:hover {
-            background: rgba(255,255,255,0.06);
-            border-color: var(--accent);
-            color: var(--text-primary);
-        }
-        
-        /* Messages */
+        /* Messages - Enhanced Rich Formatting */
         .message {
             margin: 6px 0;
             padding: 10px 14px;
             border-radius: 14px;
-            max-width: 85%;
+            max-width: 92%;
             word-wrap: break-word;
-            line-height: 1.6;
+            line-height: 1.7;
             animation: slideIn 0.3s cubic-bezier(0.4, 0, 0.2, 1);
             font-size: 0.95rem;
             position: relative;
         }
-        
-        @keyframes slideIn {
-            from { opacity: 0; transform: translateY(8px) scale(0.98); }
-            to { opacity: 1; transform: translateY(0) scale(1); }
-        }
+        @keyframes slideIn { from { opacity: 0; transform: translateY(8px) scale(0.98); } to { opacity: 1; transform: translateY(0) scale(1); } }
         
         .user-message {
             background: var(--accent);
@@ -619,7 +431,155 @@
             color: var(--text-primary);
             margin-right: auto;
             border-bottom-left-radius: 4px;
+            overflow: visible;
         }
+        
+        /* Rich formatting styles for AI messages */
+        .ai-message h1, .ai-message h2, .ai-message h3 {
+            margin: 8px 0 4px 0;
+            font-weight: 700;
+            color: var(--text-primary);
+        }
+        .ai-message h1 { font-size: 1.3rem; }
+        .ai-message h2 { font-size: 1.1rem; }
+        .ai-message h3 { font-size: 1rem; }
+        
+        .ai-message ul, .ai-message ol {
+            margin: 4px 0 4px 20px;
+            padding-left: 8px;
+        }
+        .ai-message li {
+            margin: 2px 0;
+            list-style: none;
+            position: relative;
+            padding-left: 20px;
+        }
+        .ai-message li::before {
+            content: '▸';
+            position: absolute;
+            left: 0;
+            color: var(--accent);
+            font-weight: 700;
+        }
+        
+        .ai-message .bullet-blue {
+            color: var(--accent);
+            font-weight: 700;
+            margin-right: 6px;
+        }
+        
+        .ai-message .highlight {
+            background: rgba(59,130,246,0.15);
+            padding: 1px 6px;
+            border-radius: 4px;
+            border-left: 3px solid var(--accent);
+            display: inline-block;
+        }
+        
+        .ai-message .divider {
+            border: none;
+            height: 1px;
+            background: linear-gradient(to right, transparent, var(--accent), transparent);
+            margin: 8px 0;
+            opacity: 0.3;
+        }
+        
+        .ai-message .emoji-big { font-size: 1.8rem; margin-right: 6px; vertical-align: middle; }
+        .ai-message .emoji-med { font-size: 1.2rem; margin-right: 4px; vertical-align: middle; }
+        
+        .ai-message .code-block {
+            background: var(--bg-primary);
+            padding: 8px 12px;
+            border-radius: 6px;
+            font-family: 'Courier New', monospace;
+            font-size: 0.85rem;
+            border-left: 3px solid var(--accent);
+            margin: 4px 0;
+            overflow-x: auto;
+            white-space: pre-wrap;
+        }
+        
+        .ai-message .step {
+            display: flex;
+            align-items: flex-start;
+            gap: 10px;
+            margin: 4px 0;
+            padding: 4px 8px;
+            background: var(--bg-surface);
+            border-radius: 6px;
+            border-left: 2px solid var(--accent);
+        }
+        .ai-message .step .step-num {
+            background: var(--accent);
+            color: white;
+            width: 22px;
+            height: 22px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 11px;
+            font-weight: 700;
+            flex-shrink: 0;
+        }
+        
+        .ai-message .tag {
+            display: inline-block;
+            padding: 1px 10px;
+            border-radius: 12px;
+            font-size: 0.7rem;
+            font-weight: 600;
+            margin: 2px 4px 2px 0;
+        }
+        .ai-message .tag-blue { background: rgba(59,130,246,0.15); color: var(--accent); }
+        .ai-message .tag-green { background: rgba(34,197,94,0.15); color: var(--success); }
+        .ai-message .tag-gold { background: rgba(245,158,11,0.15); color: var(--premium-gold); }
+        .ai-message .tag-purple { background: rgba(139,92,246,0.15); color: #8b5cf6; }
+        
+        .ai-message .grid-2 {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 8px;
+            margin: 6px 0;
+        }
+        .ai-message .grid-2 .grid-item {
+            background: var(--bg-surface);
+            padding: 8px 12px;
+            border-radius: 8px;
+            border: 1px solid var(--border);
+            text-align: center;
+            font-size: 0.85rem;
+        }
+        .ai-message .grid-2 .grid-item .num {
+            font-size: 1.8rem;
+            font-weight: 800;
+            color: var(--accent);
+            display: block;
+        }
+        
+        .ai-message .table-wrap {
+            overflow-x: auto;
+            margin: 6px 0;
+            border-radius: 8px;
+            border: 1px solid var(--border);
+        }
+        .ai-message .table-wrap table {
+            width: 100%;
+            border-collapse: collapse;
+            font-size: 0.85rem;
+        }
+        .ai-message .table-wrap th {
+            background: var(--bg-surface);
+            padding: 6px 12px;
+            text-align: left;
+            font-weight: 600;
+            border-bottom: 2px solid var(--border);
+        }
+        .ai-message .table-wrap td {
+            padding: 6px 12px;
+            border-bottom: 1px solid var(--border);
+        }
+        .ai-message .table-wrap tr:last-child td { border-bottom: none; }
         
         .message .msg-time {
             font-size: 0.6rem;
@@ -637,15 +597,13 @@
             opacity: 0;
             transition: var(--transition);
         }
-        
         .message:hover .msg-actions { opacity: 1; }
-        
         .message .msg-actions button {
             background: var(--bg-surface);
             border: 1px solid var(--border);
             color: var(--text-secondary);
-            width: 22px;
-            height: 22px;
+            width: 24px;
+            height: 24px;
             border-radius: 4px;
             cursor: pointer;
             font-size: 0.6rem;
@@ -654,11 +612,7 @@
             align-items: center;
             justify-content: center;
         }
-        
-        .message .msg-actions button:hover {
-            background: rgba(255,255,255,0.1);
-            color: var(--text-primary);
-        }
+        .message .msg-actions button:hover { background: rgba(255,255,255,0.1); color: var(--text-primary); }
         
         /* Typing Indicator */
         .typing-indicator {
@@ -672,12 +626,7 @@
             border-radius: 14px;
             border-bottom-left-radius: 4px;
         }
-        
-        .typing-dots {
-            display: flex;
-            gap: 3px;
-        }
-        
+        .typing-dots { display: flex; gap: 3px; }
         .typing-dots span {
             width: 6px;
             height: 6px;
@@ -685,19 +634,13 @@
             border-radius: 50%;
             animation: typingDot 1.4s infinite;
         }
-        
         .typing-dots span:nth-child(2) { animation-delay: 0.2s; }
         .typing-dots span:nth-child(3) { animation-delay: 0.4s; }
-        
         @keyframes typingDot {
             0%, 60%, 100% { transform: translateY(0); opacity: 0.3; }
             30% { transform: translateY(-6px); opacity: 1; }
         }
-        
-        .typing-label {
-            font-size: 0.8rem;
-            color: var(--text-secondary);
-        }
+        .typing-label { font-size: 0.8rem; color: var(--text-secondary); }
         
         /* Stop Button */
         .stop-btn {
@@ -714,14 +657,8 @@
             gap: 4px;
             margin-left: auto;
         }
+        .stop-btn:hover { background: rgba(239,68,68,0.1); border-color: var(--danger); color: var(--danger); }
         
-        .stop-btn:hover {
-            background: rgba(239,68,68,0.1);
-            border-color: var(--danger);
-            color: var(--danger);
-        }
-        
-        /* Word-by-word typing */
         .typing-cursor {
             display: inline-block;
             width: 2px;
@@ -731,32 +668,18 @@
             animation: blink 0.7s infinite;
             vertical-align: text-bottom;
         }
+        @keyframes blink { 0%, 50% { opacity: 1; } 51%, 100% { opacity: 0; } }
         
-        @keyframes blink {
-            0%, 50% { opacity: 1; }
-            51%, 100% { opacity: 0; }
-        }
+        .word { display: inline; animation: wordAppear 0.12s ease; }
+        @keyframes wordAppear { from { opacity: 0; transform: translateY(3px); } to { opacity: 1; transform: translateY(0); } }
         
-        .word {
-            display: inline;
-            animation: wordAppear 0.12s ease;
-        }
-        
-        @keyframes wordAppear {
-            from { opacity: 0; transform: translateY(3px); }
-            to { opacity: 1; transform: translateY(0); }
-        }
-        
-        /* ============================================================
-           INPUT AREA
-           ============================================================ */
+        /* Input Area */
         .input-area {
             padding: 10px 20px;
             background: var(--bg-surface);
             border-top: 1px solid var(--border);
             flex-shrink: 0;
         }
-        
         .input-wrapper {
             display: flex;
             gap: 8px;
@@ -766,12 +689,7 @@
             padding: 4px 4px 4px 16px;
             transition: var(--transition);
         }
-        
-        .input-wrapper:focus-within {
-            border-color: var(--accent);
-            box-shadow: 0 0 0 3px rgba(59,130,246,0.08);
-        }
-        
+        .input-wrapper:focus-within { border-color: var(--accent); box-shadow: 0 0 0 3px rgba(59,130,246,0.08); }
         #messageInput {
             flex: 1;
             background: transparent;
@@ -782,11 +700,7 @@
             outline: none;
             min-width: 0;
         }
-        
-        #messageInput::placeholder {
-            color: var(--text-secondary);
-        }
-        
+        #messageInput::placeholder { color: var(--text-secondary); }
         #sendButton {
             background: var(--accent-gradient);
             border: none;
@@ -801,17 +715,10 @@
             align-items: center;
             gap: 6px;
         }
-        
-        #sendButton:hover:not(:disabled) {
-            transform: translateY(-1px);
-            box-shadow: 0 8px 24px rgba(59,130,246,0.25);
-        }
-        
+        #sendButton:hover:not(:disabled) { transform: translateY(-1px); box-shadow: 0 8px 24px rgba(59,130,246,0.25); }
         #sendButton:disabled { opacity: 0.4; cursor: not-allowed; }
         
-        /* ============================================================
-           TOAST
-           ============================================================ */
+        /* Toast */
         .toast {
             position: fixed;
             bottom: 30px;
@@ -830,15 +737,9 @@
             animation: toastSlide 0.3s cubic-bezier(0.4, 0, 0.2, 1);
             max-width: 90%;
         }
+        @keyframes toastSlide { from { opacity: 0; transform: translateX(-50%) translateY(12px) scale(0.95); } to { opacity: 1; transform: translateX(-50%) translateY(0) scale(1); } }
         
-        @keyframes toastSlide {
-            from { opacity: 0; transform: translateX(-50%) translateY(12px) scale(0.95); }
-            to { opacity: 1; transform: translateX(-50%) translateY(0) scale(1); }
-        }
-        
-        /* ============================================================
-           MODAL
-           ============================================================ */
+        /* Modal */
         .modal {
             position: fixed;
             top: 0; left: 0; right: 0; bottom: 0;
@@ -850,9 +751,7 @@
             z-index: 1000;
             padding: 16px;
         }
-        
         .modal.active { display: flex; }
-        
         .modal-content {
             background: var(--bg-card);
             border: 1px solid var(--border);
@@ -863,28 +762,10 @@
             text-align: center;
             animation: modalScale 0.3s cubic-bezier(0.4, 0, 0.2, 1);
         }
-        
-        @keyframes modalScale {
-            from { transform: scale(0.95); opacity: 0; }
-            to { transform: scale(1); opacity: 1; }
-        }
-        
-        .modal .modal-icon {
-            font-size: 3rem;
-            margin-bottom: 8px;
-        }
-        
-        .modal h2 {
-            font-size: 1.4rem;
-            font-weight: 700;
-            margin-bottom: 6px;
-        }
-        
-        .modal p {
-            color: var(--text-secondary);
-            font-size: 0.9rem;
-        }
-        
+        @keyframes modalScale { from { transform: scale(0.95); opacity: 0; } to { transform: scale(1); opacity: 1; } }
+        .modal .modal-icon { font-size: 3rem; margin-bottom: 8px; }
+        .modal h2 { font-size: 1.4rem; font-weight: 700; margin-bottom: 6px; }
+        .modal p { color: var(--text-secondary); font-size: 0.9rem; }
         .modal .modal-close {
             margin-top: 14px;
             padding: 10px 24px;
@@ -898,79 +779,38 @@
             width: 100%;
             font-size: 0.9rem;
         }
+        .modal .modal-close:hover { transform: translateY(-1px); box-shadow: 0 8px 24px rgba(59,130,246,0.3); }
+        .modal .modal-close.premium { background: var(--premium-gradient); }
+        .modal .modal-close.secondary { background: transparent; border: 1px solid var(--border); color: var(--text-secondary); margin-top: 6px; }
+        .modal .modal-close.secondary:hover { background: var(--bg-surface); color: var(--text-primary); }
         
-        .modal .modal-close:hover {
-            transform: translateY(-1px);
-            box-shadow: 0 8px 24px rgba(59,130,246,0.3);
-        }
-        
-        .modal .modal-close.premium {
-            background: var(--premium-gradient);
-        }
-        
-        .modal .modal-close.secondary {
-            background: transparent;
-            border: 1px solid var(--border);
-            color: var(--text-secondary);
-            margin-top: 6px;
-        }
-        
-        .modal .modal-close.secondary:hover {
-            background: var(--bg-surface);
-            color: var(--text-primary);
-        }
-        
-        /* ============================================================
-           RESPONSIVE
-           ============================================================ */
+        /* Responsive */
         @media (max-width: 768px) {
             body { padding: 6px; }
             #app { height: 98vh; max-height: none; border-radius: 16px; flex-direction: column; }
-            
-            .sidebar {
-                width: 100%;
-                max-height: 180px;
-                border-right: none;
-                border-bottom: 1px solid var(--border);
-            }
-            
-            .sidebar .conversation-list {
-                max-height: 70px;
-            }
-            
-            .sidebar .user-profile {
-                padding: 6px 12px;
-            }
-            
-            .sidebar-header {
-                padding: 8px 12px 6px;
-            }
-            
+            .sidebar { width: 100%; max-height: 180px; border-right: none; border-bottom: 1px solid var(--border); }
+            .sidebar .conversation-list { max-height: 70px; }
+            .sidebar .user-profile { padding: 6px 12px; }
+            .sidebar-header { padding: 8px 12px 6px; }
             .new-chat-btn { font-size: 12px; padding: 6px; }
             .conv-item { padding: 5px 8px; }
             .conv-item .conv-title { font-size: 11px; }
             .conv-item .conv-meta { font-size: 9px; }
-            
             .chat-header { padding: 6px 12px; }
             .chat-header .chat-title { font-size: 13px; }
             #chatContainer { padding: 10px 12px; }
             .input-area { padding: 6px 12px; }
-            .message { max-width: 92%; font-size: 0.85rem; padding: 8px 12px; }
+            .message { max-width: 95%; font-size: 0.85rem; padding: 8px 12px; }
             .welcome { padding: 20px 16px; margin: 16px auto; }
             .welcome .suggestions-grid { grid-template-columns: 1fr; }
-            
-            .conv-item .conv-actions {
-                display: flex;
-                opacity: 0.4;
-            }
-            
+            .conv-item .conv-actions { display: flex; opacity: 0.4; }
             .user-avatar { width: 30px; height: 30px; font-size: 12px; }
             .user-info .name { font-size: 12px; }
             .user-info .email { font-size: 10px; }
             .user-info .balance { font-size: 10px; }
             .logout-btn { width: 26px; height: 26px; font-size: 11px; }
+            .ai-message .grid-2 { grid-template-columns: 1fr; }
         }
-        
         @media (max-width: 480px) {
             #app { border-radius: 12px; }
             .sidebar { max-height: 150px; }
@@ -986,9 +826,7 @@
     <!-- PARTICLES -->
     <div class="particles" id="particles"></div>
 
-    <!-- ============================================================
-    LOADER
-    ============================================================ -->
+    <!-- LOADER -->
     <div id="loader">
         <div class="loader-spinner"></div>
         <div class="loader-text" id="loaderText">Authenticating...</div>
@@ -997,14 +835,10 @@
         </div>
     </div>
 
-    <!-- ============================================================
-    TOAST
-    ============================================================ -->
+    <!-- TOAST -->
     <div class="toast" id="toast"></div>
 
-    <!-- ============================================================
-    LIMIT MODAL
-    ============================================================ -->
+    <!-- LIMIT MODAL -->
     <div class="modal" id="limitModal">
         <div class="modal-content">
             <div class="modal-icon">⏳</div>
@@ -1021,15 +855,12 @@
         </div>
     </div>
 
-    <!-- ============================================================
-    AUTH MODAL (Show when not logged in)
-    ============================================================ -->
+    <!-- AUTH MODAL -->
     <div class="modal" id="authModal">
         <div class="modal-content">
             <div class="modal-icon">🔐</div>
             <h2>Welcome Back</h2>
             <p style="margin-bottom:16px;">Please login to continue using Zakhourani AI</p>
-            
             <div style="display:flex;flex-direction:column;gap:10px;text-align:left;">
                 <input type="email" id="authEmail" placeholder="Email" style="background:var(--bg-primary);border:1px solid var(--border);border-radius:8px;padding:10px 14px;color:var(--text-primary);font-size:14px;outline:none;width:100%;">
                 <input type="password" id="authPassword" placeholder="Password" style="background:var(--bg-primary);border:1px solid var(--border);border-radius:8px;padding:10px 14px;color:var(--text-primary);font-size:14px;outline:none;width:100%;">
@@ -1042,14 +873,10 @@
         </div>
     </div>
 
-    <!-- ============================================================
-    APP
-    ============================================================ -->
+    <!-- APP -->
     <div id="app" style="display:none;">
 
-        <!-- ============================================================
-        SIDEBAR
-        ============================================================ -->
+        <!-- SIDEBAR -->
         <aside class="sidebar">
             <div class="sidebar-header">
                 <a href="https://whzco.com/index.html" class="sidebar-brand" title="Home">
@@ -1062,7 +889,6 @@
                 </button>
             </div>
 
-            <!-- User Profile -->
             <div class="user-profile">
                 <div class="user-avatar" id="userAvatar">Z</div>
                 <div class="user-info">
@@ -1081,18 +907,12 @@
                 </button>
             </div>
 
-            <!-- Conversation List -->
-            <div class="conversation-list" id="conversationList">
-                <!-- Conversations rendered here -->
-            </div>
+            <div class="conversation-list" id="conversationList"></div>
         </aside>
 
-        <!-- ============================================================
-        MAIN CHAT
-        ============================================================ -->
+        <!-- MAIN CHAT -->
         <main class="main-chat">
 
-            <!-- Chat Header -->
             <div class="chat-header">
                 <div class="chat-title">
                     <span id="chatTitle">New Conversation</span>
@@ -1114,7 +934,6 @@
                 </div>
             </div>
 
-            <!-- Chat Container -->
             <div id="chatContainer">
                 <div class="welcome" id="welcomeMessage">
                     <div class="welcome-icon">🤖</div>
@@ -1129,7 +948,6 @@
                 </div>
             </div>
 
-            <!-- Input Area -->
             <div class="input-area">
                 <div class="input-wrapper">
                     <input type="text" id="messageInput" placeholder="Ask Zakhourani..." autocomplete="off">
@@ -1164,7 +982,7 @@
             workerUrl: 'https://aged-recipe-80db.wabdo3762.workers.dev/',
             dailyLimit: 50,
             isPremium: false,
-            soundEnabled: false
+            soundEnabled: true
         };
 
         // ============================================================
@@ -1267,6 +1085,221 @@
         }
 
         // ============================================================
+        //  SOUND SYSTEM
+        // ============================================================
+        let audioCtx = null;
+
+        function initAudio() {
+            if (!audioCtx) {
+                audioCtx = new(window.AudioContext || window.webkitAudioContext)();
+            }
+            return audioCtx;
+        }
+
+        function playTypingSound() {
+            if (!CONFIG.soundEnabled) return;
+            try {
+                const ctx = initAudio();
+                const osc = ctx.createOscillator();
+                const gain = ctx.createGain();
+                osc.connect(gain);
+                gain.connect(ctx.destination);
+                osc.frequency.value = 600 + Math.random() * 200;
+                gain.gain.value = 0.02;
+                osc.start();
+                osc.stop(ctx.currentTime + 0.02);
+            } catch (e) {}
+        }
+
+        function playSendSound() {
+            if (!CONFIG.soundEnabled) return;
+            try {
+                const ctx = initAudio();
+                const osc = ctx.createOscillator();
+                const gain = ctx.createGain();
+                osc.connect(gain);
+                gain.connect(ctx.destination);
+                osc.frequency.value = 800;
+                gain.gain.value = 0.05;
+                osc.start();
+                setTimeout(() => {
+                    const osc2 = ctx.createOscillator();
+                    const gain2 = ctx.createGain();
+                    osc2.connect(gain2);
+                    gain2.connect(ctx.destination);
+                    osc2.frequency.value = 1200;
+                    gain2.gain.value = 0.04;
+                    osc2.start();
+                    osc2.stop(ctx.currentTime + 0.08);
+                }, 60);
+                osc.stop(ctx.currentTime + 0.1);
+            } catch (e) {}
+        }
+
+        function playSuccessSound() {
+            if (!CONFIG.soundEnabled) return;
+            try {
+                const ctx = initAudio();
+                const osc = ctx.createOscillator();
+                const gain = ctx.createGain();
+                osc.connect(gain);
+                gain.connect(ctx.destination);
+                osc.frequency.value = 1000;
+                gain.gain.value = 0.06;
+                osc.start();
+                setTimeout(() => {
+                    const osc2 = ctx.createOscillator();
+                    const gain2 = ctx.createGain();
+                    osc2.connect(gain2);
+                    gain2.connect(ctx.destination);
+                    osc2.frequency.value = 1400;
+                    gain2.gain.value = 0.05;
+                    osc2.start();
+                    osc2.stop(ctx.currentTime + 0.1);
+                }, 80);
+                osc.stop(ctx.currentTime + 0.15);
+            } catch (e) {}
+        }
+
+        function playErrorSound() {
+            if (!CONFIG.soundEnabled) return;
+            try {
+                const ctx = initAudio();
+                const osc = ctx.createOscillator();
+                const gain = ctx.createGain();
+                osc.connect(gain);
+                gain.connect(ctx.destination);
+                osc.frequency.value = 400;
+                gain.gain.value = 0.06;
+                osc.type = 'sawtooth';
+                osc.start();
+                osc.stop(ctx.currentTime + 0.2);
+            } catch (e) {}
+        }
+
+        // ============================================================
+        //  RICH FORMATTING - Convert markdown-like text to HTML
+        // ============================================================
+        function formatRichText(text) {
+            let html = text;
+            
+            // Remove excessive ** markers - replace with proper bold
+            html = html.replace(/\*\*(.*?)\*\*/g, '<strong>$1</strong>');
+            
+            // Convert bullet points with • or - or * to styled lists
+            html = html.replace(/^[•\-\*]\s+(.*)$/gm, '<li>$1</li>');
+            
+            // Convert numbered lists
+            html = html.replace(/^(\d+)\.\s+(.*)$/gm, (match, num, content) => {
+                return `<div class="step"><span class="step-num">${num}</span><span>${content}</span></div>`;
+            });
+            
+            // Convert headings
+            html = html.replace(/^###\s+(.*)$/gm, '<h3>$1</h3>');
+            html = html.replace(/^##\s+(.*)$/gm, '<h2>$1</h2>');
+            html = html.replace(/^#\s+(.*)$/gm, '<h1>$1</h1>');
+            
+            // Convert code blocks (between ```)
+            html = html.replace(/```([\s\S]*?)```/g, (match, code) => {
+                return `<div class="code-block">${escapeHtml(code.trim())}</div>`;
+            });
+            
+            // Convert inline code
+            html = html.replace(/`([^`]+)`/g, (match, code) => {
+                return `<code style="background:var(--bg-primary);padding:1px 6px;border-radius:4px;font-family:monospace;font-size:0.85rem;">${escapeHtml(code)}</code>`;
+            });
+            
+            // Convert horizontal rules
+            html = html.replace(/^---$/gm, '<hr class="divider">');
+            
+            // Convert emojis and symbols
+            const emojiMap = {
+                ':)' : '😊',
+                ':(' : '😔',
+                ':D' : '😄',
+                ';)' : '😉',
+                ':*' : '😘',
+                ':P' : '😛',
+                ':O' : '😮',
+                ':|' : '😐',
+                ':-)' : '🙂',
+                ':-(' : '🙁',
+                ':-D' : '😃',
+                ':-P' : '😜',
+                ':-O' : '😲',
+                ':-*' : '😗',
+                ':/' : '😕',
+                ':\\' : '😕',
+                ':3' : '😺',
+                '>:(' : '😡',
+                '>:-(' : '😠',
+                'O:)': '😇',
+                'o:)': '😇',
+                '8-)': '😎',
+                'B-)': '😎',
+                ':-)': '🙂',
+                ':-(' : '🙁',
+                ':-D' : '😃',
+                ':-P' : '😜',
+                ':-O' : '😲',
+                ':-*' : '😗',
+                ':/' : '😕',
+                ':\\' : '😕',
+                ':-/' : '😕',
+                ':-\\' : '😕',
+                ':3' : '😺',
+                '>:(' : '😡',
+                '>:-(' : '😠',
+                'O:)' : '😇',
+                'o:)' : '😇',
+                '8-)' : '😎',
+                'B-)' : '😎'
+            };
+            
+            Object.keys(emojiMap).forEach(key => {
+                html = html.replace(new RegExp(key.replace(/[.*+?^${}()|[\]\\]/g, '\\$&'), 'g'), emojiMap[key]);
+            });
+            
+            // Convert ✅, ❌, ⭐, 🚀, 💡, 🔥, 🎯, 📌, ✨, 🌟 to styled icons
+            html = html.replace(/✅/g, '<span style="color:var(--success);font-weight:700;">✅</span>');
+            html = html.replace(/❌/g, '<span style="color:var(--danger);font-weight:700;">❌</span>');
+            html = html.replace(/⭐/g, '<span style="color:var(--premium-gold);">⭐</span>');
+            html = html.replace(/🚀/g, '<span style="color:var(--accent);">🚀</span>');
+            html = html.replace(/💡/g, '<span style="color:var(--warning);">💡</span>');
+            html = html.replace(/🔥/g, '<span style="color:var(--danger);">🔥</span>');
+            html = html.replace(/🎯/g, '<span style="color:var(--success);">🎯</span>');
+            html = html.replace(/📌/g, '<span style="color:var(--accent);">📌</span>');
+            html = html.replace(/✨/g, '<span style="color:var(--premium-gold);">✨</span>');
+            html = html.replace(/🌟/g, '<span style="color:var(--premium-gold);">🌟</span>');
+            
+            // Convert bullet lists with proper styling
+            html = html.replace(/<li>([\s\S]*?)<\/li>/g, (match, content) => {
+                return `<li><span class="bullet-blue">▸</span> ${content}</li>`;
+            });
+            
+            // Wrap consecutive list items in ul
+            html = html.replace(/(<li>.*?<\/li>\s*)+/g, (match) => {
+                return `<ul style="list-style:none;padding-left:0;">${match}</ul>`;
+            });
+            
+            // Convert paragraphs (double newlines)
+            html = html.replace(/\n\n/g, '<br><br>');
+            
+            // Convert single newlines to breaks
+            html = html.replace(/\n/g, '<br>');
+            
+            // Clean up extra breaks
+            html = html.replace(/(<br>\s*)+$/, '');
+            
+            // Add class for highlighted text
+            html = html.replace(/<strong>(.*?)<\/strong>/g, (match, content) => {
+                return `<strong style="color:var(--accent);">${content}</strong>`;
+            });
+            
+            return html;
+        }
+
+        // ============================================================
         //  FIREBASE AUTH
         // ============================================================
         let auth = null;
@@ -1303,8 +1336,10 @@
                 DOM.authError.textContent = '';
                 hideAuthModal();
                 showToast('✅ Welcome back, ' + (result.user.displayName || result.user.email));
+                playSuccessSound();
             } catch (error) {
                 DOM.authError.textContent = error.message;
+                playErrorSound();
             }
         }
 
@@ -1325,8 +1360,10 @@
                 DOM.authError.textContent = '';
                 hideAuthModal();
                 showToast('🎉 Account created! Welcome!');
+                playSuccessSound();
             } catch (error) {
                 DOM.authError.textContent = error.message;
+                playErrorSound();
             }
         }
 
@@ -1343,7 +1380,6 @@
                 DOM.userAvatar.textContent = initial;
                 DOM.userAvatar.style.backgroundImage = user.photoURL ? `url(${user.photoURL})` : '';
                 
-                // Show app
                 DOM.app.style.display = 'flex';
                 DOM.loader.classList.add('hidden');
             } else {
@@ -1355,7 +1391,7 @@
         }
 
         // ============================================================
-        //  USAGE TRACKING (Per User)
+        //  USAGE TRACKING
         // ============================================================
         function loadUsage() {
             const key = `zakhourani_usage_${state.user ? state.user.uid : 'guest'}`;
@@ -1415,6 +1451,7 @@
         function showLimitModal() {
             DOM.limitModal.classList.add('active');
             updateLimitTimer();
+            playErrorSound();
         }
 
         function updateLimitTimer() {
@@ -1433,7 +1470,7 @@
         }
 
         // ============================================================
-        //  CONVERSATIONS (Per User)
+        //  CONVERSATIONS
         // ============================================================
         function getStorageKey() {
             return `zakhourani_conversations_${state.user ? state.user.uid : 'guest'}`;
@@ -1487,14 +1524,14 @@
                 div.dataset.id = conv.id;
                 
                 const lastMsg = conv.messages.length > 0 ? conv.messages[conv.messages.length - 1] : null;
-                const preview = lastMsg ? (lastMsg.role === 'user' ? 'You: ' : 'AI: ') + 
-                    lastMsg.content.substring(0, 45) + (lastMsg.content.length > 45 ? '...' : '') : 'Empty conversation';
+                const preview = lastMsg ? (lastMsg.role === 'user' ? '👤 You: ' : '🤖 AI: ') + 
+                    lastMsg.content.substring(0, 40) + (lastMsg.content.length > 40 ? '...' : '') : '📝 Empty conversation';
                 
                 div.innerHTML = `
                     <div class="conv-title">${escapeHtml(conv.title)}</div>
                     <div class="conv-meta">
                         <span>${escapeHtml(preview)}</span>
-                        <span>${new Date(conv.updatedAt).toLocaleDateString()}</span>
+                        <span>📅 ${new Date(conv.updatedAt).toLocaleDateString()}</span>
                     </div>
                     <div class="conv-actions">
                         <button onclick="event.stopPropagation(); renameConversation('${conv.id}')" title="Rename">
@@ -1546,7 +1583,7 @@
             const id = generateId();
             state.conversations[id] = {
                 id: id,
-                title: `Chat ${Object.keys(state.conversations).length + 1}`,
+                title: `📝 Chat ${Object.keys(state.conversations).length + 1}`,
                 messages: [],
                 createdAt: new Date().toISOString(),
                 updatedAt: new Date().toISOString()
@@ -1554,6 +1591,7 @@
             saveConversations();
             loadConversation(id);
             showToast('✨ New conversation created');
+            playSuccessSound();
         }
 
         function deleteConversation(id) {
@@ -1584,7 +1622,7 @@
         function renameConversation(id) {
             const conv = state.conversations[id];
             if (!conv) return;
-            const newTitle = prompt('Rename conversation:', conv.title);
+            const newTitle = prompt('✏️ Rename conversation:', conv.title);
             if (newTitle && newTitle.trim()) {
                 conv.title = newTitle.trim();
                 conv.updatedAt = new Date().toISOString();
@@ -1594,14 +1632,15 @@
                     DOM.chatTitle.textContent = conv.title;
                 }
                 showToast('✏️ Conversation renamed');
+                playSuccessSound();
             }
         }
 
         function updateConversationTitle(id, firstMessage) {
             const conv = state.conversations[id];
-            if (!conv || conv.title !== 'New Conversation') return;
+            if (!conv || conv.title !== 'New Conversation' && !conv.title.startsWith('📝 Chat')) return;
             const title = firstMessage.length > 30 ? firstMessage.substring(0, 30) + '...' : firstMessage;
-            conv.title = title;
+            conv.title = '💬 ' + title;
             conv.updatedAt = new Date().toISOString();
             saveConversations();
             renderConversations();
@@ -1617,7 +1656,9 @@
             
             let html = '';
             if (role === 'assistant') {
-                html += `<div class="msg-content" id="msg-${Date.now()}"></div>`;
+                // Apply rich formatting to AI messages
+                const formattedContent = formatRichText(content);
+                html += `<div class="msg-content" id="msg-${Date.now()}">${formattedContent}</div>`;
             } else {
                 html += `<div>${escapeHtml(content).replace(/\n/g, '<br>')}</div>`;
             }
@@ -1626,8 +1667,9 @@
             if (role === 'assistant') {
                 html += `
                     <div class="msg-actions">
-                        <button onclick="copyMessage(this)" title="Copy"><i class="fas fa-copy"></i></button>
-                        <button onclick="speakMessage(this)" title="Speak"><i class="fas fa-volume-up"></i></button>
+                        <button onclick="copyMessage(this)" title="📋 Copy"><i class="fas fa-copy"></i></button>
+                        <button onclick="speakMessage(this)" title="🔊 Speak"><i class="fas fa-volume-up"></i></button>
+                        <button onclick="readAloud(this)" title="📖 Read Aloud"><i class="fas fa-book-open"></i></button>
                     </div>
                 `;
             }
@@ -1649,45 +1691,58 @@
         }
 
         // ============================================================
-        //  WORD-BY-WORD TYPING
+        //  WORD-BY-WORD TYPING WITH SOUND
         // ============================================================
-        function typeWriter(element, text, speed = 15) {
+        function typeWriter(element, text, speed = 12) {
             const words = text.split(' ');
             let index = 0;
             state.isTyping = true;
             state.stopTyping = false;
             
+            // Store the raw text for formatting
+            const rawText = text;
+            
+            // Create stop button
             const stopBtn = document.createElement('button');
             stopBtn.className = 'stop-btn';
-            stopBtn.innerHTML = '<i class="fas fa-stop"></i> Stop';
+            stopBtn.innerHTML = '⏹️ Stop';
             stopBtn.onclick = () => {
                 state.stopTyping = true;
                 state.isTyping = false;
-                element.innerHTML = text.replace(/\n/g, '<br>');
+                element.innerHTML = formatRichText(rawText);
                 stopBtn.remove();
                 showToast('⏹️ Response stopped');
+                playErrorSound();
             };
             element.parentElement.appendChild(stopBtn);
             
             function type() {
                 if (state.stopTyping || !state.isTyping) {
-                    element.innerHTML = text.replace(/\n/g, '<br>');
+                    element.innerHTML = formatRichText(rawText);
                     stopBtn.remove();
                     return;
                 }
                 
                 if (index < words.length) {
                     const currentText = words.slice(0, index + 1).join(' ');
-                    element.innerHTML = escapeHtml(currentText).replace(/\n/g, '<br>') + 
+                    // Show raw text with cursor, will be formatted when complete
+                    element.innerHTML = escapeHtml(currentText) + 
                         `<span class="typing-cursor"></span>`;
+                    
+                    // Play typing sound
+                    if (CONFIG.soundEnabled && index % 2 === 0) {
+                        playTypingSound();
+                    }
                     
                     index++;
                     DOM.chatContainer.scrollTop = DOM.chatContainer.scrollHeight;
-                    state.typingTimer = setTimeout(type, speed + Math.random() * 20);
+                    state.typingTimer = setTimeout(type, speed + Math.random() * 15);
                 } else {
-                    element.innerHTML = text.replace(/\n/g, '<br>');
+                    // Final formatted version
+                    element.innerHTML = formatRichText(rawText);
                     state.isTyping = false;
                     stopBtn.remove();
+                    playSuccessSound();
                 }
             }
             
@@ -1703,6 +1758,7 @@
             const text = content ? content.textContent : '';
             navigator.clipboard.writeText(text).then(() => {
                 showToast('📋 Copied!', 1500);
+                playSuccessSound();
             }).catch(() => {
                 const range = document.createRange();
                 range.selectNode(content);
@@ -1722,10 +1778,53 @@
                 const utterance = new SpeechSynthesisUtterance(text);
                 utterance.rate = 0.9;
                 utterance.pitch = 1;
+                utterance.voice = speechSynthesis.getVoices().find(v => v.lang === 'en-US') || null;
                 speechSynthesis.speak(utterance);
                 showToast('🔊 Speaking...', 2000);
+                playSuccessSound();
             } else {
                 showToast('⚠️ TTS not supported', 2000);
+                playErrorSound();
+            }
+        };
+
+        window.readAloud = function(btn) {
+            const div = btn.closest('.message');
+            const content = div.querySelector('.msg-content') || div.querySelector('div');
+            const text = content ? content.textContent : '';
+            
+            if ('speechSynthesis' in window) {
+                window.speechSynthesis.cancel();
+                const utterance = new SpeechSynthesisUtterance(text);
+                utterance.rate = 0.75;
+                utterance.pitch = 1.1;
+                utterance.voice = speechSynthesis.getVoices().find(v => v.lang === 'en-US' && v.name.includes('Google')) || 
+                                speechSynthesis.getVoices().find(v => v.lang === 'en-US') || null;
+                speechSynthesis.speak(utterance);
+                showToast('📖 Reading aloud...', 2000);
+                playSuccessSound();
+                
+                // Highlight text being read (simple visual feedback)
+                const originalText = content.textContent;
+                let wordIndex = 0;
+                const words = originalText.split(' ');
+                
+                const highlightInterval = setInterval(() => {
+                    if (wordIndex < words.length) {
+                        // Simple highlight by changing background briefly
+                        // (limited implementation for readability)
+                        wordIndex++;
+                    } else {
+                        clearInterval(highlightInterval);
+                    }
+                }, 300);
+                
+                utterance.onend = () => {
+                    clearInterval(highlightInterval);
+                };
+            } else {
+                showToast('⚠️ Text-to-speech not supported', 2000);
+                playErrorSound();
             }
         };
 
@@ -1753,6 +1852,7 @@
             const conv = state.conversations[state.currentId];
             if (!conv || conv.messages.length === 0) {
                 showToast('No messages to edit');
+                playErrorSound();
                 return;
             }
             
@@ -1766,11 +1866,12 @@
             
             if (lastUserIndex === -1) {
                 showToast('No user message to edit');
+                playErrorSound();
                 return;
             }
             
             const lastMsg = conv.messages[lastUserIndex];
-            const newText = prompt('Edit your message:', lastMsg.content);
+            const newText = prompt('✏️ Edit your message:', lastMsg.content);
             if (newText && newText.trim()) {
                 conv.messages = conv.messages.slice(0, lastUserIndex);
                 conv.messages.push({ role: 'user', content: newText.trim(), timestamp: getTime() });
@@ -1778,6 +1879,7 @@
                 saveConversations();
                 loadConversation(state.currentId);
                 showToast('✏️ Message edited');
+                playSuccessSound();
             }
         }
 
@@ -1793,6 +1895,7 @@
                 saveConversations();
                 loadConversation(state.currentId);
                 showToast('🗑️ Chat cleared');
+                playSuccessSound();
             }
         }
 
@@ -1800,6 +1903,7 @@
             const conv = state.conversations[state.currentId];
             if (!conv || conv.messages.length === 0) {
                 showToast('No messages to export');
+                playErrorSound();
                 return;
             }
             
@@ -1815,6 +1919,7 @@
             a.click();
             URL.revokeObjectURL(url);
             showToast('📥 Chat exported!');
+            playSuccessSound();
         }
 
         // ============================================================
@@ -1840,21 +1945,24 @@
         function getLocalResponse(prompt) {
             const lower = prompt.toLowerCase();
             if (lower.includes('dr. waleed') || lower.includes('waleed')) {
-                return "Dr. Waleed Hussein Zakhourani is a Harvard-educated linguist, creator of the JIHAN Universal Dictionary, and founder of Zakhourani. He bridges English, Arabic, and Kurdish cultures through language education and AI-powered learning tools.";
+                return "👨‍🎓 **Dr. Waleed Hussein Zakhourani** is a Harvard-educated linguist, creator of the JIHAN Universal Dictionary, and founder of Zakhourani. He bridges English, Arabic, and Kurdish cultures through language education and AI-powered learning tools. 📚✨";
             }
             if (lower.includes('hello') || lower.includes('hi')) {
-                return "Hello! I'm Zakhourani AI, your premium intelligent assistant. How can I help you today?";
+                return "👋 Hello! I'm Zakhourani AI, your premium intelligent assistant. How can I help you today? 💡";
             }
             if (lower.includes('who are you')) {
-                return "I'm Zakhourani AI, a premium intelligent assistant created by Zakhourani Developers. I'm here to help you with any questions you have.";
+                return "🤖 I'm **Zakhourani AI**, a premium intelligent assistant created by Zakhourani Developers. I'm here to help you with any questions you have! 🚀";
             }
             if (lower.includes('help')) {
-                return "I can help you with:\n• Answering general knowledge questions\n• Explaining complex topics simply\n• Writing and editing text\n• Brainstorming ideas\n• Learning English\n• And much more!";
+                return "💡 I can help you with:\n• Answering general knowledge questions\n• Explaining complex topics simply\n• Writing and editing text\n• Brainstorming ideas\n• Learning English\n• And much more! 🎯\n\nWhat would you like to know?";
             }
             if (lower.includes('thank')) {
-                return "You're welcome! It's my pleasure to help. Is there anything else I can assist you with?";
+                return "🙏 You're welcome! It's my pleasure to help. Is there anything else I can assist you with? ✨";
             }
-            return "I'm Zakhourani AI, your premium intelligent assistant. Please ask me anything, and I'll do my best to help you!";
+            if (lower.includes('poem')) {
+                return "📝 **A Short Poem About AI:**\n\n✨ *In circuits deep, a mind awakes,*\n*Learning from the data it takes.*\n*With every query, it grows wise,*\n*Helping humans reach new skies.* 🚀\n\n*From words to images, it creates,*\n*Expanding minds, opening gates.*\n*Zakhourani AI, here to stay,*\n*Guiding you along the way.* 🌟";
+            }
+            return "💬 I'm Zakhourani AI, your premium intelligent assistant. Please ask me anything, and I'll do my best to help you! 🎯";
         }
 
         // ============================================================
@@ -1872,12 +1980,13 @@
 
             addMessage(text, 'user');
             DOM.messageInput.value = '';
+            playSendSound();
 
             const typingDiv = document.createElement('div');
             typingDiv.className = 'typing-indicator';
             typingDiv.innerHTML = `
                 <div class="typing-dots"><span></span><span></span><span></span></div>
-                <span class="typing-label">Zakhourani is thinking...</span>
+                <span class="typing-label">🤖 Zakhourani is thinking...</span>
             `;
             DOM.chatContainer.appendChild(typingDiv);
             DOM.chatContainer.scrollTop = DOM.chatContainer.scrollHeight;
@@ -1903,6 +2012,7 @@
                 const fallback = getLocalResponse(text);
                 addMessage(fallback, 'assistant');
                 showToast('⚠️ Using offline mode', 3000);
+                playErrorSound();
             } finally {
                 state.isProcessing = false;
                 DOM.sendBtn.disabled = false;
@@ -1919,6 +2029,7 @@
             const isLight = document.body.classList.contains('light');
             DOM.themeIcon.className = isLight ? 'fas fa-sun' : 'fas fa-moon';
             localStorage.setItem('zakhourani_theme', isLight ? 'light' : 'dark');
+            playSuccessSound();
         }
 
         // ============================================================
@@ -1952,12 +2063,14 @@
             if (confirm('Logout?')) {
                 await auth.signOut();
                 showToast('👋 Logged out');
+                playSuccessSound();
             }
         });
 
         document.getElementById('upgradeFromLimit').addEventListener('click', () => {
             DOM.limitModal.classList.remove('active');
             showToast('🚀 Premium coming soon!', 3000);
+            playSuccessSound();
         });
         document.getElementById('closeLimitModal').addEventListener('click', () => {
             DOM.limitModal.classList.remove('active');
@@ -1982,27 +2095,20 @@
         function init() {
             createParticles();
             
-            // Load theme
             if (localStorage.getItem('zakhourani_theme') === 'light') {
                 document.body.classList.add('light');
                 DOM.themeIcon.className = 'fas fa-sun';
             }
             
-            // Init Firebase
             const firebaseAuth = initFirebase();
             
-            // Auth state listener
             firebaseAuth.onAuthStateChanged((user) => {
                 updateLoader('Authenticating...', 30);
                 
                 if (user) {
                     state.user = user;
                     updateLoader('Loading data...', 60);
-                    
-                    // Update user UI
                     updateUserUI(user);
-                    
-                    // Load data
                     loadUsage();
                     loadConversations();
                     
@@ -2012,6 +2118,7 @@
                         DOM.app.style.display = 'flex';
                         DOM.messageInput.focus();
                         showToast('🤖 Welcome back, ' + (user.displayName || user.email.split('@')[0]) + '!', 2000);
+                        playSuccessSound();
                     }, 300);
                 } else {
                     state.user = null;

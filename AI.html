@@ -3,16 +3,17 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=yes">
-    <title>Zakhourani AI · Dual AI Engine</title>
-    <meta name="description" content="Zakhourani AI - Powered by DeepSeek & Gemini">
+    <title>Zakhourani AI · Ultimate Mobile Assistant</title>
+    <meta name="description" content="Zakhourani AI - Your intelligent assistant by Zakhourani Developers">
     <meta name="theme-color" content="#0f172a">
     
     <!-- Font Awesome 6 -->
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <!-- Google Fonts -->
-    <link href="https://fonts.googleapis.com/css2?family=Inter:opsz,wght@14..32,400;14..32,500;14..32,600;14..32,700;14..32,800&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:opsz,wght@14..32,400;14..32,500;14..32,600;14..32,700;14..32,800;14..32,900&display=swap" rel="stylesheet">
     
     <style>
+        /* ========== RESET & CORE VARIABLES ========== */
         * {
             margin: 0;
             padding: 0;
@@ -22,10 +23,10 @@
         }
         
         :root {
-            --bg-primary: #0f172a;
-            --bg-secondary: #1e293b;
-            --bg-surface: rgba(255,255,255,0.05);
-            --bg-card: rgba(15,23,42,0.6);
+            --bg-gradient: linear-gradient(145deg, #0f172a 0%, #1e293b 100%);
+            --surface: rgba(255,255,255,0.05);
+            --surface-hover: rgba(255,255,255,0.1);
+            --border: rgba(255,255,255,0.1);
             --text-primary: #f1f5f9;
             --text-secondary: #94a3b8;
             --accent: #3b82f6;
@@ -33,48 +34,89 @@
             --success: #22c55e;
             --warning: #eab308;
             --danger: #ef4444;
-            --border: rgba(255,255,255,0.1);
+            --premium-gold: #f59e0b;
+            --premium-gradient: linear-gradient(135deg, #f59e0b, #d97706);
+            --card-bg: rgba(15,23,42,0.6);
             --shadow: 0 25px 50px -12px rgba(0,0,0,0.5);
-            --glass: 1px solid rgba(255,255,255,0.1);
+            --glass-border: 1px solid rgba(255,255,255,0.1);
+        }
+        
+        body.light {
+            --bg-gradient: linear-gradient(145deg, #e2e8f0 0%, #cbd5e1 100%);
+            --surface: rgba(0,0,0,0.03);
+            --surface-hover: rgba(0,0,0,0.05);
+            --border: rgba(0,0,0,0.1);
+            --text-primary: #0f172a;
+            --text-secondary: #334155;
+            --card-bg: rgba(255,255,255,0.7);
+            --shadow: 0 25px 50px -12px rgba(0,0,0,0.2);
         }
         
         body {
-            background: var(--bg-primary);
+            background: var(--bg-gradient);
             min-height: 100vh;
             display: flex;
             align-items: center;
             justify-content: center;
             padding: 8px;
             transition: background 0.3s;
+            position: relative;
+            overflow: hidden;
+        }
+        
+        /* Animated background particles */
+        .particles {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            pointer-events: none;
+            z-index: 0;
+        }
+        
+        .particle {
+            position: absolute;
+            background: var(--accent);
+            border-radius: 50%;
+            opacity: 0.1;
+            animation: float 15s infinite;
+        }
+        
+        @keyframes float {
+            0%, 100% { transform: translateY(0) translateX(0); }
+            25% { transform: translateY(-100px) translateX(50px); }
+            50% { transform: translateY(-50px) translateX(-50px); }
+            75% { transform: translateY(-150px) translateX(30px); }
         }
         
         #app {
             width: 100%;
             max-width: 1400px;
             height: 98vh;
-            background: var(--bg-card);
+            background: var(--card-bg);
             backdrop-filter: blur(20px);
             border-radius: 32px;
-            border: var(--glass);
+            border: var(--glass-border);
             box-shadow: var(--shadow);
             display: flex;
             flex-direction: column;
             overflow: hidden;
             color: var(--text-primary);
             position: relative;
+            z-index: 1;
         }
         
-        /* Scrollbar */
+        /* ========== SCROLLBARS ========== */
         *::-webkit-scrollbar { width: 4px; height: 4px; }
         *::-webkit-scrollbar-track { background: transparent; }
         *::-webkit-scrollbar-thumb { background: var(--accent); border-radius: 10px; }
 
-        /* Header */
+        /* ========== HEADER ========== */
         header {
             padding: 16px 20px;
-            background: var(--bg-surface);
-            border-bottom: var(--glass);
-            flex-shrink: 0;
+            background: var(--surface);
+            border-bottom: var(--glass-border);
         }
         
         .header-row {
@@ -107,12 +149,25 @@
             position: relative;
         }
         
+        .premium-crown {
+            position: absolute;
+            top: -8px;
+            right: -8px;
+            color: var(--premium-gold);
+            font-size: 14px;
+            filter: drop-shadow(0 2px 4px rgba(245,158,11,0.5));
+            display: none;
+        }
+        
         .title h1 {
             font-size: 1.5rem;
             font-weight: 600;
+            letter-spacing: -0.3px;
             background: linear-gradient(to right, #fff, #cbd5e1);
             -webkit-background-clip: text;
             -webkit-text-fill-color: transparent;
+            overflow: hidden;
+            text-overflow: ellipsis;
         }
         
         .title p {
@@ -129,8 +184,8 @@
         }
         
         .icon-btn {
-            background: var(--bg-surface);
-            border: var(--glass);
+            background: var(--surface);
+            border: var(--glass-border);
             color: var(--text-primary);
             width: 40px;
             height: 40px;
@@ -142,60 +197,90 @@
             transition: all 0.3s;
             font-size: 1.1rem;
             text-decoration: none;
+            position: relative;
         }
         
         .icon-btn:hover {
-            background: rgba(255,255,255,0.1);
+            background: var(--surface-hover);
             transform: translateY(-2px);
         }
         
         .icon-btn:active { transform: scale(0.95); }
         
-        .engine-badge {
-            padding: 6px 14px;
+        .upgrade-btn {
+            background: var(--premium-gradient);
+            border: none;
+            color: white;
+            padding: 8px 16px;
             border-radius: 20px;
-            font-size: 0.75rem;
             font-weight: 600;
-            background: rgba(59,130,246,0.2);
-            color: var(--accent);
-            border: 1px solid rgba(59,130,246,0.3);
+            font-size: 0.85rem;
+            cursor: pointer;
+            transition: all 0.3s;
             display: flex;
             align-items: center;
             gap: 6px;
+            animation: glowPulse 2s infinite;
+            white-space: nowrap;
         }
         
-        .engine-badge .dot {
-            width: 8px;
-            height: 8px;
-            border-radius: 50%;
-            display: inline-block;
+        @keyframes glowPulse {
+            0%, 100% { box-shadow: 0 0 20px rgba(245,158,11,0.3); }
+            50% { box-shadow: 0 0 40px rgba(245,158,11,0.6); }
         }
         
-        .engine-badge .dot.active {
-            background: var(--success);
-            animation: pulse 2s infinite;
+        .upgrade-btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 0 50px rgba(245,158,11,0.8);
         }
         
-        .engine-badge .dot.error {
-            background: var(--danger);
+        .user-info {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            padding: 4px 12px;
+            background: var(--surface);
+            border-radius: 20px;
+            border: var(--glass-border);
+            cursor: pointer;
+            font-size: 0.85rem;
+            white-space: nowrap;
         }
         
-        @keyframes pulse {
-            0%, 100% { opacity: 1; }
-            50% { opacity: 0.3; }
+        .tier-badge {
+            padding: 2px 8px;
+            border-radius: 10px;
+            font-size: 0.7rem;
+            font-weight: 700;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
         }
         
-        /* Usage Bar */
+        .tier-free {
+            background: rgba(100,100,100,0.3);
+            color: #ccc;
+        }
+        
+        .tier-pro {
+            background: var(--premium-gradient);
+            color: white;
+        }
+        
+        .tier-ultra {
+            background: linear-gradient(135deg, #8b5cf6, #6d28d9);
+            color: white;
+        }
+        
+        /* ========== USAGE BAR ========== */
         .usage-bar-container {
             padding: 8px 20px;
-            background: var(--bg-surface);
-            border-bottom: var(--glass);
+            background: var(--surface);
+            border-bottom: var(--glass-border);
             display: flex;
             align-items: center;
             gap: 12px;
             font-size: 0.8rem;
             color: var(--text-secondary);
-            flex-shrink: 0;
         }
         
         .usage-bar {
@@ -213,34 +298,101 @@
             transition: width 0.5s;
         }
         
-        .usage-fill.warning { background: var(--warning); }
-        .usage-fill.danger { background: var(--danger); }
+        .usage-fill.warning {
+            background: var(--warning);
+        }
         
-        /* Chat Container */
+        .usage-fill.danger {
+            background: var(--danger);
+        }
+        
+        .reset-timer {
+            font-weight: 600;
+            color: var(--accent);
+        }
+
+        /* ========== TAB BAR ========== */
+        .tab-bar {
+            padding: 10px 16px;
+            display: flex;
+            gap: 8px;
+            overflow-x: auto;
+            scrollbar-width: none;
+            border-bottom: var(--glass-border);
+            -webkit-overflow-scrolling: touch;
+        }
+        
+        .tab-bar::-webkit-scrollbar { display: none; }
+        
+        .tab {
+            background: var(--surface);
+            border: var(--glass-border);
+            border-radius: 30px;
+            padding: 8px 16px;
+            font-size: 0.85rem;
+            display: flex;
+            align-items: center;
+            gap: 6px;
+            cursor: pointer;
+            white-space: nowrap;
+            color: var(--text-secondary);
+            transition: all 0.3s;
+            position: relative;
+        }
+        
+        .tab:hover { background: var(--surface-hover); }
+        
+        .tab.active {
+            background: var(--accent);
+            border-color: var(--accent);
+            color: white;
+        }
+        
+        .tab i { font-size: 0.8rem; }
+        
+        .close-tab {
+            margin-left: 4px;
+            opacity: 0.6;
+            transition: 0.3s;
+            padding: 4px;
+            border-radius: 50%;
+        }
+        
+        .close-tab:hover { opacity: 1; background: rgba(255,255,255,0.2); }
+        
+        .new-tab {
+            background: transparent;
+            border: 1px dashed var(--border);
+            color: var(--text-secondary);
+        }
+
+        /* ========== CHAT CONTAINER ========== */
         #chatContainer {
             flex: 1;
             overflow-y: auto;
             padding: 16px;
             scroll-behavior: smooth;
+            -webkit-overflow-scrolling: touch;
         }
         
         .welcome {
             text-align: center;
-            max-width: 600px;
+            max-width: 500px;
             margin: 40px auto;
-            background: var(--bg-surface);
+            background: var(--surface);
             border-radius: 32px;
             padding: 40px 32px;
-            border: var(--glass);
+            border: var(--glass-border);
+            backdrop-filter: blur(8px);
         }
         
         .welcome-icon {
             font-size: 4rem;
             margin-bottom: 20px;
-            animation: float 3s ease-in-out infinite;
+            animation: floatIcon 3s ease-in-out infinite;
         }
         
-        @keyframes float {
+        @keyframes floatIcon {
             0%, 100% { transform: translateY(0); }
             50% { transform: translateY(-20px); }
         }
@@ -260,14 +412,13 @@
             line-height: 1.6;
         }
         
-        /* Messages */
         .message {
-            margin: 12px 0;
+            margin: 16px 0;
             padding: 14px 18px;
             border-radius: 24px;
             max-width: 85%;
             word-wrap: break-word;
-            line-height: 1.6;
+            line-height: 1.5;
             animation: slideIn 0.3s;
             font-size: 0.95rem;
             box-shadow: 0 4px 12px rgba(0,0,0,0.1);
@@ -287,8 +438,8 @@
         }
         
         .ai-message {
-            background: var(--bg-surface);
-            border: var(--glass);
+            background: var(--surface);
+            border: var(--glass-border);
             color: var(--text-primary);
             margin-right: auto;
             border-bottom-left-radius: 8px;
@@ -301,17 +452,44 @@
             text-align: right;
         }
         
-        .ai-engine-badge {
-            font-size: 0.7rem;
+        .ai-attribution {
+            font-size: 0.75rem;
+            font-style: italic;
             color: var(--accent);
-            margin-bottom: 4px;
+            margin-bottom: 5px;
             display: block;
             font-weight: 500;
         }
         
+        .message-actions {
+            position: absolute;
+            top: 6px;
+            right: 6px;
+            display: flex;
+            gap: 4px;
+            opacity: 0;
+            transition: opacity 0.2s;
+        }
+        
+        .message:hover .message-actions { opacity: 1; }
+        
+        .message-actions button {
+            background: var(--surface-hover);
+            border: none;
+            color: var(--text-primary);
+            width: 28px;
+            height: 28px;
+            border-radius: 8px;
+            cursor: pointer;
+            font-size: 0.8rem;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+        
         .loading {
-            background: var(--bg-surface);
-            border: var(--glass);
+            background: var(--surface);
+            border: var(--glass-border);
             margin-right: auto;
             display: flex;
             align-items: center;
@@ -335,26 +513,26 @@
         .typing span:nth-child(2) { animation-delay: 0.2s; }
         .typing span:nth-child(3) { animation-delay: 0.4s; }
         
-        @keyframes typing {
-            0%,60%,100% { transform: translateY(0); }
-            30% { transform: translateY(-8px); }
+        @keyframes typing { 
+            0%,60%,100% { transform: translateY(0); } 
+            30% { transform: translateY(-8px); } 
         }
-        
-        /* Input Area */
+
+        /* ========== INPUT AREA ========== */
         .input-area {
             padding: 16px;
-            background: var(--bg-surface);
-            border-top: var(--glass);
-            flex-shrink: 0;
+            background: var(--surface);
+            border-top: var(--glass-border);
         }
         
         .input-wrapper {
             display: flex;
             gap: 8px;
-            background: var(--bg-card);
-            border: var(--glass);
+            background: var(--card-bg);
+            border: var(--glass-border);
             border-radius: 50px;
             padding: 4px 4px 4px 16px;
+            backdrop-filter: blur(4px);
             transition: 0.3s;
         }
         
@@ -374,9 +552,7 @@
             min-width: 0;
         }
         
-        #messageInput::placeholder {
-            color: var(--text-secondary);
-        }
+        #messageInput::placeholder { color: var(--text-secondary); }
         
         #sendButton {
             background: var(--accent);
@@ -386,15 +562,15 @@
             padding: 10px 20px;
             font-weight: 600;
             cursor: pointer;
-            transition: all 0.3s;
             display: flex;
             align-items: center;
             justify-content: center;
+            transition: all 0.3s;
         }
         
         #sendButton:active:not(:disabled) { transform: scale(0.95); }
         #sendButton:disabled { opacity: 0.4; cursor: not-allowed; }
-        
+
         .input-extras {
             display: flex;
             justify-content: space-between;
@@ -411,8 +587,8 @@
         }
         
         .chip {
-            background: var(--bg-surface);
-            border: var(--glass);
+            background: var(--surface);
+            border: var(--glass-border);
             border-radius: 30px;
             padding: 6px 14px;
             font-size: 0.8rem;
@@ -425,45 +601,56 @@
             white-space: nowrap;
         }
         
-        .chip:hover { background: rgba(255,255,255,0.1); color: var(--text-primary); }
-        .chip:active { transform: scale(0.95); }
+        .chip:hover:not(.disabled) {
+            background: var(--surface-hover);
+            color: var(--text-primary);
+        }
         
+        .chip.disabled { opacity: 0.3; pointer-events: none; }
+        
+        .utility-buttons {
+            display: flex;
+            gap: 6px;
+            flex-wrap: wrap;
+        }
+        
+        .util-btn {
+            background: var(--surface);
+            border: var(--glass-border);
+            color: var(--text-secondary);
+            width: 36px;
+            height: 36px;
+            border-radius: 10px;
+            cursor: pointer;
+            transition: all 0.3s;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            position: relative;
+        }
+        
+        .util-btn:hover { background: var(--surface-hover); color: var(--text-primary); }
+        
+        .premium-lock {
+            position: absolute;
+            top: -4px;
+            right: -4px;
+            font-size: 0.6rem;
+            color: var(--premium-gold);
+        }
+
         footer {
-            padding: 8px 16px;
+            padding: 10px 16px;
             display: flex;
             justify-content: space-between;
             color: var(--text-secondary);
-            font-size: 0.7rem;
-            border-top: var(--glass);
-            flex-shrink: 0;
+            font-size: 0.75rem;
+            border-top: var(--glass-border);
+            flex-wrap: wrap;
+            gap: 8px;
         }
-        
-        /* Toast */
-        .toast {
-            position: fixed;
-            bottom: 30px;
-            left: 50%;
-            transform: translateX(-50%);
-            background: var(--bg-card);
-            border: var(--glass);
-            border-radius: 30px;
-            padding: 14px 28px;
-            color: var(--text-primary);
-            box-shadow: var(--shadow);
-            z-index: 2000;
-            display: none;
-            font-size: 0.9rem;
-            backdrop-filter: blur(10px);
-            animation: slideUp 0.3s;
-            max-width: 90%;
-        }
-        
-        @keyframes slideUp {
-            from { transform: translateX(-50%) translateY(20px); opacity: 0; }
-            to { transform: translateX(-50%) translateY(0); opacity: 1; }
-        }
-        
-        /* Limit Modal */
+
+        /* ========== MODALS ========== */
         .modal {
             position: fixed;
             top: 0; left: 0; right: 0; bottom: 0;
@@ -476,21 +663,35 @@
             padding: 16px;
         }
         
-        .modal.active { display: flex; }
+        .modal.active {
+            display: flex;
+            animation: modalFadeIn 0.3s;
+        }
+        
+        @keyframes modalFadeIn {
+            from { opacity: 0; }
+            to { opacity: 1; }
+        }
         
         .modal-content {
-            background: var(--bg-card);
-            border: var(--glass);
+            background: var(--card-bg);
+            border: var(--glass-border);
             border-radius: 32px;
-            max-width: 500px;
+            max-width: 600px;
             width: 100%;
+            max-height: 85vh;
+            overflow-y: auto;
             padding: 32px;
-            text-align: center;
+            color: var(--text-primary);
+            box-shadow: var(--shadow);
         }
         
         .modal-content h2 {
             font-size: 1.8rem;
-            margin-bottom: 12px;
+            margin-bottom: 20px;
+            display: flex;
+            align-items: center;
+            gap: 12px;
         }
         
         .modal-close {
@@ -502,6 +703,7 @@
             font-weight: 600;
             cursor: pointer;
             margin-top: 16px;
+            width: 100%;
             transition: all 0.3s;
         }
         
@@ -509,557 +711,1324 @@
             background: var(--accent-glow);
             transform: translateY(-2px);
         }
+
+        /* ========== PRICING CARDS ========== */
+        .pricing-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 20px;
+            margin: 24px 0;
+        }
         
-        /* Fallback indicator */
-        .fallback-notice {
-            background: rgba(239,68,68,0.1);
-            border: 1px solid var(--danger);
-            border-radius: 12px;
-            padding: 12px 16px;
-            margin: 8px 0;
+        .pricing-card {
+            background: var(--surface);
+            border: var(--glass-border);
+            border-radius: 24px;
+            padding: 24px;
+            text-align: center;
+            transition: all 0.3s;
+            position: relative;
+            overflow: hidden;
+        }
+        
+        .pricing-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 20px 40px rgba(0,0,0,0.3);
+        }
+        
+        .pricing-card.premium {
+            border: 2px solid var(--premium-gold);
+            box-shadow: 0 0 30px rgba(245,158,11,0.2);
+        }
+        
+        .pricing-card.ultra {
+            border: 2px solid #8b5cf6;
+            box-shadow: 0 0 30px rgba(139,92,246,0.2);
+        }
+        
+        .popular-badge {
+            position: absolute;
+            top: 12px;
+            right: -30px;
+            background: var(--premium-gradient);
+            color: white;
+            padding: 4px 30px;
+            font-size: 0.7rem;
+            font-weight: 700;
+            transform: rotate(45deg);
+        }
+        
+        .plan-icon {
+            font-size: 3rem;
+            margin-bottom: 12px;
+        }
+        
+        .plan-name {
+            font-size: 1.2rem;
+            font-weight: 700;
+            margin-bottom: 8px;
+        }
+        
+        .plan-price {
+            font-size: 2.5rem;
+            font-weight: 900;
+            margin: 16px 0;
+        }
+        
+        .plan-price span {
+            font-size: 1rem;
+            font-weight: 400;
             color: var(--text-secondary);
-            font-size: 0.85rem;
+        }
+        
+        .plan-features {
+            list-style: none;
+            padding: 0;
+            margin: 20px 0;
+            text-align: left;
+        }
+        
+        .plan-features li {
+            padding: 8px 0;
+            color: var(--text-secondary);
             display: flex;
             align-items: center;
             gap: 8px;
+            font-size: 0.9rem;
         }
         
+        .plan-features li i.fa-check {
+            color: var(--success);
+        }
+        
+        .plan-features li i.fa-times {
+            color: var(--danger);
+        }
+        
+        .plan-btn {
+            width: 100%;
+            padding: 12px;
+            border-radius: 30px;
+            font-weight: 700;
+            font-size: 1rem;
+            cursor: pointer;
+            transition: all 0.3s;
+            border: none;
+        }
+        
+        .plan-btn.current {
+            background: var(--success);
+            color: white;
+        }
+        
+        .plan-btn.premium-btn {
+            background: var(--premium-gradient);
+            color: white;
+        }
+        
+        .plan-btn.ultra-btn {
+            background: linear-gradient(135deg, #8b5cf6, #6d28d9);
+            color: white;
+        }
+        
+        .plan-btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 10px 20px rgba(0,0,0,0.2);
+        }
+        
+        .coming-soon-badge {
+            display: inline-block;
+            background: rgba(245,158,11,0.2);
+            color: var(--premium-gold);
+            padding: 4px 12px;
+            border-radius: 20px;
+            font-size: 0.75rem;
+            font-weight: 600;
+            margin-top: 8px;
+        }
+
+        /* ========== AUTH STYLES ========== */
+        .auth-container {
+            max-width: 400px;
+            margin: 0 auto;
+        }
+        
+        .auth-tabs {
+            display: flex;
+            gap: 8px;
+            margin-bottom: 20px;
+        }
+        
+        .auth-tab {
+            flex: 1;
+            padding: 12px;
+            background: var(--surface);
+            border: var(--glass-border);
+            border-radius: 12px;
+            text-align: center;
+            cursor: pointer;
+            color: var(--text-secondary);
+            transition: all 0.3s;
+        }
+        
+        .auth-tab.active {
+            background: var(--accent);
+            color: white;
+            border-color: var(--accent);
+        }
+        
+        .auth-form {
+            display: flex;
+            flex-direction: column;
+            gap: 12px;
+        }
+        
+        .auth-input {
+            background: var(--card-bg);
+            border: var(--glass-border);
+            border-radius: 12px;
+            padding: 14px 16px;
+            color: var(--text-primary);
+            font-size: 0.95rem;
+            outline: none;
+            transition: all 0.3s;
+        }
+        
+        .auth-input:focus {
+            border-color: var(--accent);
+            box-shadow: 0 0 0 3px rgba(59,130,246,0.2);
+        }
+        
+        .auth-submit {
+            background: var(--accent);
+            color: white;
+            border: none;
+            border-radius: 12px;
+            padding: 14px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s;
+            font-size: 1rem;
+        }
+        
+        .auth-submit:hover {
+            background: var(--accent-glow);
+            transform: translateY(-2px);
+        }
+        
+        .auth-error {
+            color: var(--danger);
+            font-size: 0.85rem;
+            text-align: center;
+            min-height: 20px;
+        }
+        
+        .auth-success {
+            color: var(--success);
+            font-size: 0.85rem;
+            text-align: center;
+        }
+
+        .toast {
+            position: fixed;
+            bottom: 30px;
+            left: 50%;
+            transform: translateX(-50%);
+            background: var(--card-bg);
+            border: var(--glass-border);
+            border-radius: 30px;
+            padding: 14px 28px;
+            color: var(--text-primary);
+            box-shadow: var(--shadow);
+            z-index: 2000;
+            display: none;
+            font-size: 0.9rem;
+            white-space: nowrap;
+            backdrop-filter: blur(10px);
+            animation: slideUp 0.3s;
+        }
+        
+        @keyframes slideUp {
+            from { transform: translateX(-50%) translateY(20px); opacity: 0; }
+            to { transform: translateX(-50%) translateY(0); opacity: 1; }
+        }
+
+        /* ========== RESPONSIVE ========== */
         @media (max-width: 768px) {
-            .header-row { flex-direction: column; align-items: flex-start; }
-            .header-actions { width: 100%; justify-content: flex-end; }
+            .header-row {
+                flex-direction: column;
+                align-items: flex-start;
+            }
+            
+            .header-actions {
+                width: 100%;
+                justify-content: flex-end;
+            }
+            
+            .pricing-grid {
+                grid-template-columns: 1fr;
+            }
+            
+            .modal-content {
+                padding: 20px;
+                border-radius: 24px;
+            }
+        }
+        
+        @media (max-width: 480px) {
             .title h1 { font-size: 1.2rem; }
-            .welcome { padding: 24px 16px; }
-            .message { max-width: 95%; }
+            .avatar { width: 38px; height: 38px; font-size: 18px; }
+            header { padding: 12px; }
+            .upgrade-btn { font-size: 0.75rem; padding: 6px 12px; }
         }
     </style>
 </head>
 <body>
+    <!-- Animated Background Particles -->
+    <div class="particles" id="particles"></div>
+    
     <div id="app">
-        <!-- Header -->
         <header>
             <div class="header-row">
                 <div class="brand">
-                    <div class="avatar"><i class="fas fa-brain"></i></div>
+                    <div class="avatar">
+                        <i class="fas fa-brain"></i>
+                        <i class="fas fa-crown premium-crown" id="premiumCrown"></i>
+                    </div>
                     <div class="title">
                         <h1>Zakhourani AI</h1>
-                        <p><i class="fas fa-code-branch"></i> Dual AI Engine</p>
+                        <p><i class="fas fa-code-branch"></i> by Zakhourani Developers</p>
                     </div>
                 </div>
                 <div class="header-actions">
-                    <div class="engine-badge">
-                        <span class="dot active" id="engineStatus"></span>
-                        <span id="engineLabel">Gemini</span>
-                    </div>
+                    <div id="userInfoDisplay" style="display:none;"></div>
+                    <button class="upgrade-btn" id="upgradeBtn" title="Upgrade to Premium">
+                        <i class="fas fa-crown"></i> Upgrade
+                    </button>
                     <div class="icon-btn" id="themeToggle" title="Theme"><i class="fas fa-moon"></i></div>
-                    <div class="icon-btn" id="clearChat" title="Clear Chat"><i class="fas fa-trash-alt"></i></div>
+                    <div class="icon-btn" id="statsBtn" title="Stats"><i class="fas fa-chart-bar"></i></div>
+                    <div class="icon-btn" id="shortcutsBtn" title="Shortcuts"><i class="fas fa-keyboard"></i></div>
+                    <div class="icon-btn" id="settingsBtn" title="Settings"><i class="fas fa-sliders-h"></i></div>
+                    <a href="https://whz-co.github.io/whz/index.html" class="icon-btn" title="Home"><i class="fas fa-home"></i></a>
+                    <div class="icon-btn" id="aboutBtn" title="About"><i class="fas fa-info-circle"></i></div>
                 </div>
             </div>
         </header>
 
         <!-- Usage Bar -->
-        <div class="usage-bar-container">
-            <i class="fas fa-comment"></i>
-            <span id="usageText">0/50 questions</span>
+        <div class="usage-bar-container" id="usageBarContainer">
+            <i class="fas fa-question-circle"></i>
+            <span id="usageText">0/50 questions used</span>
             <div class="usage-bar">
                 <div class="usage-fill" id="usageFill" style="width: 0%"></div>
             </div>
-            <span id="resetTimer"></span>
+            <span class="reset-timer" id="resetTimer"></span>
         </div>
 
-        <!-- Chat Container -->
+        <!-- Conversation Tabs -->
+        <div class="tab-bar" id="tabBar">
+            <div class="tab active" data-tab="default" id="defaultTab"><i class="fas fa-comment"></i> Main Chat</div>
+            <div class="tab new-tab" id="newTabBtn"><i class="fas fa-plus"></i> New Chat</div>
+        </div>
+
+        <!-- Search bar -->
+        <div class="search-bar" id="searchBar" style="display:none; padding: 10px 16px; background: var(--surface); border-bottom: var(--glass-border);">
+            <input type="text" id="searchInput" placeholder="Search messages..." style="flex:1; min-width:160px; background:var(--card-bg); border:var(--glass-border); border-radius:30px; padding:10px 14px; color:var(--text-primary); outline:none;">
+            <select id="searchScope" style="background:var(--card-bg); border:var(--glass-border); border-radius:30px; padding:8px 12px; color:var(--text-primary);">
+                <option value="current">Current chat</option>
+                <option value="all">All chats</option>
+            </select>
+            <button id="searchClose" style="background:var(--surface-hover); border:none; color:var(--text-primary); padding:8px 14px; border-radius:30px; cursor:pointer;"><i class="fas fa-times"></i> Close</button>
+        </div>
+
+        <!-- Chat messages container -->
         <div id="chatContainer">
             <div class="welcome" id="welcomeMessage">
                 <div class="welcome-icon">🤖</div>
                 <h2>ASK ZAKHOURANI</h2>
-                <p>Powered by <strong>Google Gemini</strong> with DeepSeek fallback</p>
-                <p style="margin-top: 16px; font-size: 0.85rem; color: var(--text-secondary);">
-                    <i class="fas fa-shield-alt"></i> 50 free questions daily
+                <p>Your intelligent assistant – concise, bullet‑point answers.</p>
+                <p style="margin-top:20px;"><i class="fas fa-gem"></i> 50 free questions daily</p>
+                <p style="margin-top:10px; font-size:0.85rem;">
+                    <i class="fas fa-crown" style="color: var(--premium-gold);"></i> 
+                    <a href="#" id="premiumLink" style="color: var(--premium-gold); text-decoration: none; font-weight: 600;">Upgrade to Premium</a> for image & voice features
                 </p>
             </div>
         </div>
 
-        <!-- Input Area -->
+        <!-- Input area -->
         <div class="input-area">
             <div class="input-wrapper">
-                <input type="text" id="messageInput" placeholder="Ask anything..." autocomplete="off">
-                <button id="sendButton"><i class="fas fa-paper-plane"></i></button>
+                <input type="text" id="messageInput" placeholder="Login to ask Zakhourani..." autocomplete="off" disabled>
+                <button id="sendButton" disabled><i class="fas fa-paper-plane"></i></button>
             </div>
             <div class="input-extras">
-                <div class="suggestions">
-                    <div class="chip" data-prompt="What is artificial intelligence?"><i class="fas fa-robot"></i> AI</div>
-                    <div class="chip" data-prompt="Explain machine learning simply"><i class="fas fa-brain"></i> ML</div>
-                    <div class="chip" data-prompt="Write a poem about technology"><i class="fas fa-feather"></i> Poem</div>
-                    <div class="chip" data-prompt="What are the latest tech trends?"><i class="fas fa-chart-line"></i> Trends</div>
+                <div class="suggestions" id="suggestions">
+                    <div class="chip disabled" data-prompt="Who is Dr. Waleed Hussein Zakhourani?"><i class="fas fa-user-graduate"></i> Dr. Waleed</div>
+                    <div class="chip disabled" data-prompt="Tell me about Zakhourani Developers"><i class="fas fa-users"></i> Our team</div>
+                    <div class="chip disabled" data-prompt="What is machine learning?"><i class="fas fa-brain"></i> ML</div>
+                    <div class="chip disabled" data-prompt="Explain quantum computing"><i class="fas fa-atom"></i> Quantum</div>
+                    <div class="chip disabled" data-prompt="Write a poem"><i class="fas fa-feather"></i> Poem</div>
+                </div>
+                <div class="utility-buttons">
+                    <div class="util-btn" id="imageGenBtn" title="AI Image Generation (Premium)">
+                        <i class="fas fa-image"></i>
+                        <i class="fas fa-lock premium-lock"></i>
+                    </div>
+                    <div class="util-btn" id="voiceInputBtn" title="Voice input"><i class="fas fa-microphone"></i></div>
+                    <div class="util-btn" id="searchToggle" title="Search"><i class="fas fa-search"></i></div>
+                    <div class="util-btn" id="clearChat" title="Clear chat"><i class="fas fa-trash-alt"></i></div>
+                    <div class="util-btn" id="shareChat" title="Share"><i class="fas fa-share-alt"></i></div>
+                    <div class="util-btn" id="soundToggle" title="Toggle sound"><i class="fas fa-volume-up"></i></div>
                 </div>
             </div>
         </div>
 
         <footer>
-            <span><i class="fas fa-shield-alt"></i> 50 free questions/day</span>
+            <span><i class="fas fa-shield-alt"></i> <span id="footerLimit">50 free questions/day</span></span>
             <span>© 2026 Zakhourani Developers</span>
         </footer>
     </div>
 
-    <!-- Limit Modal -->
-    <div class="modal" id="limitModal">
+    <!-- Auth Modal -->
+    <div class="modal" id="authModal">
         <div class="modal-content">
-            <i class="fas fa-hourglass-half" style="font-size:4rem; color:var(--warning);"></i>
-            <h2>Daily Limit Reached</h2>
-            <p>You've used all 50 free questions today.</p>
-            <p style="color: var(--text-secondary); margin-top: 8px;">Resets at midnight</p>
-            <button class="modal-close" id="closeLimitModal">OK</button>
+            <h2><i class="fas fa-user-lock"></i> <span id="authTitle">Welcome Back</span></h2>
+            <p id="authMessage">Please login or register to use Zakhourani AI</p>
+            
+            <div class="auth-container">
+                <div class="auth-tabs">
+                    <div class="auth-tab active" data-tab="login">Login</div>
+                    <div class="auth-tab" data-tab="register">Register</div>
+                </div>
+                
+                <form class="auth-form" id="authForm" autocomplete="on">
+                    <input type="email" class="auth-input" id="authEmail" placeholder="Email address" required autocomplete="email">
+                    <input type="password" class="auth-input" id="authPassword" placeholder="Password" required autocomplete="current-password">
+                    <div id="registerFields" style="display:none;">
+                        <input type="text" class="auth-input" id="authName" placeholder="Full name" autocomplete="name">
+                        <input type="password" class="auth-input" id="authConfirmPassword" placeholder="Confirm password" autocomplete="new-password">
+                    </div>
+                    <div class="auth-error" id="authError"></div>
+                    <div class="auth-success" id="authSuccess"></div>
+                    <button type="submit" class="auth-submit" id="authSubmit">Login</button>
+                </form>
+            </div>
+            <button class="modal-close" id="closeAuthModal" style="display:none;">Continue</button>
         </div>
     </div>
 
-    <!-- Toast -->
+    <!-- Pricing Modal -->
+    <div class="modal" id="pricingModal">
+        <div class="modal-content" style="max-width: 800px;">
+            <h2><i class="fas fa-crown" style="color: var(--premium-gold);"></i> Choose Your Plan</h2>
+            <p style="color: var(--text-secondary); margin-bottom: 20px;">
+                Unlock the full power of Zakhourani AI with premium features
+            </p>
+            
+            <div class="pricing-grid">
+                <!-- Free Plan -->
+                <div class="pricing-card">
+                    <div class="plan-icon">🚀</div>
+                    <div class="plan-name">Free</div>
+                    <div class="plan-price">$0<span>/month</span></div>
+                    <ul class="plan-features">
+                        <li><i class="fas fa-check"></i> 50 questions/day</li>
+                        <li><i class="fas fa-check"></i> Text responses</li>
+                        <li><i class="fas fa-check"></i> Basic support</li>
+                        <li><i class="fas fa-times"></i> Image generation</li>
+                        <li><i class="fas fa-times"></i> Voice features</li>
+                        <li><i class="fas fa-times"></i> Video creation</li>
+                    </ul>
+                    <button class="plan-btn current">Current Plan</button>
+                </div>
+                
+                <!-- Pro Plan -->
+                <div class="pricing-card premium">
+                    <div class="popular-badge">POPULAR</div>
+                    <div class="plan-icon">👑</div>
+                    <div class="plan-name">Pro</div>
+                    <div class="plan-price">$9.99<span>/month</span></div>
+                    <ul class="plan-features">
+                        <li><i class="fas fa-check"></i> Unlimited questions</li>
+                        <li><i class="fas fa-check"></i> Priority responses</li>
+                        <li><i class="fas fa-check"></i> Image generation (50/day)</li>
+                        <li><i class="fas fa-check"></i> Advanced voice features</li>
+                        <li><i class="fas fa-times"></i> Video creation</li>
+                        <li><i class="fas fa-check"></i> Custom AI personalities</li>
+                    </ul>
+                    <button class="plan-btn premium-btn" onclick="showComingSoon()">
+                        <i class="fas fa-crown"></i> Upgrade to Pro
+                    </button>
+                    <div class="coming-soon-badge">
+                        <i class="fas fa-clock"></i> Coming Soon
+                    </div>
+                </div>
+                
+                <!-- Ultra Plan -->
+                <div class="pricing-card ultra">
+                    <div class="plan-icon">💎</div>
+                    <div class="plan-name">Ultra</div>
+                    <div class="plan-price">$19.99<span>/month</span></div>
+                    <ul class="plan-features">
+                        <li><i class="fas fa-check"></i> Everything in Pro</li>
+                        <li><i class="fas fa-check"></i> Video creation (10/day)</li>
+                        <li><i class="fas fa-check"></i> Voice cloning</li>
+                        <li><i class="fas fa-check"></i> Priority support 24/7</li>
+                        <li><i class="fas fa-check"></i> API access</li>
+                        <li><i class="fas fa-check"></i> Custom model training</li>
+                    </ul>
+                    <button class="plan-btn ultra-btn" onclick="showComingSoon()">
+                        <i class="fas fa-gem"></i> Upgrade to Ultra
+                    </button>
+                    <div class="coming-soon-badge">
+                        <i class="fas fa-clock"></i> Coming Soon
+                    </div>
+                </div>
+            </div>
+            
+            <p style="text-align: center; color: var(--text-secondary); margin-top: 20px; font-size: 0.85rem;">
+                <i class="fas fa-info-circle"></i> Premium features are currently under development and will be available soon.
+                <br>Stay tuned for updates!
+            </p>
+            
+            <button class="modal-close" id="closePricingModal">Close</button>
+        </div>
+    </div>
+
+    <!-- About Modal -->
+    <div class="modal" id="aboutModal">
+        <div class="modal-content">
+            <h2><i class="fas fa-info-circle"></i> About Us</h2>
+            <p>We are a team of linguists, educators, and engineers building tools that bridge cultures and empower learners.</p>
+            <p><strong>Dr. Waleed Hussein Zakhourani</strong> – founder – is a Harvard‑educated linguist, creator of the JIHAN Universal Dictionary.</p>
+            <button class="modal-close" id="closeAboutModal">Close</button>
+        </div>
+    </div>
+
+    <!-- Limit Reached Modal -->
+    <div class="modal" id="limitModal">
+        <div class="modal-content" style="text-align:center;">
+            <i class="fas fa-hourglass-half" style="font-size:5rem; color:var(--warning);"></i>
+            <h2>Daily Limit Reached</h2>
+            <p>You've used all 50 free questions today.</p>
+            <p style="color: var(--premium-gold); margin-top: 16px;">
+                <i class="fas fa-crown"></i> Upgrade to Premium for unlimited questions!
+            </p>
+            <div id="limitTimer" style="font-size: 1.2rem; font-weight: 600; margin: 16px 0; color: var(--accent);"></div>
+            <button class="modal-close" id="upgradeFromLimit" style="background: var(--premium-gradient);">View Premium Plans</button>
+            <button class="modal-close" id="closeLimitModal" style="margin-top: 8px;">OK</button>
+        </div>
+    </div>
+
+    <!-- Toast notification -->
     <div class="toast" id="toast"></div>
 
+    <!-- Firebase SDK -->
+    <script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-app-compat.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-auth-compat.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-firestore-compat.js"></script>
+
     <script>
-        // ====================================================================
-        //  CONFIGURATION
-        // ====================================================================
-        const CONFIG = {
-            deepseek: {
-                key: "sk-26d206f0f103487294931892fe7ccbb0",
-                endpoint: "https://api.deepseek.com/v1/chat/completions",
-                model: "deepseek-chat"
-            },
-            gemini: {
-                key: "AQ.Ab8RN6IaTEc7vntVh8-FjW7_j0cQgo6cM47Dd9jW6bMe6AOFFQ",
-                endpoint: "https://generativelanguage.googleapis.com/v1beta/models/gemini-2.0-flash:generateContent",
-                model: "gemini-2.0-flash"
-            },
-            dailyLimit: 50,
-            systemPrompt: `You are Zakhourani AI, a helpful assistant. Provide clear, concise, and accurate responses. If asked about yourself, say you are Zakhourani AI, built by Zakhourani Developers.`
-        };
+        (function() {
+            // ========== FIREBASE CONFIGURATION ==========
+            const firebaseConfig = {
+                apiKey: "AIzaSyAE8wf24HXrfmpMluaFOv1OHPrf_YFfqTQ",
+                authDomain: "www.whzco.com",
+                projectId: "whaai-c388e",
+                storageBucket: "whaai-c388e.firebasestorage.app",
+                messagingSenderId: "640598205524",
+                appId: "1:640598205524:web:c975f5e8b371b1043e39c1",
+                measurementId: "G-1MHE0JBZJR"
+            };
 
-        // ====================================================================
-        //  STATE
-        // ====================================================================
-        let currentEngine = 'gemini'; // Start with Gemini since DeepSeek has payment issues
-        let usage = { date: new Date().toDateString(), count: 0 };
-        let messages = [];
-        let isProcessing = false;
-        let deepseekFailed = true; // Track that DeepSeek is failing
-
-        // ====================================================================
-        //  DOM REFS
-        // ====================================================================
-        const chatContainer = document.getElementById('chatContainer');
-        const welcomeMsg = document.getElementById('welcomeMessage');
-        const messageInput = document.getElementById('messageInput');
-        const sendBtn = document.getElementById('sendButton');
-        const usageFill = document.getElementById('usageFill');
-        const usageText = document.getElementById('usageText');
-        const resetTimer = document.getElementById('resetTimer');
-        const toast = document.getElementById('toast');
-        const engineLabel = document.getElementById('engineLabel');
-        const engineStatus = document.getElementById('engineStatus');
-
-        // ====================================================================
-        //  UTILITY FUNCTIONS
-        // ====================================================================
-        function showToast(msg, duration = 3000) {
-            toast.textContent = msg;
-            toast.style.display = 'block';
-            clearTimeout(toast._timeout);
-            toast._timeout = setTimeout(() => { toast.style.display = 'none'; }, duration);
-        }
-
-        function getTime() {
-            return new Date().toLocaleTimeString();
-        }
-
-        function escapeHtml(text) {
-            const map = { '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#039;' };
-            return String(text).replace(/[&<>"']/g, m => map[m]);
-        }
-
-        // ====================================================================
-        //  USAGE TRACKING
-        // ====================================================================
-        function checkAndResetUsage() {
-            const today = new Date().toDateString();
-            if (usage.date !== today) {
-                usage = { date: today, count: 0 };
-                saveUsage();
+            // Initialize Firebase
+            if (!firebase.apps.length) {
+                firebase.initializeApp(firebaseConfig);
             }
-            updateUsageDisplay();
-        }
+            
+            const auth = firebase.auth();
+            const db = firebase.firestore();
 
-        function saveUsage() {
-            localStorage.setItem('zakhourani_usage', JSON.stringify(usage));
-        }
+            // ========== CONFIGURATION ==========
+            const DEEPSEEK_KEY = "sk-26d206f0f103487294931892fe7ccbb0";
+            const API_ENDPOINT = 'https://api.deepseek.com/v1/chat/completions';
+            const DAILY_LIMIT = 50;
+            const RATE_LIMIT_WINDOW = 60000;
+            const MAX_REQUESTS_PER_WINDOW = 30;
+            
+            let requestTimestamps = [];
 
-        function loadUsage() {
-            try {
-                const saved = localStorage.getItem('zakhourani_usage');
-                if (saved) {
-                    usage = JSON.parse(saved);
-                    checkAndResetUsage();
+            // ========== STORAGE KEYS ==========
+            const STORAGE_KEYS = {
+                CONVERSATIONS: 'zakhouraniConversations',
+                USAGE: 'zakhouraniUsage',
+                SETTINGS: 'zakhouraniSettings',
+                ACHIEVEMENTS: 'zakhouraniAchievements'
+            };
+
+            // ========== GLOBAL STATE ==========
+            let currentUser = null;
+            let userTier = 'free';
+            let settings = {
+                temperature: 0.7,
+                maxTokens: 500,
+                personality: 'default',
+                systemPrompt: `You are Zakhourani AI, created by Zakhourani Developers. Provide concise, bullet-point answers. If asked about Dr. Waleed Hussein Zakhourani: He is a Harvard-educated linguist, creator of the JIHAN Universal Dictionary, bridging English, Arabic, and Kurdish cultures.`,
+                soundEnabled: false,
+                ttsEnabled: false,
+                autoScroll: true,
+                accentColor: '#3b82f6'
+            };
+            
+            let usage = { date: new Date().toDateString(), count: 0, lastReset: Date.now() };
+            let conversations = { default: { id: 'default', name: 'Main Chat', messages: [], pinned: false, archived: false } };
+            let currentConvId = 'default';
+            let currentMessages = [];
+            let achievements = { firstMessage: false, fiveMessages: false };
+            let recognition = null;
+            let resetTimerInterval = null;
+
+            // ========== DOM ELEMENTS ==========
+            const chatContainer = document.getElementById('chatContainer');
+            const welcomeMsg = document.getElementById('welcomeMessage');
+            const messageInput = document.getElementById('messageInput');
+            const sendBtn = document.getElementById('sendButton');
+            const tabBar = document.getElementById('tabBar');
+            const upgradeBtn = document.getElementById('upgradeBtn');
+            const premiumCrown = document.getElementById('premiumCrown');
+            const usageFill = document.getElementById('usageFill');
+            const usageText = document.getElementById('usageText');
+            const resetTimer = document.getElementById('resetTimer');
+            const userInfoDisplay = document.getElementById('userInfoDisplay');
+            const toast = document.getElementById('toast');
+            const imageGenBtn = document.getElementById('imageGenBtn');
+
+            // ========== PARTICLES BACKGROUND ==========
+            function createParticles() {
+                const container = document.getElementById('particles');
+                for (let i = 0; i < 20; i++) {
+                    const particle = document.createElement('div');
+                    particle.className = 'particle';
+                    const size = Math.random() * 4 + 2;
+                    particle.style.width = size + 'px';
+                    particle.style.height = size + 'px';
+                    particle.style.left = Math.random() * 100 + '%';
+                    particle.style.top = Math.random() * 100 + '%';
+                    particle.style.animationDelay = Math.random() * 15 + 's';
+                    particle.style.animationDuration = (Math.random() * 10 + 10) + 's';
+                    container.appendChild(particle);
                 }
-            } catch (e) {
-                usage = { date: new Date().toDateString(), count: 0 };
             }
-        }
 
-        function updateUsageDisplay() {
-            const percentage = Math.min((usage.count / CONFIG.dailyLimit) * 100, 100);
-            usageFill.style.width = percentage + '%';
-            usageText.textContent = `${usage.count}/${CONFIG.dailyLimit} questions`;
-            
-            usageFill.className = 'usage-fill';
-            if (percentage >= 90) usageFill.classList.add('danger');
-            else if (percentage >= 70) usageFill.classList.add('warning');
-        }
-
-        function incrementUsage() {
-            if (usage.count >= CONFIG.dailyLimit) {
-                showLimitModal();
-                return false;
-            }
-            usage.count++;
-            saveUsage();
-            updateUsageDisplay();
-            return true;
-        }
-
-        function showLimitModal() {
-            document.getElementById('limitModal').classList.add('active');
-        }
-
-        document.getElementById('closeLimitModal').addEventListener('click', () => {
-            document.getElementById('limitModal').classList.remove('active');
-        });
-
-        // Reset timer
-        function startResetTimer() {
-            setInterval(() => {
+            // ========== 24-HOUR RESET SYSTEM ==========
+            function checkAndResetUsage() {
                 const now = new Date();
-                const tomorrow = new Date(now);
-                tomorrow.setDate(tomorrow.getDate() + 1);
-                tomorrow.setHours(0, 0, 0, 0);
-                const diff = tomorrow - now;
-                const hours = Math.floor(diff / (1000 * 60 * 60));
-                const mins = Math.floor((diff % (1000 * 60 * 60)) / (1000 * 60));
-                resetTimer.textContent = `Resets in ${hours}h ${mins}m`;
-            }, 10000);
-        }
+                const currentDate = now.toDateString();
+                
+                if (usage.date !== currentDate) {
+                    usage = { date: currentDate, count: 0, lastReset: now.getTime() };
+                    saveUsage();
+                    if (currentUser) {
+                        enableInput(false);
+                    }
+                }
+                
+                updateUsageDisplay();
+                startResetTimer();
+            }
 
-        // ====================================================================
-        //  AI ENGINE: Gemini Primary with DeepSeek Fallback
-        // ====================================================================
-        
-        // GEMINI - Primary AI (working)
-        async function callGemini(prompt, history) {
-            const contents = [];
-            
-            // Add system context
-            contents.push({
-                role: 'user',
-                parts: [{ text: CONFIG.systemPrompt + '\n\nPlease respond to the following:' }]
-            });
-            contents.push({
-                role: 'model',
-                parts: [{ text: 'I understand. I will follow these instructions and respond helpfully.' }]
-            });
+            function startResetTimer() {
+                if (resetTimerInterval) clearInterval(resetTimerInterval);
+                
+                resetTimerInterval = setInterval(() => {
+                    const now = new Date();
+                    const tomorrow = new Date(now);
+                    tomorrow.setDate(tomorrow.getDate() + 1);
+                    tomorrow.setHours(0, 0, 0, 0);
+                    
+                    const diff = tomorrow - now;
+                    const hours = Math.floor(diff / (1000 * 60 * 60));
+                    const minutes = Math.floor((diff % (1000 * 60 * 60)) / (1000 * 60));
+                    const seconds = Math.floor((diff % (1000 * 60)) / 1000);
+                    
+                    resetTimer.textContent = `Resets in ${hours}h ${minutes}m ${seconds}s`;
+                    
+                    if (diff <= 0) {
+                        checkAndResetUsage();
+                    }
+                }, 1000);
+            }
 
-            // Add conversation history
-            for (const msg of history.slice(-8)) {
-                contents.push({
-                    role: msg.role === 'user' ? 'user' : 'model',
-                    parts: [{ text: msg.content }]
+            function updateUsageDisplay() {
+                const limit = userTier === 'free' ? DAILY_LIMIT : Infinity;
+                const percentage = limit === Infinity ? 0 : Math.min((usage.count / limit) * 100, 100);
+                
+                usageFill.style.width = percentage + '%';
+                usageText.textContent = limit === Infinity ? 
+                    `${usage.count} questions used (Unlimited)` : 
+                    `${usage.count}/${limit} questions used`;
+                
+                usageFill.className = 'usage-fill';
+                if (percentage >= 90) usageFill.classList.add('danger');
+                else if (percentage >= 70) usageFill.classList.add('warning');
+                
+                document.getElementById('footerLimit').textContent = 
+                    limit === Infinity ? 'Unlimited questions' : `${limit} free questions/day`;
+            }
+
+            function incrementUsage() {
+                const limit = userTier === 'free' ? DAILY_LIMIT : Infinity;
+                
+                if (limit === Infinity) {
+                    usage.count++;
+                    saveUsage();
+                    updateUsageDisplay();
+                    return true;
+                }
+                
+                if (usage.count >= limit) {
+                    showLimitModal();
+                    return false;
+                }
+                
+                usage.count++;
+                saveUsage();
+                updateUsageDisplay();
+                
+                if (usage.count >= limit) {
+                    disableInput(true);
+                    showLimitModal();
+                }
+                
+                return true;
+            }
+
+            function showLimitModal() {
+                document.getElementById('limitModal').classList.add('active');
+                updateLimitTimer();
+            }
+
+            function updateLimitTimer() {
+                const timerEl = document.getElementById('limitTimer');
+                if (!timerEl) return;
+                
+                const update = () => {
+                    const now = new Date();
+                    const tomorrow = new Date(now);
+                    tomorrow.setDate(tomorrow.getDate() + 1);
+                    tomorrow.setHours(0, 0, 0, 0);
+                    
+                    const diff = tomorrow - now;
+                    const hours = Math.floor(diff / (1000 * 60 * 60));
+                    const minutes = Math.floor((diff % (1000 * 60 * 60)) / (1000 * 60));
+                    
+                    timerEl.textContent = `⏰ Resets in ${hours}h ${minutes}m`;
+                };
+                
+                update();
+                setInterval(update, 60000);
+            }
+
+            // ========== AUTHENTICATION ==========
+            function showAuthModal() {
+                document.getElementById('authModal').classList.add('active');
+                document.getElementById('closeAuthModal').style.display = 'none';
+                document.getElementById('authError').textContent = '';
+                document.getElementById('authSuccess').textContent = '';
+                document.getElementById('authForm').reset();
+                switchAuthTab('login');
+            }
+
+            function hideAuthModal() {
+                document.getElementById('authModal').classList.remove('active');
+            }
+
+            function switchAuthTab(mode) {
+                const tabs = document.querySelectorAll('.auth-tab');
+                tabs.forEach(tab => {
+                    tab.classList.toggle('active', tab.dataset.tab === mode);
+                });
+                
+                document.getElementById('authTitle').textContent = mode === 'login' ? 'Welcome Back' : 'Create Account';
+                document.getElementById('authSubmit').textContent = mode === 'login' ? 'Login' : 'Register';
+                document.getElementById('registerFields').style.display = mode === 'register' ? 'flex' : 'none';
+            }
+
+            async function handleAuth(e) {
+                e.preventDefault();
+                const email = document.getElementById('authEmail').value.trim();
+                const password = document.getElementById('authPassword').value;
+                const errorDiv = document.getElementById('authError');
+                const successDiv = document.getElementById('authSuccess');
+                const authMode = document.querySelector('.auth-tab.active').dataset.tab;
+                
+                errorDiv.textContent = '';
+                successDiv.textContent = '';
+                
+                if (!email || !password) {
+                    errorDiv.textContent = 'Please fill in all fields';
+                    return;
+                }
+                
+                if (authMode === 'register') {
+                    const name = document.getElementById('authName').value.trim();
+                    const confirmPassword = document.getElementById('authConfirmPassword').value;
+                    
+                    if (!name) {
+                        errorDiv.textContent = 'Please enter your name';
+                        return;
+                    }
+                    if (password.length < 6) {
+                        errorDiv.textContent = 'Password must be at least 6 characters';
+                        return;
+                    }
+                    if (password !== confirmPassword) {
+                        errorDiv.textContent = 'Passwords do not match';
+                        return;
+                    }
+                    
+                    try {
+                        const userCredential = await auth.createUserWithEmailAndPassword(email, password);
+                        await userCredential.user.updateProfile({ displayName: name });
+                        await saveUserToFirestore(userCredential.user, 'email');
+                        successDiv.textContent = 'Account created! Logging in...';
+                        setTimeout(() => hideAuthModal(), 1500);
+                    } catch (error) {
+                        errorDiv.textContent = error.code === 'auth/email-already-in-use' ? 
+                            'Email already registered' : error.message;
+                    }
+                } else {
+                    try {
+                        await auth.signInWithEmailAndPassword(email, password);
+                        hideAuthModal();
+                    } catch (error) {
+                        errorDiv.textContent = 'Invalid email or password';
+                    }
+                }
+            }
+
+            async function saveUserToFirestore(user, provider = 'email') {
+                try {
+                    await db.collection('users').doc(user.uid).set({
+                        uid: user.uid,
+                        email: user.email,
+                        displayName: user.displayName || user.email.split('@')[0],
+                        photoURL: user.photoURL || '',
+                        provider: provider,
+                        tier: 'free',
+                        lastLogin: firebase.firestore.FieldValue.serverTimestamp(),
+                        createdAt: firebase.firestore.FieldValue.serverTimestamp()
+                    }, { merge: true });
+                    
+                    await loadUserTier(user.uid);
+                } catch (error) {
+                    console.error('Firestore error:', error);
+                }
+            }
+
+            async function loadUserTier(uid) {
+                try {
+                    const doc = await db.collection('users').doc(uid).get();
+                    if (doc.exists) {
+                        userTier = doc.data().tier || 'free';
+                        updateTierUI();
+                    }
+                } catch (error) {
+                    userTier = 'free';
+                }
+            }
+
+            function updateTierUI() {
+                if (userTier === 'pro' || userTier === 'ultra') {
+                    premiumCrown.style.display = 'block';
+                    upgradeBtn.style.display = 'none';
+                    document.querySelectorAll('.premium-lock').forEach(lock => lock.style.display = 'none');
+                    imageGenBtn.title = 'AI Image Generation';
+                } else {
+                    premiumCrown.style.display = 'none';
+                    upgradeBtn.style.display = 'flex';
+                    document.querySelectorAll('.premium-lock').forEach(lock => lock.style.display = 'block');
+                    imageGenBtn.title = 'AI Image Generation (Premium)';
+                }
+                updateUsageDisplay();
+            }
+
+            function updateUserDisplay() {
+                if (currentUser) {
+                    userInfoDisplay.style.display = 'flex';
+                    userInfoDisplay.className = 'user-info';
+                    const tierClass = userTier === 'ultra' ? 'tier-ultra' : userTier === 'pro' ? 'tier-pro' : 'tier-free';
+                    const tierLabel = userTier.toUpperCase();
+                    
+                    userInfoDisplay.innerHTML = `
+                        <i class="fas fa-user-circle"></i>
+                        <span>${escapeHtml(currentUser.displayName?.split(' ')[0] || 'User')}</span>
+                        <span class="tier-badge ${tierClass}">${tierLabel}</span>
+                        <button class="logout-btn" id="logoutBtn" title="Logout" style="background:transparent; border:none; color:var(--danger); cursor:pointer; padding:4px; font-size:0.9rem;">
+                            <i class="fas fa-sign-out-alt"></i>
+                        </button>
+                    `;
+                    
+                    document.getElementById('logoutBtn')?.addEventListener('click', logout);
+                } else {
+                    userInfoDisplay.style.display = 'none';
+                    userInfoDisplay.innerHTML = '';
+                }
+            }
+
+            async function logout() {
+                if (confirm('Are you sure you want to logout?')) {
+                    await auth.signOut();
+                    currentUser = null;
+                    userTier = 'free';
+                    updateUserDisplay();
+                    updateTierUI();
+                    disableApp();
+                    showAuthModal();
+                    showToast('Logged out successfully');
+                }
+            }
+
+            function checkAuth() {
+                if (!currentUser) {
+                    showAuthModal();
+                    return false;
+                }
+                return true;
+            }
+
+            // ========== PREMIUM FEATURES ==========
+            function showComingSoon() {
+                showToast('🚀 Premium features are coming soon! Stay tuned for updates.', 5000);
+            }
+
+            function handlePremiumFeature(feature) {
+                if (userTier === 'free') {
+                    showToast('🔒 This is a premium feature. Upgrade to unlock!', 4000);
+                    document.getElementById('pricingModal').classList.add('active');
+                } else {
+                    showComingSoon();
+                }
+            }
+
+            // ========== CORE FUNCTIONS ==========
+            function escapeHtml(text) {
+                const map = { '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#039;' };
+                return text.replace(/[&<>"']/g, m => map[m]);
+            }
+
+            function showToast(msg, duration = 3000) {
+                toast.textContent = msg;
+                toast.style.display = 'block';
+                clearTimeout(toast.timeout);
+                toast.timeout = setTimeout(() => { toast.style.display = 'none'; }, duration);
+            }
+
+            function playNotificationSound() {
+                if (!settings.soundEnabled) return;
+                try {
+                    const audioCtx = new (window.AudioContext || window.webkitAudioContext)();
+                    const oscillator = audioCtx.createOscillator();
+                    const gainNode = audioCtx.createGain();
+                    oscillator.connect(gainNode);
+                    gainNode.connect(audioCtx.destination);
+                    oscillator.frequency.value = 800;
+                    gainNode.gain.value = 0.1;
+                    oscillator.start();
+                    oscillator.stop(audioCtx.currentTime + 0.1);
+                } catch (e) {}
+            }
+
+            function disableInput(disabled) {
+                messageInput.disabled = disabled;
+                sendBtn.disabled = disabled;
+                document.querySelectorAll('.chip').forEach(chip => {
+                    chip.classList.toggle('disabled', disabled);
                 });
             }
 
-            // Add current prompt
-            contents.push({
-                role: 'user',
-                parts: [{ text: prompt }]
-            });
-
-            const response = await fetch(`${CONFIG.gemini.endpoint}?key=${CONFIG.gemini.key}`, {
-                method: 'POST',
-                headers: {
-                    'Content-Type': 'application/json'
-                },
-                body: JSON.stringify({
-                    contents: contents,
-                    generationConfig: {
-                        temperature: 0.7,
-                        maxOutputTokens: 500
-                    }
-                })
-            });
-
-            if (!response.ok) {
-                const errorText = await response.text();
-                throw new Error(`Gemini error (${response.status}): ${errorText}`);
-            }
-            
-            const data = await response.json();
-            
-            if (data.candidates && data.candidates[0] && data.candidates[0].content) {
-                return data.candidates[0].content.parts[0].text;
-            }
-            throw new Error('Gemini: No response content');
-        }
-
-        // DEEPSEEK - Fallback (currently failing with 402)
-        async function callDeepSeek(prompt, history) {
-            const messages = [
-                { role: 'system', content: CONFIG.systemPrompt },
-                ...history.slice(-8),
-                { role: 'user', content: prompt }
-            ];
-
-            const response = await fetch(CONFIG.deepseek.endpoint, {
-                method: 'POST',
-                headers: {
-                    'Content-Type': 'application/json',
-                    'Authorization': `Bearer ${CONFIG.deepseek.key}`
-                },
-                body: JSON.stringify({
-                    model: CONFIG.deepseek.model,
-                    messages: messages,
-                    temperature: 0.7,
-                    max_tokens: 500
-                })
-            });
-
-            if (!response.ok) {
-                const errorText = await response.text();
-                // Check if it's a payment issue
-                if (response.status === 402) {
-                    throw new Error('DeepSeek: Payment required - please add credits');
-                }
-                throw new Error(`DeepSeek error (${response.status}): ${errorText}`);
-            }
-            const data = await response.json();
-            return data.choices[0].message.content;
-        }
-
-        // Main AI caller with smart fallback
-        async function callAI(prompt, history) {
-            let lastError = null;
-            
-            // Try Gemini first (primary)
-            try {
-                currentEngine = 'gemini';
-                engineLabel.textContent = 'Gemini';
-                engineStatus.className = 'dot active';
-                const result = await callGemini(prompt, history);
-                return result;
-            } catch (error) {
-                console.warn('Gemini failed:', error);
-                lastError = error;
-                showToast('⚠️ Gemini error, trying DeepSeek...', 2000);
-            }
-
-            // Try DeepSeek as fallback
-            try {
-                currentEngine = 'deepseek';
-                engineLabel.textContent = 'DeepSeek';
-                engineStatus.className = 'dot active';
-                const result = await callDeepSeek(prompt, history);
-                showToast('✅ DeepSeek fallback successful', 1500);
-                return result;
-            } catch (error) {
-                console.error('DeepSeek failed:', error);
-                // If DeepSeek fails with 402, mark it and keep using Gemini
-                if (error.message.includes('Payment required') || error.message.includes('402')) {
-                    deepseekFailed = true;
-                    showToast('⚠️ DeepSeek payment required - using Gemini', 3000);
-                }
-                throw new Error('Both AI engines failed. Please try again later.');
-            }
-        }
-
-        // ====================================================================
-        //  CHAT FUNCTIONS
-        // ====================================================================
-        function appendMessage(content, role, timestamp = null) {
-            const msgDiv = document.createElement('div');
-            msgDiv.className = `message ${role === 'user' ? 'user-message' : 'ai-message'}`;
-            
-            let innerHtml = '';
-            if (role === 'assistant') {
-                const engineName = currentEngine.charAt(0).toUpperCase() + currentEngine.slice(1);
-                innerHtml += `<span class="ai-engine-badge"><i class="fas fa-microchip"></i> ${engineName}</span>`;
-            }
-            innerHtml += `<div>${escapeHtml(content).replace(/\n/g, '<br>')}</div>`;
-            innerHtml += `<div class="message-time">${timestamp || getTime()}</div>`;
-            
-            msgDiv.innerHTML = innerHtml;
-            chatContainer.appendChild(msgDiv);
-            
-            if (welcomeMsg.parentNode === chatContainer) welcomeMsg.remove();
-            chatContainer.scrollTop = chatContainer.scrollHeight;
-        }
-
-        function addMessage(content, role) {
-            const msg = { role, content, timestamp: getTime() };
-            messages.push(msg);
-            appendMessage(content, role, msg.timestamp);
-            // Save history to localStorage
-            try {
-                localStorage.setItem('zakhourani_messages', JSON.stringify(messages));
-            } catch (e) {}
-        }
-
-        function loadHistory() {
-            try {
-                const saved = localStorage.getItem('zakhourani_messages');
-                if (saved) {
-                    messages = JSON.parse(saved);
-                    if (messages.length > 0) {
-                        if (welcomeMsg.parentNode === chatContainer) welcomeMsg.remove();
-                        messages.forEach(msg => {
-                            appendMessage(msg.content, msg.role, msg.timestamp);
-                        });
-                    }
-                }
-            } catch (e) {
-                messages = [];
-            }
-        }
-
-        // ====================================================================
-        //  SEND MESSAGE
-        // ====================================================================
-        async function sendMessage() {
-            const text = messageInput.value.trim();
-            if (!text || isProcessing) return;
-
-            if (!incrementUsage()) return;
-
-            isProcessing = true;
-            sendBtn.disabled = true;
-            messageInput.disabled = true;
-
-            // Add user message
-            addMessage(text, 'user');
-            messageInput.value = '';
-
-            // Show loading
-            const loadingDiv = document.createElement('div');
-            loadingDiv.className = 'message loading';
-            loadingDiv.innerHTML = '<div class="typing"><span></span><span></span><span></span></div><span>Thinking...</span>';
-            chatContainer.appendChild(loadingDiv);
-            chatContainer.scrollTop = chatContainer.scrollHeight;
-
-            // Get history (exclude current user message)
-            const history = messages.slice(0, -1).map(m => ({ role: m.role, content: m.content }));
-
-            try {
-                const reply = await callAI(text, history);
-                loadingDiv.remove();
-                addMessage(reply, 'assistant');
-            } catch (error) {
-                loadingDiv.remove();
-                const errorMsg = error.message || 'Unknown error occurred';
-                addMessage(`⚠️ Error: ${errorMsg}`, 'assistant');
-                showToast('Error: ' + errorMsg, 4000);
-            } finally {
-                isProcessing = false;
-                sendBtn.disabled = false;
+            function enableApp() {
                 messageInput.disabled = false;
-                messageInput.focus();
-                updateEngineStatus();
+                sendBtn.disabled = false;
+                messageInput.placeholder = 'Ask Zakhourani... (Ctrl+Enter to send)';
+                document.querySelectorAll('.chip').forEach(chip => chip.classList.remove('disabled'));
+                if (usage.count >= DAILY_LIMIT && userTier === 'free') {
+                    disableInput(true);
+                }
             }
-        }
 
-        function updateEngineStatus() {
-            engineStatus.className = 'dot active';
-            // Show engine status
-            if (currentEngine === 'gemini') {
-                engineLabel.textContent = 'Gemini ✓';
-            } else {
-                engineLabel.textContent = 'DeepSeek';
+            function disableApp() {
+                messageInput.disabled = true;
+                sendBtn.disabled = true;
+                messageInput.placeholder = 'Please login to use Zakhourani AI';
+                document.querySelectorAll('.chip').forEach(chip => chip.classList.add('disabled'));
             }
-        }
 
-        // ====================================================================
-        //  EVENT LISTENERS
-        // ====================================================================
-        sendBtn.addEventListener('click', sendMessage);
-
-        messageInput.addEventListener('keydown', (e) => {
-            if (e.key === 'Enter' && !e.shiftKey) {
-                e.preventDefault();
-                sendMessage();
+            // ========== USAGE MANAGEMENT ==========
+            function loadUsage() {
+                try {
+                    const saved = localStorage.getItem(STORAGE_KEYS.USAGE);
+                    if (saved) {
+                        const data = JSON.parse(saved);
+                        usage = data;
+                        checkAndResetUsage();
+                    }
+                } catch (e) {
+                    usage = { date: new Date().toDateString(), count: 0, lastReset: Date.now() };
+                }
             }
-        });
 
-        // Suggestion chips
-        document.querySelectorAll('.chip').forEach(chip => {
-            chip.addEventListener('click', () => {
-                messageInput.value = chip.dataset.prompt;
-                sendMessage();
-            });
-        });
+            function saveUsage() {
+                localStorage.setItem(STORAGE_KEYS.USAGE, JSON.stringify(usage));
+            }
 
-        // Clear chat
-        document.getElementById('clearChat').addEventListener('click', () => {
-            if (messages.length === 0) return;
-            if (confirm('Clear all messages?')) {
-                messages = [];
+            // ========== CONVERSATION MANAGEMENT ==========
+            function loadConversations() {
+                try {
+                    const saved = localStorage.getItem(STORAGE_KEYS.CONVERSATIONS);
+                    conversations = saved ? JSON.parse(saved) : { default: { id: 'default', name: 'Main Chat', messages: [], pinned: false, archived: false } };
+                } catch (e) {
+                    conversations = { default: { id: 'default', name: 'Main Chat', messages: [], pinned: false, archived: false } };
+                }
+                if (!conversations.default) {
+                    conversations.default = { id: 'default', name: 'Main Chat', messages: [], pinned: false, archived: false };
+                }
+                renderTabs();
+                loadConversation(currentConvId);
+            }
+
+            function saveConversations() {
+                localStorage.setItem(STORAGE_KEYS.CONVERSATIONS, JSON.stringify(conversations));
+            }
+
+            function loadConversation(id) {
+                currentConvId = id;
+                currentMessages = conversations[id]?.messages || [];
+                displayMessages();
+            }
+
+            function renderTabs() {
+                const tabs = document.querySelectorAll('.tab:not(#defaultTab):not(#newTabBtn)');
+                tabs.forEach(t => t.remove());
+
+                const convList = Object.values(conversations).filter(c => !c.archived && c.id !== 'default');
+                convList.sort((a, b) => {
+                    if (a.pinned && !b.pinned) return -1;
+                    if (!a.pinned && b.pinned) return 1;
+                    return (a.name || '').localeCompare(b.name || '');
+                });
+
+                convList.forEach(conv => {
+                    const tab = document.createElement('div');
+                    tab.className = `tab ${conv.id === currentConvId ? 'active' : ''}`;
+                    tab.dataset.tab = conv.id;
+                    tab.innerHTML = `
+                        <i class="fas ${conv.pinned ? 'fa-thumbtack' : 'fa-comment'}"></i>
+                        <span>${escapeHtml(conv.name || 'Chat')}</span>
+                        <i class="fas fa-times close-tab" data-id="${conv.id}"></i>
+                    `;
+                    tab.addEventListener('click', (e) => {
+                        if (!e.target.classList.contains('close-tab')) {
+                            switchConversation(conv.id);
+                        }
+                    });
+                    tabBar.insertBefore(tab, newTabBtn);
+                });
+
+                document.getElementById('defaultTab').classList.toggle('active', currentConvId === 'default');
+
+                document.querySelectorAll('.close-tab').forEach(btn => {
+                    btn.addEventListener('click', (e) => {
+                        e.stopPropagation();
+                        deleteConversation(btn.dataset.id);
+                    });
+                });
+            }
+
+            function switchConversation(id) {
+                if (!conversations[id]) return;
+                currentConvId = id;
+                currentMessages = conversations[id].messages || [];
+                renderTabs();
+                displayMessages();
+            }
+
+            function deleteConversation(id) {
+                if (id === 'default') return;
+                if (!confirm('Delete this conversation?')) return;
+                delete conversations[id];
+                if (currentConvId === id) {
+                    currentConvId = 'default';
+                    currentMessages = conversations.default.messages;
+                }
+                saveConversations();
+                renderTabs();
+                displayMessages();
+            }
+
+            function createNewConversation() {
+                if (!checkAuth()) return;
+                const id = 'conv_' + Date.now();
+                conversations[id] = {
+                    id: id,
+                    name: `Chat ${Object.keys(conversations).length}`,
+                    messages: [],
+                    pinned: false,
+                    archived: false
+                };
+                saveConversations();
+                switchConversation(id);
+            }
+
+            function displayMessages(filterText = '', scope = 'current') {
                 chatContainer.innerHTML = '';
-                chatContainer.appendChild(welcomeMsg);
-                localStorage.removeItem('zakhourani_messages');
-                showToast('Chat cleared');
+                
+                if (scope === 'current') {
+                    if (!currentMessages || currentMessages.length === 0) {
+                        chatContainer.appendChild(welcomeMsg.cloneNode(true));
+                        return;
+                    }
+                    
+                    let messagesToShow = currentMessages;
+                    if (filterText.trim()) {
+                        const lowerFilter = filterText.toLowerCase();
+                        messagesToShow = currentMessages.filter(msg => 
+                            msg.content.toLowerCase().includes(lowerFilter)
+                        );
+                        if (messagesToShow.length === 0) {
+                            chatContainer.innerHTML = '<div style="text-align:center; padding:40px;">No messages found.</div>';
+                            return;
+                        }
+                    }
+                    
+                    messagesToShow.forEach(msg => appendMessageToDOM(msg.content, msg.role, msg.timestamp));
+                }
+                
+                if (settings.autoScroll) {
+                    chatContainer.scrollTop = chatContainer.scrollHeight;
+                }
             }
-        });
 
-        // Theme toggle
-        let isDark = true;
-        document.getElementById('themeToggle').addEventListener('click', () => {
-            isDark = !isDark;
-            document.body.style.background = isDark ? '#0f172a' : '#e2e8f0';
-            document.getElementById('themeToggle').innerHTML = isDark ? 
-                '<i class="fas fa-moon"></i>' : '<i class="fas fa-sun"></i>';
-        });
-
-        // ====================================================================
-        //  INITIALIZATION
-        // ====================================================================
-        function init() {
-            loadUsage();
-            loadHistory();
-            startResetTimer();
-            updateUsageDisplay();
-            
-            // Set initial engine to Gemini (since DeepSeek has payment issues)
-            currentEngine = 'gemini';
-            engineLabel.textContent = 'Gemini ✓';
-            engineStatus.className = 'dot active';
-            
-            // If DeepSeek failed before, show a notice
-            if (deepseekFailed) {
-                setTimeout(() => {
-                    showToast('ℹ️ Using Gemini AI (DeepSeek unavailable)', 3000);
-                }, 1000);
+            function appendMessageToDOM(content, role, timestamp = null) {
+                const msgDiv = document.createElement('div');
+                msgDiv.className = `message ${role === 'user' ? 'user-message' : 'ai-message'}`;
+                
+                let innerHtml = '';
+                if (role === 'assistant') {
+                    innerHtml += '<span class="ai-attribution"><i class="fas fa-stethoscope"></i> Zakhourani AI</span>';
+                }
+                innerHtml += `<div>${escapeHtml(content).replace(/\n/g, '<br>')}</div>`;
+                innerHtml += `<div class="message-time">${timestamp ? new Date(timestamp).toLocaleTimeString() : new Date().toLocaleTimeString()}</div>`;
+                
+                msgDiv.innerHTML = innerHtml;
+                chatContainer.appendChild(msgDiv);
             }
-            
-            messageInput.focus();
-            showToast('🤖 Zakhourani AI ready - Gemini active', 2000);
-        }
 
-        init();
-
-        // Handle visibility change to reset usage when day changes
-        document.addEventListener('visibilitychange', () => {
-            if (!document.hidden) {
-                checkAndResetUsage();
+            async function addMessage(content, role) {
+                const msg = { role, content, timestamp: new Date().toISOString() };
+                if (!conversations[currentConvId].messages) conversations[currentConvId].messages = [];
+                conversations[currentConvId].messages.push(msg);
+                saveConversations();
+                appendMessageToDOM(content, role, msg.timestamp);
+                if (welcomeMsg.parentNode === chatContainer) welcomeMsg.remove();
+                if (role === 'assistant' && settings.soundEnabled) playNotificationSound();
+                
+                if (!achievements.firstMessage && role === 'user') {
+                    achievements.firstMessage = true;
+                    localStorage.setItem(STORAGE_KEYS.ACHIEVEMENTS, JSON.stringify(achievements));
+                    showToast('🏆 Achievement: First Message!');
+                }
             }
-        });
 
-        // Auto-focus input on load
-        document.addEventListener('click', () => {
-            if (!isProcessing && document.activeElement !== messageInput) {
-                messageInput.focus();
+            // ========== AI CALL ==========
+            async function callAI(prompt, history = []) {
+                const now = Date.now();
+                requestTimestamps = requestTimestamps.filter(ts => now - ts < RATE_LIMIT_WINDOW);
+                if (requestTimestamps.length >= MAX_REQUESTS_PER_WINDOW) {
+                    throw new Error('Rate limit exceeded');
+                }
+                requestTimestamps.push(now);
+
+                const messages = [
+                    { role: 'system', content: settings.systemPrompt },
+                    ...history.slice(-8),
+                    { role: 'user', content: prompt }
+                ];
+
+                try {
+                    const response = await fetch(API_ENDPOINT, {
+                        method: 'POST',
+                        headers: {
+                            'Content-Type': 'application/json',
+                            'Authorization': `Bearer ${DEEPSEEK_KEY}`
+                        },
+                        body: JSON.stringify({
+                            model: 'deepseek-chat',
+                            messages: messages,
+                            temperature: settings.temperature,
+                            max_tokens: settings.maxTokens
+                        })
+                    });
+                    
+                    if (!response.ok) throw new Error(`API error: ${response.status}`);
+                    const data = await response.json();
+                    return data.choices[0].message.content;
+                } catch (e) {
+                    console.warn('DeepSeek failed:', e);
+                    const lower = prompt.toLowerCase();
+                    if (lower.includes('dr. waleed')) {
+                        return "• Dr. Waleed Hussein Zakhourani is a Harvard-educated linguist.\n• Creator of the JIHAN Universal Dictionary.\n• Bridges English, Arabic, and Kurdish cultures.";
+                    }
+                    if (lower.includes('machine learning')) {
+                        return "• ML is a subset of AI.\n• Types: supervised, unsupervised, reinforcement.\n• Applications: image recognition, NLP, recommendations.";
+                    }
+                    return "I'm here to help! Ask me about Dr. Waleed, our team, or any topic.";
+                }
             }
-        });
+
+            // ========== SEND MESSAGE ==========
+            async function sendMessage() {
+                if (!checkAuth()) return;
+                
+                const text = messageInput.value.trim();
+                if (!text || messageInput.disabled) return;
+
+                if (!incrementUsage()) return;
+
+                await addMessage(text, 'user');
+                messageInput.value = '';
+
+                const history = conversations[currentConvId].messages.slice(-10).map(m => ({ role: m.role, content: m.content }));
+
+                const loadingDiv = document.createElement('div');
+                loadingDiv.className = 'message loading';
+                loadingDiv.innerHTML = '<div class="typing"><span></span><span></span><span></span></div><span>Zakhourani is thinking...</span>';
+                chatContainer.appendChild(loadingDiv);
+                if (settings.autoScroll) chatContainer.scrollTop = chatContainer.scrollHeight;
+
+                try {
+                    const reply = await callAI(text, history);
+                    loadingDiv.remove();
+                    await addMessage(reply, 'assistant');
+                } catch (err) {
+                    loadingDiv.remove();
+                    await addMessage('Sorry, an error occurred. Please try again.', 'assistant');
+                } finally {
+                    messageInput.focus();
+                }
+            }
+
+            // ========== EVENT LISTENERS ==========
+            sendBtn.addEventListener('click', sendMessage);
+            messageInput.addEventListener('keypress', (e) => { 
+                if (e.key === 'Enter' && !e.ctrlKey) sendMessage(); 
+            });
+
+            document.getElementById('newTabBtn').addEventListener('click', createNewConversation);
+            document.getElementById('defaultTab').addEventListener('click', () => switchConversation('default'));
+
+            document.getElementById('themeToggle').addEventListener('click', () => {
+                document.body.classList.toggle('light');
+                document.getElementById('themeToggle').innerHTML = document.body.classList.contains('light') ? 
+                    '<i class="fas fa-sun"></i>' : '<i class="fas fa-moon"></i>';
+            });
+
+            document.getElementById('upgradeBtn').addEventListener('click', () => {
+                document.getElementById('pricingModal').classList.add('active');
+            });
+
+            document.getElementById('premiumLink')?.addEventListener('click', (e) => {
+                e.preventDefault();
+                document.getElementById('pricingModal').classList.add('active');
+            });
+
+            document.getElementById('closePricingModal').addEventListener('click', () => {
+                document.getElementById('pricingModal').classList.remove('active');
+            });
+
+            document.getElementById('upgradeFromLimit').addEventListener('click', () => {
+                document.getElementById('limitModal').classList.remove('active');
+                document.getElementById('pricingModal').classList.add('active');
+            });
+
+            document.getElementById('closeLimitModal').addEventListener('click', () => {
+                document.getElementById('limitModal').classList.remove('active');
+            });
+
+            imageGenBtn.addEventListener('click', () => handlePremiumFeature('image'));
+
+            // Auth events
+            document.getElementById('authForm').addEventListener('submit', handleAuth);
+            document.getElementById('closeAuthModal').addEventListener('click', hideAuthModal);
+            document.querySelectorAll('.auth-tab').forEach(tab => {
+                tab.addEventListener('click', () => switchAuthTab(tab.dataset.tab));
+            });
+
+            // Modal close on outside click
+            window.addEventListener('click', (e) => {
+                if (e.target.classList.contains('modal')) {
+                    e.target.classList.remove('active');
+                }
+            });
+
+            // Keyboard shortcuts
+            document.addEventListener('keydown', (e) => {
+                if (e.ctrlKey && e.key === 'Enter') { e.preventDefault(); sendMessage(); }
+                if (e.ctrlKey && e.key === 'n') { e.preventDefault(); createNewConversation(); }
+                if (e.key === '/' && document.activeElement !== messageInput && currentUser) {
+                    e.preventDefault(); messageInput.focus();
+                }
+            });
+
+            // Suggestion chips
+            document.querySelectorAll('.chip').forEach(chip => {
+                chip.addEventListener('click', () => {
+                    if (!chip.classList.contains('disabled')) {
+                        messageInput.value = chip.dataset.prompt;
+                        sendMessage();
+                    }
+                });
+            });
+
+            // ========== AUTH STATE OBSERVER ==========
+            auth.onAuthStateChanged(async (user) => {
+                if (user) {
+                    currentUser = user;
+                    await loadUserTier(user.uid);
+                    updateUserDisplay();
+                    updateTierUI();
+                    enableApp();
+                    checkAndResetUsage();
+                    hideAuthModal();
+                } else {
+                    currentUser = null;
+                    userTier = 'free';
+                    updateUserDisplay();
+                    updateTierUI();
+                    disableApp();
+                    showAuthModal();
+                }
+            });
+
+            // ========== LOAD SETTINGS ==========
+            function loadSettings() {
+                try {
+                    const saved = localStorage.getItem(STORAGE_KEYS.SETTINGS);
+                    if (saved) settings = { ...settings, ...JSON.parse(saved) };
+                } catch (e) {}
+            }
+
+            // ========== INITIALIZATION ==========
+            function initialize() {
+                createParticles();
+                loadSettings();
+                loadUsage();
+                loadConversations();
+                startResetTimer();
+            }
+
+            initialize();
+        })();
     </script>
 </body>
 </html>

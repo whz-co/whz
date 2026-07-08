@@ -3,8 +3,8 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=yes">
-    <title>Zakhourani AI · Professional Chat</title>
-    <meta name="description" content="Zakhourani AI - Premium Intelligent Assistant">
+    <title>Zakhourani AI · Premium Assistant</title>
+    <meta name="description" content="Zakhourani AI - Your Premium Intelligent Assistant">
     <meta name="theme-color" content="#0f172a">
     
     <!-- Font Awesome 6 -->
@@ -16,9 +16,6 @@
     <script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-app-compat.js"></script>
     <script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-auth-compat.js"></script>
     <script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-firestore-compat.js"></script>
-    
-    <!-- Markdown Library for rich formatting -->
-    <script src="https://cdn.jsdelivr.net/npm/marked/marked.min.js"></script>
     
     <style>
         /* ============================================================
@@ -404,7 +401,7 @@
         }
         .welcome .suggestions-grid .chip:hover { background: rgba(255,255,255,0.06); border-color: var(--accent); color: var(--text-primary); }
         
-        /* Messages - Enhanced Rich Formatting */
+        /* Messages */
         .message {
             margin: 6px 0;
             padding: 10px 14px;
@@ -431,30 +428,35 @@
             color: var(--text-primary);
             margin-right: auto;
             border-bottom-left-radius: 4px;
-            overflow: visible;
         }
         
-        /* Rich formatting styles for AI messages */
-        .ai-message h1, .ai-message h2, .ai-message h3 {
+        .ai-message .msg-content {
+            white-space: pre-wrap;
+        }
+        
+        .ai-message .msg-content h1,
+        .ai-message .msg-content h2,
+        .ai-message .msg-content h3 {
             margin: 8px 0 4px 0;
             font-weight: 700;
             color: var(--text-primary);
         }
-        .ai-message h1 { font-size: 1.3rem; }
-        .ai-message h2 { font-size: 1.1rem; }
-        .ai-message h3 { font-size: 1rem; }
+        .ai-message .msg-content h1 { font-size: 1.3rem; }
+        .ai-message .msg-content h2 { font-size: 1.1rem; }
+        .ai-message .msg-content h3 { font-size: 1rem; }
         
-        .ai-message ul, .ai-message ol {
+        .ai-message .msg-content ul,
+        .ai-message .msg-content ol {
             margin: 4px 0 4px 20px;
             padding-left: 8px;
         }
-        .ai-message li {
+        .ai-message .msg-content li {
             margin: 2px 0;
             list-style: none;
             position: relative;
             padding-left: 20px;
         }
-        .ai-message li::before {
+        .ai-message .msg-content li::before {
             content: '▸';
             position: absolute;
             left: 0;
@@ -462,21 +464,11 @@
             font-weight: 700;
         }
         
-        .ai-message .bullet-blue {
+        .ai-message .msg-content strong {
             color: var(--accent);
-            font-weight: 700;
-            margin-right: 6px;
         }
         
-        .ai-message .highlight {
-            background: rgba(59,130,246,0.15);
-            padding: 1px 6px;
-            border-radius: 4px;
-            border-left: 3px solid var(--accent);
-            display: inline-block;
-        }
-        
-        .ai-message .divider {
+        .ai-message .msg-content .divider {
             border: none;
             height: 1px;
             background: linear-gradient(to right, transparent, var(--accent), transparent);
@@ -484,10 +476,7 @@
             opacity: 0.3;
         }
         
-        .ai-message .emoji-big { font-size: 1.8rem; margin-right: 6px; vertical-align: middle; }
-        .ai-message .emoji-med { font-size: 1.2rem; margin-right: 4px; vertical-align: middle; }
-        
-        .ai-message .code-block {
+        .ai-message .msg-content .code-block {
             background: var(--bg-primary);
             padding: 8px 12px;
             border-radius: 6px;
@@ -499,7 +488,7 @@
             white-space: pre-wrap;
         }
         
-        .ai-message .step {
+        .ai-message .msg-content .step {
             display: flex;
             align-items: flex-start;
             gap: 10px;
@@ -509,7 +498,7 @@
             border-radius: 6px;
             border-left: 2px solid var(--accent);
         }
-        .ai-message .step .step-num {
+        .ai-message .msg-content .step .step-num {
             background: var(--accent);
             color: white;
             width: 22px;
@@ -522,64 +511,6 @@
             font-weight: 700;
             flex-shrink: 0;
         }
-        
-        .ai-message .tag {
-            display: inline-block;
-            padding: 1px 10px;
-            border-radius: 12px;
-            font-size: 0.7rem;
-            font-weight: 600;
-            margin: 2px 4px 2px 0;
-        }
-        .ai-message .tag-blue { background: rgba(59,130,246,0.15); color: var(--accent); }
-        .ai-message .tag-green { background: rgba(34,197,94,0.15); color: var(--success); }
-        .ai-message .tag-gold { background: rgba(245,158,11,0.15); color: var(--premium-gold); }
-        .ai-message .tag-purple { background: rgba(139,92,246,0.15); color: #8b5cf6; }
-        
-        .ai-message .grid-2 {
-            display: grid;
-            grid-template-columns: 1fr 1fr;
-            gap: 8px;
-            margin: 6px 0;
-        }
-        .ai-message .grid-2 .grid-item {
-            background: var(--bg-surface);
-            padding: 8px 12px;
-            border-radius: 8px;
-            border: 1px solid var(--border);
-            text-align: center;
-            font-size: 0.85rem;
-        }
-        .ai-message .grid-2 .grid-item .num {
-            font-size: 1.8rem;
-            font-weight: 800;
-            color: var(--accent);
-            display: block;
-        }
-        
-        .ai-message .table-wrap {
-            overflow-x: auto;
-            margin: 6px 0;
-            border-radius: 8px;
-            border: 1px solid var(--border);
-        }
-        .ai-message .table-wrap table {
-            width: 100%;
-            border-collapse: collapse;
-            font-size: 0.85rem;
-        }
-        .ai-message .table-wrap th {
-            background: var(--bg-surface);
-            padding: 6px 12px;
-            text-align: left;
-            font-weight: 600;
-            border-bottom: 2px solid var(--border);
-        }
-        .ai-message .table-wrap td {
-            padding: 6px 12px;
-            border-bottom: 1px solid var(--border);
-        }
-        .ai-message .table-wrap tr:last-child td { border-bottom: none; }
         
         .message .msg-time {
             font-size: 0.6rem;
@@ -784,6 +715,22 @@
         .modal .modal-close.secondary { background: transparent; border: 1px solid var(--border); color: var(--text-secondary); margin-top: 6px; }
         .modal .modal-close.secondary:hover { background: var(--bg-surface); color: var(--text-primary); }
         
+        /* Engine Badge */
+        .engine-badge {
+            font-size: 10px;
+            padding: 2px 10px;
+            border-radius: 12px;
+            background: var(--bg-surface);
+            border: 1px solid var(--border);
+            color: var(--text-secondary);
+            display: inline-block;
+            margin-top: 4px;
+        }
+        .engine-badge.gemini { border-color: rgba(59,130,246,0.3); color: var(--accent); }
+        .engine-badge.chatgpt { border-color: rgba(16,185,129,0.3); color: var(--success); }
+        .engine-badge.deepseek { border-color: rgba(139,92,246,0.3); color: #8b5cf6; }
+        .engine-badge.local { border-color: rgba(245,158,11,0.3); color: var(--premium-gold); }
+        
         /* Responsive */
         @media (max-width: 768px) {
             body { padding: 6px; }
@@ -809,7 +756,6 @@
             .user-info .email { font-size: 10px; }
             .user-info .balance { font-size: 10px; }
             .logout-btn { width: 26px; height: 26px; font-size: 11px; }
-            .ai-message .grid-2 { grid-template-columns: 1fr; }
         }
         @media (max-width: 480px) {
             #app { border-radius: 12px; }
@@ -1178,15 +1124,15 @@
         }
 
         // ============================================================
-        //  RICH FORMATTING - Convert markdown-like text to HTML
+        //  RICH FORMATTING
         // ============================================================
         function formatRichText(text) {
             let html = text;
             
-            // Remove excessive ** markers - replace with proper bold
+            // Convert **bold** to <strong>
             html = html.replace(/\*\*(.*?)\*\*/g, '<strong>$1</strong>');
             
-            // Convert bullet points with • or - or * to styled lists
+            // Convert bullet points
             html = html.replace(/^[•\-\*]\s+(.*)$/gm, '<li>$1</li>');
             
             // Convert numbered lists
@@ -1199,7 +1145,7 @@
             html = html.replace(/^##\s+(.*)$/gm, '<h2>$1</h2>');
             html = html.replace(/^#\s+(.*)$/gm, '<h1>$1</h1>');
             
-            // Convert code blocks (between ```)
+            // Convert code blocks
             html = html.replace(/```([\s\S]*?)```/g, (match, code) => {
                 return `<div class="code-block">${escapeHtml(code.trim())}</div>`;
             });
@@ -1212,55 +1158,19 @@
             // Convert horizontal rules
             html = html.replace(/^---$/gm, '<hr class="divider">');
             
-            // Convert emojis and symbols
+            // Convert emojis
             const emojiMap = {
-                ':)' : '😊',
-                ':(' : '😔',
-                ':D' : '😄',
-                ';)' : '😉',
-                ':*' : '😘',
-                ':P' : '😛',
-                ':O' : '😮',
-                ':|' : '😐',
-                ':-)' : '🙂',
-                ':-(' : '🙁',
-                ':-D' : '😃',
-                ':-P' : '😜',
-                ':-O' : '😲',
-                ':-*' : '😗',
-                ':/' : '😕',
-                ':\\' : '😕',
-                ':3' : '😺',
-                '>:(' : '😡',
-                '>:-(' : '😠',
-                'O:)': '😇',
-                'o:)': '😇',
-                '8-)': '😎',
-                'B-)': '😎',
-                ':-)': '🙂',
-                ':-(' : '🙁',
-                ':-D' : '😃',
-                ':-P' : '😜',
-                ':-O' : '😲',
-                ':-*' : '😗',
-                ':/' : '😕',
-                ':\\' : '😕',
-                ':-/' : '😕',
-                ':-\\' : '😕',
-                ':3' : '😺',
-                '>:(' : '😡',
-                '>:-(' : '😠',
-                'O:)' : '😇',
-                'o:)' : '😇',
-                '8-)' : '😎',
-                'B-)' : '😎'
+                ':)' : '😊', ':(' : '😔', ':D' : '😄', ';)' : '😉',
+                ':*' : '😘', ':P' : '😛', ':O' : '😮', ':|' : '😐',
+                ':-)' : '🙂', ':-(' : '🙁', ':-D' : '😃', ':-P' : '😜',
+                ':-O' : '😲', ':-*' : '😗', ':/' : '😕', ':\\' : '😕'
             };
             
             Object.keys(emojiMap).forEach(key => {
                 html = html.replace(new RegExp(key.replace(/[.*+?^${}()|[\]\\]/g, '\\$&'), 'g'), emojiMap[key]);
             });
             
-            // Convert ✅, ❌, ⭐, 🚀, 💡, 🔥, 🎯, 📌, ✨, 🌟 to styled icons
+            // Convert special icons
             html = html.replace(/✅/g, '<span style="color:var(--success);font-weight:700;">✅</span>');
             html = html.replace(/❌/g, '<span style="color:var(--danger);font-weight:700;">❌</span>');
             html = html.replace(/⭐/g, '<span style="color:var(--premium-gold);">⭐</span>');
@@ -1272,29 +1182,22 @@
             html = html.replace(/✨/g, '<span style="color:var(--premium-gold);">✨</span>');
             html = html.replace(/🌟/g, '<span style="color:var(--premium-gold);">🌟</span>');
             
-            // Convert bullet lists with proper styling
+            // Convert bullet lists
             html = html.replace(/<li>([\s\S]*?)<\/li>/g, (match, content) => {
-                return `<li><span class="bullet-blue">▸</span> ${content}</li>`;
+                return `<li><span style="color:var(--accent);font-weight:700;">▸</span> ${content}</li>`;
             });
             
-            // Wrap consecutive list items in ul
+            // Wrap list items in ul
             html = html.replace(/(<li>.*?<\/li>\s*)+/g, (match) => {
                 return `<ul style="list-style:none;padding-left:0;">${match}</ul>`;
             });
             
-            // Convert paragraphs (double newlines)
+            // Convert paragraphs
             html = html.replace(/\n\n/g, '<br><br>');
-            
-            // Convert single newlines to breaks
             html = html.replace(/\n/g, '<br>');
             
-            // Clean up extra breaks
+            // Clean up
             html = html.replace(/(<br>\s*)+$/, '');
-            
-            // Add class for highlighted text
-            html = html.replace(/<strong>(.*?)<\/strong>/g, (match, content) => {
-                return `<strong style="color:var(--accent);">${content}</strong>`;
-            });
             
             return html;
         }
@@ -1650,15 +1553,20 @@
         // ============================================================
         //  MESSAGE FUNCTIONS
         // ============================================================
-        function appendMessageToDOM(content, role, timestamp = null) {
+        function appendMessageToDOM(content, role, timestamp = null, engine = null) {
             const div = document.createElement('div');
             div.className = `message ${role === 'user' ? 'user-message' : 'ai-message'}`;
             
             let html = '';
             if (role === 'assistant') {
-                // Apply rich formatting to AI messages
                 const formattedContent = formatRichText(content);
                 html += `<div class="msg-content" id="msg-${Date.now()}">${formattedContent}</div>`;
+                if (engine) {
+                    const engineClass = engine.includes('gemini') ? 'gemini' : 
+                                      engine.includes('chatgpt') ? 'chatgpt' : 
+                                      engine.includes('deepseek') ? 'deepseek' : 'local';
+                    html += `<div class="engine-badge ${engineClass}"><i class="fas fa-microchip"></i> ${engine}</div>`;
+                }
             } else {
                 html += `<div>${escapeHtml(content).replace(/\n/g, '<br>')}</div>`;
             }
@@ -1691,7 +1599,7 @@
         }
 
         // ============================================================
-        //  WORD-BY-WORD TYPING WITH SOUND
+        //  WORD-BY-WORD TYPING
         // ============================================================
         function typeWriter(element, text, speed = 12) {
             const words = text.split(' ');
@@ -1699,10 +1607,8 @@
             state.isTyping = true;
             state.stopTyping = false;
             
-            // Store the raw text for formatting
             const rawText = text;
             
-            // Create stop button
             const stopBtn = document.createElement('button');
             stopBtn.className = 'stop-btn';
             stopBtn.innerHTML = '⏹️ Stop';
@@ -1725,11 +1631,9 @@
                 
                 if (index < words.length) {
                     const currentText = words.slice(0, index + 1).join(' ');
-                    // Show raw text with cursor, will be formatted when complete
                     element.innerHTML = escapeHtml(currentText) + 
                         `<span class="typing-cursor"></span>`;
                     
-                    // Play typing sound
                     if (CONFIG.soundEnabled && index % 2 === 0) {
                         playTypingSound();
                     }
@@ -1738,7 +1642,6 @@
                     DOM.chatContainer.scrollTop = DOM.chatContainer.scrollHeight;
                     state.typingTimer = setTimeout(type, speed + Math.random() * 15);
                 } else {
-                    // Final formatted version
                     element.innerHTML = formatRichText(rawText);
                     state.isTyping = false;
                     stopBtn.remove();
@@ -1804,15 +1707,11 @@
                 showToast('📖 Reading aloud...', 2000);
                 playSuccessSound();
                 
-                // Highlight text being read (simple visual feedback)
-                const originalText = content.textContent;
                 let wordIndex = 0;
-                const words = originalText.split(' ');
+                const words = text.split(' ');
                 
                 const highlightInterval = setInterval(() => {
                     if (wordIndex < words.length) {
-                        // Simple highlight by changing background briefly
-                        // (limited implementation for readability)
                         wordIndex++;
                     } else {
                         clearInterval(highlightInterval);
@@ -1828,11 +1727,11 @@
             }
         };
 
-        function addMessage(content, role) {
+        function addMessage(content, role, engine = null) {
             const conv = state.conversations[state.currentId];
             if (!conv) return;
             
-            const msg = { role, content, timestamp: getTime() };
+            const msg = { role, content, timestamp: getTime(), engine: engine || 'Zakhourani AI' };
             conv.messages.push(msg);
             conv.updatedAt = new Date().toISOString();
             
@@ -1841,7 +1740,7 @@
             }
             
             saveConversations();
-            appendMessageToDOM(content, role, msg.timestamp);
+            appendMessageToDOM(content, role, msg.timestamp, msg.engine);
             renderConversations();
         }
 
@@ -1934,7 +1833,7 @@
                 });
                 if (!response.ok) throw new Error('Server error');
                 const data = await response.json();
-                if (data.success) return { reply: data.reply, engine: 'Zakhourani AI' };
+                if (data.success) return { reply: data.reply, engine: data.engine || 'Zakhourani AI' };
                 throw new Error(data.error || 'Unknown error');
             } catch (error) {
                 console.error('AI error:', error);
@@ -2000,17 +1899,17 @@
                 try {
                     result = await callCloudflareAI(text, history);
                     typingDiv.remove();
-                    addMessage(result.reply, 'assistant');
+                    addMessage(result.reply, 'assistant', result.engine);
                 } catch (err) {
                     typingDiv.remove();
                     const fallback = getLocalResponse(text);
-                    addMessage(fallback, 'assistant');
+                    addMessage(fallback, 'assistant', 'local-fallback');
                     showToast('📡 Using offline mode', 2000);
                 }
             } catch (error) {
                 typingDiv.remove();
                 const fallback = getLocalResponse(text);
-                addMessage(fallback, 'assistant');
+                addMessage(fallback, 'assistant', 'local-fallback');
                 showToast('⚠️ Using offline mode', 3000);
                 playErrorSound();
             } finally {

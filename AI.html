@@ -7,12 +7,11 @@
     <meta name="description" content="Zakhourani AI - Your Premium Intelligent Assistant">
     <meta name="theme-color" content="#0f172a">
     
-    <!-- Font Awesome 6 -->
+    <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>🧠</text></svg>">
+    
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
-    <!-- Google Fonts -->
     <link href="https://fonts.googleapis.com/css2?family=Inter:opsz,wght@14..32,400;14..32,500;14..32,600;14..32,700;14..32,800;14..32,900&display=swap" rel="stylesheet">
     
-    <!-- Firebase SDK -->
     <script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-app-compat.js"></script>
     <script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-auth-compat.js"></script>
     <script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-firestore-compat.js"></script>
@@ -1031,21 +1030,39 @@
         }
 
         // ============================================================
-        //  SOUND SYSTEM
+        //  SOUND SYSTEM - FIXED AUDIOCONTEXT ISSUE
         // ============================================================
         let audioCtx = null;
+        let audioInitialized = false;
 
         function initAudio() {
             if (!audioCtx) {
                 audioCtx = new(window.AudioContext || window.webkitAudioContext)();
             }
+            // Resume audio context if suspended (fixes the AudioContext error)
+            if (audioCtx.state === 'suspended') {
+                audioCtx.resume().catch(() => {});
+            }
             return audioCtx;
         }
+
+        // Call this function on user interaction to initialize audio
+        function ensureAudioReady() {
+            if (!audioInitialized) {
+                initAudio();
+                audioInitialized = true;
+            }
+        }
+
+        // Add click listener to initialize audio on first user interaction
+        document.addEventListener('click', ensureAudioReady, { once: true });
+        document.addEventListener('touchstart', ensureAudioReady, { once: true });
 
         function playTypingSound() {
             if (!CONFIG.soundEnabled) return;
             try {
                 const ctx = initAudio();
+                if (ctx.state !== 'running') return;
                 const osc = ctx.createOscillator();
                 const gain = ctx.createGain();
                 osc.connect(gain);
@@ -1054,13 +1071,14 @@
                 gain.gain.value = 0.02;
                 osc.start();
                 osc.stop(ctx.currentTime + 0.02);
-            } catch (e) {}
+            } catch (e) { /* silently fail */ }
         }
 
         function playSendSound() {
             if (!CONFIG.soundEnabled) return;
             try {
                 const ctx = initAudio();
+                if (ctx.state !== 'running') return;
                 const osc = ctx.createOscillator();
                 const gain = ctx.createGain();
                 osc.connect(gain);
@@ -1069,23 +1087,26 @@
                 gain.gain.value = 0.05;
                 osc.start();
                 setTimeout(() => {
-                    const osc2 = ctx.createOscillator();
-                    const gain2 = ctx.createGain();
-                    osc2.connect(gain2);
-                    gain2.connect(ctx.destination);
-                    osc2.frequency.value = 1200;
-                    gain2.gain.value = 0.04;
-                    osc2.start();
-                    osc2.stop(ctx.currentTime + 0.08);
+                    try {
+                        const osc2 = ctx.createOscillator();
+                        const gain2 = ctx.createGain();
+                        osc2.connect(gain2);
+                        gain2.connect(ctx.destination);
+                        osc2.frequency.value = 1200;
+                        gain2.gain.value = 0.04;
+                        osc2.start();
+                        osc2.stop(ctx.currentTime + 0.08);
+                    } catch (e) {}
                 }, 60);
                 osc.stop(ctx.currentTime + 0.1);
-            } catch (e) {}
+            } catch (e) { /* silently fail */ }
         }
 
         function playSuccessSound() {
             if (!CONFIG.soundEnabled) return;
             try {
                 const ctx = initAudio();
+                if (ctx.state !== 'running') return;
                 const osc = ctx.createOscillator();
                 const gain = ctx.createGain();
                 osc.connect(gain);
@@ -1094,23 +1115,26 @@
                 gain.gain.value = 0.06;
                 osc.start();
                 setTimeout(() => {
-                    const osc2 = ctx.createOscillator();
-                    const gain2 = ctx.createGain();
-                    osc2.connect(gain2);
-                    gain2.connect(ctx.destination);
-                    osc2.frequency.value = 1400;
-                    gain2.gain.value = 0.05;
-                    osc2.start();
-                    osc2.stop(ctx.currentTime + 0.1);
+                    try {
+                        const osc2 = ctx.createOscillator();
+                        const gain2 = ctx.createGain();
+                        osc2.connect(gain2);
+                        gain2.connect(ctx.destination);
+                        osc2.frequency.value = 1400;
+                        gain2.gain.value = 0.05;
+                        osc2.start();
+                        osc2.stop(ctx.currentTime + 0.1);
+                    } catch (e) {}
                 }, 80);
                 osc.stop(ctx.currentTime + 0.15);
-            } catch (e) {}
+            } catch (e) { /* silently fail */ }
         }
 
         function playErrorSound() {
             if (!CONFIG.soundEnabled) return;
             try {
                 const ctx = initAudio();
+                if (ctx.state !== 'running') return;
                 const osc = ctx.createOscillator();
                 const gain = ctx.createGain();
                 osc.connect(gain);
@@ -1120,7 +1144,7 @@
                 osc.type = 'sawtooth';
                 osc.start();
                 osc.stop(ctx.currentTime + 0.2);
-            } catch (e) {}
+            } catch (e) { /* silently fail */ }
         }
 
         // ============================================================
@@ -1129,48 +1153,32 @@
         function formatRichText(text) {
             let html = text;
             
-            // Convert **bold** to <strong>
             html = html.replace(/\*\*(.*?)\*\*/g, '<strong>$1</strong>');
-            
-            // Convert bullet points
             html = html.replace(/^[•\-\*]\s+(.*)$/gm, '<li>$1</li>');
-            
-            // Convert numbered lists
             html = html.replace(/^(\d+)\.\s+(.*)$/gm, (match, num, content) => {
                 return `<div class="step"><span class="step-num">${num}</span><span>${content}</span></div>`;
             });
-            
-            // Convert headings
             html = html.replace(/^###\s+(.*)$/gm, '<h3>$1</h3>');
             html = html.replace(/^##\s+(.*)$/gm, '<h2>$1</h2>');
             html = html.replace(/^#\s+(.*)$/gm, '<h1>$1</h1>');
-            
-            // Convert code blocks
             html = html.replace(/```([\s\S]*?)```/g, (match, code) => {
                 return `<div class="code-block">${escapeHtml(code.trim())}</div>`;
             });
-            
-            // Convert inline code
             html = html.replace(/`([^`]+)`/g, (match, code) => {
                 return `<code style="background:var(--bg-primary);padding:1px 6px;border-radius:4px;font-family:monospace;font-size:0.85rem;">${escapeHtml(code)}</code>`;
             });
-            
-            // Convert horizontal rules
             html = html.replace(/^---$/gm, '<hr class="divider">');
             
-            // Convert emojis
             const emojiMap = {
                 ':)' : '😊', ':(' : '😔', ':D' : '😄', ';)' : '😉',
                 ':*' : '😘', ':P' : '😛', ':O' : '😮', ':|' : '😐',
                 ':-)' : '🙂', ':-(' : '🙁', ':-D' : '😃', ':-P' : '😜',
                 ':-O' : '😲', ':-*' : '😗', ':/' : '😕', ':\\' : '😕'
             };
-            
             Object.keys(emojiMap).forEach(key => {
                 html = html.replace(new RegExp(key.replace(/[.*+?^${}()|[\]\\]/g, '\\$&'), 'g'), emojiMap[key]);
             });
             
-            // Convert special icons
             html = html.replace(/✅/g, '<span style="color:var(--success);font-weight:700;">✅</span>');
             html = html.replace(/❌/g, '<span style="color:var(--danger);font-weight:700;">❌</span>');
             html = html.replace(/⭐/g, '<span style="color:var(--premium-gold);">⭐</span>');
@@ -1182,21 +1190,14 @@
             html = html.replace(/✨/g, '<span style="color:var(--premium-gold);">✨</span>');
             html = html.replace(/🌟/g, '<span style="color:var(--premium-gold);">🌟</span>');
             
-            // Convert bullet lists
             html = html.replace(/<li>([\s\S]*?)<\/li>/g, (match, content) => {
                 return `<li><span style="color:var(--accent);font-weight:700;">▸</span> ${content}</li>`;
             });
-            
-            // Wrap list items in ul
             html = html.replace(/(<li>.*?<\/li>\s*)+/g, (match) => {
                 return `<ul style="list-style:none;padding-left:0;">${match}</ul>`;
             });
-            
-            // Convert paragraphs
             html = html.replace(/\n\n/g, '<br><br>');
             html = html.replace(/\n/g, '<br>');
-            
-            // Clean up
             html = html.replace(/(<br>\s*)+$/, '');
             
             return html;
@@ -1562,9 +1563,9 @@
                 const formattedContent = formatRichText(content);
                 html += `<div class="msg-content" id="msg-${Date.now()}">${formattedContent}</div>`;
                 if (engine) {
-                    const engineClass = engine.includes('gemini') ? 'gemini' : 
-                                      engine.includes('chatgpt') ? 'chatgpt' : 
-                                      engine.includes('deepseek') ? 'deepseek' : 'local';
+                    const engineClass = engine.toLowerCase().includes('gemini') ? 'gemini' : 
+                                      engine.toLowerCase().includes('chatgpt') ? 'chatgpt' : 
+                                      engine.toLowerCase().includes('deepseek') ? 'deepseek' : 'local';
                     html += `<div class="engine-badge ${engineClass}"><i class="fas fa-microchip"></i> ${engine}</div>`;
                 }
             } else {
@@ -1706,21 +1707,6 @@
                 speechSynthesis.speak(utterance);
                 showToast('📖 Reading aloud...', 2000);
                 playSuccessSound();
-                
-                let wordIndex = 0;
-                const words = text.split(' ');
-                
-                const highlightInterval = setInterval(() => {
-                    if (wordIndex < words.length) {
-                        wordIndex++;
-                    } else {
-                        clearInterval(highlightInterval);
-                    }
-                }, 300);
-                
-                utterance.onend = () => {
-                    clearInterval(highlightInterval);
-                };
             } else {
                 showToast('⚠️ Text-to-speech not supported', 2000);
                 playErrorSound();
@@ -1903,13 +1889,13 @@
                 } catch (err) {
                     typingDiv.remove();
                     const fallback = getLocalResponse(text);
-                    addMessage(fallback, 'assistant', 'local-fallback');
+                    addMessage(fallback, 'assistant', 'Zakhourani AI (Offline)');
                     showToast('📡 Using offline mode', 2000);
                 }
             } catch (error) {
                 typingDiv.remove();
                 const fallback = getLocalResponse(text);
-                addMessage(fallback, 'assistant', 'local-fallback');
+                addMessage(fallback, 'assistant', 'Zakhourani AI (Offline)');
                 showToast('⚠️ Using offline mode', 3000);
                 playErrorSound();
             } finally {

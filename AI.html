@@ -7,9 +7,7 @@
     <meta name="description" content="Zakhourani AI - Intelligent Assistant">
     <meta name="theme-color" content="#0f172a">
     
-    <!-- Font Awesome 6 -->
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
-    <!-- Google Fonts -->
     <link href="https://fonts.googleapis.com/css2?family=Inter:opsz,wght@14..32,400;14..32,500;14..32,600;14..32,700;14..32,800&display=swap" rel="stylesheet">
     
     <style>
@@ -64,12 +62,10 @@
             position: relative;
         }
         
-        /* Scrollbar */
         *::-webkit-scrollbar { width: 4px; height: 4px; }
         *::-webkit-scrollbar-track { background: transparent; }
         *::-webkit-scrollbar-thumb { background: var(--accent); border-radius: 10px; }
 
-        /* Header */
         header {
             padding: 16px 20px;
             background: var(--bg-surface);
@@ -89,7 +85,6 @@
             display: flex;
             align-items: center;
             gap: 12px;
-            min-width: 0;
         }
         
         .avatar {
@@ -104,7 +99,6 @@
             color: white;
             box-shadow: 0 8px 20px rgba(59,130,246,0.3);
             flex-shrink: 0;
-            position: relative;
         }
         
         .title h1 {
@@ -141,7 +135,6 @@
             cursor: pointer;
             transition: all 0.3s;
             font-size: 1.1rem;
-            text-decoration: none;
         }
         
         .icon-btn:hover {
@@ -173,12 +166,16 @@
             animation: pulse 2s infinite;
         }
         
+        .status-badge .dot.error {
+            background: var(--danger);
+            animation: none;
+        }
+        
         @keyframes pulse {
             0%, 100% { opacity: 1; }
             50% { opacity: 0.3; }
         }
         
-        /* Usage Bar */
         .usage-bar-container {
             padding: 8px 20px;
             background: var(--bg-surface);
@@ -209,7 +206,6 @@
         .usage-fill.warning { background: var(--warning); }
         .usage-fill.danger { background: var(--danger); }
         
-        /* Chat Container */
         #chatContainer {
             flex: 1;
             overflow-y: auto;
@@ -253,7 +249,6 @@
             line-height: 1.6;
         }
         
-        /* Messages */
         .message {
             margin: 12px 0;
             padding: 14px 18px;
@@ -302,6 +297,16 @@
             font-weight: 500;
         }
         
+        .engine-tag {
+            font-size: 0.6rem;
+            color: var(--text-secondary);
+            background: var(--bg-surface);
+            padding: 2px 10px;
+            border-radius: 12px;
+            display: inline-block;
+            margin-top: 4px;
+        }
+        
         .loading {
             background: var(--bg-surface);
             border: var(--glass);
@@ -333,7 +338,6 @@
             30% { transform: translateY(-8px); }
         }
         
-        /* Input Area */
         .input-area {
             padding: 16px;
             background: var(--bg-surface);
@@ -431,7 +435,6 @@
             flex-shrink: 0;
         }
         
-        /* Toast */
         .toast {
             position: fixed;
             bottom: 30px;
@@ -456,7 +459,6 @@
             to { transform: translateX(-50%) translateY(0); opacity: 1; }
         }
         
-        /* Limit Modal */
         .modal {
             position: fixed;
             top: 0; left: 0; right: 0; bottom: 0;
@@ -514,28 +516,26 @@
 </head>
 <body>
     <div id="app">
-        <!-- Header -->
         <header>
             <div class="header-row">
                 <div class="brand">
                     <div class="avatar"><i class="fas fa-brain"></i></div>
                     <div class="title">
                         <h1>Zakhourani AI</h1>
-                        <p><i class="fas fa-code-branch"></i> Intelligent Assistant</p>
+                        <p><i class="fas fa-cloud"></i> Secure Cloud AI</p>
                     </div>
                 </div>
                 <div class="header-actions">
                     <div class="status-badge">
-                        <span class="dot"></span>
-                        <span>Online</span>
+                        <span class="dot" id="statusDot"></span>
+                        <span id="statusText">Online</span>
                     </div>
-                    <div class="icon-btn" id="themeToggle" title="Theme"><i class="fas fa-moon"></i></div>
-                    <div class="icon-btn" id="clearChat" title="Clear Chat"><i class="fas fa-trash-alt"></i></div>
+                    <div class="icon-btn" id="themeToggle"><i class="fas fa-moon"></i></div>
+                    <div class="icon-btn" id="clearChat"><i class="fas fa-trash-alt"></i></div>
                 </div>
             </div>
         </header>
 
-        <!-- Usage Bar -->
         <div class="usage-bar-container">
             <i class="fas fa-comment"></i>
             <span id="usageText">0/50 questions</span>
@@ -545,19 +545,17 @@
             <span id="resetTimer"></span>
         </div>
 
-        <!-- Chat Container -->
         <div id="chatContainer">
             <div class="welcome" id="welcomeMessage">
                 <div class="welcome-icon">🤖</div>
                 <h2>Zakhourani AI</h2>
-                <p>Your intelligent assistant for any question</p>
+                <p>Powered by secure Cloudflare infrastructure</p>
                 <p style="margin-top: 16px; font-size: 0.85rem; color: var(--text-secondary);">
                     <i class="fas fa-shield-alt"></i> 50 free questions daily
                 </p>
             </div>
         </div>
 
-        <!-- Input Area -->
         <div class="input-area">
             <div class="input-wrapper">
                 <input type="text" id="messageInput" placeholder="Ask Zakhourani anything..." autocomplete="off">
@@ -579,7 +577,6 @@
         </footer>
     </div>
 
-    <!-- Limit Modal -->
     <div class="modal" id="limitModal">
         <div class="modal-content">
             <i class="fas fa-hourglass-half" style="font-size:4rem; color:var(--warning);"></i>
@@ -590,29 +587,17 @@
         </div>
     </div>
 
-    <!-- Toast -->
     <div class="toast" id="toast"></div>
 
     <script>
         // ====================================================================
-        //  CONFIGURATION - Using working API keys
+        //  CONFIGURATION - No API Keys Here! 
+        //  All keys are securely stored in Cloudflare Worker
         // ====================================================================
         const CONFIG = {
-            // Using DeepSeek as primary (it's authenticated but needs payment)
-            // We'll use a free fallback approach
-            deepseek: {
-                key: "sk-26d206f0f103487294931892fe7ccbb0",
-                endpoint: "https://api.deepseek.com/v1/chat/completions",
-                model: "deepseek-chat"
-            },
-            // Gemini key appears to be in wrong format - will use fallback
-            gemini: {
-                key: "AIzaSyAE8wf24HXrfmpMluaFOv1OHPrf_YFfqTQ", // Updated to proper format
-                endpoint: "https://generativelanguage.googleapis.com/v1beta/models/gemini-pro:generateContent",
-                model: "gemini-pro"
-            },
-            dailyLimit: 50,
-            systemPrompt: `You are Zakhourani AI, a helpful and intelligent assistant created by Zakhourani Developers. Provide clear, concise, and accurate responses. Be friendly and professional.`
+            // ⚠️ REPLACE THIS WITH YOUR CLOUDFLARE WORKER URL ⚠️
+            workerUrl: 'https://aged-recipe-80db.your-subdomain.workers.dev',
+            dailyLimit: 50
         };
 
         // ====================================================================
@@ -633,6 +618,8 @@
         const usageText = document.getElementById('usageText');
         const resetTimer = document.getElementById('resetTimer');
         const toast = document.getElementById('toast');
+        const statusText = document.getElementById('statusText');
+        const statusDot = document.getElementById('statusDot');
 
         // ====================================================================
         //  UTILITY FUNCTIONS
@@ -651,6 +638,13 @@
         function escapeHtml(text) {
             const map = { '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#039;' };
             return String(text).replace(/[&<>"']/g, m => map[m]);
+        }
+
+        function setStatus(text, isOnline = true) {
+            statusText.textContent = text;
+            if (statusDot) {
+                statusDot.className = 'dot' + (isOnline ? '' : ' error');
+            }
         }
 
         // ====================================================================
@@ -710,7 +704,6 @@
             document.getElementById('limitModal').classList.remove('active');
         });
 
-        // Reset timer
         function startResetTimer() {
             setInterval(() => {
                 const now = new Date();
@@ -725,85 +718,49 @@
         }
 
         // ====================================================================
-        //  AI ENGINE - Smart Fallback System
+        //  CLOUDFLARE WORKER AI CALL
         // ====================================================================
-        
-        // Primary: DeepSeek (has valid key but needs payment)
-        async function callDeepSeek(prompt, history) {
-            const messages = [
-                { role: 'system', content: CONFIG.systemPrompt },
-                ...history.slice(-8),
-                { role: 'user', content: prompt }
-            ];
+        async function callCloudflareAI(prompt, history) {
+            try {
+                setStatus('Thinking...', true);
+                
+                const response = await fetch(CONFIG.workerUrl, {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json'
+                    },
+                    body: JSON.stringify({
+                        prompt: prompt,
+                        history: history
+                    })
+                });
 
-            const response = await fetch(CONFIG.deepseek.endpoint, {
-                method: 'POST',
-                headers: {
-                    'Content-Type': 'application/json',
-                    'Authorization': `Bearer ${CONFIG.deepseek.key}`
-                },
-                body: JSON.stringify({
-                    model: CONFIG.deepseek.model,
-                    messages: messages,
-                    temperature: 0.7,
-                    max_tokens: 500
-                })
-            });
-
-            if (!response.ok) {
-                const errorText = await response.text();
-                if (response.status === 402) {
-                    throw new Error('PAYMENT_REQUIRED');
+                if (!response.ok) {
+                    throw new Error(`Server error: ${response.status}`);
                 }
-                throw new Error(`DeepSeek error (${response.status}): ${errorText}`);
+
+                const data = await response.json();
+                
+                if (data.success) {
+                    setStatus('Online', true);
+                    return {
+                        reply: data.reply,
+                        engine: data.engine || 'unknown'
+                    };
+                } else {
+                    throw new Error(data.error || 'Unknown error from server');
+                }
+            } catch (error) {
+                console.error('Cloudflare AI error:', error);
+                setStatus('Error', false);
+                showToast('⚠️ Connection error: ' + error.message, 4000);
+                throw error;
             }
-            const data = await response.json();
-            return data.choices[0].message.content;
         }
 
-        // Fallback: Gemini (free tier available)
-        async function callGemini(prompt, history) {
-            // Build conversation for Gemini
-            let conversation = CONFIG.systemPrompt + '\n\n';
-            
-            // Add history
-            for (const msg of history.slice(-6)) {
-                conversation += `${msg.role === 'user' ? 'User' : 'Assistant'}: ${msg.content}\n`;
-            }
-            conversation += `User: ${prompt}\nAssistant:`;
-
-            const response = await fetch(`${CONFIG.gemini.endpoint}?key=${CONFIG.gemini.key}`, {
-                method: 'POST',
-                headers: {
-                    'Content-Type': 'application/json'
-                },
-                body: JSON.stringify({
-                    contents: [{
-                        parts: [{ text: conversation }]
-                    }],
-                    generationConfig: {
-                        temperature: 0.7,
-                        maxOutputTokens: 500,
-                        topP: 0.95,
-                        topK: 40
-                    }
-                })
-            });
-
-            if (!response.ok) {
-                const errorText = await response.text();
-                throw new Error(`Gemini error (${response.status}): ${errorText}`);
-            }
-            
-            const data = await response.json();
-            
-            if (data.candidates && data.candidates[0] && data.candidates[0].content) {
-                return data.candidates[0].content.parts[0].text;
-            }
-            throw new Error('Gemini: No response content');
-        }
-
-        // Local fallback when all APIs fail
+        // ====================================================================
+        //  LOCAL FALLBACK (When Cloudflare is unreachable)
+        // ====================================================================
         function getLocalResponse(prompt) {
             const lower = prompt.toLowerCase();
             
@@ -823,52 +780,23 @@
                 return "You're welcome! It's my pleasure to help. Is there anything else you'd like to know?";
             }
             
-            return "I'm Zakhourani AI, your intelligent assistant. I'm currently processing your request. For the best experience, please try asking a more specific question, and I'll do my best to help!";
-        }
-
-        // Main AI caller with smart fallback
-        async function callAI(prompt, history) {
-            let lastError = null;
-            
-            // Try DeepSeek first
-            try {
-                const result = await callDeepSeek(prompt, history);
-                return result;
-            } catch (error) {
-                console.warn('DeepSeek failed:', error.message);
-                lastError = error;
-                
-                if (error.message === 'PAYMENT_REQUIRED') {
-                    showToast('DeepSeek requires payment, switching to Gemini...', 2000);
-                } else {
-                    showToast('DeepSeek error, trying Gemini...', 2000);
-                }
-            }
-
-            // Try Gemini as fallback
-            try {
-                const result = await callGemini(prompt, history);
-                showToast('✅ Response from Gemini', 1500);
-                return result;
-            } catch (error) {
-                console.error('Gemini failed:', error.message);
-                showToast('Using local response mode...', 2000);
-            }
-
-            // Final local fallback
-            return getLocalResponse(prompt);
+            return "I'm Zakhourani AI, your intelligent assistant. I'm currently processing your request through our secure cloud infrastructure. For the best experience, please try asking a more specific question!";
         }
 
         // ====================================================================
         //  CHAT FUNCTIONS
         // ====================================================================
-        function appendMessage(content, role, timestamp = null) {
+        function appendMessage(content, role, timestamp = null, engine = null) {
             const msgDiv = document.createElement('div');
             msgDiv.className = `message ${role === 'user' ? 'user-message' : 'ai-message'}`;
             
             let innerHtml = '';
             if (role === 'assistant') {
                 innerHtml += `<span class="ai-brand"><i class="fas fa-brain"></i> Zakhourani AI</span>`;
+                if (engine) {
+                    const engineName = engine.charAt(0).toUpperCase() + engine.slice(1);
+                    innerHtml += `<span class="engine-tag"><i class="fas fa-microchip"></i> ${engineName}</span>`;
+                }
             }
             innerHtml += `<div>${escapeHtml(content).replace(/\n/g, '<br>')}</div>`;
             innerHtml += `<div class="message-time">${timestamp || getTime()}</div>`;
@@ -880,10 +808,10 @@
             chatContainer.scrollTop = chatContainer.scrollHeight;
         }
 
-        function addMessage(content, role) {
-            const msg = { role, content, timestamp: getTime() };
+        function addMessage(content, role, engine = null) {
+            const msg = { role, content, timestamp: getTime(), engine };
             messages.push(msg);
-            appendMessage(content, role, msg.timestamp);
+            appendMessage(content, role, msg.timestamp, engine);
             try {
                 localStorage.setItem('zakhourani_messages', JSON.stringify(messages));
             } catch (e) {}
@@ -897,7 +825,7 @@
                     if (messages.length > 0) {
                         if (welcomeMsg.parentNode === chatContainer) welcomeMsg.remove();
                         messages.forEach(msg => {
-                            appendMessage(msg.content, msg.role, msg.timestamp);
+                            appendMessage(msg.content, msg.role, msg.timestamp, msg.engine);
                         });
                     }
                 }
@@ -931,13 +859,24 @@
             const history = messages.slice(0, -1).map(m => ({ role: m.role, content: m.content }));
 
             try {
-                const reply = await callAI(text, history);
-                loadingDiv.remove();
-                addMessage(reply, 'assistant');
+                let result;
+                try {
+                    // Try Cloudflare Worker first
+                    result = await callCloudflareAI(text, history);
+                    loadingDiv.remove();
+                    addMessage(result.reply, 'assistant', result.engine);
+                } catch (cloudflareError) {
+                    console.warn('Cloudflare failed, using local fallback');
+                    loadingDiv.remove();
+                    const fallbackReply = getLocalResponse(text);
+                    addMessage(fallbackReply, 'assistant', 'local');
+                    showToast('Using local response mode', 3000);
+                }
             } catch (error) {
                 loadingDiv.remove();
-                addMessage(`I apologize, but I'm having trouble connecting. Please try again.`, 'assistant');
-                showToast('Error: ' + error.message, 4000);
+                const fallbackReply = getLocalResponse(text);
+                addMessage(fallbackReply, 'assistant', 'local');
+                showToast('Using offline mode', 3000);
             } finally {
                 isProcessing = false;
                 sendBtn.disabled = false;
@@ -994,17 +933,20 @@
             updateUsageDisplay();
             
             messageInput.focus();
-            showToast('🤖 Zakhourani AI is ready', 2000);
+            setStatus('Online', true);
+            showToast('🤖 Zakhourani AI is ready (Secure Cloud Mode)', 2000);
         }
 
         init();
 
+        // Handle visibility change to reset usage when day changes
         document.addEventListener('visibilitychange', () => {
             if (!document.hidden) {
                 checkAndResetUsage();
             }
         });
 
+        // Auto-focus input on load
         document.addEventListener('click', () => {
             if (!isProcessing && document.activeElement !== messageInput) {
                 messageInput.focus();

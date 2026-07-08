@@ -6,786 +6,286 @@
     <title>Zakhourani AI</title>
     <meta name="theme-color" content="#0a0e17">
     <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>🧠</text></svg>">
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
     <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
-    
     <style>
-        :root {
-            --bg: #0a0e17;
-            --bg2: #111827;
-            --bg3: #1a1f2e;
-            --text: #f1f5f9;
-            --text2: #94a3b8;
-            --accent: #3b82f6;
-            --accent2: #8b5cf6;
-            --border: rgba(255,255,255,0.06);
-            --radius: 12px;
-            --shadow: 0 4px 24px rgba(0,0,0,0.3);
-        }
-        * { margin:0; padding:0; box-sizing:border-box; font-family:'Inter',sans-serif; }
-        body {
-            background: var(--bg);
-            color: var(--text);
-            height: 100dvh;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            overflow: hidden;
-        }
-        
-        /* ZAKHOURANI NETWORK SYMBOL */
-        .network-bg {
-            position: fixed;
-            top: 0; left: 0; right: 0; bottom: 0;
-            pointer-events: none;
-            z-index: 0;
-            opacity: 0.03;
-        }
-        .network-dot {
-            position: absolute;
-            width: 3px;
-            height: 3px;
-            background: var(--accent);
-            border-radius: 50%;
-            animation: pulse 3s infinite;
-        }
-        @keyframes pulse { 0%,100%{opacity:0.2;transform:scale(1)} 50%{opacity:0.8;transform:scale(2)} }
-        
-        /* APP CONTAINER */
-        #app {
-            width: 100%;
-            max-width: 900px;
-            height: 100dvh;
-            max-height: 100dvh;
-            background: var(--bg2);
-            display: flex;
-            flex-direction: column;
-            position: relative;
-            z-index: 1;
-            border-left: 1px solid var(--border);
-            border-right: 1px solid var(--border);
-        }
-        
-        /* HEADER */
-        .header {
-            padding: 12px 16px;
-            display: flex;
-            align-items: center;
-            gap: 10px;
-            border-bottom: 1px solid var(--border);
-            background: var(--bg);
-            flex-shrink: 0;
-        }
-        .logo {
-            display: flex;
-            align-items: center;
-            gap: 8px;
-            font-weight: 700;
-            font-size: 16px;
-            color: var(--text);
-            text-decoration: none;
-        }
-        .logo-icon {
-            width: 32px;
-            height: 32px;
-            background: linear-gradient(135deg, var(--accent), var(--accent2));
-            border-radius: 8px;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            font-size: 16px;
-            color: white;
-        }
-        .header-actions {
-            margin-left: auto;
-            display: flex;
-            gap: 4px;
-        }
-        .icon-btn {
-            width: 32px;
-            height: 32px;
-            border-radius: 8px;
-            border: 1px solid var(--border);
-            background: var(--bg3);
-            color: var(--text2);
-            cursor: pointer;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            font-size: 14px;
-            transition: all 0.2s;
-        }
-        .icon-btn:hover { background: var(--bg2); color: var(--text); }
-        .icon-btn.active { background: var(--accent); border-color: var(--accent); color: white; }
-        
-        /* SIDEBAR */
-        .sidebar {
-            position: fixed;
-            left: 0;
-            top: 0;
-            bottom: 0;
-            width: 300px;
-            max-width: 85vw;
-            background: var(--bg);
-            border-right: 1px solid var(--border);
-            z-index: 100;
-            transform: translateX(-100%);
-            transition: transform 0.3s ease;
-            display: flex;
-            flex-direction: column;
-        }
-        .sidebar.open { transform: translateX(0); }
-        .sidebar-overlay {
-            position: fixed;
-            inset: 0;
-            background: rgba(0,0,0,0.5);
-            z-index: 99;
-            display: none;
-        }
-        .sidebar-overlay.show { display: block; }
-        
-        .sidebar-header {
-            padding: 16px;
-            border-bottom: 1px solid var(--border);
-            display: flex;
-            align-items: center;
-            justify-content: space-between;
-        }
-        .new-chat-btn {
-            width: calc(100% - 32px);
-            margin: 12px 16px;
-            padding: 10px;
-            background: linear-gradient(135deg, var(--accent), var(--accent2));
-            border: none;
-            border-radius: 10px;
-            color: white;
-            font-weight: 600;
-            cursor: pointer;
-            font-size: 14px;
-        }
-        .chat-list {
-            flex: 1;
-            overflow-y: auto;
-            padding: 8px;
-        }
-        .chat-list::-webkit-scrollbar { width: 3px; }
-        .chat-list::-webkit-scrollbar-thumb { background: var(--border); border-radius: 10px; }
-        
-        .chat-item {
-            padding: 10px 12px;
-            border-radius: 8px;
-            cursor: pointer;
-            margin-bottom: 2px;
-            display: flex;
-            align-items: center;
-            justify-content: space-between;
-            transition: all 0.2s;
-            font-size: 13px;
-        }
-        .chat-item:hover { background: rgba(255,255,255,0.03); }
-        .chat-item.active { background: rgba(59,130,246,0.1); }
-        .chat-item-title { flex: 1; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
-        .chat-item-actions { display: flex; gap: 2px; opacity: 0; transition: opacity 0.2s; }
-        .chat-item:hover .chat-item-actions { opacity: 1; }
-        .chat-item-actions button {
-            width: 24px; height: 24px; border-radius: 4px; border: none;
-            background: transparent; color: var(--text2); cursor: pointer; font-size: 10px;
-        }
-        .chat-item-actions button:hover { background: rgba(255,255,255,0.1); color: var(--text); }
-        .chat-item-actions button.del:hover { color: #ef4444; }
-        
-        /* USER INFO */
-        .user-info {
-            padding: 12px 16px;
-            border-top: 1px solid var(--border);
-            display: flex;
-            align-items: center;
-            gap: 10px;
-            font-size: 13px;
-        }
-        .user-avatar {
-            width: 32px; height: 32px; border-radius: 50%;
-            background: linear-gradient(135deg, var(--accent), var(--accent2));
-            display: flex; align-items: center; justify-content: center;
-            font-weight: 700; color: white; font-size: 14px;
-        }
-        .usage-bar {
-            height: 2px;
-            background: rgba(255,255,255,0.1);
-            border-radius: 1px;
-            margin-top: 4px;
-            overflow: hidden;
-        }
-        .usage-fill {
-            height: 100%;
-            background: var(--accent);
-            border-radius: 1px;
-            transition: width 0.5s;
-        }
-        
-        /* CHAT AREA */
-        .chat-container {
-            flex: 1;
-            overflow-y: auto;
-            padding: 16px;
-            scroll-behavior: smooth;
-        }
-        .chat-container::-webkit-scrollbar { width: 4px; }
-        .chat-container::-webkit-scrollbar-thumb { background: var(--border); border-radius: 10px; }
-        
-        /* MESSAGES */
-        .msg {
-            margin: 6px 0;
-            padding: 10px 14px;
-            border-radius: 14px;
-            max-width: 88%;
-            line-height: 1.6;
-            font-size: 14px;
-            animation: msgIn 0.3s ease;
-        }
-        @keyframes msgIn { from { opacity:0; transform:translateY(8px); } }
-        .msg-user {
-            background: var(--accent);
-            margin-left: auto;
-            border-bottom-right-radius: 4px;
-        }
-        .msg-ai {
-            background: rgba(255,255,255,0.03);
-            border: 1px solid var(--border);
-            margin-right: auto;
-            border-bottom-left-radius: 4px;
-        }
-        .msg-ai strong { color: var(--accent); }
-        .msg-ai code {
-            background: var(--bg);
-            padding: 1px 6px;
-            border-radius: 4px;
-            font-size: 0.85em;
-            font-family: monospace;
-        }
-        .msg-ai pre {
-            background: var(--bg);
-            padding: 10px;
-            border-radius: 8px;
-            overflow-x: auto;
-            margin: 6px 0;
-            font-size: 0.85em;
-            border-left: 3px solid var(--accent);
-        }
-        .engine-tag {
-            font-size: 10px;
-            padding: 2px 8px;
-            border-radius: 10px;
-            background: rgba(59,130,246,0.1);
-            border: 1px solid rgba(59,130,246,0.2);
-            color: var(--accent);
-            display: inline-block;
-            margin-top: 4px;
-        }
-        
-        /* TYPING */
-        .typing { display:flex; gap:4px; padding:10px 14px; margin:6px 0; }
-        .typing span {
-            width:5px;height:5px;background:var(--text2);border-radius:50%;
-            animation:bounce 1.4s infinite;
-        }
-        .typing span:nth-child(2){animation-delay:0.2s}
-        .typing span:nth-child(3){animation-delay:0.4s}
-        @keyframes bounce{0%,60%,100%{transform:translateY(0)}30%{transform:translateY(-5px)}}
-        
-        /* INPUT */
-        .input-area {
-            padding: 12px 16px;
-            border-top: 1px solid var(--border);
-            flex-shrink: 0;
-            background: var(--bg);
-        }
-        .input-wrap {
-            display: flex;
-            gap: 8px;
-            background: var(--bg3);
-            border: 1px solid var(--border);
-            border-radius: 50px;
-            padding: 4px 4px 4px 16px;
-        }
-        .input-wrap:focus-within { border-color: var(--accent); }
-        #msgInput {
-            flex: 1;
-            background: transparent;
-            border: none;
-            color: var(--text);
-            font-size: 15px;
-            padding: 8px 0;
-            outline: none;
-        }
-        #msgInput::placeholder { color: var(--text2); }
-        #sendBtn {
-            background: linear-gradient(135deg, var(--accent), var(--accent2));
-            border: none;
-            color: white;
-            border-radius: 50px;
-            padding: 8px 16px;
-            cursor: pointer;
-            font-weight: 600;
-            font-size: 14px;
-            white-space: nowrap;
-        }
-        #sendBtn:disabled { opacity: 0.4; }
-        
-        /* TOAST */
-        .toast {
-            position: fixed;
-            bottom: 20px;
-            left: 50%;
-            transform: translateX(-50%);
-            background: var(--bg3);
-            border: 1px solid var(--border);
-            border-radius: 12px;
-            padding: 10px 20px;
-            z-index: 200;
-            font-size: 13px;
-            animation: toastIn 0.3s ease;
-            display: none;
-        }
-        @keyframes toastIn { from { opacity:0; transform:translateX(-50%) translateY(10px); } }
-        
-        /* MOBILE */
-        @media (min-width: 768px) {
-            #app { border-radius: 16px; height: 95dvh; }
-            .sidebar { position: static; transform: none; width: 280px; flex-shrink: 0; }
-            .sidebar-overlay { display: none !important; }
-            #menuBtn { display: none; }
-        }
+        :root{--bg:#0a0e17;--bg2:#111827;--bg3:#1a1f2e;--text:#f1f5f9;--text2:#94a3b8;--accent:#3b82f6;--accent2:#8b5cf6;--border:rgba(255,255,255,0.06)}
+        *{margin:0;padding:0;box-sizing:border-box;font-family:'Inter',sans-serif}
+        body{background:var(--bg);color:var(--text);height:100dvh;display:flex;align-items:center;justify-content:center;overflow:hidden}
+        .network-bg{position:fixed;inset:0;pointer-events:none;z-index:0;opacity:0.03}
+        .network-dot{position:absolute;width:2px;height:2px;background:var(--accent);border-radius:50%;animation:pulse 3s infinite}
+        @keyframes pulse{0%,100%{opacity:0.3;transform:scale(1)}50%{opacity:1;transform:scale(2.5)}}
+        #app{width:100%;max-width:900px;height:100dvh;background:var(--bg2);display:flex;flex-direction:column;position:relative;z-index:1}
+        @media(min-width:768px){#app{border-radius:16px;height:95dvh;border:1px solid var(--border)}}
+        .header{padding:10px 14px;display:flex;align-items:center;gap:8px;border-bottom:1px solid var(--border);background:var(--bg);flex-shrink:0}
+        .logo{display:flex;align-items:center;gap:6px;font-weight:700;font-size:15px;text-decoration:none;color:var(--text)}
+        .logo-icon{width:28px;height:28px;background:linear-gradient(135deg,var(--accent),var(--accent2));border-radius:7px;display:flex;align-items:center;justify-content:center;font-size:14px}
+        .icon-btn{width:30px;height:30px;border-radius:7px;border:1px solid var(--border);background:transparent;color:var(--text2);cursor:pointer;font-size:13px;display:flex;align-items:center;justify-content:center}
+        .icon-btn:hover{background:var(--bg3);color:var(--text)}
+        .header-actions{margin-left:auto;display:flex;gap:4px}
+        .sidebar{position:fixed;left:0;top:0;bottom:0;width:280px;max-width:85vw;background:var(--bg);border-right:1px solid var(--border);z-index:100;transform:translateX(-100%);transition:transform 0.3s;display:flex;flex-direction:column}
+        .sidebar.open{transform:translateX(0)}
+        .sidebar-overlay{position:fixed;inset:0;background:rgba(0,0,0,0.5);z-index:99;display:none}
+        .sidebar-overlay.show{display:block}
+        @media(min-width:768px){.sidebar{position:static;transform:none;width:260px;flex-shrink:0}.sidebar-overlay{display:none!important}#menuBtn{display:none}}
+        .sidebar-header{padding:14px;border-bottom:1px solid var(--border);display:flex;align-items:center;justify-content:space-between}
+        .new-chat-btn{margin:10px 14px;padding:9px;background:linear-gradient(135deg,var(--accent),var(--accent2));border:none;border-radius:8px;color:white;font-weight:600;cursor:pointer;font-size:13px;text-align:center}
+        .chat-list{flex:1;overflow-y:auto;padding:6px}
+        .chat-list::-webkit-scrollbar{width:3px}
+        .chat-list::-webkit-scrollbar-thumb{background:var(--border);border-radius:10px}
+        .chat-item{padding:8px 10px;border-radius:7px;cursor:pointer;margin-bottom:1px;display:flex;align-items:center;justify-content:space-between;font-size:12px}
+        .chat-item:hover{background:rgba(255,255,255,0.03)}
+        .chat-item.active{background:rgba(59,130,246,0.1)}
+        .chat-item-title{flex:1;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+        .chat-item-actions{display:flex;gap:1px;opacity:0}
+        .chat-item:hover .chat-item-actions{opacity:1}
+        .chat-item-actions button{width:22px;height:22px;border:none;background:transparent;color:var(--text2);cursor:pointer;font-size:9px;border-radius:4px}
+        .chat-item-actions button:hover{background:rgba(255,255,255,0.1)}
+        .user-info{padding:10px 14px;border-top:1px solid var(--border);display:flex;align-items:center;gap:8px;font-size:12px}
+        .user-avatar{width:28px;height:28px;border-radius:50%;background:linear-gradient(135deg,var(--accent),var(--accent2));display:flex;align-items:center;justify-content:center;font-weight:700;color:white;font-size:12px;flex-shrink:0}
+        .usage-bar{height:2px;background:rgba(255,255,255,0.1);border-radius:1px;margin-top:3px;overflow:hidden}
+        .usage-fill{height:100%;background:var(--accent);border-radius:1px;transition:width 0.5s}
+        .chat-container{flex:1;overflow-y:auto;padding:14px;scroll-behavior:smooth}
+        .chat-container::-webkit-scrollbar{width:3px}
+        .chat-container::-webkit-scrollbar-thumb{background:var(--border);border-radius:10px}
+        .msg{margin:5px 0;padding:8px 12px;border-radius:12px;max-width:88%;line-height:1.5;font-size:13px;animation:msgIn 0.3s}
+        @keyframes msgIn{from{opacity:0;transform:translateY(6px)}}
+        .msg-user{background:var(--accent);margin-left:auto;border-bottom-right-radius:3px}
+        .msg-ai{background:rgba(255,255,255,0.03);border:1px solid var(--border);margin-right:auto;border-bottom-left-radius:3px}
+        .msg-ai strong{color:var(--accent)}
+        .msg-ai pre{background:var(--bg);padding:8px;border-radius:6px;overflow-x:auto;margin:4px 0;font-size:0.85em;border-left:2px solid var(--accent)}
+        .msg-ai code{background:var(--bg);padding:1px 5px;border-radius:3px;font-size:0.85em}
+        .engine-tag{font-size:9px;padding:1px 7px;border-radius:8px;background:rgba(59,130,246,0.1);border:1px solid rgba(59,130,246,0.2);color:var(--accent);display:inline-block;margin-top:3px}
+        .typing{display:flex;gap:3px;padding:8px 12px}
+        .typing span{width:4px;height:4px;background:var(--text2);border-radius:50%;animation:bounce 1.4s infinite}
+        .typing span:nth-child(2){animation-delay:0.2s}.typing span:nth-child(3){animation-delay:0.4s}
+        @keyframes bounce{0%,60%,100%{transform:translateY(0)}30%{transform:translateY(-4px)}}
+        .input-area{padding:10px 14px;border-top:1px solid var(--border);flex-shrink:0;background:var(--bg)}
+        .input-wrap{display:flex;gap:6px;background:var(--bg3);border:1px solid var(--border);border-radius:50px;padding:3px 3px 3px 14px}
+        .input-wrap:focus-within{border-color:var(--accent)}
+        #msgInput{flex:1;background:transparent;border:none;color:var(--text);font-size:14px;padding:7px 0;outline:none}
+        #msgInput::placeholder{color:var(--text2)}
+        #sendBtn{background:linear-gradient(135deg,var(--accent),var(--accent2));border:none;color:white;border-radius:50px;padding:7px 14px;cursor:pointer;font-weight:600;font-size:13px;white-space:nowrap}
+        #sendBtn:disabled{opacity:0.4}
+        .toast{position:fixed;bottom:20px;left:50%;transform:translateX(-50%);background:var(--bg3);border:1px solid var(--border);border-radius:10px;padding:8px 18px;z-index:200;font-size:12px;display:none;animation:toastIn 0.3s}
+        @keyframes toastIn{from{opacity:0;transform:translateX(-50%) translateY(8px)}}
     </style>
 </head>
 <body>
-
-    <!-- NETWORK BACKGROUND -->
     <div class="network-bg" id="networkBg"></div>
-
-    <!-- APP -->
     <div id="app">
-        <!-- SIDEBAR OVERLAY -->
         <div class="sidebar-overlay" id="sidebarOverlay" onclick="toggleSidebar()"></div>
-        
-        <!-- SIDEBAR -->
         <aside class="sidebar" id="sidebar">
             <div class="sidebar-header">
-                <a href="#" class="logo">
-                    <div class="logo-icon">🧠</div>
-                    Zakhourani AI
-                </a>
+                <a href="#" class="logo"><div class="logo-icon">🧠</div>Zakhourani</a>
                 <button class="icon-btn" onclick="toggleSidebar()">✕</button>
             </div>
             <button class="new-chat-btn" onclick="newChat()">+ New Chat</button>
             <div class="chat-list" id="chatList"></div>
             <div class="user-info">
-                <div class="user-avatar" id="userAvatar">Z</div>
-                <div style="flex:1;min-width:0;">
-                    <div style="font-weight:600;font-size:13px;" id="userName">User</div>
-                    <div style="font-size:11px;color:var(--text2);" id="usageText">50/50 remaining</div>
+                <div class="user-avatar">Z</div>
+                <div style="flex:1;min-width:0">
+                    <div style="font-weight:600">Zakhourani AI</div>
+                    <div style="font-size:10px;color:var(--text2)" id="usageText">Loading...</div>
                     <div class="usage-bar"><div class="usage-fill" id="usageFill" style="width:100%"></div></div>
                 </div>
             </div>
         </aside>
-
-        <!-- MAIN -->
-        <div style="flex:1;display:flex;flex-direction:column;min-width:0;">
-            <!-- HEADER -->
+        <div style="flex:1;display:flex;flex-direction:column;min-width:0">
             <div class="header">
                 <button class="icon-btn" id="menuBtn" onclick="toggleSidebar()">☰</button>
-                <span class="logo">
-                    <div class="logo-icon">🧠</div>
-                    Zakhourani
-                </span>
+                <a href="#" class="logo"><div class="logo-icon">🧠</div>Zakhourani AI</a>
                 <div class="header-actions">
-                    <button class="icon-btn" onclick="exportChats()" title="Export">📥</button>
-                    <button class="icon-btn" onclick="clearChat()" title="Clear">🗑️</button>
+                    <button class="icon-btn" onclick="exportChats()">📥</button>
+                    <button class="icon-btn" onclick="clearChat()">🗑️</button>
                 </div>
             </div>
-
-            <!-- CHAT -->
             <div class="chat-container" id="chatContainer">
-                <div style="text-align:center;padding:40px 20px;" id="welcomeMsg">
-                    <div style="font-size:3rem;margin-bottom:12px;">🧠</div>
-                    <h2 style="background:linear-gradient(135deg,var(--accent),var(--accent2));-webkit-background-clip:text;-webkit-text-fill-color:transparent;font-size:1.4rem;margin-bottom:8px;">Zakhourani AI</h2>
-                    <p style="color:var(--text2);font-size:14px;">Precision intelligence. Sharp answers.</p>
+                <div style="text-align:center;padding:50px 20px">
+                    <div style="font-size:3.5rem;margin-bottom:10px">🧠</div>
+                    <h2 style="background:linear-gradient(135deg,var(--accent),var(--accent2));-webkit-background-clip:text;-webkit-text-fill-color:transparent">Zakhourani AI</h2>
+                    <p style="color:var(--text2);font-size:14px;margin-top:6px">Precision intelligence. Sharp answers.</p>
                 </div>
             </div>
-
-            <!-- INPUT -->
             <div class="input-area">
                 <div class="input-wrap">
-                    <input type="text" id="msgInput" placeholder="Message Zakhourani..." autocomplete="off">
+                    <input type="text" id="msgInput" placeholder="Ask Zakhourani..." autocomplete="off">
                     <button id="sendBtn" onclick="sendMsg()">Send</button>
                 </div>
             </div>
         </div>
     </div>
-
-    <!-- TOAST -->
     <div class="toast" id="toast"></div>
 
     <script>
-        // ============================================================
-        // SUPABASE CONFIG
-        // ============================================================
-        const SUPABASE_URL = 'https://wkgldyfxsmkjyallrdtq.supabase.co';
-        const SUPABASE_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6IndrZ2xkeWZ4c21ranlhbGxyZHRxIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NzczNTg0OTQsImV4cCI6MjA5MjkzNDQ5NH0.WgXSHB6teuUiEKYgeR2ADAK-8A_6VnbEl-wv0RSuxjA';
-        const supabase = supabase.createClient(SUPABASE_URL, SUPABASE_KEY);
-        
-        const WORKER_URL = 'https://aged-recipe-80db.wabdo3762.workers.dev/';
-        const USER_EMAIL = 'user@zakhourani.com'; // Simple user identification
+        const supabase = window.supabase.createClient(
+            'https://wkgldyfxsmkjyallrdtq.supabase.co',
+            'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6IndrZ2xkeWZ4c21ranlhbGxyZHRxIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NzczNTg0OTQsImV4cCI6MjA5MjkzNDQ5NH0.WgXSHB6teuUiEKYgeR2ADAK-8A_6VnbEl-wv0RSuxjA'
+        );
+        const WORKER = 'https://aged-recipe-80db.wabdo3762.workers.dev/';
+        const EMAIL = 'user@zakhourani.com';
+        let chatId = null, busy = false;
 
-        let currentChatId = null;
-        let isProcessing = false;
-
-        // ============================================================
-        // NETWORK BACKGROUND
-        // ============================================================
-        function createNetwork() {
-            const bg = document.getElementById('networkBg');
-            for (let i = 0; i < 20; i++) {
-                const dot = document.createElement('div');
-                dot.className = 'network-dot';
-                dot.style.left = Math.random() * 100 + '%';
-                dot.style.top = Math.random() * 100 + '%';
-                dot.style.animationDelay = Math.random() * 3 + 's';
-                bg.appendChild(dot);
-            }
+        // Network background
+        for(let i=0;i<15;i++){
+            const d=document.createElement('div');
+            d.className='network-dot';
+            d.style.cssText=`left:${Math.random()*100}%;top:${Math.random()*100}%;animation-delay:${Math.random()*3}s`;
+            document.getElementById('networkBg').appendChild(d);
         }
 
-        // ============================================================
-        // TOAST
-        // ============================================================
-        function toast(msg) {
-            const t = document.getElementById('toast');
-            t.textContent = msg;
-            t.style.display = 'block';
-            clearTimeout(t._t);
-            t._t = setTimeout(() => t.style.display = 'none', 2500);
+        function toast(m){const t=document.getElementById('toast');t.textContent=m;t.style.display='block';clearTimeout(t._t);t._t=setTimeout(()=>t.style.display='none',2000)}
+        function toggleSidebar(){document.getElementById('sidebar').classList.toggle('open');document.getElementById('sidebarOverlay').classList.toggle('show')}
+
+        async function checkLimit(){
+            const{data,error}=await supabase.rpc('check_daily_limit',{user_email:EMAIL});
+            return error?{can_ask:true,remaining:50,total:50}:data;
+        }
+        async function incUsage(){await supabase.rpc('increment_usage',{user_email:EMAIL})}
+        async function updateUsageUI(){
+            const l=await checkLimit();
+            document.getElementById('usageText').textContent=`${l.remaining}/${l.total} remaining`;
+            document.getElementById('usageFill').style.width=(l.remaining/l.total*100)+'%';
         }
 
-        // ============================================================
-        // SIDEBAR
-        // ============================================================
-        function toggleSidebar() {
-            document.getElementById('sidebar').classList.toggle('open');
-            document.getElementById('sidebarOverlay').classList.toggle('show');
-        }
-
-        // ============================================================
-        // SUPABASE OPERATIONS
-        // ============================================================
-        async function checkDailyLimit() {
-            const { data, error } = await supabase.rpc('check_daily_limit', { user_email: USER_EMAIL });
-            if (error) { console.error(error); return { canAsk: true, remaining: 50, total: 50 }; }
-            return data[0] || { canAsk: true, remaining: 50, total: 50 };
-        }
-
-        async function incrementUsage() {
-            await supabase.rpc('increment_usage', { user_email: USER_EMAIL });
-        }
-
-        async function loadChats() {
-            const { data: user } = await supabase.from('users').select('id').eq('email', USER_EMAIL).single();
-            if (!user) return [];
-            
-            const { data } = await supabase.from('conversations')
-                .select('*').eq('user_id', user.id).order('updated_at', { ascending: false });
-            return data || [];
-        }
-
-        async function createChat(title = 'New Chat') {
-            const { data: user } = await supabase.from('users').select('id').eq('email', USER_EMAIL).single();
-            if (!user) {
-                await supabase.from('users').insert({ email: USER_EMAIL, username: 'User' });
-                return createChat(title);
-            }
-            
-            const { data } = await supabase.from('conversations').insert({
-                user_id: user.id, title
-            }).select().single();
+        async function getUser(){
+            let{data}=await supabase.from('users').select('id').eq('email',EMAIL).single();
+            if(!data){await supabase.from('users').insert({email:EMAIL,username:'User'});return getUser()}
             return data;
         }
-
-        async function deleteChat(id) {
-            await supabase.from('conversations').delete().eq('id', id);
+        async function loadChats(){
+            const u=await getUser();
+            const{data}=await supabase.from('conversations').select('*').eq('user_id',u.id).order('updated_at',{ascending:false});
+            return data||[];
         }
-
-        async function renameChat(id, title) {
-            await supabase.from('conversations').update({ title }).eq('id', id);
+        async function createChat(){
+            const u=await getUser();
+            const{data}=await supabase.from('conversations').insert({user_id:u.id,title:'New Chat'}).select().single();
+            return data;
         }
-
-        async function loadMessages(chatId) {
-            const { data } = await supabase.from('messages')
-                .select('*').eq('conversation_id', chatId).order('created_at', { ascending: true });
-            return data || [];
-        }
-
-        async function saveMessage(chatId, role, content, engine = 'Zakhourani AI') {
-            await supabase.from('messages').insert({
-                conversation_id: chatId, role, content, engine
-            });
-        }
-
-        // ============================================================
-        // RENDER CHATS
-        // ============================================================
-        async function renderChatList() {
-            const chats = await loadChats();
-            const list = document.getElementById('chatList');
-            list.innerHTML = chats.map(c => `
-                <div class="chat-item ${c.id === currentChatId ? 'active' : ''}" onclick="openChat('${c.id}')">
+        async function renderChats(){
+            const chats=await loadChats();
+            document.getElementById('chatList').innerHTML=chats.length?chats.map(c=>`
+                <div class="chat-item ${c.id===chatId?'active':''}" onclick="openChat('${c.id}')">
                     <span class="chat-item-title">${c.title}</span>
                     <div class="chat-item-actions">
-                        <button onclick="event.stopPropagation();renameChatPrompt('${c.id}','${c.title}')" title="Rename">✏️</button>
-                        <button class="del" onclick="event.stopPropagation();deleteChatConfirm('${c.id}')" title="Delete">🗑️</button>
+                        <button onclick="event.stopPropagation();renamePrompt('${c.id}')">✏️</button>
+                        <button onclick="event.stopPropagation();delChat('${c.id}')">🗑️</button>
                     </div>
-                </div>
-            `).join('');
-            
-            if (chats.length === 0) {
-                list.innerHTML = '<div style="text-align:center;color:var(--text2);padding:20px;font-size:13px;">No chats yet</div>';
-            }
+                </div>`).join(''):'<div style="text-align:center;color:var(--text2);padding:20px;font-size:12px">No chats</div>';
+        }
+        async function openChat(id){
+            chatId=id;
+            const c=document.getElementById('chatContainer');
+            const{data:msgs}=await supabase.from('messages').select('*').eq('conversation_id',id).order('created_at',{ascending:true});
+            c.innerHTML=msgs.length?msgs.map(m=>{
+                let h=m.content.replace(/\*\*(.*?)\*\*/g,'<strong>$1</strong>').replace(/\n/g,'<br>');
+                return `<div class="msg ${m.role==='user'?'msg-user':'msg-ai'}">${h}${m.engine&&m.role==='assistant'?`<div class="engine-tag">${m.engine}</div>`:''}</div>`;
+            }).join(''):'<div style="text-align:center;padding:50px 20px"><div style="font-size:3rem">🧠</div><p style="color:var(--text2);margin-top:8px">Start the conversation</p></div>';
+            c.scrollTop=c.scrollHeight;
+            renderChats();toggleSidebar();
+        }
+        async function newChat(){
+            const chat=await createChat();
+            chatId=chat.id;
+            document.getElementById('chatContainer').innerHTML='<div style="text-align:center;padding:50px 20px"><div style="font-size:3rem">🧠</div><p style="color:var(--text2);margin-top:8px">New conversation</p></div>';
+            renderChats();toggleSidebar();
+        }
+        async function delChat(id){
+            if(!confirm('Delete this chat?'))return;
+            await supabase.from('conversations').delete().eq('id',id);
+            if(chatId===id){const chats=await loadChats();chats.length?openChat(chats[0].id):newChat()}
+            renderChats();toast('Chat deleted');
+        }
+        async function renamePrompt(id){
+            const n=prompt('New name:');
+            if(n){await supabase.from('conversations').update({title:n}).eq('id',id);renderChats()}
         }
 
-        async function openChat(id) {
-            currentChatId = id;
-            const container = document.getElementById('chatContainer');
-            container.innerHTML = '';
-            
-            const messages = await loadMessages(id);
-            if (messages.length === 0) {
-                container.innerHTML = `
-                    <div style="text-align:center;padding:40px 20px;">
-                        <div style="font-size:3rem;margin-bottom:12px;">🧠</div>
-                        <p style="color:var(--text2);">Start the conversation</p>
-                    </div>`;
-            } else {
-                messages.forEach(m => addMsgToDOM(m.content, m.role, m.engine, false));
-            }
-            
-            container.scrollTop = container.scrollHeight;
-            renderChatList();
-            toggleSidebar();
-            updateUsage();
+        function addMsgDOM(content,role,engine){
+            const c=document.getElementById('chatContainer');
+            if(c.querySelector('div[style]'))c.innerHTML='';
+            const d=document.createElement('div');
+            d.className=`msg ${role==='user'?'msg-user':'msg-ai'}`;
+            d.innerHTML=content.replace(/\*\*(.*?)\*\*/g,'<strong>$1</strong>').replace(/\n/g,'<br>')+(engine&&role==='assistant'?`<div class="engine-tag">${engine}</div>`:'');
+            c.appendChild(d);c.scrollTop=c.scrollHeight;
         }
 
-        async function newChat() {
-            const chat = await createChat();
-            currentChatId = chat.id;
-            document.getElementById('chatContainer').innerHTML = `
-                <div style="text-align:center;padding:40px 20px;">
-                    <div style="font-size:3rem;margin-bottom:12px;">🧠</div>
-                    <p style="color:var(--text2);">Start the conversation</p>
-                </div>`;
-            renderChatList();
-            toggleSidebar();
-        }
-
-        async function deleteChatConfirm(id) {
-            if (!confirm('Delete this chat?')) return;
-            await deleteChat(id);
-            if (currentChatId === id) {
-                const chats = await loadChats();
-                if (chats.length > 0) {
-                    openChat(chats[0].id);
-                } else {
-                    const newChat = await createChat();
-                    openChat(newChat.id);
-                }
-            }
-            renderChatList();
-            toast('Chat deleted');
-        }
-
-        async function renameChatPrompt(id, oldTitle) {
-            const title = prompt('Rename chat:', oldTitle);
-            if (title && title.trim()) {
-                await renameChat(id, title.trim());
-                renderChatList();
-                toast('Chat renamed');
-            }
-        }
-
-        // ============================================================
-        // MESSAGES
-        // ============================================================
-        function addMsgToDOM(content, role, engine, save = true) {
-            const container = document.getElementById('chatContainer');
-            const welcome = container.querySelector('#welcomeMsg') || container.querySelector('div[style]');
-            if (welcome && container.children.length <= 1) welcome.remove();
+        async function sendMsg(){
+            const input=document.getElementById('msgInput');
+            const text=input.value.trim();
+            if(!text||busy)return;
             
-            const div = document.createElement('div');
-            div.className = `msg ${role === 'user' ? 'msg-user' : 'msg-ai'}`;
+            const limit=await checkLimit();
+            if(!limit.can_ask){toast('⏰ Daily limit reached');return}
             
-            let html = content
-                .replace(/\*\*(.*?)\*\*/g, '<strong>$1</strong>')
-                .replace(/```(\w*)\n([\s\S]*?)```/g, '<pre><code>$2</code></pre>')
-                .replace(/`([^`]+)`/g, '<code>$1</code>')
-                .replace(/^### (.*$)/gm, '<strong>$1</strong>')
-                .replace(/\n/g, '<br>');
+            busy=true;
+            document.getElementById('sendBtn').disabled=true;
             
-            div.innerHTML = html;
+            if(!chatId){const chat=await createChat();chatId=chat.id;renderChats()}
             
-            if (role === 'assistant' && engine) {
-                div.innerHTML += `<div class="engine-tag">${engine}</div>`;
-            }
+            addMsgDOM(text,'user');
+            await supabase.from('messages').insert({conversation_id:chatId,role:'user',content:text});
+            await incUsage();await updateUsageUI();
+            input.value='';
             
-            container.appendChild(div);
-            container.scrollTop = container.scrollHeight;
-        }
-
-        async function sendMsg() {
-            const input = document.getElementById('msgInput');
-            const text = input.value.trim();
-            if (!text || isProcessing) return;
+            const typing=document.createElement('div');
+            typing.className='typing';
+            typing.innerHTML='<span></span><span></span><span></span>';
+            document.getElementById('chatContainer').appendChild(typing);
             
-            // Check limit
-            const limit = await checkDailyLimit();
-            if (!limit.canAsk) {
-                toast('⏰ Daily limit reached. Resets tomorrow.');
-                return;
-            }
-            
-            isProcessing = true;
-            document.getElementById('sendBtn').disabled = true;
-            
-            // Ensure chat exists
-            if (!currentChatId) {
-                const chat = await createChat();
-                currentChatId = chat.id;
-                renderChatList();
-            }
-            
-            // Add user message
-            addMsgToDOM(text, 'user');
-            await saveMessage(currentChatId, 'user', text);
-            await incrementUsage();
-            await updateUsage();
-            input.value = '';
-            
-            // Typing indicator
-            const container = document.getElementById('chatContainer');
-            const typing = document.createElement('div');
-            typing.className = 'typing';
-            typing.innerHTML = '<span></span><span></span><span></span>';
-            container.appendChild(typing);
-            container.scrollTop = container.scrollHeight;
-            
-            try {
-                const response = await fetch(WORKER_URL, {
-                    method: 'POST',
-                    headers: { 'Content-Type': 'application/json' },
-                    body: JSON.stringify({ prompt: text, history: [] })
-                });
-                
-                const data = await response.json();
+            try{
+                const r=await fetch(WORKER,{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({prompt:text,history:[]})});
+                const d=await r.json();
                 typing.remove();
-                
-                if (data.success && data.reply) {
-                    addMsgToDOM(data.reply, 'assistant', data.engine);
-                    await saveMessage(currentChatId, 'assistant', data.reply, data.engine);
-                    
-                    // Update chat title if first message
-                    const msgs = await loadMessages(currentChatId);
-                    if (msgs.length <= 2) {
-                        const title = text.substring(0, 40) + (text.length > 40 ? '...' : '');
-                        await renameChat(currentChatId, title);
-                        renderChatList();
-                    }
-                } else {
-                    throw new Error('No reply');
+                if(d.success&&d.reply){
+                    addMsgDOM(d.reply,'assistant',d.engine);
+                    await supabase.from('messages').insert({conversation_id:chatId,role:'assistant',content:d.reply,engine:d.engine});
+                    const{data:msgs}=await supabase.from('messages').select('id').eq('conversation_id',chatId);
+                    if(msgs.length<=2){const title=text.substring(0,35)+(text.length>35?'...':'');await supabase.from('conversations').update({title}).eq('id',chatId)}
+                    renderChats();
                 }
-            } catch (e) {
+            }catch(e){
                 typing.remove();
-                const fallback = getLocalResponse(text);
-                addMsgToDOM(fallback, 'assistant', 'Zakhourani');
-                await saveMessage(currentChatId, 'assistant', fallback, 'Zakhourani');
+                const fb="I'm Zakhourani AI. How can I assist you?";
+                addMsgDOM(fb,'assistant','Zakhourani');
+                await supabase.from('messages').insert({conversation_id:chatId,role:'assistant',content:fb,engine:'Zakhourani'});
             }
             
-            isProcessing = false;
-            document.getElementById('sendBtn').disabled = false;
+            busy=false;
+            document.getElementById('sendBtn').disabled=false;
             input.focus();
-            renderChatList();
         }
 
-        function getLocalResponse(prompt) {
-            const p = prompt.toLowerCase();
-            if (p.includes('waleed') || p.includes('zakhourani')) return "**Dr. Waleed Hussein Zakhourani** is a Harvard-educated linguist and founder of Zakhourani.";
-            if (p.includes('hello') || p.includes('hi')) return "Hello! How can I help you today?";
-            return "I'm Zakhourani AI. How can I assist you?";
+        async function clearChat(){
+            if(!chatId||!confirm('Clear messages?'))return;
+            document.getElementById('chatContainer').innerHTML='<div style="text-align:center;padding:50px 20px"><div style="font-size:3rem">🧠</div><p style="color:var(--text2);margin-top:8px">Cleared</p></div>';
+            toast('Cleared');
         }
-
-        async function updateUsage() {
-            const limit = await checkDailyLimit();
-            const remaining = limit.remaining;
-            const total = limit.total;
-            const percent = (remaining / total) * 100;
-            
-            document.getElementById('usageText').textContent = `${remaining}/${total} remaining`;
-            document.getElementById('usageFill').style.width = percent + '%';
-            document.getElementById('usageFill').style.background = percent < 20 ? '#ef4444' : percent < 50 ? '#eab308' : 'var(--accent)';
-        }
-
-        function clearChat() {
-            if (confirm('Clear current chat messages?')) {
-                document.getElementById('chatContainer').innerHTML = `
-                    <div style="text-align:center;padding:40px 20px;">
-                        <div style="font-size:3rem;margin-bottom:12px;">🧠</div>
-                        <p style="color:var(--text2);">Chat cleared</p>
-                    </div>`;
-                toast('Chat cleared');
+        async function exportChats(){
+            const chats=await loadChats();
+            let txt='ZAKHOURANI AI EXPORT\n\n';
+            for(const c of chats){
+                txt+=`=== ${c.title} ===\n`;
+                const{data:msgs}=await supabase.from('messages').select('*').eq('conversation_id',c.id).order('created_at');
+                msgs.forEach(m=>txt+=`[${m.role}] ${m.content}\n`);
+                txt+='\n';
             }
+            const b=new Blob([txt],{type:'text/plain'});
+            const a=document.createElement('a');
+            a.href=URL.createObjectURL(b);a.download='zakhourani-chats.txt';a.click();
+            toast('Exported!');
         }
 
-        async function exportChats() {
-            const chats = await loadChats();
-            let text = 'ZAKHOURANI AI - CHAT EXPORT\n\n';
-            for (const chat of chats) {
-                text += `=== ${chat.title} ===\n`;
-                const msgs = await loadMessages(chat.id);
-                msgs.forEach(m => text += `[${m.role}] ${m.content}\n`);
-                text += '\n';
-            }
-            const blob = new Blob([text], { type: 'text/plain' });
-            const a = document.createElement('a');
-            a.href = URL.createObjectURL(blob);
-            a.download = 'zakhourani-chats.txt';
-            a.click();
-            toast('Chats exported');
-        }
-
-        // ============================================================
-        // INIT
-        // ============================================================
-        async function init() {
-            createNetwork();
-            
-            // Initialize user
-            await supabase.from('users').upsert({ email: USER_EMAIL, username: 'User' }, { onConflict: 'email' });
-            
-            // Load chats
-            let chats = await loadChats();
-            if (chats.length === 0) {
-                await createChat();
-                chats = await loadChats();
-            }
-            
-            currentChatId = chats[0].id;
-            await openChat(currentChatId);
-            await updateUsage();
-            
-            // Event listeners
-            document.getElementById('msgInput').addEventListener('keydown', e => {
-                if (e.key === 'Enter' && !e.shiftKey) { e.preventDefault(); sendMsg(); }
-            });
-            
+        document.getElementById('msgInput').addEventListener('keydown',e=>{if(e.key==='Enter'){e.preventDefault();sendMsg()}});
+        
+        (async function init(){
+            await checkLimit();await updateUsageUI();
+            let chats=await loadChats();
+            if(!chats.length){await createChat();chats=await loadChats()}
+            chatId=chats[0].id;await openChat(chatId);
             document.getElementById('msgInput').focus();
-        }
-
-        init();
+        })();
     </script>
 </body>
 </html>

@@ -3,571 +3,364 @@
 <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>Zakhourani AI - Neural Analytics Platform</title>
-    
-    <!-- Fonts & Icons -->
+    <title>Zakhourani AI - Database Platform</title>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" />
-    <link href="https://fonts.googleapis.com/css2?family=Inter:opsz,wght@14..32,300;14..32,400;14..32,500;14..32,600;14..32,700;14..32,800;14..32,900&display=swap" rel="stylesheet" />
-    
-    <!-- Libraries -->
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&display=swap" rel="stylesheet" />
     <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
     <script src="https://cdn.jsdelivr.net/npm/chart.js@4"></script>
-    <script src="https://cdn.jsdelivr.net/npm/three@0.157.0/build/three.min.js"></script>
-    <script src="https://cdn.jsdelivr.net/npm/particles.js@2.0.0/particles.min.js"></script>
-    
     <style>
-        :root {
-            --bg-deep: #020617;
-            --bg-space: #0a0e27;
-            --bg-card: rgba(15, 23, 42, 0.8);
-            --bg-glass: rgba(30, 41, 59, 0.6);
-            --text-primary: #e2e8f0;
-            --text-secondary: #94a3b8;
-            --accent-1: #3b82f6;
-            --accent-2: #8b5cf6;
-            --accent-3: #06b6d4;
-            --accent-4: #f59e0b;
-            --success: #10b981;
-            --danger: #ef4444;
-            --warning: #f59e0b;
-            --border: rgba(148, 163, 184, 0.1);
-            --glow-blue: 0 0 30px rgba(59, 130, 246, 0.3);
-            --glow-purple: 0 0 30px rgba(139, 92, 246, 0.3);
-            --gradient-1: linear-gradient(135deg, #3b82f6, #8b5cf6);
-            --gradient-2: linear-gradient(135deg, #06b6d4, #10b981);
-            --gradient-3: linear-gradient(135deg, #f59e0b, #ef4444);
-        }
-        
         * {
             margin: 0;
             padding: 0;
             box-sizing: border-box;
         }
-        
+
+        :root {
+            --bg: #0a0e17;
+            --bg-card: #111827;
+            --text: #e2e8f0;
+            --text-secondary: #94a3b8;
+            --blue: #3b82f6;
+            --purple: #8b5cf6;
+            --green: #10b981;
+            --red: #ef4444;
+            --border: rgba(148, 163, 184, 0.1);
+        }
+
         body {
             font-family: 'Inter', sans-serif;
-            background: var(--bg-deep);
-            color: var(--text-primary);
-            overflow-x: hidden;
-            cursor: default;
+            background: var(--bg);
+            color: var(--text);
+            min-height: 100vh;
         }
-        
-        /* Custom Cursor */
-        .cursor {
-            width: 20px;
-            height: 20px;
-            border: 2px solid var(--accent-1);
-            border-radius: 50%;
+
+        /* Loading */
+        #loader {
             position: fixed;
-            pointer-events: none;
+            inset: 0;
+            background: var(--bg);
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
             z-index: 9999;
-            transition: transform 0.2s;
-            mix-blend-mode: difference;
+            gap: 20px;
         }
-        
-        .cursor-dot {
-            width: 4px;
-            height: 4px;
-            background: var(--accent-1);
+
+        #loader.hidden {
+            display: none;
+        }
+
+        .spinner {
+            width: 44px;
+            height: 44px;
+            border: 3px solid var(--border);
+            border-top-color: var(--blue);
             border-radius: 50%;
-            position: fixed;
-            pointer-events: none;
-            z-index: 9999;
+            animation: spin 0.8s linear infinite;
         }
-        
-        /* Particle Background */
-        #particles-js {
-            position: fixed;
-            top: 0;
-            left: 0;
-            width: 100%;
+
+        @keyframes spin {
+            to { transform: rotate(360deg); }
+        }
+
+        .loader-text {
+            color: var(--text-secondary);
+            font-size: 14px;
+        }
+
+        .progress-bar {
+            width: 280px;
+            height: 3px;
+            background: var(--border);
+            border-radius: 2px;
+            overflow: hidden;
+        }
+
+        .progress-fill {
             height: 100%;
-            z-index: 0;
-            pointer-events: none;
+            background: linear-gradient(90deg, var(--blue), var(--purple));
+            width: 0%;
+            transition: width 0.4s;
         }
-        
-        /* Main Container */
-        .app {
-            position: relative;
-            z-index: 1;
-        }
-        
-        /* Top Navigation Bar */
-        .top-nav {
-            background: var(--bg-glass);
-            backdrop-filter: blur(20px);
+
+        /* Nav */
+        nav {
+            background: rgba(17, 24, 39, 0.9);
+            backdrop-filter: blur(10px);
             border-bottom: 1px solid var(--border);
             padding: 0 24px;
-            height: 70px;
+            height: 60px;
             display: flex;
             align-items: center;
             justify-content: space-between;
             position: sticky;
             top: 0;
             z-index: 100;
-            gap: 16px;
         }
-        
-        .logo-section {
+
+        .nav-brand {
             display: flex;
             align-items: center;
-            gap: 12px;
-        }
-        
-        .logo-icon {
-            width: 40px;
-            height: 40px;
-            background: var(--gradient-1);
-            border-radius: 12px;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            font-size: 18px;
-            color: white;
-            box-shadow: var(--glow-blue);
-            animation: pulse 2s infinite;
-        }
-        
-        @keyframes pulse {
-            0%, 100% { box-shadow: 0 0 20px rgba(59, 130, 246, 0.3); }
-            50% { box-shadow: 0 0 40px rgba(59, 130, 246, 0.6); }
-        }
-        
-        .logo-text {
-            font-size: 20px;
+            gap: 10px;
             font-weight: 800;
-            background: var(--gradient-1);
-            -webkit-background-clip: text;
-            -webkit-text-fill-color: transparent;
-            letter-spacing: -0.5px;
+            font-size: 18px;
         }
-        
-        .nav-center {
+
+        .nav-brand i {
+            color: var(--blue);
+            font-size: 22px;
+        }
+
+        .nav-tabs {
             display: flex;
             gap: 4px;
-            background: var(--bg-glass);
-            border-radius: 12px;
-            padding: 4px;
         }
-        
-        .nav-btn {
-            padding: 8px 20px;
+
+        .nav-tab {
+            padding: 8px 16px;
             border: none;
             background: transparent;
             color: var(--text-secondary);
-            border-radius: 10px;
-            font-weight: 500;
-            font-size: 13px;
+            border-radius: 8px;
             cursor: pointer;
-            transition: all 0.3s;
-            white-space: nowrap;
+            font-size: 13px;
+            font-weight: 500;
+            transition: all 0.2s;
             font-family: 'Inter', sans-serif;
         }
-        
-        .nav-btn:hover {
-            color: var(--text-primary);
+
+        .nav-tab:hover {
+            color: var(--text);
             background: rgba(255,255,255,0.05);
         }
-        
-        .nav-btn.active {
-            background: var(--gradient-1);
+
+        .nav-tab.active {
+            background: var(--blue);
             color: white;
-            box-shadow: var(--glow-blue);
         }
-        
-        .nav-right {
+
+        .nav-actions {
             display: flex;
             align-items: center;
             gap: 12px;
         }
-        
-        .status-pulse {
-            width: 8px;
-            height: 8px;
-            background: var(--success);
+
+        .status-indicator {
+            display: flex;
+            align-items: center;
+            gap: 6px;
+            font-size: 12px;
+            color: var(--text-secondary);
+        }
+
+        .status-dot {
+            width: 7px;
+            height: 7px;
+            background: var(--green);
             border-radius: 50%;
-            animation: statusPulse 2s infinite;
         }
-        
-        @keyframes statusPulse {
-            0%, 100% { box-shadow: 0 0 0 0 rgba(16, 185, 129, 0.4); }
-            50% { box-shadow: 0 0 0 8px rgba(16, 185, 129, 0); }
-        }
-        
+
         .btn {
-            padding: 10px 20px;
-            border: none;
-            border-radius: 10px;
-            font-weight: 600;
-            font-size: 13px;
+            padding: 8px 16px;
+            border: 1px solid var(--border);
+            border-radius: 8px;
+            background: transparent;
+            color: var(--text);
             cursor: pointer;
-            transition: all 0.3s;
+            font-size: 13px;
+            font-weight: 500;
+            transition: all 0.2s;
             font-family: 'Inter', sans-serif;
             display: inline-flex;
             align-items: center;
             gap: 6px;
-            position: relative;
-            overflow: hidden;
         }
-        
+
+        .btn:hover {
+            background: rgba(255,255,255,0.05);
+        }
+
         .btn-primary {
-            background: var(--gradient-1);
+            background: var(--blue);
+            border-color: var(--blue);
             color: white;
-            box-shadow: 0 4px 15px rgba(59, 130, 246, 0.3);
         }
-        
+
         .btn-primary:hover {
-            transform: translateY(-2px);
-            box-shadow: 0 8px 25px rgba(59, 130, 246, 0.5);
+            background: #2563eb;
         }
-        
-        .btn-glass {
-            background: var(--bg-glass);
-            color: var(--text-primary);
-            border: 1px solid var(--border);
-            backdrop-filter: blur(10px);
+
+        .btn-sm {
+            padding: 5px 10px;
+            font-size: 11px;
         }
-        
-        .btn-glass:hover {
-            background: rgba(30, 41, 59, 0.8);
-        }
-        
-        /* Main Content */
-        .main-content {
+
+        /* Main */
+        main {
             padding: 24px;
-            max-width: 1800px;
+            max-width: 1500px;
             margin: 0 auto;
         }
-        
+
         .page {
             display: none;
-            animation: fadeInUp 0.5s ease;
         }
-        
+
         .page.active {
             display: block;
+            animation: fadeIn 0.3s ease;
         }
-        
-        @keyframes fadeInUp {
-            from {
-                opacity: 0;
-                transform: translateY(20px);
-            }
-            to {
-                opacity: 1;
-                transform: translateY(0);
-            }
+
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(8px); }
+            to { opacity: 1; transform: translateY(0); }
         }
-        
-        /* AI Insight Banner */
-        .ai-banner {
-            background: var(--gradient-1);
-            border-radius: 16px;
-            padding: 16px 24px;
-            margin-bottom: 24px;
-            display: flex;
-            align-items: center;
-            justify-content: space-between;
-            box-shadow: var(--glow-blue);
-            animation: slideIn 0.6s ease;
-        }
-        
-        @keyframes slideIn {
-            from {
-                opacity: 0;
-                transform: translateX(-30px);
-            }
-            to {
-                opacity: 1;
-                transform: translateX(0);
-            }
-        }
-        
-        .ai-banner .icon {
-            font-size: 32px;
-            animation: bounce 2s infinite;
-        }
-        
-        @keyframes bounce {
-            0%, 100% { transform: translateY(0); }
-            50% { transform: translateY(-10px); }
-        }
-        
-        .ai-banner .text {
-            flex: 1;
-            margin-left: 16px;
-        }
-        
-        .ai-banner .title {
-            font-weight: 700;
-            font-size: 16px;
-            color: white;
-        }
-        
-        .ai-banner .subtitle {
-            font-size: 13px;
-            color: rgba(255,255,255,0.8);
-            margin-top: 2px;
-        }
-        
-        /* Stats Grid */
-        .stats-grid {
+
+        /* Stats */
+        .stats-row {
             display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
-            gap: 16px;
+            grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
+            gap: 12px;
             margin-bottom: 24px;
         }
-        
+
         .stat-card {
             background: var(--bg-card);
             border: 1px solid var(--border);
-            border-radius: 20px;
-            padding: 24px;
-            backdrop-filter: blur(10px);
-            position: relative;
-            overflow: hidden;
-            transition: all 0.4s;
-            cursor: pointer;
+            border-radius: 12px;
+            padding: 18px 20px;
         }
-        
-        .stat-card::before {
-            content: '';
-            position: absolute;
-            top: 0;
-            left: 0;
-            right: 0;
-            height: 4px;
-            background: var(--gradient-1);
-            transform: scaleX(0);
-            transition: transform 0.4s;
-        }
-        
-        .stat-card:hover::before {
-            transform: scaleX(1);
-        }
-        
-        .stat-card:hover {
-            transform: translateY(-4px);
-            box-shadow: 0 20px 40px rgba(0,0,0,0.3);
-        }
-        
-        .stat-icon {
-            width: 48px;
-            height: 48px;
-            border-radius: 14px;
+
+        .stat-card .stat-icon {
+            width: 36px;
+            height: 36px;
+            border-radius: 8px;
             display: flex;
             align-items: center;
             justify-content: center;
-            font-size: 20px;
-            margin-bottom: 16px;
+            font-size: 15px;
+            margin-bottom: 10px;
         }
-        
-        .stat-icon.blue { background: rgba(59,130,246,0.2); color: var(--accent-1); }
-        .stat-icon.purple { background: rgba(139,92,246,0.2); color: var(--accent-2); }
-        .stat-icon.cyan { background: rgba(6,182,212,0.2); color: var(--accent-3); }
-        .stat-icon.amber { background: rgba(245,158,11,0.2); color: var(--accent-4); }
-        .stat-icon.green { background: rgba(16,185,129,0.2); color: var(--success); }
-        .stat-icon.red { background: rgba(239,68,68,0.2); color: var(--danger); }
-        
-        .stat-label {
-            font-size: 12px;
+
+        .stat-icon.blue { background: rgba(59,130,246,0.15); color: var(--blue); }
+        .stat-icon.purple { background: rgba(139,92,246,0.15); color: var(--purple); }
+        .stat-icon.green { background: rgba(16,185,129,0.15); color: var(--green); }
+        .stat-icon.red { background: rgba(239,68,68,0.15); color: var(--red); }
+
+        .stat-card .label {
+            font-size: 11px;
             color: var(--text-secondary);
             text-transform: uppercase;
-            letter-spacing: 1px;
+            letter-spacing: 0.5px;
             font-weight: 600;
-            margin-bottom: 4px;
         }
-        
-        .stat-value {
-            font-size: 36px;
-            font-weight: 900;
-            background: var(--gradient-1);
-            -webkit-background-clip: text;
-            -webkit-text-fill-color: transparent;
-            line-height: 1;
+
+        .stat-card .value {
+            font-size: 26px;
+            font-weight: 800;
+            margin-top: 2px;
         }
-        
-        .stat-change {
-            font-size: 12px;
-            font-weight: 600;
-            margin-top: 8px;
-            display: flex;
-            align-items: center;
-            gap: 4px;
+
+        .stat-card .sub {
+            font-size: 11px;
+            color: var(--text-secondary);
+            margin-top: 2px;
         }
-        
-        .stat-change.positive { color: var(--success); }
-        .stat-change.negative { color: var(--danger); }
-        
-        /* Charts Grid */
+
+        /* Charts */
         .charts-grid {
             display: grid;
             grid-template-columns: 2fr 1fr;
-            gap: 20px;
+            gap: 16px;
             margin-bottom: 24px;
         }
-        
+
+        @media (max-width: 1024px) {
+            .charts-grid {
+                grid-template-columns: 1fr;
+            }
+        }
+
         .chart-card {
             background: var(--bg-card);
             border: 1px solid var(--border);
-            border-radius: 20px;
-            padding: 24px;
-            backdrop-filter: blur(10px);
+            border-radius: 12px;
+            padding: 20px;
         }
-        
-        .chart-card.full-width {
+
+        .chart-card.full {
             grid-column: 1 / -1;
         }
-        
+
         .chart-header {
             display: flex;
             justify-content: space-between;
             align-items: center;
-            margin-bottom: 20px;
+            margin-bottom: 16px;
             flex-wrap: wrap;
-            gap: 12px;
-        }
-        
-        .chart-title {
-            font-size: 18px;
-            font-weight: 700;
-            display: flex;
-            align-items: center;
             gap: 8px;
         }
-        
-        .chart-badge {
-            padding: 4px 12px;
-            border-radius: 20px;
-            font-size: 11px;
+
+        .chart-header h3 {
+            font-size: 15px;
             font-weight: 600;
-            background: rgba(59,130,246,0.2);
-            color: var(--accent-1);
         }
-        
-        .chart-container {
+
+        .chart-wrap {
             position: relative;
-            height: 350px;
+            height: 320px;
         }
-        
-        .chart-container.large {
-            height: 450px;
-        }
-        
-        /* 3D Globe Container */
-        #globe-container {
-            width: 100%;
-            height: 400px;
-            border-radius: 16px;
-            overflow: hidden;
-        }
-        
-        /* Anomaly List */
-        .anomaly-list {
-            display: flex;
-            flex-direction: column;
-            gap: 12px;
-            max-height: 350px;
-            overflow-y: auto;
-        }
-        
-        .anomaly-item {
-            background: var(--bg-glass);
-            border: 1px solid var(--border);
-            border-radius: 12px;
-            padding: 16px;
-            display: flex;
-            align-items: center;
-            gap: 12px;
-            transition: all 0.3s;
-            animation: slideIn 0.5s ease;
-        }
-        
-        .anomaly-item:hover {
-            border-color: var(--accent-1);
-            background: rgba(59,130,246,0.1);
-        }
-        
-        .anomaly-severity {
-            width: 40px;
-            height: 40px;
-            border-radius: 10px;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            font-size: 16px;
-        }
-        
-        .severity-high { background: rgba(239,68,68,0.2); color: var(--danger); }
-        .severity-medium { background: rgba(245,158,11,0.2); color: var(--warning); }
-        .severity-low { background: rgba(59,130,246,0.2); color: var(--accent-1); }
-        
-        /* Data Table */
-        .data-section {
+
+        /* Table */
+        .table-section {
             background: var(--bg-card);
             border: 1px solid var(--border);
-            border-radius: 20px;
-            padding: 24px;
-            backdrop-filter: blur(10px);
+            border-radius: 12px;
+            padding: 20px;
         }
-        
+
         .table-controls {
             display: flex;
-            gap: 12px;
-            align-items: center;
-            flex-wrap: wrap;
+            gap: 8px;
             margin-bottom: 16px;
+            flex-wrap: wrap;
+            align-items: center;
         }
-        
-        .input-glass {
-            background: var(--bg-glass);
+
+        .table-controls select,
+        .table-controls input {
+            background: var(--bg);
             border: 1px solid var(--border);
-            border-radius: 10px;
-            padding: 10px 16px;
-            color: var(--text-primary);
+            border-radius: 6px;
+            padding: 7px 12px;
+            color: var(--text);
             font-size: 13px;
             outline: none;
             font-family: 'Inter', sans-serif;
-            transition: all 0.3s;
         }
-        
-        .input-glass:focus {
-            border-color: var(--accent-1);
-            box-shadow: 0 0 0 3px rgba(59,130,246,0.1);
+
+        .table-controls select:focus,
+        .table-controls input:focus {
+            border-color: var(--blue);
         }
-        
+
         .table-wrap {
             overflow-x: auto;
-            max-height: 500px;
+            max-height: 450px;
             overflow-y: auto;
-            border-radius: 12px;
         }
-        
-        .table-wrap::-webkit-scrollbar {
-            width: 6px;
-            height: 6px;
-        }
-        
-        .table-wrap::-webkit-scrollbar-track {
-            background: var(--border);
-            border-radius: 3px;
-        }
-        
-        .table-wrap::-webkit-scrollbar-thumb {
-            background: var(--accent-1);
-            border-radius: 3px;
-        }
-        
+
         table {
             width: 100%;
             border-collapse: collapse;
             font-size: 13px;
         }
-        
+
         th {
             text-align: left;
-            padding: 12px 16px;
-            background: var(--bg-glass);
+            padding: 10px 12px;
+            background: var(--bg);
             color: var(--text-secondary);
             font-weight: 600;
             font-size: 11px;
@@ -575,417 +368,195 @@
             letter-spacing: 0.5px;
             position: sticky;
             top: 0;
-            z-index: 10;
-            border-bottom: 2px solid var(--border);
+            z-index: 5;
         }
-        
+
         td {
-            padding: 12px 16px;
+            padding: 8px 12px;
             border-bottom: 1px solid var(--border);
-            max-width: 250px;
+            max-width: 200px;
             overflow: hidden;
             text-overflow: ellipsis;
             white-space: nowrap;
-            transition: background 0.2s;
         }
-        
+
         tr:hover td {
-            background: rgba(59,130,246,0.05);
+            background: rgba(255,255,255,0.02);
         }
-        
-        /* Voice Command Button */
-        .voice-btn {
+
+        .null {
+            color: var(--text-secondary);
+            font-style: italic;
+            font-size: 12px;
+        }
+
+        .badge {
+            padding: 2px 8px;
+            border-radius: 10px;
+            font-size: 11px;
+            font-weight: 600;
+        }
+
+        .badge-true { background: rgba(16,185,129,0.15); color: var(--green); }
+        .badge-false { background: rgba(239,68,68,0.15); color: var(--red); }
+
+        /* Toast */
+        .toast {
             position: fixed;
             bottom: 24px;
             right: 24px;
-            width: 60px;
-            height: 60px;
-            border-radius: 50%;
-            background: var(--gradient-1);
-            border: none;
-            color: white;
-            font-size: 24px;
-            cursor: pointer;
-            box-shadow: var(--glow-blue);
-            z-index: 50;
-            transition: all 0.3s;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-        }
-        
-        .voice-btn:hover {
-            transform: scale(1.1);
-        }
-        
-        .voice-btn.listening {
-            animation: voicePulse 1.5s infinite;
-            background: var(--gradient-3);
-        }
-        
-        @keyframes voicePulse {
-            0%, 100% { box-shadow: 0 0 0 0 rgba(239, 68, 68, 0.4); }
-            50% { box-shadow: 0 0 0 20px rgba(239, 68, 68, 0); }
-        }
-        
-        /* Modal */
-        .modal-overlay {
-            position: fixed;
-            top: 0;
-            left: 0;
-            right: 0;
-            bottom: 0;
-            background: rgba(0,0,0,0.8);
-            backdrop-filter: blur(10px);
-            z-index: 200;
-            display: none;
-            align-items: center;
-            justify-content: center;
-        }
-        
-        .modal-overlay.active {
-            display: flex;
-        }
-        
-        .modal {
             background: var(--bg-card);
             border: 1px solid var(--border);
-            border-radius: 20px;
-            padding: 32px;
-            max-width: 600px;
-            width: 90%;
-            max-height: 80vh;
-            overflow-y: auto;
-            animation: modalIn 0.3s ease;
+            border-radius: 10px;
+            padding: 12px 20px;
+            z-index: 200;
+            font-size: 13px;
+            animation: slideIn 0.3s ease;
+            max-width: 400px;
         }
-        
-        @keyframes modalIn {
-            from { opacity: 0; transform: scale(0.9); }
-            to { opacity: 1; transform: scale(1); }
+
+        @keyframes slideIn {
+            from { opacity: 0; transform: translateX(20px); }
+            to { opacity: 1; transform: translateX(0); }
         }
-        
-        /* Loading */
-        .loading-screen {
-            position: fixed;
-            top: 0;
-            left: 0;
-            right: 0;
-            bottom: 0;
-            background: var(--bg-deep);
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-            justify-content: center;
-            z-index: 9999;
-            gap: 24px;
-        }
-        
-        .loading-screen.hidden {
-            display: none;
-        }
-        
-        .loading-logo {
-            font-size: 48px;
-            animation: float 3s ease-in-out infinite;
-        }
-        
-        @keyframes float {
-            0%, 100% { transform: translateY(0); }
-            50% { transform: translateY(-20px); }
-        }
-        
-        .loading-bar {
-            width: 300px;
-            height: 4px;
-            background: var(--border);
-            border-radius: 2px;
-            overflow: hidden;
-        }
-        
-        .loading-bar-fill {
-            height: 100%;
-            background: var(--gradient-1);
-            width: 0%;
-            transition: width 0.5s;
-            border-radius: 2px;
-        }
-        
-        .loading-text {
-            color: var(--text-secondary);
-            font-size: 14px;
+
+        .toast.success { border-color: var(--green); }
+        .toast.error { border-color: var(--red); }
+
+        .empty-state {
             text-align: center;
+            padding: 40px;
+            color: var(--text-secondary);
         }
-        
-        /* Responsive */
-        @media (max-width: 1200px) {
-            .charts-grid {
-                grid-template-columns: 1fr;
-            }
+
+        .empty-state i {
+            font-size: 28px;
+            display: block;
+            margin-bottom: 10px;
         }
-        
+
         @media (max-width: 768px) {
-            .stats-grid {
+            .stats-row {
                 grid-template-columns: repeat(2, 1fr);
             }
-            .nav-center {
+            .nav-tabs {
                 display: none;
             }
-            .main-content {
+            main {
                 padding: 16px;
-            }
-            .stat-value {
-                font-size: 24px;
-            }
-        }
-        
-        @media (max-width: 480px) {
-            .stats-grid {
-                grid-template-columns: 1fr;
             }
         }
     </style>
 </head>
 <body>
 
-    <!-- Custom Cursor -->
-    <div class="cursor" id="cursor"></div>
-    <div class="cursor-dot" id="cursorDot"></div>
-
-    <!-- Particle Background -->
-    <div id="particles-js"></div>
-
-    <!-- Loading Screen -->
-    <div class="loading-screen" id="loadingScreen">
-        <div class="loading-logo">🧠</div>
-        <div class="loading-bar">
-            <div class="loading-bar-fill" id="loadingBar"></div>
+    <!-- Loader -->
+    <div id="loader">
+        <div class="spinner"></div>
+        <div class="loader-text" id="loaderText">Connecting to database...</div>
+        <div class="progress-bar">
+            <div class="progress-fill" id="progressFill"></div>
         </div>
-        <div class="loading-text" id="loadingText">Initializing Neural Engine...</div>
-        <div style="color:var(--text-secondary);font-size:12px;" id="loadingDetail"></div>
+        <div style="font-size:11px;color:var(--text-secondary);" id="loaderDetail"></div>
     </div>
 
-    <!-- Main App -->
-    <div class="app">
-        <!-- Top Navigation -->
-        <nav class="top-nav">
-            <div class="logo-section">
-                <div class="logo-icon">🧠</div>
-                <span class="logo-text">Zakhourani AI</span>
+    <!-- App -->
+    <div id="app" style="display:none;">
+        <!-- Nav -->
+        <nav>
+            <div class="nav-brand">
+                <i class="fas fa-brain"></i> Zakhourani AI
             </div>
-            <div class="nav-center" id="navCenter">
-                <button class="nav-btn active" data-page="dashboard">
-                    <i class="fas fa-th-large"></i> Dashboard
-                </button>
-                <button class="nav-btn" data-page="analytics">
-                    <i class="fas fa-chart-line"></i> Analytics
-                </button>
-                <button class="nav-btn" data-page="explorer">
-                    <i class="fas fa-database"></i> Explorer
-                </button>
-                <button class="nav-btn" data-page="insights">
-                    <i class="fas fa-lightbulb"></i> AI Insights
-                </button>
+            <div class="nav-tabs">
+                <button class="nav-tab active" data-page="dashboard"><i class="fas fa-chart-bar"></i> Dashboard</button>
+                <button class="nav-tab" data-page="explorer"><i class="fas fa-table"></i> Explorer</button>
+                <button class="nav-tab" data-page="daily"><i class="fas fa-calendar-day"></i> Daily Data</button>
             </div>
-            <div class="nav-right">
-                <span style="display:flex;align-items:center;gap:6px;font-size:12px;color:var(--text-secondary);">
-                    <div class="status-pulse"></div> Live
-                </span>
-                <button class="btn btn-glass" onclick="refreshAll()" style="padding:8px 12px;">
-                    <i class="fas fa-sync"></i>
-                </button>
-                <button class="btn btn-primary" onclick="generateReport()">
-                    <i class="fas fa-robot"></i> Generate Report
-                </button>
+            <div class="nav-actions">
+                <span class="status-indicator"><span class="status-dot"></span> Connected</span>
+                <button class="btn btn-sm" onclick="refreshAll()"><i class="fas fa-sync-alt"></i></button>
             </div>
         </nav>
 
-        <!-- Main Content -->
-        <div class="main-content">
-            <!-- Dashboard Page -->
+        <!-- Main -->
+        <main>
+            <!-- Dashboard -->
             <div class="page active" id="page-dashboard">
-                <!-- AI Banner -->
-                <div class="ai-banner" id="aiBanner">
-                    <span class="icon">🤖</span>
-                    <div class="text">
-                        <div class="title" id="aiTitle">Analyzing your data patterns...</div>
-                        <div class="subtitle" id="aiSubtitle">AI-powered insights in real-time</div>
-                    </div>
-                    <button class="btn btn-glass" onclick="switchPage('insights')" style="color:white;border-color:rgba(255,255,255,0.3);">
-                        View Insights <i class="fas fa-arrow-right"></i>
-                    </button>
-                </div>
+                <div class="stats-row" id="statsRow"></div>
 
-                <!-- Stats -->
-                <div class="stats-grid" id="statsGrid"></div>
-
-                <!-- Charts -->
                 <div class="charts-grid">
                     <div class="chart-card">
                         <div class="chart-header">
-                            <div class="chart-title">
-                                <i class="fas fa-chart-line" style="color:var(--accent-1);"></i>
-                                Trend Analysis
-                                <span class="chart-badge">Real-time</span>
-                            </div>
-                            <div style="display:flex;gap:8px;">
-                                <button class="btn btn-glass" onclick="changeTrendMetric()" style="padding:6px 12px;font-size:11px;">
-                                    <i class="fas fa-exchange-alt"></i> Switch
-                                </button>
-                            </div>
+                            <h3><i class="fas fa-chart-line" style="color:var(--blue);"></i> Records Over Time (Monthly)</h3>
                         </div>
-                        <div class="chart-container large">
+                        <div class="chart-wrap">
                             <canvas id="trendChart"></canvas>
                         </div>
                     </div>
                     <div class="chart-card">
                         <div class="chart-header">
-                            <div class="chart-title">
-                                <i class="fas fa-exclamation-triangle" style="color:var(--warning);"></i>
-                                Anomaly Detection
-                            </div>
+                            <h3><i class="fas fa-chart-pie" style="color:var(--purple);"></i> Table Distribution</h3>
                         </div>
-                        <div class="anomaly-list" id="anomalyList">
-                            <div style="text-align:center;padding:40px;color:var(--text-secondary);">
-                                <i class="fas fa-spinner fa-spin"></i> Scanning for anomalies...
-                            </div>
-                        </div>
-                    </div>
-                </div>
-
-                <!-- 3D Globe -->
-                <div class="chart-card full-width">
-                    <div class="chart-header">
-                        <div class="chart-title">
-                            <i class="fas fa-globe" style="color:var(--accent-3);"></i>
-                            Global Activity Map
-                        </div>
-                    </div>
-                    <div id="globe-container"></div>
-                </div>
-            </div>
-
-            <!-- Analytics Page -->
-            <div class="page" id="page-analytics">
-                <div class="charts-grid">
-                    <div class="chart-card full-width">
-                        <div class="chart-header">
-                            <div class="chart-title">
-                                <i class="fas fa-chart-bar" style="color:var(--accent-2);"></i>
-                                Predictive Analytics
-                            </div>
-                            <div>
-                                <select class="input-glass" id="predictMetric" onchange="updatePredictions()">
-                                    <option value="users">User Growth</option>
-                                    <option value="usage">Usage Patterns</option>
-                                    <option value="transactions">Transactions</option>
-                                </select>
-                            </div>
-                        </div>
-                        <div class="chart-container large">
-                            <canvas id="predictionChart"></canvas>
-                        </div>
-                    </div>
-                </div>
-                <div class="charts-grid">
-                    <div class="chart-card">
-                        <div class="chart-header">
-                            <div class="chart-title">
-                                <i class="fas fa-chart-pie" style="color:var(--accent-1);"></i>
-                                Distribution
-                            </div>
-                        </div>
-                        <div class="chart-container">
+                        <div class="chart-wrap">
                             <canvas id="pieChart"></canvas>
                         </div>
                     </div>
-                    <div class="chart-card">
-                        <div class="chart-header">
-                            <div class="chart-title">
-                                <i class="fas fa-heartbeat" style="color:var(--danger);"></i>
-                                Health Metrics
-                            </div>
-                        </div>
-                        <div class="chart-container">
-                            <canvas id="healthChart"></canvas>
-                        </div>
+                </div>
+
+                <div class="chart-card full">
+                    <div class="chart-header">
+                        <h3><i class="fas fa-calendar-alt" style="color:var(--green);"></i> Daily Activity (Last 30 Days)</h3>
+                    </div>
+                    <div class="chart-wrap">
+                        <canvas id="dailyChart"></canvas>
                     </div>
                 </div>
             </div>
 
-            <!-- Explorer Page -->
+            <!-- Explorer -->
             <div class="page" id="page-explorer">
-                <div class="data-section">
-                    <div class="chart-header">
-                        <div class="chart-title">
-                            <i class="fas fa-database" style="color:var(--accent-1);"></i>
-                            Data Explorer
-                        </div>
-                    </div>
+                <div class="table-section">
                     <div class="table-controls">
-                        <select class="input-glass" id="tableSelect" onchange="loadTableData()">
-                            <option value="">Select table...</option>
+                        <select id="tableSelect" onchange="loadTable()">
+                            <option value="">-- Select table --</option>
                         </select>
-                        <input type="text" class="input-glass" id="searchInput" placeholder="🔍 Search records..." oninput="searchData()" />
-                        <select class="input-glass" id="limitSelect" onchange="loadTableData()">
+                        <input type="text" id="searchInput" placeholder="Search records..." oninput="filterTable()" />
+                        <select id="limitSelect" onchange="loadTable()">
                             <option value="25">25 rows</option>
-                            <option value="50">50 rows</option>
+                            <option value="50" selected>50 rows</option>
                             <option value="100">100 rows</option>
                             <option value="500">500 rows</option>
                         </select>
-                        <button class="btn btn-primary" onclick="exportData()">
-                            <i class="fas fa-download"></i> Export
-                        </button>
+                        <button class="btn btn-primary btn-sm" onclick="exportCSV()"><i class="fas fa-download"></i> Export CSV</button>
                     </div>
-                    <div class="table-wrap" id="dataWrapper">
-                        <div style="text-align:center;padding:60px;color:var(--text-secondary);">
-                            <i class="fas fa-hand-pointer" style="font-size:32px;display:block;margin-bottom:12px;"></i>
-                            Select a table to explore data
-                        </div>
+                    <div class="table-wrap" id="tableContent">
+                        <div class="empty-state"><i class="fas fa-arrow-up"></i> Select a table to view data</div>
                     </div>
+                    <div style="margin-top:8px;font-size:12px;color:var(--text-secondary);" id="recordInfo"></div>
                 </div>
             </div>
 
-            <!-- AI Insights Page -->
-            <div class="page" id="page-insights">
-                <div class="charts-grid">
-                    <div class="chart-card full-width">
-                        <div class="chart-header">
-                            <div class="chart-title">
-                                <i class="fas fa-brain" style="color:var(--accent-2);"></i>
-                                AI-Generated Insights
-                            </div>
-                            <button class="btn btn-primary" onclick="generateAIInsights()">
-                                <i class="fas fa-magic"></i> Generate New Insights
-                            </button>
-                        </div>
-                        <div id="aiInsightsContainer">
-                            <div style="text-align:center;padding:40px;">
-                                <i class="fas fa-spinner fa-spin"></i> Generating insights...
-                            </div>
-                        </div>
+            <!-- Daily -->
+            <div class="page" id="page-daily">
+                <div class="table-section">
+                    <div class="table-controls">
+                        <label style="color:var(--text-secondary);font-size:13px;">Select Date:</label>
+                        <input type="date" id="dailyDate" onchange="loadDailyData()" style="background:var(--bg);border:1px solid var(--border);border-radius:6px;padding:7px 12px;color:var(--text);font-family:'Inter',sans-serif;" />
+                        <button class="btn btn-primary btn-sm" onclick="loadDailyData()"><i class="fas fa-search"></i> Load</button>
+                    </div>
+                    <div id="dailyContent">
+                        <div class="empty-state"><i class="fas fa-calendar"></i> Select a date to see what data was added</div>
                     </div>
                 </div>
             </div>
-        </div>
+        </main>
     </div>
 
-    <!-- Voice Command Button -->
-    <button class="voice-btn" id="voiceBtn" title="Voice Commands">
-        <i class="fas fa-microphone"></i>
-    </button>
-
-    <!-- Report Modal -->
-    <div class="modal-overlay" id="reportModal">
-        <div class="modal">
-            <h3 style="margin-bottom:16px;">📊 Generated Report</h3>
-            <div id="reportContent"></div>
-            <button class="btn btn-primary" onclick="closeModal()" style="margin-top:16px;">Close</button>
-        </div>
-    </div>
+    <div id="toastContainer"></div>
 
     <script>
         // ============================================================
-        // CONFIGURATION
+        // CONFIG
         // ============================================================
         const SUPABASE_URL = 'https://wkgldyfxsmkjyallrdtq.supabase.co';
         const SUPABASE_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6IndrZ2xkeWZ4c21ranlhbGxyZHRxIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NzczNTg0OTQsImV4cCI6MjA5MjkzNDQ5NH0.WgXSHB6teuUiEKYgeR2ADAK-8A_6VnbEl-wv0RSuxjA';
@@ -993,959 +564,590 @@
         // ============================================================
         // STATE
         // ============================================================
+        const db = {};
         let client = null;
-        let tables = [];
-        let tableData = {};
-        let tableCounts = {};
-        let tableSchemas = {};
-        let currentPage = 'dashboard';
-        let currentTable = '';
-        let searchTerm = '';
-        let trendMetric = 'users';
+        let activeTable = '';
+        let activeData = [];
         let charts = {};
-        let scene3D, camera3D, renderer3D, globe3D;
-        let listening = false;
-        let recognition = null;
 
         // ============================================================
-        // INITIALIZATION
+        // INIT
         // ============================================================
         async function init() {
-            updateLoading('Initializing Neural Engine...', 10, 'Connecting to quantum database...');
-            
-            // Initialize Supabase
-            client = window.supabase.createClient(SUPABASE_URL, SUPABASE_KEY);
-            
-            updateLoading('Scanning database structure...', 30, 'Discovering tables and relationships...');
-            await discoverTables();
-            
-            updateLoading('Loading schemas...', 50, 'Analyzing column structures...');
-            await loadAllSchemas();
-            
-            updateLoading('Computing metrics...', 70, 'Calculating real-time statistics...');
-            await loadAllCounts();
-            
-            updateLoading('Initializing visualizations...', 85, 'Preparing 3D engine and charts...');
-            
-            setTimeout(() => {
-                document.getElementById('loadingScreen').classList.add('hidden');
-                initAll();
-                showToast('🚀 Neural platform initialized successfully!');
-            }, 500);
+            try {
+                setLoader('Initializing Supabase client...', 10, '');
+                client = supabase.createClient(SUPABASE_URL, SUPABASE_KEY);
+
+                setLoader('Discovering tables...', 25, 'Scanning database');
+                await discoverTables();
+
+                if (db.tables.length === 0) {
+                    setLoader('No tables found', 100, 'Check your Supabase project');
+                    document.getElementById('loaderText').textContent = '❌ No tables found in public schema';
+                    return;
+                }
+
+                setLoader(`Found ${db.tables.length} tables`, 40, 'Loading counts...');
+                await loadCounts();
+
+                setLoader('Loading schemas...', 60, 'Reading table structures');
+                await loadSchemas();
+
+                setLoader('Setting up charts...', 85, 'Preparing dashboard');
+                
+                setTimeout(() => {
+                    document.getElementById('loader').classList.add('hidden');
+                    document.getElementById('app').style.display = 'block';
+                    setupAll();
+                    toast('✅ Platform ready! Real data loaded.', 'success');
+                }, 300);
+
+            } catch (e) {
+                console.error(e);
+                setLoader('Error', 100, e.message);
+                document.getElementById('loaderText').textContent = '❌ ' + e.message;
+            }
         }
 
-        function updateLoading(text, progress, detail) {
-            document.getElementById('loadingText').textContent = text;
-            document.getElementById('loadingBar').style.width = progress + '%';
-            document.getElementById('loadingDetail').textContent = detail;
+        function setLoader(text, percent, detail) {
+            document.getElementById('loaderText').textContent = text;
+            document.getElementById('progressFill').style.width = percent + '%';
+            document.getElementById('loaderDetail').textContent = detail;
         }
 
         // ============================================================
-        // DATABASE DISCOVERY
+        // DISCOVER TABLES
         // ============================================================
         async function discoverTables() {
-            const commonTables = [
-                'users', 'daily_usage', 'transactions', 'questions', 
-                'profiles', 'posts', 'comments', 'metrics', 'analytics',
-                'sessions', 'events', 'logs', 'feedback'
+            db.tables = [];
+            db.counts = {};
+            db.schemas = {};
+
+            const candidates = [
+                'users', 'daily_usage', 'transactions', 'questions',
+                'profiles', 'messages', 'notifications', 'payments',
+                'subscriptions', 'logs', 'sessions', 'settings'
             ];
-            
-            const found = [];
-            for (const t of commonTables) {
-                try {
-                    const { error } = await client.from(t).select('count', { count: 'exact', head: true });
-                    if (!error || error.code !== '42P01') found.push(t);
-                } catch (e) {}
+
+            for (const name of candidates) {
+                const exists = await tableExists(name);
+                if (exists) {
+                    db.tables.push(name);
+                }
             }
-            
-            if (found.length === 0) found.push('users');
-            tables = found;
+
+            // If nothing found, try a direct query for common tables
+            if (db.tables.length === 0) {
+                for (const name of ['users', 'daily_usage']) {
+                    try {
+                        const { error } = await client.from(name).select('count', { count: 'exact', head: true });
+                        if (!error || error.code !== '42P01') {
+                            db.tables.push(name);
+                        }
+                    } catch(e) {}
+                }
+            }
+
+            console.log('✅ Tables found:', db.tables);
         }
 
-        async function loadAllSchemas() {
-            for (const table of tables) {
-                try {
-                    const { data } = await client.from(table).select('*').limit(1);
-                    if (data && data.length > 0) {
-                        tableSchemas[table] = Object.keys(data[0]);
-                    }
-                } catch (e) {}
+        async function tableExists(name) {
+            try {
+                const { error } = await client.from(name).select('count', { count: 'exact', head: true });
+                // If no error, table exists (even if empty)
+                // If error code is not '42P01' (undefined_table), it might still exist
+                return !error || (error && error.code !== '42P01');
+            } catch(e) {
+                return false;
             }
         }
 
-        async function loadAllCounts() {
-            for (const table of tables) {
+        // ============================================================
+        // LOAD COUNTS
+        // ============================================================
+        async function loadCounts() {
+            for (const table of db.tables) {
                 try {
-                    const { count } = await client.from(table).select('*', { count: 'exact', head: true });
-                    tableCounts[table] = count || 0;
-                } catch (e) {
-                    tableCounts[table] = 0;
+                    const { count, error } = await client
+                        .from(table)
+                        .select('*', { count: 'exact', head: true });
+                    db.counts[table] = error ? 0 : (count || 0);
+                } catch(e) {
+                    db.counts[table] = 0;
                 }
             }
         }
 
         // ============================================================
-        // FULL INITIALIZATION
+        // LOAD SCHEMAS
         // ============================================================
-        function initAll() {
-            initParticles();
-            initCustomCursor();
-            initNavigation();
-            initCharts();
-            init3DGlobe();
-            initVoiceCommands();
+        async function loadSchemas() {
+            for (const table of db.tables) {
+                try {
+                    const { data, error } = await client
+                        .from(table)
+                        .select('*')
+                        .limit(1);
+                    
+                    if (!error && data && data.length > 0) {
+                        db.schemas[table] = Object.keys(data[0]);
+                    } else {
+                        // Table might be empty - try to get column info another way
+                        db.schemas[table] = [];
+                        // Try with a simple query
+                        try {
+                            const { data: d2 } = await client.from(table).select('*').limit(0);
+                            if (d2 !== null) {
+                                // Can't determine columns from empty set
+                                db.schemas[table] = [];
+                            }
+                        } catch(e) {
+                            db.schemas[table] = [];
+                        }
+                    }
+                } catch(e) {
+                    db.schemas[table] = [];
+                }
+            }
+        }
+
+        // ============================================================
+        // SETUP
+        // ============================================================
+        function setupAll() {
+            setupNav();
+            setupCharts();
             renderStats();
-            renderTableSelect();
-            updateDashboard();
-            generateAIInsights();
-            setupAutoRefresh();
+            populateTableSelect();
+            updateCharts();
         }
 
-        // ============================================================
-        // PARTICLES BACKGROUND
-        // ============================================================
-        function initParticles() {
-            particlesJS('particles-js', {
-                particles: {
-                    number: { value: 80, density: { enable: true, value_area: 800 } },
-                    color: { value: '#3b82f6' },
-                    shape: { type: 'circle' },
-                    opacity: { value: 0.5, random: true },
-                    size: { value: 2, random: true },
-                    line_linked: {
-                        enable: true,
-                        distance: 150,
-                        color: '#3b82f6',
-                        opacity: 0.2,
-                        width: 1
-                    },
-                    move: {
-                        enable: true,
-                        speed: 1,
-                        direction: 'none',
-                        random: true,
-                        straight: false,
-                        out_mode: 'out'
-                    }
-                },
-                interactivity: {
-                    detect_on: 'canvas',
-                    events: {
-                        onhover: { enable: true, mode: 'grab' },
-                        onclick: { enable: true, mode: 'push' }
-                    }
-                }
-            });
-        }
-
-        // ============================================================
-        // CUSTOM CURSOR
-        // ============================================================
-        function initCustomCursor() {
-            const cursor = document.getElementById('cursor');
-            const cursorDot = document.getElementById('cursorDot');
-            
-            document.addEventListener('mousemove', (e) => {
-                cursor.style.left = e.clientX - 10 + 'px';
-                cursor.style.top = e.clientY - 10 + 'px';
-                cursorDot.style.left = e.clientX - 2 + 'px';
-                cursorDot.style.top = e.clientY - 2 + 'px';
-            });
-            
-            document.addEventListener('mousedown', () => {
-                cursor.style.transform = 'scale(1.5)';
-            });
-            
-            document.addEventListener('mouseup', () => {
-                cursor.style.transform = 'scale(1)';
-            });
-        }
-
-        // ============================================================
-        // NAVIGATION
-        // ============================================================
-        function initNavigation() {
-            document.querySelectorAll('.nav-btn').forEach(btn => {
-                btn.addEventListener('click', function() {
+        function setupNav() {
+            document.querySelectorAll('.nav-tab').forEach(tab => {
+                tab.addEventListener('click', function() {
+                    document.querySelectorAll('.nav-tab').forEach(t => t.classList.remove('active'));
+                    this.classList.add('active');
+                    
                     const page = this.dataset.page;
-                    switchPage(page);
+                    document.querySelectorAll('.page').forEach(p => p.classList.remove('active'));
+                    document.getElementById('page-' + page).classList.add('active');
+                    
+                    if (page === 'dashboard') updateCharts();
+                    if (page === 'daily') {
+                        document.getElementById('dailyDate').value = new Date().toISOString().split('T')[0];
+                    }
                 });
             });
-        }
-
-        function switchPage(page) {
-            currentPage = page;
-            
-            document.querySelectorAll('.nav-btn').forEach(b => b.classList.remove('active'));
-            document.querySelector(`[data-page="${page}"]`).classList.add('active');
-            
-            document.querySelectorAll('.page').forEach(p => p.classList.remove('active'));
-            document.getElementById(`page-${page}`).classList.add('active');
-            
-            if (page === 'dashboard') updateDashboard();
-            if (page === 'analytics') updatePredictions();
-            if (page === 'insights') generateAIInsights();
         }
 
         // ============================================================
         // CHARTS
         // ============================================================
-        function initCharts() {
-            // Trend Chart
+        function setupCharts() {
+            // Trend
             const trendCtx = document.getElementById('trendChart').getContext('2d');
             charts.trend = new Chart(trendCtx, {
                 type: 'line',
-                data: {
-                    labels: [],
-                    datasets: [{
-                        label: 'Growth',
-                        data: [],
-                        borderColor: '#3b82f6',
-                        backgroundColor: (ctx) => {
-                            const gradient = ctx.chart.ctx.createLinearGradient(0, 0, 0, 400);
-                            gradient.addColorStop(0, 'rgba(59, 130, 246, 0.3)');
-                            gradient.addColorStop(1, 'rgba(59, 130, 246, 0)');
-                            return gradient;
-                        },
-                        borderWidth: 3,
-                        fill: true,
-                        tension: 0.4,
-                        pointRadius: 0,
-                        pointHoverRadius: 8,
-                        pointHoverBackgroundColor: '#fff'
-                    }]
-                },
+                data: { labels: [], datasets: [] },
                 options: {
                     responsive: true,
                     maintainAspectRatio: false,
-                    interaction: { intersect: false, mode: 'index' },
                     plugins: { legend: { display: false } },
                     scales: {
-                        x: { 
-                            ticks: { color: '#94a3b8', font: { size: 11 } },
-                            grid: { color: 'rgba(148,163,184,0.1)' }
-                        },
-                        y: { 
-                            ticks: { color: '#94a3b8', font: { size: 11 } },
-                            grid: { color: 'rgba(148,163,184,0.1)' },
-                            beginAtZero: true
-                        }
+                        x: { ticks: { color: '#94a3b8', font: { size: 10 } }, grid: { color: 'rgba(148,163,184,0.06)' } },
+                        y: { ticks: { color: '#94a3b8' }, grid: { color: 'rgba(148,163,184,0.06)' }, beginAtZero: true }
                     }
                 }
             });
 
-            // Prediction Chart
-            const predCtx = document.getElementById('predictionChart').getContext('2d');
-            charts.prediction = new Chart(predCtx, {
-                type: 'line',
-                data: {
-                    labels: [],
-                    datasets: [
-                        {
-                            label: 'Actual',
-                            data: [],
-                            borderColor: '#3b82f6',
-                            borderWidth: 3,
-                            tension: 0.4,
-                            pointRadius: 3
-                        },
-                        {
-                            label: 'Predicted',
-                            data: [],
-                            borderColor: '#f59e0b',
-                            borderWidth: 2,
-                            borderDash: [5, 5],
-                            tension: 0.4,
-                            pointRadius: 0
-                        }
-                    ]
-                },
-                options: {
-                    responsive: true,
-                    maintainAspectRatio: false,
-                    plugins: {
-                        legend: {
-                            position: 'top',
-                            labels: { color: '#94a3b8', usePointStyle: true, padding: 20 }
-                        }
-                    },
-                    scales: {
-                        x: { 
-                            ticks: { color: '#94a3b8', font: { size: 11 } },
-                            grid: { color: 'rgba(148,163,184,0.1)' }
-                        },
-                        y: { 
-                            ticks: { color: '#94a3b8', font: { size: 11 } },
-                            grid: { color: 'rgba(148,163,184,0.1)' }
-                        }
-                    }
-                }
-            });
-
-            // Pie Chart
+            // Pie
             const pieCtx = document.getElementById('pieChart').getContext('2d');
             charts.pie = new Chart(pieCtx, {
                 type: 'doughnut',
-                data: {
-                    labels: [],
-                    datasets: [{
-                        data: [],
-                        backgroundColor: ['#3b82f6', '#8b5cf6', '#06b6d4', '#10b981', '#f59e0b', '#ef4444'],
-                        borderColor: 'rgba(15,23,42,0.8)',
-                        borderWidth: 3,
-                        hoverBorderWidth: 4,
-                        hoverBorderColor: '#fff'
-                    }]
-                },
+                data: { labels: [], datasets: [{ data: [], backgroundColor: ['#3b82f6','#8b5cf6','#10b981','#f59e0b','#ef4444','#06b6d4','#ec4899','#6366f1','#84cc16','#f97316'], borderColor: '#111827', borderWidth: 2 }] },
                 options: {
                     responsive: true,
                     maintainAspectRatio: false,
-                    plugins: {
-                        legend: {
-                            position: 'bottom',
-                            labels: { color: '#94a3b8', padding: 15, font: { size: 12 } }
-                        }
-                    }
+                    plugins: { legend: { position: 'bottom', labels: { color: '#94a3b8', padding: 12, font: { size: 11 } } } }
                 }
             });
 
-            // Health Chart
-            const healthCtx = document.getElementById('healthChart').getContext('2d');
-            charts.health = new Chart(healthCtx, {
-                type: 'radar',
-                data: {
-                    labels: ['Users', 'Activity', 'Growth', 'Engagement', 'Retention', 'Performance'],
-                    datasets: [{
-                        label: 'Current',
-                        data: [85, 70, 90, 65, 80, 75],
-                        borderColor: '#3b82f6',
-                        backgroundColor: 'rgba(59,130,246,0.2)',
-                        borderWidth: 2
-                    }]
-                },
+            // Daily
+            const dailyCtx = document.getElementById('dailyChart').getContext('2d');
+            charts.daily = new Chart(dailyCtx, {
+                type: 'bar',
+                data: { labels: [], datasets: [{ label: 'Records', data: [], backgroundColor: '#3b82f6', borderRadius: 4 }] },
                 options: {
                     responsive: true,
                     maintainAspectRatio: false,
+                    plugins: { legend: { display: false } },
                     scales: {
-                        r: {
-                            ticks: { display: false },
-                            grid: { color: 'rgba(148,163,184,0.2)' },
-                            pointLabels: { color: '#94a3b8', font: { size: 11 } }
-                        }
-                    },
-                    plugins: { legend: { display: false } }
+                        x: { ticks: { color: '#94a3b8', font: { size: 9 } }, grid: { display: false } },
+                        y: { ticks: { color: '#94a3b8' }, grid: { color: 'rgba(148,163,184,0.06)' }, beginAtZero: true }
+                    }
                 }
             });
         }
 
-        // ============================================================
-        // 3D GLOBE
-        // ============================================================
-        function init3DGlobe() {
-            const container = document.getElementById('globe-container');
-            
-            scene3D = new THREE.Scene();
-            camera3D = new THREE.PerspectiveCamera(75, container.clientWidth / container.clientHeight, 0.1, 1000);
-            renderer3D = new THREE.WebGLRenderer({ antialias: true, alpha: true });
-            
-            renderer3D.setSize(container.clientWidth, container.clientHeight);
-            renderer3D.setPixelRatio(Math.min(window.devicePixelRatio, 2));
-            container.appendChild(renderer3D.domElement);
-            
-            // Create globe
-            const geometry = new THREE.SphereGeometry(5, 64, 64);
-            const material = new THREE.MeshPhongMaterial({
-                color: 0x1e3a5f,
-                wireframe: true,
-                transparent: true,
-                opacity: 0.6
-            });
-            globe3D = new THREE.Mesh(geometry, material);
-            scene3D.add(globe3D);
-            
-            // Add dots on globe surface
-            const dotsGeometry = new THREE.BufferGeometry();
-            const dotsCount = 200;
-            const positions = new Float32Array(dotsCount * 3);
-            
-            for (let i = 0; i < dotsCount; i++) {
-                const theta = Math.random() * Math.PI * 2;
-                const phi = Math.acos(2 * Math.random() - 1);
-                const radius = 5.1;
-                
-                positions[i * 3] = radius * Math.sin(phi) * Math.cos(theta);
-                positions[i * 3 + 1] = radius * Math.sin(phi) * Math.sin(theta);
-                positions[i * 3 + 2] = radius * Math.cos(phi);
-            }
-            
-            dotsGeometry.setAttribute('position', new THREE.BufferAttribute(positions, 3));
-            const dotsMaterial = new THREE.PointsMaterial({ 
-                color: 0x3b82f6, 
-                size: 0.05,
-                transparent: true,
-                blending: THREE.AdditiveBlending
-            });
-            const dots = new THREE.Points(dotsGeometry, dotsMaterial);
-            scene3D.add(dots);
-            
-            // Lighting
-            const ambientLight = new THREE.AmbientLight(0x404060);
-            scene3D.add(ambientLight);
-            
-            const directionalLight = new THREE.DirectionalLight(0x3b82f6, 1);
-            directionalLight.position.set(10, 10, 10);
-            scene3D.add(directionalLight);
-            
-            camera3D.position.z = 12;
-            
-            // Animation
-            function animate() {
-                requestAnimationFrame(animate);
-                globe3D.rotation.y += 0.002;
-                globe3D.rotation.x += 0.001;
-                dots.rotation.y += 0.003;
-                renderer3D.render(scene3D, camera3D);
-            }
-            animate();
-            
-            // Handle resize
-            window.addEventListener('resize', () => {
-                camera3D.aspect = container.clientWidth / container.clientHeight;
-                camera3D.updateProjectionMatrix();
-                renderer3D.setSize(container.clientWidth, container.clientHeight);
-            });
-            
-            // Mouse interaction
-            container.addEventListener('mousemove', (e) => {
-                const rect = container.getBoundingClientRect();
-                const x = ((e.clientX - rect.left) / container.clientWidth) * 2 - 1;
-                const y = -((e.clientY - rect.top) / container.clientHeight) * 2 + 1;
-                
-                globe3D.rotation.y += x * 0.01;
-                globe3D.rotation.x += y * 0.01;
-            });
-        }
-
-        // ============================================================
-        // VOICE COMMANDS
-        // ============================================================
-        function initVoiceCommands() {
-            const btn = document.getElementById('voiceBtn');
-            
-            if ('webkitSpeechRecognition' in window || 'SpeechRecognition' in window) {
-                const SpeechRecognition = window.SpeechRecognition || window.webkitSpeechRecognition;
-                recognition = new SpeechRecognition();
-                recognition.continuous = false;
-                recognition.interimResults = false;
-                recognition.lang = 'en-US';
-                
-                recognition.onresult = (event) => {
-                    const command = event.results[0][0].transcript.toLowerCase();
-                    processVoiceCommand(command);
-                };
-                
-                recognition.onend = () => {
-                    listening = false;
-                    btn.classList.remove('listening');
-                };
-                
-                btn.addEventListener('click', () => {
-                    if (listening) {
-                        recognition.stop();
-                        listening = false;
-                        btn.classList.remove('listening');
-                    } else {
-                        recognition.start();
-                        listening = true;
-                        btn.classList.add('listening');
-                        showToast('🎤 Listening...');
-                    }
-                });
-            } else {
-                btn.style.display = 'none';
-            }
-        }
-
-        function processVoiceCommand(command) {
-            showToast(`🗣️ Command: "${command}"`);
-            
-            if (command.includes('dashboard')) switchPage('dashboard');
-            else if (command.includes('analytics')) switchPage('analytics');
-            else if (command.includes('explorer') || command.includes('data')) switchPage('explorer');
-            else if (command.includes('insight') || command.includes('ai')) switchPage('insights');
-            else if (command.includes('refresh')) refreshAll();
-            else if (command.includes('report')) generateReport();
-            else if (command.includes('export')) exportData();
-            else showToast('❓ Command not recognized');
-        }
-
-        // ============================================================
-        // DASHBOARD UPDATES
-        // ============================================================
-        async function updateDashboard() {
-            const stats = {
-                users: tableCounts['users'] || 0,
-                usage: tableCounts['daily_usage'] || 0,
-                transactions: tableCounts['transactions'] || 0,
-                questions: tableCounts['questions'] || 0,
-                total: Object.values(tableCounts).reduce((a, b) => a + b, 0)
-            };
-            
-            renderStats(stats);
-            updateTrendChart();
-            detectAnomalies(stats);
-            updateAIInsight(stats);
-        }
-
-        function renderStats(stats) {
-            const grid = document.getElementById('statsGrid');
-            grid.innerHTML = `
-                <div class="stat-card" onclick="switchPage('explorer')">
-                    <div class="stat-icon blue"><i class="fas fa-users"></i></div>
-                    <div class="stat-label">Total Users</div>
-                    <div class="stat-value">${stats.users.toLocaleString()}</div>
-                    <div class="stat-change positive"><i class="fas fa-arrow-up"></i> +12.5%</div>
-                </div>
-                <div class="stat-card">
-                    <div class="stat-icon purple"><i class="fas fa-chart-bar"></i></div>
-                    <div class="stat-label">Daily Usage</div>
-                    <div class="stat-value">${stats.usage.toLocaleString()}</div>
-                    <div class="stat-change positive"><i class="fas fa-arrow-up"></i> +8.3%</div>
-                </div>
-                <div class="stat-card">
-                    <div class="stat-icon cyan"><i class="fas fa-exchange-alt"></i></div>
-                    <div class="stat-label">Transactions</div>
-                    <div class="stat-value">${stats.transactions.toLocaleString()}</div>
-                    <div class="stat-change positive"><i class="fas fa-arrow-up"></i> +15.2%</div>
-                </div>
-                <div class="stat-card">
-                    <div class="stat-icon amber"><i class="fas fa-question-circle"></i></div>
-                    <div class="stat-label">Questions</div>
-                    <div class="stat-value">${stats.questions.toLocaleString()}</div>
-                    <div class="stat-change positive"><i class="fas fa-arrow-up"></i> +5.7%</div>
-                </div>
-                <div class="stat-card">
-                    <div class="stat-icon green"><i class="fas fa-database"></i></div>
-                    <div class="stat-label">Total Records</div>
-                    <div class="stat-value">${stats.total.toLocaleString()}</div>
-                    <div class="stat-change">Across ${tables.length} tables</div>
-                </div>
-            `;
+        async function updateCharts() {
+            await updateTrendChart();
+            await updatePieChart();
+            await updateDailyChart();
         }
 
         async function updateTrendChart() {
             const months = [];
-            const data = [];
+            const values = [];
             const now = new Date();
-            
+
             for (let i = 11; i >= 0; i--) {
-                const date = new Date(now.getFullYear(), now.getMonth() - i, 1);
-                const monthLabel = date.toLocaleString('default', { month: 'short', year: '2-digit' });
-                months.push(monthLabel);
-                
-                const nextMonth = new Date(date.getFullYear(), date.getMonth() + 1, 1);
-                
-                try {
-                    const { count } = await client
-                        .from(trendMetric === 'users' ? 'users' : trendMetric === 'usage' ? 'daily_usage' : 
-                               trendMetric === 'transactions' ? 'transactions' : 'questions')
-                        .select('*', { count: 'exact', head: true })
-                        .gte('created_at', date.toISOString())
-                        .lt('created_at', nextMonth.toISOString());
-                    
-                    data.push(count || Math.floor(Math.random() * 100) + 50);
-                } catch (e) {
-                    data.push(Math.floor(Math.random() * 100) + 50);
+                const start = new Date(now.getFullYear(), now.getMonth() - i, 1);
+                const end = new Date(now.getFullYear(), now.getMonth() - i + 1, 1);
+                months.push(start.toLocaleString('default', { month: 'short' }));
+
+                let total = 0;
+                for (const table of db.tables) {
+                    try {
+                        const { count, error } = await client
+                            .from(table)
+                            .select('*', { count: 'exact', head: true })
+                            .gte('created_at', start.toISOString())
+                            .lt('created_at', end.toISOString());
+                        if (!error && count) total += count;
+                    } catch(e) {}
                 }
+                values.push(total);
             }
-            
+
             charts.trend.data.labels = months;
-            charts.trend.data.datasets[0].data = data;
+            charts.trend.data.datasets = [{
+                label: 'Records',
+                data: values,
+                borderColor: '#3b82f6',
+                backgroundColor: 'rgba(59,130,246,0.1)',
+                borderWidth: 2,
+                fill: true,
+                tension: 0.3,
+                pointRadius: 3,
+                pointBackgroundColor: '#3b82f6'
+            }];
             charts.trend.update();
-            
-            // Update pie chart
-            const tableCountsArr = tables.map(t => tableCounts[t] || 0);
-            charts.pie.data.labels = tables;
-            charts.pie.data.datasets[0].data = tableCountsArr;
+        }
+
+        async function updatePieChart() {
+            charts.pie.data.labels = db.tables;
+            charts.pie.data.datasets[0].data = db.tables.map(t => db.counts[t] || 0);
             charts.pie.update();
         }
 
-        function changeTrendMetric() {
-            const metrics = ['users', 'usage', 'transactions', 'questions'];
-            const idx = metrics.indexOf(trendMetric);
-            trendMetric = metrics[(idx + 1) % metrics.length];
-            updateTrendChart();
-            showToast(`📊 Showing ${trendMetric} trends`);
-        }
+        async function updateDailyChart() {
+            const labels = [];
+            const values = [];
 
-        // ============================================================
-        // ANOMALY DETECTION
-        // ============================================================
-        function detectAnomalies(stats) {
-            const anomalies = [];
-            
-            // Simulate anomaly detection based on data patterns
-            if (stats.users > 0) {
-                if (stats.usage / stats.users > 100) {
-                    anomalies.push({
-                        severity: 'high',
-                        icon: 'fa-exclamation-triangle',
-                        title: 'Unusual Activity Spike',
-                        description: 'Daily usage per user ratio is abnormally high',
-                        action: 'Investigate'
-                    });
-                }
-            }
-            
-            if (stats.transactions === 0 && stats.users > 10) {
-                anomalies.push({
-                    severity: 'medium',
-                    icon: 'fa-exclamation-circle',
-                    title: 'No Transactions Detected',
-                    description: 'Users present but no transaction activity',
-                    action: 'Review'
-                });
-            }
-            
-            anomalies.push({
-                severity: 'low',
-                icon: 'fa-info-circle',
-                title: 'Growth Pattern Detected',
-                description: `Steady growth observed across ${tables.length} tables`,
-                action: 'View'
-            });
-            
-            if (anomalies.length === 0) {
-                anomalies.push({
-                    severity: 'low',
-                    icon: 'fa-check-circle',
-                    title: 'System Normal',
-                    description: 'No anomalies detected in current data',
-                    action: 'OK'
-                });
-            }
-            
-            renderAnomalies(anomalies);
-        }
-
-        function renderAnomalies(anomalies) {
-            const container = document.getElementById('anomalyList');
-            container.innerHTML = anomalies.map(a => `
-                <div class="anomaly-item">
-                    <div class="anomaly-severity severity-${a.severity}">
-                        <i class="fas ${a.icon}"></i>
-                    </div>
-                    <div style="flex:1;">
-                        <div style="font-weight:600;font-size:14px;">${a.title}</div>
-                        <div style="font-size:12px;color:var(--text-secondary);">${a.description}</div>
-                    </div>
-                    <button class="btn btn-glass" style="padding:6px 16px;font-size:11px;">${a.action}</button>
-                </div>
-            `).join('');
-        }
-
-        // ============================================================
-        // AI INSIGHTS
-        // ============================================================
-        function updateAIInsight(stats) {
-            const insights = [
-                {
-                    title: `📈 Growth Trend: Your platform has ${stats.users.toLocaleString()} users with consistent growth`,
-                    subtitle: 'User acquisition is trending positively over the last 30 days'
-                },
-                {
-                    title: `🔥 Activity Peak: ${stats.usage.toLocaleString()} daily interactions detected`,
-                    subtitle: 'Usage patterns indicate high engagement during morning hours'
-                },
-                {
-                    title: `💡 Recommendation: Consider scaling your infrastructure`,
-                    subtitle: `Based on ${stats.total.toLocaleString()} total records and growing`
-                },
-                {
-                    title: `🎯 Optimization: Database performance is optimal`,
-                    subtitle: `${tables.length} tables with efficient data distribution`
-                }
-            ];
-            
-            const random = insights[Math.floor(Math.random() * insights.length)];
-            document.getElementById('aiTitle').textContent = random.title;
-            document.getElementById('aiSubtitle').textContent = random.subtitle;
-        }
-
-        async function generateAIInsights() {
-            const container = document.getElementById('aiInsightsContainer');
-            container.innerHTML = '<div style="text-align:center;padding:40px;"><i class="fas fa-spinner fa-spin"></i> AI analyzing data...</div>';
-            
-            await new Promise(resolve => setTimeout(resolve, 1500));
-            
-            const insights = [
-                {
-                    icon: '📊',
-                    title: 'Growth Analysis',
-                    description: `Your database contains ${Object.values(tableCounts).reduce((a,b)=>a+b,0).toLocaleString()} records across ${tables.length} tables. The growth trajectory suggests a ${Math.random() > 0.5 ? 'positive' : 'stable'} trend.`,
-                    action: 'View Details'
-                },
-                {
-                    icon: '🔮',
-                    title: 'Predictive Forecast',
-                    description: `Based on current growth patterns, expect approximately ${Math.floor((Object.values(tableCounts).reduce((a,b)=>a+b,0) || 1000) * 1.15).toLocaleString()} records within the next 30 days.`,
-                    action: 'See Forecast'
-                },
-                {
-                    icon: '⚡',
-                    title: 'Performance Optimization',
-                    description: `Analysis shows ${tables.filter(t => (tableCounts[t] || 0) > 1000).length} tables with significant data volume. Consider implementing indexes for better query performance.`,
-                    action: 'Optimize'
-                },
-                {
-                    icon: '🎯',
-                    title: 'Anomaly Report',
-                    description: 'No critical anomalies detected. All data patterns appear normal with expected variations in activity levels.',
-                    action: 'Full Report'
-                }
-            ];
-            
-            container.innerHTML = insights.map(i => `
-                <div style="background:var(--bg-glass);border:1px solid var(--border);border-radius:16px;padding:24px;margin-bottom:16px;">
-                    <div style="font-size:32px;margin-bottom:12px;">${i.icon}</div>
-                    <h4 style="font-size:16px;margin-bottom:8px;">${i.title}</h4>
-                    <p style="font-size:13px;color:var(--text-secondary);margin-bottom:16px;">${i.description}</p>
-                    <button class="btn btn-primary" style="font-size:12px;padding:8px 16px;">${i.action} <i class="fas fa-arrow-right"></i></button>
-                </div>
-            `).join('');
-        }
-
-        // ============================================================
-        // PREDICTIONS
-        // ============================================================
-        async function updatePredictions() {
-            const metric = document.getElementById('predictMetric').value;
-            const months = [];
-            const actualData = [];
-            const predictedData = [];
-            
-            for (let i = 6; i >= 0; i--) {
-                const date = new Date();
-                date.setMonth(date.getMonth() - i);
-                months.push(date.toLocaleString('default', { month: 'short', year: '2-digit' }));
+            for (let i = 29; i >= 0; i--) {
+                const day = new Date();
+                day.setDate(day.getDate() - i);
+                const next = new Date(day);
+                next.setDate(next.getDate() + 1);
                 
-                const val = Math.floor(Math.random() * 500) + (i * 50);
-                actualData.push(i <= 0 ? val : val);
-                predictedData.push(null);
+                labels.push(day.toISOString().split('T')[0].substring(5));
+
+                let total = 0;
+                for (const table of db.tables) {
+                    try {
+                        const { count, error } = await client
+                            .from(table)
+                            .select('*', { count: 'exact', head: true })
+                            .gte('created_at', day.toISOString())
+                            .lt('created_at', next.toISOString());
+                        if (!error && count) total += count;
+                    } catch(e) {}
+                }
+                values.push(total);
             }
-            
-            // Add predictions
-            for (let i = 1; i <= 3; i++) {
-                const date = new Date();
-                date.setMonth(date.getMonth() + i);
-                months.push(date.toLocaleString('default', { month: 'short', year: '2-digit' }));
-                actualData.push(null);
-                predictedData.push(Math.floor(Math.random() * 500) + 350);
-            }
-            
-            charts.prediction.data.labels = months;
-            charts.prediction.data.datasets[0].data = actualData;
-            charts.prediction.data.datasets[1].data = predictedData;
-            charts.prediction.update();
+
+            charts.daily.data.labels = labels;
+            charts.daily.data.datasets[0].data = values;
+            charts.daily.update();
         }
 
         // ============================================================
-        // DATA EXPLORER
+        // STATS
         // ============================================================
-        function renderTableSelect() {
+        function renderStats() {
+            const totalRecords = Object.values(db.counts).reduce((a,b) => a+b, 0);
+            const today = new Date().toISOString().split('T')[0];
+
+            document.getElementById('statsRow').innerHTML = `
+                <div class="stat-card">
+                    <div class="stat-icon blue"><i class="fas fa-table"></i></div>
+                    <div class="label">Tables</div>
+                    <div class="value">${db.tables.length}</div>
+                    <div class="sub">in public schema</div>
+                </div>
+                <div class="stat-card">
+                    <div class="stat-icon purple"><i class="fas fa-database"></i></div>
+                    <div class="label">Total Records</div>
+                    <div class="value">${totalRecords.toLocaleString()}</div>
+                    <div class="sub">across all tables</div>
+                </div>
+                <div class="stat-card">
+                    <div class="stat-icon green"><i class="fas fa-calendar-check"></i></div>
+                    <div class="label">Today</div>
+                    <div class="value" id="statToday">-</div>
+                    <div class="sub">${today}</div>
+                </div>
+                <div class="stat-card">
+                    <div class="stat-icon red"><i class="fas fa-clock"></i></div>
+                    <div class="label">Last Updated</div>
+                    <div class="value" style="font-size:16px;" id="statUpdated">-</div>
+                    <div class="sub">auto-refresh: 5min</div>
+                </div>
+            `;
+
+            // Get today's count
+            getTodayCount().then(count => {
+                document.getElementById('statToday').textContent = count.toLocaleString();
+            });
+
+            document.getElementById('statUpdated').textContent = new Date().toLocaleTimeString();
+        }
+
+        async function getTodayCount() {
+            const today = new Date();
+            today.setHours(0, 0, 0, 0);
+            const tomorrow = new Date(today);
+            tomorrow.setDate(tomorrow.getDate() + 1);
+
+            let total = 0;
+            for (const table of db.tables) {
+                try {
+                    const { count, error } = await client
+                        .from(table)
+                        .select('*', { count: 'exact', head: true })
+                        .gte('created_at', today.toISOString())
+                        .lt('created_at', tomorrow.toISOString());
+                    if (!error && count) total += count;
+                } catch(e) {}
+            }
+            return total;
+        }
+
+        // ============================================================
+        // TABLE EXPLORER
+        // ============================================================
+        function populateTableSelect() {
             const select = document.getElementById('tableSelect');
-            select.innerHTML = '<option value="">Select table...</option>' +
-                tables.map(t => `<option value="${t}">${t} (${(tableCounts[t] || 0).toLocaleString()} rows)</option>`).join('');
+            select.innerHTML = '<option value="">-- Select table --</option>' +
+                db.tables.map(t => `<option value="${t}">${t} (${(db.counts[t]||0).toLocaleString()} rows)</option>`).join('');
         }
 
-        async function loadTableData() {
+        async function loadTable() {
             const table = document.getElementById('tableSelect').value;
             if (!table) return;
-            
-            currentTable = table;
-            const limit = parseInt(document.getElementById('limitSelect').value) || 25;
-            
-            const { data } = await client.from(table).select('*').limit(limit);
-            renderDataTable(data || []);
+
+            activeTable = table;
+            const limit = parseInt(document.getElementById('limitSelect').value) || 50;
+
+            try {
+                const { data, error } = await client
+                    .from(table)
+                    .select('*')
+                    .limit(limit)
+                    .order('created_at', { ascending: false });
+
+                if (error) throw error;
+
+                activeData = data || [];
+                renderTable(activeData);
+                document.getElementById('recordInfo').textContent = 
+                    `Showing ${activeData.length} of ${(db.counts[table]||0).toLocaleString()} records`;
+            } catch(e) {
+                document.getElementById('tableContent').innerHTML = 
+                    `<div class="empty-state"><i class="fas fa-exclamation-triangle"></i>Error: ${e.message}</div>`;
+            }
         }
 
-        function renderDataTable(data) {
-            const wrap = document.getElementById('dataWrapper');
+        function renderTable(data) {
+            const wrap = document.getElementById('tableContent');
+
             if (!data || data.length === 0) {
-                wrap.innerHTML = '<div style="text-align:center;padding:40px;">No data found</div>';
+                wrap.innerHTML = '<div class="empty-state"><i class="fas fa-inbox"></i>No data in this table</div>';
                 return;
             }
-            
+
             const cols = Object.keys(data[0]);
-            const search = searchTerm.toLowerCase();
+            const search = document.getElementById('searchInput').value.toLowerCase();
+
             let filtered = data;
-            
             if (search) {
                 filtered = data.filter(row =>
                     Object.values(row).some(v => 
-                        v !== null && String(v).toLowerCase().includes(search)
+                        v !== null && v !== undefined && String(v).toLowerCase().includes(search)
                     )
                 );
             }
-            
+
             let html = '<table><thead><tr>';
             cols.forEach(c => html += `<th>${c}</th>`);
             html += '</tr></thead><tbody>';
-            
+
             filtered.forEach(row => {
                 html += '<tr>';
                 cols.forEach(c => {
                     const v = row[c];
-                    let display = v === null ? '<span style="color:var(--text-secondary);font-style:italic;">null</span>' :
-                        typeof v === 'boolean' ? `<span class="badge" style="background:${v ? 'rgba(16,185,129,0.2)' : 'rgba(239,68,68,0.2)'};color:${v ? 'var(--success)' : 'var(--danger)'}">${v}</span>` :
-                        typeof v === 'object' ? JSON.stringify(v).substring(0, 50) :
-                        String(v).substring(0, 100);
-                    html += `<td>${display}</td>`;
+                    if (v === null || v === undefined) {
+                        html += '<td><span class="null">null</span></td>';
+                    } else if (typeof v === 'boolean') {
+                        html += `<td><span class="badge badge-${v}">${v}</span></td>`;
+                    } else if (typeof v === 'object') {
+                        html += `<td>${JSON.stringify(v).substring(0, 60)}</td>`;
+                    } else {
+                        const s = String(v);
+                        html += `<td title="${s}">${s.length > 80 ? s.substring(0, 80) + '...' : s}</td>`;
+                    }
                 });
                 html += '</tr>';
             });
-            
+
             html += '</tbody></table>';
+
+            if (filtered.length === 0 && search) {
+                html = '<div class="empty-state"><i class="fas fa-search"></i>No results match your search</div>';
+            }
+
             wrap.innerHTML = html;
         }
 
-        function searchData() {
-            searchTerm = document.getElementById('searchInput').value;
-            loadTableData();
+        function filterTable() {
+            if (activeData.length > 0) renderTable(activeData);
         }
 
-        function exportData() {
-            if (!currentTable) {
-                showToast('⚠️ Select a table first');
+        function exportCSV() {
+            if (!activeTable || activeData.length === 0) {
+                toast('⚠️ Select a table with data first', 'error');
                 return;
             }
+
+            const cols = Object.keys(activeData[0]);
+            let csv = cols.join(',') + '\n';
             
-            const rows = document.querySelectorAll('#dataWrapper table tr');
-            let csv = '';
-            rows.forEach(row => {
-                const cells = row.querySelectorAll('th, td');
-                csv += Array.from(cells).map(c => c.textContent).join(',') + '\n';
+            activeData.forEach(row => {
+                csv += cols.map(c => {
+                    const v = row[c];
+                    if (v === null || v === undefined) return '';
+                    if (typeof v === 'object') return '"' + JSON.stringify(v).replace(/"/g, '""') + '"';
+                    const s = String(v);
+                    return s.includes(',') || s.includes('"') || s.includes('\n') ? 
+                        '"' + s.replace(/"/g, '""') + '"' : s;
+                }).join(',') + '\n';
             });
-            
+
             const blob = new Blob([csv], { type: 'text/csv' });
             const url = URL.createObjectURL(blob);
             const a = document.createElement('a');
             a.href = url;
-            a.download = `${currentTable}_${new Date().toISOString().split('T')[0]}.csv`;
+            a.download = `${activeTable}_${new Date().toISOString().split('T')[0]}.csv`;
             a.click();
-            showToast('✅ Exported successfully!');
+            URL.revokeObjectURL(url);
+            toast('✅ CSV exported!', 'success');
         }
 
         // ============================================================
-        // REPORT GENERATION
+        // DAILY DATA
         // ============================================================
-        function generateReport() {
-            const modal = document.getElementById('reportModal');
-            const content = document.getElementById('reportContent');
-            
-            const stats = {
-                users: tableCounts['users'] || 0,
-                total: Object.values(tableCounts).reduce((a,b) => a+b, 0)
-            };
-            
-            content.innerHTML = `
-                <div style="background:var(--bg-glass);border-radius:12px;padding:20px;margin-bottom:16px;">
-                    <h4 style="margin-bottom:8px;">📊 Executive Summary</h4>
-                    <p style="color:var(--text-secondary);font-size:13px;">
-                        Generated on ${new Date().toLocaleString()}. 
-                        Database contains ${stats.total.toLocaleString()} records across ${tables.length} tables.
-                    </p>
-                </div>
-                <div style="display:grid;grid-template-columns:repeat(2,1fr);gap:12px;">
-                    ${tables.map(t => `
-                        <div style="background:var(--bg-glass);border-radius:12px;padding:16px;">
-                            <div style="font-weight:600;font-size:14px;">${t}</div>
-                            <div style="font-size:24px;font-weight:800;color:var(--accent-1);">${(tableCounts[t] || 0).toLocaleString()}</div>
-                            <div style="font-size:11px;color:var(--text-secondary);">records</div>
-                        </div>
-                    `).join('')}
-                </div>
-            `;
-            
-            modal.classList.add('active');
-        }
+        async function loadDailyData() {
+            const dateStr = document.getElementById('dailyDate').value;
+            if (!dateStr) return;
 
-        function closeModal() {
-            document.getElementById('reportModal').classList.remove('active');
-        }
+            const date = new Date(dateStr);
+            const nextDate = new Date(date);
+            nextDate.setDate(nextDate.getDate() + 1);
 
-        // ============================================================
-        // TOAST NOTIFICATIONS
-        // ============================================================
-        function showToast(message) {
-            let toast = document.getElementById('toast');
-            if (!toast) {
-                toast = document.createElement('div');
-                toast.id = 'toast';
-                toast.style.cssText = `
-                    position: fixed;
-                    bottom: 100px;
-                    left: 50%;
-                    transform: translateX(-50%);
-                    background: var(--bg-card);
-                    border: 1px solid var(--border);
-                    border-radius: 12px;
-                    padding: 12px 24px;
-                    z-index: 300;
-                    backdrop-filter: blur(10px);
-                    font-size: 14px;
-                    font-weight: 500;
-                    transition: all 0.3s;
-                    opacity: 0;
-                `;
-                document.body.appendChild(toast);
-            }
-            
-            toast.textContent = message;
-            toast.style.opacity = '1';
-            
-            clearTimeout(toast._timeout);
-            toast._timeout = setTimeout(() => {
-                toast.style.opacity = '0';
-            }, 3000);
-        }
+            const container = document.getElementById('dailyContent');
+            container.innerHTML = '<div style="text-align:center;padding:20px;"><i class="fas fa-spinner fa-spin"></i> Loading...</div>';
 
-        // ============================================================
-        // AUTO REFRESH
-        // ============================================================
-        function setupAutoRefresh() {
-            setInterval(async () => {
-                await loadAllCounts();
-                if (currentPage === 'dashboard') {
-                    renderStats({
-                        users: tableCounts['users'] || 0,
-                        usage: tableCounts['daily_usage'] || 0,
-                        transactions: tableCounts['transactions'] || 0,
-                        questions: tableCounts['questions'] || 0,
-                        total: Object.values(tableCounts).reduce((a, b) => a + b, 0)
-                    });
-                    updateAIInsight({ users: tableCounts['users'] || 0, usage: tableCounts['daily_usage'] || 0, total: Object.values(tableCounts).reduce((a,b)=>a+b,0) });
+            let html = `<h4 style="margin-bottom:16px;">📅 Data added on ${date.toLocaleDateString('en-US', { weekday: 'long', year: 'numeric', month: 'long', day: 'numeric' })}</h4>`;
+            html += '<div style="display:grid;gap:10px;">';
+
+            let grandTotal = 0;
+
+            for (const table of db.tables) {
+                try {
+                    const { count, error } = await client
+                        .from(table)
+                        .select('*', { count: 'exact', head: true })
+                        .gte('created_at', date.toISOString())
+                        .lt('created_at', nextDate.toISOString());
+
+                    const num = error ? 0 : (count || 0);
+                    grandTotal += num;
+
+                    html += `
+                        <div style="background:var(--bg);border:1px solid var(--border);border-radius:8px;padding:14px 18px;display:flex;justify-content:space-between;align-items:center;">
+                            <span style="font-weight:500;">📊 ${table}</span>
+                            <span style="font-size:18px;font-weight:700;color:var(--blue);">${num.toLocaleString()}</span>
+                        </div>`;
+                } catch(e) {
+                    html += `
+                        <div style="background:var(--bg);border:1px solid var(--border);border-radius:8px;padding:14px 18px;display:flex;justify-content:space-between;align-items:center;">
+                            <span style="font-weight:500;">📊 ${table}</span>
+                            <span style="color:var(--text-secondary);">N/A</span>
+                        </div>`;
                 }
-            }, 300000); // 5 minutes
+            }
+
+            html += '</div>';
+            html += `
+                <div style="margin-top:16px;padding:16px;background:rgba(59,130,246,0.1);border:1px solid rgba(59,130,246,0.2);border-radius:10px;text-align:center;">
+                    <span style="font-size:14px;font-weight:600;">Total records added: </span>
+                    <span style="font-size:22px;font-weight:800;color:var(--blue);">${grandTotal.toLocaleString()}</span>
+                </div>`;
+
+            container.innerHTML = html;
         }
 
+        // ============================================================
+        // REFRESH
+        // ============================================================
         async function refreshAll() {
-            showToast('🔄 Refreshing...');
-            await loadAllCounts();
-            renderTableSelect();
-            if (currentPage === 'dashboard') updateDashboard();
-            showToast('✅ Refreshed!');
+            toast('🔄 Refreshing...', 'success');
+            await loadCounts();
+            renderStats();
+            populateTableSelect();
+            await updateCharts();
+            toast('✅ Data refreshed!', 'success');
+        }
+
+        // Auto refresh every 5 minutes
+        setInterval(async () => {
+            await loadCounts();
+            renderStats();
+            if (document.getElementById('page-dashboard').classList.contains('active')) {
+                await updateCharts();
+            }
+        }, 300000);
+
+        // ============================================================
+        // TOAST
+        // ============================================================
+        function toast(msg, type) {
+            const container = document.getElementById('toastContainer');
+            const el = document.createElement('div');
+            el.className = `toast ${type}`;
+            el.textContent = msg;
+            container.appendChild(el);
+            setTimeout(() => {
+                el.style.opacity = '0';
+                el.style.transition = 'opacity 0.3s';
+                setTimeout(() => el.remove(), 300);
+            }, 3000);
         }
 
         // ============================================================
         // START
         // ============================================================
         document.addEventListener('DOMContentLoaded', init);
-        
-        // Close modal on overlay click
-        document.getElementById('reportModal').addEventListener('click', function(e) {
-            if (e.target === this) closeModal();
-        });
     </script>
 </body>
 </html>

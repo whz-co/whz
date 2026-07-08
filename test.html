@@ -1,781 +1,1134 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="en" dir="ltr">
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=yes, viewport-fit=cover">
-  <title>Dr. Waleed · Ancestral Honor · Mir Porti & Mir Ali</title>
-  <!-- Font Awesome 6 (free) for icons -->
-  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
-  <!-- Google Fonts: elegant & readable -->
-  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600;700&family=Amiri:wght@400;700&family=Playfair+Display:wght@400;600;700&display=swap" rel="stylesheet">
-  <!-- AOS (Animate on Scroll) for motion effects -->
-  <link href="https://unpkg.com/aos@2.3.1/dist/aos.css" rel="stylesheet">
-  <style>
-    /* ----------------------------------------------------- */
-    /* 1. RESET & BASE — ultra compact, mobile first        */
-    /* ----------------------------------------------------- */
-    * {
-      margin: 0;
-      padding: 0;
-      box-sizing: border-box;
-    }
-
-    html {
-      font-size: 14px;
-      scroll-behavior: smooth;
-      overflow-x: hidden;
-    }
-
-    body {
-      background: #0f0c09;
-      font-family: 'Inter', sans-serif;
-      color: #f0e4d4;
-      line-height: 1.5;
-      width: 100%;
-      position: relative;
-    }
-
-    /* ----------------------------------------------------- */
-    /* 2. DYNAMIC PARTICLE CANVAS (background motion)       */
-    /* ----------------------------------------------------- */
-    #particle-canvas {
-      position: fixed;
-      top: 0;
-      left: 0;
-      width: 100%;
-      height: 100%;
-      z-index: -1;
-      pointer-events: none;
-      opacity: 0.5;
-    }
-
-    /* ----------------------------------------------------- */
-    /* 3. HAMBURGER NAV (sticky, compact)                   */
-    /* ----------------------------------------------------- */
-    .mobile-nav {
-      position: sticky;
-      top: 0;
-      z-index: 2000;
-      background: rgba(18, 14, 10, 0.85);
-      backdrop-filter: blur(16px);
-      -webkit-backdrop-filter: blur(16px);
-      border-bottom: 1px solid #5f4f3d;
-      display: flex;
-      align-items: center;
-      justify-content: space-between;
-      padding: 0.5rem 1rem;
-      box-shadow: 0 8px 20px rgba(0,0,0,0.5);
-    }
-
-    .logo-mini {
-      font-size: 1.4rem;
-      font-weight: 700;
-      background: linear-gradient(135deg, #f3d9bf, #dbb58b);
-      -webkit-background-clip: text;
-      -webkit-text-fill-color: transparent;
-    }
-    .logo-mini i {
-      color: #b78f69;
-      margin-right: 4px;
-    }
-
-    .hamburger {
-      background: rgba(255,255,240,0.08);
-      border: 1px solid #8d7761;
-      border-radius: 12px;
-      padding: 0.3rem 0.5rem;
-      cursor: pointer;
-      display: flex;
-      flex-direction: column;
-      gap: 4px;
-      width: 42px;
-      height: 38px;
-      justify-content: center;
-      transition: 0.2s;
-    }
-    .hamburger:hover {
-      background: #3d3228;
-    }
-    .hamburger span {
-      display: block;
-      width: 24px;
-      height: 2px;
-      background: #eddac4;
-      border-radius: 4px;
-      transition: 0.2s;
-    }
-
-    .menu-dropdown {
-      position: absolute;
-      top: 58px;
-      right: 1rem;
-      background: rgba(34, 28, 22, 0.97);
-      backdrop-filter: blur(20px);
-      border: 1px solid #ac9277;
-      border-radius: 28px;
-      padding: 0.7rem 0;
-      min-width: 210px;
-      box-shadow: 0 25px 40px rgba(0,0,0,0.8);
-      display: none;
-      z-index: 1999;
-    }
-    .menu-dropdown.show {
-      display: block;
-      animation: slideIn 0.25s ease;
-    }
-    @keyframes slideIn {
-      0% { opacity: 0; transform: translateY(-10px); }
-      100% { opacity: 1; transform: translateY(0); }
-    }
-    .menu-dropdown a {
-      display: block;
-      padding: 0.8rem 1.8rem;
-      color: #f7e2cc;
-      text-decoration: none;
-      font-size: 1.25rem;
-      border-bottom: 1px solid #544435;
-      transition: 0.2s;
-    }
-    .menu-dropdown a:hover {
-      background: #4f3e2d;
-      padding-left: 2.2rem;
-    }
-    .menu-dropdown a i {
-      width: 28px;
-      color: #d6a97c;
-    }
-
-    .menu-dropdown .home-icon-item {
-      background: #5e4a36;
-      border-radius: 40px;
-      margin: 0.7rem 1.2rem;
-      padding: 0.7rem;
-      text-align: center;
-      border: 1px solid #ccaa84;
-    }
-    .menu-dropdown .home-icon-item i {
-      color: #f5dbb6;
-      font-size: 1.5rem;
-    }
-    .menu-dropdown .home-icon-item a {
-      padding: 0;
-      margin: 0;
-      border: none;
-      background: transparent;
-      color: #ffefdb;
-      font-size: 1.3rem;
-    }
-    .menu-dropdown .home-icon-item a:hover {
-      background: transparent;
-      padding-left: 0;
-    }
-
-    /* ----------------------------------------------------- */
-    /* 4. HERO WITH GLOW & FLOATING                         */
-    /* ----------------------------------------------------- */
-    .hero-section {
-      padding: 3rem 1.2rem 2.5rem;
-      text-align: center;
-      position: relative;
-    }
-    .hero-glow {
-      font-size: 2.9rem;
-      font-weight: 700;
-      font-family: 'Playfair Display', serif;
-      text-shadow: 0 0 15px #dbb487, 0 0 30px #7a583a;
-      animation: pulseGlow 3s infinite alternate, float 6s infinite ease-in-out;
-    }
-    @keyframes pulseGlow {
-      0% { text-shadow: 0 0 10px #cfa97c, 0 0 20px #8f6947; }
-      100% { text-shadow: 0 0 25px #efcaa0, 0 0 50px #b2804f; }
-    }
-    @keyframes float {
-      0% { transform: translateY(0px); }
-      50% { transform: translateY(-8px); }
-      100% { transform: translateY(0px); }
-    }
-    .hero-sub {
-      font-size: 1.3rem;
-      color: #e2cbb2;
-      letter-spacing: 2px;
-      margin-top: 0.6rem;
-      opacity: 0.9;
-    }
-
-    /* ----------------------------------------------------- */
-    /* 5. GALLERY (unchanged)                               */
-    /* ----------------------------------------------------- */
-    .gallery-wrap {
-      padding: 2rem 1rem 1rem;
-    }
-    .section-title {
-      font-size: 2.1rem;
-      font-weight: 500;
-      border-left: 6px solid #c09f7c;
-      padding-left: 1.2rem;
-      margin-bottom: 1.8rem;
-      font-family: 'Playfair Display', serif;
-    }
-    .gallery-grid {
-      display: grid;
-      grid-template-columns: repeat(3, 1fr);
-      gap: 0.8rem;
-      perspective: 1200px;
-    }
-    .gallery-item {
-      border-radius: 26px;
-      overflow: hidden;
-      border: 2px solid #8f755b;
-      box-shadow: 0 25px 35px -10px black;
-      transition: transform 0.3s cubic-bezier(0.2, 0.9, 0.4, 1.3), box-shadow 0.3s;
-      aspect-ratio: 1/1;
-      cursor: pointer;
-      transform-style: preserve-3d;
-    }
-    .gallery-item:hover {
-      transform: rotateY(4deg) rotateX(3deg) scale(1.03);
-      box-shadow: 0 30px 45px -5px #000000;
-      border-color: #e2b78b;
-    }
-    .gallery-item img {
-      width: 100%;
-      height: 100%;
-      object-fit: cover;
-      display: block;
-      transition: filter 0.3s;
-    }
-    .gallery-item:hover img {
-      filter: brightness(1.15) saturate(1.1);
-    }
-
-    /* lightbox (fullscreen) */
-    .lightbox {
-      position: fixed;
-      top: 0; left: 0; width: 100%; height: 100%;
-      background: rgba(8, 5, 3, 0.98);
-      backdrop-filter: blur(20px);
-      z-index: 3000;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      opacity: 0;
-      pointer-events: none;
-      transition: opacity 0.3s ease;
-    }
-    .lightbox.active {
-      opacity: 1;
-      pointer-events: all;
-    }
-    .lightbox-content {
-      max-width: 96vw;
-      max-height: 96vh;
-      border: 4px solid #dab38b;
-      border-radius: 28px;
-      overflow: hidden;
-      box-shadow: 0 50px 80px black;
-      animation: zoomPop 0.25s;
-    }
-    @keyframes zoomPop {
-      0% { transform: scale(0.9); opacity: 0; }
-      100% { transform: scale(1); opacity: 1; }
-    }
-    .lightbox-content img {
-      width: 100%;
-      height: auto;
-      display: block;
-      object-fit: contain;
-    }
-    .lightbox-close {
-      position: absolute;
-      top: 30px; right: 30px;
-      font-size: 3.8rem;
-      color: #ffebd2;
-      cursor: pointer;
-      text-shadow: 0 4px 20px black;
-      transition: 0.2s;
-      z-index: 3001;
-    }
-    .lightbox-close:hover {
-      transform: scale(1.2) rotate(90deg);
-    }
-
-    /* ----------------------------------------------------- */
-    /* 6. LANGUAGE TOGGLE (unchanged)                       */
-    /* ----------------------------------------------------- */
-    .lang-panel {
-      background: rgba(26, 21, 16, 0.7);
-      backdrop-filter: blur(10px);
-      border-radius: 50px;
-      padding: 1.8rem 1.2rem;
-      margin: 1.8rem 1rem;
-      border: 1px solid #9a8066;
-      box-shadow: 0 25px 40px -12px black;
-    }
-    .lang-tabs {
-      display: flex;
-      gap: 0.5rem;
-      flex-wrap: wrap;
-      justify-content: center;
-    }
-    .lang-tab {
-      background: #352d24;
-      border: 1px solid #9b8066;
-      color: #f1dbc4;
-      font-size: 1.15rem;
-      padding: 0.6rem 1.3rem;
-      border-radius: 50px;
-      cursor: pointer;
-      transition: 0.2s;
-      font-weight: 500;
-    }
-    .lang-tab.active {
-      background: #c6a178;
-      color: #1c1610;
-      font-weight: 700;
-      border-color: #efd2b1;
-      box-shadow: 0 0 20px #f1c494;
-      transform: scale(1.05);
-    }
-    .bio-content {
-      margin-top: 2rem;
-    }
-    .bio-text {
-      display: none;
-      font-size: 1.1rem;
-      line-height: 1.8;
-      background: #1d1711;
-      padding: 1.8rem;
-      border-radius: 40px;
-      border: 1px solid #a58b6f;
-      box-shadow: inset 0 0 20px #0e0b07;
-      animation: fadeLang 0.5s;
-    }
-    @keyframes fadeLang {
-      0% { opacity: 0; transform: translateY(10px); }
-      100% { opacity: 1; transform: translateY(0); }
-    }
-    .bio-text.active {
-      display: block;
-    }
-
-    /* ----------------------------------------------------- */
-    /* 7. PUBLICATIONS (unchanged)                          */
-    /* ----------------------------------------------------- */
-    .pub-section {
-      padding: 2rem 1rem;
-    }
-    .pub-grid {
-      display: grid;
-      grid-template-columns: 1fr 1fr;
-      gap: 1.2rem;
-    }
-    .pub-card {
-      background: rgba(39, 32, 25, 0.7);
-      backdrop-filter: blur(6px);
-      border: 1px solid #9a8066;
-      border-radius: 36px;
-      padding: 1.7rem 0.8rem;
-      text-align: center;
-      transition: all 0.3s cubic-bezier(0.2, 0.9, 0.3, 1.3);
-      box-shadow: 0 18px 28px -12px black;
-      transform: translateY(0);
-      animation: cardPulse 5s infinite;
-    }
-    @keyframes cardPulse {
-      0% { box-shadow: 0 18px 28px -12px black; }
-      50% { box-shadow: 0 22px 35px -8px #7a624b; }
-      100% { box-shadow: 0 18px 28px -12px black; }
-    }
-    .pub-card:hover {
-      transform: translateY(-12px) scale(1.03);
-      background: #4f4133;
-      border-color: #e9bc91;
-      box-shadow: 0 35px 45px -8px #000;
-    }
-    .pub-card i {
-      font-size: 2.5rem;
-      color: #dfb185;
-      margin-bottom: 0.8rem;
-    }
-
-    /* ----------------------------------------------------- */
-    /* 8. NEW ANCESTRAL POST - BLACK & WHITE TRIBUTE        */
-    /*    with added Dr. Waleed portrait                    */
-    /* ----------------------------------------------------- */
-    .ancestral-tribute {
-      background: linear-gradient(145deg, #11100e, #050403);
-      border-radius: 48px;
-      margin: 2rem 1rem;
-      padding: 1.8rem 1.2rem;
-      border: 1px solid #7f6953;
-      box-shadow: 0 25px 40px -12px black;
-    }
-    .tribute-header {
-      text-align: center;
-      margin-bottom: 1.5rem;
-      border-bottom: 2px dashed #b58f68;
-      display: inline-block;
-      width: 100%;
-    }
-    .tribute-header h2 {
-      font-family: 'Playfair Display', serif;
-      font-size: 2rem;
-      letter-spacing: 1px;
-      background: linear-gradient(135deg, #e7d5c0, #c8aa85);
-      -webkit-background-clip: text;
-      -webkit-text-fill-color: transparent;
-    }
-    .tribute-header p {
-      font-size: 0.9rem;
-      color: #b59778;
-    }
-    .ancestral-grid {
-      display: flex;
-      flex-direction: column;
-      gap: 2rem;
-    }
-    .ancestor-card {
-      background: rgba(20, 17, 13, 0.8);
-      border-radius: 44px;
-      padding: 1rem;
-      backdrop-filter: blur(4px);
-      border: 1px solid #7a624b;
-      transition: 0.25s;
-    }
-    .ancestor-card:hover {
-      border-color: #c6a16e;
-      transform: scale(1.01);
-    }
-    .bw-portrait {
-      width: 85%;
-      margin: 0 auto 1rem;
-      border-radius: 32px;
-      overflow: hidden;
-      border: 2px solid #5e4c38;
-      filter: grayscale(100%);
-      transition: filter 0.4s, transform 0.3s;
-      cursor: pointer;
-      box-shadow: 0 15px 25px -8px black;
-    }
-    .bw-portrait:hover {
-      filter: grayscale(20%);
-      transform: scale(1.02);
-      border-color: #dbb27c;
-    }
-    .bw-portrait img {
-      width: 100%;
-      height: auto;
-      display: block;
-    }
-    .ancestor-card h3 {
-      font-size: 1.7rem;
-      text-align: center;
-      font-weight: 600;
-      font-family: 'Amiri', serif;
-      color: #eedbbc;
-      margin: 0.8rem 0 0.5rem;
-    }
-    .ancestor-role {
-      text-align: center;
-      color: #cfaa82;
-      font-weight: 500;
-      letter-spacing: 1px;
-      margin-bottom: 0.8rem;
-    }
-    .ancestor-desc {
-      font-size: 0.95rem;
-      line-height: 1.5;
-      padding: 0.5rem 0.2rem;
-      color: #e2cfbb;
-    }
-    .tribute-footer {
-      margin-top: 1.5rem;
-      text-align: center;
-      background: #1b1611;
-      border-radius: 60px;
-      padding: 1rem;
-      font-size: 0.9rem;
-      border: 1px solid #7c644b;
-    }
-
-    /* existing Mir Porti + Mir Khalaf sections (unchanged but kept) */
-    .mir-section, .mir-khalaf-section {
-      background: linear-gradient(145deg, #1f1a14, #16110c);
-      border-radius: 60px 60px 30px 30px;
-      margin: 2rem 1rem;
-      border: 2px solid #9d846b;
-      box-shadow: 0 30px 40px -15px black;
-      padding: 2rem 1rem;
-    }
-    .mir-header {
-      display: flex;
-      align-items: center;
-      gap: 1rem;
-      margin-bottom: 1.5rem;
-    }
-    .mir-header i {
-      font-size: 2.8rem;
-      color: #c9a87c;
-    }
-    .mir-title {
-      font-size: 2.2rem;
-      font-family: 'Playfair Display', serif;
-      font-weight: 600;
-    }
-    .mir-image, .mir-khalaf-image {
-      width: 80%;
-      margin: 0 auto 1.5rem;
-      border-radius: 40px;
-      border: 3px solid #b59673;
-      box-shadow: 0 25px 35px -10px black;
-      transition: transform 0.3s;
-      cursor: pointer;
-    }
-    .mir-image img, .mir-khalaf-image img {
-      width: 100%;
-      height: auto;
-      display: block;
-      border-radius: 37px;
-    }
-    .mir-desc {
-      background: rgba(24, 19, 14, 0.7);
-      backdrop-filter: blur(6px);
-      border-radius: 50px;
-      padding: 1.8rem;
-      border: 1px solid #aa8b6e;
-    }
-    .bridge-map {
-      background: #1f1a14;
-      border-radius: 70px 70px 30px 30px;
-      margin: 2rem 1rem;
-      padding: 2rem 1rem;
-      border: 2px solid #8b745c;
-    }
-    .map-svg svg {
-      width: 100%;
-      height: auto;
-      filter: drop-shadow(0 15px 15px #00000080);
-    }
-    .sound-waves {
-      display: flex;
-      justify-content: center;
-      gap: 6px;
-      margin: 1.5rem 0 0;
-      height: 35px;
-    }
-    .wave {
-      width: 7px;
-      height: 22px;
-      background: #c9a67b;
-      border-radius: 8px;
-      animation: wave 1.4s infinite ease-in-out;
-    }
-    .wave:nth-child(2) { animation-delay: 0.2s; background: #ddb790; }
-    .wave:nth-child(3) { animation-delay: 0.4s; background: #f0caa0; }
-    .wave:nth-child(4) { animation-delay: 0.1s; background: #d6a87c; }
-    @keyframes wave {
-      0%, 100% { transform: scaleY(0.6); }
-      50% { transform: scaleY(1.5); }
-    }
-    .footer {
-      background: #100c08;
-      padding: 2.2rem 1rem;
-      text-align: center;
-      font-size: 1.2rem;
-      border-top: 2px solid #6a5743;
-      color: #cfbb9f;
-    }
-    .footer a {
-      color: #e4c5a1;
-      text-decoration: none;
-      transition: 0.2s;
-    }
-    .footer a:hover {
-      color: #fad6aa;
-    }
-    .home-link-bottom {
-      margin-top: 1rem;
-    }
-  </style>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>X Lodon Sports - Home | الرئيسية</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link href="https://fonts.googleapis.com/css2?family=Tajawal:wght@400;500;700&display=swap" rel="stylesheet">
+    <script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-app-compat.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-auth-compat.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-firestore-compat.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2/dist/umd/supabase.min.js"></script>
+    
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        body { background: #0a0f1a; color: white; font-family: 'Segoe UI', 'Tajawal', sans-serif; min-height: 100vh; }
+        
+        .header { background: linear-gradient(135deg, #111827, #0a0f1a); padding: 12px 15px; border-bottom: 2px solid #00ff9d; position: sticky; top: 0; z-index: 100; }
+        .user-bar { display: flex; justify-content: space-between; align-items: center; margin-bottom: 10px; flex-wrap: wrap; gap: 10px; }
+        .user-info { display: flex; align-items: center; gap: 10px; }
+        .user-avatar { width: 40px; height: 40px; background: #00ff9d33; border-radius: 50%; display: flex; align-items: center; justify-content: center; color: #00ff9d; }
+        .user-name { font-weight: 600; font-size: 14px; }
+        .balance-badge { background: #00ff9d22; padding: 8px 15px; border-radius: 25px; border: 1px solid #00ff9d; }
+        .balance-amount { color: #00ff9d; font-weight: 700; font-size: 18px; }
+        .lang-toggle { background: #1a2332; border: 1px solid #00ff9d; color: #00ff9d; padding: 5px 12px; border-radius: 20px; cursor: pointer; }
+        
+        .tabs { display: flex; gap: 5px; overflow-x: auto; white-space: nowrap; padding-bottom: 5px; }
+        .tab { padding: 10px 15px; background: #1a2332; border-radius: 25px; color: white; text-decoration: none; font-size: 13px; }
+        .tab.active { background: #00ff9d; color: black; }
+        
+        .container { max-width: 1200px; margin: 0 auto; padding: 15px; padding-bottom: 80px; }
+        
+        /* Stats Banner - Enhanced */
+        .stats-banner { display: grid; grid-template-columns: repeat(4, 1fr); gap: 10px; margin-bottom: 20px; }
+        .stat-card { background: #111827; padding: 12px; border-radius: 12px; text-align: center; border: 1px solid #00ff9d22; transition: all 0.2s; }
+        .stat-card:hover { transform: translateY(-2px); border-color: #00ff9d; }
+        .stat-card .value { font-size: 24px; font-weight: bold; color: #00ff9d; }
+        .stat-card .label { font-size: 11px; color: #a0a8c9; margin-top: 5px; }
+        .stat-card .icon { font-size: 20px; margin-bottom: 5px; }
+        
+        /* Today's Matches Banner - NEW */
+        .today-banner {
+            background: linear-gradient(135deg, #00ff9d11, #00ff9d05);
+            border: 1px solid #00ff9d33;
+            border-radius: 12px;
+            padding: 15px;
+            margin-bottom: 20px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            flex-wrap: wrap;
+            gap: 10px;
+        }
+        .today-banner .today-title {
+            font-size: 16px;
+            font-weight: 700;
+            color: #00ff9d;
+        }
+        .today-banner .today-count {
+            background: #00ff9d22;
+            padding: 5px 15px;
+            border-radius: 20px;
+            font-size: 14px;
+            border: 1px solid #00ff9d;
+        }
+        
+        .quick-cards { display: grid; grid-template-columns: repeat(5, 1fr); gap: 10px; margin: 15px 0; }
+        .quick-card { background: #111827; padding: 15px 10px; border-radius: 12px; text-align: center; text-decoration: none; color: white; border: 1px solid #ffffff11; transition: all 0.2s; }
+        .quick-card:hover { transform: translateY(-3px); border-color: #00ff9d; }
+        .quick-card i { font-size: 28px; color: #00ff9d; margin-bottom: 8px; }
+        .quick-card .count { font-size: 24px; font-weight: bold; color: #00ff9d; }
+        .quick-card small { font-size: 11px; color: #a0a8c9; }
+        
+        /* Guide Section - Enhanced */
+        .guide-section { margin-bottom: 20px; }
+        .guide-title { color: #00ff9d; font-size: 16px; margin-bottom: 12px; display: flex; align-items: center; gap: 8px; }
+        .guide-cards { display: grid; grid-template-columns: repeat(4, 1fr); gap: 8px; }
+        .guide-card { background: #111827; padding: 12px 8px; border-radius: 10px; text-align: center; border: 1px solid #ffffff11; transition: all 0.2s; }
+        .guide-card:hover { border-color: #00ff9d; transform: translateY(-2px); }
+        .guide-card i { font-size: 20px; margin-bottom: 5px; }
+        .guide-card .label { font-size: 10px; color: #a0a8c9; margin-bottom: 3px; }
+        .guide-card .value { font-size: 12px; font-weight: 700; }
+        .guide-card .value.green { color: #00ff9d; }
+        .guide-card .value.red { color: #ff5252; }
+        .guide-card .value.orange { color: #ff9800; }
+        
+        /* Leagues Section - Enhanced */
+        .leagues-section { margin-bottom: 20px; }
+        .leagues-grid { display: grid; grid-template-columns: repeat(5, 1fr); gap: 8px; }
+        .league-item { 
+            background: #111827; 
+            padding: 10px 5px; 
+            border-radius: 10px; 
+            display: flex; 
+            flex-direction: column; 
+            align-items: center; 
+            text-align: center; 
+            border: 1px solid #ffffff11; 
+            cursor: pointer; 
+            transition: all 0.2s; 
+            position: relative;
+        }
+        .league-item:hover { transform: translateY(-2px); border-color: #00ff9d; }
+        .league-item img { width: 32px; height: 32px; object-fit: contain; margin-bottom: 5px; }
+        .league-item span { font-size: 9px; line-height: 1.2; }
+        .league-item .match-badge {
+            position: absolute;
+            top: -5px;
+            right: -5px;
+            background: #ff4444;
+            color: white;
+            font-size: 8px;
+            padding: 2px 6px;
+            border-radius: 10px;
+            font-weight: bold;
+        }
+        .league-item .live-indicator {
+            width: 8px;
+            height: 8px;
+            background: #ff4444;
+            border-radius: 50%;
+            animation: pulse 1s infinite;
+            display: inline-block;
+            margin-top: 3px;
+        }
+        .league-item.has-live { border-color: #ff4444; }
+        
+        .section-title { display: flex; justify-content: space-between; align-items: center; margin: 20px 0 15px; }
+        .section-title h3 { color: #00ff9d; font-size: 18px; display: flex; align-items: center; gap: 8px; }
+        .section-title a { color: #a0a8c9; text-decoration: none; font-size: 12px; }
+        .section-title a:hover { color: #00ff9d; }
+        
+        /* Match Cards - Enhanced */
+        .match-card { background: #111827; border-radius: 12px; padding: 12px; margin-bottom: 10px; border-left: 4px solid #00ff9d; cursor: pointer; transition: all 0.2s; }
+        .match-card:hover { transform: translateX(5px); background: #1a2332; }
+        .match-card.live { border-left-color: #ff4444; }
+        .match-card.betting-closed { border-left-color: #a0a8c9; opacity: 0.7; }
+        .match-card.betting-closed:hover { opacity: 0.8; }
+        
+        .match-league { color: #a0a8c9; font-size: 11px; margin-bottom: 5px; display: flex; align-items: center; gap: 5px; }
+        .league-logo-mini { width: 16px; height: 16px; object-fit: contain; }
+        .match-teams { display: flex; align-items: center; justify-content: space-between; flex-wrap: wrap; gap: 8px; }
+        .team { font-weight: 600; font-size: 13px; display: flex; align-items: center; gap: 5px; }
+        .team-logo-mini { width: 20px; height: 20px; object-fit: contain; border-radius: 50%; }
+        .score { font-size: 18px; font-weight: bold; color: #ff4444; }
+        .match-time { font-size: 11px; color: #00ff9d; }
+        .live-badge { background: #ff4444; color: white; padding: 2px 8px; border-radius: 20px; font-size: 10px; animation: pulse 1s infinite; }
+        .closed-badge { background: #a0a8c9; color: #333; padding: 2px 8px; border-radius: 20px; font-size: 10px; }
+        
+        /* Live Progress Bar - NEW */
+        .live-progress {
+            width: 100%;
+            height: 3px;
+            background: #1a2332;
+            border-radius: 3px;
+            margin-top: 8px;
+            overflow: hidden;
+        }
+        .live-progress .progress-fill {
+            height: 100%;
+            background: linear-gradient(90deg, #00ff9d, #ff4444);
+            border-radius: 3px;
+            transition: width 0.5s ease;
+        }
+        .live-progress .progress-fill.closed {
+            background: #a0a8c9;
+        }
+        
+        @keyframes pulse { 0%,100% { opacity: 1; } 50% { opacity: 0.6; } }
+        
+        .odds-preview { display: flex; gap: 5px; margin-top: 8px; }
+        .odd-preview { 
+            flex: 1; 
+            text-align: center; 
+            padding: 4px; 
+            background: #0a0f1a; 
+            border-radius: 6px; 
+            font-size: 11px;
+            transition: all 0.2s;
+        }
+        .odd-preview:hover { background: #00ff9d11; }
+        .odd-preview span { color: #00ff9d; font-weight: bold; }
+        .odd-preview.disabled { opacity: 0.4; }
+        .odd-preview.disabled span { color: #a0a8c9; }
+        
+        .bottom-nav { display: flex; justify-content: space-around; background: #111827; padding: 12px; position: fixed; bottom: 0; left: 0; right: 0; border-top: 1px solid #00ff9d33; z-index: 99; }
+        .nav-item { color: #a0a8c9; text-decoration: none; text-align: center; font-size: 11px; transition: all 0.2s; }
+        .nav-item.active { color: #00ff9d; }
+        .nav-item i { font-size: 20px; display: block; margin-bottom: 3px; }
+        .nav-item:hover { color: #00ff9d; transform: translateY(-2px); }
+        
+        .empty-state { text-align: center; padding: 30px; color: #a0a8c9; font-size: 13px; background: #111827; border-radius: 12px; }
+        
+        .arabic { font-family: 'Tajawal', sans-serif; }
+        
+        .last-updated {
+            font-size: 10px;
+            color: #a0a8c9;
+            text-align: right;
+            margin-top: 10px;
+        }
+        
+        /* ============================================ */
+        /* 🆕 MESSAGE / SUPPORT ICON                   */
+        /* ============================================ */
+        .message-icon { 
+            position: fixed; 
+            bottom: 85px; 
+            right: 25px; 
+            width: 55px; 
+            height: 55px; 
+            background: #00ff9d; 
+            border-radius: 50%; 
+            display: flex; 
+            align-items: center; 
+            justify-content: center; 
+            cursor: pointer; 
+            z-index: 999; 
+            box-shadow: 0 4px 20px rgba(0,255,157,0.4); 
+            transition: all 0.3s; 
+        }
+        .message-icon:hover { 
+            transform: scale(1.1); 
+            background: #00cc7d; 
+            box-shadow: 0 4px 30px rgba(0,255,157,0.6);
+        }
+        .message-icon i { font-size: 24px; color: black; }
+        .message-icon .badge { 
+            position: absolute; 
+            top: -5px; 
+            right: -5px; 
+            background: #ff4444; 
+            color: white; 
+            border-radius: 50%; 
+            width: 20px; 
+            height: 20px; 
+            font-size: 10px; 
+            display: flex; 
+            align-items: center; 
+            justify-content: center; 
+            font-weight: bold; 
+            animation: pulse 1.5s infinite;
+        }
+        
+        /* ============================================ */
+        /* 🆕 MESSAGE POPUP                            */
+        /* ============================================ */
+        .message-overlay {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: rgba(0,0,0,0.7);
+            z-index: 1000;
+            align-items: center;
+            justify-content: center;
+            padding: 20px;
+        }
+        .message-overlay.show {
+            display: flex;
+        }
+        .message-popup {
+            background: #111827;
+            border-radius: 20px;
+            max-width: 450px;
+            width: 100%;
+            max-height: 90vh;
+            overflow-y: auto;
+            padding: 25px;
+            border: 1px solid #00ff9d33;
+            box-shadow: 0 20px 60px rgba(0,0,0,0.5);
+            position: relative;
+            animation: popupIn 0.3s ease;
+        }
+        @keyframes popupIn {
+            from { opacity: 0; transform: scale(0.9) translateY(20px); }
+            to { opacity: 1; transform: scale(1) translateY(0); }
+        }
+        .message-popup .close-btn {
+            position: absolute;
+            top: 15px;
+            right: 15px;
+            background: none;
+            border: none;
+            color: #a0a8c9;
+            font-size: 24px;
+            cursor: pointer;
+            transition: all 0.2s;
+        }
+        .message-popup .close-btn:hover {
+            color: #ff5252;
+            transform: rotate(90deg);
+        }
+        .message-popup .popup-title {
+            font-size: 20px;
+            font-weight: 700;
+            color: #00ff9d;
+            margin-bottom: 15px;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+        .message-popup .popup-title i {
+            font-size: 24px;
+        }
+        .message-popup .popup-subtitle {
+            font-size: 13px;
+            color: #a0a8c9;
+            margin-bottom: 20px;
+            line-height: 1.6;
+        }
+        .message-popup .form-group {
+            margin-bottom: 12px;
+        }
+        .message-popup .form-group label {
+            display: block;
+            font-size: 12px;
+            color: #a0a8c9;
+            margin-bottom: 4px;
+        }
+        .message-popup .form-group label .required {
+            color: #ff5252;
+        }
+        .message-popup .form-group input,
+        .message-popup .form-group textarea,
+        .message-popup .form-group select {
+            width: 100%;
+            padding: 10px 14px;
+            background: #0a0f1a;
+            border: 1px solid #ffffff22;
+            border-radius: 10px;
+            color: white;
+            font-size: 14px;
+            transition: border-color 0.2s;
+        }
+        .message-popup .form-group input:focus,
+        .message-popup .form-group textarea:focus,
+        .message-popup .form-group select:focus {
+            border-color: #00ff9d;
+            outline: none;
+        }
+        .message-popup .form-group textarea {
+            min-height: 80px;
+            resize: vertical;
+        }
+        .message-popup .form-group select option {
+            background: #111827;
+        }
+        .message-popup .form-row {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 12px;
+        }
+        .message-popup .submit-btn {
+            width: 100%;
+            padding: 12px;
+            background: #00ff9d;
+            color: black;
+            border: none;
+            border-radius: 10px;
+            font-weight: bold;
+            cursor: pointer;
+            transition: all 0.2s;
+            font-size: 16px;
+            margin-top: 5px;
+        }
+        .message-popup .submit-btn:hover {
+            transform: scale(1.02);
+            background: #00cc7d;
+        }
+        .message-popup .submit-btn:disabled {
+            opacity: 0.5;
+            cursor: not-allowed;
+            transform: none;
+        }
+        .message-popup .form-response {
+            display: none;
+            margin-top: 15px;
+            padding: 12px;
+            border-radius: 10px;
+            text-align: center;
+            font-weight: 500;
+            font-size: 14px;
+        }
+        .message-popup .form-response.success {
+            display: block;
+            background: rgba(0,255,157,0.1);
+            border: 1px solid #00ff9d;
+            color: #00ff9d;
+        }
+        .message-popup .form-response.error {
+            display: block;
+            background: rgba(255,82,82,0.1);
+            border: 1px solid #ff5252;
+            color: #ff5252;
+        }
+        .message-popup .quick-questions {
+            margin: 15px 0;
+        }
+        .message-popup .quick-questions .qq-title {
+            font-size: 12px;
+            color: #a0a8c9;
+            margin-bottom: 8px;
+        }
+        .message-popup .quick-questions .qq-btns {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 6px;
+        }
+        .message-popup .quick-questions .qq-btn {
+            padding: 5px 12px;
+            background: #1a2332;
+            border: 1px solid #ffffff22;
+            border-radius: 20px;
+            color: #a0a8c9;
+            font-size: 11px;
+            cursor: pointer;
+            transition: all 0.2s;
+        }
+        .message-popup .quick-questions .qq-btn:hover {
+            border-color: #00ff9d;
+            color: white;
+            background: rgba(0,255,157,0.05);
+        }
+        
+        @media (max-width: 600px) {
+            .stats-banner { grid-template-columns: repeat(2, 1fr); }
+            .guide-cards { grid-template-columns: repeat(2, 1fr); }
+            .leagues-grid { grid-template-columns: repeat(3, 1fr); }
+            .quick-cards { grid-template-columns: repeat(3, 1fr); }
+            .match-teams { flex-direction: column; text-align: center; }
+            .today-banner { flex-direction: column; text-align: center; }
+            .message-popup { padding: 20px; margin: 10px; }
+            .message-popup .form-row { grid-template-columns: 1fr; }
+            .message-icon { width: 45px; height: 45px; bottom: 75px; right: 15px; }
+            .message-icon i { font-size: 20px; }
+        }
+    </style>
 </head>
 <body>
-  <canvas id="particle-canvas"></canvas>
-
-  <!-- HAMBURGER NAV -->
-  <div class="mobile-nav">
-    <div class="logo-mini"><i class="fas fa-feather-alt"></i> Dr. W.</div>
-    <button class="hamburger" id="hamburgerBtn" aria-label="menu">
-      <span></span><span></span><span></span>
-    </button>
-    <div class="menu-dropdown" id="menuDropdown">
-      <a href="#home"><i class="fas fa-home"></i> Home</a>
-      <a href="#gallery"><i class="fas fa-images"></i> Gallery</a>
-      <a href="#bio"><i class="fas fa-book-open"></i> Bio</a>
-      <a href="#publications"><i class="fas fa-scroll"></i> Works</a>
-      <a href="#ancestral-post"><i class="fas fa-crown"></i> Ancestral Honor</a>
-      <a href="#mir-porti"><i class="fas fa-crown"></i> Mir Porti</a>
-      <a href="#mir-khalaf"><i class="fas fa-chess-king"></i> Mir Khalaf</a>
-      <div class="home-icon-item">
-        <a href="https://whz-co.github.io/whz/index.html" target="_blank"><i class="fas fa-home"></i> Home</a>
-      </div>
-    </div>
-  </div>
-
-  <!-- HERO -->
-  <section id="home" class="hero-section" data-aos="fade-up" data-aos-duration="1200">
-    <div class="hero-glow">Dr. Waleed H. Z.</div>
-    <div class="hero-sub">linguist · educator · keeper of noble lineage</div>
-  </section>
-
-  <!-- GALLERY -->
-  <section id="gallery" class="gallery-wrap" data-aos="zoom-in" data-aos-duration="900">
-    <h2 class="section-title"><i class="fas fa-camera"></i> moments</h2>
-    <div class="gallery-grid">
-      <div class="gallery-item" data-src="https://raw.githubusercontent.com/whz-co/whz/main/images/dr%20waleed%20on%20libra..jpg">
-        <img src="https://raw.githubusercontent.com/whz-co/whz/main/images/dr%20waleed%20on%20libra..jpg" alt="" loading="lazy">
-      </div>
-      <div class="gallery-item" data-src="https://raw.githubusercontent.com/whz-co/whz/main/images/Dr%20waleed%20is%20holding%20a%20book.png">
-        <img src="https://raw.githubusercontent.com/whz-co/whz/main/images/Dr%20waleed%20is%20holding%20a%20book.png" alt="" loading="lazy">
-      </div>
-      <div class="gallery-item" data-src="https://raw.githubusercontent.com/whz-co/whz/main/images/Dr%20waleed%20is%20writing.jpg">
-        <img src="https://raw.githubusercontent.com/whz-co/whz/main/images/Dr%20waleed%20is%20writing.jpg" alt="" loading="lazy">
-      </div>
-    </div>
-    <p style="text-align:center; font-size:0.95rem; color:#d4ba9b; margin-top:0.8rem;"><i class="fas fa-expand-alt"></i> tap image for fullscreen</p>
-  </section>
-
-  <!-- LIGHTBOX -->
-  <div class="lightbox" id="lightbox">
-    <span class="lightbox-close" id="lightboxClose">&times;</span>
-    <div class="lightbox-content">
-      <img src="" alt="" id="lightboxImg">
-    </div>
-  </div>
-
-  <!-- BIO (trilingual) unchanged -->
-  <section id="bio" class="lang-panel" data-aos="fade-right" data-aos-duration="1000">
-    <h2 style="font-size:2.2rem; margin-bottom:1.2rem;"><i class="fas fa-feather"></i> about</h2>
-    <div class="lang-tabs">
-      <button class="lang-tab active" data-lang="en">🇬🇧 EN</button>
-      <button class="lang-tab" data-lang="ar">🇸🇦 AR</button>
-      <button class="lang-tab" data-lang="ku-arab">🏴 KU(Ar)</button>
-      <button class="lang-tab" data-lang="ku-latn">🇹🇰 KU(La)</button>
-    </div>
-    <div class="bio-content">
-      <div class="bio-text active" id="bio-en" lang="en"><p>Dr. Waleed Hussein Zakhourani is a distinguished linguist, visionary educator, and cultural scholar whose life's work serves as a vital bridge between the English, Arabic, and Kurdish worlds. Holding a PhD in English Language Etiquette from Harvard University, his academic foundation studies how language conveys respect and cultural values. This rare specialization defines his mission: to transform English into a medium of global mutual understanding.</p><p>With decades in multilingual education, he champions linguistic accessibility and cultural preservation. His expertise spans lexicography, translation studies, and academic publishing. He empowers learners to navigate the global stage while rooted in their own heritage.</p></div>
-      <div class="bio-text" id="bio-ar" lang="ar" dir="rtl"><p>يُعد الدكتور وليد حسين زاخوراني لغوياً بارزاً، ومربياً رؤيوياً، وباحثاً ثقافياً كرس مسيرته المهنية لتكون جسراً حيوياً يربط بين عوالم اللغات الإنجليزية والعربية والكردية. من خلال حصوله على درجة الدكتوراه في آداب اللغة الإنجليزية من جامعة هارفارد، تعذرت ركائز أساسه الأكاديمي في الدراسة المتعمقة لكيفية تعبير اللغة عن الاحترام والوضوح والقيم الثقافية الراسخة.</p><p>مع عقود من القيادة في مجال التعليم متعدد اللغات، برز الدكتور زاخوراني كشخصية رائدة في تيسير الوصول اللغوي والحفاظ على التراث الثقافي.</p></div>
-      <div class="bio-text" id="bio-ku-arab" lang="ku-arab" dir="rtl"><p>د. وەلید حسێن زاخۆرانی زمانزانەکێ دیار، پەروەردەکارەکێ خودان دیدەڤانی، و ڤەکۆلەرەکێ کلتووریێ خودان ئەزموونە، کو ژیانا خۆ تەرخانکرییە دا ببیتە پرەکا زیندی د ناڤبەرا جیهانێن ئینگلیزی، عەرەبی و کوردی دا.</p><p>دگەل چەندین سالێن کارکرنێ د بوارێ پەروەردەیا فرە-زمانیدا، د. وەلید وەک پالپشتەکێ مەزن یێ ب ساناهی کرنا زمانان و پاراستنا کلتووری دیار بوویە.</p></div>
-      <div class="bio-text" id="bio-ku-latn" lang="ku-latn"><p>Dr. Welîd Hisên Zexoranî zimanzanekî berbiçav, perwerdekarekî xwedî dîtin û zanyarekî çandî ye ku xebatên wî wekî pireke girîng di navbera cîhanên Îngilîzî, Erebî û Kurdî de xizmetê dikin.</p><p>Bi ezmûna dehan salan di perwerdehiya pirzimanî de, Dr. Zexoranî parêzvanê gihîştina zimên û parastina çandî ye.</p></div>
-    </div>
-  </section>
-
-  <!-- PUBLICATIONS -->
-  <section id="publications" class="pub-section" data-aos="fade-up" data-aos-duration="900">
-    <h2 class="section-title"><i class="fas fa-book"></i> selected works</h2>
-    <div class="pub-grid">
-      <div class="pub-card"><i class="fas fa-book"></i><h3>Lexical Bridges</h3><p>Kurdish–English dictionary</p></div>
-      <div class="pub-card"><i class="fas fa-globe"></i><h3>Politeness Across Borders</h3><p>Harvard 2008</p></div>
-      <div class="pub-card"><i class="fas fa-language"></i><h3>Arabic Rhetoric</h3><p>multilingual study</p></div>
-      <div class="pub-card"><i class="fas fa-feather"></i><h3>Zakhourani Method</h3><p>teaching through heritage</p></div>
-    </div>
-  </section>
-
-  <!-- ========= NEW ANCESTRAL POST: MIR PORTI, HIS WIFE, MIR ALI & DR. WALEED ========= -->
-  <section id="ancestral-post" class="ancestral-tribute" data-aos="fade-up" data-aos-duration="1000">
-    <div class="tribute-header">
-      <h2><i class="fas fa-landmark"></i> Guardians of Mardin · The Eternal Sovereigns</h2>
-      <p>Black & white chronicle — Mir Porti, his noble wife, Mir Ali, and Dr. Waleed — rulers & inheritors of Zakhoran</p>
-    </div>
-    <div class="ancestral-grid">
-      <!-- Dr. Waleed portrait added first as modern inheritor -->
-      <div class="ancestor-card">
-        <div class="bw-portrait" data-src="https://raw.githubusercontent.com/whz-co/whz/main/images/Dr%20waleed%20-%20porti%20image%20behind.jpg">
-          <img src="https://raw.githubusercontent.com/whz-co/whz/main/images/Dr%20waleed%20-%20porti%20image%20behind.jpg" alt="Dr. Waleed with ancestral heritage" loading="lazy">
+    <div class="header">
+        <div class="user-bar">
+            <div class="user-info">
+                <div class="user-avatar"><i class="fas fa-user"></i></div>
+                <div>
+                    <div class="user-name" id="user-name">Loading...</div>
+                    <div style="font-size: 11px; color: #a0a8c9;" id="user-email"></div>
+                </div>
+            </div>
+            <div style="display: flex; align-items: center; gap: 10px;">
+                <div class="balance-badge"><i class="fas fa-wallet"></i> <span class="balance-amount" id="balance-display">$0.00</span></div>
+                <button class="lang-toggle" onclick="toggleLanguage()"><span class="en">عربي</span><span class="ar" style="display:none;">English</span></button>
+            </div>
         </div>
-        <h3>Dr. Waleed Hussein Zakhourani</h3>
-        <div class="ancestor-role">✦ The Scholar Heir · Bridge Between Eras ✦</div>
-        <div class="ancestor-desc">Dr. Waleed, direct descendant of Mir Porti and Mir Ali, carries forward the legacy of leadership through knowledge and cultural diplomacy. A Harvard-educated linguist, he embodies the noble spirit of his forefathers — transforming ancestral strength into intellectual bridges across English, Arabic, and Kurdish worlds. This portrait with the heritage of Porti behind him symbolizes the unbroken chain from sovereign rulers to modern-day scholar.</div>
-      </div>
-      <!-- Mir Porti & his wife (combined post) -->
-      <div class="ancestor-card">
-        <div class="bw-portrait" data-src="https://raw.githubusercontent.com/whz-co/whz/main/images/Mir%20Porte%20%20and%20his%20wife%20-%20english.png">
-          <img src="https://raw.githubusercontent.com/whz-co/whz/main/images/Mir%20Porte%20%20and%20his%20wife%20-%20english.png" alt="Mir Porti and his wife" loading="lazy">
+        <div class="tabs">
+            <a href="betting-sport.html" class="tab active"><i class="fas fa-home"></i> <span class="en">Home</span><span class="ar" style="display:none;">الرئيسية</span></a>
+            <a href="live-matches.html" class="tab"><i class="fas fa-play"></i> <span class="en">Live</span><span class="ar" style="display:none;">مباشر</span> <span id="live-count">0</span></a>
+            <a href="upcoming-matches.html" class="tab"><i class="fas fa-calendar"></i> <span class="en">Upcoming</span><span class="ar" style="display:none;">قادم</span></a>
+            <a href="finished-matches.html" class="tab"><i class="fas fa-check"></i> <span class="en">Results</span><span class="ar" style="display:none;">النتائج</span></a>
+            <a href="my-bets.html" class="tab"><i class="fas fa-ticket"></i> <span class="en">My Bets</span><span class="ar" style="display:none;">رهاناتي</span></a>
+            <!-- 🆕 NEW TABS: Wallet & Guide -->
+            <a href="wallets.html" class="tab"><i class="fas fa-wallet"></i> <span class="en">Wallet</span><span class="ar" style="display:none;">المحفظة</span></a>
+            <a href="guide.html" class="tab"><i class="fas fa-book"></i> <span class="en">Guide</span><span class="ar" style="display:none;">الدليل</span></a>
         </div>
-        <h3>Mir Porti & The Noble Lady of Zakhoran</h3>
-        <div class="ancestor-role">✦ Sovereign Rulers of Mardin & Botan ✦</div>
-        <div class="ancestor-desc">Mir Porti, the legendary leader whose reign (1650–1700) shaped the destiny of Mardin, Midyat and the Zakhoran region. Alongside his wife, a matriarch of wisdom and strength, they forged alliances across Kurdish, Arab and Turkish tribes. Their union symbolized unity and enduring sovereignty. The village of Porti remains a living monument to their authority. This black & white visual tribute honors the ancestral pillars of Dr. Waleed's lineage.</div>
-      </div>
-      <!-- Mir Ali (Son of Mir Porti) -->
-      <div class="ancestor-card">
-        <div class="bw-portrait" data-src="https://raw.githubusercontent.com/whz-co/whz/main/images/Mir%20Ali%20Mir%20Porte.jpg">
-          <img src="https://raw.githubusercontent.com/whz-co/whz/main/images/Mir%20Ali%20Mir%20Porte.jpg" alt="Mir Ali Mir Porti" loading="lazy">
+    </div>
+    
+    <div class="container">
+        <!-- Stats Banner -->
+        <div class="stats-banner">
+            <div class="stat-card">
+                <div class="icon">📊</div>
+                <div class="value" id="stat-total">0</div>
+                <div class="label"><span class="en">Total Matches</span><span class="ar" style="display:none;">إجمالي المباريات</span></div>
+            </div>
+            <div class="stat-card">
+                <div class="icon">🔴</div>
+                <div class="value" id="stat-live">0</div>
+                <div class="label"><span class="en">Live Now</span><span class="ar" style="display:none;">مباشر الآن</span></div>
+            </div>
+            <div class="stat-card">
+                <div class="icon">📅</div>
+                <div class="value" id="stat-upcoming">0</div>
+                <div class="label"><span class="en">Upcoming</span><span class="ar" style="display:none;">قادم</span></div>
+            </div>
+            <div class="stat-card">
+                <div class="icon">🎯</div>
+                <div class="value" id="stat-active-bets">0</div>
+                <div class="label"><span class="en">Active Bets</span><span class="ar" style="display:none;">رهانات نشطة</span></div>
+            </div>
         </div>
-        <h3>Mir Ali · The Heir of Fortitude</h3>
-        <div class="ancestor-role">✦ Son of Mir Porti · Guardian of Tradition ✦</div>
-        <div class="ancestor-desc">Mir Ali, successor to his father's formidable legacy, upheld justice and expanded the family's influence across the province. Known for his wisdom and diplomatic prowess, he bridged generations of leadership. His direct lineage flows through Dr. Waleed, preserving the honor of the Zakhoran tribe. This portrait (presented in timeless monochrome) echoes the resilience and nobility of the Mir Porti dynasty that ruled for decades.</div>
-      </div>
+        
+        <!-- Today's Matches Banner - NEW -->
+        <div class="today-banner" id="today-banner">
+            <div>
+                <span class="today-title"><i class="fas fa-calendar-day"></i> <span class="en">Today's Matches</span><span class="ar" style="display:none;">مباريات اليوم</span></span>
+                <span style="font-size: 12px; color: #a0a8c9; margin-left: 10px;" id="today-date"></span>
+            </div>
+            <span class="today-count" id="today-count">0 <span class="en">matches</span><span class="ar" style="display:none;">مباراة</span></span>
+        </div>
+        
+        <!-- Quick Navigation Cards -->
+        <div class="quick-cards">
+            <a href="live-matches.html" class="quick-card"><i class="fas fa-play-circle"></i><div class="count" id="quick-live">0</div><small><span class="en">Live Now</span><span class="ar" style="display:none;">مباشر الآن</span></small></a>
+            <a href="upcoming-matches.html" class="quick-card"><i class="fas fa-calendar"></i><div class="count" id="quick-upcoming">0</div><small><span class="en">Upcoming</span><span class="ar" style="display:none;">قادم</span></small></a>
+            <a href="my-bets.html" class="quick-card"><i class="fas fa-ticket-alt"></i><div class="count" id="quick-active">0</div><small><span class="en">Active Bets</span><span class="ar" style="display:none;">رهانات نشطة</span></small></a>
+            <!-- 🆕 NEW QUICK CARDS -->
+            <a href="wallets.html" class="quick-card"><i class="fas fa-wallet"></i><div class="count">💰</div><small><span class="en">Wallet</span><span class="ar" style="display:none;">المحفظة</span></small></a>
+            <a href="guide.html" class="quick-card"><i class="fas fa-book"></i><div class="count">📖</div><small><span class="en">Betting Guide</span><span class="ar" style="display:none;">دليل الرهان</span></small></a>
+        </div>
+        
+        <!-- Quick Guide -->
+        <div class="guide-section">
+            <div class="guide-title"><i class="fas fa-info-circle"></i> <span class="en">Quick Guide</span><span class="ar" style="display:none;">دليل سريع</span></div>
+            <div class="guide-cards">
+                <div class="guide-card"><i class="fas fa-clock" style="color:#00ff9d;"></i><div class="label"><span class="en">Betting Closes</span></div><div class="value green"><span class="en">80th minute</span></div></div>
+                <div class="guide-card"><i class="fas fa-ban" style="color:#ff5252;"></i><div class="label"><span class="en">Cancel Fee</span></div><div class="value red"><span class="en">5% - 50%</span></div></div>
+                <div class="guide-card"><i class="fas fa-hand-holding-usd" style="color:#ff9800;"></i><div class="label"><span class="en">Cashout Fee</span></div><div class="value orange"><span class="en">15% - 35%</span></div></div>
+                <div class="guide-card"><i class="fas fa-tachometer-alt" style="color:#2196f3;"></i><div class="label"><span class="en">Auto Settlement</span></div><div class="value green"><span class="en">After match</span></div></div>
+            </div>
+        </div>
+        
+        <!-- Dynamic Leagues - Enhanced -->
+        <div class="leagues-section">
+            <div class="guide-title"><i class="fas fa-trophy"></i> <span class="en">Leagues With Matches Today</span><span class="ar" style="display:none;">دوريات اليوم</span></div>
+            <div class="leagues-grid" id="top-leagues-grid">
+                <div class="empty-state">Loading leagues...</div>
+            </div>
+        </div>
+        
+        <!-- Live Matches Section -->
+        <div class="section-title">
+            <h3><i class="fas fa-circle" style="color: #ff4444; font-size: 10px;"></i> <span class="en">Top Live Matches</span><span class="ar" style="display:none;">أهم المباريات المباشرة</span></h3>
+            <a href="live-matches.html"><span class="en">View All</span><span class="ar" style="display:none;">عرض الكل</span> →</a>
+        </div>
+        <div id="live-container"><div class="empty-state"><div class="loading-spinner" style="display:inline-block; width:16px; height:16px; border:2px solid #00ff9d; border-top-color:transparent; border-radius:50%; animation:spin 0.6s linear infinite;"></div> Loading live matches...</div></div>
+        
+        <!-- Upcoming Matches Section -->
+        <div class="section-title">
+            <h3><i class="fas fa-calendar"></i> <span class="en">Top Upcoming Matches</span><span class="ar" style="display:none;">أهم المباريات القادمة</span></h3>
+            <a href="upcoming-matches.html"><span class="en">View All</span><span class="ar" style="display:none;">عرض الكل</span> →</a>
+        </div>
+        <div id="upcoming-container"><div class="empty-state"><div class="loading-spinner" style="display:inline-block; width:16px; height:16px; border:2px solid #00ff9d; border-top-color:transparent; border-radius:50%; animation:spin 0.6s linear infinite;"></div> Loading upcoming matches...</div></div>
+        
+        <div class="last-updated" id="last-updated">Last updated: Just now</div>
     </div>
-    <div class="tribute-footer">
-      <i class="fas fa-tree"></i> Dr. Waleed H. Z. — descendant of Mir Porti & Mir Ali — carrying forward the torch of knowledge, bridging empires of language and heritage.
+    
+    <!-- ============================================ -->
+    <!-- 🆕 MESSAGE / SUPPORT ICON                   -->
+    <!-- ============================================ -->
+    <div class="message-icon" id="messageIcon" onclick="openMessagePopup()">
+        <i class="fas fa-comment-dots"></i>
+        <span class="badge">!</span>
     </div>
-  </section>
-
-  <!-- MIR PORTI existing section (kept) -->
-  <section id="mir-porti" class="mir-section" data-aos="fade-right" data-aos-duration="1100">
-    <div class="mir-header"><i class="fas fa-crown"></i><h2 class="mir-title">Mir Porti · The Legacy of Zakhoran</h2></div>
-    <div class="mir-image" data-src="https://raw.githubusercontent.com/whz-co/whz/main/images/porte.png"><img src="https://raw.githubusercontent.com/whz-co/whz/main/images/porte.png" alt="Mir Porti" loading="lazy"></div>
-    <div class="mir-desc"><div class="lang-tabs" style="margin-bottom:1rem;"><button class="lang-tab active" data-lang="en-mir">🇬🇧 EN</button><button class="lang-tab" data-lang="ku-arab-mir">🏴 KU(Ar)</button><button class="lang-tab" data-lang="ku-latn-mir">🇹🇰 KU(La)</button><button class="lang-tab" data-lang="ar-mir">🇸🇦 AR</button></div>
-      <div class="bio-text active" id="mir-en"><p><strong>Mir Porti: The Legacy of Zakhoran and the Nobility of Mardin</strong></p><p>Mir Porti stands as a monumental figure in Kurdish history, particularly within the district of Midyat in Mardin. His historical influence flourished between 1650 and 1700 AD, centered in the Zakhoran region. His impact was so profound that the village of "Porti" was named in his honor, serving as a lasting geographical testament to his leadership. As a direct descendant of the illustrious Emirs of Bohtan, Mir Porti represents a lineage of nobility and power. He is the sixth grandfather of Dr. Walid Hussein Al-Zakhorani.</p></div>
-      <div class="bio-text" id="mir-ku-arab" lang="ku-arab" dir="rtl"><p><strong>میر پۆرتی: کێلەکێ دیرۆکیێ زاخۆران و ڕەسەناتییا مێردینێ</strong></p><p>میر پۆرتی ئێکە ژ کەسایەتیێن ناڤدار و دیارێن دیرۆکا کورد ل دەڤەرا میدیادێ ل پارێزگەها مێردینێ. ناڤبری ل سالێن د ناڤبەرا 1650 تا 1700 زایینی خودان دەسهەلات و ناڤودەنگ بوو، ب تایبەتی ل دەڤەرا زاخوران. ژبەر مەزناهی و کارتێکرنا وی، گوندێ "پۆرتی" ب ناڤێ وی هاتیە ناڤکرن.</p></div>
-      <div class="bio-text" id="mir-ku-latn" lang="ku-latn"><p><strong>Mîr Portî: Sembola Dîroka Zaxoran û Malbata Mîrên Botan</strong></p><p>Mîr Portî yek ji kesayetên herî navdar û bandordar ê dîroka Kurd e li navçeya Midyadê. Dîroka wî vedigere salên navbera 1650 - 1700’an, bi taybetî li herêma Zaxoran. Ji ber nav û dengê wî yê mezin, gundek bi navê wî hatiye binavkirin.</p></div>
-      <div class="bio-text" id="mir-ar" lang="ar" dir="rtl"><p><strong>الأمير بورتي: سليل الإمارة البوهتانية وعماد زاخوران</strong></p><p>يُعد الأمير بورتي أحد أبرز الأعلام التاريخيين في الذاكرة الكردية لمدينة مديات. يمتد نفوذه إلى الحقبة ما بين عامي 1650 و1700 ميلادية، وتحديداً في ربوع منطقة زاخوران، حيث اقترن اسمه بالأرض حتى سُميت قرية "بورتي" تيمناً به.</p></div>
+    
+    <!-- ============================================ -->
+    <!-- 🆕 MESSAGE POPUP                            -->
+    <!-- ============================================ -->
+    <div class="message-overlay" id="messageOverlay" onclick="closeMessagePopup(event)">
+        <div class="message-popup" onclick="event.stopPropagation()">
+            <button class="close-btn" onclick="closeMessagePopup()">&times;</button>
+            
+            <div class="popup-title">
+                <i class="fas fa-headset"></i>
+                <span>Support Center</span>
+            </div>
+            
+            <div class="popup-subtitle">
+                Need help? Send us a message and our team will respond within 24 hours.
+            </div>
+            
+            <!-- Quick Questions -->
+            <div class="quick-questions">
+                <div class="qq-title">Quick Questions:</div>
+                <div class="qq-btns">
+                    <button class="qq-btn" onclick="fillQuestion('How do I place a bet?')">📖 How to bet</button>
+                    <button class="qq-btn" onclick="fillQuestion('I can\'t withdraw my money')">💰 Withdraw</button>
+                    <button class="qq-btn" onclick="fillQuestion('My bet is not showing')">⚽ Bet issue</button>
+                    <button class="qq-btn" onclick="fillQuestion('I forgot my password')">🔑 Password</button>
+                    <button class="qq-btn" onclick="fillQuestion('I want to make a complaint')">📝 Complaint</button>
+                </div>
+            </div>
+            
+            <!-- Form -->
+            <form id="supportForm" onsubmit="submitSupportMessage(event)">
+                <div class="form-row">
+                    <div class="form-group">
+                        <label>Full Name <span class="required">*</span></label>
+                        <input type="text" id="msg-name" placeholder="Enter your name" required>
+                    </div>
+                    <div class="form-group">
+                        <label>Email <span class="required">*</span></label>
+                        <input type="email" id="msg-email" placeholder="your@email.com" required>
+                    </div>
+                </div>
+                <div class="form-row">
+                    <div class="form-group">
+                        <label>Phone Number</label>
+                        <input type="tel" id="msg-phone" placeholder="+1234567890">
+                    </div>
+                    <div class="form-group">
+                        <label>Ticket / Bet ID</label>
+                        <input type="text" id="msg-ticket" placeholder="Optional">
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label>Category <span class="required">*</span></label>
+                    <select id="msg-category" required>
+                        <option value="">Select a category...</option>
+                        <option value="betting">Betting Issue</option>
+                        <option value="withdrawal">Withdrawal Problem</option>
+                        <option value="deposit">Deposit Issue</option>
+                        <option value="account">Account Problem</option>
+                        <option value="bonus">Bonus/Promotion</option>
+                        <option value="technical">Technical Issue</option>
+                        <option value="complaint">Complaint</option>
+                        <option value="other">Other</option>
+                    </select>
+                </div>
+                <div class="form-group">
+                    <label>Message <span class="required">*</span></label>
+                    <textarea id="msg-message" placeholder="Describe your issue in detail..." required></textarea>
+                </div>
+                <button type="submit" class="submit-btn" id="msg-submit">
+                    <i class="fas fa-paper-plane"></i> Send Message
+                </button>
+            </form>
+            
+            <div class="form-response" id="msg-response"></div>
+        </div>
     </div>
-  </section>
-
-  <!-- MIR KHALAF section -->
-  <section id="mir-khalaf" class="mir-khalaf-section" data-aos="fade-left" data-aos-duration="1100">
-    <div class="mir-header"><i class="fas fa-chess-king"></i><h2 class="mir-title">Mir Khalaf · The Heir of Sovereignty</h2></div>
-    <div class="mir-khalaf-image" data-src="https://raw.githubusercontent.com/whz-co/whz/main/images/mir%20khalaf%20-%20arabic%20black%20and%20white.jpg"><img src="https://raw.githubusercontent.com/whz-co/whz/main/images/mir%20khalaf%20-%20arabic%20black%20and%20white.jpg" alt="Mir Khalaf" loading="lazy"></div>
-    <div class="mir-desc"><div class="lang-tabs" style="margin-bottom:1rem;"><button class="lang-tab active" data-lang="en-khalaf">🇬🇧 EN</button><button class="lang-tab" data-lang="ar-khalaf">🇸🇦 AR</button><button class="lang-tab" data-lang="ku-arab-khalaf">🏴 KU(Ar)</button><button class="lang-tab" data-lang="ku-latn-khalaf">🇹🇰 KU(La)</button></div>
-      <div class="bio-text active" id="khalaf-en"><p><strong>Mir Khalaf (Khalafê Portî): The Continuation of a Noble Legacy</strong></p><p>Mir Khalaf, the son of Mir Ali and grandson of the legendary Mir Porti, stands as a prominent figure in the annals of Kurdish history. Commonly known as Khalafê Portî, he carried the mantle of leadership with distinction and authority. His influence was earned through formidable presence and social standing, recognized as a cornerstone of stability in Mardin province.</p></div>
-      <div class="bio-text" id="khalaf-ar" lang="ar" dir="rtl"><p><strong>مير خلف (خلفي بورتي): امتداد الزعامة وإرث الأنفة في ماردين</strong></p><p>يبرز اسم مير خلف بن مير علي بن مير بورتي كواحد من ألمع الأحفاد الذين حملوا مشعل السيادة من جدهم الأكبر "مير بورتي". ويُعرف في الذاكرة الشعبية بلقب (خلفي بورتي)، وهو اللقب الذي اقترن بالشجاعة والحكمة والمكانة الاجتماعية الرفيعة.</p></div>
-      <div class="bio-text" id="khalaf-ku-arab" lang="ku-arab" dir="rtl"><p><strong>میر خەلەف (خەلەفێ پۆرتى): بەردەوامیا ڕێبازا میراتییێ</strong></p><p>میر خەلەف کورێ میر عەلى و نەوەیێ میر پۆرتى یە، ئێکە ژ وان کەسایەتیێن کو ناڤێ مالباتێ ب بلندى ڕاگرتیە. د ناڤ خەلکى و دیرۆکێ دا ب ناڤێ (خەلەفێ پۆرتى) دهێتە ناسیار.</p></div>
-      <div class="bio-text" id="khalaf-ku-latn" lang="ku-latn"><p><strong>Mîr Xelef (Xelefê Portî): Berdewamiya Rûmeta Malbatê</strong></p><p>Mîr Xelefê kurê Mîr Elî û neviyê Mîr Portî, yek ji stûnên girîng ên dîroka malbata xwe ye. Di nav gel de bi navê (Xelefê Portî) tê naskirin û di warê navdarî û desthelatdariyê de, qet ji bapîrê xwe Mîr Portî kêmtir nebûye.</p></div>
+    
+    <!-- Bottom Navigation -->
+    <div class="bottom-nav">
+        <a href="../index.html" class="nav-item"><i class="fas fa-home"></i><span>Home</span></a>
+        <a href="../games.html" class="nav-item"><i class="fas fa-gamepad"></i><span>Casino</span></a>
+        <a href="betting-sport.html" class="nav-item active"><i class="fas fa-futbol"></i><span>Sports</span></a>
+        <a href="../dashboard.html" class="nav-item"><i class="fas fa-user"></i><span>Account</span></a>
+        <a href="wallets.html" class="nav-item"><i class="fas fa-wallet"></i><span>Wallet</span></a>
     </div>
-  </section>
 
-  <!-- BRIDGE MAP + sound waves -->
-  <div class="bridge-map" data-aos="flip-left" data-aos-duration="1100"><div class="map-svg"><svg viewBox="0 0 360 140"><circle cx="90" cy="70" r="22" fill="#b79067" opacity="0.9" /><circle cx="180" cy="70" r="25" fill="#caa37b" /><circle cx="270" cy="70" r="22" fill="#a88967" opacity="0.9" /><text x="70" y="50" fill="#f2ddc5" font-size="12">AR</text><text x="165" y="40" fill="#fcebd6" font-size="14">ENG</text><text x="250" y="50" fill="#f2ddc5" font-size="12">KU</text><text x="130" y="115" fill="#e2cbb2" font-size="15">Dr. Waleed</text></svg></div><div class="sound-waves"><div class="wave"></div><div class="wave"></div><div class="wave"></div><div class="wave"></div></div></div>
-
-  <footer class="footer"><i class="far fa-copyright"></i> 2026 WHZ developer – all rights reserved<br><span style="font-size:1.1rem;"><i class="fas fa-code"></i> Dr. Waleed archive</span><div class="home-link-bottom"><a href="#home"><i class="fas fa-arrow-up"></i> return top</a></div></footer>
-
-  <audio id="ambientAudio" loop style="display:none"><source src="https://www.soundhelix.com/examples/mp3/SoundHelix-Song-1.mp3" type="audio/mpeg"></audio>
-  <script src="https://unpkg.com/aos@2.3.1/dist/aos.js"></script>
-  <script>
-    (function() {
-      AOS.init({ once: true, offset: 50, duration: 700 });
-      const hamburger = document.getElementById('hamburgerBtn'), dropdown = document.getElementById('menuDropdown');
-      hamburger.addEventListener('click', (e) => { e.stopPropagation(); dropdown.classList.toggle('show'); });
-      document.addEventListener('click', (e) => { if (!hamburger.contains(e.target) && !dropdown.contains(e.target)) dropdown.classList.remove('show'); });
-      const lightbox = document.getElementById('lightbox'), lightboxImg = document.getElementById('lightboxImg'), closeBtn = document.getElementById('lightboxClose');
-      document.querySelectorAll('[data-src]').forEach(el => { el.addEventListener('click', () => { lightboxImg.src = el.dataset.src; lightbox.classList.add('active'); }); });
-      closeBtn.addEventListener('click', () => lightbox.classList.remove('active'));
-      lightbox.addEventListener('click', (e) => { if(e.target === lightbox) lightbox.classList.remove('active'); });
-      // lang toggles for main bio
-      const mainTabs = document.querySelectorAll('.lang-panel .lang-tab'), bioMap = { en: document.getElementById('bio-en'), ar: document.getElementById('bio-ar'), 'ku-arab': document.getElementById('bio-ku-arab'), 'ku-latn': document.getElementById('bio-ku-latn') };
-      mainTabs.forEach(t => t.addEventListener('click', () => { mainTabs.forEach(tt => tt.classList.remove('active')); t.classList.add('active'); Object.values(bioMap).forEach(b => b.classList.remove('active')); if(bioMap[t.dataset.lang]) bioMap[t.dataset.lang].classList.add('active'); }));
-      const mirTabs = document.querySelectorAll('#mir-porti .lang-tab'), mirTexts = { 'en-mir': document.getElementById('mir-en'), 'ku-arab-mir': document.getElementById('mir-ku-arab'), 'ku-latn-mir': document.getElementById('mir-ku-latn'), 'ar-mir': document.getElementById('mir-ar') };
-      mirTabs.forEach(t => t.addEventListener('click', () => { mirTabs.forEach(tt => tt.classList.remove('active')); t.classList.add('active'); Object.values(mirTexts).forEach(tx => tx.classList.remove('active')); if(mirTexts[t.dataset.lang]) mirTexts[t.dataset.lang].classList.add('active'); }));
-      const khalafTabs = document.querySelectorAll('#mir-khalaf .lang-tab'), khalafTexts = { 'en-khalaf': document.getElementById('khalaf-en'), 'ar-khalaf': document.getElementById('khalaf-ar'), 'ku-arab-khalaf': document.getElementById('khalaf-ku-arab'), 'ku-latn-khalaf': document.getElementById('khalaf-ku-latn') };
-      khalafTabs.forEach(t => t.addEventListener('click', () => { khalafTabs.forEach(tt => tt.classList.remove('active')); t.classList.add('active'); Object.values(khalafTexts).forEach(tx => tx.classList.remove('active')); if(khalafTexts[t.dataset.lang]) khalafTexts[t.dataset.lang].classList.add('active'); }));
-      const audio = document.getElementById('ambientAudio'); let soundActive = false;
-      function enableSound() { if(!soundActive) { audio.volume = 0.1; audio.play().catch(()=>{}); soundActive = true; } }
-      document.body.addEventListener('touchstart', enableSound, { once: true }); document.body.addEventListener('click', enableSound, { once: true });
-      const canvas = document.getElementById('particle-canvas'), ctx = canvas.getContext('2d'); let width, height, particles = [];
-      function initParticles() { width = window.innerWidth; height = window.innerHeight; canvas.width = width; canvas.height = height; particles = []; for (let i=0;i<80;i++) { particles.push({ x: Math.random() * width, y: Math.random() * height, radius: Math.random() * 3.5 + 1.2, speedX: (Math.random() - 0.5) * 0.25, speedY: (Math.random() - 0.5) * 0.2, color: `rgba(215, 180, 140, ${Math.random() * 0.3 + 0.2})` }); } }
-      function drawParticles() { ctx.clearRect(0,0,width,height); particles.forEach(p => { ctx.beginPath(); ctx.arc(p.x,p.y,p.radius,0,Math.PI*2); ctx.fillStyle = p.color; ctx.fill(); particles.forEach(p2 => { const dx = p.x-p2.x, dy = p.y-p2.y, dist = Math.sqrt(dx*dx+dy*dy); if (dist<100 && dist>0) { ctx.strokeStyle = `rgba(190,155,120,${0.12 - dist/900})`; ctx.lineWidth=0.7; ctx.beginPath(); ctx.moveTo(p.x,p.y); ctx.lineTo(p2.x,p2.y); ctx.stroke(); } }); p.x += p.speedX; p.y += p.speedY; if (p.x<0||p.x>width) p.speedX*=-1; if (p.y<0||p.y>height) p.speedY*=-1; }); requestAnimationFrame(drawParticles); }
-      window.addEventListener('resize', () => { initParticles(); }); initParticles(); drawParticles();
-    })();
-  </script>
+    <script>
+        // ============================================
+        // BETTING SPORT HOME PAGE - ENHANCED
+        // WITH MESSAGE POPUP + WALLET + GUIDE
+        // ============================================
+        
+        // Supabase Configuration
+        const SUPABASE_URL = 'https://jnazybaeajyynpyoszmy.supabase.co';
+        const SUPABASE_ANON_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImpuYXp5YmFlYWp5eW5weW9zem15Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3NzcyNzgwMDMsImV4cCI6MjA5Mjg1NDAwM30.P_8V-_s6DQDiYekZX1yaNup48WBRaLhb3ILAkvzTDTY';
+        
+        let supabaseClient = supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
+        
+        // Firebase Config
+        const firebaseConfig = {
+            apiKey: "AIzaSyA72Yo_YGqno9PX25p3yQBvyflcaM-NqEM",
+            authDomain: "x-bet-prod-jd.firebaseapp.com",
+            projectId: "x-bet-prod-jd",
+            storageBucket: "x-bet-prod-jd.firebasestorage.app",
+            messagingSenderId: "499334334535",
+            appId: "1:499334334535:web:bebc1bf817e24d9e3c4962"
+        };
+        
+        if (!firebase.apps.length) firebase.initializeApp(firebaseConfig);
+        
+        const db = firebase.firestore();
+        const auth = firebase.auth();
+        
+        let currentUser = null;
+        let allMatches = [];
+        let refreshInterval = null;
+        let leagueMatchesToday = {};
+        
+        const API_BASE = 'https://muddy-wildflower-a70d.dilovantalan.workers.dev';
+        const BETTING_CLOSES_AT = 80;
+        
+        // ===== HELPER FUNCTIONS =====
+        function escapeHtml(str) {
+            if (!str) return '';
+            return String(str).replace(/[&<>]/g, function(m) {
+                if (m === '&') return '&amp;';
+                if (m === '<') return '&lt;';
+                if (m === '>') return '&gt;';
+                return m;
+            });
+        }
+        
+        function toggleLanguage() {
+            const isArabic = document.body.classList.toggle('arabic');
+            localStorage.setItem('lang', isArabic ? 'ar' : 'en');
+            document.documentElement.dir = isArabic ? 'rtl' : 'ltr';
+            document.querySelectorAll('.en').forEach(el => el.style.display = isArabic ? 'none' : '');
+            document.querySelectorAll('.ar').forEach(el => el.style.display = isArabic ? '' : 'none');
+        }
+        
+        if (localStorage.getItem('lang') === 'ar') {
+            setTimeout(toggleLanguage, 100);
+        }
+        
+        // ===== LOAD BALANCE =====
+        async function loadBalance() {
+            try {
+                if (!currentUser) return 0;
+                const doc = await db.collection('wallets').doc(currentUser.uid).get();
+                const balance = doc.exists ? (doc.data().balance || 0) : 1000;
+                document.getElementById('balance-display').textContent = `$${balance.toFixed(2)}`;
+                return balance;
+            } catch(e) { 
+                console.error('Balance error:', e); 
+                return 0;
+            }
+        }
+        
+        // ===== FETCH MATCHES FROM API =====
+        async function fetchMatches() {
+            try {
+                const today = new Date();
+                const dates = [];
+                
+                for (let i = 0; i <= 7; i++) {
+                    const date = new Date(today);
+                    date.setDate(today.getDate() + i);
+                    dates.push(date.toISOString().split('T')[0]);
+                }
+                
+                const fetchPromises = dates.map(date => 
+                    fetch(`${API_BASE}/api/fixtures/date/${date}`).then(r => r.json()).catch(() => ({ success: false, data: [] }))
+                );
+                
+                const results = await Promise.all(fetchPromises);
+                const matches = [];
+                const todayStr = today.toISOString().split('T')[0];
+                
+                for (const data of results) {
+                    if (data.success && data.data) {
+                        for (const m of data.data) {
+                            const statusShort = m.fixture.status?.short;
+                            const isLive = statusShort === '1H' || statusShort === '2H' || statusShort === 'HT';
+                            const isFinished = statusShort === 'FT' || statusShort === 'AET' || statusShort === 'PEN';
+                            const matchTime = new Date(m.fixture.date);
+                            const matchDateStr = matchTime.toISOString().split('T')[0];
+                            
+                            let status = 'upcoming';
+                            if (isLive) status = 'live';
+                            else if (isFinished) status = 'finished';
+                            else if (matchTime < new Date()) status = 'finished';
+                            
+                            if (matchDateStr === todayStr && (status === 'live' || status === 'upcoming')) {
+                                if (!leagueMatchesToday[m.league.id]) {
+                                    leagueMatchesToday[m.league.id] = {
+                                        name: m.league.name,
+                                        logo: m.league.logo,
+                                        count: 0,
+                                        hasLive: false
+                                    };
+                                }
+                                leagueMatchesToday[m.league.id].count++;
+                                if (isLive) leagueMatchesToday[m.league.id].hasLive = true;
+                            }
+                            
+                            matches.push({
+                                fixture_id: m.fixture.id,
+                                start_time: m.fixture.date,
+                                status: status,
+                                league_id: m.league.id,
+                                league_name: m.league.name,
+                                league_logo: m.league.logo,
+                                home_team: {
+                                    id: m.teams.home.id,
+                                    name: m.teams.home.name,
+                                    logo: m.teams.home.logo
+                                },
+                                away_team: {
+                                    id: m.teams.away.id,
+                                    name: m.teams.away.name,
+                                    logo: m.teams.away.logo
+                                },
+                                score: { home: m.goals?.home || 0, away: m.goals?.away || 0 },
+                                elapsed: m.fixture.status?.elapsed || 0,
+                                odds: {
+                                    home: (1.80 + ((m.fixture.id % 20) / 100)).toFixed(2),
+                                    draw: (3.20 + ((m.fixture.id % 15) / 100)).toFixed(2),
+                                    away: (2.80 + ((m.fixture.id % 25) / 100)).toFixed(2)
+                                }
+                            });
+                        }
+                    }
+                }
+                
+                return matches;
+            } catch(e) {
+                console.error('Fetch error:', e);
+                return [];
+            }
+        }
+        
+        // ===== LOAD ALL DATA =====
+        async function loadAllData() {
+            try {
+                leagueMatchesToday = {};
+                allMatches = await fetchMatches();
+                
+                const liveMatches = allMatches.filter(m => m.status === 'live');
+                const upcomingMatches = allMatches.filter(m => m.status === 'upcoming' && new Date(m.start_time) > new Date());
+                const totalMatches = allMatches.length;
+                const todayMatches = allMatches.filter(m => {
+                    const matchDate = new Date(m.start_time).toDateString();
+                    const today = new Date().toDateString();
+                    return matchDate === today && (m.status === 'live' || m.status === 'upcoming');
+                });
+                
+                document.getElementById('stat-total').textContent = totalMatches;
+                document.getElementById('stat-live').textContent = liveMatches.length;
+                document.getElementById('stat-upcoming').textContent = upcomingMatches.length;
+                document.getElementById('live-count').textContent = liveMatches.length;
+                document.getElementById('quick-live').textContent = liveMatches.length;
+                document.getElementById('quick-upcoming').textContent = upcomingMatches.length;
+                document.getElementById('today-count').textContent = `${todayMatches.length} matches`;
+                document.getElementById('today-date').textContent = new Date().toLocaleDateString('en-US', { 
+                    weekday: 'long', 
+                    month: 'long', 
+                    day: 'numeric', 
+                    year: 'numeric' 
+                });
+                
+                displayTopLiveMatches(liveMatches.slice(0, 5));
+                displayTopUpcomingMatches(upcomingMatches.slice(0, 5));
+                loadDynamicLeagues();
+                
+                if (currentUser) {
+                    const { data: bets } = await supabaseClient
+                        .from('bets')
+                        .select('id', { count: 'exact' })
+                        .eq('user_id', currentUser.uid)
+                        .eq('status', 'active');
+                    
+                    const activeCount = bets?.length || 0;
+                    document.getElementById('stat-active-bets').textContent = activeCount;
+                    document.getElementById('quick-active').textContent = activeCount;
+                }
+                
+                document.getElementById('last-updated').textContent = `Last updated: ${new Date().toLocaleTimeString()}`;
+                
+            } catch(e) {
+                console.error('Load data error:', e);
+            }
+        }
+        
+        function displayTopLiveMatches(matches) {
+            const container = document.getElementById('live-container');
+            
+            if (!matches.length) {
+                container.innerHTML = '<div class="empty-state"><i class="fas fa-futbol"></i> No live matches at the moment</div>';
+                return;
+            }
+            
+            container.innerHTML = matches.map(m => {
+                const homeTeam = m.home_team || { name: 'Home', logo: '' };
+                const awayTeam = m.away_team || { name: 'Away', logo: '' };
+                const score = m.score || { home: 0, away: 0 };
+                const elapsed = m.elapsed || 0;
+                const period = elapsed < 45 ? '1st Half' : (elapsed < 60 ? 'Half Time' : (elapsed < 90 ? '2nd Half' : 'Added Time'));
+                const isBettingClosed = elapsed >= BETTING_CLOSES_AT;
+                const progressPercent = Math.min((elapsed / 90) * 100, 100);
+                
+                return `
+                    <div class="match-card live ${isBettingClosed ? 'betting-closed' : ''}" onclick="location.href='match-details.html?id=${m.fixture_id}'">
+                        <div class="match-league">
+                            ${m.league_logo ? `<img class="league-logo-mini" src="${m.league_logo}" onerror="this.style.display='none'">` : '<i class="fas fa-trophy"></i>'}
+                            <span>${escapeHtml(m.league_name || 'League')}</span>
+                            <span class="${isBettingClosed ? 'closed-badge' : 'live-badge'}">
+                                <i class="fas ${isBettingClosed ? 'fa-lock' : 'fa-circle'}"></i> 
+                                ${isBettingClosed ? 'BETTING CLOSED' : `LIVE ${period} ${elapsed}'`}
+                            </span>
+                        </div>
+                        <div class="match-teams">
+                            <div class="team">
+                                ${homeTeam.logo ? `<img class="team-logo-mini" src="${homeTeam.logo}" onerror="this.style.display='none'">` : ''}
+                                ${escapeHtml(homeTeam.name)}
+                            </div>
+                            <div class="score">${score.home} - ${score.away}</div>
+                            <div class="team">
+                                ${escapeHtml(awayTeam.name)}
+                                ${awayTeam.logo ? `<img class="team-logo-mini" src="${awayTeam.logo}" onerror="this.style.display='none'">` : ''}
+                            </div>
+                        </div>
+                        <div class="live-progress">
+                            <div class="progress-fill ${isBettingClosed ? 'closed' : ''}" style="width: ${progressPercent}%;"></div>
+                        </div>
+                        <div class="odds-preview">
+                            <div class="odd-preview ${isBettingClosed ? 'disabled' : ''}">1 <span>${m.odds?.home || '2.00'}</span></div>
+                            <div class="odd-preview ${isBettingClosed ? 'disabled' : ''}">X <span>${m.odds?.draw || '3.50'}</span></div>
+                            <div class="odd-preview ${isBettingClosed ? 'disabled' : ''}">2 <span>${m.odds?.away || '3.80'}</span></div>
+                        </div>
+                        ${isBettingClosed ? '<div style="text-align:center; margin-top:5px; font-size:10px; color:#ff5252;"><i class="fas fa-lock"></i> Betting closed - Match in final minutes</div>' : ''}
+                    </div>
+                `;
+            }).join('');
+        }
+        
+        function displayTopUpcomingMatches(matches) {
+            const container = document.getElementById('upcoming-container');
+            
+            if (!matches.length) {
+                container.innerHTML = '<div class="empty-state"><i class="fas fa-calendar"></i> No upcoming matches found</div>';
+                return;
+            }
+            
+            container.innerHTML = matches.map(m => {
+                const homeTeam = m.home_team || { name: 'Home', logo: '' };
+                const awayTeam = m.away_team || { name: 'Away', logo: '' };
+                const matchTime = new Date(m.start_time);
+                const now = new Date();
+                const minutesUntil = Math.floor((matchTime - now) / 60000);
+                const isSoon = minutesUntil < 60 && minutesUntil > 0;
+                
+                return `
+                    <div class="match-card" onclick="location.href='match-details.html?id=${m.fixture_id}'">
+                        <div class="match-league">
+                            ${m.league_logo ? `<img class="league-logo-mini" src="${m.league_logo}" onerror="this.style.display='none'">` : '<i class="fas fa-trophy"></i>'}
+                            <span>${escapeHtml(m.league_name || 'League')}</span>
+                            ${isSoon ? '<span class="live-badge" style="background:#ff9800;"><i class="fas fa-clock"></i> Starting soon!</span>' : ''}
+                        </div>
+                        <div class="match-teams">
+                            <div class="team">
+                                ${homeTeam.logo ? `<img class="team-logo-mini" src="${homeTeam.logo}" onerror="this.style.display='none'">` : ''}
+                                ${escapeHtml(homeTeam.name)}
+                            </div>
+                            <span style="color:#ff9800; font-weight:bold;">VS</span>
+                            <div class="team">
+                                ${escapeHtml(awayTeam.name)}
+                                ${awayTeam.logo ? `<img class="team-logo-mini" src="${awayTeam.logo}" onerror="this.style.display='none'">` : ''}
+                            </div>
+                        </div>
+                        <div style="display:flex; justify-content:space-between; margin-top:8px;">
+                            <span class="match-time"><i class="far fa-calendar"></i> ${matchTime.toLocaleDateString()}</span>
+                            <span class="match-time"><i class="far fa-clock"></i> ${matchTime.toLocaleTimeString([], {hour:'2-digit', minute:'2-digit'})}</span>
+                            ${minutesUntil > 0 ? `<span class="match-time"><i class="fas fa-hourglass-start"></i> ${minutesUntil}m</span>` : ''}
+                        </div>
+                        <div class="odds-preview">
+                            <div class="odd-preview">1 <span>${m.odds?.home || '2.00'}</span></div>
+                            <div class="odd-preview">X <span>${m.odds?.draw || '3.50'}</span></div>
+                            <div class="odd-preview">2 <span>${m.odds?.away || '3.80'}</span></div>
+                        </div>
+                    </div>
+                `;
+            }).join('');
+        }
+        
+        function loadDynamicLeagues() {
+            const container = document.getElementById('top-leagues-grid');
+            
+            const leagues = Object.keys(leagueMatchesToday)
+                .map(id => ({
+                    id: parseInt(id),
+                    ...leagueMatchesToday[id]
+                }))
+                .sort((a, b) => b.count - a.count)
+                .slice(0, 15);
+            
+            if (!leagues.length) {
+                container.innerHTML = '<div class="empty-state">No leagues with matches today</div>';
+                return;
+            }
+            
+            container.innerHTML = leagues.map(league => `
+                <div class="league-item ${league.hasLive ? 'has-live' : ''}" onclick="location.href='upcoming-matches.html?league=${league.id}&name=${encodeURIComponent(league.name)}'">
+                    <img src="${league.logo}" onerror="this.style.display='none'">
+                    <span>${escapeHtml(league.name)}</span>
+                    <span style="font-size: 8px; color: #a0a8c9;">${league.count} matches</span>
+                    ${league.hasLive ? `<div class="live-indicator" title="Live match now"></div>` : ''}
+                    ${league.hasLive ? `<span class="match-badge">LIVE</span>` : ''}
+                </div>
+            `).join('');
+        }
+        
+        function startAutoRefresh() {
+            if (refreshInterval) clearInterval(refreshInterval);
+            refreshInterval = setInterval(() => {
+                loadAllData();
+                loadBalance();
+            }, 60000);
+        }
+        
+        // ============================================
+        // 🆕 MESSAGE POPUP FUNCTIONS
+        // ============================================
+        function openMessagePopup() {
+            document.getElementById('messageOverlay').classList.add('show');
+            document.body.style.overflow = 'hidden';
+            
+            // Auto-fill user info if logged in
+            if (currentUser) {
+                const nameInput = document.getElementById('msg-name');
+                const emailInput = document.getElementById('msg-email');
+                if (nameInput && !nameInput.value) {
+                    nameInput.value = currentUser.displayName || '';
+                }
+                if (emailInput && !emailInput.value) {
+                    emailInput.value = currentUser.email || '';
+                }
+            }
+        }
+        
+        function closeMessagePopup(event) {
+            if (!event || event.target === document.getElementById('messageOverlay')) {
+                document.getElementById('messageOverlay').classList.remove('show');
+                document.body.style.overflow = '';
+            }
+        }
+        
+        function fillQuestion(text) {
+            document.getElementById('msg-message').value = text;
+            document.getElementById('msg-message').focus();
+        }
+        
+        async function submitSupportMessage(e) {
+            e.preventDefault();
+            
+            const name = document.getElementById('msg-name').value.trim();
+            const email = document.getElementById('msg-email').value.trim();
+            const phone = document.getElementById('msg-phone').value.trim();
+            const ticket = document.getElementById('msg-ticket').value.trim();
+            const category = document.getElementById('msg-category').value;
+            const message = document.getElementById('msg-message').value.trim();
+            
+            if (!name || !email || !category || !message) {
+                showMsgResponse('Please fill in all required fields.', 'error');
+                return;
+            }
+            
+            const btn = document.getElementById('msg-submit');
+            const originalText = btn.innerHTML;
+            btn.disabled = true;
+            btn.innerHTML = '<i class="fas fa-spinner fa-spin"></i> Sending...';
+            
+            try {
+                const msgData = {
+                    name: name,
+                    email: email,
+                    phone: phone || 'N/A',
+                    ticket: ticket || 'N/A',
+                    category: category,
+                    message: message,
+                    user_id: currentUser?.uid || 'guest',
+                    status: 'pending',
+                    created_at: new Date().toISOString(),
+                    source: 'homepage-popup'
+                };
+                
+                // Save to Supabase
+                if (supabaseClient) {
+                    const { error } = await supabaseClient
+                        .from('support_messages')
+                        .insert(msgData);
+                    
+                    if (error) throw error;
+                }
+                
+                showMsgResponse('✅ Your message has been sent! We will respond within 24 hours.', 'success');
+                document.getElementById('supportForm').reset();
+                
+                setTimeout(() => {
+                    closeMessagePopup();
+                }, 3000);
+                
+            } catch (error) {
+                console.error('Message error:', error);
+                showMsgResponse('❌ Failed to send message. Please try again.', 'error');
+            } finally {
+                btn.disabled = false;
+                btn.innerHTML = originalText;
+            }
+        }
+        
+        function showMsgResponse(message, type) {
+            const el = document.getElementById('msg-response');
+            el.className = `form-response ${type}`;
+            el.innerHTML = message;
+            
+            setTimeout(() => {
+                el.className = 'form-response';
+            }, 8000);
+        }
+        
+        // ============================================
+        // 🆕 WALLET & GUIDE PAGES (Placeholder)
+        // ============================================
+        // Note: wallets.html and guide.html should be created from your GitHub links
+        // They are linked in the navigation tabs above
+        
+        // ============================================
+        // INITIALIZATION
+        // ============================================
+        auth.onAuthStateChanged(async (user) => {
+            if (!user) {
+                window.location.href = '../login.html';
+                return;
+            }
+            
+            currentUser = user;
+            document.getElementById('user-name').textContent = user.displayName || 'Sports Bettor';
+            document.getElementById('user-email').textContent = user.email || '';
+            
+            await loadBalance();
+            await loadAllData();
+            startAutoRefresh();
+        });
+        
+        // Add loading spinner style
+        const style = document.createElement('style');
+        style.textContent = `
+            @keyframes spin { to { transform: rotate(360deg); } }
+            .loading-spinner { display: inline-block; width: 16px; height: 16px; border: 2px solid #00ff9d; border-top-color: transparent; border-radius: 50%; animation: spin 0.6s linear infinite; vertical-align: middle; margin-right: 8px; }
+        `;
+        document.head.appendChild(style);
+        
+        // Expose global functions
+        window.toggleLanguage = toggleLanguage;
+        window.openMessagePopup = openMessagePopup;
+        window.closeMessagePopup = closeMessagePopup;
+        window.fillQuestion = fillQuestion;
+        window.submitSupportMessage = submitSupportMessage;
+        
+        console.log('✅ X Lodon Sports - Enhanced Homepage Loaded');
+        console.log('   🆕 Message popup with support form');
+        console.log('   🆕 Wallet page link added');
+        console.log('   🆕 Guide page link added');
+        console.log('   📊 Dynamic leagues based on today\'s matches');
+        console.log('   ⏰ Live betting closes at 80th minute');
+    </script>
 </body>
 </html>

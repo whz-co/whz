@@ -57,7 +57,6 @@
         
         #app { width:100%; max-width:1500px; height:96vh; max-height:950px; background:var(--bg-card); backdrop-filter:blur(24px); border-radius:24px; border:1px solid var(--border); box-shadow:var(--shadow); display:flex; overflow:hidden; color:var(--text-primary); position:relative; z-index:1; transition:var(--transition); }
         
-        /* Mobile Sidebar Overlay */
         .sidebar-overlay { position:fixed; inset:0; background:rgba(0,0,0,0.7); z-index:99; display:none; backdrop-filter:blur(4px); -webkit-backdrop-filter:blur(4px); }
         .sidebar-overlay.show { display:block; }
         
@@ -86,7 +85,6 @@
         .balance-fill { height:100%; background:var(--accent-gradient); border-radius:2px; transition:width 0.8s cubic-bezier(0.4,0,0.2,1); width:0%; }
         .balance-fill.warning { background:var(--warning); } .balance-fill.danger { background:var(--danger); }
         
-        /* Countdown Timer */
         .countdown-text { font-size:10px; color:var(--text-muted); margin-top:3px; }
         .countdown-text .time { color:var(--accent); font-weight:600; }
         
@@ -186,7 +184,11 @@
         .modal .modal-close.premium { background:var(--premium-gradient); }
         .modal .modal-close.secondary { background:transparent; border:1px solid var(--border); color:var(--text-secondary); margin-top:6px; }
         
-        /* Mobile Responsive */
+        /* New User Welcome Banner */
+        .new-user-banner { background:var(--accent-gradient); color:white; padding:8px 14px; border-radius:10px; margin:8px 16px; font-size:12px; text-align:center; font-weight:600; animation:fadeInUp 0.5s ease; display:none; }
+        .new-user-banner.show { display:block; }
+        @keyframes fadeInUp { from{opacity:0;transform:translateY(10px)} }
+        
         @media (max-width:768px) {
             body{padding:6px} #app{height:100dvh;max-height:none;border-radius:16px;flex-direction:column}
             .sidebar{position:fixed;left:0;top:0;bottom:0;z-index:100;transform:translateX(-100%);width:280px;max-width:85vw;border-right:1px solid var(--border);box-shadow:var(--shadow)}
@@ -222,15 +224,18 @@
 
     <div class="toast" id="toast"></div>
 
+    <!-- NEW USER WELCOME BANNER -->
+    <div class="new-user-banner" id="newUserBanner">🎉 Welcome! You've been awarded <strong>50 free questions</strong>. Enjoy!</div>
+
     <div class="modal" id="limitModal">
         <div class="modal-content">
             <div class="modal-icon">⏳</div>
             <h2>Daily Questions Used</h2>
             <p>You've used all <strong>50 questions</strong> for today.</p>
-            <p style="margin-top:8px;color:var(--text-muted);font-size:0.85rem">Your limit resets automatically every 24 hours</p>
+            <p style="margin-top:8px;color:var(--text-muted);font-size:0.85rem">Your limit resets automatically every 24 hours at midnight UTC</p>
             <div id="limitTimer" style="font-size:1.1rem;font-weight:700;margin:12px 0;color:var(--accent);"></div>
-            <button class="modal-close premium" id="upgradeFromLimit"><i class="fas fa-crown"></i> Upgrade to Premium</button>
-            <button class="modal-close secondary" id="closeLimitModal">Close</button>
+            <button class="modal-close premium" onclick="document.getElementById('limitModal').classList.remove('active');showToast('🚀 Premium coming soon!')"><i class="fas fa-crown"></i> Upgrade to Premium</button>
+            <button class="modal-close secondary" onclick="document.getElementById('limitModal').classList.remove('active')">Close</button>
         </div>
     </div>
 
@@ -238,7 +243,7 @@
         <div class="modal-content">
             <div class="modal-icon">🔐</div>
             <h2>Welcome to Zakhourani AI</h2>
-            <p style="margin-bottom:16px;">Please login to continue</p>
+            <p style="margin-bottom:16px;">Login or register to get <strong>50 free questions</strong> every 24 hours</p>
             <div style="display:flex;flex-direction:column;gap:10px;text-align:left;">
                 <input type="email" id="authEmail" placeholder="Email" style="background:var(--bg-primary);border:1px solid var(--border);border-radius:8px;padding:10px 14px;color:var(--text-primary);font-size:14px;outline:none;width:100%;">
                 <input type="password" id="authPassword" placeholder="Password" style="background:var(--bg-primary);border:1px solid var(--border);border-radius:8px;padding:10px 14px;color:var(--text-primary);font-size:14px;outline:none;width:100%;">
@@ -262,6 +267,7 @@
                 </a>
                 <button class="new-chat-btn" id="newChatBtn"><i class="fas fa-plus"></i> New Chat</button>
             </div>
+            <div id="newUserBannerSidebar" class="new-user-banner" style="margin:8px 10px"></div>
             <div class="user-profile">
                 <div class="user-avatar" id="userAvatar" onclick="showProfileModal()">Z</div>
                 <div class="user-info">
@@ -292,7 +298,7 @@
                 <div class="welcome" id="welcomeMessage">
                     <div class="welcome-icon">🧠</div>
                     <h2>Zakhourani AI</h2>
-                    <p>Your premium intelligent assistant. 50 free questions every 24 hours.</p>
+                    <p>Your premium intelligent assistant. <strong>50 free questions</strong> every 24 hours. New users start with full quota immediately.</p>
                     <div class="suggestions-grid">
                         <div class="chip" data-prompt="Who is Dr. Waleed Hussein Zakhourani?">👨‍🎓 About Dr. Waleed</div>
                         <div class="chip" data-prompt="Explain quantum computing in simple terms">⚛️ Quantum Computing</div>
@@ -327,7 +333,7 @@
 
     <script>
         // ============================================================
-        // ZAKHOURANI AI - ENHANCED WITH 24HR RESET & MOBILE SIDEBAR
+        // ZAKHOURANI AI - NEW USER 50 QUESTIONS AWARD SYSTEM
         // ============================================================
         const zakhSupabase = supabase.createClient(
             'https://wkgldyfxsmkjyallrdtq.supabase.co',
@@ -348,9 +354,8 @@
 
         let state = {
             conversations: {}, currentId: null, isProcessing: false, isTyping: false,
-            typingTimer: null, usage: { date: new Date().toDateString(), count: 0 },
-            stopTyping: false, user: null, supabaseEmail: '', isOnline: true,
-            countdownInterval: null
+            typingTimer: null, stopTyping: false, user: null, supabaseEmail: '', 
+            isOnline: true, countdownInterval: null, isNewUser: false
         };
 
         const DOM = {
@@ -369,35 +374,23 @@
             authLoginBtn: document.getElementById('authLoginBtn'), authRegisterBtn: document.getElementById('authRegisterBtn'),
             logoutBtn: document.getElementById('logoutBtn'), themeIcon: document.getElementById('themeIcon'),
             menuBtn: document.getElementById('menuBtn'), sidebar: document.getElementById('sidebar'),
-            sidebarOverlay: document.getElementById('sidebarOverlay')
+            sidebarOverlay: document.getElementById('sidebarOverlay'),
+            newUserBanner: document.getElementById('newUserBanner'),
+            newUserBannerSidebar: document.getElementById('newUserBannerSidebar')
         };
 
         // ============================================================
         // NETWORK BACKGROUND
         // ============================================================
         (()=>{const bg=document.getElementById('netBg');for(let i=0;i<25;i++){const d=document.createElement('div');d.className='net-dot c'+(Math.floor(Math.random()*4)+1);d.style.cssText=`left:${Math.random()*100}%;top:${Math.random()*100}%;animation-delay:${Math.random()*5}s`;bg.appendChild(d)}})();
-        
         function createParticles(){const c=document.getElementById('particles');for(let i=0;i<20;i++){const p=document.createElement('div');p.className='particle';const s=Math.random()*5+2;p.style.cssText=`width:${s}px;height:${s}px;left:${Math.random()*100}%;top:${Math.random()*100}%;animation-delay:${Math.random()*20}s;animation-duration:${15+Math.random()*15}s;background:${['#3b82f6','#8b5cf6','#22c55e','#f59e0b'][Math.floor(Math.random()*4)]}`;c.appendChild(p)}}
 
         // ============================================================
-        // MOBILE SIDEBAR TOGGLE
+        // MOBILE SIDEBAR
         // ============================================================
-        function toggleSidebar(){
-            DOM.sidebar.classList.toggle('open');
-            DOM.sidebarOverlay.classList.toggle('show');
-        }
-        // Show menu button on mobile
-        function updateMenuBtn(){
-            if(window.innerWidth<769){
-                DOM.menuBtn.style.display='flex';
-            }else{
-                DOM.menuBtn.style.display='none';
-                DOM.sidebar.classList.remove('open');
-                DOM.sidebarOverlay.classList.remove('show');
-            }
-        }
-        window.addEventListener('resize',updateMenuBtn);
-        updateMenuBtn();
+        function toggleSidebar(){DOM.sidebar.classList.toggle('open');DOM.sidebarOverlay.classList.toggle('show')}
+        function updateMenuBtn(){if(window.innerWidth<769){DOM.menuBtn.style.display='flex'}else{DOM.menuBtn.style.display='none';DOM.sidebar.classList.remove('open');DOM.sidebarOverlay.classList.remove('show')}}
+        window.addEventListener('resize',updateMenuBtn);updateMenuBtn();
 
         // ============================================================
         // HELPERS
@@ -405,31 +398,46 @@
         function showToast(m,d=3000){DOM.toast.textContent=m;DOM.toast.style.display='block';clearTimeout(DOM.toast._t);DOM.toast._t=setTimeout(()=>DOM.toast.style.display='none',d)}
         function getTime(){return new Date().toLocaleTimeString([],{hour:'2-digit',minute:'2-digit'})}
         function escapeHtml(t){const m={'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#039;'};return String(t).replace(/[&<>"']/g,c=>m[c])}
-        function generateId(){return Date.now().toString(36)+Math.random().toString(36).substr(2,5)}
         function updateLoader(t,p){DOM.loaderText.textContent=t;DOM.progressFill.style.width=p+'%'}
         function formatRichText(t){let h=t;h=h.replace(/\*\*(.*?)\*\*/g,'<strong>$1</strong>');h=h.replace(/```([\s\S]*?)```/g,(m,c)=>`<pre style="background:var(--bg-primary);padding:10px;border-radius:6px;overflow-x:auto;margin:6px 0;font-size:0.85em;border-left:3px solid var(--accent)"><code>${escapeHtml(c.trim())}</code></pre>`);h=h.replace(/`([^`]+)`/g,(m,c)=>`<code style="background:var(--bg-primary);padding:1px 5px;border-radius:4px;font-size:0.85em">${escapeHtml(c)}</code>`);h=h.replace(/\n/g,'<br>');return h}
         function isValidUUID(s){return s&&s.length>25}
 
         // ============================================================
-        // 24-HOUR COUNTDOWN TIMER
+        // 24-HOUR COUNTDOWN
         // ============================================================
         function startCountdown(){
             if(state.countdownInterval)clearInterval(state.countdownInterval);
             function tick(){
-                const now=new Date();
-                const reset=new Date(now);
+                const now=new Date();const reset=new Date(now);
                 reset.setUTCHours(24,0,0,0);
                 if(now>=reset)reset.setDate(reset.getDate()+1);
                 const diff=reset-now;
-                const h=Math.floor(diff/3600000);
-                const m=Math.floor((diff%3600000)/60000);
-                const s=Math.floor((diff%60000)/1000);
+                const h=Math.floor(diff/3600000),m=Math.floor((diff%3600000)/60000),s=Math.floor((diff%60000)/1000);
                 const timeStr=`${String(h).padStart(2,'0')}:${String(m).padStart(2,'0')}:${String(s).padStart(2,'0')}`;
                 if(DOM.countdownText)DOM.countdownText.innerHTML=`Resets in <span class="time">${timeStr}</span>`;
                 if(DOM.limitTimer&&DOM.limitModal.classList.contains('active'))DOM.limitTimer.textContent=`⏰ Resets in ${h}h ${m}m ${s}s`;
             }
-            tick();
-            state.countdownInterval=setInterval(tick,1000);
+            tick();state.countdownInterval=setInterval(tick,1000);
+        }
+
+        // ============================================================
+        // NEW USER DETECTION & AWARD
+        // ============================================================
+        function showNewUserBanner(){
+            DOM.newUserBanner.classList.add('show');
+            DOM.newUserBannerSidebar.classList.add('show');
+            DOM.newUserBannerSidebar.innerHTML='🎉 <strong>50 Free Questions Awarded!</strong> Welcome to Zakhourani AI!';
+            setTimeout(()=>{DOM.newUserBanner.classList.remove('show');DOM.newUserBannerSidebar.classList.remove('show')},8000);
+            showToast('🎉 Welcome! 50 free questions awarded!',4000);
+        }
+
+        async function isNewUser(email){
+            const{data}=await zakhSupabase.from('users').select('created_at').eq('email',email).maybeSingle();
+            if(!data)return true; // No user = new user
+            const created=new Date(data.created_at);
+            const now=new Date();
+            const diffMinutes=(now-created)/60000;
+            return diffMinutes<5; // Considered "new" if created within 5 minutes
         }
 
         // ============================================================
@@ -441,7 +449,20 @@
         async function sbIncUsage(email){try{await zakhSupabase.rpc('increment_usage',{p_user_email:email})}catch(e){}}
         async function sbGetOrCreateUser(email,name){
             let{data}=await zakhSupabase.from('users').select('*').eq('email',email).maybeSingle();
-            if(!data){await zakhSupabase.from('users').insert({email,username:name,display_name:name,daily_questions_date:new Date().toISOString().split('T')[0]});return sbGetOrCreateUser(email,name)}
+            if(!data){
+                // NEW USER - Create with 0 questions used = 50 available
+                await zakhSupabase.from('users').insert({
+                    email,username:name,display_name:name,
+                    daily_questions_used:0,
+                    daily_questions_date:new Date().toISOString().split('T')[0],
+                    total_questions_used:0,
+                    balance_credits:0,
+                    is_premium:false
+                });
+                state.isNewUser=true;
+                showNewUserBanner();
+                return sbGetOrCreateUser(email,name);
+            }
             return data;
         }
         async function sbLoadChats(userId){const{data}=await zakhSupabase.from('conversations').select('*').eq('user_id',userId).order('updated_at',{ascending:false});return data||[]}
@@ -467,15 +488,15 @@
         function initFirebase(){if(!firebase.apps.length)firebase.initializeApp(firebaseConfig);auth=firebase.auth();return auth}
         function showAuthModal(){DOM.authModal.classList.add('active')}
         function hideAuthModal(){DOM.authModal.classList.remove('active')}
-        async function handleLogin(){
-            const e=DOM.authEmail.value.trim(),p=DOM.authPassword.value;
-            if(!e||!p){DOM.authError.textContent='Enter email & password';return}
-            try{await auth.signInWithEmailAndPassword(e,p);hideAuthModal()}catch(err){DOM.authError.textContent=err.message}
-        }
+        async function handleLogin(){const e=DOM.authEmail.value.trim(),p=DOM.authPassword.value;if(!e||!p){DOM.authError.textContent='Enter email & password';return}try{await auth.signInWithEmailAndPassword(e,p);hideAuthModal()}catch(err){DOM.authError.textContent=err.message}}
         async function handleRegister(){
             const e=DOM.authEmail.value.trim(),p=DOM.authPassword.value;
-            if(!e||!p||p.length<6){DOM.authError.textContent='Password must be 6+ chars';return}
-            try{await auth.createUserWithEmailAndPassword(e,p);hideAuthModal()}catch(err){DOM.authError.textContent=err.message}
+            if(!e||!p||p.length<6){DOM.authError.textContent='Min 6 characters required';return}
+            try{
+                await auth.createUserWithEmailAndPassword(e,p);
+                hideAuthModal();
+                // New user will be detected in onAuthStateChanged
+            }catch(err){DOM.authError.textContent=err.message}
         }
 
         // ============================================================
@@ -535,111 +556,25 @@
             const user=await sbGetOrCreateUser(state.supabaseEmail,DOM.userName.textContent);
             const chats=await sbLoadChats(user.id);
             state.conversations={};
-            if(chats.length){
-                chats.forEach(c=>{state.conversations[c.id]={id:c.id,title:c.title,messages:[],createdAt:c.created_at,updatedAt:c.updated_at}});
-            }else{
-                const c=await sbCreateChat(user.id,'New Conversation');
-                state.conversations[c.id]={id:c.id,title:c.title,messages:[],createdAt:c.created_at,updatedAt:c.updated_at};
-            }
-            state.currentId=Object.keys(state.conversations)[0];
-            renderConversations();
-            loadConversation(state.currentId);
+            if(chats.length){chats.forEach(c=>{state.conversations[c.id]={id:c.id,title:c.title,messages:[],createdAt:c.created_at,updatedAt:c.updated_at}})}
+            else{const c=await sbCreateChat(user.id,'New Conversation');state.conversations[c.id]={id:c.id,title:c.title,messages:[],createdAt:c.created_at,updatedAt:c.updated_at}}
+            state.currentId=Object.keys(state.conversations)[0];renderConversations();loadConversation(state.currentId);
         }
-
-        function renderConversations(){
-            const list=DOM.convList;list.innerHTML='';
-            Object.values(state.conversations).sort((a,b)=>new Date(b.updatedAt)-new Date(a.updatedAt)).forEach(conv=>{
-                const div=document.createElement('div');
-                div.className=`conv-item${conv.id===state.currentId?' active':''}`;
-                div.innerHTML=`<div class="conv-title">💬 ${escapeHtml(conv.title)}</div><div class="conv-meta"><span>${new Date(conv.updatedAt).toLocaleDateString()}</span></div><div class="conv-actions"><button onclick="event.stopPropagation();renameConversation('${conv.id}')">✏️</button><button onclick="event.stopPropagation();deleteConversation('${conv.id}')" class="delete">🗑️</button></div>`;
-                div.addEventListener('click',()=>{switchConversation(conv.id);if(window.innerWidth<769)toggleSidebar()});
-                list.appendChild(div);
-            });
-        }
-
-        async function loadConversation(id){
-            const conv=state.conversations[id];if(!conv)return;
-            state.currentId=id;
-            DOM.chatTitle.textContent=conv.title||'New Conversation';
-            DOM.chatDate.textContent=new Date(conv.createdAt).toLocaleDateString();
-            DOM.chatContainer.innerHTML='';
-            const msgs=await sbLoadMsgs(id);
-            conv.messages=msgs.map(m=>({role:m.role,content:m.content,timestamp:new Date(m.created_at).toLocaleTimeString([],{hour:'2-digit',minute:'2-digit'}),engine:m.engine}));
-            if(!conv.messages.length){DOM.chatContainer.appendChild(DOM.welcomeMsg);renderConversations();return}
-            conv.messages.forEach(m=>appendMsgToDOM(m.content,m.role,m.timestamp,m.engine,false));
-            DOM.chatContainer.scrollTop=DOM.chatContainer.scrollHeight;
-            renderConversations();
-        }
-
+        function renderConversations(){const list=DOM.convList;list.innerHTML='';Object.values(state.conversations).sort((a,b)=>new Date(b.updatedAt)-new Date(a.updatedAt)).forEach(conv=>{const div=document.createElement('div');div.className=`conv-item${conv.id===state.currentId?' active':''}`;div.innerHTML=`<div class="conv-title">💬 ${escapeHtml(conv.title)}</div><div class="conv-meta"><span>${new Date(conv.updatedAt).toLocaleDateString()}</span></div><div class="conv-actions"><button onclick="event.stopPropagation();renameConversation('${conv.id}')">✏️</button><button onclick="event.stopPropagation();deleteConversation('${conv.id}')" class="delete">🗑️</button></div>`;div.addEventListener('click',()=>{switchConversation(conv.id);if(window.innerWidth<769)toggleSidebar()});list.appendChild(div)})}
+        async function loadConversation(id){const conv=state.conversations[id];if(!conv)return;state.currentId=id;DOM.chatTitle.textContent=conv.title||'New Conversation';DOM.chatDate.textContent=new Date(conv.createdAt).toLocaleDateString();DOM.chatContainer.innerHTML='';const msgs=await sbLoadMsgs(id);conv.messages=msgs.map(m=>({role:m.role,content:m.content,timestamp:new Date(m.created_at).toLocaleTimeString([],{hour:'2-digit',minute:'2-digit'}),engine:m.engine}));if(!conv.messages.length){DOM.chatContainer.appendChild(DOM.welcomeMsg);renderConversations();return}conv.messages.forEach(m=>appendMsgToDOM(m.content,m.role,m.timestamp,m.engine,false));DOM.chatContainer.scrollTop=DOM.chatContainer.scrollHeight;renderConversations()}
         function switchConversation(id){if(id!==state.currentId)loadConversation(id)}
-
-        async function createNewConversation(){
-            if(!state.supabaseEmail)return;
-            const user=await sbGetOrCreateUser(state.supabaseEmail,DOM.userName.textContent);
-            const c=await sbCreateChat(user.id,`Chat ${Object.keys(state.conversations).length+1}`);
-            state.conversations[c.id]={id:c.id,title:c.title,messages:[],createdAt:c.created_at,updatedAt:c.updated_at};
-            loadConversation(c.id);showToast('✨ New conversation');playSuccessSound();
-            if(window.innerWidth<769)toggleSidebar();
-        }
-
-        async function deleteConversation(id){
-            if(!confirm('Delete?'))return;
-            await sbDelChat(id);
-            delete state.conversations[id];
-            if(!Object.keys(state.conversations).length){
-                const user=await sbGetOrCreateUser(state.supabaseEmail,DOM.userName.textContent);
-                const c=await sbCreateChat(user.id,'New Conversation');
-                state.conversations[c.id]={id:c.id,title:c.title,messages:[],createdAt:c.created_at,updatedAt:c.updated_at};
-            }
-            state.currentId=Object.keys(state.conversations)[0];
-            renderConversations();loadConversation(state.currentId);showToast('🗑️ Deleted');
-        }
-
-        async function renameConversation(id){
-            const conv=state.conversations[id];if(!conv)return;
-            const t=prompt('Rename:',conv.title);
-            if(t&&t.trim()){conv.title=t.trim();conv.updatedAt=new Date().toISOString();await sbRenameChat(id,conv.title);renderConversations();if(id===state.currentId)DOM.chatTitle.textContent=conv.title;showToast('✏️ Renamed')}
-        }
+        async function createNewConversation(){if(!state.supabaseEmail)return;const user=await sbGetOrCreateUser(state.supabaseEmail,DOM.userName.textContent);const c=await sbCreateChat(user.id,`Chat ${Object.keys(state.conversations).length+1}`);state.conversations[c.id]={id:c.id,title:c.title,messages:[],createdAt:c.created_at,updatedAt:c.updated_at};loadConversation(c.id);showToast('✨ New conversation');playSuccessSound();if(window.innerWidth<769)toggleSidebar()}
+        async function deleteConversation(id){if(!confirm('Delete?'))return;await sbDelChat(id);delete state.conversations[id];if(!Object.keys(state.conversations).length){const user=await sbGetOrCreateUser(state.supabaseEmail,DOM.userName.textContent);const c=await sbCreateChat(user.id,'New Conversation');state.conversations[c.id]={id:c.id,title:c.title,messages:[],createdAt:c.created_at,updatedAt:c.updated_at}}state.currentId=Object.keys(state.conversations)[0];renderConversations();loadConversation(state.currentId);showToast('🗑️ Deleted')}
+        async function renameConversation(id){const conv=state.conversations[id];if(!conv)return;const t=prompt('Rename:',conv.title);if(t&&t.trim()){conv.title=t.trim();conv.updatedAt=new Date().toISOString();await sbRenameChat(id,conv.title);renderConversations();if(id===state.currentId)DOM.chatTitle.textContent=conv.title;showToast('✏️ Renamed')}}
 
         // ============================================================
         // MESSAGES
         // ============================================================
-        function appendMsgToDOM(content,role,timestamp,engine,animate=true){
-            const div=document.createElement('div');
-            div.className=`message ${role==='user'?'user-message':'ai-message'}`;
-            let html=role==='assistant'?`<div class="msg-content">${formatRichText(content)}</div>`:`<div>${escapeHtml(content).replace(/\n/g,'<br>')}</div>`;
-            if(role==='assistant')html+=`<div class="powered-by">Powered by Zakhourani</div>`;
-            html+=`<div class="msg-time">${timestamp||getTime()}</div>`;
-            html+=`<div class="msg-actions"><button onclick="copyMsg(this)"><i class="fas fa-copy"></i></button><button onclick="speakMsg(this)"><i class="fas fa-volume-up"></i></button></div>`;
-            div.innerHTML=html;DOM.chatContainer.appendChild(div);
-            if(DOM.welcomeMsg.parentNode===DOM.chatContainer)DOM.welcomeMsg.remove();
-            DOM.chatContainer.scrollTop=DOM.chatContainer.scrollHeight;
-            if(animate&&role==='assistant'){const cd=div.querySelector('.msg-content');if(cd)typeWriter(cd,content)}
-        }
-
-        function typeWriter(el,text,speed=15){
-            const words=text.split(' ');let i=0;state.isTyping=true;state.stopTyping=false;const raw=text;
-            const stopBtn=document.createElement('button');stopBtn.className='stop-btn';stopBtn.innerHTML='⏹️ Stop';
-            stopBtn.onclick=()=>{state.stopTyping=true;state.isTyping=false;el.innerHTML=formatRichText(raw);stopBtn.remove();showToast('⏹️ Stopped')};
-            el.parentElement.appendChild(stopBtn);
-            function type(){if(state.stopTyping||!state.isTyping){el.innerHTML=formatRichText(raw);stopBtn.remove();return}
-                if(i<words.length){el.innerHTML=formatRichText(words.slice(0,i+1).join(' '))+'<span class="typing-cursor"></span>';i++;DOM.chatContainer.scrollTop=DOM.chatContainer.scrollHeight;state.typingTimer=setTimeout(type,speed+Math.random()*15)}
-                else{el.innerHTML=formatRichText(raw);state.isTyping=false;stopBtn.remove();playSuccessSound()}}type();
-        }
-
+        function appendMsgToDOM(content,role,timestamp,engine,animate=true){const div=document.createElement('div');div.className=`message ${role==='user'?'user-message':'ai-message'}`;let html=role==='assistant'?`<div class="msg-content">${formatRichText(content)}</div>`:`<div>${escapeHtml(content).replace(/\n/g,'<br>')}</div>`;if(role==='assistant')html+=`<div class="powered-by">Powered by Zakhourani</div>`;html+=`<div class="msg-time">${timestamp||getTime()}</div>`;html+=`<div class="msg-actions"><button onclick="copyMsg(this)"><i class="fas fa-copy"></i></button><button onclick="speakMsg(this)"><i class="fas fa-volume-up"></i></button></div>`;div.innerHTML=html;DOM.chatContainer.appendChild(div);if(DOM.welcomeMsg.parentNode===DOM.chatContainer)DOM.welcomeMsg.remove();DOM.chatContainer.scrollTop=DOM.chatContainer.scrollHeight;if(animate&&role==='assistant'){const cd=div.querySelector('.msg-content');if(cd)typeWriter(cd,content)}}
+        function typeWriter(el,text,speed=15){const words=text.split(' ');let i=0;state.isTyping=true;state.stopTyping=false;const raw=text;const stopBtn=document.createElement('button');stopBtn.className='stop-btn';stopBtn.innerHTML='⏹️ Stop';stopBtn.onclick=()=>{state.stopTyping=true;state.isTyping=false;el.innerHTML=formatRichText(raw);stopBtn.remove();showToast('⏹️ Stopped')};el.parentElement.appendChild(stopBtn);function type(){if(state.stopTyping||!state.isTyping){el.innerHTML=formatRichText(raw);stopBtn.remove();return}if(i<words.length){el.innerHTML=formatRichText(words.slice(0,i+1).join(' '))+'<span class="typing-cursor"></span>';i++;DOM.chatContainer.scrollTop=DOM.chatContainer.scrollHeight;state.typingTimer=setTimeout(type,speed+Math.random()*15)}else{el.innerHTML=formatRichText(raw);state.isTyping=false;stopBtn.remove();playSuccessSound()}}type()}
         window.copyMsg=function(btn){const t=btn.closest('.message').textContent.replace(/Powered by Zakhourani|Copy|Speak|\d+:\d+/g,'').trim();navigator.clipboard.writeText(t).then(()=>showToast('📋 Copied!',1500))};
         window.speakMsg=function(btn){const t=btn.closest('.message').textContent.replace(/Powered by Zakhourani|Copy|Speak|\d+:\d+/g,'').trim();if('speechSynthesis' in window){window.speechSynthesis.cancel();const u=new SpeechSynthesisUtterance(t);u.rate=0.9;speechSynthesis.speak(u);showToast('🔊 Speaking...',2000)}};
-
-        async function addMessage(content,role,engine){
-            const conv=state.conversations[state.currentId];if(!conv||!state.supabaseEmail)return;
-            const user=await sbGetOrCreateUser(state.supabaseEmail,DOM.userName.textContent);
-            conv.messages.push({role,content,timestamp:getTime(),engine:engine||'Zakhourani AI'});
-            conv.updatedAt=new Date().toISOString();
-            await sbSaveMsg(state.currentId,user.id,role,content,engine);
-            appendMsgToDOM(content,role,getTime(),engine);
-            renderConversations();
-        }
-
+        async function addMessage(content,role,engine){const conv=state.conversations[state.currentId];if(!conv||!state.supabaseEmail)return;const user=await sbGetOrCreateUser(state.supabaseEmail,DOM.userName.textContent);conv.messages.push({role,content,timestamp:getTime(),engine:engine||'Zakhourani AI'});conv.updatedAt=new Date().toISOString();await sbSaveMsg(state.currentId,user.id,role,content,engine);appendMsgToDOM(content,role,getTime(),engine);renderConversations()}
         function editLastMessage(){const c=state.conversations[state.currentId];if(!c||!c.messages.length){showToast('No messages');return}let li=-1;for(let i=c.messages.length-1;i>=0;i--){if(c.messages[i].role==='user'){li=i;break}}if(li===-1){showToast('No user message');return}const t=prompt('Edit:',c.messages[li].content);if(t&&t.trim()){c.messages[li].content=t.trim();c.updatedAt=new Date().toISOString();loadConversation(state.currentId);showToast('✏️ Edited')}}
         function clearCurrentChat(){const c=state.conversations[state.currentId];if(!c||!c.messages.length){showToast('Already empty');return}if(confirm('Clear all?')){c.messages=[];c.updatedAt=new Date().toISOString();loadConversation(state.currentId);showToast('🗑️ Cleared')}}
         async function exportChat(){const msgs=await sbLoadMsgs(state.currentId);if(!msgs.length){showToast('Nothing to export');return}const txt=`ZAKHOURANI AI EXPORT\n\n`+msgs.map(m=>`[${m.role.toUpperCase()}] ${m.content}`).join('\n\n');const b=new Blob([txt],{type:'text/plain'});const a=document.createElement('a');a.href=URL.createObjectURL(b);a.download=`Zakhourani_${new Date().toISOString().split('T')[0]}.txt`;a.click();URL.revokeObjectURL(a.href);showToast('📥 Exported')}
@@ -647,61 +582,28 @@
         // ============================================================
         // PROFILE
         // ============================================================
-        async function showProfileModal(){
-            if(!state.supabaseEmail)return;
-            const user=await sbGetOrCreateUser(state.supabaseEmail,DOM.userName.textContent);
-            const l=await sbCheckLimit(state.supabaseEmail);
-            document.getElementById('profileEmail').textContent=state.supabaseEmail;
-            document.getElementById('profileName').value=user.display_name||'';
-            document.getElementById('profileStats').innerHTML=`
-                <div style="background:var(--bg-primary);border:1px solid var(--border);border-radius:8px;padding:10px;text-align:center"><div style="font-size:1.1rem;font-weight:700;color:var(--accent)">${l.remaining}</div><div style="font-size:10px;color:var(--text-muted)">Remaining Today</div></div>
-                <div style="background:var(--bg-primary);border:1px solid var(--border);border-radius:8px;padding:10px;text-align:center"><div style="font-size:1.1rem;font-weight:700;color:var(--accent)">${l.total_used||0}</div><div style="font-size:10px;color:var(--text-muted)">Total Used</div></div>
-                <div style="background:var(--bg-primary);border:1px solid var(--border);border-radius:8px;padding:10px;text-align:center"><div style="font-size:1.1rem;font-weight:700;color:var(--accent)">${Object.keys(state.conversations).length}</div><div style="font-size:10px;color:var(--text-muted)">Chats</div></div>
-                <div style="background:var(--bg-primary);border:1px solid var(--border);border-radius:8px;padding:10px;text-align:center"><div style="font-size:1.1rem;font-weight:700;color:var(--accent)">$${parseFloat(l.balance||0).toFixed(2)}</div><div style="font-size:10px;color:var(--text-muted)">Balance</div></div>
-            `;
-            document.getElementById('profileModal').classList.add('active');
-        }
-        async function updateProfile(){
-            const n=document.getElementById('profileName').value.trim();
-            if(n&&state.supabaseEmail){await zakhSupabase.from('users').update({display_name:n}).eq('email',state.supabaseEmail);DOM.userName.textContent=n;DOM.userAvatar.textContent=n.charAt(0).toUpperCase();showToast('✅ Updated')}
-            document.getElementById('profileModal').classList.remove('active');
-        }
+        async function showProfileModal(){if(!state.supabaseEmail)return;const user=await sbGetOrCreateUser(state.supabaseEmail,DOM.userName.textContent);const l=await sbCheckLimit(state.supabaseEmail);document.getElementById('profileEmail').textContent=state.supabaseEmail;document.getElementById('profileName').value=user.display_name||'';document.getElementById('profileStats').innerHTML=`<div style="background:var(--bg-primary);border:1px solid var(--border);border-radius:8px;padding:10px;text-align:center"><div style="font-size:1.1rem;font-weight:700;color:var(--accent)">${l.remaining}</div><div style="font-size:10px;color:var(--text-muted)">Remaining</div></div><div style="background:var(--bg-primary);border:1px solid var(--border);border-radius:8px;padding:10px;text-align:center"><div style="font-size:1.1rem;font-weight:700;color:var(--accent)">${l.total_used||0}</div><div style="font-size:10px;color:var(--text-muted)">Total Used</div></div><div style="background:var(--bg-primary);border:1px solid var(--border);border-radius:8px;padding:10px;text-align:center"><div style="font-size:1.1rem;font-weight:700;color:var(--accent)">${Object.keys(state.conversations).length}</div><div style="font-size:10px;color:var(--text-muted)">Chats</div></div><div style="background:var(--bg-primary);border:1px solid var(--border);border-radius:8px;padding:10px;text-align:center"><div style="font-size:1.1rem;font-weight:700;color:var(--accent)">$${parseFloat(l.balance||0).toFixed(2)}</div><div style="font-size:10px;color:var(--text-muted)">Balance</div></div>`;document.getElementById('profileModal').classList.add('active')}
+        async function updateProfile(){const n=document.getElementById('profileName').value.trim();if(n&&state.supabaseEmail){await zakhSupabase.from('users').update({display_name:n}).eq('email',state.supabaseEmail);DOM.userName.textContent=n;DOM.userAvatar.textContent=n.charAt(0).toUpperCase();showToast('✅ Updated')}document.getElementById('profileModal').classList.remove('active')}
 
         // ============================================================
         // AI CALL & SEND
         // ============================================================
-        async function callAI(prompt,history){
-            const ctrl=new AbortController();const tid=setTimeout(()=>ctrl.abort(),30000);
-            const r=await fetch(CONFIG.workerUrl,{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({prompt,history:history||[]}),signal:ctrl.signal});
-            clearTimeout(tid);if(!r.ok)throw new Error(`Error ${r.status}`);
-            const d=await r.json();if(d.success&&d.reply){state.isOnline=true;return{reply:d.reply,engine:d.engine||'Zakhourani AI'}}throw new Error(d.error||'No reply');
-        }
-
-        function getLocalResponse(p){
-            const l=p.toLowerCase();
-            if(l.includes('waleed')||l.includes('zakhourani'))return "**Dr. Waleed Hussein Zakhourani** is a Harvard-educated linguist, creator of the JIHAN Universal Dictionary, and founder of Zakhourani. 📚✨";
-            if(l.includes('hello')||l.includes('hi'))return "Hello! I'm Zakhourani AI. How can I help? 💡";
-            if(l.includes('who are you'))return "I'm **Zakhourani AI**, the world's most advanced premium assistant. 🚀";
-            return "I'm Zakhourani AI. Ask me anything! 🎯";
-        }
+        async function callAI(prompt,history){const ctrl=new AbortController();const tid=setTimeout(()=>ctrl.abort(),30000);const r=await fetch(CONFIG.workerUrl,{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({prompt,history:history||[]}),signal:ctrl.signal});clearTimeout(tid);if(!r.ok)throw new Error(`Error ${r.status}`);const d=await r.json();if(d.success&&d.reply){state.isOnline=true;return{reply:d.reply,engine:d.engine||'Zakhourani AI'}}throw new Error(d.error||'No reply')}
+        function getLocalResponse(p){const l=p.toLowerCase();if(l.includes('waleed')||l.includes('zakhourani'))return "**Dr. Waleed Hussein Zakhourani** is a Harvard-educated linguist, creator of the JIHAN Universal Dictionary, and founder of Zakhourani. 📚✨";if(l.includes('hello')||l.includes('hi'))return "Hello! I'm Zakhourani AI. How can I help? 💡";if(l.includes('who are you'))return "I'm **Zakhourani AI**, the world's most advanced premium assistant. 🚀";return "I'm Zakhourani AI. Ask me anything! 🎯"}
 
         async function sendMessage(){
             const text=DOM.messageInput.value.trim();
             if(!text||state.isProcessing||state.isTyping)return;
             if(!(await canAsk())){showLimitModal();return}
             if(!(await incrementUsage()))return;
-            
             state.isProcessing=true;DOM.sendBtn.disabled=true;DOM.messageInput.disabled=true;
             await addMessage(text,'user');DOM.messageInput.value='';playSendSound();
-            
             const typingDiv=document.createElement('div');typingDiv.className='typing-indicator';
             typingDiv.innerHTML=`<div class="typing-dots"><span></span><span></span><span></span></div><span class="typing-label">Zakhourani is thinking...</span>`;
             DOM.chatContainer.appendChild(typingDiv);DOM.chatContainer.scrollTop=DOM.chatContainer.scrollHeight;
-            
             const history=(state.conversations[state.currentId]?.messages||[]).slice(-10).map(m=>({role:m.role,content:m.content}));
             try{const r=await callAI(text,history);typingDiv.remove();await addMessage(r.reply,'assistant',r.engine)}
             catch(e){typingDiv.remove();await addMessage(getLocalResponse(text),'assistant','Zakhourani AI')}
-            
             state.isProcessing=false;DOM.sendBtn.disabled=false;DOM.messageInput.disabled=false;DOM.messageInput.focus();
         }
 
@@ -714,18 +616,11 @@
         DOM.messageInput.addEventListener('keydown',e=>{if(e.key==='Enter'&&!e.shiftKey){e.preventDefault();sendMessage()}});
         document.getElementById('newChatBtn').addEventListener('click',createNewConversation);
         document.querySelectorAll('.chip').forEach(c=>c.addEventListener('click',()=>{DOM.messageInput.value=c.dataset.prompt;sendMessage()}));
-        DOM.authLoginBtn.addEventListener('click',handleLogin);
-        DOM.authRegisterBtn.addEventListener('click',handleRegister);
+        DOM.authLoginBtn.addEventListener('click',handleLogin);DOM.authRegisterBtn.addEventListener('click',handleRegister);
         DOM.authEmail.addEventListener('keydown',e=>{if(e.key==='Enter')handleLogin()});
         DOM.authPassword.addEventListener('keydown',e=>{if(e.key==='Enter')handleLogin()});
         DOM.logoutBtn.addEventListener('click',async()=>{if(confirm('Logout?')){await auth.signOut();showToast('👋 Logged out')}});
-        document.getElementById('upgradeFromLimit').addEventListener('click',()=>{DOM.limitModal.classList.remove('active');showToast('🚀 Premium coming soon!',3000)});
-        document.getElementById('closeLimitModal').addEventListener('click',()=>{DOM.limitModal.classList.remove('active')});
-        document.addEventListener('keydown',e=>{
-            if(e.key==='Escape'){state.stopTyping=true;state.isTyping=false;document.querySelectorAll('.modal.active').forEach(m=>m.classList.remove('active'));DOM.sidebar.classList.remove('open');DOM.sidebarOverlay.classList.remove('show')}
-            if(e.ctrlKey&&e.key==='k'){e.preventDefault();DOM.messageInput.focus()}
-            if(e.key==='/'&&document.activeElement!==DOM.messageInput){e.preventDefault();DOM.messageInput.focus()}
-        });
+        document.addEventListener('keydown',e=>{if(e.key==='Escape'){state.stopTyping=true;state.isTyping=false;document.querySelectorAll('.modal.active').forEach(m=>m.classList.remove('active'));DOM.sidebar.classList.remove('open');DOM.sidebarOverlay.classList.remove('show')}if(e.ctrlKey&&e.key==='k'){e.preventDefault();DOM.messageInput.focus()}if(e.key==='/'&&document.activeElement!==DOM.messageInput){e.preventDefault();DOM.messageInput.focus()}});
 
         // ============================================================
         // INIT
@@ -738,10 +633,19 @@
             fbAuth.onAuthStateChanged(async(user)=>{
                 updateLoader('Loading...',30);
                 if(user){
-                    state.user=user;updateLoader('Syncing...',60);
-                    updateUserUI(user);await updateBalance();await loadConversations();
+                    state.user=user;updateLoader('Setting up your account...',60);
+                    updateUserUI(user);
+                    // Check if new user
+                    const isNew=await isNewUser(user.email);
+                    if(isNew){state.isNewUser=true;showNewUserBanner()}
+                    await updateBalance();await loadConversations();
                     updateLoader('Ready!',100);
-                    setTimeout(()=>{DOM.loader.classList.add('hidden');DOM.app.style.display='flex';DOM.messageInput.focus();showToast('🧠 Zakhourani AI Ready · 50 questions available',2500)},300);
+                    setTimeout(()=>{
+                        DOM.loader.classList.add('hidden');DOM.app.style.display='flex';
+                        DOM.messageInput.focus();
+                        const msg=state.isNewUser?'🎉 Welcome! 50 free questions awarded!':'🧠 Zakhourani AI Ready';
+                        showToast(msg,3000);
+                    },300);
                 }else{
                     state.user=null;updateLoader('Please login...',50);DOM.app.style.display='none';showAuthModal();
                 }

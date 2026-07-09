@@ -3,187 +3,118 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=yes, viewport-fit=cover">
-    <title>Zakhourani AI · Premium Intelligent Assistant</title>
+    <title>Zakhourani AI · Premium Assistant</title>
     <meta name="description" content="Zakhourani AI - Claim 50 Free Questions Every 24 Hours">
     <meta name="theme-color" content="#0a0e17">
+    <meta http-equiv="Content-Security-Policy" content="default-src * 'unsafe-inline' 'unsafe-eval' data: blob:; script-src * 'unsafe-inline' 'unsafe-eval' data: blob:; style-src * 'unsafe-inline'; img-src * data: https:; font-src * data: https:; connect-src * https: wss:; frame-src *;">
     <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><defs><linearGradient id='g' x1='0%25' y1='0%25' x2='100%25' y2='100%25'><stop offset='0%25' style='stop-color:%233b82f6'/><stop offset='100%25' style='stop-color:%238b5cf6'/></linearGradient></defs><circle cx='50' cy='50' r='45' fill='none' stroke='url(%23g)' stroke-width='4'/><circle cx='30' cy='35' r='8' fill='%233b82f6' opacity='0.9'/><circle cx='70' cy='35' r='8' fill='%238b5cf6' opacity='0.9'/><circle cx='30' cy='65' r='8' fill='%2322c55e' opacity='0.9'/><circle cx='70' cy='65' r='8' fill='%23f59e0b' opacity='0.9'/><circle cx='50' cy='50' r='6' fill='white'/></svg>">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
-    <link href="https://fonts.googleapis.com/css2?family=Inter:opsz,wght@14..32,300;14..32,400;14..32,500;14..32,600;14..32,700;14..32,800;14..32,900&display=swap" rel="stylesheet">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:opsz,wght@14..32,400;500;600;700;800;900&display=swap" rel="stylesheet">
     <script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-app-compat.js"></script>
     <script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-auth-compat.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
     <style>
-        :root {
-            --bg: #0a0e17; --bg2: #111827; --bg3: #1a1f2e; --bg4: #1f2937;
-            --text: #f1f5f9; --text2: #94a3b8; --text3: #64748b;
-            --accent: #3b82f6; --accent2: #8b5cf6; --accent-light: #60a5fa;
-            --success: #22c55e; --gold: #f59e0b; --danger: #ef4444;
-            --border: rgba(255,255,255,0.06); --border2: rgba(255,255,255,0.1); --border3: rgba(255,255,255,0.18);
-            --gradient: linear-gradient(135deg, #3b82f6, #8b5cf6);
-            --gradient-gold: linear-gradient(135deg, #f59e0b, #d97706);
-            --shadow-sm: 0 1px 3px rgba(0,0,0,0.3); --shadow-md: 0 4px 20px rgba(0,0,0,0.4);
-            --shadow-lg: 0 10px 40px rgba(0,0,0,0.5); --shadow-glow: 0 0 30px rgba(59,130,246,0.12);
-            --radius-sm: 8px; --radius: 12px; --radius-lg: 16px; --radius-xl: 20px; --radius-2xl: 24px;
-            --transition: all 0.25s cubic-bezier(0.4,0,0.2,1);
-            --sidebar-w: 300px; --header-h: 56px;
-        }
-        * { margin:0; padding:0; box-sizing:border-box; font-family:'Inter',-apple-system,BlinkMacSystemFont,sans-serif; -webkit-tap-highlight-color:transparent; -webkit-font-smoothing:antialiased; }
-        html,body { background:var(--bg); color:var(--text); height:100dvh; width:100vw; overflow:hidden; position:fixed; inset:0; font-size:14px; }
-        
-        .net-bg { position:fixed; inset:0; pointer-events:none; z-index:0; opacity:0.04; }
-        .net-dot { position:absolute; width:3px; height:3px; border-radius:50%; animation:netPulse 3s infinite; }
-        .net-dot.c1{background:var(--accent)} .net-dot.c2{background:var(--accent2)} .net-dot.c3{background:var(--success)} .net-dot.c4{background:var(--gold)}
+        /* ALL CSS HERE */
+        :root{--bg:#0a0e17;--bg2:#111827;--bg3:#1a1f2e;--bg4:#1f2937;--text:#f1f5f9;--text2:#94a3b8;--text3:#64748b;--accent:#3b82f6;--accent2:#8b5cf6;--accent-light:#60a5fa;--success:#22c55e;--gold:#f59e0b;--danger:#ef4444;--border:rgba(255,255,255,0.06);--border2:rgba(255,255,255,0.1);--border3:rgba(255,255,255,0.18);--gradient:linear-gradient(135deg,#3b82f6,#8b5cf6);--gradient-gold:linear-gradient(135deg,#f59e0b,#d97706);--shadow-sm:0 1px 3px rgba(0,0,0,0.3);--shadow-md:0 4px 20px rgba(0,0,0,0.4);--shadow-lg:0 10px 40px rgba(0,0,0,0.5);--shadow-glow:0 0 30px rgba(59,130,246,0.12);--radius-sm:8px;--radius:12px;--radius-lg:16px;--radius-xl:20px;--radius-2xl:24px;--transition:all 0.2s ease;--sidebar-w:300px;--header-h:56px}
+        *{margin:0;padding:0;box-sizing:border-box;font-family:'Inter',-apple-system,sans-serif;-webkit-tap-highlight-color:transparent;-webkit-font-smoothing:antialiased}
+        html,body{background:var(--bg);color:var(--text);height:100dvh;width:100vw;overflow:hidden;position:fixed;inset:0;font-size:14px;touch-action:pan-x pan-y}
+        .net-bg{position:fixed;inset:0;pointer-events:none;z-index:0;opacity:0.04}
+        .net-dot{position:absolute;width:3px;height:3px;border-radius:50%;animation:netPulse 3s infinite}
+        .net-dot.c1{background:var(--accent)}.net-dot.c2{background:var(--accent2)}.net-dot.c3{background:var(--success)}.net-dot.c4{background:var(--gold)}
         @keyframes netPulse{0%,100%{opacity:0.15;transform:scale(1)}50%{opacity:0.9;transform:scale(3)}}
-        .net-line{position:absolute;height:1px;background:linear-gradient(90deg,transparent,var(--accent),transparent);opacity:0.05;transform-origin:left center}
-        
         #loader{position:fixed;inset:0;background:var(--bg);display:flex;flex-direction:column;align-items:center;justify-content:center;z-index:9999;gap:20px;transition:opacity 0.5s}
         #loader.hidden{opacity:0;visibility:hidden;pointer-events:none}
         .loader-spinner{width:48px;height:48px;border:3px solid var(--border2);border-top-color:var(--accent);border-radius:50%;animation:spin 0.7s linear infinite}
         @keyframes spin{to{transform:rotate(360deg)}}
         .loader-text{color:var(--text2);font-size:14px;font-weight:500}
-        
         #app{width:100%;height:100dvh;background:var(--bg2);display:flex;flex-direction:column;position:relative;z-index:1;box-shadow:var(--shadow-lg)}
         @media(min-width:1024px){#app{max-width:1500px;height:95dvh;border-radius:var(--radius-2xl);border:1px solid var(--border);flex-direction:row;margin:2.5dvh auto}}
-        
-        /* FIXED: Bright sidebar overlay */
-        .sidebar-overlay{position:fixed;inset:0;background:rgba(0,0,0,0.7);z-index:98;display:none;}
+        .sidebar-overlay{position:fixed;inset:0;background:rgba(0,0,0,0.75);z-index:98;display:none;backdrop-filter:blur(4px)}
         .sidebar-overlay.show{display:block}
-        
-        /* FIXED: BRIGHT sidebar with high contrast for mobile */
-        .sidebar{position:fixed;left:0;top:0;bottom:0;width:var(--sidebar-w);max-width:88vw;background:#0f172a;border-right:1px solid rgba(255,255,255,0.15);z-index:99;transform:translateX(-100%);transition:transform 0.3s cubic-bezier(0.4,0,0.2,1);display:flex;flex-direction:column;box-shadow:10px 0 40px rgba(0,0,0,0.6)}
+        .sidebar{position:fixed;left:0;top:0;bottom:0;width:var(--sidebar-w);max-width:88vw;background:#0f172a;border-right:1px solid rgba(255,255,255,0.15);z-index:99;transform:translateX(-100%);transition:transform 0.3s;display:flex;flex-direction:column;box-shadow:10px 0 40px rgba(0,0,0,0.6);overflow-y:auto;-webkit-overflow-scrolling:touch}
         .sidebar.open{transform:translateX(0)}
         @media(min-width:1024px){.sidebar{position:static;transform:none;width:var(--sidebar-w);flex-shrink:0;box-shadow:none;background:var(--bg);border-right:1px solid var(--border)}.sidebar-overlay{display:none!important}}
-        
         .sidebar-head{padding:16px;border-bottom:1px solid rgba(255,255,255,0.12);background:rgba(59,130,246,0.05)}
         .logo{display:flex;align-items:center;gap:10px;text-decoration:none;color:var(--text);margin-bottom:14px}
-        .logo-icon{width:42px;height:42px;background:var(--gradient);border-radius:10px;display:flex;align-items:center;justify-content:center;position:relative;box-shadow:0 0 20px rgba(59,130,246,0.3);flex-shrink:0}
+        .logo-icon{width:42px;height:42px;background:var(--gradient);border-radius:10px;display:flex;align-items:center;justify-content:center;position:relative;box-shadow:0 0 20px rgba(59,130,246,0.3)}
         .logo-icon i{font-size:18px;color:white;z-index:1}
         .logo-icon::after{content:'';position:absolute;width:10px;height:10px;background:white;border-radius:50%}
-        .logo-text{font-weight:800;font-size:16px;letter-spacing:-0.3px}
-        .logo-badge{font-size:8px;background:var(--gradient-gold);color:white;padding:2px 8px;border-radius:10px;font-weight:700;margin-left:3px}
-        
-        .new-chat-btn{width:100%;padding:13px;background:var(--gradient);border:none;border-radius:10px;color:white;font-weight:600;font-size:15px;cursor:pointer;transition:var(--transition);display:flex;align-items:center;justify-content:center;gap:8px;box-shadow:0 4px 16px rgba(59,130,246,0.3);margin-bottom:8px}
-        .new-chat-btn:hover{transform:translateY(-1px);box-shadow:0 6px 24px rgba(59,130,246,0.4)}
+        .logo-text{font-weight:800;font-size:16px}.logo-badge{font-size:8px;background:var(--gradient-gold);color:white;padding:2px 8px;border-radius:10px;font-weight:700;margin-left:3px}
+        .new-chat-btn{width:100%;padding:13px;background:var(--gradient);border:none;border-radius:10px;color:white;font-weight:600;font-size:15px;cursor:pointer;display:flex;align-items:center;justify-content:center;gap:8px;box-shadow:0 4px 16px rgba(59,130,246,0.3);touch-action:manipulation}
         .new-chat-btn:active{transform:scale(0.96)}
-        
-        /* FIXED: Bright user bar */
         .user-bar{padding:16px;border-bottom:1px solid rgba(255,255,255,0.12);display:flex;align-items:center;gap:12px;background:rgba(255,255,255,0.03)}
-        .user-avatar{width:44px;height:44px;border-radius:50%;background:var(--gradient);display:flex;align-items:center;justify-content:center;font-weight:700;color:white;font-size:18px;flex-shrink:0;cursor:pointer;box-shadow:var(--shadow-sm);position:relative}
+        .user-avatar{width:44px;height:44px;border-radius:50%;background:var(--gradient);display:flex;align-items:center;justify-content:center;font-weight:700;color:white;font-size:18px;flex-shrink:0;position:relative}
         .online-dot{position:absolute;bottom:3px;right:3px;width:11px;height:11px;background:var(--success);border-radius:50%;border:2px solid #0f172a}
-        .user-info{flex:1;min-width:0}
-        .user-info .uname{font-weight:700;font-size:14px;color:#ffffff;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;cursor:pointer}
-        .user-info .uemail{font-size:11px;color:var(--text2);white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
-        .user-info .bal-info{font-size:12px;color:var(--text2);display:flex;align-items:center;gap:6px;margin-top:4px}
+        .user-info{flex:1;min-width:0}.user-info .uname{font-weight:700;font-size:14px;color:#fff;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+        .user-info .uemail{font-size:11px;color:var(--text2)}.user-info .bal-info{font-size:12px;color:var(--text2);margin-top:4px}
         .user-info .bal-info .val{color:var(--accent-light);font-weight:700}
         .usage-bar{width:100%;height:4px;background:rgba(255,255,255,0.1);border-radius:2px;margin-top:8px;overflow:hidden}
         .usage-fill{height:100%;background:var(--accent);border-radius:2px;transition:width 0.6s}
         .usage-fill.warning{background:var(--gold)}.usage-fill.danger{background:var(--danger)}
-        .countdown-text{font-size:11px;color:var(--text3);margin-top:4px}
-        .countdown-text .time{color:var(--accent-light);font-weight:600}
-        
-        .logout-btn{background:rgba(255,255,255,0.06);border:1px solid rgba(255,255,255,0.15);color:var(--text2);width:36px;height:36px;border-radius:8px;cursor:pointer;transition:var(--transition);display:flex;align-items:center;justify-content:center;font-size:14px;flex-shrink:0}
-        .logout-btn:hover{background:rgba(239,68,68,0.2);border-color:var(--danger);color:var(--danger)}
-        
+        .countdown-text{font-size:11px;color:var(--text3);margin-top:4px}.countdown-text .time{color:var(--accent-light);font-weight:600}
+        .logout-btn{background:rgba(255,255,255,0.06);border:1px solid rgba(255,255,255,0.15);color:var(--text2);width:36px;height:36px;border-radius:8px;cursor:pointer;display:flex;align-items:center;justify-content:center;font-size:14px;touch-action:manipulation}
         .chat-list{flex:1;overflow-y:auto;padding:8px 10px;-webkit-overflow-scrolling:touch}
-        .chat-list::-webkit-scrollbar{width:3px}.chat-list::-webkit-scrollbar-thumb{background:rgba(255,255,255,0.15);border-radius:10px}
-        .conv-item{padding:11px 13px;border-radius:8px;cursor:pointer;margin-bottom:3px;display:flex;align-items:center;justify-content:space-between;transition:var(--transition);border:1px solid transparent;min-height:46px;position:relative}
-        .conv-item:hover{background:rgba(255,255,255,0.05);border-color:rgba(255,255,255,0.1)}
+        .conv-item{padding:11px 13px;border-radius:8px;cursor:pointer;margin-bottom:3px;display:flex;align-items:center;justify-content:space-between;border:1px solid transparent;min-height:46px;position:relative;touch-action:manipulation}
         .conv-item.active{background:rgba(59,130,246,0.12);border-color:rgba(59,130,246,0.3)}
         .conv-item.active::before{content:'';position:absolute;left:0;top:10px;bottom:10px;width:3px;background:var(--accent);border-radius:0 3px 3px 0}
         .conv-item-title{flex:1;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;font-weight:500;font-size:13px;color:#e2e8f0}
-        .conv-item-actions{display:flex;gap:4px;opacity:0;transition:var(--transition);position:absolute;right:8px;top:50%;transform:translateY(-50%);background:#0f172a;padding:3px;border-radius:6px}
-        .conv-item:hover .conv-item-actions{opacity:1}
-        .conv-item-actions button{width:30px;height:30px;border:none;background:rgba(255,255,255,0.08);color:var(--text2);cursor:pointer;font-size:11px;border-radius:6px;transition:var(--transition);display:flex;align-items:center;justify-content:center}
-        .conv-item-actions button:hover{background:rgba(255,255,255,0.15);color:white}
-        .conv-item-actions button.del:hover{color:var(--danger)}
-        
-        .main-chat{flex:1;display:flex;flex-direction:column;min-width:0;min-height:0;background:var(--bg2)}
-        .chat-header{height:var(--header-h);padding:0 16px;border-bottom:1px solid var(--border);display:flex;align-items:center;gap:10px;flex-shrink:0;background:var(--bg);backdrop-filter:blur(12px);-webkit-backdrop-filter:blur(12px)}
-        .chat-header .cht-title{font-weight:600;font-size:15px;display:flex;align-items:center;gap:8px;flex:1;min-width:0;color:white}
-        .chat-actions{display:flex;gap:4px;flex-shrink:0}
-        .icon-btn{width:36px;height:36px;border-radius:8px;border:1px solid var(--border2);background:transparent;color:var(--text2);cursor:pointer;font-size:14px;display:flex;align-items:center;justify-content:center;flex-shrink:0;transition:var(--transition)}
-        .icon-btn:hover{background:var(--bg4);color:white;border-color:var(--border3)}
-        .icon-btn:active{transform:scale(0.93)}
-        #menuBtn{display:none}@media(max-width:1023px){#menuBtn{display:flex;font-size:18px}}
-        
-        #chatContainer{flex:1;overflow-y:auto;padding:16px 20px;scroll-behavior:smooth;-webkit-overflow-scrolling:touch}
-        #chatContainer::-webkit-scrollbar{width:5px}#chatContainer::-webkit-scrollbar-thumb{background:var(--border2);border-radius:10px}
-        
+        .conv-item-actions{display:flex;gap:4px;position:absolute;right:8px;top:50%;transform:translateY(-50%);background:#0f172a;padding:3px;border-radius:6px;opacity:0.8}
+        .conv-item-actions button{width:30px;height:30px;border:none;background:rgba(255,255,255,0.08);color:var(--text2);cursor:pointer;font-size:11px;border-radius:6px;touch-action:manipulation}
+        .main-chat{flex:1;display:flex;flex-direction:column;min-width:0;min-height:0}
+        .chat-header{height:var(--header-h);padding:0 16px;border-bottom:1px solid var(--border);display:flex;align-items:center;gap:10px;flex-shrink:0;background:var(--bg)}
+        .chat-header .cht-title{font-weight:600;font-size:15px;flex:1;min-width:0;color:white}
+        .chat-actions{display:flex;gap:4px}
+        .icon-btn{width:36px;height:36px;border-radius:8px;border:1px solid var(--border2);background:transparent;color:var(--text2);cursor:pointer;font-size:14px;display:flex;align-items:center;justify-content:center;touch-action:manipulation}
+        .icon-btn:active{transform:scale(0.93)}#menuBtn{display:none}@media(max-width:1023px){#menuBtn{display:flex;font-size:18px}}
+        #chatContainer{flex:1;overflow-y:auto;padding:16px 20px;-webkit-overflow-scrolling:touch;scroll-behavior:smooth}
         .free-tier-card{text-align:center;max-width:480px;margin:20px auto;background:rgba(34,197,94,0.06);border:2px solid var(--success);border-radius:var(--radius-xl);padding:24px 20px;animation:glowPulse 2s infinite}
         @keyframes glowPulse{0%,100%{box-shadow:0 0 20px rgba(34,197,94,0.08)}50%{box-shadow:0 0 40px rgba(34,197,94,0.18)}}
         .free-tier-card h3{font-size:1.1rem;font-weight:800;color:var(--success);margin-bottom:6px}
-        .free-tier-card p{color:var(--text2);font-size:13px;margin-bottom:12px;line-height:1.5}
-        .free-tier-btn{display:inline-block;padding:12px 24px;background:var(--success);border:none;border-radius:50px;color:white;font-weight:700;font-size:14px;cursor:pointer;transition:var(--transition);box-shadow:0 4px 16px rgba(34,197,94,0.3);-webkit-tap-highlight-color:transparent;touch-action:manipulation}
-        .free-tier-btn:active{transform:scale(0.94)}
-        
+        .free-tier-btn{display:inline-block;padding:12px 24px;background:var(--success);border:none;border-radius:50px;color:white;font-weight:700;font-size:14px;cursor:pointer;box-shadow:0 4px 16px rgba(34,197,94,0.3);touch-action:manipulation}
         .welcome{text-align:center;max-width:500px;margin:20px auto;background:var(--bg);border-radius:var(--radius-xl);padding:28px 20px;border:1px solid var(--border)}
         .welcome-icon{font-size:3.5rem;margin-bottom:12px;animation:floatIcon 3s infinite}
         @keyframes floatIcon{0%,100%{transform:translateY(0)}50%{transform:translateY(-10px)}}
         .welcome h2{font-size:18px;font-weight:800;background:var(--gradient);-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text;margin-bottom:6px}
-        .welcome p{color:var(--text2);font-size:14px;line-height:1.6}
         .chips-grid{display:grid;grid-template-columns:1fr 1fr;gap:8px;margin-top:16px}
-        .chip{padding:12px 14px;background:rgba(255,255,255,0.02);border:1px solid var(--border);border-radius:var(--radius);cursor:pointer;transition:var(--transition);font-size:12px;color:var(--text2);text-align:center;font-weight:500}
-        .chip:hover{border-color:var(--accent);color:white;background:rgba(59,130,246,0.06)}
+        .chip{padding:12px 14px;background:rgba(255,255,255,0.02);border:1px solid var(--border);border-radius:var(--radius);cursor:pointer;font-size:12px;color:var(--text2);text-align:center;font-weight:500;touch-action:manipulation}
         @media(max-width:480px){.chips-grid{grid-template-columns:1fr}}
-        
         .message{margin:8px 0;padding:12px 15px;border-radius:14px;max-width:85%;line-height:1.6;font-size:14px;animation:msgIn 0.3s ease;word-wrap:break-word;position:relative}
         @keyframes msgIn{from{opacity:0;transform:translateY(10px)scale(0.98)}to{opacity:1;transform:translateY(0)scale(1)}}
-        .user-msg{background:var(--accent);color:white;margin-left:auto;border-bottom-right-radius:4px;box-shadow:0 2px 10px rgba(59,130,246,0.25)}
+        .user-msg{background:var(--accent);color:white;margin-left:auto;border-bottom-right-radius:4px}
         .ai-msg{background:rgba(255,255,255,0.02);border:1px solid var(--border);margin-right:auto;border-bottom-left-radius:4px}
-        .ai-msg strong{color:var(--accent-light);font-weight:700}
-        .ai-msg pre{background:var(--bg);padding:10px;border-radius:8px;overflow-x:auto;margin:6px 0;font-size:0.84em;border-left:3px solid var(--accent)}
-        .ai-msg code{background:var(--bg);padding:2px 6px;border-radius:4px;font-size:0.86em}
-        .powered-by{font-size:10px;color:var(--text3);margin-top:5px;display:flex;align-items:center;gap:5px;opacity:0.8}
-        .powered-by::before{content:'';width:5px;height:5px;background:var(--accent);border-radius:50%}
-        .msg-time{font-size:10px;opacity:0.4;margin-top:4px;text-align:right}
-        .msg-actions{position:absolute;top:5px;right:5px;display:flex;gap:3px;opacity:0;transition:var(--transition)}
-        .message:hover .msg-actions{opacity:1}
-        .msg-actions button{width:26px;height:26px;border-radius:4px;border:1px solid var(--border2);background:var(--bg3);color:var(--text2);cursor:pointer;font-size:11px;display:flex;align-items:center;justify-content:center}
-        @media(max-width:768px){.message{max-width:90%;font-size:13.5px}#chatContainer{padding:12px}}
-        @media(max-width:480px){.message{max-width:94%;font-size:13px;padding:9px 11px}#chatContainer{padding:10px}}
-        
+        .ai-msg strong{color:var(--accent-light)}.powered-by{font-size:10px;color:var(--text3);margin-top:5px}
+        .msg-actions{position:absolute;top:5px;right:5px;display:flex;gap:3px;opacity:0.7}
+        .msg-actions button{width:26px;height:26px;border-radius:4px;border:1px solid var(--border2);background:var(--bg3);color:var(--text2);cursor:pointer;font-size:11px;touch-action:manipulation}
         .typing-indicator{display:flex;align-items:center;gap:10px;padding:10px 14px;background:rgba(255,255,255,0.02);border:1px solid var(--border);border-radius:14px;margin:8px 0;max-width:150px}
         .typing-dots{display:flex;gap:4px}.typing-dots span{width:6px;height:6px;background:var(--text2);border-radius:50%;animation:bounce 1.4s infinite}
-        .typing-dots span:nth-child(2){animation-delay:0.2s}.typing-dots span:nth-child(3){animation-delay:0.4s}
         @keyframes bounce{0%,60%,100%{transform:translateY(0);opacity:0.3}30%{transform:translateY(-6px);opacity:1}}
-        .typing-label{font-size:12px;color:var(--text2)}
-        
-        /* FIXED: Input area for mobile */
-        .input-area{padding:10px 14px;border-top:1px solid var(--border);flex-shrink:0;background:var(--bg);z-index:10}
-        .input-wrap{display:flex;gap:8px;background:var(--bg4);border:2px solid var(--border2);border-radius:50px;padding:5px 5px 5px 16px;transition:var(--transition)}
+        .input-area{padding:10px 14px;border-top:1px solid var(--border);flex-shrink:0;background:var(--bg)}
+        .input-wrap{display:flex;gap:8px;background:var(--bg4);border:2px solid var(--border2);border-radius:50px;padding:5px 5px 5px 16px}
         .input-wrap:focus-within{border-color:var(--accent);box-shadow:0 0 0 4px rgba(59,130,246,0.08)}
-        #messageInput{flex:1;background:transparent;border:none;color:var(--text);font-size:15px;padding:9px 0;outline:none;min-width:0}
-        #messageInput::placeholder{color:var(--text3)}
-        /* FIXED: Send button - larger touch target for mobile */
-        #sendButton{background:var(--gradient);border:none;color:white;border-radius:50px;padding:10px 20px;font-weight:600;cursor:pointer;transition:var(--transition);font-size:14px;display:flex;align-items:center;gap:6px;white-space:nowrap;flex-shrink:0;box-shadow:var(--shadow-sm);-webkit-tap-highlight-color:transparent;touch-action:manipulation;min-width:70px;min-height:44px;justify-content:center}
-        #sendButton:active{transform:scale(0.94);background:var(--accent-dark)}
-        #sendButton:disabled{opacity:0.4}
-        @media(max-width:480px){.input-area{padding:8px 10px}.input-wrap{padding:4px 4px 4px 12px;border-radius:30px}#messageInput{font-size:14px;padding:7px 0}#sendButton{padding:8px 14px;font-size:13px;min-width:60px;min-height:40px}}
-        
-        .toast{position:fixed;bottom:80px;left:50%;transform:translateX(-50%);background:var(--bg4);border:1px solid var(--border3);border-radius:var(--radius);padding:10px 20px;z-index:400;font-size:13px;display:none;animation:toastIn 0.3s ease;box-shadow:var(--shadow-lg);font-weight:500;white-space:nowrap;max-width:90vw}
-        @keyframes toastIn{from{opacity:0;transform:translateX(-50%)translateY(10px)}to{opacity:1;transform:translateX(-50%)translateY(0)}}
-        
-        .modal{position:fixed;inset:0;background:rgba(0,0,0,0.85);display:none;align-items:center;justify-content:center;z-index:300;padding:16px}
+        #messageInput{flex:1;background:transparent;border:none;color:var(--text);font-size:15px;padding:9px 0;outline:none;min-width:0;touch-action:manipulation}
+        #sendButton{background:var(--gradient);border:none;color:white;border-radius:50px;padding:10px 20px;font-weight:600;cursor:pointer;font-size:14px;display:flex;align-items:center;gap:6px;white-space:nowrap;flex-shrink:0;box-shadow:var(--shadow-sm);touch-action:manipulation;min-height:44px;min-width:60px;justify-content:center}
+        #sendButton:active{transform:scale(0.94)}
+        .toast{position:fixed;bottom:80px;left:50%;transform:translateX(-50%);background:var(--bg4);border:1px solid var(--border3);border-radius:var(--radius);padding:10px 20px;z-index:400;font-size:13px;display:none;animation:toastIn 0.3s ease;white-space:nowrap;max-width:90vw}
+        @keyframes toastIn{from{opacity:0;transform:translateX(-50%)translateY(10px)}}
+        .modal{position:fixed;inset:0;background:rgba(0,0,0,0.85);display:none;align-items:center;justify-content:center;z-index:300;padding:16px;backdrop-filter:blur(8px)}
         .modal.show{display:flex}
-        .modal-box{background:var(--bg2);border:1px solid var(--border3);border-radius:var(--radius-xl);padding:24px 20px;max-width:460px;width:100%;max-height:85vh;overflow-y:auto;animation:modalIn 0.3s ease;box-shadow:var(--shadow-xl);text-align:center}
-        @keyframes modalIn{from{opacity:0;transform:scale(0.95)translateY(10px)}to{opacity:1;transform:scale(1)translateY(0)}}
-        .modal-box h2{font-size:18px;font-weight:700;margin-bottom:8px}
-        .modal-btn{width:100%;padding:12px;border:none;border-radius:50px;color:white;font-weight:600;cursor:pointer;font-size:14px;margin-top:6px;transition:var(--transition);display:flex;align-items:center;justify-content:center;gap:8px;-webkit-tap-highlight-color:transparent;touch-action:manipulation}
-        .modal-btn.primary{background:var(--gradient)}.modal-btn.secondary{background:transparent;border:1px solid var(--border3);color:var(--text2)}.modal-btn.gold{background:var(--gradient-gold)}.modal-btn.success{background:var(--success)}
-        .modal-btn:active{transform:scale(0.96)}
-        .auth-form{display:flex;flex-direction:column;gap:8px;text-align:left}
-        .auth-form input{background:var(--bg);border:1px solid var(--border2);border-radius:8px;padding:11px 14px;color:var(--text);font-size:14px;outline:none;width:100%}
+        .modal-box{background:var(--bg2);border:1px solid var(--border3);border-radius:var(--radius-xl);padding:24px 20px;max-width:460px;width:100%;max-height:85vh;overflow-y:auto;animation:modalIn 0.3s ease}
+        @keyframes modalIn{from{opacity:0;transform:scale(0.95)translateY(10px)}}
+        .modal-btn{width:100%;padding:12px;border:none;border-radius:50px;color:white;font-weight:600;cursor:pointer;font-size:14px;margin-top:6px;display:flex;align-items:center;justify-content:center;gap:8px;touch-action:manipulation}
+        .modal-btn.primary{background:var(--gradient)}.modal-btn.secondary{background:transparent;border:1px solid var(--border3);color:var(--text2)}.modal-btn.gold{background:var(--gradient-gold)}
+        .auth-form input{background:var(--bg);border:1px solid var(--border2);border-radius:8px;padding:11px 14px;color:var(--text);font-size:14px;outline:none;width:100%;margin-bottom:8px}
         .auth-error{color:var(--danger);font-size:12px;text-align:center;min-height:18px}
-        .pkg-card{background:var(--bg);border:1px solid var(--border);border-radius:var(--radius);padding:14px 16px;margin:8px 0;display:flex;justify-content:space-between;align-items:center;cursor:pointer;transition:var(--transition)}
-        .pkg-card.popular{border-color:var(--gold);background:rgba(245,158,11,0.04)}.pkg-card.popular::before{content:'MOST POPULAR';position:absolute;top:-10px;right:16px;background:var(--gradient-gold);color:white;font-size:9px;padding:3px 10px;border-radius:10px;font-weight:700}
-        .pkg-card h4{font-size:14px;font-weight:700}.pkg-card .price{font-size:1.2rem;font-weight:800;color:var(--accent)}
-        .payment-methods{display:flex;gap:6px;justify-content:center;flex-wrap:wrap;margin:10px 0}
-        .payment-card{background:var(--bg);border:1px solid var(--border);border-radius:8px;padding:12px 14px;text-align:center;cursor:pointer;min-width:70px}
-        .payment-card i{font-size:20px;margin-bottom:4px;display:block}.payment-card span{font-size:10px;color:var(--text2)}
+        .pkg-card{background:var(--bg);border:1px solid var(--border);border-radius:var(--radius);padding:14px 16px;margin:8px 0;display:flex;justify-content:space-between;align-items:center;cursor:pointer}
+        .pkg-card.popular{border-color:var(--gold);background:rgba(245,158,11,0.04);position:relative}
+        .pkg-card.popular::before{content:'POPULAR';position:absolute;top:-10px;right:16px;background:var(--gradient-gold);color:white;font-size:9px;padding:3px 10px;border-radius:10px;font-weight:700}
         .about-dr-card{background:var(--bg);border:1px solid var(--border);border-radius:var(--radius-lg);padding:16px;margin:8px 0;text-align:left;max-height:280px;overflow-y:auto;font-size:12px;color:var(--text2);line-height:1.7}
-        .about-dr-card h4{color:var(--accent-light);margin-bottom:6px;font-size:14px}
-        .about-dr-card a{color:var(--accent);font-size:12px}
-        ::selection{background:rgba(59,130,246,0.3);color:white}
+        .about-dr-card h4{color:var(--accent-light);margin-bottom:6px}
+        .stat-card{background:var(--bg);border:1px solid var(--border);border-radius:8px;padding:10px;text-align:center}
+        .stat-card .stat-val{font-size:1.1rem;font-weight:700;color:var(--accent)}
+        .stat-card .stat-lbl{font-size:10px;color:var(--text3);margin-top:2px;text-transform:uppercase}
+        .payment-card{display:inline-flex;flex-direction:column;align-items:center;padding:8px 12px;background:var(--bg);border:1px solid var(--border);border-radius:8px;margin:4px}
     </style>
 </head>
 <body>
@@ -191,28 +122,103 @@
     <div class="net-bg" id="netBg"></div>
     <div class="sidebar-overlay" id="sidebarOverlay" onclick="toggleSidebar()"></div>
     
-    <div id="loader"><div class="loader-spinner"></div><div class="loader-text" id="loaderText">Initializing Zakhourani AI...</div></div>
+    <div id="loader">
+        <div class="loader-spinner"></div>
+        <div class="loader-text" id="loaderText">Initializing Zakhourani AI...</div>
+    </div>
+    
     <div class="toast" id="toast"></div>
 
     <!-- AUTH MODAL -->
-    <div class="modal" id="authModal"><div class="modal-box"><div style="font-size:3rem;margin-bottom:8px">🔐</div><h2>Welcome to Zakhourani AI</h2><p style="color:var(--text2);font-size:13px;margin-bottom:12px">Login or register to claim <strong>50 free questions</strong> every 24 hours.</p><div class="auth-form"><input type="email" id="authEmail" placeholder="Your email address"><input type="password" id="authPassword" placeholder="Create password"><div style="display:flex;gap:8px"><button class="modal-btn primary" id="authLoginBtn" style="flex:1">Login</button><button class="modal-btn secondary" id="authRegisterBtn" style="flex:1">Register</button></div><div class="auth-error" id="authError"></div></div></div></div>
+    <div class="modal" id="authModal">
+        <div class="modal-box">
+            <div style="font-size:3rem;margin-bottom:8px">🔐</div>
+            <h2>Welcome to Zakhourani AI</h2>
+            <p style="color:var(--text2);font-size:13px;margin-bottom:12px">Login or register to claim <strong>50 free questions</strong> every 24h.</p>
+            <div class="auth-form">
+                <input type="email" id="authEmail" placeholder="Email address" autocomplete="email">
+                <input type="password" id="authPassword" placeholder="Password" autocomplete="current-password">
+                <div style="display:flex;gap:8px">
+                    <button class="modal-btn primary" id="authLoginBtn">Login</button>
+                    <button class="modal-btn secondary" id="authRegisterBtn">Register</button>
+                </div>
+                <div class="auth-error" id="authError"></div>
+            </div>
+        </div>
+    </div>
 
     <!-- LIMIT MODAL -->
-    <div class="modal" id="limitModal"><div class="modal-box"><div style="font-size:3.5rem;margin-bottom:8px">⏳</div><h2>Daily Questions Used</h2><p style="color:var(--text2);font-size:13px">You've used all <strong>50 questions</strong> for today. Resets at midnight UTC.</p><div id="limitTimer" style="font-size:1.2rem;font-weight:700;margin:10px 0;color:var(--accent)"></div><button class="modal-btn gold" onclick="closeModal('limitModal');showPackagesModal()"><i class="fas fa-crown"></i> Upgrade Now</button><button class="modal-btn secondary" onclick="closeModal('limitModal')">Close</button></div></div>
+    <div class="modal" id="limitModal">
+        <div class="modal-box">
+            <div style="font-size:3.5rem;margin-bottom:8px">⏳</div>
+            <h2>Daily Questions Used</h2>
+            <p style="color:var(--text2)">You've used all <strong>50 questions</strong>. Resets at midnight UTC.</p>
+            <div id="limitTimer" style="font-size:1.2rem;font-weight:700;margin:10px 0;color:var(--accent)"></div>
+            <button class="modal-btn gold" onclick="closeModal('limitModal');showPackagesModal()"><i class="fas fa-crown"></i> Upgrade</button>
+            <button class="modal-btn secondary" onclick="closeModal('limitModal')">Close</button>
+        </div>
+    </div>
 
     <!-- PACKAGES MODAL -->
-    <div class="modal" id="packagesModal"><div class="modal-box" style="text-align:left;max-width:500px"><h2 style="text-align:center">💰 Packages & Balance</h2><p style="text-align:center">Balance: <strong style="color:var(--accent);font-size:1.2rem" id="packagesBalance">$0.00</strong></p><div style="display:flex;gap:6px;margin:8px 0"><button class="modal-btn primary" style="flex:1;font-size:11px" onclick="topupBalance(5)">+ $5</button><button class="modal-btn primary" style="flex:1;font-size:11px" onclick="topupBalance(10)">+ $10</button><button class="modal-btn primary" style="flex:1;font-size:11px" onclick="topupBalance(25)">+ $25</button></div><div id="packagesList"></div><div class="payment-methods"><div class="payment-card"><i class="fab fa-cc-visa" style="color:#1a1f71"></i><span>Visa</span></div><div class="payment-card"><i class="fab fa-cc-mastercard" style="color:#eb001b"></i><span>Mastercard</span></div><div class="payment-card"><i class="fab fa-bitcoin" style="color:var(--gold)"></i><span>Crypto</span></div><div class="payment-card"><i class="fab fa-cc-amex" style="color:#016fd0"></i><span>Amex</span></div></div><p style="font-size:10px;color:var(--text3);text-align:center;margin-top:8px">Payment gateway coming soon</p><button class="modal-btn secondary" onclick="closeModal('packagesModal')">Close</button></div></div>
+    <div class="modal" id="packagesModal">
+        <div class="modal-box" style="text-align:left;max-width:500px">
+            <h2 style="text-align:center">💰 Packages & Balance</h2>
+            <p style="text-align:center">Balance: <strong style="color:var(--accent);font-size:1.2rem" id="packagesBalance">$0.00</strong></p>
+            <div style="display:flex;gap:6px;margin:10px 0">
+                <button class="modal-btn primary" style="flex:1;font-size:11px" onclick="topupBalance(5)">+ $5</button>
+                <button class="modal-btn primary" style="flex:1;font-size:11px" onclick="topupBalance(10)">+ $10</button>
+                <button class="modal-btn primary" style="flex:1;font-size:11px" onclick="topupBalance(25)">+ $25</button>
+            </div>
+            <div id="packagesList"></div>
+            <div style="display:flex;gap:8px;justify-content:center;margin-top:12px;flex-wrap:wrap">
+                <span class="payment-card"><i class="fab fa-cc-visa" style="color:#1a1f71;font-size:20px"></i><span style="font-size:10px">Visa</span></span>
+                <span class="payment-card"><i class="fab fa-cc-mastercard" style="color:#eb001b;font-size:20px"></i><span style="font-size:10px">MC</span></span>
+                <span class="payment-card"><i class="fab fa-bitcoin" style="color:var(--gold);font-size:20px"></i><span style="font-size:10px">Crypto</span></span>
+                <span class="payment-card"><i class="fab fa-cc-amex" style="color:#016fd0;font-size:20px"></i><span style="font-size:10px">Amex</span></span>
+            </div>
+            <p style="font-size:10px;color:var(--text3);text-align:center;margin-top:8px">Payment gateway coming soon</p>
+            <button class="modal-btn secondary" onclick="closeModal('packagesModal')">Close</button>
+        </div>
+    </div>
 
     <!-- PROFILE MODAL -->
-    <div class="modal" id="profileModal"><div class="modal-box" style="text-align:left"><h2 style="text-align:center">👤 Your Profile</h2><p style="text-align:center;color:var(--text3);font-size:12px" id="profileEmail"></p><div style="margin:8px 0"><label style="font-size:10px;color:var(--text2);font-weight:600;text-transform:uppercase">Display Name</label><input type="text" id="profileName" style="width:100%;padding:10px;background:var(--bg);border:1px solid var(--border2);border-radius:8px;color:var(--text);margin-top:3px;outline:none;font-size:14px"></div><div id="profileStats" style="display:grid;grid-template-columns:1fr 1fr;gap:6px;margin:10px 0"></div><button class="modal-btn primary" onclick="updateProfile()"><i class="fas fa-save"></i> Save</button><button class="modal-btn secondary" onclick="closeModal('profileModal')">Close</button></div></div>
+    <div class="modal" id="profileModal">
+        <div class="modal-box" style="text-align:left">
+            <h2 style="text-align:center">👤 Profile</h2>
+            <p style="text-align:center;color:var(--text3);font-size:12px" id="profileEmail"></p>
+            <div style="margin:10px 0">
+                <label style="font-size:10px;color:var(--text2);font-weight:600;text-transform:uppercase">Display Name</label>
+                <input type="text" id="profileName" style="width:100%;padding:10px;background:var(--bg);border:1px solid var(--border2);border-radius:8px;color:var(--text);margin-top:4px;outline:none;font-size:14px">
+            </div>
+            <div id="profileStats" style="display:grid;grid-template-columns:1fr 1fr;gap:6px;margin:10px 0"></div>
+            <button class="modal-btn primary" onclick="updateProfile()"><i class="fas fa-save"></i> Save</button>
+            <button class="modal-btn secondary" onclick="closeModal('profileModal')">Close</button>
+        </div>
+    </div>
 
     <!-- ABOUT DR MODAL -->
-    <div class="modal" id="aboutDrModal"><div class="modal-box" style="text-align:left;max-width:550px"><h2 style="text-align:center">👨‍🎓 About Dr. Waleed Zakhourani</h2><div class="about-dr-card"><h4>Dr. Waleed Hussein Zakhourani</h4><p>Dr. Waleed Hussein Zakhourani is a distinguished linguist, visionary educator, and cultural scholar whose life's work serves as a vital bridge between the English, Arabic, and Kurdish worlds. Holding a PhD in English Language Etiquette from Harvard University.</p><p>With decades in multilingual education, he champions linguistic accessibility and cultural preservation. His expertise spans lexicography, translation studies, and academic publishing.</p><h4>🏰 Ancestral Legacy: Mir Porti of Zakhoran</h4><p>Mir Porti stands as a monumental figure in Kurdish history, within the district of Midyat in Mardin. His influence flourished between 1650-1700 AD in the Zakhoran region. The village "Porti" was named in his honor.</p><p>As a direct descendant of the illustrious Emirs of Bohtan, he is the sixth grandfather of Dr. Walid Hussein Al-Zakhorani. The Zakhourani family is a very big tribe of Kurdish origin, whose ancestors came before a thousand years.</p><a href="https://whzco.com/aboutDrwaleed.html" target="_blank">📖 Read more about Dr. Waleed and his ancestors →</a></div><button class="modal-btn secondary" onclick="closeModal('aboutDrModal')">Close</button></div></div>
+    <div class="modal" id="aboutDrModal">
+        <div class="modal-box" style="text-align:left;max-width:550px">
+            <h2 style="text-align:center">👨‍🎓 Dr. Waleed Zakhourani</h2>
+            <div class="about-dr-card">
+                <h4>Distinguished Linguist & Educator</h4>
+                <p>Dr. Waleed Hussein Zakhourani is a distinguished linguist, Harvard PhD, bridging English, Arabic & Kurdish worlds. Founder of Zakhourani.</p>
+                <h4>🏰 Ancestral Legacy</h4>
+                <p>Mir Porti (1650-1700 AD) of Zakhoran, descendant of Emirs of Bohtan, sixth grandfather of Dr. Waleed. The Zakhourani tribe's ancestors came over a thousand years ago.</p>
+                <a href="https://whzco.com/aboutDrwaleed.html" target="_blank" style="color:var(--accent)">📖 Read more →</a>
+            </div>
+            <button class="modal-btn secondary" onclick="closeModal('aboutDrModal')">Close</button>
+        </div>
+    </div>
 
+    <!-- MAIN APP -->
     <div id="app" style="display:none">
         <aside class="sidebar" id="sidebar">
             <div class="sidebar-head">
-                <a href="https://whzco.com" class="logo" target="_blank"><div class="logo-icon"><i class="fas fa-brain"></i></div><div><span class="logo-text">Zakhourani</span><span class="logo-badge">AI</span></div></a>
+                <a href="https://whzco.com" class="logo" target="_blank">
+                    <div class="logo-icon"><i class="fas fa-brain"></i></div>
+                    <div><span class="logo-text">Zakhourani</span><span class="logo-badge">AI</span></div>
+                </a>
                 <button class="new-chat-btn" onclick="createNewChat()"><i class="fas fa-plus-circle"></i> New Conversation</button>
             </div>
             <div class="user-bar">
@@ -220,267 +226,227 @@
                 <div class="user-info">
                     <div class="uname" id="userName" onclick="showProfileModal()">Loading...</div>
                     <div class="uemail" id="userEmail">user@email.com</div>
-                    <div class="bal-info"><i class="fas fa-gem"></i><span>Q: <span class="val" id="balanceCount">50</span>/50 | $<span class="val" id="balanceAmount">0.00</span></span></div>
+                    <div class="bal-info"><span>Q: <span class="val" id="balanceCount">50</span>/50 | $<span class="val" id="balanceAmount">0.00</span></span></div>
                     <div class="usage-bar"><div class="usage-fill" id="balanceFill" style="width:100%"></div></div>
                     <div class="countdown-text" id="countdownText">Resets in <span class="time">--:--:--</span></div>
                 </div>
-                <button class="logout-btn" onclick="handleLogout()" title="Logout"><i class="fas fa-sign-out-alt"></i></button>
+                <button class="logout-btn" onclick="handleLogout()"><i class="fas fa-sign-out-alt"></i></button>
             </div>
-            <div class="chat-list" id="conversationList"><div style="text-align:center;color:var(--text3);padding:40px 20px;font-size:12px"><i class="fas fa-inbox" style="font-size:2.5rem;display:block;margin-bottom:12px;opacity:0.2"></i>No conversations</div></div>
+            <div class="chat-list" id="conversationList"></div>
         </aside>
         <div class="main-chat">
             <div class="chat-header">
                 <button class="icon-btn" id="menuBtn" onclick="toggleSidebar()"><i class="fas fa-bars"></i></button>
                 <div class="cht-title"><span id="chatTitle">Zakhourani AI</span></div>
                 <div class="chat-actions">
-                    <button class="icon-btn" onclick="showAboutDrModal()" title="About"><i class="fas fa-user-graduate"></i></button>
-                    <button class="icon-btn" onclick="showPackagesModal()" title="Packages"><i class="fas fa-crown"></i></button>
-                    <button class="icon-btn" onclick="editLastMessage()" title="Edit"><i class="fas fa-pen"></i></button>
-                    <button class="icon-btn" onclick="clearCurrentChat()" title="Clear"><i class="fas fa-trash-alt"></i></button>
-                    <button class="icon-btn" onclick="exportChat()" title="Export"><i class="fas fa-download"></i></button>
-                    <button class="icon-btn" onclick="toggleTheme()" title="Theme" id="themeBtn"><i class="fas fa-moon"></i></button>
+                    <button class="icon-btn" onclick="showModal('aboutDrModal')"><i class="fas fa-user-graduate"></i></button>
+                    <button class="icon-btn" onclick="showPackagesModal()"><i class="fas fa-crown"></i></button>
+                    <button class="icon-btn" onclick="editLastMessage()"><i class="fas fa-pen"></i></button>
+                    <button class="icon-btn" onclick="clearCurrentChat()"><i class="fas fa-trash-alt"></i></button>
+                    <button class="icon-btn" onclick="exportChat()"><i class="fas fa-download"></i></button>
+                    <button class="icon-btn" onclick="toggleTheme()" id="themeBtn"><i class="fas fa-moon"></i></button>
                 </div>
             </div>
             <div id="chatContainer">
                 <div class="free-tier-card" id="freeTierCard">
-                    <div style="font-size:2.5rem;margin-bottom:8px">🎁</div>
-                    <h3>Claim Your Free 50 Questions Daily</h3>
-                    <p>Activate your <strong>Free Tier</strong> to get 50 questions every 24 hours.</p>
-                    <button class="free-tier-btn" id="freeTierBtn" onclick="activateFreeTier()">🎯 Activate Free Tier - $0.00</button>
-                    <p style="font-size:10px;color:var(--text3);margin-top:8px">Resets automatically every 24 hours</p>
+                    <div style="font-size:2.5rem">🎁</div><h3>Claim Your Free 50 Questions</h3>
+                    <p>Activate your <strong>Free Tier</strong> — $0.00 every 24 hours.</p>
+                    <button class="free-tier-btn" id="freeTierBtn" onclick="activateFreeTier()">🎯 Activate Free Tier</button>
                 </div>
                 <div class="welcome" id="welcomeMessage">
                     <div class="welcome-icon">🧠</div><h2>Zakhourani AI</h2>
-                    <p>Your premium intelligent assistant. Claim your free tier to start!</p>
+                    <p>Your premium assistant. Claim free tier to start!</p>
                     <div class="chips-grid">
                         <div class="chip" data-prompt="Who is Dr. Waleed Hussein Zakhourani?">👨‍🎓 About Dr. Waleed</div>
-                        <div class="chip" data-prompt="Explain quantum computing in simple terms">⚛️ Quantum Computing</div>
-                        <div class="chip" data-prompt="Write a beautiful poem about AI">📝 AI Poetry</div>
-                        <div class="chip" data-prompt="Latest technology trends in 2026">🚀 Future Tech</div>
+                        <div class="chip" data-prompt="Explain quantum computing simply">⚛️ Quantum Computing</div>
+                        <div class="chip" data-prompt="Write a poem about AI">📝 AI Poetry</div>
+                        <div class="chip" data-prompt="Latest tech trends 2026">🚀 Future Tech</div>
                     </div>
                 </div>
             </div>
             <div class="input-area">
-                <div class="input-wrap"><input type="text" id="messageInput" placeholder="Ask Zakhourani anything..." autocomplete="off"><button id="sendButton"><i class="fas fa-paper-plane"></i> Send</button></div>
+                <div class="input-wrap">
+                    <input type="text" id="messageInput" placeholder="Ask Zakhourani..." autocomplete="off" inputmode="text" enterkeyhint="send">
+                    <button id="sendButton" onclick="sendMessage()"><i class="fas fa-paper-plane"></i> Send</button>
+                </div>
             </div>
         </div>
     </div>
 
     <script>
         // ============================================================
-        // ZAKHOURANI AI - FIXED MOBILE VERSION
+        // ZAKHOURANI AI - COMPLETE SINGLE-FILE APPLICATION
         // ============================================================
-        const ZAKH = supabase.createClient('https://wkgldyfxsmkjyallrdtq.supabase.co','eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6IndrZ2xkeWZ4c21ranlhbGxyZHRxIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NzczNTg0OTQsImV4cCI6MjA5MjkzNDQ5NH0.WgXSHB6teuUiEKYgeR2ADAK-8A_6VnbEl-wv0RSuxjA');
-        const WORKER = 'https://aged-recipe-80db.wabdo3762.workers.dev/';
-        const fbConfig={apiKey:"AIzaSyAE8wf24HXrfmpMluaFOv1OHPrf_YFfqTQ",authDomain:"www.whzco.com",projectId:"whaai-c388e",storageBucket:"whaai-c388e.firebasestorage.app",messagingSenderId:"640598205524",appId:"1:640598205524:web:c975f5e8b371b1043e39c1"};
-        let auth=null,chatId=null,busy=false,userEmail='',allChats=[],countdownInterval=null,audioCtx=null,freeTierClaimed=false;
-        const $=id=>document.getElementById(id);
         
-        (()=>{const bg=$('netBg');for(let i=0;i<30;i++){const d=document.createElement('div');d.className='net-dot c'+(Math.floor(Math.random()*4)+1);d.style.cssText=`left:${Math.random()*100}%;top:${Math.random()*100}%;animation-delay:${Math.random()*5}s`;bg.appendChild(d)}for(let i=0;i<6;i++){const l=document.createElement('div');l.className='net-line';l.style.cssText=`left:${Math.random()*85}%;top:${Math.random()*85}%;width:${80+Math.random()*180}px;transform:rotate(${Math.random()*360}deg)`;bg.appendChild(l)}})();
+        // --- CONFIGURATION ---
+        const ZAI_CONFIG = {
+            supabaseUrl: 'https://wkgldyfxsmkjyallrdtq.supabase.co',
+            supabaseAnonKey: 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6IndrZ2xkeWZ4c21ranlhbGxyZHRxIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NzczNTg0OTQsImV4cCI6MjA5MjkzNDQ5NH0.WgXSHB6teuUiEKYgeR2ADAK-8A_6VnbEl-wv0RSuxjA',
+            firebase: {
+                apiKey: "AIzaSyAE8wf24HXrfmpMluaFOv1OHPrf_YFfqTQ",
+                authDomain: "whaai-c388e.firebaseapp.com",
+                projectId: "whaai-c388e",
+                storageBucket: "whaai-c388e.firebasestorage.app",
+                messagingSenderId: "640598205524",
+                appId: "1:640598205524:web:c975f5e8b371b1043e39c1",
+                measurementId: "G-1MHE0JBZJR"
+            },
+            workerUrl: 'https://aged-recipe-80db.wabdo3762.workers.dev/',
+            dailyLimit: 50,
+            soundEnabled: true
+        };
         
-        function toast(m,d=2500){const t=$('toast');t.textContent=m;t.style.display='block';clearTimeout(t._t);t._t=setTimeout(()=>t.style.display='none',d)}
-        function toggleSidebar(){$('sidebar').classList.toggle('open');$('sidebarOverlay').classList.toggle('show')}
-        function closeModal(id){$(id).classList.remove('show')}
-        function showModal(id){$(id).classList.add('show')}
-        function getTime(){return new Date().toLocaleTimeString([],{hour:'2-digit',minute:'2-digit'})}
-        function isValidUUID(s){return s&&s.length>25&&/^[0-9a-f-]+$/i.test(s)}
-        function formatText(t){let h=t;h=h.replace(/\*\*(.*?)\*\*/g,'<strong>$1</strong>');h=h.replace(/```(\w*)\n?([\s\S]*?)```/g,(m,l,c)=>`<pre><code>${c.trim().replace(/</g,'&lt;')}</code></pre>`);h=h.replace(/`([^`]+)`/g,(m,c)=>`<code>${c.replace(/</g,'&lt;')}</code>`);h=h.replace(/\n/g,'<br>');return h}
+        // --- GLOBAL STATE ---
+        const $ = id => document.getElementById(id);
+        let auth, chatId = null, busy = false, userEmail = '', allChats = [], countdownInterval, audioCtx, freeTierClaimed = false;
         
-        function updateMenuBtn(){if(window.innerWidth<1024){$('menuBtn').style.display='flex'}else{$('menuBtn').style.display='none';$('sidebar').classList.remove('open');$('sidebarOverlay').classList.remove('show')}}
-        window.addEventListener('resize',updateMenuBtn);updateMenuBtn();
-        
-        // Sound system
-        function initAudio(){if(!audioCtx)audioCtx=new(window.AudioContext||window.webkitAudioContext)();if(audioCtx.state==='suspended')audioCtx.resume().catch(()=>{});return audioCtx}
-        document.addEventListener('click',()=>initAudio(),{once:true});document.addEventListener('touchstart',()=>initAudio(),{once:true});
-        function playBeep(f=800,v=0.04,d=0.1){try{const c=initAudio();if(!c||c.state!=='running')return;const o=c.createOscillator(),g=c.createGain();o.connect(g);g.connect(c.destination);o.frequency.value=f;o.type='sine';g.gain.value=v;o.start();o.stop(c.currentTime+d)}catch(e){}}
-        function playClick(){playBeep(1000,0.03,0.04)}
-        function playSendSound(){playBeep(800,0.05,0.08);setTimeout(()=>playBeep(1000,0.04,0.06),50)}
-        function playSuccessSound(){playBeep(800,0.06,0.08);setTimeout(()=>playBeep(1200,0.05,0.08),70);setTimeout(()=>playBeep(1400,0.04,0.1),140)}
-        function playClaimSound(){playBeep(523,0.07,0.12);setTimeout(()=>playBeep(659,0.06,0.12),120);setTimeout(()=>playBeep(784,0.06,0.15),240)}
-        
-        // Countdown
-        function startCountdown(){if(countdownInterval)clearInterval(countdownInterval);function tick(){const n=new Date(),r=new Date(n);r.setUTCHours(24,0,0,0);if(n>=r)r.setDate(r.getDate()+1);const d=r-n,h=Math.floor(d/3600000),m=Math.floor((d%3600000)/60000),s=Math.floor((d%60000)/1000);const ts=`${String(h).padStart(2,'0')}:${String(m).padStart(2,'0')}:${String(s).padStart(2,'0')}`;const ct=$('countdownText');if(ct)ct.innerHTML=`Resets in <span class="time">${ts}</span>`;const lt=$('limitTimer');if(lt&&$('limitModal').classList.contains('show'))lt.textContent=`⏰ Resets in ${h}h ${m}m ${s}s`}tick();countdownInterval=setInterval(tick,1000)}
-        
-        // Free Tier
-        function updateFreeTierUI(remaining){const card=$('freeTierCard');if(remaining>0){card.style.display='none';freeTierClaimed=true}else{card.style.display='block';$('freeTierBtn').className='free-tier-btn';$('freeTierBtn').innerHTML='🎯 Activate Free Tier - $0.00';$('freeTierBtn').disabled=false;freeTierClaimed=false}}
-        async function activateFreeTier(){if(!userEmail){toast('Please login first');return}playClaimSound();const btn=$('freeTierBtn');btn.textContent='⏳ Activating...';btn.disabled=true;const limit=await sbCheckLimit(userEmail);if(limit.remaining>0){btn.className='free-tier-btn';btn.innerHTML='✅ Activated! '+limit.remaining+' Questions';btn.disabled=true;$('freeTierCard').style.display='none';freeTierClaimed=true;await updateUsageUI();toast('🎉 Free Tier Activated! '+limit.remaining+' questions!',4000);playSuccessSound()}else{btn.innerHTML='⏰ 0 Questions - Resets at midnight';btn.disabled=true;toast('⏰ Used all questions. Resets at midnight.')}}
-        
-        // Supabase
-        async function sbCheckLimit(email){try{const{data}=await ZAKH.rpc('check_daily_limit',{p_user_email:email});return data||{can_ask:true,remaining:50,total:50,username:'User',balance:0}}catch(e){return{can_ask:true,remaining:50,total:50,username:'User',balance:0}}}
-        async function sbIncUsage(email){try{await ZAKH.rpc('increment_usage',{p_user_email:email})}catch(e){}}
-        async function sbGetUser(email,name){let{data}=await ZAKH.from('users').select('*').eq('email',email).maybeSingle();if(!data){const{data:nu}=await ZAKH.from('users').insert({email,username:name||email.split('@')[0],display_name:name||email.split('@')[0],daily_questions_used:0,daily_questions_date:new Date().toISOString().split('T')[0],total_questions_used:0,balance_credits:0,is_premium:false}).select().single();if(nu)return nu}return data}
-        async function sbLoadChats(uid){const{data}=await ZAKH.from('conversations').select('*').eq('user_id',uid).order('updated_at',{ascending:false});allChats=data||[];return allChats}
-        async function sbCreateChat(uid,title){const{data}=await ZAKH.from('conversations').insert({user_id:uid,title}).select().single();return data}
-        async function sbDelChat(id){if(isValidUUID(id))await ZAKH.from('conversations').delete().eq('id',id)}
-        async function sbRenameChat(id,title){if(isValidUUID(id))await ZAKH.from('conversations').update({title,updated_at:new Date().toISOString()}).eq('id',id)}
-        async function sbLoadMsgs(cid){if(!isValidUUID(cid))return[];const{data}=await ZAKH.from('messages').select('*').eq('conversation_id',cid).order('created_at',{ascending:true});return data||[]}
-        async function sbSaveMsg(cid,uid,role,content,engine){if(!isValidUUID(cid))return;await ZAKH.from('messages').insert({conversation_id:cid,user_id:uid,role,content,engine:engine||'Zakhourani AI'})}
-        async function sbLoadPkgs(){const{data}=await ZAKH.from('packages').select('*').order('price',{ascending:true});return data||[]}
-        
-        // Firebase
-        function initFirebase(){if(!firebase.apps.length)firebase.initializeApp(fbConfig);auth=firebase.auth();return auth}
-        async function handleLogin(){const e=$('authEmail').value.trim(),p=$('authPassword').value;if(!e||!p){$('authError').textContent='Enter email & password';return}try{await auth.signInWithEmailAndPassword(e,p);closeModal('authModal');playSuccessSound()}catch(err){$('authError').textContent=err.message}}
-        async function handleRegister(){const e=$('authEmail').value.trim(),p=$('authPassword').value;if(!e||!p||p.length<6){$('authError').textContent='Min 6 characters';return}try{await auth.createUserWithEmailAndPassword(e,p);closeModal('authModal');playClaimSound()}catch(err){$('authError').textContent=err.message}}
-        async function handleLogout(){if(confirm('Logout?')){await auth.signOut();toast('👋 Logged out');playClick()}}
-        
-        function updateUserUI(user){if(user){const n=user.displayName||user.email.split('@')[0];userEmail=user.email||'';$('userName').textContent=n;$('userEmail').textContent=userEmail;$('userAvatarText').textContent=n.charAt(0).toUpperCase();$('app').style.display='flex';$('loader').classList.add('hidden')}else{$('app').style.display='none';$('loader').classList.remove('hidden');$('loaderText').textContent='Please login...';showModal('authModal')}}
-        
-        async function updateUsageUI(){if(!userEmail)return;const l=await sbCheckLimit(userEmail);const p=l.total>0?(l.remaining/l.total)*100:100;$('balanceCount').textContent=l.remaining>=999?'∞':`${l.remaining}`;$('balanceAmount').textContent=parseFloat(l.balance||0).toFixed(2);$('balanceFill').style.width=p+'%';$('balanceFill').className='usage-fill';if(p<15)$('balanceFill').classList.add('danger');else if(p<35)$('balanceFill').classList.add('warning');$('userName').textContent=l.username||$('userName').textContent;$('userAvatarText').textContent=(l.username||'Z').charAt(0).toUpperCase();updateFreeTierUI(l.remaining)}
-        
-        async function canAsk(){if(!userEmail)return true;const l=await sbCheckLimit(userEmail);return l.can_ask}
-        async function incUsage(){if(!userEmail)return true;const l=await sbCheckLimit(userEmail);if(!l.can_ask){showModal('limitModal');startCountdown();return false}await sbIncUsage(userEmail);await updateUsageUI();return true}
-        
-        // Render
-        async function renderChats(){const u=await sbGetUser(userEmail,$('userName').textContent);if(!u)return;const chats=await sbLoadChats(u.id);const list=$('conversationList');if(!chats.length){list.innerHTML='<div style="text-align:center;color:var(--text3);padding:40px 20px;font-size:12px"><i class="fas fa-inbox" style="font-size:2.5rem;display:block;margin-bottom:12px;opacity:0.2"></i>No conversations</div>';return}list.innerHTML=chats.map(c=>`<div class="conv-item${c.id===chatId?' active':''}" onclick="openChat('${c.id}')"><span class="conv-item-title">💬 ${c.title.replace(/'/g,"&#39;")}</span><div class="conv-item-actions"><button onclick="event.stopPropagation();renamePrompt('${c.id}','${c.title.replace(/'/g,"\\'")}')">✏️</button><button class="del" onclick="event.stopPropagation();delChat('${c.id}')">🗑️</button></div></div>`).join('')}
-        
-        async function openChat(id){if(!isValidUUID(id))return;chatId=id;const msgs=await sbLoadMsgs(id);const c=$('chatContainer');c.innerHTML=msgs.length?msgs.map(m=>`<div class="message ${m.role==='user'?'user-msg':'ai-msg'}">${formatText(m.content)}${m.role==='assistant'?'<div class="powered-by">Powered by Zakhourani</div>':''}<div class="msg-actions"><button onclick="copyMsg(this)"><i class="fas fa-copy"></i></button><button onclick="speakMsg(this)"><i class="fas fa-volume-up"></i></button></div><div class="msg-time">${new Date(m.created_at).toLocaleTimeString([],{hour:'2-digit',minute:'2-digit'})}</div></div>`).join(''):`<div class="welcome"><div class="welcome-icon">🧠</div><h2>Zakhourani AI</h2><p>Start the conversation</p></div>`;c.scrollTop=c.scrollHeight;$('chatTitle').textContent=allChats.find(x=>x.id===id)?.title||'Chat';renderChats();if(window.innerWidth<1024)toggleSidebar();playClick()}
-        
-        async function createNewChat(){const u=await sbGetUser(userEmail,$('userName').textContent);if(!u)return;const c=await sbCreateChat(u.id,'New Conversation');chatId=c.id;$('chatContainer').innerHTML=`<div class="welcome"><div class="welcome-icon">🧠</div><h2>Zakhourani AI</h2><p>New conversation ready</p></div>`;$('chatTitle').textContent='New Conversation';renderChats();if(window.innerWidth<1024)toggleSidebar();$('messageInput').focus();toast('✨ New conversation');playSuccessSound()}
-        async function delChat(id){if(!confirm('Delete?'))return;await sbDelChat(id);allChats=await sbLoadChats((await sbGetUser(userEmail,$('userName').textContent)).id);chatId=allChats.length?allChats[0].id:null;if(!chatId){const u=await sbGetUser(userEmail,$('userName').textContent);const c=await sbCreateChat(u.id,'New Conversation');chatId=c.id}openChat(chatId);renderChats();toast('🗑️ Deleted')}
-        async function renamePrompt(id,old){const t=prompt('Rename:',old);if(t&&t.trim()){await sbRenameChat(id,t.trim());renderChats();$('chatTitle').textContent=t.trim();toast('✏️ Renamed')}}
-        async function clearCurrentChat(){if(!chatId||!confirm('Clear?'))return;$('chatContainer').innerHTML=`<div class="welcome"><div class="welcome-icon">🧠</div><h2>Zakhourani AI</h2><p>Cleared</p></div>`;toast('🧹 Cleared')}
-        async function exportChat(){const msgs=await sbLoadMsgs(chatId);if(!msgs.length){toast('Nothing to export');return}const txt=`ZAKHOURANI AI EXPORT\n${new Date().toLocaleString()}\n\n`+msgs.map(m=>`[${m.role.toUpperCase()}] ${m.content}`).join('\n\n');const b=new Blob([txt],{type:'text/plain'});const a=document.createElement('a');a.href=URL.createObjectURL(b);a.download=`Zakhourani_${new Date().toISOString().split('T')[0]}.txt`;a.click();URL.revokeObjectURL(a.href);toast('📥 Exported');playSuccessSound()}
-        
-        window.copyMsg=function(btn){const t=btn.closest('.message').textContent.replace(/Powered by Zakhourani|Copy|Speak|\d+:\d+/g,'').trim();navigator.clipboard.writeText(t).then(()=>{toast('📋 Copied!',1500);playClick()})}
-        window.speakMsg=function(btn){const t=btn.closest('.message').textContent.replace(/Powered by Zakhourani|Copy|Speak|\d+:\d+/g,'').trim();if('speechSynthesis' in window){window.speechSynthesis.cancel();const u=new SpeechSynthesisUtterance(t);u.rate=0.9;speechSynthesis.speak(u);toast('🔊 Speaking...',2000)}}
-        async function editLastMessage(){const msgs=await sbLoadMsgs(chatId);if(!msgs.length){toast('No messages');return}let li=-1;for(let i=msgs.length-1;i>=0;i--){if(msgs[i].role==='user'){li=i;break}}if(li===-1){toast('No user message');return}const t=prompt('Edit:',msgs[li].content);if(t&&t.trim()){msgs[li].content=t.trim();toast('✏️ Edited');playClick()}}
-        
-        async function showProfileModal(){if(!userEmail)return;const u=await sbGetUser(userEmail,$('userName').textContent);const l=await sbCheckLimit(userEmail);$('profileEmail').textContent=userEmail;$('profileName').value=u?.display_name||'';$('profileStats').innerHTML=`<div style="background:var(--bg);border:1px solid var(--border);border-radius:8px;padding:10px;text-align:center"><div style="font-size:1.1rem;font-weight:700;color:var(--accent)">${l.remaining}</div><div style="font-size:10px;color:var(--text3)">Remaining</div></div><div style="background:var(--bg);border:1px solid var(--border);border-radius:8px;padding:10px;text-align:center"><div style="font-size:1.1rem;font-weight:700;color:var(--accent)">${l.total_used||0}</div><div style="font-size:10px;color:var(--text3)">Total Used</div></div><div style="background:var(--bg);border:1px solid var(--border);border-radius:8px;padding:10px;text-align:center"><div style="font-size:1.1rem;font-weight:700;color:var(--accent)">${allChats.length}</div><div style="font-size:10px;color:var(--text3)">Chats</div></div><div style="background:var(--bg);border:1px solid var(--border);border-radius:8px;padding:10px;text-align:center"><div style="font-size:1.1rem;font-weight:700;color:var(--accent)">$${parseFloat(l.balance||0).toFixed(2)}</div><div style="font-size:10px;color:var(--text3)">Balance</div></div>`;showModal('profileModal')}
-        async function updateProfile(){const n=$('profileName').value.trim();if(n&&userEmail){await ZAKH.from('users').update({display_name:n}).eq('email',userEmail);$('userName').textContent=n;$('userAvatarText').textContent=n.charAt(0).toUpperCase();toast('✅ Updated');playSuccessSound()}closeModal('profileModal')}
-        
-        async function showPackagesModal(){const l=await sbCheckLimit(userEmail);const pkgs=await sbLoadPkgs();$('packagesBalance').textContent=`$${parseFloat(l.balance||0).toFixed(2)}`;$('packagesList').innerHTML=pkgs.map(p=>`<div class="pkg-card${p.is_popular?' popular':''}" onclick="purchasePkg('${p.id}')"><div><h4>${p.name}${p.is_popular?' <span style="font-size:9px;background:var(--gradient-gold);color:white;padding:2px 8px;border-radius:10px;margin-left:4px">BEST</span>':''}</h4><small style="color:var(--text2);font-size:11px">${p.questions_per_day===999999?'♾️ Unlimited':p.questions_per_day+'/day'} · ${p.validity_days}d</small></div><div style="text-align:right"><div class="price">$${p.price}</div><button class="modal-btn primary" style="padding:6px 14px;font-size:12px;width:auto">Buy</button></div></div>`).join('');showModal('packagesModal')}
-        async function purchasePkg(pid){try{const{data}=await ZAKH.rpc('purchase_package',{p_user_email:userEmail,p_pkg_id:pid});toast(data.message);closeModal('packagesModal');updateUsageUI();playSuccessSound()}catch(e){toast('❌ Failed')}}
-        async function topupBalance(amt){try{const{data}=await ZAKH.rpc('topup_balance',{p_user_email:userEmail,p_amount:amt});toast(`✅ +$${amt}! Balance: $${data.new_balance}`);closeModal('packagesModal');updateUsageUI();playSuccessSound()}catch(e){toast('❌ Failed')}}
-        function showAboutDrModal(){showModal('aboutDrModal');playClick()}
-        
-        // ============================================================
-        // FIXED: Send message with proper mobile touch handling
-        // ============================================================
-        async function sendMessage(){
-            const input=$('messageInput');
-            const text=input.value.trim();
-            if(!text||busy)return;
-            
-            if(!(await canAsk())){showModal('limitModal');startCountdown();return}
-            if(!(await incUsage()))return;
-            
-            busy=true;
-            $('sendButton').disabled=true;
-            
-            if(!chatId||!isValidUUID(chatId)){
-                const u=await sbGetUser(userEmail,$('userName').textContent);
-                const c=await sbCreateChat(u.id,'New Conversation');
-                chatId=c.id;
-                renderChats();
-                $('chatTitle').textContent='New Conversation';
+        // --- NETWORK BACKGROUND ---
+        (() => {
+            const bg = $('netBg');
+            for (let i = 0; i < 25; i++) {
+                const d = document.createElement('div');
+                d.className = 'net-dot c' + (Math.floor(Math.random() * 4) + 1);
+                d.style.cssText = `left:${Math.random()*100}%;top:${Math.random()*100}%;animation-delay:${Math.random()*5}s`;
+                bg.appendChild(d);
             }
-            
-            const c=$('chatContainer');
-            if(c.querySelector('.welcome'))c.innerHTML='';
-            if(c.querySelector('.free-tier-card'))$('freeTierCard').style.display='none';
-            
-            // User message
-            const ud=document.createElement('div');
-            ud.className='message user-msg';
-            ud.innerHTML=text.replace(/\n/g,'<br>')+'<div class="msg-time">'+getTime()+'</div>';
-            c.appendChild(ud);
-            c.scrollTop=c.scrollHeight;
-            
-            const u=await sbGetUser(userEmail,$('userName').textContent);
-            await sbSaveMsg(chatId,u.id,'user',text,'Zakhourani');
-            input.value='';
-            playSendSound();
-            
-            // Typing
-            const typing=document.createElement('div');
-            typing.className='typing-indicator';
-            typing.innerHTML='<div class="typing-dots"><span></span><span></span><span></span></div><span class="typing-label">Thinking...</span>';
-            c.appendChild(typing);
-            c.scrollTop=c.scrollHeight;
-            
-            try{
-                const r=await fetch(WORKER,{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({prompt:text,history:[]})});
-                const d=await r.json();
-                typing.remove();
-                
-                if(d.success&&d.reply){
-                    const ad=document.createElement('div');
-                    ad.className='message ai-msg';
-                    ad.innerHTML=formatText(d.reply)+'<div class="powered-by">Powered by Zakhourani</div><div class="msg-actions"><button onclick="copyMsg(this)"><i class="fas fa-copy"></i></button><button onclick="speakMsg(this)"><i class="fas fa-volume-up"></i></button></div><div class="msg-time">'+getTime()+'</div>';
-                    c.appendChild(ad);
-                    await sbSaveMsg(chatId,u.id,'assistant',d.reply,'Zakhourani');
-                    
-                    const msgs=await sbLoadMsgs(chatId);
-                    if(msgs.length<=2){
-                        const title=text.substring(0,35)+(text.length>35?'...':'');
-                        await sbRenameChat(chatId,title);
-                        $('chatTitle').textContent=title;
-                        renderChats();
-                    }
-                    playSuccessSound();
+        })();
+        
+        // --- HELPERS ---
+        function toast(m, d = 2500) { const t = $('toast'); t.textContent = m; t.style.display = 'block'; clearTimeout(t._t); t._t = setTimeout(() => t.style.display = 'none', d); }
+        function toggleSidebar() { $('sidebar').classList.toggle('open'); $('sidebarOverlay').classList.toggle('show'); }
+        function closeModal(id) { $(id).classList.remove('show'); }
+        function showModal(id) { $(id).classList.add('show'); }
+        function getTime() { return new Date().toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' }); }
+        function isValidUUID(s) { return s && s.length > 25 && /^[0-9a-f-]+$/i.test(s); }
+        function formatText(t) { let h = t; h = h.replace(/\*\*(.*?)\*\*/g, '<strong>$1</strong>'); h = h.replace(/```([\s\S]*?)```/g, (m, c) => `<pre><code>${c.trim().replace(/</g, '&lt;')}</code></pre>`); h = h.replace(/`([^`]+)`/g, (m, c) => `<code>${c.replace(/</g, '&lt;')}</code>`); h = h.replace(/\n/g, '<br>'); return h; }
+        function updateMenuBtn() { if (window.innerWidth < 1024) { $('menuBtn').style.display = 'flex'; } else { $('menuBtn').style.display = 'none'; $('sidebar').classList.remove('open'); $('sidebarOverlay').classList.remove('show'); } }
+        window.addEventListener('resize', updateMenuBtn);
+        updateMenuBtn();
+        
+        // --- AUDIO ---
+        function initAudio() { if (!audioCtx) audioCtx = new (window.AudioContext || window.webkitAudioContext)(); if (audioCtx.state === 'suspended') audioCtx.resume().catch(() => {}); return audioCtx; }
+        document.addEventListener('click', () => initAudio(), { once: true });
+        document.addEventListener('touchstart', () => initAudio(), { once: true });
+        function beep(f = 800, v = 0.04, d = 0.1) { if (!ZAI_CONFIG.soundEnabled) return; try { const c = initAudio(); if (!c || c.state !== 'running') return; const o = c.createOscillator(), g = c.createGain(); o.connect(g); g.connect(c.destination); o.frequency.value = f; o.type = 'sine'; g.gain.value = v; o.start(); o.stop(c.currentTime + d); } catch (e) {} }
+        function clickSound() { beep(1000, 0.03, 0.04); }
+        function sendSound() { beep(800, 0.05, 0.08); setTimeout(() => beep(1000, 0.04, 0.06), 50); }
+        function successSound() { beep(800, 0.06, 0.08); setTimeout(() => beep(1200, 0.05, 0.08), 70); }
+        function claimSound() { beep(523, 0.07, 0.12); setTimeout(() => beep(659, 0.06, 0.12), 120); }
+        
+        // --- COUNTDOWN ---
+        function startCountdown() { if (countdownInterval) clearInterval(countdownInterval); function tick() { const n = new Date(), r = new Date(n); r.setUTCHours(24, 0, 0, 0); if (n >= r) r.setDate(r.getDate() + 1); const d = r - n, h = Math.floor(d / 3600000), m = Math.floor((d % 3600000) / 60000), s = Math.floor((d % 60000) / 1000); $('countdownText').innerHTML = `Resets in <span class="time">${String(h).padStart(2, '0')}:${String(m).padStart(2, '0')}:${String(s).padStart(2, '0')}</span>`; if ($('limitModal').classList.contains('show')) $('limitTimer').textContent = `⏰ ${h}h ${m}m ${s}s`; } tick(); countdownInterval = setInterval(tick, 1000); }
+        
+        // --- FREE TIER ---
+        function updateFreeTierUI(rem) { if (rem > 0) { $('freeTierCard').style.display = 'none'; freeTierClaimed = true; } else { $('freeTierCard').style.display = 'block'; $('freeTierBtn').disabled = false; freeTierClaimed = false; } }
+        async function activateFreeTier() { if (!userEmail) return toast('Login first'); claimSound(); const btn = $('freeTierBtn'); btn.disabled = true; btn.textContent = 'Activating...'; const l = await sbCheckLimit(userEmail); if (l.remaining > 0) { $('freeTierCard').style.display = 'none'; freeTierClaimed = true; await updateUsageUI(); toast('🎉 ' + l.remaining + ' questions available!'); successSound(); } else { btn.textContent = '0 questions — resets at midnight'; toast('Used all questions'); } }
+        
+        // --- SUPABASE ---
+        const ZAKH = supabase.createClient(ZAI_CONFIG.supabaseUrl, ZAI_CONFIG.supabaseAnonKey);
+        async function sbCheckLimit(e) { try { const { data } = await ZAKH.rpc('check_daily_limit', { p_user_email: e }); return data || { can_ask: true, remaining: 50, total: 50, username: 'User', balance: 0 }; } catch (er) { return { can_ask: true, remaining: 50, total: 50, username: 'User', balance: 0 }; } }
+        async function sbIncUsage(e) { try { await ZAKH.rpc('increment_usage', { p_user_email: e }); } catch (er) {} }
+        async function sbGetUser(e, n) { let { data } = await ZAKH.from('users').select('*').eq('email', e).maybeSingle(); if (!data) { await ZAKH.from('users').insert({ email: e, username: n, display_name: n, daily_questions_used: 0, daily_questions_date: new Date().toISOString().split('T')[0], total_questions_used: 0, balance_credits: 0, is_premium: false }); return sbGetUser(e, n); } return data; }
+        async function sbLoadChats(uid) { const { data } = await ZAKH.from('conversations').select('*').eq('user_id', uid).order('updated_at', { ascending: false }); allChats = data || []; return allChats; }
+        async function sbCreateChat(uid, t) { const { data } = await ZAKH.from('conversations').insert({ user_id: uid, title: t }).select().single(); return data; }
+        async function sbDelChat(id) { if (isValidUUID(id)) await ZAKH.from('conversations').delete().eq('id', id); }
+        async function sbRenameChat(id, t) { if (isValidUUID(id)) await ZAKH.from('conversations').update({ title: t, updated_at: new Date().toISOString() }).eq('id', id); }
+        async function sbLoadMsgs(cid) { if (!isValidUUID(cid)) return []; const { data } = await ZAKH.from('messages').select('*').eq('conversation_id', cid).order('created_at', { ascending: true }); return data || []; }
+        async function sbSaveMsg(cid, uid, role, content, engine) { if (!isValidUUID(cid)) return; await ZAKH.from('messages').insert({ conversation_id: cid, user_id: uid, role, content, engine }); }
+        async function sbLoadPkgs() { const { data } = await ZAKH.from('packages').select('*').order('price', { ascending: true }); return data || []; }
+        
+        // --- FIREBASE ---
+        function initFirebase() { if (!firebase.apps.length) { firebase.initializeApp(ZAI_CONFIG.firebase); } auth = firebase.auth(); return auth; }
+        async function handleLogin() { const e = $('authEmail').value.trim(), p = $('authPassword').value; if (!e || !p) return $('authError').textContent = 'Enter email & password'; try { await auth.signInWithEmailAndPassword(e, p); closeModal('authModal'); successSound(); } catch (er) { $('authError').textContent = er.message; } }
+        async function handleRegister() { const e = $('authEmail').value.trim(), p = $('authPassword').value; if (!e || !p || p.length < 6) return $('authError').textContent = 'Min 6 characters'; try { await auth.createUserWithEmailAndPassword(e, p); closeModal('authModal'); claimSound(); } catch (er) { $('authError').textContent = er.message; } }
+        async function handleLogout() { if (confirm('Logout?')) { await auth.signOut(); toast('👋 Logged out'); } }
+        
+        function updateUserUI(user) { if (user) { const n = user.displayName || user.email.split('@')[0]; userEmail = user.email; $('userName').textContent = n; $('userEmail').textContent = userEmail; $('userAvatarText').textContent = n.charAt(0).toUpperCase(); $('app').style.display = 'flex'; $('loader').classList.add('hidden'); } else { $('app').style.display = 'none'; $('loader').classList.remove('hidden'); $('loaderText').textContent = 'Please login...'; showModal('authModal'); } }
+        
+        async function updateUsageUI() { if (!userEmail) return; const l = await sbCheckLimit(userEmail); $('balanceCount').textContent = l.remaining >= 999 ? '∞' : l.remaining; $('balanceAmount').textContent = parseFloat(l.balance || 0).toFixed(2); const p = l.total > 0 ? (l.remaining / l.total) * 100 : 100; $('balanceFill').style.width = p + '%'; $('balanceFill').className = 'usage-fill' + (p < 15 ? ' danger' : p < 35 ? ' warning' : ''); $('userName').textContent = l.username || $('userName').textContent; $('userAvatarText').textContent = (l.username || 'Z').charAt(0).toUpperCase(); updateFreeTierUI(l.remaining); }
+        
+        async function canAsk() { if (!userEmail) return true; const l = await sbCheckLimit(userEmail); return l.can_ask; }
+        async function incUsage() { if (!userEmail) return true; const l = await sbCheckLimit(userEmail); if (!l.can_ask) { showModal('limitModal'); startCountdown(); return false; } await sbIncUsage(userEmail); await updateUsageUI(); return true; }
+        
+        // --- RENDER CHATS ---
+        async function renderChats() { const u = await sbGetUser(userEmail, $('userName').textContent); if (!u) return; const chats = await sbLoadChats(u.id); const list = $('conversationList'); list.innerHTML = chats.length ? chats.map(c => `<div class="conv-item${c.id === chatId ? ' active' : ''}" onclick="openChat('${c.id}')"><span class="conv-item-title">💬 ${c.title}</span><div class="conv-item-actions"><button onclick="event.stopPropagation();renamePrompt('${c.id}','${c.title}')">✏️</button><button onclick="event.stopPropagation();delChat('${c.id}')" style="color:var(--danger)">🗑️</button></div></div>`).join('') : '<div style="text-align:center;color:var(--text3);padding:40px">No conversations</div>'; }
+        
+        async function openChat(id) { if (!isValidUUID(id)) return; chatId = id; const msgs = await sbLoadMsgs(id); $('chatContainer').innerHTML = msgs.length ? msgs.map(m => `<div class="message ${m.role === 'user' ? 'user-msg' : 'ai-msg'}">${formatText(m.content)}${m.role === 'assistant' ? '<div class="powered-by">Zakhourani AI</div>' : ''}<div class="msg-actions"><button onclick="copyMsg(this)"><i class="fas fa-copy"></i></button><button onclick="speakMsg(this)"><i class="fas fa-volume-up"></i></button></div></div>`).join('') : '<div class="welcome"><div class="welcome-icon">🧠</div><h2>Start the conversation</h2></div>'; $('chatContainer').scrollTop = 0; $('chatTitle').textContent = allChats.find(x => x.id === id)?.title || 'Chat'; renderChats(); if (window.innerWidth < 1024) toggleSidebar(); }
+        
+        async function createNewChat() { const u = await sbGetUser(userEmail, $('userName').textContent); if (!u) return; const c = await sbCreateChat(u.id, 'New Conversation'); chatId = c.id; $('chatContainer').innerHTML = '<div class="welcome"><div class="welcome-icon">🧠</div><h2>New conversation</h2></div>'; $('chatTitle').textContent = 'New Chat'; renderChats(); if (window.innerWidth < 1024) toggleSidebar(); $('messageInput').focus(); toast('✨ New chat'); }
+        async function delChat(id) { if (!confirm('Delete?')) return; await sbDelChat(id); allChats = await sbLoadChats((await sbGetUser(userEmail, $('userName').textContent)).id); chatId = allChats.length ? allChats[0].id : null; if (!chatId) { const u = await sbGetUser(userEmail, $('userName').textContent); chatId = (await sbCreateChat(u.id, 'New Conversation')).id; } openChat(chatId); renderChats(); }
+        async function renamePrompt(id, old) { const t = prompt('Rename:', old); if (t) { await sbRenameChat(id, t); renderChats(); $('chatTitle').textContent = t; } }
+        async function clearCurrentChat() { if (!chatId || !confirm('Clear?')) return; $('chatContainer').innerHTML = '<div class="welcome"><div class="welcome-icon">🧠</div><h2>Cleared</h2></div>'; }
+        async function exportChat() { const msgs = await sbLoadMsgs(chatId); if (!msgs.length) return toast('Nothing'); const txt = 'Zakhourani AI Export\n\n' + msgs.map(m => `[${m.role}] ${m.content}`).join('\n\n'); const b = new Blob([txt]); const a = document.createElement('a'); a.href = URL.createObjectURL(b); a.download = 'chat.txt'; a.click(); toast('Exported'); }
+        
+        window.copyMsg = function(btn) { navigator.clipboard.writeText(btn.closest('.message').textContent.replace(/Zakhourani AI|Copy|Speak/g, '').trim()).then(() => toast('Copied')); };
+        window.speakMsg = function(btn) { const t = btn.closest('.message').textContent.replace(/Zakhourani AI|Copy|Speak/g, '').trim(); if ('speechSynthesis' in window) { speechSynthesis.cancel(); speechSynthesis.speak(new SpeechSynthesisUtterance(t)); } };
+        async function editLastMessage() { const msgs = await sbLoadMsgs(chatId); if (!msgs.length) return toast('No messages'); let idx = -1; for (let i = msgs.length - 1; i >= 0; i--) { if (msgs[i].role === 'user') { idx = i; break; } } if (idx === -1) return toast('No user message'); const t = prompt('Edit:', msgs[idx].content); if (t) msgs[idx].content = t; }
+        
+        // --- PROFILE & PACKAGES ---
+        async function showProfileModal() { const u = await sbGetUser(userEmail, $('userName').textContent); const l = await sbCheckLimit(userEmail); $('profileEmail').textContent = userEmail; $('profileName').value = u.display_name || ''; $('profileStats').innerHTML = `<div class="stat-card"><div class="stat-val">${l.remaining}</div><div class="stat-lbl">Remaining</div></div><div class="stat-card"><div class="stat-val">${l.total_used || 0}</div><div class="stat-lbl">Used</div></div><div class="stat-card"><div class="stat-val">${allChats.length}</div><div class="stat-lbl">Chats</div></div><div class="stat-card"><div class="stat-val">$${parseFloat(l.balance || 0).toFixed(2)}</div><div class="stat-lbl">Balance</div></div>`; showModal('profileModal'); }
+        async function updateProfile() { const n = $('profileName').value.trim(); if (n) { await ZAKH.from('users').update({ display_name: n }).eq('email', userEmail); $('userName').textContent = n; toast('Updated'); } closeModal('profileModal'); }
+        async function showPackagesModal() { const l = await sbCheckLimit(userEmail); const pkgs = await sbLoadPkgs(); $('packagesBalance').textContent = '$' + parseFloat(l.balance || 0).toFixed(2); $('packagesList').innerHTML = pkgs.map(p => `<div class="pkg-card${p.is_popular ? ' popular' : ''}" onclick="purchasePkg('${p.id}')"><div><h4>${p.name}</h4><small>${p.questions_per_day === 999999 ? 'Unlimited' : p.questions_per_day + '/day'} · ${p.validity_days}d</small></div><div class="price">$${p.price}</div></div>`).join(''); showModal('packagesModal'); }
+        async function purchasePkg(pid) { const { data } = await ZAKH.rpc('purchase_package', { p_user_email: userEmail, p_pkg_id: pid }); toast(data.message); closeModal('packagesModal'); updateUsageUI(); }
+        async function topupBalance(amt) { const { data } = await ZAKH.rpc('topup_balance', { p_user_email: userEmail, p_amount: amt }); toast('+$' + amt + ' Balance: $' + data.new_balance); closeModal('packagesModal'); updateUsageUI(); }
+        
+        // --- SEND MESSAGE ---
+        async function sendMessage() {
+            const input = $('messageInput'), text = input.value.trim();
+            if (!text || busy) return;
+            if (!(await canAsk())) { showModal('limitModal'); startCountdown(); return; }
+            if (!(await incUsage())) return;
+            busy = true; $('sendButton').disabled = true;
+            if (!chatId || !isValidUUID(chatId)) { const u = await sbGetUser(userEmail, $('userName').textContent); const c = await sbCreateChat(u.id, 'New Conversation'); chatId = c.id; renderChats(); $('chatTitle').textContent = 'New Chat'; }
+            const c = $('chatContainer'); if (c.querySelector('.welcome')) c.innerHTML = ''; c.querySelector('.free-tier-card')?.remove();
+            const ud = document.createElement('div'); ud.className = 'message user-msg'; ud.textContent = text; c.appendChild(ud); c.scrollTop = c.scrollHeight;
+            const u = await sbGetUser(userEmail, $('userName').textContent); await sbSaveMsg(chatId, u.id, 'user', text, 'Zakhourani'); input.value = ''; sendSound();
+            const typing = document.createElement('div'); typing.className = 'typing-indicator'; typing.innerHTML = '<div class="typing-dots"><span></span><span></span><span></span></div>'; c.appendChild(typing); c.scrollTop = c.scrollHeight;
+            try {
+                const r = await fetch(ZAI_CONFIG.workerUrl, { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify({ prompt: text, history: [] }) });
+                const d = await r.json(); typing.remove();
+                if (d.success && d.reply) {
+                    const ad = document.createElement('div'); ad.className = 'message ai-msg'; ad.innerHTML = formatText(d.reply) + '<div class="powered-by">Zakhourani AI</div>'; c.appendChild(ad); c.scrollTop = c.scrollHeight;
+                    await sbSaveMsg(chatId, u.id, 'assistant', d.reply, 'Zakhourani');
+                    const msgs = await sbLoadMsgs(chatId); if (msgs.length <= 2) { const title = text.slice(0, 35) + (text.length > 35 ? '...' : ''); await sbRenameChat(chatId, title); $('chatTitle').textContent = title; renderChats(); }
+                    successSound();
                 }
-            }catch(e){typing.remove()}
-            
-            c.scrollTop=c.scrollHeight;
-            busy=false;
-            $('sendButton').disabled=false;
-            input.focus();
+            } catch (e) { typing.remove(); }
+            busy = false; $('sendButton').disabled = false; input.focus();
         }
         
-        function toggleTheme(){document.body.classList.toggle('light');const l=document.body.classList.contains('light');$('themeBtn').innerHTML=l?'<i class="fas fa-sun"></i>':'<i class="fas fa-moon"></i>';localStorage.setItem('zk_theme',l?'light':'dark');playClick()}
+        function toggleTheme() { document.body.classList.toggle('light'); $('themeBtn').innerHTML = document.body.classList.contains('light') ? '<i class="fas fa-sun"></i>' : '<i class="fas fa-moon"></i>'; localStorage.setItem('zk_theme', document.body.classList.contains('light') ? 'light' : 'dark'); }
         
-        // ============================================================
-        // EVENT LISTENERS - Fixed for mobile
-        // ============================================================
-        $('sendButton').addEventListener('click',(e)=>{e.preventDefault();sendMessage()});
-        $('sendButton').addEventListener('touchend',(e)=>{e.preventDefault();sendMessage()});
+        // --- EVENT BINDINGS ---
+        $('sendButton').onclick = sendMessage;
+        $('messageInput').addEventListener('keydown', e => { if (e.key === 'Enter') { e.preventDefault(); sendMessage(); } });
+        $('authLoginBtn').onclick = handleLogin;
+        $('authRegisterBtn').onclick = handleRegister;
+        document.querySelectorAll('.chip').forEach(c => c.onclick = () => { $('messageInput').value = c.dataset.prompt; sendMessage(); });
+        document.addEventListener('keydown', e => { if (e.key === 'Escape') { document.querySelectorAll('.modal.show').forEach(m => m.classList.remove('show')); $('sidebar').classList.remove('open'); $('sidebarOverlay').classList.remove('show'); } if (e.ctrlKey && e.key === 'k') { e.preventDefault(); $('messageInput').focus(); } });
         
-        $('messageInput').addEventListener('keydown',e=>{if(e.key==='Enter'&&!e.shiftKey){e.preventDefault();sendMessage()}});
-        
-        $('authLoginBtn').addEventListener('click',handleLogin);
-        $('authRegisterBtn').addEventListener('click',handleRegister);
-        $('authEmail').addEventListener('keydown',e=>{if(e.key==='Enter')handleLogin()});
-        $('authPassword').addEventListener('keydown',e=>{if(e.key==='Enter')handleLogin()});
-        
-        document.querySelectorAll('.chip').forEach(c=>c.addEventListener('click',()=>{$('messageInput').value=c.dataset.prompt;sendMessage()}));
-        document.querySelectorAll('.chip').forEach(c=>c.addEventListener('touchend',()=>{$('messageInput').value=c.dataset.prompt;sendMessage()}));
-        
-        document.addEventListener('keydown',e=>{if(e.key==='Escape'){document.querySelectorAll('.modal.show').forEach(m=>m.classList.remove('show'));$('sidebar').classList.remove('open');$('sidebarOverlay').classList.remove('show')}if(e.ctrlKey&&e.key==='k'){e.preventDefault();$('messageInput').focus()}});
-        
-        // ============================================================
-        // INIT
-        // ============================================================
-        async function init(){
-            if(localStorage.getItem('zk_theme')==='light'){document.body.classList.add('light');$('themeBtn').innerHTML='<i class="fas fa-sun"></i>'}
+        // --- INIT ---
+        async function init() {
+            if (localStorage.getItem('zk_theme') === 'light') { document.body.classList.add('light'); $('themeBtn').innerHTML = '<i class="fas fa-sun"></i>'; }
             startCountdown();
-            const fb=initFirebase();
-            fb.onAuthStateChanged(async(user)=>{
-                $('loaderText').textContent='Loading...';
-                if(user){
-                    userEmail=user.email||'';
+            initFirebase();
+            auth.onAuthStateChanged(async (user) => {
+                $('loaderText').textContent = 'Loading...';
+                if (user) {
+                    userEmail = user.email;
                     updateUserUI(user);
                     await updateUsageUI();
-                    const u=await sbGetUser(userEmail,$('userName').textContent);
-                    if(u){
-                        let chats=await sbLoadChats(u.id);
-                        if(!chats.length){const c=await sbCreateChat(u.id,'Welcome to Zakhourani AI');chats=[c]}
-                        chatId=chats[0].id;allChats=chats;
-                        await openChat(chatId);await renderChats();
-                        const l=await sbCheckLimit(userEmail);
-                        updateFreeTierUI(l.remaining);
-                    }
-                    $('loader').classList.add('hidden');
-                    $('app').style.display='flex';
+                    const u = await sbGetUser(userEmail, $('userName').textContent);
+                    let chats = await sbLoadChats(u.id);
+                    if (!chats.length) { const c = await sbCreateChat(u.id, 'Welcome'); chats = [c]; }
+                    chatId = chats[0].id; allChats = chats;
+                    await openChat(chatId); await renderChats();
+                    $('loader').classList.add('hidden'); $('app').style.display = 'flex';
                     $('messageInput').focus();
-                    const l=await sbCheckLimit(userEmail);
-                    const m=l.remaining>0?'🧠 Zakhourani AI Ready':'🎁 Claim your free 50 questions!';
-                    toast(m,2500);
-                    if(l.remaining>0)playSuccessSound();
-                }else{
-                    $('app').style.display='none';
-                    $('loader').classList.remove('hidden');
-                    $('loaderText').textContent='Please login...';
-                    showModal('authModal');
+                    const l = await sbCheckLimit(userEmail);
+                    toast(l.remaining > 0 ? '🧠 Ready' : '🎁 Claim free tier', 2000);
+                    if (l.remaining > 0) successSound();
+                } else {
+                    $('app').style.display = 'none'; $('loader').classList.remove('hidden');
+                    $('loaderText').textContent = 'Please login...'; showModal('authModal');
                 }
             });
         }

@@ -4,132 +4,149 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=yes, viewport-fit=cover">
     <title>Zakhourani AI · Premium Assistant</title>
+    <meta name="description" content="Zakhourani AI - Your Premium Intelligent Assistant">
     <meta name="theme-color" content="#0a0e17">
-    <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><defs><linearGradient id='g' x1='0%25' y1='0%25' x2='100%25' y2='100%25'><stop offset='0%25' style='stop-color:%233b82f6'/><stop offset='100%25' style='stop-color:%238b5cf6'/></linearGradient></defs><circle cx='50' cy='50' r='45' fill='none' stroke='url(%23g)' stroke-width='4'/><circle cx='30' cy='35' r='8' fill='%233b82f6'/><circle cx='70' cy='35' r='8' fill='%238b5cf6'/><circle cx='30' cy='65' r='8' fill='%2322c55e'/><circle cx='70' cy='65' r='8' fill='%23f59e0b'/><circle cx='50' cy='50' r='6' fill='white'/></svg>">
+    <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><defs><linearGradient id='g' x1='0%25' y1='0%25' x2='100%25' y2='100%25'><stop offset='0%25' style='stop-color:%233b82f6'/><stop offset='100%25' style='stop-color:%238b5cf6'/></linearGradient></defs><circle cx='50' cy='50' r='45' fill='none' stroke='url(%23g)' stroke-width='4'/><circle cx='30' cy='35' r='8' fill='%233b82f6' opacity='0.8'/><circle cx='70' cy='35' r='8' fill='%238b5cf6' opacity='0.8'/><circle cx='30' cy='65' r='8' fill='%2322c55e' opacity='0.8'/><circle cx='70' cy='65' r='8' fill='%23f59e0b' opacity='0.8'/><circle cx='50' cy='50' r='6' fill='white'/></svg>">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:opsz,wght@14..32,400;14..32,500;14..32,600;14..32,700;14..32,800;14..32,900&display=swap" rel="stylesheet">
     <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
-    
     <style>
         :root {
-            --bg: #0a0e17; --bg2: #111827; --bg3: #1a1f2e;
-            --text: #f1f5f9; --text2: #94a3b8;
-            --accent: #3b82f6; --accent2: #8b5cf6;
-            --success: #22c55e; --gold: #f59e0b; --danger: #ef4444;
-            --border: rgba(255,255,255,0.06);
+            --bg: #0a0e17; --bg2: #111827; --bg3: #1a1f2e; --bg4: #1f2937;
+            --text: #f1f5f9; --text2: #94a3b8; --text3: #64748b;
+            --accent: #3b82f6; --accent2: #8b5cf6; --accent3: #60a5fa;
+            --success: #22c55e; --gold: #f59e0b; --danger: #ef4444; --danger2: #dc2626;
+            --border: rgba(255,255,255,0.06); --border2: rgba(255,255,255,0.1);
             --gradient: linear-gradient(135deg, #3b82f6, #8b5cf6);
             --gradient-gold: linear-gradient(135deg, #f59e0b, #d97706);
+            --gradient-dark: linear-gradient(135deg, #1e293b, #0f172a);
+            --shadow-sm: 0 1px 3px rgba(0,0,0,0.3);
+            --shadow-md: 0 4px 20px rgba(0,0,0,0.4);
+            --shadow-lg: 0 10px 40px rgba(0,0,0,0.5);
+            --shadow-glow: 0 0 30px rgba(59,130,246,0.15);
+            --radius-sm: 8px; --radius: 12px; --radius-lg: 16px; --radius-xl: 20px;
+            --transition: all 0.25s cubic-bezier(0.4,0,0.2,1);
+            --sidebar-w: 300px;
         }
-        * { margin:0; padding:0; box-sizing:border-box; font-family:'Inter',sans-serif; -webkit-tap-highlight-color:transparent; }
-        body { background:var(--bg); color:var(--text); height:100dvh; display:flex; align-items:center; justify-content:center; overflow:hidden; }
+        * { margin:0; padding:0; box-sizing:border-box; font-family:'Inter',-apple-system,BlinkMacSystemFont,sans-serif; -webkit-tap-highlight-color:transparent; }
+        body { background:var(--bg); color:var(--text); height:100dvh; width:100vw; display:flex; align-items:center; justify-content:center; overflow:hidden; position:fixed; inset:0; }
         
-        .net-bg { position:fixed; inset:0; pointer-events:none; z-index:0; opacity:0.04; }
-        .net-dot { position:absolute; width:2px; height:2px; border-radius:50%; animation:pulse 3s infinite; }
-        .net-dot.c1{background:var(--accent)} .net-dot.c2{background:var(--accent2)} .net-dot.c3{background:var(--success)} .net-dot.c4{background:var(--gold)}
-        @keyframes pulse{0%,100%{opacity:0.3;transform:scale(1)}50%{opacity:1;transform:scale(2.5)}}
+        .net-bg { position:fixed; inset:0; pointer-events:none; z-index:0; opacity:0.05; }
+        .net-dot { position:absolute; width:3px; height:3px; border-radius:50%; animation:pulse 3s infinite; }
+        .net-dot.c1{background:var(--accent)}.net-dot.c2{background:var(--accent2)}.net-dot.c3{background:var(--success)}.net-dot.c4{background:var(--gold)}
+        @keyframes pulse{0%,100%{opacity:0.2;transform:scale(1)}50%{opacity:0.9;transform:scale(2.8)}}
+        .net-line{position:absolute;height:1px;background:linear-gradient(90deg,transparent,var(--accent),transparent);opacity:0.08;transform-origin:left center}
         
-        #app { width:100%; max-width:1200px; height:100dvh; background:var(--bg2); display:flex; flex-direction:column; position:relative; z-index:1; }
-        @media(min-width:768px){ #app{height:94dvh;border-radius:20px;border:1px solid var(--border);flex-direction:row} }
+        #app{width:100%;height:100dvh;background:var(--bg2);display:flex;flex-direction:column;position:relative;z-index:1;box-shadow:var(--shadow-lg)}
+        @media(min-width:1024px){#app{max-width:1400px;height:96dvh;border-radius:var(--radius-xl);border:1px solid var(--border);flex-direction:row;margin:0 12px}}
         
-        /* LOGIN SCREEN */
-        .login-screen { position:fixed; inset:0; background:var(--bg); display:flex; align-items:center; justify-content:center; z-index:500; flex-direction:column; gap:16px; padding:20px; }
-        .login-screen.hidden { display:none; }
-        .login-box { background:var(--bg2); border:1px solid var(--border); border-radius:16px; padding:28px 24px; max-width:380px; width:100%; text-align:center; }
-        .login-box h2 { font-size:1.3rem; margin-bottom:6px; background:var(--gradient); -webkit-background-clip:text; -webkit-text-fill-color:transparent; }
-        .login-box p { color:var(--text2); font-size:13px; margin-bottom:16px; }
-        .login-box input { width:100%; padding:10px 14px; background:var(--bg); border:1px solid var(--border); border-radius:8px; color:var(--text); font-size:14px; margin-bottom:8px; outline:none; }
-        .login-box input:focus { border-color:var(--accent); }
-        .login-box button { width:100%; padding:10px; border:none; border-radius:8px; color:white; font-weight:600; cursor:pointer; font-size:14px; margin-top:4px; }
-        .btn-primary { background:var(--gradient); }
-        .btn-secondary { background:transparent; border:1px solid var(--border)!important; color:var(--text2)!important; }
+        .sidebar{position:fixed;left:0;top:0;bottom:0;width:var(--sidebar-w);max-width:85vw;background:var(--bg);border-right:1px solid var(--border);z-index:100;transform:translateX(-100%);transition:transform 0.3s;display:flex;flex-direction:column;box-shadow:var(--shadow-lg)}
+        .sidebar.open{transform:translateX(0)}
+        .sidebar-overlay{position:fixed;inset:0;background:rgba(0,0,0,0.7);z-index:99;display:none;backdrop-filter:blur(4px)}
+        .sidebar-overlay.show{display:block}
+        @media(min-width:1024px){.sidebar{position:static;transform:none;width:var(--sidebar-w);flex-shrink:0;box-shadow:none}.sidebar-overlay{display:none!important}}
         
-        /* SIDEBAR */
-        .sidebar { position:fixed; left:0; top:0; bottom:0; width:280px; max-width:85vw; background:var(--bg); border-right:1px solid var(--border); z-index:100; transform:translateX(-100%); transition:transform 0.3s; display:flex; flex-direction:column; }
-        .sidebar.open { transform:translateX(0); }
-        .sidebar-overlay { position:fixed; inset:0; background:rgba(0,0,0,0.6); z-index:99; display:none; }
-        .sidebar-overlay.show { display:block; }
-        @media(min-width:768px){ .sidebar{position:static;transform:none;width:280px;flex-shrink:0} .sidebar-overlay{display:none!important} }
+        .sidebar-head{padding:16px;border-bottom:1px solid var(--border);background:var(--bg)}
+        .logo{display:flex;align-items:center;gap:12px;text-decoration:none;color:var(--text);margin-bottom:12px}
+        .logo-icon{width:40px;height:40px;background:var(--gradient);border-radius:var(--radius);display:flex;align-items:center;justify-content:center;position:relative;box-shadow:var(--shadow-glow)}
+        .logo-icon::after{content:'';position:absolute;width:10px;height:10px;background:white;border-radius:50%}
+        .logo-icon i{font-size:16px;color:white;z-index:1}
+        .logo-text{font-weight:800;font-size:16px;letter-spacing:-0.3px}
+        .logo-badge{font-size:8px;background:var(--gradient-gold);color:white;padding:2px 8px;border-radius:10px;font-weight:700;margin-left:4px;letter-spacing:0.5px}
         
-        .sidebar-head { padding:14px; border-bottom:1px solid var(--border); }
-        .logo { display:flex; align-items:center; gap:10px; text-decoration:none; color:var(--text); margin-bottom:10px; }
-        .logo-icon { width:36px;height:36px;background:var(--gradient);border-radius:10px;display:flex;align-items:center;justify-content:center;position:relative; }
-        .logo-icon::after { content:'';position:absolute;width:8px;height:8px;background:white;border-radius:50%; }
-        .new-chat-btn { width:100%;padding:9px;background:var(--gradient);border:none;border-radius:8px;color:white;font-weight:600;font-size:13px;cursor:pointer; }
+        .new-chat-btn{width:100%;padding:11px;background:var(--gradient);border:none;border-radius:var(--radius-sm);color:white;font-weight:600;font-size:14px;cursor:pointer;transition:var(--transition);display:flex;align-items:center;justify-content:center;gap:8px;box-shadow:var(--shadow-sm)}
+        .new-chat-btn:hover{transform:translateY(-2px);box-shadow:var(--shadow-glow)}
         
-        .chat-list { flex:1;overflow-y:auto;padding:6px; }
-        .chat-list::-webkit-scrollbar{width:3px} .chat-list::-webkit-scrollbar-thumb{background:var(--border);border-radius:10px}
-        .chat-item { padding:9px 10px;border-radius:7px;cursor:pointer;margin-bottom:1px;display:flex;align-items:center;justify-content:space-between;font-size:12px; }
-        .chat-item:hover{background:rgba(255,255,255,0.03)} .chat-item.active{background:rgba(59,130,246,0.1)}
-        .chat-item-title{flex:1;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
-        .chat-item-actions{display:flex;gap:1px;opacity:0} .chat-item:hover .chat-item-actions{opacity:1}
-        .chat-item-actions button{width:24px;height:24px;border:none;background:transparent;color:var(--text2);cursor:pointer;font-size:9px;border-radius:4px}
+        .chat-list{flex:1;overflow-y:auto;padding:8px;-webkit-overflow-scrolling:touch}
+        .chat-list::-webkit-scrollbar{width:4px}.chat-list::-webkit-scrollbar-thumb{background:var(--border);border-radius:10px}
+        .chat-item{padding:10px 12px;border-radius:var(--radius-sm);cursor:pointer;margin-bottom:2px;display:flex;align-items:center;justify-content:space-between;font-size:13px;transition:var(--transition);border:1px solid transparent}
+        .chat-item:hover{background:rgba(255,255,255,0.03);border-color:var(--border)}
+        .chat-item.active{background:rgba(59,130,246,0.08);border-color:rgba(59,130,246,0.2)}
+        .chat-item-title{flex:1;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;font-weight:500}
+        .chat-item-actions{display:flex;gap:2px;opacity:0;transition:var(--transition)}
+        .chat-item:hover .chat-item-actions,.chat-item.active .chat-item-actions{opacity:1}
+        .chat-item-actions button{width:26px;height:26px;border:none;background:rgba(255,255,255,0.04);color:var(--text2);cursor:pointer;font-size:10px;border-radius:var(--radius-sm);transition:var(--transition)}
+        .chat-item-actions button:hover{background:rgba(255,255,255,0.1);color:var(--text)}
         
-        .user-bar { padding:10px 14px;border-top:1px solid var(--border);display:flex;align-items:center;gap:8px;font-size:11px; }
-        .user-avatar{width:30px;height:30px;border-radius:50%;background:var(--gradient);display:flex;align-items:center;justify-content:center;color:white;font-weight:700;font-size:12px;flex-shrink:0;cursor:pointer}
-        .usage-bar{height:2px;background:rgba(255,255,255,0.08);border-radius:1px;margin-top:3px;overflow:hidden}
-        .usage-fill{height:100%;background:var(--accent);border-radius:1px;transition:width 0.5s}
+        .user-bar{padding:12px 16px;border-top:1px solid var(--border);display:flex;align-items:center;gap:10px;font-size:12px;background:var(--bg)}
+        .user-avatar{width:36px;height:36px;border-radius:50%;background:var(--gradient);display:flex;align-items:center;justify-content:center;font-weight:700;color:white;font-size:14px;flex-shrink:0;cursor:pointer;transition:var(--transition);box-shadow:var(--shadow-sm)}
+        .user-avatar:hover{transform:scale(1.05);box-shadow:var(--shadow-glow)}
+        .usage-bar{height:3px;background:rgba(255,255,255,0.06);border-radius:2px;margin-top:4px;overflow:hidden}
+        .usage-fill{height:100%;background:var(--accent);border-radius:2px;transition:width 0.6s}
+        .usage-fill.warning{background:var(--gold)}.usage-fill.danger{background:var(--danger)}
         
-        /* MAIN */
-        .main-area{flex:1;display:flex;flex-direction:column;min-width:0;min-height:0}
-        .top-bar{padding:10px 14px;border-bottom:1px solid var(--border);display:flex;align-items:center;gap:8px;flex-shrink:0;background:var(--bg)}
-        @media(min-width:768px){#menuBtn{display:none}}
-        .icon-btn{width:32px;height:32px;border-radius:7px;border:1px solid var(--border);background:transparent;color:var(--text2);cursor:pointer;font-size:13px;display:flex;align-items:center;justify-content:center;flex-shrink:0}
-        .top-actions{margin-left:auto;display:flex;gap:4px}
+        .main-area{flex:1;display:flex;flex-direction:column;min-width:0;min-height:0;background:var(--bg2)}
+        .top-bar{padding:12px 16px;border-bottom:1px solid var(--border);display:flex;align-items:center;gap:10px;flex-shrink:0;background:var(--bg)}
+        @media(min-width:1024px){#menuBtn{display:none}}
+        .icon-btn{width:36px;height:36px;border-radius:var(--radius-sm);border:1px solid var(--border);background:transparent;color:var(--text2);cursor:pointer;font-size:14px;display:flex;align-items:center;justify-content:center;flex-shrink:0;transition:var(--transition)}
+        .icon-btn:hover{background:var(--bg4);color:var(--text);border-color:var(--border2)}
+        .top-actions{margin-left:auto;display:flex;gap:6px}
         
-        .chat-container{flex:1;overflow-y:auto;padding:14px;-webkit-overflow-scrolling:touch}
-        .chat-container::-webkit-scrollbar{width:3px} .chat-container::-webkit-scrollbar-thumb{background:var(--border);border-radius:10px}
+        .chat-container{flex:1;overflow-y:auto;padding:16px 20px;-webkit-overflow-scrolling:touch;scroll-behavior:smooth}
+        .chat-container::-webkit-scrollbar{width:4px}.chat-container::-webkit-scrollbar-thumb{background:var(--border);border-radius:10px}
         
-        .welcome-msg{text-align:center;padding:40px 16px;max-width:400px;margin:0 auto}
-        .welcome-icon{font-size:3rem;margin-bottom:10px}
-        .welcome-msg h2{font-size:1.3rem;background:var(--gradient);-webkit-background-clip:text;-webkit-text-fill-color:transparent;margin-bottom:6px}
-        .welcome-msg p{color:var(--text2);font-size:13px}
-        .chips{display:grid;grid-template-columns:1fr 1fr;gap:6px;margin-top:14px}
-        .chip{padding:9px;background:rgba(255,255,255,0.03);border:1px solid var(--border);border-radius:8px;cursor:pointer;font-size:12px;color:var(--text2);text-align:center}
-        .chip:hover{border-color:var(--accent);color:var(--text)}
-        @media(max-width:400px){.chips{grid-template-columns:1fr}}
+        .welcome-msg{text-align:center;padding:60px 20px;max-width:500px;margin:0 auto}
+        .welcome-icon{font-size:4rem;margin-bottom:14px;animation:float 3s ease-in-out infinite}
+        @keyframes float{0%,100%{transform:translateY(0)}50%{transform:translateY(-12px)}}
+        .welcome-msg h2{font-size:1.6rem;font-weight:800;background:var(--gradient);-webkit-background-clip:text;-webkit-text-fill-color:transparent;margin-bottom:8px;letter-spacing:-0.5px}
+        .welcome-msg p{color:var(--text2);font-size:14px;line-height:1.6}
+        .chips{display:grid;grid-template-columns:1fr 1fr;gap:8px;margin-top:16px;max-width:450px;margin-left:auto;margin-right:auto}
+        .chip{padding:12px 14px;background:rgba(255,255,255,0.02);border:1px solid var(--border);border-radius:var(--radius);cursor:pointer;font-size:13px;color:var(--text2);text-align:center;transition:var(--transition);font-weight:500}
+        .chip:hover{border-color:var(--accent);color:var(--text);background:rgba(59,130,246,0.05);transform:translateY(-1px);box-shadow:var(--shadow-sm)}
+        @media(max-width:480px){.chips{grid-template-columns:1fr}}
         
-        .msg{margin:5px 0;padding:9px 13px;border-radius:13px;max-width:88%;line-height:1.55;font-size:13.5px;animation:msgIn 0.25s;word-wrap:break-word}
-        @keyframes msgIn{from{opacity:0;transform:translateY(6px)}}
-        .msg-user{background:var(--accent);color:white;margin-left:auto;border-bottom-right-radius:3px}
-        .msg-ai{background:rgba(255,255,255,0.03);border:1px solid var(--border);margin-right:auto;border-bottom-left-radius:3px}
-        .msg-ai strong{color:var(--accent)}
-        .msg-ai pre{background:var(--bg);padding:8px;border-radius:6px;overflow-x:auto;margin:4px 0;font-size:0.82em;border-left:2px solid var(--accent)}
-        .powered-by{font-size:9px;color:var(--text2);margin-top:4px;opacity:0.7}
+        .msg{margin:8px 0;padding:12px 16px;border-radius:var(--radius);max-width:85%;line-height:1.65;font-size:14px;animation:msgIn 0.3s ease;word-wrap:break-word;position:relative}
+        @keyframes msgIn{from{opacity:0;transform:translateY(10px)}}
+        .msg-user{background:var(--accent);color:white;margin-left:auto;border-bottom-right-radius:4px;box-shadow:0 2px 12px rgba(59,130,246,0.3)}
+        .msg-ai{background:rgba(255,255,255,0.02);border:1px solid var(--border);margin-right:auto;border-bottom-left-radius:4px}
+        .msg-ai strong{color:var(--accent3);font-weight:700}
+        .msg-ai pre{background:var(--bg);padding:12px;border-radius:var(--radius-sm);overflow-x:auto;margin:8px 0;font-size:0.85em;border-left:3px solid var(--accent)}
+        .msg-ai code{background:var(--bg);padding:2px 6px;border-radius:4px;font-size:0.88em;font-family:'SF Mono','Fira Code',monospace}
+        .powered-by{font-size:10px;color:var(--text3);margin-top:6px;display:flex;align-items:center;gap:4px}
+        .powered-by::before{content:'';display:inline-block;width:4px;height:4px;background:var(--accent);border-radius:50%}
         
-        .typing{display:flex;gap:3px;padding:9px 13px}
-        .typing span{width:4px;height:4px;background:var(--text2);border-radius:50%;animation:bounce 1.4s infinite}
+        .typing{display:flex;gap:4px;padding:12px 16px;background:rgba(255,255,255,0.02);border:1px solid var(--border);border-radius:var(--radius);margin:8px 0;max-width:100px}
+        .typing span{width:6px;height:6px;background:var(--text2);border-radius:50%;animation:bounce 1.4s infinite}
         .typing span:nth-child(2){animation-delay:0.2s}.typing span:nth-child(3){animation-delay:0.4s}
-        @keyframes bounce{0%,60%,100%{transform:translateY(0)}30%{transform:translateY(-4px)}}
+        @keyframes bounce{0%,60%,100%{transform:translateY(0);opacity:0.3}30%{transform:translateY(-6px);opacity:1}}
         
-        .input-area{padding:10px 14px;border-top:1px solid var(--border);flex-shrink:0;background:var(--bg)}
-        .input-wrap{display:flex;gap:6px;background:var(--bg3);border:1px solid var(--border);border-radius:50px;padding:3px 3px 3px 14px}
-        .input-wrap:focus-within{border-color:var(--accent)}
-        #msgInput{flex:1;background:transparent;border:none;color:var(--text);font-size:14px;padding:8px 0;outline:none;min-width:0}
-        #msgInput::placeholder{color:var(--text2)}
-        #sendBtn{background:var(--gradient);border:none;color:white;border-radius:50px;padding:8px 15px;cursor:pointer;font-weight:600;font-size:13px;white-space:nowrap;flex-shrink:0}
-        #sendBtn:disabled{opacity:0.4}
+        .input-area{padding:12px 16px;border-top:1px solid var(--border);flex-shrink:0;background:var(--bg)}
+        .input-wrap{display:flex;gap:8px;background:var(--bg4);border:2px solid var(--border);border-radius:50px;padding:5px 5px 5px 18px;transition:var(--transition)}
+        .input-wrap:focus-within{border-color:var(--accent);box-shadow:0 0 0 4px rgba(59,130,246,0.1)}
+        #msgInput{flex:1;background:transparent;border:none;color:var(--text);font-size:15px;padding:8px 0;outline:none;min-width:0}
+        #msgInput::placeholder{color:var(--text3)}
+        #sendBtn{background:var(--gradient);border:none;color:white;border-radius:50px;padding:10px 20px;cursor:pointer;font-weight:600;font-size:14px;white-space:nowrap;flex-shrink:0;transition:var(--transition);display:flex;align-items:center;gap:6px;box-shadow:var(--shadow-sm)}
+        #sendBtn:hover:not(:disabled){transform:translateY(-1px);box-shadow:var(--shadow-glow)}
+        #sendBtn:disabled{opacity:0.4;cursor:not-allowed}
         
-        .toast{position:fixed;bottom:20px;left:50%;transform:translateX(-50%);background:var(--bg3);border:1px solid var(--border);border-radius:10px;padding:9px 18px;z-index:200;font-size:12px;display:none;animation:toastIn 0.3s}
-        @keyframes toastIn{from{opacity:0;transform:translateX(-50%) translateY(8px)}}
+        .toast{position:fixed;bottom:24px;left:50%;transform:translateX(-50%);background:var(--bg4);border:1px solid var(--border2);border-radius:var(--radius);padding:10px 20px;z-index:400;font-size:13px;display:none;animation:toastIn 0.3s;box-shadow:var(--shadow-lg);font-weight:500}
+        @keyframes toastIn{from{opacity:0;transform:translateX(-50%) translateY(10px)}}
         
-        /* MODALS */
-        .modal{position:fixed;inset:0;background:rgba(0,0,0,0.7);display:none;align-items:center;justify-content:center;z-index:300;padding:16px}
+        .modal{position:fixed;inset:0;background:rgba(0,0,0,0.75);display:none;align-items:center;justify-content:center;z-index:300;padding:20px;backdrop-filter:blur(8px)}
         .modal.show{display:flex}
-        .modal-box{background:var(--bg2);border:1px solid var(--border);border-radius:16px;padding:24px;max-width:420px;width:100%;max-height:85vh;overflow-y:auto;animation:modalIn 0.3s}
-        @keyframes modalIn{from{opacity:0;transform:scale(0.95)}}
-        .modal-box h3{margin-bottom:4px;font-size:1.1rem}
-        .modal-box p{color:var(--text2);font-size:13px;margin-bottom:12px}
-        .modal-btn{width:100%;padding:10px;border:none;border-radius:25px;color:white;font-weight:600;cursor:pointer;font-size:13px;margin-top:6px}
+        .modal-box{background:var(--bg2);border:1px solid var(--border2);border-radius:var(--radius-lg);padding:28px 24px;max-width:440px;width:100%;max-height:85vh;overflow-y:auto;animation:modalIn 0.3s;box-shadow:var(--shadow-lg)}
+        @keyframes modalIn{from{opacity:0;transform:scale(0.95) translateY(10px)}}
+        .modal-box h3{font-size:1.2rem;font-weight:700;margin-bottom:6px}
+        .modal-box p{color:var(--text2);font-size:13px;margin-bottom:14px;line-height:1.6}
+        .modal-btn{width:100%;padding:11px;border:none;border-radius:50px;color:white;font-weight:600;cursor:pointer;font-size:14px;margin-top:8px;transition:var(--transition)}
         .modal-btn.primary{background:var(--gradient)}
-        .modal-btn.secondary{background:transparent;border:1px solid var(--border);color:var(--text2)}
+        .modal-btn.secondary{background:transparent;border:1px solid var(--border2);color:var(--text2)}
         .modal-btn.gold{background:var(--gradient-gold)}
         .modal-btn.danger{background:var(--danger)}
+        .modal-btn:hover{transform:translateY(-1px);box-shadow:var(--shadow-md)}
         
-        .pkg-card{background:var(--bg);border:1px solid var(--border);border-radius:12px;padding:14px;margin:8px 0;display:flex;justify-content:space-between;align-items:center}
-        .pkg-card.popular{border-color:var(--gold)}
-        .pkg-card h4{font-size:14px}.pkg-card .price{font-size:1.2rem;font-weight:700;color:var(--accent)}
-        .pkg-card .badge{font-size:9px;background:var(--gradient-gold);color:white;padding:2px 8px;border-radius:8px;margin-left:6px}
-        .pkg-card button{padding:6px 14px;border:none;border-radius:20px;background:var(--gradient);color:white;cursor:pointer;font-size:12px;font-weight:600}
+        .pkg-card{background:var(--bg);border:1px solid var(--border);border-radius:var(--radius);padding:14px 16px;margin:8px 0;display:flex;justify-content:space-between;align-items:center;transition:var(--transition)}
+        .pkg-card:hover{border-color:var(--border2)}
+        .pkg-card.popular{border-color:var(--gold);background:rgba(245,158,11,0.05)}
+        .pkg-card h4{font-size:14px;font-weight:700}.pkg-card .price{font-size:1.3rem;font-weight:800;color:var(--accent)}
+        .pkg-card .badge{font-size:9px;background:var(--gradient-gold);color:white;padding:2px 8px;border-radius:10px;margin-left:6px;font-weight:700}
+        .pkg-card button{padding:7px 16px;border:none;border-radius:20px;background:var(--gradient);color:white;cursor:pointer;font-size:12px;font-weight:600;transition:var(--transition)}
+        .pkg-card button:hover{transform:scale(1.03);box-shadow:var(--shadow-glow)}
+        
+        .profile-field{margin:8px 0}
+        .profile-field label{display:block;font-size:12px;color:var(--text2);margin-bottom:4px;font-weight:600;text-transform:uppercase;letter-spacing:0.5px}
+        .profile-field input{width:100%;padding:10px 14px;background:var(--bg);border:1px solid var(--border);border-radius:var(--radius-sm);color:var(--text);font-size:14px;outline:none;transition:var(--transition)}
+        .profile-field input:focus{border-color:var(--accent)}
     </style>
 </head>
 <body>
@@ -137,68 +154,64 @@
     <div class="net-bg" id="netBg"></div>
     <div class="sidebar-overlay" id="sidebarOverlay" onclick="toggleSidebar()"></div>
 
-    <!-- LOGIN SCREEN -->
-    <div class="login-screen" id="loginScreen">
-        <div class="login-box">
-            <div style="font-size:3rem;margin-bottom:8px">🧠</div>
-            <h2>Welcome to Zakhourani AI</h2>
-            <p>Enter your email to continue</p>
-            <input type="email" id="loginEmail" placeholder="your@email.com">
-            <button class="btn-primary" onclick="handleLogin()">Continue <i class="fas fa-arrow-right"></i></button>
-            <button class="btn-secondary" onclick="demoLogin()" style="margin-top:8px">Try Demo</button>
-            <div id="loginError" style="color:var(--danger);font-size:12px;margin-top:8px;min-height:18px"></div>
-        </div>
-    </div>
-
     <div id="app">
         <!-- SIDEBAR -->
         <aside class="sidebar" id="sidebar">
             <div class="sidebar-head">
-                <a href="#" class="logo">
-                    <div class="logo-icon"></div>
-                    <span style="font-weight:700;font-size:15px">Zakhourani AI</span>
+                <a href="https://whzco.com" class="logo" target="_blank">
+                    <div class="logo-icon"><i class="fas fa-brain"></i></div>
+                    <div>
+                        <span class="logo-text">Zakhourani</span>
+                        <span class="logo-badge">AI</span>
+                    </div>
                 </a>
-                <button class="new-chat-btn" onclick="newChat()"><i class="fas fa-plus"></i> New Chat</button>
+                <button class="new-chat-btn" onclick="newChat()"><i class="fas fa-plus-circle"></i> New Conversation</button>
             </div>
             <div class="chat-list" id="chatList"></div>
             <div class="user-bar">
                 <div class="user-avatar" id="userAvatar" onclick="showProfileModal()">Z</div>
                 <div style="flex:1;min-width:0">
-                    <div style="font-weight:600;font-size:12px" id="userName">User</div>
-                    <div style="font-size:10px;color:var(--text2)" id="usageTxt">50/50</div>
+                    <div style="font-weight:700;font-size:13px" id="userName">Zakhourani User</div>
+                    <div style="font-size:11px;color:var(--text2)" id="usageTxt">50 / 50 remaining</div>
                     <div class="usage-bar"><div class="usage-fill" id="usageFill" style="width:100%"></div></div>
                 </div>
-                <button class="icon-btn" onclick="showProfileModal()" title="Profile" style="font-size:12px"><i class="fas fa-cog"></i></button>
+                <button class="icon-btn" onclick="showProfileModal()" title="Profile & Balance" style="font-size:13px"><i class="fas fa-user-cog"></i></button>
             </div>
         </aside>
 
-        <!-- MAIN -->
+        <!-- MAIN CHAT AREA -->
         <div class="main-area">
             <div class="top-bar">
                 <button class="icon-btn" id="menuBtn" onclick="toggleSidebar()"><i class="fas fa-bars"></i></button>
-                <span style="font-weight:700;font-size:15px">Zakhourani AI</span>
+                <a href="https://whzco.com" class="logo" target="_blank" style="margin:0">
+                    <div class="logo-icon"><i class="fas fa-brain"></i></div>
+                    <span class="logo-text">Zakhourani AI</span>
+                </a>
                 <div class="top-actions">
-                    <button class="icon-btn" onclick="showBalanceModal()" title="Balance"><i class="fas fa-wallet"></i></button>
-                    <button class="icon-btn" onclick="clearChat()" title="Clear"><i class="fas fa-trash-alt"></i></button>
+                    <button class="icon-btn" onclick="showBalanceModal()" title="Balance & Packages"><i class="fas fa-wallet"></i></button>
+                    <button class="icon-btn" onclick="exportChat()" title="Export Chat"><i class="fas fa-file-export"></i></button>
+                    <button class="icon-btn" onclick="clearChat()" title="Clear Chat" style="color:var(--danger)"><i class="fas fa-eraser"></i></button>
                 </div>
             </div>
+
             <div class="chat-container" id="chatContainer">
                 <div class="welcome-msg" id="welcomeBlock">
                     <div class="welcome-icon">🧠</div>
                     <h2>Zakhourani AI</h2>
-                    <p>Precision intelligence. Sharp answers.</p>
+                    <p>Your premium intelligent assistant. Precision answers, zero fluff.</p>
                     <div class="chips">
                         <div class="chip" data-prompt="Who is Dr. Waleed Hussein Zakhourani?">👨‍🎓 About Dr. Waleed</div>
-                        <div class="chip" data-prompt="Explain quantum computing simply">⚛️ Quantum Computing</div>
-                        <div class="chip" data-prompt="Write a short poem about AI">📝 AI Poem</div>
-                        <div class="chip" data-prompt="Latest technology trends 2026">🚀 Tech Trends</div>
+                        <div class="chip" data-prompt="Explain quantum computing in simple terms">⚛️ Quantum Computing</div>
+                        <div class="chip" data-prompt="Write a beautiful poem about artificial intelligence">📝 AI Poetry</div>
+                        <div class="chip" data-prompt="What are the most exciting technology trends in 2026?">🚀 Future Tech</div>
                     </div>
                 </div>
             </div>
+
             <div class="input-area">
                 <div class="input-wrap">
-                    <input type="text" id="msgInput" placeholder="Ask Zakhourani..." autocomplete="off">
-                    <button id="sendBtn" onclick="sendMsg()">Send</button>
+                    <input type="text" id="msgInput" placeholder="Ask Zakhourani anything..." autocomplete="off" autofocus>
+                    <button id="sendBtn" onclick="sendMsg()"><i class="fas fa-paper-plane"></i> Send</button>
                 </div>
             </div>
         </div>
@@ -207,37 +220,47 @@
     <!-- TOAST -->
     <div class="toast" id="toast"></div>
 
-    <!-- BALANCE MODAL -->
+    <!-- LIMIT MODAL -->
+    <div class="modal" id="limitModal">
+        <div class="modal-box">
+            <div style="font-size:3rem;text-align:center;margin-bottom:12px">⏳</div>
+            <h3 style="text-align:center">Daily Limit Reached</h3>
+            <p style="text-align:center">You've used all your daily questions. Upgrade for unlimited access.</p>
+            <div id="limitTimer" style="text-align:center;font-weight:700;color:var(--accent);margin:12px 0;font-size:15px"></div>
+            <button class="modal-btn gold" onclick="closeModal('limitModal');showBalanceModal()"><i class="fas fa-crown"></i> View Packages</button>
+            <button class="modal-btn secondary" onclick="closeModal('limitModal')">Close</button>
+        </div>
+    </div>
+
+    <!-- BALANCE & PACKAGES MODAL -->
     <div class="modal" id="balanceModal">
         <div class="modal-box">
             <h3>💰 Balance & Packages</h3>
-            <p>Your balance: <strong id="balanceAmount">$0.00</strong></p>
+            <p>Current Balance: <strong style="color:var(--accent);font-size:1.1rem" id="balanceAmount">$0.00</strong></p>
             <div id="packagesList"></div>
             <button class="modal-btn secondary" onclick="closeModal('balanceModal')">Close</button>
+            <p style="font-size:11px;color:var(--text3);text-align:center;margin-top:10px">Payment system coming soon. Packages will be active immediately after purchase.</p>
         </div>
     </div>
 
     <!-- PROFILE MODAL -->
     <div class="modal" id="profileModal">
         <div class="modal-box">
-            <h3>👤 Profile</h3>
-            <p id="profileEmail">user@email.com</p>
-            <div style="margin:8px 0">
-                <label style="font-size:12px;color:var(--text2)">Display Name</label>
-                <input type="text" id="profileName" style="width:100%;padding:8px;background:var(--bg);border:1px solid var(--border);border-radius:6px;color:var(--text);margin-top:4px">
+            <h3>👤 Your Profile</h3>
+            <p id="profileEmail" style="color:var(--text3)"></p>
+            <div class="profile-field">
+                <label>Display Name</label>
+                <input type="text" id="profileName" placeholder="Your name">
             </div>
-            <div id="profileStats" style="font-size:12px;color:var(--text2);margin:8px 0"></div>
-            <button class="modal-btn primary" onclick="updateProfile()">Save</button>
-            <button class="modal-btn danger" onclick="logout()">Logout</button>
+            <div id="profileStats" style="font-size:13px;color:var(--text2);margin:10px 0;line-height:1.8"></div>
+            <button class="modal-btn primary" onclick="updateProfile()"><i class="fas fa-save"></i> Save Changes</button>
             <button class="modal-btn secondary" onclick="closeModal('profileModal')">Close</button>
         </div>
     </div>
 
-    <div class="toast" id="toast"></div>
-
     <script>
         // ============================================================
-        // SUPABASE
+        // SUPABASE CLIENT
         // ============================================================
         const ZAKH = supabase.createClient(
             'https://wkgldyfxsmkjyallrdtq.supabase.co',
@@ -245,146 +268,445 @@
         );
         const WORKER = 'https://aged-recipe-80db.wabdo3762.workers.dev/';
         
-        let userEmail = '', chatId = null, busy = false;
+        // Get user email from WHZCO.com session or use default
+        const USER_EMAIL = (() => {
+            try {
+                const urlParams = new URLSearchParams(window.location.search);
+                if (urlParams.get('email')) return urlParams.get('email');
+                if (urlParams.get('user')) return urlParams.get('user');
+                const stored = localStorage.getItem('zakh_user_email');
+                if (stored) return stored;
+            } catch(e) {}
+            return 'user@zakhourani.com';
+        })();
+        
+        // Save email for persistence
+        localStorage.setItem('zakh_user_email', USER_EMAIL);
+        
+        let chatId = null, busy = false;
 
         // ============================================================
-        // NETWORK BG
+        // NETWORK BACKGROUND
         // ============================================================
-        for(let i=0;i<20;i++){const d=document.createElement('div');d.className='net-dot c'+(Math.floor(Math.random()*4)+1);d.style.cssText=`left:${Math.random()*100}%;top:${Math.random()*100}%;animation-delay:${Math.random()*4}s`;document.getElementById('netBg').appendChild(d)}
+        (function createNetworkBg() {
+            const bg = document.getElementById('netBg');
+            for (let i = 0; i < 30; i++) {
+                const dot = document.createElement('div');
+                dot.className = 'net-dot c' + (Math.floor(Math.random() * 4) + 1);
+                dot.style.cssText = `left:${Math.random()*100}%;top:${Math.random()*100}%;animation-delay:${Math.random()*5}s;animation-duration:${2+Math.random()*4}s`;
+                bg.appendChild(dot);
+            }
+            for (let i = 0; i < 8; i++) {
+                const line = document.createElement('div');
+                line.className = 'net-line';
+                line.style.cssText = `left:${Math.random()*85}%;top:${Math.random()*85}%;width:${80+Math.random()*150}px;transform:rotate(${Math.random()*360}deg)`;
+                bg.appendChild(line);
+            }
+        })();
 
         // ============================================================
         // HELPERS
         // ============================================================
-        function toast(m,d=2000){const t=document.getElementById('toast');t.textContent=m;t.style.display='block';clearTimeout(t._t);t._t=setTimeout(()=>t.style.display='none',d)}
-        function toggleSidebar(){document.getElementById('sidebar').classList.toggle('open');document.getElementById('sidebarOverlay').classList.toggle('show')}
-        function closeModal(id){document.getElementById(id).classList.remove('show')}
-        function showModal(id){document.getElementById(id).classList.add('show')}
-        function isValidUUID(s){return /^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$/i.test(s)}
+        function toast(m, d = 2500) {
+            const t = document.getElementById('toast');
+            t.textContent = m; t.style.display = 'block';
+            clearTimeout(t._t); t._t = setTimeout(() => t.style.display = 'none', d);
+        }
+        function toggleSidebar() {
+            document.getElementById('sidebar').classList.toggle('open');
+            document.getElementById('sidebarOverlay').classList.toggle('show');
+        }
+        function closeModal(id) { document.getElementById(id).classList.remove('show'); }
+        function showModal(id) { document.getElementById(id).classList.add('show'); }
+        function isValidUUID(s) { return s && s.length >= 30 && /^[0-9a-f-]+$/i.test(s); }
 
         // ============================================================
-        // AUTH
+        // SUPABASE OPERATIONS
         // ============================================================
-        async function handleLogin(){
-            const email = document.getElementById('loginEmail').value.trim();
-            if(!email){document.getElementById('loginError').textContent='Enter email';return}
-            userEmail = email;
-            await initApp();
-            document.getElementById('loginScreen').classList.add('hidden');
-        }
-        function demoLogin(){document.getElementById('loginEmail').value='demo@zakhourani.com';handleLogin()}
-        async function logout(){
-            userEmail='';chatId=null;
-            document.getElementById('loginScreen').classList.remove('hidden');
-            document.getElementById('app').style.display='none';
-            closeModal('profileModal');
-        }
-
-        // ============================================================
-        // SUPABASE OPS
-        // ============================================================
-        async function getOrCreateUser(){
-            let{data}=await ZAKH.from('users').select('*').eq('email',userEmail).maybeSingle();
-            if(!data){await ZAKH.from('users').insert({email:userEmail,username:userEmail.split('@')[0],display_name:userEmail.split('@')[0]});return getOrCreateUser()}
+        async function getOrCreateUser() {
+            let { data } = await ZAKH.from('users').select('*').eq('email', USER_EMAIL).maybeSingle();
+            if (!data) {
+                const name = USER_EMAIL.split('@')[0];
+                await ZAKH.from('users').insert({ email: USER_EMAIL, username: name, display_name: name });
+                return getOrCreateUser();
+            }
             return data;
         }
-        async function checkLimit(){
-            try{const{data}=await ZAKH.rpc('check_daily_limit',{user_email:userEmail});return data||{can_ask:true,remaining:50,total:50,is_premium:false,balance:0,username:'User'}}catch(e){return{can_ask:true,remaining:50,total:50,is_premium:false,balance:0,username:'User'}}
+
+        async function checkLimit() {
+            try {
+                const { data } = await ZAKH.rpc('check_daily_limit', { user_email: USER_EMAIL });
+                return data || { can_ask: true, remaining: 50, total: 50, is_premium: false, balance: 0, username: 'User' };
+            } catch (e) {
+                return { can_ask: true, remaining: 50, total: 50, is_premium: false, balance: 0, username: 'User' };
+            }
         }
-        async function incUsage(){try{await ZAKH.rpc('increment_usage',{user_email:userEmail})}catch(e){}}
-        async function loadChats(){const u=await getOrCreateUser();const{data}=await ZAKH.from('conversations').select('*').eq('user_id',u.id).order('updated_at',{ascending:false});return data||[]}
-        async function createChat(title='New Chat'){const u=await getOrCreateUser();const{data}=await ZAKH.from('conversations').insert({user_id:u.id,title}).select().single();return data}
-        async function delChat(id){await ZAKH.from('conversations').delete().eq('id',id)}
-        async function renameChat(id,title){await ZAKH.from('conversations').update({title,updated_at:new Date().toISOString()}).eq('id',id)}
-        async function loadMsgs(cid){if(!isValidUUID(cid))return[];try{const{data}=await ZAKH.from('messages').select('*').eq('conversation_id',cid).order('created_at',{ascending:true});return data||[]}catch(e){return[]}}
-        async function saveMsg(cid,role,content,engine){if(!isValidUUID(cid))return;const u=await getOrCreateUser();try{await ZAKH.from('messages').insert({conversation_id:cid,user_id:u.id,role,content,engine})}catch(e){}}
-        async function loadPackages(){const{data}=await ZAKH.from('packages').select('*').order('price',{ascending:true});return data||[]}
+
+        async function incUsage() {
+            try { await ZAKH.rpc('increment_usage', { user_email: USER_EMAIL }); } catch (e) {}
+        }
+
+        async function loadChats() {
+            const user = await getOrCreateUser();
+            const { data } = await ZAKH.from('conversations').select('*').eq('user_id', user.id).order('updated_at', { ascending: false });
+            return data || [];
+        }
+
+        async function createChat(title = 'New Chat') {
+            const user = await getOrCreateUser();
+            const { data } = await ZAKH.from('conversations').insert({ user_id: user.id, title }).select().single();
+            return data;
+        }
+
+        async function delChat(id) {
+            if (!isValidUUID(id)) return;
+            await ZAKH.from('conversations').delete().eq('id', id);
+        }
+
+        async function renameChat(id, title) {
+            if (!isValidUUID(id)) return;
+            await ZAKH.from('conversations').update({ title, updated_at: new Date().toISOString() }).eq('id', id);
+        }
+
+        async function loadMsgs(convId) {
+            if (!isValidUUID(convId)) return [];
+            try {
+                const { data } = await ZAKH.from('messages').select('*').eq('conversation_id', convId).order('created_at', { ascending: true });
+                return data || [];
+            } catch (e) { return []; }
+        }
+
+        async function saveMsg(convId, role, content, engine) {
+            if (!isValidUUID(convId)) return;
+            const user = await getOrCreateUser();
+            try {
+                await ZAKH.from('messages').insert({ conversation_id: convId, user_id: user.id, role, content, engine });
+                await ZAKH.from('conversations').update({ message_count: ZAKH.raw('message_count + 1'), updated_at: new Date().toISOString() }).eq('id', convId);
+            } catch (e) {}
+        }
+
+        async function loadPackages() {
+            const { data } = await ZAKH.from('packages').select('*').order('price', { ascending: true });
+            return data || [];
+        }
 
         // ============================================================
         // RENDER
         // ============================================================
-        async function renderChats(){
-            const chats=await loadChats();const l=document.getElementById('chatList');
-            l.innerHTML=chats.length?chats.map(c=>`<div class="chat-item${c.id===chatId?' active':''}" onclick="openChat('${c.id}')"><span class="chat-item-title">${c.title}</span><div class="chat-item-actions"><button onclick="event.stopPropagation();renamePrompt('${c.id}','${c.title}')">✏️</button><button onclick="event.stopPropagation();delChatConfirm('${c.id}')">🗑️</button></div></div>`).join(''):'<div style="text-align:center;color:var(--text2);padding:20px;font-size:12px">No chats</div>';
+        async function renderChats() {
+            const chats = await loadChats();
+            const list = document.getElementById('chatList');
+            if (!chats.length) {
+                list.innerHTML = '<div style="text-align:center;color:var(--text3);padding:30px 20px;font-size:13px"><i class="fas fa-comments" style="font-size:2rem;display:block;margin-bottom:10px;opacity:0.3"></i>No conversations yet<br><small>Click "New Conversation" to start</small></div>';
+                return;
+            }
+            list.innerHTML = chats.map(c => `
+                <div class="chat-item ${c.id === chatId ? 'active' : ''}" onclick="openChat('${c.id}')">
+                    <span class="chat-item-title">💬 ${c.title}</span>
+                    <div class="chat-item-actions">
+                        <button onclick="event.stopPropagation();renamePrompt('${c.id}','${c.title.replace(/'/g,"\\'")}')" title="Rename">✏️</button>
+                        <button onclick="event.stopPropagation();deleteChatConfirm('${c.id}')" title="Delete">🗑️</button>
+                    </div>
+                </div>`).join('');
         }
-        async function openChat(id){
-            chatId=id;const c=document.getElementById('chatContainer');const msgs=await loadMsgs(id);
-            c.innerHTML=msgs.length?msgs.map(m=>`<div class="msg ${m.role==='user'?'msg-user':'msg-ai'}">${m.content.replace(/\*\*(.*?)\*\*/g,'<strong>$1</strong>').replace(/\n/g,'<br>')}<div class="powered-by">⚡ Powered by Zakhourani</div></div>`).join(''):`<div class="welcome-msg"><div class="welcome-icon">🧠</div><h2>Zakhourani AI</h2><p>Start the conversation</p></div>`;
-            c.scrollTop=c.scrollHeight;renderChats();toggleSidebar();
+
+        async function openChat(id) {
+            if (!isValidUUID(id)) return;
+            chatId = id;
+            const container = document.getElementById('chatContainer');
+            const msgs = await loadMsgs(id);
+            
+            if (!msgs.length) {
+                container.innerHTML = `<div class="welcome-msg"><div class="welcome-icon">🧠</div><h2>Zakhourani AI</h2><p>Start the conversation</p></div>`;
+            } else {
+                container.innerHTML = msgs.map(m => {
+                    const content = m.content
+                        .replace(/\*\*(.*?)\*\*/g, '<strong>$1</strong>')
+                        .replace(/```(\w*)\n([\s\S]*?)```/g, '<pre><code>$2</code></pre>')
+                        .replace(/`([^`]+)`/g, '<code>$1</code>')
+                        .replace(/\n/g, '<br>');
+                    return `<div class="msg ${m.role === 'user' ? 'msg-user' : 'msg-ai'}">${content}<div class="powered-by">Zakhourani AI</div></div>`;
+                }).join('');
+            }
+            container.scrollTop = container.scrollHeight;
+            renderChats();
+            if (window.innerWidth < 1024) toggleSidebar();
         }
-        async function newChat(){const c=await createChat();chatId=c.id;document.getElementById('chatContainer').innerHTML=`<div class="welcome-msg"><div class="welcome-icon">🧠</div><h2>Zakhourani AI</h2><p>New conversation</p></div>`;renderChats();toggleSidebar()}
-        async function delChatConfirm(id){if(!confirm('Delete?'))return;await delChat(id);if(chatId===id){const chats=await loadChats();chats.length?openChat(chats[0].id):newChat()}renderChats();toast('Deleted')}
-        async function renamePrompt(id,old){const t=prompt('Rename:',old);if(t&&t.trim()){await renameChat(id,t.trim());renderChats()}}
-        async function clearChat(){if(!chatId||!confirm('Clear?'))return;document.getElementById('chatContainer').innerHTML=`<div class="welcome-msg"><div class="welcome-icon">🧠</div><h2>Zakhourani AI</h2><p>Cleared</p></div>`;toast('Cleared')}
+
+        async function newChat() {
+            const chat = await createChat();
+            chatId = chat.id;
+            document.getElementById('chatContainer').innerHTML = `<div class="welcome-msg"><div class="welcome-icon">🧠</div><h2>Zakhourani AI</h2><p>New conversation ready</p></div>`;
+            renderChats();
+            if (window.innerWidth < 1024) toggleSidebar();
+            document.getElementById('msgInput').focus();
+            toast('✨ New conversation created');
+        }
+
+        async function deleteChatConfirm(id) {
+            if (!confirm('Permanently delete this conversation?')) return;
+            await delChat(id);
+            if (chatId === id) {
+                const chats = await loadChats();
+                chats.length ? openChat(chats[0].id) : newChat();
+            }
+            renderChats();
+            toast('🗑️ Conversation deleted');
+        }
+
+        async function renamePrompt(id, old) {
+            const t = prompt('Rename conversation:', old);
+            if (t && t.trim()) { await renameChat(id, t.trim()); renderChats(); toast('✏️ Renamed'); }
+        }
+
+        async function clearChat() {
+            if (!chatId || !confirm('Clear all messages in this conversation?')) return;
+            document.getElementById('chatContainer').innerHTML = `<div class="welcome-msg"><div class="welcome-icon">🧠</div><h2>Zakhourani AI</h2><p>Conversation cleared</p></div>`;
+            toast('🧹 Cleared');
+        }
+
+        async function exportChat() {
+            const msgs = await loadMsgs(chatId);
+            if (!msgs.length) { toast('Nothing to export'); return; }
+            const txt = `ZAKHOURANI AI - CHAT EXPORT\nDate: ${new Date().toLocaleString()}\n\n` + msgs.map(m => `[${m.role.toUpperCase()}] ${m.content}`).join('\n\n');
+            const blob = new Blob([txt], { type: 'text/plain' });
+            const a = document.createElement('a');
+            a.href = URL.createObjectURL(blob);
+            a.download = `zakhourani-chat-${new Date().toISOString().split('T')[0]}.txt`;
+            a.click();
+            URL.revokeObjectURL(a.href);
+            toast('📥 Chat exported');
+        }
 
         // ============================================================
-        // PROFILE & BALANCE
+        // PROFILE & BALANCE MODALS
         // ============================================================
-        async function showProfileModal(){
-            const u=await getOrCreateUser();const l=await checkLimit();
-            document.getElementById('profileEmail').textContent=userEmail;
-            document.getElementById('profileName').value=u.display_name||'';
-            document.getElementById('profileStats').innerHTML=`Premium: ${l.is_premium?'✅ Yes':'❌ No'}<br>Questions today: ${l.total-l.remaining}/${l.total}<br>Balance: $${l.balance}`;
+        async function showProfileModal() {
+            const user = await getOrCreateUser();
+            const limit = await checkLimit();
+            document.getElementById('profileEmail').textContent = USER_EMAIL;
+            document.getElementById('profileName').value = user.display_name || '';
+            document.getElementById('profileStats').innerHTML = `
+                <strong>Status:</strong> ${limit.is_premium ? '⭐ Premium' : 'Free Plan'}<br>
+                <strong>Questions Today:</strong> ${limit.total - limit.remaining} / ${limit.total}<br>
+                <strong>Balance:</strong> $${parseFloat(limit.balance).toFixed(2)}<br>
+                <strong>Member Since:</strong> ${new Date(user.created_at).toLocaleDateString()}
+            `;
             showModal('profileModal');
         }
-        async function updateProfile(){
-            const name=document.getElementById('profileName').value.trim();
-            if(name){await ZAKH.from('users').update({display_name:name}).eq('email',userEmail);document.getElementById('userName').textContent=name;toast('Updated!')}
+
+        async function updateProfile() {
+            const name = document.getElementById('profileName').value.trim();
+            if (name) {
+                await ZAKH.from('users').update({ display_name: name }).eq('email', USER_EMAIL);
+                document.getElementById('userName').textContent = name;
+                document.getElementById('userAvatar').textContent = name.charAt(0).toUpperCase();
+                toast('✅ Profile updated');
+            }
             closeModal('profileModal');
         }
-        async function showBalanceModal(){
-            const l=await checkLimit();const pkgs=await loadPackages();
-            document.getElementById('balanceAmount').textContent=`$${l.balance}`;
-            document.getElementById('packagesList').innerHTML=pkgs.map(p=>`<div class="pkg-card${p.is_popular?' popular':''}"><div><h4>${p.name}${p.is_popular?'<span class="badge">POPULAR</span>':''}</h4><small style="color:var(--text2)">${p.questions_per_day===999999?'Unlimited':p.questions_per_day} questions/day · ${p.validity_days} days</small></div><div style="text-align:right"><div class="price">$${p.price}</div><button onclick="purchasePkg('${p.id}')">Buy</button></div></div>`).join('');
+
+        async function showBalanceModal() {
+            const limit = await checkLimit();
+            const pkgs = await loadPackages();
+            document.getElementById('balanceAmount').textContent = `$${parseFloat(limit.balance).toFixed(2)}`;
+            document.getElementById('packagesList').innerHTML = pkgs.map(p => `
+                <div class="pkg-card${p.is_popular ? ' popular' : ''}">
+                    <div>
+                        <h4>${p.name} ${p.is_popular ? '<span class="badge">BEST VALUE</span>' : ''}</h4>
+                        <small style="color:var(--text2);font-size:11px">${p.questions_per_day === 999999 ? '♾️ Unlimited' : p.questions_per_day + ' questions/day'} · ${p.validity_days} days</small>
+                    </div>
+                    <div style="text-align:right">
+                        <div class="price">$${p.price}</div>
+                        <button onclick="purchasePkg('${p.id}')">Buy Now</button>
+                    </div>
+                </div>`).join('');
             showModal('balanceModal');
         }
-        async function purchasePkg(pid){
-            try{const{data}=await ZAKH.rpc('purchase_package',{user_email:userEmail,package_id:pid});toast(data.message);closeModal('balanceModal');updateUsageUI()}catch(e){toast('Error purchasing')}
+
+        async function purchasePkg(pid) {
+            try {
+                const { data } = await ZAKH.rpc('purchase_package', { user_email: USER_EMAIL, pkg_id: pid });
+                toast(data.message);
+                closeModal('balanceModal');
+                await updateUsageUI();
+            } catch (e) {
+                toast('❌ Purchase failed. Try again.');
+            }
         }
 
         // ============================================================
         // SEND MESSAGE
         // ============================================================
-        async function sendMsg(){
-            const input=document.getElementById('msgInput');const text=input.value.trim();
-            if(!text||busy)return;
-            const limit=await checkLimit();
-            if(!limit.can_ask){toast('⏰ Daily limit reached. Buy a package!');showBalanceModal();return}
-            busy=true;document.getElementById('sendBtn').disabled=true;
-            if(!chatId){const c=await createChat();chatId=c.id;renderChats()}
-            const container=document.getElementById('chatContainer');
-            if(document.getElementById('welcomeBlock'))container.innerHTML='';
-            const ud=document.createElement('div');ud.className='msg msg-user';ud.textContent=text;container.appendChild(ud);
-            await saveMsg(chatId,'user',text,'Zakhourani');await incUsage();await updateUsageUI();input.value='';
-            const typing=document.createElement('div');typing.className='typing';typing.innerHTML='<span></span><span></span><span></span>';container.appendChild(typing);container.scrollTop=container.scrollHeight;
-            try{
-                const r=await fetch(WORKER,{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({prompt:text,history:[]})});
-                const d=await r.json();typing.remove();
-                if(d.success&&d.reply){const ad=document.createElement('div');ad.className='msg msg-ai';ad.innerHTML=d.reply.replace(/\*\*(.*?)\*\*/g,'<strong>$1</strong>').replace(/\n/g,'<br>')+'<div class="powered-by">⚡ Powered by Zakhourani</div>';container.appendChild(ad);await saveMsg(chatId,'assistant',d.reply,'Zakhourani');const msgs=await loadMsgs(chatId);if(msgs.length<=2){const title=text.substring(0,35)+(text.length>35?'...':'');await renameChat(chatId,title)}renderChats()}
-            }catch(e){typing.remove()}
-            container.scrollTop=container.scrollHeight;busy=false;document.getElementById('sendBtn').disabled=false;input.focus();
+        async function sendMsg() {
+            const input = document.getElementById('msgInput');
+            const text = input.value.trim();
+            if (!text || busy) return;
+            
+            const limit = await checkLimit();
+            if (!limit.can_ask) { showModal('limitModal'); updateLimitTimer(); return; }
+            
+            busy = true;
+            document.getElementById('sendBtn').disabled = true;
+            
+            if (!chatId || !isValidUUID(chatId)) { 
+                const c = await createChat(); 
+                chatId = c.id; 
+                renderChats(); 
+            }
+            
+            const container = document.getElementById('chatContainer');
+            const welcomeBlock = document.getElementById('welcomeBlock');
+            if (welcomeBlock || container.querySelector('.welcome-msg')) {
+                container.innerHTML = '';
+            }
+            
+            // User message
+            const userDiv = document.createElement('div');
+            userDiv.className = 'msg msg-user';
+            userDiv.textContent = text;
+            container.appendChild(userDiv);
+            container.scrollTop = container.scrollHeight;
+            
+            await saveMsg(chatId, 'user', text, 'Zakhourani');
+            await incUsage();
+            await updateUsageUI();
+            input.value = '';
+            input.style.height = 'auto';
+            
+            // Typing indicator
+            const typing = document.createElement('div');
+            typing.className = 'typing';
+            typing.innerHTML = '<span></span><span></span><span></span>';
+            container.appendChild(typing);
+            container.scrollTop = container.scrollHeight;
+            
+            try {
+                const response = await fetch(WORKER, {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({ prompt: text, history: [] })
+                });
+                const data = await response.json();
+                typing.remove();
+                
+                if (data.success && data.reply) {
+                    const aiDiv = document.createElement('div');
+                    aiDiv.className = 'msg msg-ai';
+                    const formatted = data.reply
+                        .replace(/\*\*(.*?)\*\*/g, '<strong>$1</strong>')
+                        .replace(/```(\w*)\n([\s\S]*?)```/g, '<pre><code>$2</code></pre>')
+                        .replace(/`([^`]+)`/g, '<code>$1</code>')
+                        .replace(/\n/g, '<br>');
+                    aiDiv.innerHTML = formatted + '<div class="powered-by">Zakhourani AI</div>';
+                    container.appendChild(aiDiv);
+                    await saveMsg(chatId, 'assistant', data.reply, 'Zakhourani');
+                    
+                    // Auto-rename on first message
+                    const msgs = await loadMsgs(chatId);
+                    if (msgs.length <= 2) {
+                        const title = text.substring(0, 40) + (text.length > 40 ? '...' : '');
+                        await renameChat(chatId, title);
+                    }
+                    renderChats();
+                } else {
+                    throw new Error('No reply');
+                }
+            } catch (e) {
+                typing.remove();
+                const aiDiv = document.createElement('div');
+                aiDiv.className = 'msg msg-ai';
+                aiDiv.innerHTML = "I'm Zakhourani AI. Please try again or rephrase your question.<div class='powered-by'>Zakhourani AI</div>";
+                container.appendChild(aiDiv);
+            }
+            
+            container.scrollTop = container.scrollHeight;
+            busy = false;
+            document.getElementById('sendBtn').disabled = false;
+            input.focus();
         }
 
-        async function updateUsageUI(){
-            const l=await checkLimit();document.getElementById('usageTxt').textContent=`${l.remaining}/${l.total}`;document.getElementById('usageFill').style.width=(l.remaining/l.total*100)+'%';document.getElementById('userName').textContent=l.username||'User';
+        async function updateUsageUI() {
+            const limit = await checkLimit();
+            const remaining = limit.remaining;
+            const total = limit.total;
+            const percent = total > 0 ? (remaining / total) * 100 : 100;
+            
+            document.getElementById('usageTxt').textContent = `${remaining} / ${total} remaining`;
+            const fill = document.getElementById('usageFill');
+            fill.style.width = percent + '%';
+            fill.className = 'usage-fill';
+            if (percent < 15) fill.classList.add('danger');
+            else if (percent < 35) fill.classList.add('warning');
+            
+            document.getElementById('userName').textContent = limit.username || 'Zakhourani User';
+            document.getElementById('userAvatar').textContent = (limit.username || 'Z').charAt(0).toUpperCase();
+        }
+
+        function updateLimitTimer() {
+            const el = document.getElementById('limitTimer');
+            const tick = () => {
+                const now = new Date(), tmr = new Date(now);
+                tmr.setDate(tmr.getDate() + 1); tmr.setHours(0, 0, 0, 0);
+                const diff = tmr - now;
+                const h = Math.floor(diff / 3600000);
+                const m = Math.floor((diff % 3600000) / 60000);
+                const s = Math.floor((diff % 60000) / 1000);
+                el.textContent = `⏰ Resets in ${h}h ${m}m ${s}s`;
+            };
+            tick();
+            if (el._interval) clearInterval(el._interval);
+            el._interval = setInterval(tick, 1000);
         }
 
         // ============================================================
-        // EVENTS
+        // EVENT LISTENERS
         // ============================================================
-        document.getElementById('msgInput').addEventListener('keydown',e=>{if(e.key==='Enter'&&!e.shiftKey){e.preventDefault();sendMsg()}});
-        document.querySelectorAll('.chip').forEach(c=>{c.addEventListener('click',()=>{document.getElementById('msgInput').value=c.dataset.prompt;sendMsg()})});
+        document.getElementById('msgInput').addEventListener('keydown', e => {
+            if (e.key === 'Enter' && !e.shiftKey) { e.preventDefault(); sendMsg(); }
+        });
+        
+        document.querySelectorAll('.chip').forEach(c => {
+            c.addEventListener('click', () => {
+                document.getElementById('msgInput').value = c.dataset.prompt;
+                sendMsg();
+            });
+        });
+
+        // Close sidebar on escape
+        document.addEventListener('keydown', e => {
+            if (e.key === 'Escape') {
+                document.getElementById('sidebar').classList.remove('open');
+                document.getElementById('sidebarOverlay').classList.remove('show');
+            }
+        });
 
         // ============================================================
-        // INIT
+        // INITIALIZATION
         // ============================================================
-        async function initApp(){
-            document.getElementById('app').style.display='flex';
-            await getOrCreateUser();await updateUsageUI();
-            let chats=await loadChats();if(!chats.length){const c=await createChat();chats=[c]}chatId=chats[0].id;await openChat(chatId);
+        async function init() {
+            // Create user if not exists
+            await getOrCreateUser();
+            await updateUsageUI();
+            
+            // Load chats
+            let chats = await loadChats();
+            if (!chats.length) {
+                const c = await createChat('Welcome Chat');
+                chats = [c];
+            }
+            chatId = chats[0].id;
+            await openChat(chatId);
+            await renderChats();
+            
             document.getElementById('msgInput').focus();
+            
+            console.log('✅ Zakhourani AI initialized');
+            console.log('👤 User:', USER_EMAIL);
+            console.log('💾 Data stored in Supabase');
         }
-        // Start with login screen visible
-        document.getElementById('app').style.display='none';
+        
+        init();
     </script>
 </body>
 </html>

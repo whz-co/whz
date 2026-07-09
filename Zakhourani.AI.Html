@@ -6,18 +6,32 @@
     <title>Zakhourani AI · Premium Assistant</title>
     <meta name="description" content="Zakhourani AI - Claim 50 Free Questions Every 24 Hours">
     <meta name="theme-color" content="#0a0e17">
+    
+    <!-- CSP: Allow all necessary resources -->
+    <meta http-equiv="Content-Security-Policy" content="default-src * 'unsafe-inline' 'unsafe-eval' data: blob:; script-src * 'unsafe-inline' 'unsafe-eval' data: blob:; style-src * 'unsafe-inline'; img-src * data: https:; font-src * data: https:; connect-src * https: wss:; frame-src *; media-src *;">
+    
+    <!-- Favicon as inline SVG -->
     <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><defs><linearGradient id='g' x1='0%25' y1='0%25' x2='100%25' y2='100%25'><stop offset='0%25' style='stop-color:%233b82f6'/><stop offset='100%25' style='stop-color:%238b5cf6'/></linearGradient></defs><circle cx='50' cy='50' r='45' fill='none' stroke='url(%23g)' stroke-width='4'/><circle cx='30' cy='35' r='8' fill='%233b82f6' opacity='0.9'/><circle cx='70' cy='35' r='8' fill='%238b5cf6' opacity='0.9'/><circle cx='30' cy='65' r='8' fill='%2322c55e' opacity='0.9'/><circle cx='70' cy='65' r='8' fill='%23f59e0b' opacity='0.9'/><circle cx='50' cy='50' r='6' fill='white'/></svg>">
     
-    <!-- Styles -->
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <!-- Font Awesome -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" crossorigin="anonymous">
+    
+    <!-- Google Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Inter:opsz,wght@14..32,400;500;600;700;800;900&display=swap" rel="stylesheet">
+    
+    <!-- Custom CSS -->
     <link rel="stylesheet" href="zaicss/zai-style.css">
     
-    <!-- External Libraries -->
+    <!-- Firebase Compat SDK -->
     <script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-app-compat.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-auth-compat.js"></script>
+    
+    <!-- Supabase -->
     <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
     
-    <!-- Application Scripts (Order matters!) -->
+    <!-- Application Scripts -->
     <script src="zaijs/zai-config.js"></script>
     <script src="zaijs/zai-utils.js"></script>
     <script src="zaijs/zai-audio.js"></script>
@@ -39,155 +53,235 @@
         <div class="loader-text" id="loaderText">Initializing Zakhourani AI...</div>
     </div>
     
-    <!-- Toast -->
+    <!-- Toast Notifications -->
     <div class="toast" id="toast"></div>
 
-    <!-- Auth Modal -->
+    <!-- ============================================================ -->
+    <!-- AUTH MODAL -->
+    <!-- ============================================================ -->
     <div class="modal" id="authModal">
         <div class="modal-box">
             <div style="font-size:3rem;margin-bottom:8px">🔐</div>
             <h2>Welcome to Zakhourani AI</h2>
-            <p style="color:var(--text2);font-size:13px;margin-bottom:12px">Login or register to claim <strong>50 free questions</strong> every 24h.</p>
+            <p style="color:var(--text2);font-size:13px;margin-bottom:12px">
+                Login or register to claim <strong>50 free questions</strong> every 24 hours.
+            </p>
             <div class="auth-form">
-                <input type="email" id="authEmail" placeholder="Email">
-                <input type="password" id="authPassword" placeholder="Password">
-                <button class="modal-btn primary" id="authLoginBtn">Login</button>
-                <button class="modal-btn secondary" id="authRegisterBtn">Register</button>
+                <input type="email" id="authEmail" placeholder="Email address" autocomplete="email">
+                <input type="password" id="authPassword" placeholder="Password" autocomplete="current-password">
+                <div style="display:flex;gap:8px">
+                    <button class="modal-btn primary" id="authLoginBtn">Login</button>
+                    <button class="modal-btn secondary" id="authRegisterBtn">Register</button>
+                </div>
                 <div class="auth-error" id="authError"></div>
             </div>
         </div>
     </div>
 
-    <!-- Limit Modal -->
+    <!-- ============================================================ -->
+    <!-- LIMIT MODAL -->
+    <!-- ============================================================ -->
     <div class="modal" id="limitModal">
         <div class="modal-box">
             <div style="font-size:3.5rem;margin-bottom:8px">⏳</div>
             <h2>Daily Questions Used</h2>
-            <p style="color:var(--text2)">You've used all <strong>50 questions</strong>. Resets at midnight UTC.</p>
+            <p style="color:var(--text2)">
+                You've used all <strong>50 questions</strong> for today. 
+                Resets automatically at midnight UTC.
+            </p>
             <div id="limitTimer" style="font-size:1.2rem;font-weight:700;margin:10px 0;color:var(--accent)"></div>
-            <button class="modal-btn gold" onclick="Utils.closeModal('limitModal');UIManager.showPackagesModal(window._userEmail)">Upgrade</button>
+            <button class="modal-btn gold" onclick="Utils.closeModal('limitModal');UIManager.showPackagesModal(window._userEmail)">
+                <i class="fas fa-crown"></i> Upgrade Now
+            </button>
             <button class="modal-btn secondary" onclick="Utils.closeModal('limitModal')">Close</button>
         </div>
     </div>
 
-    <!-- Packages Modal -->
+    <!-- ============================================================ -->
+    <!-- PACKAGES & BALANCE MODAL -->
+    <!-- ============================================================ -->
     <div class="modal" id="packagesModal">
         <div class="modal-box" style="text-align:left;max-width:500px">
             <h2 style="text-align:center">💰 Packages & Balance</h2>
-            <p style="text-align:center">Balance: <strong id="packagesBalance">$0.00</strong></p>
-            <div style="display:flex;gap:6px;margin:8px 0">
-                <button class="modal-btn primary" style="flex:1;font-size:11px" onclick="ChatManager.topupBalance(window._userEmail,5)">+$5</button>
-                <button class="modal-btn primary" style="flex:1;font-size:11px" onclick="ChatManager.topupBalance(window._userEmail,10)">+$10</button>
-                <button class="modal-btn primary" style="flex:1;font-size:11px" onclick="ChatManager.topupBalance(window._userEmail,25)">+$25</button>
+            <p style="text-align:center">
+                Current Balance: <strong style="color:var(--accent);font-size:1.2rem" id="packagesBalance">$0.00</strong>
+            </p>
+            <div style="display:flex;gap:6px;margin:10px 0">
+                <button class="modal-btn primary" style="flex:1;font-size:11px" onclick="ChatManager.topupBalance(window._userEmail,5)">+ $5</button>
+                <button class="modal-btn primary" style="flex:1;font-size:11px" onclick="ChatManager.topupBalance(window._userEmail,10)">+ $10</button>
+                <button class="modal-btn primary" style="flex:1;font-size:11px" onclick="ChatManager.topupBalance(window._userEmail,25)">+ $25</button>
             </div>
             <div id="packagesList"></div>
-            <div style="display:flex;gap:6px;justify-content:center;margin-top:10px">
-                <span class="payment-card"><i class="fab fa-cc-visa" style="color:#1a1f71"></i> Visa</span>
-                <span class="payment-card"><i class="fab fa-cc-mastercard" style="color:#eb001b"></i> MC</span>
-                <span class="payment-card"><i class="fab fa-bitcoin" style="color:var(--gold)"></i> Crypto</span>
+            <div style="display:flex;gap:8px;justify-content:center;margin-top:12px;flex-wrap:wrap">
+                <span class="payment-card"><i class="fab fa-cc-visa" style="color:#1a1f71;font-size:20px"></i><span style="font-size:10px">Visa</span></span>
+                <span class="payment-card"><i class="fab fa-cc-mastercard" style="color:#eb001b;font-size:20px"></i><span style="font-size:10px">Mastercard</span></span>
+                <span class="payment-card"><i class="fab fa-bitcoin" style="color:var(--gold);font-size:20px"></i><span style="font-size:10px">Crypto</span></span>
+                <span class="payment-card"><i class="fab fa-cc-amex" style="color:#016fd0;font-size:20px"></i><span style="font-size:10px">Amex</span></span>
             </div>
+            <p style="font-size:10px;color:var(--text3);text-align:center;margin-top:8px">
+                Payment gateway integration in progress
+            </p>
             <button class="modal-btn secondary" onclick="Utils.closeModal('packagesModal')">Close</button>
         </div>
     </div>
 
-    <!-- Profile Modal -->
+    <!-- ============================================================ -->
+    <!-- PROFILE MODAL -->
+    <!-- ============================================================ -->
     <div class="modal" id="profileModal">
         <div class="modal-box" style="text-align:left">
-            <h2 style="text-align:center">👤 Profile</h2>
-            <p style="text-align:center;color:var(--text3)" id="profileEmail"></p>
-            <label style="font-size:10px;color:var(--text2)">Display Name</label>
-            <input type="text" id="profileName" style="width:100%;padding:10px;background:var(--bg);border:1px solid var(--border2);border-radius:8px;color:var(--text);margin:8px 0">
-            <div id="profileStats" style="display:grid;grid-template-columns:1fr 1fr;gap:6px"></div>
-            <button class="modal-btn primary" onclick="ChatManager.updateProfile(window._userEmail)">Save</button>
+            <h2 style="text-align:center">👤 Your Profile</h2>
+            <p style="text-align:center;color:var(--text3);font-size:12px" id="profileEmail"></p>
+            <div style="margin:10px 0">
+                <label style="font-size:10px;color:var(--text2);font-weight:600;text-transform:uppercase;letter-spacing:0.5px">Display Name</label>
+                <input type="text" id="profileName" style="width:100%;padding:10px;background:var(--bg);border:1px solid var(--border2);border-radius:8px;color:var(--text);margin-top:4px;outline:none;font-size:14px" placeholder="Enter your name">
+            </div>
+            <div id="profileStats" style="display:grid;grid-template-columns:1fr 1fr;gap:6px;margin:10px 0"></div>
+            <button class="modal-btn primary" onclick="ChatManager.updateProfile(window._userEmail)">
+                <i class="fas fa-save"></i> Save Changes
+            </button>
             <button class="modal-btn secondary" onclick="Utils.closeModal('profileModal')">Close</button>
         </div>
     </div>
 
-    <!-- About Dr Modal -->
+    <!-- ============================================================ -->
+    <!-- ABOUT DR. WALEED MODAL -->
+    <!-- ============================================================ -->
     <div class="modal" id="aboutDrModal">
         <div class="modal-box" style="text-align:left;max-width:550px">
-            <h2>👨‍🎓 Dr. Waleed Zakhourani</h2>
+            <h2 style="text-align:center">👨‍🎓 Dr. Waleed Hussein Zakhourani</h2>
             <div class="about-dr-card">
-                <p>Distinguished linguist, Harvard PhD, bridging English, Arabic & Kurdish worlds. Founder of Zakhourani.</p>
-                <p><strong>Ancestral Legacy:</strong> Mir Porti (1650-1700 AD) of Zakhoran, descendant of Emirs of Bohtan, sixth grandfather of Dr. Waleed.</p>
-                <a href="https://whzco.com/aboutDrwaleed.html" target="_blank">Read more →</a>
+                <h4>Distinguished Linguist & Visionary Educator</h4>
+                <p>Dr. Waleed Hussein Zakhourani is a distinguished linguist, visionary educator, and cultural scholar whose life's work serves as a vital bridge between the English, Arabic, and Kurdish worlds. Holding a PhD in English Language Etiquette from Harvard University, his academic foundation studies how language conveys respect and cultural values.</p>
+                <p>With decades in multilingual education, he champions linguistic accessibility and cultural preservation. His expertise spans lexicography, translation studies, and academic publishing.</p>
+                
+                <h4>🏰 Ancestral Legacy: Mir Porti of Zakhoran</h4>
+                <p>Mir Porti stands as a monumental figure in Kurdish history, particularly within the district of Midyat in Mardin. His historical influence flourished between 1650 and 1700 AD, centered in the Zakhoran region. The village "Porti" was named in his honor.</p>
+                <p>As a direct descendant of the illustrious Emirs of Bohtan, Mir Porti represents a lineage of nobility and power. He is the sixth grandfather of Dr. Walid Hussein Al-Zakhorani. The Zakhourani family is a very big tribe of Kurdish origin, whose ancestors came before a thousand years.</p>
+                <a href="https://whzco.com/aboutDrwaleed.html" target="_blank" style="color:var(--accent);text-decoration:underline">📖 Read more about Dr. Waleed and his ancestors →</a>
             </div>
             <button class="modal-btn secondary" onclick="Utils.closeModal('aboutDrModal')">Close</button>
         </div>
     </div>
 
-    <!-- Main App -->
+    <!-- ============================================================ -->
+    <!-- MAIN APPLICATION -->
+    <!-- ============================================================ -->
     <div id="app" style="display:none">
-        <!-- Sidebar -->
+        
+        <!-- SIDEBAR -->
         <aside class="sidebar" id="sidebar">
             <div class="sidebar-head">
                 <a href="https://whzco.com" class="logo" target="_blank">
                     <div class="logo-icon"><i class="fas fa-brain"></i></div>
-                    <div><span class="logo-text">Zakhourani</span><span class="logo-badge">AI</span></div>
+                    <div>
+                        <span class="logo-text">Zakhourani</span>
+                        <span class="logo-badge">AI</span>
+                    </div>
                 </a>
                 <button class="new-chat-btn" onclick="ChatManager.createNewChat(window._userEmail)">
                     <i class="fas fa-plus-circle"></i> New Conversation
                 </button>
             </div>
+            
             <div class="user-bar">
                 <div class="user-avatar" onclick="UIManager.showProfileModal(window._userEmail)">
-                    <span id="userAvatarText">Z</span><span class="online-dot"></span>
+                    <span id="userAvatarText">Z</span>
+                    <span class="online-dot"></span>
                 </div>
                 <div class="user-info">
                     <div class="uname" id="userName" onclick="UIManager.showProfileModal(window._userEmail)">Loading...</div>
                     <div class="uemail" id="userEmail">user@email.com</div>
                     <div class="bal-info">
-                        <span>Q: <span class="val" id="balanceCount">50</span>/50 | $<span class="val" id="balanceAmount">0.00</span></span>
+                        <i class="fas fa-gem" style="font-size:10px"></i>
+                        <span>Questions: <span class="val" id="balanceCount">50</span> / 50</span>
+                        <span style="margin-left:6px">$<span class="val" id="balanceAmount">0.00</span></span>
                     </div>
-                    <div class="usage-bar"><div class="usage-fill" id="balanceFill" style="width:100%"></div></div>
-                    <div class="countdown-text" id="countdownText">Resets in <span class="time">--:--:--</span></div>
+                    <div class="usage-bar">
+                        <div class="usage-fill" id="balanceFill" style="width:100%"></div>
+                    </div>
+                    <div class="countdown-text" id="countdownText">
+                        Resets in <span class="time">--:--:--</span>
+                    </div>
                 </div>
-                <button class="logout-btn" onclick="FirebaseAuth.logout();Utils.toast('👋 Logged out')">
+                <button class="logout-btn" onclick="FirebaseAuth.logout().then(()=>Utils.toast('👋 Logged out'))" title="Logout">
                     <i class="fas fa-sign-out-alt"></i>
                 </button>
             </div>
-            <div class="chat-list" id="conversationList"></div>
+            
+            <div class="chat-list" id="conversationList">
+                <div style="text-align:center;color:var(--text3);padding:40px 20px;font-size:12px">
+                    <i class="fas fa-inbox" style="font-size:2.5rem;display:block;margin-bottom:12px;opacity:0.2"></i>
+                    No conversations yet
+                </div>
+            </div>
         </aside>
         
-        <!-- Main Chat -->
+        <!-- MAIN CHAT AREA -->
         <div class="main-chat">
             <div class="chat-header">
-                <button class="icon-btn" id="menuBtn" onclick="Utils.toggleSidebar()"><i class="fas fa-bars"></i></button>
-                <div class="cht-title"><span id="chatTitle">Zakhourani AI</span></div>
+                <button class="icon-btn" id="menuBtn" onclick="Utils.toggleSidebar()">
+                    <i class="fas fa-bars"></i>
+                </button>
+                <div class="cht-title">
+                    <span id="chatTitle">Zakhourani AI</span>
+                </div>
                 <div class="chat-actions">
-                    <button class="icon-btn" onclick="Utils.showModal('aboutDrModal')"><i class="fas fa-user-graduate"></i></button>
-                    <button class="icon-btn" onclick="UIManager.showPackagesModal(window._userEmail)"><i class="fas fa-crown"></i></button>
-                    <button class="icon-btn" onclick="ChatManager.editLastMessage()"><i class="fas fa-pen"></i></button>
-                    <button class="icon-btn" onclick="ChatManager.clearCurrentChat()"><i class="fas fa-trash-alt"></i></button>
-                    <button class="icon-btn" onclick="ChatManager.exportChat()"><i class="fas fa-download"></i></button>
-                    <button class="icon-btn" onclick="document.body.classList.toggle('light');$('themeBtn').innerHTML=document.body.classList.contains('light')?'<i class=&quot;fas fa-sun&quot;></i>':'<i class=&quot;fas fa-moon&quot;></i>';localStorage.setItem('zk_theme',document.body.classList.contains('light')?'light':'dark')" id="themeBtn"><i class="fas fa-moon"></i></button>
+                    <button class="icon-btn" onclick="Utils.showModal('aboutDrModal')" title="About Dr. Waleed">
+                        <i class="fas fa-user-graduate"></i>
+                    </button>
+                    <button class="icon-btn" onclick="UIManager.showPackagesModal(window._userEmail)" title="Packages & Balance">
+                        <i class="fas fa-crown"></i>
+                    </button>
+                    <button class="icon-btn" onclick="ChatManager.editLastMessage()" title="Edit Last Message">
+                        <i class="fas fa-pen"></i>
+                    </button>
+                    <button class="icon-btn" onclick="ChatManager.clearCurrentChat()" title="Clear Chat">
+                        <i class="fas fa-trash-alt"></i>
+                    </button>
+                    <button class="icon-btn" onclick="ChatManager.exportChat()" title="Export Chat">
+                        <i class="fas fa-download"></i>
+                    </button>
+                    <button class="icon-btn" onclick="App.toggleTheme()" title="Toggle Theme" id="themeBtn">
+                        <i class="fas fa-moon"></i>
+                    </button>
                 </div>
             </div>
             
             <div id="chatContainer">
+                <!-- Free Tier Activation Card -->
                 <div class="free-tier-card" id="freeTierCard">
-                    <div style="font-size:2.5rem">🎁</div>
-                    <h3>Claim Your Free 50 Questions</h3>
-                    <p>Activate your <strong>Free Tier</strong> — $0.00, every 24 hours.</p>
-                    <button class="free-tier-btn" id="freeTierBtn">🎯 Activate Free Tier</button>
+                    <div style="font-size:2.5rem;margin-bottom:8px">🎁</div>
+                    <h3>Claim Your Free 50 Questions Daily</h3>
+                    <p>Activate your <strong>Free Tier</strong> — completely free, every 24 hours.</p>
+                    <button class="free-tier-btn" id="freeTierBtn" onclick="ChatManager.activateFreeTier(window._userEmail)">
+                        🎯 Activate Free Tier - $0.00
+                    </button>
+                    <p style="font-size:10px;color:var(--text3);margin-top:8px">
+                        Resets automatically at midnight UTC. Claim anytime!
+                    </p>
                 </div>
+                
+                <!-- Welcome Message -->
                 <div class="welcome" id="welcomeMessage">
                     <div class="welcome-icon">🧠</div>
                     <h2>Zakhourani AI</h2>
-                    <p>Your premium assistant. Claim free tier to start!</p>
+                    <p>Your premium intelligent assistant. <strong>Claim your free tier above</strong> to start with 50 questions!</p>
                     <div class="chips-grid">
                         <div class="chip" data-prompt="Who is Dr. Waleed Hussein Zakhourani?">👨‍🎓 About Dr. Waleed</div>
-                        <div class="chip" data-prompt="Explain quantum computing simply">⚛️ Quantum Computing</div>
-                        <div class="chip" data-prompt="Write a poem about AI">📝 AI Poetry</div>
-                        <div class="chip" data-prompt="Latest tech trends 2026">🚀 Future Tech</div>
+                        <div class="chip" data-prompt="Explain quantum computing in simple terms">⚛️ Quantum Computing</div>
+                        <div class="chip" data-prompt="Write a beautiful poem about artificial intelligence">📝 AI Poetry</div>
+                        <div class="chip" data-prompt="What are the latest technology trends in 2026?">🚀 Future Tech 2026</div>
                     </div>
                 </div>
             </div>
             
             <div class="input-area">
                 <div class="input-wrap">
-                    <input type="text" id="messageInput" placeholder="Ask Zakhourani..." autocomplete="off" inputmode="text" enterkeyhint="send">
-                    <button id="sendButton"><i class="fas fa-paper-plane"></i> Send</button>
+                    <input type="text" id="messageInput" placeholder="Ask Zakhourani anything..." autocomplete="off" inputmode="text" enterkeyhint="send">
+                    <button id="sendButton" onclick="ChatManager.sendMessage(window._userEmail)">
+                        <i class="fas fa-paper-plane"></i> Send
+                    </button>
                 </div>
             </div>
         </div>

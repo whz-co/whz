@@ -16,7 +16,7 @@
     <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><defs><linearGradient id='g' x1='0%25' y1='0%25' x2='100%25' y2='100%25'><stop offset='0%25' style='stop-color:%233b82f6'/><stop offset='100%25' style='stop-color:%238b5cf6'/></linearGradient></defs><circle cx='50' cy='50' r='45' fill='none' stroke='url(%23g)' stroke-width='4'/><circle cx='30' cy='35' r='8' fill='%233b82f6' opacity='0.9'/><circle cx='70' cy='35' r='8' fill='%238b5cf6' opacity='0.9'/><circle cx='30' cy='65' r='8' fill='%2322c55e' opacity='0.9'/><circle cx='70' cy='65' r='8' fill='%23f59e0b' opacity='0.9'/><circle cx='50' cy='50' r='6' fill='white'/></svg>">
     <link rel="apple-touch-icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><defs><linearGradient id='g' x1='0%25' y1='0%25' x2='100%25' y2='100%25'><stop offset='0%25' style='stop-color:%233b82f6'/><stop offset='100%25' style='stop-color:%238b5cf6'/></linearGradient></defs><circle cx='50' cy='50' r='45' fill='none' stroke='url(%23g)' stroke-width='4'/><circle cx='30' cy='35' r='8' fill='%233b82f6' opacity='0.9'/><circle cx='70' cy='35' r='8' fill='%238b5cf6' opacity='0.9'/><circle cx='30' cy='65' r='8' fill='%2322c55e' opacity='0.9'/><circle cx='70' cy='65' r='8' fill='%23f59e0b' opacity='0.9'/><circle cx='50' cy='50' r='6' fill='white'/></svg>">
     
-    <!-- Fonts - STABLE GOOGLE FONTS URL (RESOLVES HTTP 400 BLOCKS) -->
+    <!-- Fonts - STATIC COMPLIANT URL TO PREVENT MIME-TYPE BLOCKS -->
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
@@ -26,15 +26,14 @@
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/styles/atom-one-dark.min.css">
     <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/highlight.min.js"></script>
     
-    <!-- Firebase & Supabase -->
+    <!-- Firebase & Supabase Databases -->
     <script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-app-compat.js"></script>
     <script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-auth-compat.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
 
     <style>
         /* ============================================================
-           ZAKHOURANI AI · ULTIMATE PREMIUM STYLESHEET
-           Version: 4.1 · Fully Cohesive UI Engine
+           ZAKHOURANI AI · ULTIMATE PREMIUM BRAND STYLES v5.0
            ============================================================ */
         
         *, *::before, *::after {
@@ -58,12 +57,11 @@
             --text-secondary: #94a3b8;
             --text-tertiary: #64748b;
             --text-quaternary: #475569;
-            --text-inverse: #0a0e17;
             
             --accent-primary: #3b82f6;
             --accent-secondary: #8b5cf6;
             --accent-gradient: linear-gradient(135deg, #3b82f6, #8b5cf6);
-            --accent-glow: 0 0 30px rgba(59,130,246,0.2);
+            --accent-glow: 0 0 30px rgba(59,130,246,0.15);
             
             --success: #22c55e;
             --success-dark: #16a34a;
@@ -71,17 +69,14 @@
             --warning-dark: #d97706;
             --danger: #ef4444;
             --danger-dark: #dc2626;
-            --info: #3b82f6;
             
             --border-light: rgba(255,255,255,0.06);
-            --border-medium: rgba(255,255,255,0.1);
-            --border-strong: rgba(255,255,255,0.18);
+            --border-medium: rgba(255,255,255,0.12);
+            --border-strong: rgba(255,255,255,0.22);
             
             --sidebar-width: 300px;
-            --sidebar-width-tablet: 280px;
             --header-height: 60px;
             
-            --radius-xs: 4px;
             --radius-sm: 6px;
             --radius-md: 10px;
             --radius-lg: 14px;
@@ -93,11 +88,10 @@
             
             --z-loader: 9999;
             --z-toast: 10000;
-            --z-modal: 300;
-            --z-sidebar: 99;
-            --z-overlay: 98;
-            --z-header: 50;
-            --z-input: 40;
+            --z-modal: 1000;
+            --z-sidebar: 200;
+            --z-overlay: 150;
+            --z-header: 100;
         }
 
         html, body {
@@ -111,12 +105,14 @@
             overscroll-behavior: none;
             -webkit-font-smoothing: antialiased;
             -moz-osx-font-smoothing: grayscale;
+            user-select: none;
+            -webkit-user-select: none;
         }
 
-        /* ===== Scrollbar Styling ===== */
+        /* ===== Custom Scrollbar ===== */
         ::-webkit-scrollbar {
-            width: 4px;
-            height: 4px;
+            width: 5px;
+            height: 5px;
         }
         ::-webkit-scrollbar-track {
             background: transparent;
@@ -129,20 +125,20 @@
             background: var(--border-strong);
         }
 
-        /* ===== Network Background ===== */
+        /* ===== Interactive Network Background ===== */
         .network-bg {
             position: fixed;
             inset: 0;
             pointer-events: none;
             z-index: 0;
-            opacity: 0.03;
+            opacity: 0.04;
         }
         .network-dot {
             position: absolute;
             width: 3px;
             height: 3px;
             border-radius: 50%;
-            animation: dotPulse 3s ease-in-out infinite;
+            animation: dotPulse 4s ease-in-out infinite;
             will-change: transform, opacity;
         }
         .network-dot.c1 { background: var(--accent-primary); }
@@ -151,10 +147,10 @@
         
         @keyframes dotPulse {
             0%, 100% { opacity: 0.1; transform: scale(1); }
-            50% { opacity: 0.8; transform: scale(3); }
+            50% { opacity: 0.9; transform: scale(3.5); }
         }
 
-        /* ===== Loader ===== */
+        /* ===== Initial Startup Loader ===== */
         #loader {
             position: fixed;
             inset: 0;
@@ -165,27 +161,24 @@
             justify-content: center;
             z-index: var(--z-loader);
             gap: 20px;
-            transition: opacity 0.6s ease, visibility 0.6s ease;
+            transition: opacity 0.5s ease, visibility 0.5s ease;
         }
         #loader.hidden {
             opacity: 0;
             visibility: hidden;
             pointer-events: none;
         }
-        
         .loader-spinner {
-            width: 56px;
-            height: 56px;
+            width: 50px;
+            height: 50px;
             border: 3px solid var(--border-medium);
             border-top-color: var(--accent-primary);
             border-radius: 50%;
-            animation: spin 0.8s cubic-bezier(0.4, 0, 0.2, 1) infinite;
-            will-change: transform;
+            animation: spin 0.8s linear infinite;
         }
         @keyframes spin {
             to { transform: rotate(360deg); }
         }
-        
         .loader-brand {
             display: flex;
             align-items: center;
@@ -196,74 +189,53 @@
             -webkit-background-clip: text;
             -webkit-text-fill-color: transparent;
         }
-        .loader-brand i {
-            font-size: 30px;
-            color: var(--accent-primary);
-        }
         .loader-text {
             color: var(--text-secondary);
             font-size: 14px;
             font-weight: 500;
         }
-        .loader-progress {
-            width: 200px;
-            height: 3px;
-            background: var(--border-light);
-            border-radius: var(--radius-full);
-            overflow: hidden;
-        }
-        .loader-progress-bar {
-            height: 100%;
-            width: 0%;
-            background: var(--accent-gradient);
-            border-radius: var(--radius-full);
-            transition: width 0.3s ease;
-        }
 
-        /* ===== Toast System ===== */
+        /* ===== Elegant Toast Notifications ===== */
         .toast-container {
             position: fixed;
-            bottom: calc(100px + env(safe-area-inset-bottom, 0px));
+            bottom: calc(90px + env(safe-area-inset-bottom, 0px));
             left: 50%;
             transform: translateX(-50%);
             z-index: var(--z-toast);
             pointer-events: none;
-            max-width: 90vw;
             display: flex;
             flex-direction: column;
             align-items: center;
             gap: 8px;
+            max-width: 90vw;
         }
         .toast {
             background: var(--bg-quaternary);
             border: 1px solid var(--border-strong);
             border-radius: var(--radius-md);
-            padding: 12px 24px;
-            font-size: 14px;
+            padding: 10px 20px;
+            font-size: 13px;
             font-weight: 500;
             color: var(--text-primary);
             box-shadow: var(--shadow-lg);
             pointer-events: auto;
-            animation: toastSlide 0.4s cubic-bezier(0.4, 0, 0.2, 1);
-            white-space: nowrap;
-            max-width: 100%;
-            overflow: hidden;
-            text-overflow: ellipsis;
             backdrop-filter: blur(20px);
             -webkit-backdrop-filter: blur(20px);
-            will-change: transform, opacity;
+            animation: toastIn 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+            white-space: nowrap;
+            overflow: hidden;
+            text-overflow: ellipsis;
         }
         .toast.success { border-color: var(--success); background: rgba(34,197,94,0.1); }
         .toast.error { border-color: var(--danger); background: rgba(239,68,68,0.1); }
         .toast.warning { border-color: var(--warning); background: rgba(245,158,11,0.1); }
-        .toast.info { border-color: var(--accent-primary); background: rgba(59,130,246,0.1); }
         
-        @keyframes toastSlide {
-            from { opacity: 0; transform: translateY(20px) scale(0.95); }
+        @keyframes toastIn {
+            from { opacity: 0; transform: translateY(20px) scale(0.9); }
             to { opacity: 1; transform: translateY(0) scale(1); }
         }
 
-        /* ===== App Container ===== */
+        /* ===== Main Application Scaffold ===== */
         #app {
             width: 100%;
             height: 100%;
@@ -287,13 +259,13 @@
             }
         }
 
-        /* ===== Sidebar Overlay (FIXED STACKING CONTEXT) ===== */
+        /* ===== Sidebar Stacking Context (FIXED UNDER APP) ===== */
         .sidebar-overlay {
             position: absolute;
             inset: 0;
-            background: rgba(0,0,0,0.7);
-            backdrop-filter: blur(6px);
-            -webkit-backdrop-filter: blur(6px);
+            background: rgba(0,0,0,0.65);
+            backdrop-filter: blur(5px);
+            -webkit-backdrop-filter: blur(5px);
             z-index: var(--z-overlay);
             opacity: 0;
             visibility: hidden;
@@ -306,23 +278,21 @@
             pointer-events: auto;
         }
 
-        /* ===== Sidebar ===== */
         .sidebar {
             position: fixed;
             left: 0;
             top: 0;
             bottom: 0;
             width: var(--sidebar-width);
-            max-width: 85vw;
+            max-width: 82vw;
             background: var(--bg-primary);
             border-right: 1px solid var(--border-medium);
             z-index: var(--z-sidebar);
             transform: translateX(-100%);
-            transition: transform 0.35s cubic-bezier(0.4, 0, 0.2, 1);
+            transition: transform 0.3s cubic-bezier(0.4, 0, 0.2, 1);
             display: flex;
             flex-direction: column;
             overflow: hidden;
-            will-change: transform;
         }
         .sidebar.open {
             transform: translateX(0);
@@ -332,10 +302,7 @@
             .sidebar {
                 position: relative;
                 transform: none !important;
-                width: var(--sidebar-width);
-                flex-shrink: 0;
                 box-shadow: none;
-                border-right: 1px solid var(--border-light);
                 height: 100%;
                 border-radius: var(--radius-2xl) 0 0 var(--radius-2xl);
             }
@@ -344,76 +311,67 @@
             }
         }
 
-        /* ===== Sidebar Header ===== */
+        /* ===== Sidebar Header Components ===== */
         .sidebar-header {
-            padding: var(--spacing-4) var(--spacing-5) var(--spacing-3);
+            padding: 16px 20px 12px;
             border-bottom: 1px solid var(--border-light);
             background: rgba(10, 14, 23, 0.95);
             backdrop-filter: blur(20px);
             -webkit-backdrop-filter: blur(20px);
             flex-shrink: 0;
-            position: sticky;
-            top: 0;
-            z-index: 3;
-            padding-top: calc(var(--spacing-4) + var(--safe-top));
         }
-        
         .brand {
             display: flex;
             align-items: center;
-            gap: var(--spacing-3);
+            gap: 12px;
             text-decoration: none;
             color: var(--text-primary);
-            margin-bottom: var(--spacing-4);
-            touch-action: manipulation;
+            margin-bottom: 16px;
         }
         .brand-icon {
-            width: 44px;
-            height: 44px;
+            width: 40px;
+            height: 40px;
             background: var(--accent-gradient);
             border-radius: var(--radius-md);
             display: flex;
             align-items: center;
             justify-content: center;
-            position: relative;
-            flex-shrink: 0;
-            box-shadow: 0 0 30px rgba(59,130,246,0.25);
+            box-shadow: var(--accent-glow);
         }
         .brand-icon i {
-            font-size: var(--font-xl);
+            font-size: 18px;
             color: white;
-            z-index: 1;
         }
         .brand-name {
-            font-weight: var(--font-bold);
-            font-size: var(--font-lg);
-            letter-spacing: -0.3px;
+            font-weight: 800;
+            font-size: 18px;
+            letter-spacing: -0.4px;
         }
         .brand-badge {
-            font-size: var(--font-xs);
+            font-size: 9px;
             background: linear-gradient(135deg, var(--warning), var(--warning-dark));
             color: white;
-            padding: 2px var(--spacing-2);
+            padding: 2px 6px;
             border-radius: var(--radius-full);
-            font-weight: var(--font-bold);
-            margin-left: var(--spacing-1);
+            font-weight: 700;
+            margin-left: 4px;
             text-transform: uppercase;
         }
         
         .search-box {
             position: relative;
-            margin-bottom: var(--spacing-3);
+            margin-bottom: 12px;
         }
         .search-box input {
             width: 100%;
-            padding: var(--spacing-2) var(--spacing-4) var(--spacing-2) var(--spacing-8);
+            padding: 8px 16px 8px 32px;
             background: var(--bg-tertiary);
             border: 1px solid var(--border-medium);
             border-radius: var(--radius-md);
             color: var(--text-primary);
-            font-size: var(--font-sm);
+            font-size: 13px;
             outline: none;
-            transition: var(--transition-base);
+            transition: var(--transition-fast);
             height: 40px;
         }
         .search-box input:focus {
@@ -421,25 +379,22 @@
         }
         .search-box .search-icon {
             position: absolute;
-            left: var(--spacing-3);
+            left: 12px;
             top: 50%;
             transform: translateY(-50%);
             color: var(--text-tertiary);
-            font-size: var(--font-sm);
-            pointer-events: none;
+            font-size: 12px;
         }
         .search-box .clear-search {
             position: absolute;
-            right: var(--spacing-3);
+            right: 12px;
             top: 50%;
             transform: translateY(-50%);
             background: transparent;
             border: none;
             color: var(--text-tertiary);
             cursor: pointer;
-            font-size: var(--font-sm);
             display: none;
-            padding: var(--spacing-1);
         }
         .search-box .clear-search.visible {
             display: block;
@@ -447,57 +402,55 @@
         
         .new-chat-btn {
             width: 100%;
-            padding: var(--spacing-3) var(--spacing-4);
+            padding: 12px;
             background: var(--accent-gradient);
             border: none;
             border-radius: var(--radius-md);
             color: white;
-            font-weight: var(--font-semibold);
-            font-size: var(--font-base);
+            font-weight: 600;
+            font-size: 14px;
             cursor: pointer;
             display: flex;
             align-items: center;
             justify-content: center;
-            gap: var(--spacing-2);
-            box-shadow: 0 4px 16px rgba(59,130,246,0.3);
-            transition: var(--transition-base);
-            min-height: 48px;
+            gap: 8px;
+            box-shadow: 0 4px 14px rgba(59,130,246,0.25);
+            transition: var(--transition-fast);
         }
         .new-chat-btn:active {
             transform: scale(0.97);
         }
 
-        /* ===== Chat List ===== */
+        /* ===== Conversations List View ===== */
         .chat-list {
             flex: 1;
             overflow-y: auto;
-            overflow-x: hidden;
-            padding: var(--spacing-2) var(--spacing-3) var(--spacing-3);
+            padding: 8px 12px;
         }
         .chat-list-empty {
             text-align: center;
             color: var(--text-tertiary);
-            padding: var(--spacing-10) var(--spacing-5);
-            font-size: var(--font-sm);
+            padding: 40px 20px;
+            font-size: 13px;
         }
         .chat-list-empty i {
-            font-size: var(--font-3xl);
-            margin-bottom: var(--spacing-3);
+            font-size: 24px;
+            margin-bottom: 12px;
             display: block;
             opacity: 0.3;
         }
         
         .conv-item {
-            padding: var(--spacing-3) var(--spacing-4);
+            padding: 10px 14px;
             border-radius: var(--radius-md);
             cursor: pointer;
-            margin-bottom: 2px;
+            margin-bottom: 3px;
             display: flex;
             align-items: center;
             justify-content: space-between;
-            gap: var(--spacing-2);
+            gap: 10px;
             border: 1px solid transparent;
-            min-height: 48px;
+            min-height: 46px;
             transition: var(--transition-fast);
         }
         .conv-item:active {
@@ -505,85 +458,80 @@
         }
         .conv-item.active {
             background: var(--bg-active);
-            border-color: rgba(59,130,246,0.2);
+            border-color: rgba(59,130,246,0.15);
         }
         .conv-item-title {
             flex: 1;
             overflow: hidden;
             text-overflow: ellipsis;
             white-space: nowrap;
-            font-weight: var(--font-medium);
-            font-size: var(--font-sm);
+            font-weight: 500;
+            font-size: 13px;
             color: var(--text-primary);
         }
         .conv-item-time {
-            font-size: var(--font-xs);
+            font-size: 11px;
             color: var(--text-tertiary);
             flex-shrink: 0;
         }
         .conv-item-actions {
             display: flex;
-            gap: 2px;
+            gap: 4px;
             opacity: 0;
             transition: opacity 0.2s ease;
-            flex-shrink: 0;
         }
         .conv-item:hover .conv-item-actions,
         .conv-item.active .conv-item-actions {
             opacity: 1;
         }
         .conv-item-actions button {
-            width: 30px;
-            height: 30px;
+            width: 26px;
+            height: 26px;
             border: none;
             background: rgba(255,255,255,0.06);
             color: var(--text-secondary);
             cursor: pointer;
-            font-size: var(--font-sm);
+            font-size: 11px;
             border-radius: var(--radius-sm);
             display: flex;
             align-items: center;
             justify-content: center;
         }
 
-        /* ===== User Bar ===== */
+        /* ===== User Scaffold & Credit Balance Area ===== */
         .user-bar {
-            padding: var(--spacing-3) var(--spacing-4) var(--spacing-4);
+            padding: 12px 16px;
             border-top: 1px solid var(--border-light);
             display: flex;
             align-items: center;
-            gap: var(--spacing-3);
+            gap: 12px;
             background: rgba(10, 14, 23, 0.95);
             backdrop-filter: blur(20px);
             -webkit-backdrop-filter: blur(20px);
             flex-shrink: 0;
-            position: sticky;
-            bottom: 0;
-            z-index: 3;
-            padding-bottom: calc(var(--spacing-4) + var(--safe-bottom));
         }
         .user-avatar {
-            width: 42px;
-            height: 42px;
+            width: 40px;
+            height: 40px;
             border-radius: 50%;
             background: var(--accent-gradient);
             display: flex;
             align-items: center;
             justify-content: center;
-            font-weight: var(--font-bold);
+            font-weight: 700;
             color: white;
-            font-size: var(--font-xl);
+            font-size: 16px;
             flex-shrink: 0;
             position: relative;
             cursor: pointer;
-            box-shadow: 0 2px 12px rgba(59,130,246,0.2);
+            box-shadow: 0 2px 8px rgba(59,130,246,0.2);
         }
         .user-status {
             position: absolute;
-            bottom: 2px;
-            right: 2px;
-            width: 10px;
-            height: 10px;
+            bottom: 1px;
+            right: 1px;
+            width: 9px;
+            height: 9px;
             background: var(--success);
             border-radius: 50%;
             border: 2px solid var(--bg-primary);
@@ -593,8 +541,8 @@
             min-width: 0;
         }
         .user-name {
-            font-weight: var(--font-bold);
-            font-size: var(--font-base);
+            font-weight: 700;
+            font-size: 14px;
             color: var(--text-primary);
             white-space: nowrap;
             overflow: hidden;
@@ -602,23 +550,23 @@
             cursor: pointer;
         }
         .user-email {
-            font-size: var(--font-xs);
+            font-size: 11px;
             color: var(--text-secondary);
             white-space: nowrap;
             overflow: hidden;
             text-overflow: ellipsis;
         }
         .user-balance {
-            font-size: var(--font-xs);
+            font-size: 11px;
             color: var(--text-secondary);
-            margin-top: 2px;
+            margin-top: 1px;
             display: flex;
             align-items: center;
-            gap: var(--spacing-2);
+            gap: 8px;
         }
         .user-balance .value {
             color: var(--accent-primary);
-            font-weight: var(--font-bold);
+            font-weight: 700;
         }
         .user-balance .divider {
             color: var(--text-tertiary);
@@ -628,22 +576,21 @@
             height: 3px;
             background: var(--border-light);
             border-radius: var(--radius-full);
-            margin-top: var(--spacing-1);
+            margin-top: 4px;
             overflow: hidden;
         }
         .usage-fill {
             height: 100%;
             background: var(--accent-gradient);
             border-radius: var(--radius-full);
-            transition: width 0.6s cubic-bezier(0.4, 0, 0.2, 1);
-            will-change: width;
+            transition: width 0.5s ease;
         }
         .usage-fill.warning { background: linear-gradient(135deg, var(--warning), var(--warning-dark)); }
         .usage-fill.danger { background: linear-gradient(135deg, var(--danger), var(--danger-dark)); }
         
         .logout-btn {
-            width: 36px;
-            height: 36px;
+            width: 34px;
+            height: 34px;
             background: rgba(255,255,255,0.05);
             border: 1px solid var(--border-medium);
             color: var(--text-secondary);
@@ -652,7 +599,7 @@
             display: flex;
             align-items: center;
             justify-content: center;
-            font-size: var(--font-base);
+            font-size: 14px;
             transition: var(--transition-fast);
             flex-shrink: 0;
         }
@@ -662,35 +609,23 @@
             color: var(--danger);
         }
 
-        /* ===== Main Chat ===== */
-        .main-chat {
-            flex: 1;
-            display: flex;
-            flex-direction: column;
-            min-width: 0;
-            min-height: 0;
-            overflow: hidden;
-            background: var(--bg-secondary);
-        }
-
-        /* ===== Chat Header ===== */
+        /* ===== Main Core Interactive Screen Scaffold ===== */
         .chat-header {
             height: var(--header-height);
-            padding: 0 var(--spacing-4);
+            padding: 0 16px;
             border-bottom: 1px solid var(--border-light);
             display: flex;
             align-items: center;
-            gap: var(--spacing-3);
+            gap: 12px;
             flex-shrink: 0;
             background: rgba(17, 24, 39, 0.95);
             backdrop-filter: blur(20px);
             -webkit-backdrop-filter: blur(20px);
             z-index: var(--z-header);
-            padding-top: var(--safe-top);
         }
         .chat-title {
-            font-weight: var(--font-semibold);
-            font-size: var(--font-lg);
+            font-weight: 600;
+            font-size: 16px;
             flex: 1;
             min-width: 0;
             color: var(--text-primary);
@@ -705,13 +640,10 @@
             align-items: center;
         }
 
-        /* ===== Hamburger Menu Button ===== */
+        /* ===== Fixed Action SVG Hamburger Button ===== */
         .hamburger-svg-btn {
-            width: 44px;
-            height: 44px;
-            min-width: 44px;
-            min-height: 44px;
-            padding: 0;
+            width: 40px;
+            height: 40px;
             background: transparent;
             border: none;
             cursor: pointer;
@@ -724,10 +656,8 @@
         }
         .hamburger-svg {
             display: block;
-            width: 28px;
-            height: 28px;
-            shape-rendering: crispEdges;
-            vector-effect: non-scaling-stroke;
+            width: 24px;
+            height: 24px;
         }
         .hamburger-svg line {
             transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
@@ -735,10 +665,18 @@
             stroke-width: 2.5;
             stroke-linecap: round;
         }
-        
-        .hamburger-svg-btn.active .line1 { transform: translate(0px, 6px) rotate(45deg); stroke: var(--accent-primary); }
-        .hamburger-svg-btn.active .line2 { opacity: 0; transform: scaleX(0); }
-        .hamburger-svg-btn.active .line3 { transform: translate(0px, -6px) rotate(-45deg); stroke: var(--accent-primary); }
+        .hamburger-svg-btn.active .line1 {
+            transform: translate(0px, 6px) rotate(45deg);
+            stroke: var(--accent-primary);
+        }
+        .hamburger-svg-btn.active .line2 {
+            opacity: 0;
+            transform: scaleX(0);
+        }
+        .hamburger-svg-btn.active .line3 {
+            transform: translate(0px, -6px) rotate(-45deg);
+            stroke: var(--accent-primary);
+        }
         
         @media (min-width: 1024px) {
             .hamburger-svg-btn {
@@ -746,54 +684,20 @@
             }
         }
 
-        /* ===== Icon Button ===== */
-        .icon-btn {
-            width: 38px;
-            height: 38px;
-            border-radius: var(--radius-sm);
-            border: none;
-            background: transparent;
-            color: var(--text-secondary);
-            cursor: pointer;
-            font-size: var(--font-lg);
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            transition: var(--transition-fast);
-            flex-shrink: 0;
-        }
-        .icon-btn:active {
-            background: rgba(255,255,255,0.05);
-            transform: scale(0.92);
-        }
-        .icon-btn:hover {
-            color: var(--text-primary);
-        }
-
-        /* ===== Chat Container ===== */
-        #chatContainer {
-            flex: 1;
-            overflow-y: auto;
-            overflow-x: hidden;
-            padding: var(--spacing-4) var(--spacing-4) var(--spacing-2);
-            -webkit-overflow-scrolling: touch;
-            scroll-behavior: smooth;
-        }
-
-        /* ===== Messages ===== */
+        /* ===== Main Dynamic Chat Panel View Area ===== */
         .message {
-            margin: var(--spacing-2) 0;
-            padding: var(--spacing-3) var(--spacing-4);
+            margin: 10px 0;
+            padding: 12px 16px;
             border-radius: var(--radius-lg);
             max-width: 85%;
-            line-height: 1.7;
-            font-size: var(--font-base);
-            animation: messageIn 0.35s cubic-bezier(0.4, 0, 0.2, 1);
+            line-height: 1.65;
+            font-size: 14px;
+            animation: messageIn 0.3s cubic-bezier(0.4, 0, 0.2, 1);
             word-wrap: break-word;
             position: relative;
         }
         @keyframes messageIn {
-            from { opacity: 0; transform: translateY(12px) scale(0.97); }
+            from { opacity: 0; transform: translateY(10px) scale(0.98); }
             to { opacity: 1; transform: translateY(0) scale(1); }
         }
         
@@ -802,7 +706,7 @@
             color: white;
             margin-left: auto;
             border-bottom-right-radius: var(--radius-xs);
-            box-shadow: 0 2px 12px rgba(59,130,246,0.2);
+            box-shadow: 0 2px 10px rgba(59,130,246,0.15);
             cursor: pointer;
         }
         .message.assistant {
@@ -811,11 +715,14 @@
             margin-right: auto;
             border-bottom-left-radius: var(--radius-xs);
         }
+        .message.assistant strong {
+            color: var(--accent-primary);
+        }
         .message.assistant code {
             font-family: 'Courier New', monospace;
-            font-size: var(--font-sm);
-            background: rgba(255,255,255,0.05);
-            padding: 2px var(--spacing-2);
+            font-size: 12px;
+            background: rgba(255,255,255,0.06);
+            padding: 2px 6px;
             border-radius: var(--radius-xs);
             color: var(--accent-primary);
         }
@@ -823,18 +730,41 @@
             background: var(--bg-primary);
             border: 1px solid var(--border-light);
             border-radius: var(--radius-md);
-            padding: var(--spacing-3) var(--spacing-4);
+            padding: 12px;
             overflow-x: auto;
-            margin: var(--spacing-2) 0;
-            font-size: var(--font-sm);
+            margin: 8px 0;
+            font-size: 13px;
         }
         .message.assistant pre code {
             background: transparent;
             padding: 0;
             color: var(--text-primary);
         }
+        .message.assistant ul, .message.assistant ol {
+            padding-left: 20px;
+            margin: 6px 0;
+        }
+        .message.assistant li {
+            margin: 4px 0;
+        }
+        .message-time {
+            font-size: 10px;
+            opacity: 0.5;
+            margin-top: 4px;
+            display: block;
+        }
+        .message.user .message-time { text-align: right; color: rgba(255,255,255,0.7); }
+        .message.assistant .message-time { color: var(--text-tertiary); }
         
-        /* Floating Code Copy Action (NEW FEATURE) */
+        .powered-by {
+            font-size: 10px;
+            color: var(--text-tertiary);
+            margin-top: 6px;
+            display: block;
+            opacity: 0.5;
+        }
+
+        /* ===== Inline Block Code Copy Floating Tool (NEW FEATURE) ===== */
         .copy-code-btn {
             position: absolute;
             top: 8px;
@@ -844,7 +774,7 @@
             color: var(--text-secondary);
             border-radius: var(--radius-sm);
             padding: 4px 8px;
-            font-size: 11px;
+            font-size: 10px;
             cursor: pointer;
             z-index: 10;
             transition: var(--transition-fast);
@@ -854,28 +784,11 @@
             color: var(--text-primary);
         }
 
-        .message-time {
-            font-size: var(--font-xs);
-            opacity: 0.5;
-            margin-top: var(--spacing-1);
-            display: block;
-        }
-        .message.user .message-time { text-align: right; color: rgba(255,255,255,0.6); }
-        .message.assistant .message-time { color: var(--text-tertiary); }
-        
-        .powered-by {
-            font-size: var(--font-xs);
-            color: var(--text-tertiary);
-            margin-top: var(--spacing-2);
-            display: block;
-            opacity: 0.6;
-        }
-
-        /* ===== Message Tool Actions ===== */
+        /* ===== Message Hover Tool Actions ===== */
         .msg-actions {
             position: absolute;
-            top: var(--spacing-2);
-            right: var(--spacing-2);
+            top: 8px;
+            right: 8px;
             display: flex;
             gap: 2px;
             opacity: 0;
@@ -885,26 +798,26 @@
             opacity: 1;
         }
         .msg-actions button {
-            width: 28px;
-            height: 28px;
+            width: 26px;
+            height: 26px;
             border-radius: var(--radius-sm);
             border: 1px solid var(--border-medium);
             background: var(--bg-quaternary);
             color: var(--text-secondary);
             cursor: pointer;
-            font-size: var(--font-xs);
+            font-size: 10px;
             display: flex;
             align-items: center;
             justify-content: center;
             transition: var(--transition-fast);
         }
 
-        /* ===== Message Feedback ===== */
+        /* ===== Message Quality Feedback System ===== */
         .msg-feedback {
             display: flex;
-            gap: var(--spacing-2);
-            margin-top: var(--spacing-3);
-            padding-top: var(--spacing-3);
+            gap: 8px;
+            margin-top: 10px;
+            padding-top: 8px;
             border-top: 1px solid var(--border-light);
             flex-wrap: wrap;
             align-items: center;
@@ -913,72 +826,138 @@
             background: transparent;
             border: 1px solid var(--border-medium);
             border-radius: var(--radius-full);
-            padding: 4px var(--spacing-4);
+            padding: 4px 12px;
             cursor: pointer;
             color: var(--text-secondary);
-            font-size: var(--font-sm);
+            font-size: 11px;
             transition: var(--transition-fast);
             display: flex;
             align-items: center;
-            gap: var(--spacing-1);
+            gap: 4px;
         }
-        .feedback-btn.active { background: rgba(59,130,246,0.15); border-color: var(--accent-primary); color: var(--accent-primary); }
-        .feedback-btn.active.negative { background: rgba(239,68,68,0.15); border-color: var(--danger); color: var(--danger); }
+        .feedback-btn.active {
+            background: rgba(59,130,246,0.12);
+            border-color: var(--accent-primary);
+            color: var(--accent-primary);
+        }
+        .feedback-btn.active.negative {
+            background: rgba(239,68,68,0.12);
+            border-color: var(--danger);
+            color: var(--danger);
+        }
 
-        /* ===== Splash Display Panel ===== */
+        /* ===== Splash Display Container Panel ===== */
         .welcome {
             text-align: center;
-            max-width: 520px;
-            margin: var(--spacing-5) auto;
+            max-width: 500px;
+            margin: 40px auto;
             background: var(--bg-tertiary);
             border-radius: var(--radius-xl);
-            padding: var(--spacing-8) var(--spacing-6) var(--spacing-6);
+            padding: 30px 20px;
             border: 1px solid var(--border-light);
         }
         .welcome-icon {
-            font-size: 4rem;
-            margin-bottom: var(--spacing-3);
+            font-size: 3rem;
+            margin-bottom: 12px;
             display: block;
             animation: float 4s ease-in-out infinite;
         }
         @keyframes float {
             0%, 100% { transform: translateY(0); }
-            50% { transform: translateY(-12px); }
+            50% { transform: translateY(-8px); }
         }
         .welcome h2 {
-            font-size: var(--font-2xl);
-            font-weight: var(--font-extrabold);
+            font-size: 22px;
+            font-weight: 800;
             background: var(--accent-gradient);
             -webkit-background-clip: text;
             -webkit-text-fill-color: transparent;
-            margin-bottom: var(--spacing-1);
+            margin-bottom: 4px;
         }
-        .welcome p { color: var(--text-secondary); font-size: var(--font-base); }
-        .chips-grid { display: grid; grid-template-columns: 1fr 1fr; gap: var(--spacing-2); margin-top: var(--spacing-4); }
-        @media (max-width: 480px) { .chips-grid { grid-template-columns: 1fr; } }
-        
+        .welcome p {
+            color: var(--text-secondary);
+            font-size: 14px;
+        }
+        .chips-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 8px;
+            margin-top: 16px;
+        }
+        @media (max-width: 480px) {
+            .chips-grid { grid-template-columns: 1fr; }
+        }
         .chip {
-            padding: var(--spacing-3) var(--spacing-4);
+            padding: 10px 14px;
             background: var(--bg-card);
             border: 1px solid var(--border-light);
             border-radius: var(--radius-md);
             cursor: pointer;
-            font-size: var(--font-sm);
+            font-size: 12px;
             color: var(--text-secondary);
-            text-align: center;
-            font-weight: var(--font-medium);
+            font-weight: 500;
             transition: var(--transition-fast);
             display: flex;
             align-items: center;
             justify-content: center;
-            gap: var(--spacing-2);
+            gap: 8px;
         }
-        .chip:active { background: var(--bg-active); border-color: var(--accent-primary); color: var(--text-primary); }
+        .chip:active {
+            background: var(--bg-active);
+            border-color: var(--accent-primary);
+            color: var(--text-primary);
+        }
 
-        /* ===== Input Area ===== */
+        /* ===== Static Display Limit Notification Banner ===== */
+        .free-tier-card {
+            text-align: center;
+            max-width: 440px;
+            margin: 16px auto;
+            background: rgba(34,197,94,0.03);
+            border: 2px solid var(--success);
+            border-radius: var(--radius-xl);
+            padding: 20px 16px;
+        }
+        .free-tier-card h3 {
+            font-size: 18px;
+            color: var(--success);
+            margin-bottom: 4px;
+        }
+
+        /* ===== Typist Pulse Status Signal ===== */
+        .typing-indicator {
+            display: inline-flex;
+            align-items: center;
+            gap: 12px;
+            padding: 12px 16px;
+            background: var(--bg-tertiary);
+            border: 1px solid var(--border-light);
+            border-radius: var(--radius-lg);
+            margin: 8px 0;
+            border-bottom-left-radius: var(--radius-xs);
+        }
+        .typing-dots {
+            display: flex;
+            gap: 4px;
+        }
+        .typing-dots span {
+            width: 6px;
+            height: 6px;
+            background: var(--text-secondary);
+            border-radius: 50%;
+            animation: dotBounce 1.4s infinite;
+        }
+        .typing-dots span:nth-child(2) { animation-delay: 0.2s; }
+        .typing-dots span:nth-child(3) { animation-delay: 0.4s; }
+        @keyframes dotBounce {
+            0%, 60%, 100% { transform: translateY(0); opacity: 0.3; }
+            30% { transform: translateY(-6px); opacity: 1; }
+        }
+
+        /* ===== Context Message Area Entry Layout ===== */
         .input-area {
-            padding: var(--spacing-3) var(--spacing-3);
-            padding-bottom: calc(var(--spacing-3) + env(safe-area-inset-bottom, 0px));
+            padding: 12px;
+            padding-bottom: calc(12px + env(safe-area-inset-bottom, 0px));
             border-top: 1px solid var(--border-light);
             flex-shrink: 0;
             background: rgba(17, 24, 39, 0.98);
@@ -988,23 +967,24 @@
         }
         .input-wrap {
             display: flex;
-            gap: var(--spacing-2);
+            gap: 8px;
             background: var(--bg-quaternary);
             border: 2px solid var(--border-medium);
             border-radius: var(--radius-full);
-            padding: 4px 4px 4px var(--spacing-4);
+            padding: 4px 4px 4px 16px;
             transition: var(--transition-base);
             align-items: center;
         }
-        .input-wrap:focus-within { border-color: var(--accent-primary); }
-        
+        .input-wrap:focus-within {
+            border-color: var(--accent-primary);
+        }
         #messageInput {
             flex: 1;
             background: transparent;
             border: none;
             color: var(--text-primary);
-            font-size: var(--font-lg);
-            padding: var(--spacing-2) 0;
+            font-size: 15px;
+            padding: 8px 0;
             outline: none;
             line-height: 1.5;
             max-height: 120px;
@@ -1015,60 +995,76 @@
             border: none;
             color: white;
             border-radius: var(--radius-full);
-            padding: var(--spacing-2) var(--spacing-5);
-            font-weight: var(--font-semibold);
+            padding: 8px 20px;
+            font-weight: 600;
             cursor: pointer;
-            font-size: var(--font-base);
+            font-size: 14px;
             display: flex;
             align-items: center;
-            gap: var(--spacing-2);
-            box-shadow: 0 2px 12px rgba(59,130,246,0.25);
+            gap: 8px;
+            flex-shrink: 0;
+            box-shadow: 0 2px 10px rgba(59,130,246,0.2);
             transition: var(--transition-base);
-            min-height: 44px;
+            min-height: 40px;
         }
-        #sendButton:disabled { opacity: 0.4; pointer-events: none; }
-        #voiceBtn {
-            width: 40px;
-            height: 40px;
-            border-radius: 50%;
-            border: 1px solid var(--border-medium);
-            background: transparent;
-            color: var(--text-secondary);
-            cursor: pointer;
-            display: none;
-            align-items: center;
-            justify-content: center;
-            transition: var(--transition-fast);
+        #sendButton:disabled {
+            opacity: 0.4;
+            pointer-events: none;
         }
-        #voiceBtn.listening { color: var(--danger); border-color: var(--danger); }
 
-        /* ===== Modals ===== */
-        .modal-box .modal-icon { font-size: 3.5rem; text-align: center; display: block; margin-bottom: var(--spacing-2); }
-        .modal-box h2 { font-size: var(--font-2xl); font-weight: var(--font-extrabold); margin-bottom: var(--spacing-2); text-align: center; }
-        .modal-box .modal-subtitle { color: var(--text-secondary); font-size: var(--font-base); margin-bottom: var(--spacing-4); text-align: center; }
+        /* ===== Branded Dialog Modals ===== */
+        .modal-box .modal-icon {
+            font-size: 3rem;
+            text-align: center;
+            display: block;
+            margin-bottom: 8px;
+        }
+        .modal-box h2 {
+            font-size: 20px;
+            font-weight: 800;
+            margin-bottom: 4px;
+            text-align: center;
+        }
+        .modal-box .modal-subtitle {
+            color: var(--text-secondary);
+            font-size: 13px;
+            margin-bottom: 16px;
+            text-align: center;
+        }
         
         .auth-form input {
             width: 100%;
-            padding: var(--spacing-3) var(--spacing-4);
+            padding: 10px 14px;
             background: var(--bg-primary);
             border: 1px solid var(--border-medium);
             border-radius: var(--radius-md);
             color: var(--text-primary);
-            font-size: var(--font-lg);
+            font-size: 14px;
             outline: none;
-            margin-bottom: var(--spacing-2);
-            height: 48px;
+            margin-bottom: 8px;
+            height: 46px;
         }
-        .auth-form input:focus { border-color: var(--accent-primary); }
-        .auth-error { color: var(--danger); font-size: var(--font-sm); text-align: center; min-height: 20px; margin-top: var(--spacing-1); }
-        .auth-buttons { display: flex; gap: var(--spacing-2); margin-top: var(--spacing-1); }
+        .auth-form input:focus {
+            border-color: var(--accent-primary);
+        }
+        .auth-error {
+            color: var(--danger);
+            font-size: 12px;
+            text-align: center;
+            min-height: 18px;
+            margin-top: 4px;
+        }
+        .auth-buttons {
+            display: flex;
+            gap: 8px;
+        }
         
         .pkg-card {
             background: var(--bg-primary);
             border: 1px solid var(--border-light);
             border-radius: var(--radius-md);
-            padding: var(--spacing-4);
-            margin: var(--spacing-2) 0;
+            padding: 14px;
+            margin: 8px 0;
             cursor: pointer;
             transition: var(--transition-fast);
             display: flex;
@@ -1076,9 +1072,15 @@
             align-items: center;
             position: relative;
         }
-        .pkg-card.popular { border-color: var(--warning); background: rgba(245,158,11,0.04); }
+        .pkg-card:active {
+            transform: scale(0.98);
+        }
+        .pkg-card.popular {
+            border-color: var(--warning);
+            background: rgba(245,158,11,0.02);
+        }
 
-        /* ===== Light Theme ===== */
+        /* ===== Light Secondary Color System ===== */
         .light-theme {
             --bg-primary: #f8fafc;
             --bg-secondary: #ffffff;
@@ -1086,16 +1088,15 @@
             --bg-quaternary: #e2e8f0;
             --bg-card: rgba(0,0,0,0.02);
             --bg-hover: rgba(0,0,0,0.03);
-            --bg-active: rgba(59,130,246,0.08);
+            --bg-active: rgba(59,130,246,0.06);
             
             --text-primary: #0f172a;
             --text-secondary: #475569;
             --text-tertiary: #94a3b8;
-            --text-quaternary: #64748b;
             
-            --border-light: rgba(0,0,0,0.06);
+            --border-light: rgba(0,0,0,0.05);
             --border-medium: rgba(0,0,0,0.1);
-            --border-strong: rgba(0,0,0,0.15);
+            --border-strong: rgba(0,0,0,0.16);
         }
         .light-theme .sidebar { background: var(--bg-primary); }
         .light-theme .sidebar-header, .light-theme .user-bar { background: rgba(248, 250, 252, 0.95); }
@@ -1108,31 +1109,28 @@
     <!-- ===== Animated Background ===== -->
     <div class="network-bg" id="networkBg"></div>
 
-    <!-- ===== Loader ===== -->
+    <!-- ===== Loader Display Screen ===== -->
     <div id="loader">
         <div class="loader-spinner"></div>
         <div class="loader-brand">
             <i class="fas fa-brain"></i>
             <span>Zakhourani AI</span>
         </div>
-        <div class="loader-text" id="loaderText">Securing dynamic buffers...</div>
-        <div class="loader-progress">
-            <div class="loader-progress-bar" id="loaderProgress"></div>
-        </div>
+        <div class="loader-text" id="loaderText">Securing channels...</div>
     </div>
 
-    <!-- ===== Toast Container ===== -->
+    <!-- ===== Toast Scaffold Notify Box ===== -->
     <div class="toast-container" id="toastContainer"></div>
 
-    <!-- ===== Auth Modal ===== -->
+    <!-- ===== Auth Dynamic Portal Dialog ===== -->
     <div class="modal" id="authModal">
         <div class="modal-box">
             <span class="modal-icon">🔐</span>
             <h2>Welcome to Zakhourani AI</h2>
-            <p class="modal-subtitle">Login or register to claim <strong>50 free questions</strong> every 24 hours.</p>
+            <p class="modal-subtitle">Claim your <strong>50 free questions</strong> daily.</p>
             <div class="auth-form">
                 <input type="email" id="authEmail" placeholder="Email address" autocomplete="email" inputmode="email">
-                <input type="password" id="authPassword" placeholder="Password (min 6 characters)" autocomplete="current-password">
+                <input type="password" id="authPassword" placeholder="Password (6+ chars)" autocomplete="current-password">
                 <div class="auth-buttons">
                     <button class="modal-btn primary" id="authLoginBtn"><i class="fas fa-sign-in-alt"></i> Login</button>
                     <button class="modal-btn secondary" id="authRegisterBtn"><i class="fas fa-user-plus"></i> Register</button>
@@ -1142,42 +1140,42 @@
         </div>
     </div>
 
-    <!-- ===== Settings Modal ===== -->
+    <!-- ===== Settings Option Menu Modal ===== -->
     <div class="modal" id="settingsModal">
-        <div class="modal-box" style="max-width:500px">
+        <div class="modal-box" style="max-width:480px">
             <span class="modal-icon">⚙️</span>
             <h2>System Settings</h2>
-            <p class="modal-subtitle">Customize your Premium Intelligence experience.</p>
+            <p class="modal-subtitle">Optimize execution parameters.</p>
             
-            <div style="margin-bottom:var(--spacing-4)">
-                <label style="font-size:var(--font-xs);color:var(--text-secondary);font-weight:var(--font-semibold);text-transform:uppercase;letter-spacing:0.5px;display:block;margin-bottom:var(--spacing-1)">AI Model Engine</label>
-                <select id="settingModel" style="width:100%;padding:var(--spacing-2) var(--spacing-3);background:var(--bg-primary);border:1px solid var(--border-medium);border-radius:var(--radius-md);color:var(--text-primary);outline:none;font-size:var(--font-base);height:44px">
+            <div style="margin-bottom:16px">
+                <label style="font-size:10px;color:var(--text-secondary);font-weight:600;text-transform:uppercase;letter-spacing:0.5px;display:block;margin-bottom:4px">AI Engine</label>
+                <select id="settingModel" style="width:100%;padding:8px 12px;background:var(--bg-primary);border:1px solid var(--border-medium);border-radius:var(--radius-md);color:var(--text-primary);outline:none;font-size:14px;height:44px">
                     <option value="zakhourani-premium">Zakhourani Premium (Default)</option>
-                    <option value="gpt-4o">GPT-4o (High Intelligence)</option>
-                    <option value="claude-3-5">Claude 3.5 Sonnet (Creative Code)</option>
+                    <option value="gpt-4o">GPT-4o Intelligence</option>
+                    <option value="claude-3-5">Claude 3.5 Sonnet</option>
                     <option value="gemini-pro">Gemini 1.5 Pro</option>
                 </select>
             </div>
             
-            <div style="margin-bottom:var(--spacing-4)">
-                <label style="font-size:var(--font-xs);color:var(--text-secondary);font-weight:var(--font-semibold);text-transform:uppercase;letter-spacing:0.5px;display:block;margin-bottom:var(--spacing-1)">Speech Synth Speed</label>
-                <div style="display:flex;align-items:center;gap:var(--spacing-3)">
+            <div style="margin-bottom:16px">
+                <label style="font-size:10px;color:var(--text-secondary);font-weight:600;text-transform:uppercase;letter-spacing:0.5px;display:block;margin-bottom:4px">Speech Synth Voice Speed</label>
+                <div style="display:flex;align-items:center;gap:12px">
                     <input type="range" id="settingSpeechSpeed" min="0.5" max="2" step="0.1" value="0.9" style="flex:1;accent-color:var(--accent-primary)">
-                    <span id="speedValue" style="font-size:var(--font-sm);color:var(--text-primary);min-width:30px">0.9x</span>
+                    <span id="speedValue" style="font-size:12px;color:var(--text-primary);min-width:30px">0.9x</span>
                 </div>
             </div>
 
-            <div style="margin-bottom:var(--spacing-4);display:flex;justify-content:space-between;align-items:center">
+            <div style="margin-bottom:16px;display:flex;justify-content:space-between;align-items:center">
                 <div>
-                    <label style="font-size:var(--font-sm);color:var(--text-primary);font-weight:var(--font-semibold);display:block">Interface Sound FX</label>
-                    <span style="font-size:var(--font-xs);color:var(--text-tertiary)">Immersive audio updates</span>
+                    <label style="font-size:13px;color:var(--text-primary);font-weight:600;display:block">Audio Sound FX</label>
+                    <span style="font-size:11px;color:var(--text-tertiary)">Interactive audio interface</span>
                 </div>
                 <input type="checkbox" id="settingSoundFX" checked style="width:20px;height:20px;accent-color:var(--accent-primary)">
             </div>
             
-            <div style="margin-bottom:var(--spacing-4)">
-                <label style="font-size:var(--font-xs);color:var(--text-secondary);font-weight:var(--font-semibold);text-transform:uppercase;letter-spacing:0.5px;display:block;margin-bottom:var(--spacing-1)">Backup & Restore Data</label>
-                <div style="display:flex;gap:var(--spacing-2)">
+            <div style="margin-bottom:16px">
+                <label style="font-size:10px;color:var(--text-secondary);font-weight:600;text-transform:uppercase;letter-spacing:0.5px;display:block;margin-bottom:4px">DB Sync Backup / Restore</label>
+                <div style="display:flex;gap:8px">
                     <button class="modal-btn secondary" style="flex:1;margin-top:0" onclick="exportAllChatsJSON()"><i class="fas fa-file-export"></i> Backup</button>
                     <button class="modal-btn secondary" style="flex:1;margin-top:0" onclick="$('importFileInput').click()"><i class="fas fa-file-import"></i> Restore</button>
                     <input type="file" id="importFileInput" accept=".json" style="display:none" onchange="importChatsJSON(event)">
@@ -1189,44 +1187,44 @@
         </div>
     </div>
 
-    <!-- ===== Limit Modal ===== -->
+    <!-- ===== Usage Limit Reached Banner ===== -->
     <div class="modal" id="limitModal">
         <div class="modal-box">
             <span class="modal-icon">⏳</span>
             <h2>Daily Limit Reached</h2>
-            <p class="modal-subtitle">You've used all <strong>50 free questions</strong> for today.<br>Resets at midnight UTC.</p>
-            <div id="limitTimer" style="font-size:1.5rem;font-weight:700;margin:var(--spacing-3) 0;color:var(--accent-primary);text-align:center;font-family:monospace"></div>
-            <button class="modal-btn gold" onclick="closeModal('limitModal');showPackagesModal()"><i class="fas fa-crown"></i> Upgrade Now</button>
+            <p class="modal-subtitle">You have executed all <strong>50 free questions</strong>.<br>Resets at midnight UTC.</p>
+            <div id="limitTimer" style="font-size:24px;font-weight:700;margin:12px 0;color:var(--accent-primary);text-align:center;font-family:monospace"></div>
+            <button class="modal-btn gold" onclick="closeModal('limitModal');showPackagesModal()"><i class="fas fa-crown"></i> Upgrade Package</button>
             <button class="modal-btn secondary" onclick="closeModal('limitModal')">Close</button>
         </div>
     </div>
 
-    <!-- ===== Packages Modal ===== -->
+    <!-- ===== Packages Payment Scaffold Modal ===== -->
     <div class="modal" id="packagesModal">
-        <div class="modal-box" style="max-width:500px">
+        <div class="modal-box" style="max-width:480px">
             <span class="modal-icon">💰</span>
             <h2>Premium Packages</h2>
-            <p class="modal-subtitle">Balance: <strong style="color:var(--accent-primary);font-size:1.3rem" id="packagesBalance">$0.00</strong></p>
-            <div style="display:flex;gap:var(--spacing-2);margin:var(--spacing-3) 0">
-                <button class="modal-btn primary" style="flex:1;font-size:var(--font-sm);padding:var(--spacing-2)" onclick="topupBalance(5)"><i class="fas fa-plus"></i> $5</button>
-                <button class="modal-btn primary" style="flex:1;font-size:var(--font-sm);padding:var(--spacing-2)" onclick="topupBalance(10)"><i class="fas fa-plus"></i> $10</button>
-                <button class="modal-btn primary" style="flex:1;font-size:var(--font-sm);padding:var(--spacing-2)" onclick="topupBalance(25)"><i class="fas fa-plus"></i> $25</button>
+            <p class="modal-subtitle">Credit Balance: <strong style="color:var(--accent-primary);font-size:18px" id="packagesBalance">$0.00</strong></p>
+            <div style="display:flex;gap:8px;margin:12px 0">
+                <button class="modal-btn primary" style="flex:1;font-size:12px;padding:8px" onclick="topupBalance(5)"><i class="fas fa-plus"></i> $5</button>
+                <button class="modal-btn primary" style="flex:1;font-size:12px;padding:8px" onclick="topupBalance(10)"><i class="fas fa-plus"></i> $10</button>
+                <button class="modal-btn primary" style="flex:1;font-size:12px;padding:8px" onclick="topupBalance(25)"><i class="fas fa-plus"></i> $25</button>
             </div>
             <div id="packagesList"></div>
-            <p style="font-size:var(--font-xs);color:var(--text-tertiary);margin-top:var(--spacing-3);text-align:center"><i class="fas fa-lock"></i> Secure payments coming soon</p>
+            <p style="font-size:11px;color:var(--text-tertiary);margin-top:12px;text-align:center"><i class="fas fa-lock"></i> SSL secured transaction layer</p>
             <button class="modal-btn secondary" onclick="closeModal('packagesModal')">Close</button>
         </div>
     </div>
 
-    <!-- ===== Profile Modal ===== -->
+    <!-- ===== Profile Modals ===== -->
     <div class="modal" id="profileModal">
         <div class="modal-box">
             <span class="modal-icon">👤</span>
-            <h2>Your Profile</h2>
-            <p class="modal-subtitle" style="color:var(--text-tertiary);font-size:var(--font-sm)" id="profileEmail"></p>
-            <div style="margin:var(--spacing-3) 0">
-                <label style="font-size:var(--font-xs);color:var(--text-secondary);font-weight:var(--font-semibold);text-transform:uppercase;letter-spacing:0.5px">Display Name</label>
-                <input type="text" id="profileName" style="width:100%;padding:var(--spacing-3) var(--spacing-4);background:var(--bg-primary);border:1px solid var(--border-medium);border-radius:var(--radius-md);color:var(--text-primary);margin-top:var(--spacing-1);outline:none;font-size:var(--font-base);transition:var(--transition-fast);height:48px">
+            <h2>Account Profile</h2>
+            <p class="modal-subtitle" style="color:var(--text-tertiary);font-size:12px" id="profileEmail"></p>
+            <div style="margin:12px 0">
+                <label style="font-size:10px;color:var(--text-secondary);font-weight:600;text-transform:uppercase;letter-spacing:0.5px">Display TagName</label>
+                <input type="text" id="profileName" style="width:100%;padding:10px 14px;background:var(--bg-primary);border:1px solid var(--border-medium);border-radius:var(--radius-md);color:var(--text-primary);margin-top:4px;outline:none;font-size:14px;height:46px">
             </div>
             <div class="stat-grid" id="profileStats"></div>
             <button class="modal-btn primary" onclick="updateProfile()"><i class="fas fa-save"></i> Save Changes</button>
@@ -1234,32 +1232,30 @@
         </div>
     </div>
 
-    <!-- ===== About Dr Modal ===== -->
+    <!-- ===== Creator Biography Modal View ===== -->
     <div class="modal" id="aboutDrModal">
-        <div class="modal-box" style="max-width:550px">
+        <div class="modal-box" style="max-width:540px">
             <span class="modal-icon">👨‍🎓</span>
             <h2>Dr. Waleed Zakhourani</h2>
             <div class="about-dr-card">
-                <h4>🏛️ Distinguished Linguist & Educator</h4>
-                <p>Dr. Waleed Hussein Zakhourani is a distinguished linguist, Harvard PhD, bridging English, Arabic & Kurdish worlds. Founder of Zakhourani AI.</p>
+                <h4>🏛️ Linguist & Researcher</h4>
+                <p>Dr. Waleed Hussein Zakhourani is a linguist, Harvard PhD, bridging English, Arabic & Kurdish worlds. Founder of Zakhourani AI.</p>
                 <h4>🏰 Ancestral Legacy</h4>
                 <p>Mir Porti (1650-1700 AD) of Zakhoran, descendant of Emirs of Bohtan, sixth grandfather of Dr. Waleed.</p>
-                <h4>📚 Publications</h4>
-                <p>Author of numerous linguistic works and cultural preservation projects spanning three decades.</p>
-                <h4>🌍 Global Impact</h4>
-                <p>Dedicated to preserving Kurdish heritage and promoting cross-cultural understanding through language.</p>
-                <a href="https://whzco.com/aboutDrwaleed.html" target="_blank" rel="noopener" style="color:var(--accent-primary);text-decoration:none;font-weight:var(--font-semibold)">📖 Read full biography →</a>
+                <h4>📚 Historical Works</h4>
+                <p>Author of major linguistic works and cultural preservation documents spanning three decades.</p>
+                <a href="https://whzco.com/aboutDrwaleed.html" target="_blank" rel="noopener">📖 Full Biography Portal →</a>
             </div>
             <button class="modal-btn secondary" onclick="closeModal('aboutDrModal')">Close</button>
         </div>
     </div>
 
-    <!-- ===== Main App ===== -->
+    <!-- ===== Main Frame Scaffold Area ===== -->
     <div id="app">
-        <!-- ===== FIXED SIDEBAR OVERLAY PLACEHOLDER (INSIDE THE APP WRAPPER LAYOUT) ===== -->
+        <!-- Sidebar Backdrop Overlay -->
         <div class="sidebar-overlay" id="sidebarOverlay"></div>
 
-        <!-- Sidebar -->
+        <!-- Sidebar Navigation Drawer Panel -->
         <aside class="sidebar" id="sidebar">
             <div class="sidebar-header">
                 <a href="https://whzco.com" class="brand" target="_blank" rel="noopener">
@@ -1267,12 +1263,11 @@
                     <div>
                         <span class="brand-name">Zakhourani</span>
                         <span class="brand-badge">AI</span>
-                        <span class="brand-version">v5</span>
                     </div>
                 </a>
                 <div class="search-box">
                     <span class="search-icon"><i class="fas fa-search"></i></span>
-                    <input type="text" id="searchChats" placeholder="Search conversations...">
+                    <input type="text" id="searchChats" placeholder="Search chats...">
                     <button class="clear-search" id="clearSearch"><i class="fas fa-times-circle"></i></button>
                 </div>
                 <button class="new-chat-btn" onclick="createNewChat()">
@@ -1283,8 +1278,7 @@
             <div class="chat-list" id="conversationList">
                 <div class="chat-list-empty">
                     <i class="fas fa-comment-dots"></i>
-                    No conversations yet
-                    <div class="sub-text">Start a new chat below</div>
+                    No conversations
                 </div>
             </div>
             
@@ -1294,7 +1288,7 @@
                     <span class="user-status"></span>
                 </div>
                 <div class="user-info">
-                    <div class="user-name" id="userName">Syncing...</div>
+                    <div class="user-name" id="userName">Sync...</div>
                     <div class="user-email" id="userEmail">user@email.com</div>
                     <div class="user-balance">
                         <span>Q: <span class="value" id="balanceCount">50</span>/50</span>
@@ -1311,10 +1305,11 @@
             </div>
         </aside>
 
-        <!-- Main Chat Area -->
+        <!-- Main Output Chat canvas window -->
         <div class="main-chat">
             <div class="chat-header">
-                <button class="hamburger-svg-btn" id="menuBtn" onclick="toggleSidebar()" aria-label="Toggle navigation menu">
+                <!-- Hardware-Accelerated SVG Toggle Menu -->
+                <button class="hamburger-svg-btn" id="menuBtn" onclick="toggleSidebar()" aria-label="Toggle menu">
                     <svg class="hamburger-svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round">
                         <line class="line1" x1="3" y1="6" x2="21" y2="6"/>
                         <line class="line2" x1="3" y1="12" x2="21" y2="12"/>
@@ -1323,27 +1318,13 @@
                 </button>
                 <div class="chat-title" id="chatTitle">Zakhourani AI</div>
                 <div class="chat-actions">
-                    <button class="icon-btn" onclick="showModal('aboutDrModal')" title="About Dr. Zakhourani" aria-label="About">
-                        <i class="fas fa-user-graduate"></i>
-                    </button>
-                    <button class="icon-btn" onclick="showModal('settingsModal')" title="System Settings" aria-label="Settings">
-                        <i class="fas fa-cog"></i>
-                    </button>
-                    <button class="icon-btn" onclick="showPackagesModal()" title="Packages & Balance" aria-label="Packages">
-                        <i class="fas fa-crown"></i>
-                    </button>
-                    <button class="icon-btn" onclick="editLastMessage()" title="Edit Last Message" aria-label="Edit">
-                        <i class="fas fa-pen"></i>
-                    </button>
-                    <button class="icon-btn" onclick="clearCurrentChat()" title="Clear Chat" aria-label="Clear">
-                        <i class="fas fa-trash-alt"></i>
-                    </button>
-                    <button class="icon-btn" onclick="exportChat()" title="Export Chat" aria-label="Export">
-                        <i class="fas fa-download"></i>
-                    </button>
-                    <button class="icon-btn" onclick="toggleTheme()" id="themeBtn" title="Toggle Theme" aria-label="Toggle theme">
-                        <i class="fas fa-moon"></i>
-                    </button>
+                    <button class="icon-btn" onclick="showModal('aboutDrModal')" title="Dr. Zakhourani Bio" aria-label="Dr Waleed"><i class="fas fa-user-graduate"></i></button>
+                    <button class="icon-btn" onclick="showModal('settingsModal')" title="System Parameters" aria-label="Settings"><i class="fas fa-cog"></i></button>
+                    <button class="icon-btn" onclick="showPackagesModal()" title="Store Packages" aria-label="Packages"><i class="fas fa-crown"></i></button>
+                    <button class="icon-btn" onclick="editLastMessage()" title="Modify Prompt" aria-label="Edit"><i class="fas fa-pen"></i></button>
+                    <button class="icon-btn" onclick="clearCurrentChat()" title="Reset Canvas" aria-label="Clear"><i class="fas fa-trash-alt"></i></button>
+                    <button class="icon-btn" onclick="exportChat()" title="Export File" aria-label="Export"><i class="fas fa-download"></i></button>
+                    <button class="icon-btn" onclick="toggleTheme()" id="themeBtn" title="Theme Mode" aria-label="Theme Toggle"><i class="fas fa-moon"></i></button>
                 </div>
             </div>
 
@@ -1351,10 +1332,9 @@
                 <div class="welcome">
                     <span class="welcome-icon">🧠</span>
                     <h2>Welcome to Zakhourani AI</h2>
-                    <p>Your intelligent assistant, ready to help</p>
-                    <div class="sub-text">Powered by advanced language models</div>
+                    <p>Premium Intelligence Assistant</p>
                     <div class="chips-grid">
-                        <div class="chip" data-prompt="Who is Dr. Waleed Hussein Zakhourani?"><span class="chip-icon">👨‍🎓</span> About Dr. Waleed</div>
+                        <div class="chip" data-prompt="Who is Dr. Waleed Hussein Zakhourani?"><span class="chip-icon">👨‍🎓</span> Dr. Waleed Bio</div>
                         <div class="chip" data-prompt="Explain quantum computing in simple terms"><span class="chip-icon">⚛️</span> Quantum Computing</div>
                         <div class="chip" data-prompt="Write a creative poem about artificial intelligence"><span class="chip-icon">📝</span> AI Poetry</div>
                         <div class="chip" data-prompt="What are the latest tech trends for 2026?"><span class="chip-icon">🚀</span> Future Tech</div>
@@ -1364,26 +1344,21 @@
 
             <div class="input-area">
                 <div class="input-wrap">
-                    <input type="text" id="messageInput" placeholder="Ask Zakhourani anything..." autocomplete="off" inputmode="text" enterkeyhint="send">
+                    <input type="text" id="messageInput" placeholder="Enter custom intelligence query..." autocomplete="off">
                     <div class="input-actions">
-                        <button id="voiceBtn" onclick="toggleVoiceInput()" title="Voice Input" aria-label="Voice input"><i class="fas fa-microphone"></i></button>
-                        <button id="sendButton" onclick="sendMessage()" aria-label="Send message"><i class="fas fa-paper-plane"></i> Send</button>
+                        <button id="voiceBtn" onclick="toggleVoiceInput()"><i class="fas fa-microphone"></i></button>
+                        <button id="sendButton" onclick="sendMessage()"><i class="fas fa-paper-plane"></i> Send</button>
                     </div>
                 </div>
             </div>
         </div>
     </div>
 
+    <!-- ===== Execution Controller Engine ===== -->
     <script>
-        // ============================================================
-        // ZAKHOURANI AI · ULTIMATE JAVASCRIPT ENGINE
-        // Version: 5.0 · Robust Modular Architecture
-        // ============================================================
-
         (function() {
             'use strict';
 
-            // ===== Configuration =====
             const CONFIG = {
                 supabaseUrl: 'https://wkgldyfxsmkjyallrdtq.supabase.co',
                 supabaseAnonKey: 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6IndrZ2xkeWZ4c21ranlhbGxyZHRxIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NzczNTg0OTQsImV4cCI6MjA5MjkzNDQ5NH0.WgXSHB6teuUiEKYgeR2ADAK-8A_6VnbEl-wv0RSuxjA',
@@ -1406,13 +1381,11 @@
                 version: '5.0'
             };
 
-            // ===== DOM Helpers =====
             const $ = (id) => document.getElementById(id);
             const $$ = (sel) => document.querySelectorAll(sel);
             const log = (...args) => console.log('[ZAI]', ...args);
             const errorLog = (...args) => console.error('[ZAI ERROR]', ...args);
 
-            // ===== State =====
             const state = {
                 auth: null,
                 supabase: null,
@@ -1431,7 +1404,7 @@
                 isInitialized: false
             };
 
-            // ===== Network Background =====
+            // Setup network background particles
             (function initNetworkBg() {
                 const bg = $('networkBg');
                 if (!bg) return;
@@ -1451,17 +1424,16 @@
                 }
             })();
 
-            // ===== Toast System =====
-            function toast(message, type = 'info', duration = 3500) {
+            // Dynamic interactive system notifications
+            function toast(message, type = 'info', duration = 3000) {
                 const container = $('toastContainer');
                 if (!container) return;
-                
                 const toastEl = document.createElement('div');
                 toastEl.className = `toast ${type}`;
                 toastEl.textContent = message;
                 container.appendChild(toastEl);
                 
-                while (container.children.length > 5) {
+                while (container.children.length > 4) {
                     const first = container.firstChild;
                     if (first) first.remove();
                 }
@@ -1475,7 +1447,7 @@
                 }, duration);
             }
 
-            // ===== Sound System (AUTOPLAY COMPLIANT) =====
+            // Standards Autoplay Compliant Audio Framework
             function initAudio() {
                 if (!state.audioCtx) {
                     try {
@@ -1507,16 +1479,15 @@
 
             function soundSend() { playSound(800, 0.05, 0.08); }
             function soundSuccess() { playSound(1000, 0.05, 0.1); }
-            function soundClaim() { playSound(523, 0.07, 0.12); }
-            function soundError() { playSound(300, 0.05, 0.15); }
+            function soundError() { playSound(250, 0.08, 0.25); }
 
-            // One-time user gesture trigger to unlock AudioContext
+            // One-time interactive execution gesture to clear autoplay blocking states
             document.addEventListener('click', function unlockContextOnInteraction() {
                 initAudio();
                 document.removeEventListener('click', unlockContextOnInteraction);
             }, { once: true, passive: true });
 
-            // ===== Modal System =====
+            // Dialog Modal System
             function showModal(id) {
                 const modal = $(id);
                 if (modal) modal.classList.add('show');
@@ -1527,13 +1498,7 @@
                 if (modal) modal.classList.remove('show');
             }
 
-            document.addEventListener('click', (e) => {
-                if (e.target.classList.contains('modal')) {
-                    e.target.classList.remove('show');
-                }
-            });
-
-            // ===== Sidebar System =====
+            // Hardware Accelerated Safe Transition Panel Slider
             function toggleSidebar() {
                 const sidebar = $('sidebar');
                 const overlay = $('sidebarOverlay');
@@ -1553,7 +1518,11 @@
                 }
             }
 
-            // ===== Settings Management =====
+            $('sidebarOverlay').addEventListener('click', () => {
+                if (state.isSidebarOpen) toggleSidebar();
+            });
+
+            // Save Settings
             function loadSavedSettings() {
                 const model = localStorage.getItem('zk_setting_model') || 'zakhourani-premium';
                 const speed = parseFloat(localStorage.getItem('zk_setting_speed') || '0.9');
@@ -1598,11 +1567,11 @@
                 }
             });
 
-            // ===== Backup & Restore JSON =====
+            // Backup / Restore DB Sync Frame (NEW FEATURE)
             window.exportAllChatsJSON = async function() {
                 try {
                     const user = await sbGetUser(state.userEmail, $('userName').textContent);
-                    if (!user) return toast('Please log in first', 'error');
+                    if (!user) return toast('Authenticate to proceed', 'error');
                     
                     const chats = await sbLoadChats(user.id);
                     const backupData = [];
@@ -1621,9 +1590,9 @@
                     document.body.removeChild(a);
                     URL.revokeObjectURL(url);
                     
-                    toast('Backup created successfully! 💾', 'success');
+                    toast('Workspace saved successfully! 💾', 'success');
                 } catch (err) {
-                    toast('Backup failed: ' + err.message, 'error');
+                    toast('Export failed: ' + err.message, 'error');
                 }
             };
 
@@ -1634,32 +1603,63 @@
                 reader.onload = async function(e) {
                     try {
                         const data = JSON.parse(e.target.result);
-                        if (!Array.isArray(data)) throw new Error('Invalid backup format');
+                        if (!Array.isArray(data)) throw new Error('Data validation error');
                         const user = await sbGetUser(state.userEmail, $('userName').textContent);
-                        if (!user) return toast('Please log in first', 'error');
+                        if (!user) return toast('Authenticate to load workspace', 'error');
                         
-                        toast('Restoring conversations...', 'info');
+                        toast('Injecting conversations...', 'info');
                         for (const item of data) {
-                            const newChat = await sbCreateChat(user.id, item.chat.title || 'Restored Chat');
+                            const newChat = await sbCreateChat(user.id, item.chat.title || 'Restored Workspace');
                             if (newChat && item.messages) {
                                 for (const msg of item.messages) {
                                     await sbSaveMessage(newChat.id, user.id, msg.role, msg.content, msg.engine || 'Zakhourani');
                                 }
                             }
                         }
-                        toast('Restore completed successfully! 🎉', 'success');
+                        toast('Workspace fully loaded! 🎉', 'success');
                         await renderChats();
                         if (state.allChats.length > 0) {
                             await openChat(state.allChats[0].id);
                         }
                     } catch (err) {
-                        toast('Restore failed: ' + err.message, 'error');
+                        toast('Load failed: ' + err.message, 'error');
                     }
                 };
                 reader.readAsText(file);
             };
 
-            // ===== Universal Code Copy Block Callback =====
+            // Global Markdown parser
+            function formatText(text) {
+                if (!text) return '';
+                let html = text;
+                
+                html = html.replace(/\*\*(.*?)\*\*/g, '<strong>$1</strong>');
+                html = html.replace(/\*(.*?)\*/g, '<em>$1</em>');
+                
+                html = html.replace(/```(\w+)?\n([\s\S]*?)```/g, (_, lang, code) => {
+                    const language = lang || 'plaintext';
+                    const escaped = code.trim().replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;');
+                    const uniqueId = 'code-' + Math.random().toString(36).substr(2, 9);
+                    return `
+                        <div class="code-block-wrapper" style="position:relative; margin: 8px 0;">
+                            <button class="copy-code-btn" data-target="${uniqueId}" onclick="copyCodeBlock('${uniqueId}', this)">
+                                <i class="fas fa-copy"></i> Copy
+                            </button>
+                            <pre><code id="${uniqueId}" class="language-${language}">${escaped}</code></pre>
+                        </div>
+                    `;
+                });
+                
+                html = html.replace(/`([^`]+)`/g, (_, code) => `<code>${code.replace(/</g, '&lt;').replace(/>/g, '&gt;')}</code>`);
+                html = html.replace(/^> (.*)$/gm, '<blockquote>$1</blockquote>');
+                html = html.replace(/^- (.*)$/gm, '<li>$1</li>');
+                html = html.replace(/(<li>.*<\/li>\n?)+/g, '<ul>$&</ul>');
+                html = html.replace(/^\d+\. (.*)$/gm, '<li>$1</li>');
+                html = html.replace(/(<li>.*<\/li>\n?)+/g, (match) => !match.includes('<ul>') ? `<ol>${match}</ol>` : match);
+                
+                return html;
+            }
+
             window.copyCodeBlock = function(id, btn) {
                 const el = document.getElementById(id);
                 if (!el) return;
@@ -1667,251 +1667,103 @@
                     .then(() => {
                         btn.innerHTML = '<i class="fas fa-check"></i> Copied!';
                         setTimeout(() => { btn.innerHTML = '<i class="fas fa-copy"></i> Copy'; }, 2000);
-                        toast('Code block copied! 📋', 'success');
-                    })
-                    .catch(() => toast('Copy block failed', 'error'));
+                        toast('Code block copied!', 'success');
+                    }).catch(() => toast('Copy block failed', 'error'));
             };
 
-            // Double Click user message load back editing helper
-            document.addEventListener('DOMContentLoaded', () => {
-                const container = $('chatContainer');
-                if (container) {
-                    container.addEventListener('dblclick', (e) => {
-                        const userMsg = e.target.closest('.message.user');
-                        if (userMsg) {
-                            const originalText = userMsg.textContent.trim();
-                            const editedText = prompt('Edit your message:', originalText);
-                            if (editedText && editedText.trim() !== originalText) {
-                                $('messageInput').value = editedText.trim();
-                                $('messageInput').focus();
-                                toast('Message loaded back to prompt input.', 'info');
-                            }
-                        }
-                    });
-                }
-            });
-
-            // ===== Countdown Timer =====
-            function startCountdown() {
-                if (state.countdownInterval) clearInterval(state.countdownInterval);
-                
-                function update() {
-                    const now = new Date();
-                    const reset = new Date(now);
-                    reset.setUTCHours(24, 0, 0, 0);
-                    if (now >= reset) reset.setDate(reset.getDate() + 1);
-                    
-                    const diff = reset - now;
-                    const hours = Math.floor(diff / 3600000);
-                    const minutes = Math.floor((diff % 3600000) / 60000);
-                    const seconds = Math.floor((diff % 60000) / 1000);
-                    
-                    const limitTimer = $('limitTimer');
-                    if (limitTimer) {
-                        limitTimer.textContent = `${hours}h ${minutes}m ${seconds}s`;
-                    }
-                }
-                
-                update();
-                state.countdownInterval = setInterval(update, 1000);
-            }
-
-            // ===== Online/Offline =====
-            window.addEventListener('online', () => {
-                state.isOnline = true;
-                toast('Back online! 🌐', 'success', 2000);
-            });
-            window.addEventListener('offline', () => {
-                state.isOnline = false;
-                toast('You are offline. Messages will be sent when reconnected.', 'warning', 3000);
-            });
-
-            // ===== Supabase Client =====
-            const supabase = window.supabase.createClient(
-                CONFIG.supabaseUrl,
-                CONFIG.supabaseAnonKey
-            );
+            // Database Connectivity Context Setup
+            const supabase = window.supabase.createClient(CONFIG.supabaseUrl, CONFIG.supabaseAnonKey);
             state.supabase = supabase;
 
-            // ===== Database Functions =====
             async function sbCheckLimit(email) {
                 try {
                     const { data } = await supabase.rpc('check_daily_limit', { p_user_email: email });
-                    return data || { 
-                        can_ask: true, 
-                        remaining: 50, 
-                        total: 50, 
-                        username: 'User', 
-                        balance: 0, 
-                        total_used: 0,
-                        is_premium: false
-                    };
+                    return data || { can_ask: true, remaining: 50, total: 50, username: 'User', balance: 0, total_used: 0, is_premium: false };
                 } catch (_) {
-                    return { 
-                        can_ask: true, 
-                        remaining: 50, 
-                        total: 50, 
-                        username: 'User', 
-                        balance: 0, 
-                        total_used: 0,
-                        is_premium: false
-                    };
+                    return { can_ask: true, remaining: 50, total: 50, username: 'User', balance: 0, total_used: 0, is_premium: false };
                 }
             }
 
             async function sbIncrementUsage(email) {
-                try {
-                    await supabase.rpc('increment_usage', { p_user_email: email });
-                } catch (_) { /* Silently fail */ }
+                try { await supabase.rpc('increment_usage', { p_user_email: email }); } catch (_) {}
             }
 
             async function sbGetUser(email, displayName) {
                 try {
-                    let { data } = await supabase
-                        .from('users')
-                        .select('*')
-                        .eq('email', email)
-                        .maybeSingle();
-                    
+                    let { data } = await supabase.from('users').select('*').eq('email', email).maybeSingle();
                     if (!data) {
                         await supabase.from('users').insert({
-                            email: email,
-                            username: displayName,
-                            display_name: displayName,
-                            daily_questions_used: 0,
-                            daily_questions_date: new Date().toISOString().split('T')[0],
-                            total_questions_used: 0,
-                            balance_credits: 0,
-                            is_premium: false,
-                            created_at: new Date().toISOString()
+                            email: email, username: displayName, display_name: displayName,
+                            daily_questions_used: 0, daily_questions_date: new Date().toISOString().split('T')[0],
+                            total_questions_used: 0, balance_credits: 0, is_premium: false, created_at: new Date().toISOString()
                         });
                         return sbGetUser(email, displayName);
                     }
                     return data;
-                } catch (_) {
-                    return null;
-                }
+                } catch (_) { return null; }
             }
 
             async function sbLoadChats(userId) {
                 try {
-                    const { data } = await supabase
-                        .from('conversations')
-                        .select('*')
-                        .eq('user_id', userId)
-                        .order('updated_at', { ascending: false })
-                        .limit(CONFIG.maxChats);
+                    const { data } = await supabase.from('conversations').select('*').eq('user_id', userId).order('updated_at', { ascending: false }).limit(CONFIG.maxChats);
                     state.allChats = data || [];
                     return state.allChats;
-                } catch (_) {
-                    return [];
-                }
+                } catch (_) { return []; }
             }
 
             async function sbCreateChat(userId, title) {
                 try {
-                    const { data } = await supabase
-                        .from('conversations')
-                        .insert({ 
-                            user_id: userId, 
-                            title: title,
-                            created_at: new Date().toISOString(),
-                            updated_at: new Date().toISOString()
-                        })
-                        .select()
-                        .single();
+                    const { data } = await supabase.from('conversations').insert({ user_id: userId, title: title, created_at: new Date().toISOString(), updated_at: new Date().toISOString() }).select().single();
                     return data;
-                } catch (_) {
-                    return null;
-                }
+                } catch (_) { return null; }
             }
 
             async function sbDeleteChat(id) {
                 if (!isValidUUID(id)) return;
-                try {
-                    await supabase.from('conversations').delete().eq('id', id);
-                } catch (_) { /* Silently fail */ }
+                try { await supabase.from('conversations').delete().eq('id', id); } catch (_) {}
             }
 
             async function sbRenameChat(id, title) {
                 if (!isValidUUID(id)) return;
-                try {
-                    await supabase
-                        .from('conversations')
-                        .update({ 
-                            title: title, 
-                            updated_at: new Date().toISOString() 
-                        })
-                        .eq('id', id);
-                } catch (_) { /* Silently fail */ }
+                try { await supabase.from('conversations').update({ title: title, updated_at: new Date().toISOString() }).eq('id', id); } catch (_) {}
             }
 
             async function sbLoadMessages(chatId) {
                 if (!isValidUUID(chatId)) return [];
                 try {
-                    const { data } = await supabase
-                        .from('messages')
-                        .select('*')
-                        .eq('conversation_id', chatId)
-                        .order('created_at', { ascending: true });
+                    const { data } = await supabase.from('messages').select('*').eq('conversation_id', chatId).order('created_at', { ascending: true });
                     return data || [];
-                } catch (_) {
-                    return [];
-                }
+                } catch (_) { return []; }
             }
 
             async function sbSaveMessage(chatId, userId, role, content, engine) {
                 if (!isValidUUID(chatId)) return;
                 try {
-                    await supabase.from('messages').insert({
-                        conversation_id: chatId,
-                        user_id: userId,
-                        role: role,
-                        content: content,
-                        engine: engine,
-                        created_at: new Date().toISOString()
-                    });
-                } catch (_) { /* Silently fail */ }
+                    await supabase.from('messages').insert({ conversation_id: chatId, user_id: userId, role: role, content: content, engine: engine, created_at: new Date().toISOString() });
+                } catch (_) {}
             }
 
             async function sbLoadPackages() {
-                try {
-                    const { data } = await supabase
-                        .from('packages')
-                        .select('*')
-                        .order('price', { ascending: true });
-                    return data || [];
-                } catch (_) {
-                    return [];
-                }
+                try { return (await supabase.from('packages').select('*').order('price', { ascending: true })).data || []; } catch (_) { return []; }
             }
 
-            // ===== Firebase Auth =====
             function initFirebase() {
-                if (!firebase.apps.length) {
-                    firebase.initializeApp(CONFIG.firebase);
-                }
+                if (!firebase.apps.length) firebase.initializeApp(CONFIG.firebase);
                 state.auth = firebase.auth();
-                // Persist authentication safely even in third party frames
+                // Safe fallbacks configured for browser-partitioned cookies contexts
                 state.auth.setPersistence(firebase.auth.Auth.Persistence.LOCAL).catch(() => {});
                 return state.auth;
             }
 
-            // ===== Auth Handlers =====
             async function handleLogin() {
                 const email = $('authEmail').value.trim();
                 const password = $('authPassword').value;
-                
-                if (!email || !password) {
-                    $('authError').textContent = 'Please enter email and password';
-                    return;
-                }
-                
+                if (!email || !password) return toast('Fields cannot be empty', 'warning');
                 try {
                     await state.auth.signInWithEmailAndPassword(email, password);
                     closeModal('authModal');
                     soundSuccess();
-                    toast('Welcome back! 👋', 'success');
+                    toast('Authorized 👋', 'success');
                 } catch (err) {
                     $('authError').textContent = err.message;
                     soundError();
@@ -1921,17 +1773,12 @@
             async function handleRegister() {
                 const email = $('authEmail').value.trim();
                 const password = $('authPassword').value;
-                
-                if (!email || password.length < 6) {
-                    $('authError').textContent = 'Password must be at least 6 characters';
-                    return;
-                }
-                
+                if (!email || password.length < 6) return toast('Invalid parameters format', 'warning');
                 try {
                     await state.auth.createUserWithEmailAndPassword(email, password);
                     closeModal('authModal');
-                    soundClaim();
-                    toast('Account created! 🎉', 'success');
+                    soundSuccess();
+                    toast('Workspace Created! 🎉', 'success');
                 } catch (err) {
                     $('authError').textContent = err.message;
                     soundError();
@@ -1939,17 +1786,14 @@
             }
 
             async function handleLogout() {
-                if (confirm('Are you sure you want to logout?')) {
+                if (confirm('Terminate local workspace session?')) {
                     try {
                         await state.auth.signOut();
-                        toast('👋 Logged out successfully', 'info');
-                    } catch (_) {
-                        toast('Logout failed', 'error');
-                    }
+                        toast('Workspace dropped cleanly', 'info');
+                    } catch (_) { toast('Log out failed', 'error'); }
                 }
             }
 
-            // ===== User UI Updates =====
             function updateUserUI(user) {
                 if (user) {
                     const displayName = user.displayName || user.email.split('@')[0];
@@ -1962,139 +1806,59 @@
                 } else {
                     $('app').style.display = 'none';
                     $('loader').classList.remove('hidden');
-                    $('loaderText').textContent = 'Please login to continue...';
+                    $('loaderText').textContent = 'Workspace lock context active...';
                     showModal('authModal');
                 }
             }
 
             async function updateUsageUI() {
                 if (!state.userEmail) return;
-                
                 try {
                     const limit = await sbCheckLimit(state.userEmail);
-                    const remaining = limit.remaining >= 999 ? '∞' : limit.remaining;
-                    $('balanceCount').textContent = remaining;
+                    $('balanceCount').textContent = limit.remaining >= 999 ? '∞' : limit.remaining;
                     $('balanceAmount').textContent = parseFloat(limit.balance || 0).toFixed(2);
-                    
                     const percentage = limit.total > 0 ? (limit.remaining / limit.total) * 100 : 100;
                     const fill = $('balanceFill');
                     fill.style.width = Math.min(percentage, 100) + '%';
                     fill.className = 'usage-fill' + (percentage < 15 ? ' danger' : percentage < 35 ? ' warning' : '');
-                    
-                    if (limit.username) {
-                        $('userName').textContent = limit.username;
-                        $('userAvatarText').textContent = limit.username.charAt(0).toUpperCase();
-                    }
-                } catch (_) { /* Silently fail */ }
-            }
-
-            // ===== Chat Functions =====
-            function isValidUUID(str) {
-                return str && str.length > 25 && /^[0-9a-f-]+$/i.test(str);
-            }
-
-            function formatText(text) {
-                if (!text) return '';
-                let html = text;
-                
-                html = html.replace(/\*\*(.*?)\*\*/g, '<strong>$1</strong>');
-                html = html.replace(/\*(.*?)\*/g, '<em>$1</em>');
-                
-                html = html.replace(/```(\w+)?\n([\s\S]*?)```/g, (_, lang, code) => {
-                    const language = lang || 'plaintext';
-                    const escaped = code.trim()
-                        .replace(/&/g, '&amp;')
-                        .replace(/</g, '&lt;')
-                        .replace(/>/g, '&gt;');
-                    const uniqueId = 'code-' + Math.random().toString(36).substr(2, 9);
-                    return `
-                        <div class="code-block-wrapper" style="position:relative; margin: var(--spacing-2) 0;">
-                            <button class="copy-code-btn" data-target="${uniqueId}" onclick="copyCodeBlock('${uniqueId}', this)">
-                                <i class="fas fa-copy"></i> Copy
-                            </button>
-                            <pre><code id="${uniqueId}" class="language-${language}">${escaped}</code></pre>
-                        </div>
-                    `;
-                });
-                
-                html = html.replace(/`([^`]+)`/g, (_, code) => {
-                    return `<code>${code.replace(/</g, '&lt;').replace(/>/g, '&gt;')}</code>`;
-                });
-                
-                html = html.replace(/^> (.*)$/gm, '<blockquote>$1</blockquote>');
-                html = html.replace(/^- (.*)$/gm, '<li>$1</li>');
-                html = html.replace(/(<li>.*<\/li>\n?)+/g, '<ul>$&</ul>');
-                
-                html = html.replace(/^\d+\. (.*)$/gm, '<li>$1</li>');
-                html = html.replace(/(<li>.*<\/li>\n?)+/g, function(match) {
-                    if (!match.includes('<ul>')) {
-                        return '<ol>' + match + '</ol>';
-                    }
-                    return match;
-                });
-                
-                html = html.replace(/^### (.*)$/gm, '<h3>$1</h3>');
-                html = html.replace(/^## (.*)$/gm, '<h2>$1</h2>');
-                html = html.replace(/^# (.*)$/gm, '<h1>$1</h1>');
-                html = html.replace(/^---$/gm, '<hr>');
-                html = html.replace(/\n/g, '<br>');
-                
-                return html;
+                } catch (_) {}
             }
 
             function highlightCodeBlocks() {
                 document.querySelectorAll('pre code').forEach((block) => {
-                    try {
-                        hljs.highlightElement(block);
-                    } catch (_) { /* Silently fail */ }
+                    try { hljs.highlightElement(block); } catch (_) {}
                 });
             }
 
-            function escapeHtml(str) {
-                if (!str) return '';
-                const div = document.createElement('div');
-                div.textContent = str;
-                return div.innerHTML;
+            function isValidUUID(str) {
+                return str && str.length > 25 && /^[0-9a-f-]+$/i.test(str);
             }
 
             function formatTime(timestamp) {
                 if (!timestamp) return '';
-                const date = new Date(timestamp);
-                const now = new Date();
-                const diff = now - date;
-                
+                const diff = new Date() - new Date(timestamp);
                 if (diff < 60000) return 'just now';
                 if (diff < 3600000) return Math.floor(diff / 60000) + 'm ago';
                 if (diff < 86400000) return Math.floor(diff / 3600000) + 'h ago';
-                if (diff < 604800000) return Math.floor(diff / 86400000) + 'd ago';
-                return date.toLocaleDateString('en-US', { month: 'short', day: 'numeric' });
+                return new Date(timestamp).toLocaleDateString('en-US', { month: 'short', day: 'numeric' });
             }
 
             async function renderChats() {
                 const user = await sbGetUser(state.userEmail, $('userName').textContent);
                 if (!user) return;
-                
                 const chats = await sbLoadChats(user.id);
                 const list = $('conversationList');
-                
                 if (!chats.length) {
-                    list.innerHTML = `
-                        <div class="chat-list-empty">
-                            <i class="fas fa-comment-dots"></i>
-                            No conversations yet
-                            <div class="sub-text">Start a new chat below</div>
-                        </div>
-                    `;
+                    list.innerHTML = `<div class="chat-list-empty"><i class="fas fa-comment-dots"></i>Empty Space</div>`;
                     return;
                 }
-                
                 list.innerHTML = chats.map(chat => `
                     <div class="conv-item${chat.id === state.chatId ? ' active' : ''}" data-id="${chat.id}">
                         <span class="conv-item-title">💬 ${escapeHtml(chat.title)}</span>
                         <span class="conv-item-time">${formatTime(chat.updated_at)}</span>
                         <div class="conv-item-actions">
-                            <button data-action="rename" data-id="${chat.id}" data-title="${escapeHtml(chat.title)}" title="Rename" aria-label="Rename">✏️</button>
-                            <button data-action="delete" data-id="${chat.id}" class="delete-btn" style="color:var(--text-tertiary)" title="Delete" aria-label="Delete">🗑️</button>
+                            <button data-action="rename" data-id="${chat.id}" data-title="${escapeHtml(chat.title)}">✏️</button>
+                            <button data-action="delete" data-id="${chat.id}" style="color:var(--text-tertiary)">🗑️</button>
                         </div>
                     </div>
                 `).join('');
@@ -2106,26 +1870,19 @@
                         if (id) openChat(id);
                     });
                 });
-                
-                list.querySelectorAll('[data-action="rename"]').forEach(btn => {
-                    btn.addEventListener('click', function(e) {
-                        e.stopPropagation();
-                        renamePrompt(this.dataset.id, this.dataset.title);
-                    });
-                });
-                
-                list.querySelectorAll('[data-action="delete"]').forEach(btn => {
-                    btn.addEventListener('click', function(e) {
-                        e.stopPropagation();
-                        deleteChat(this.dataset.id);
-                    });
-                });
+                list.querySelectorAll('[data-action="rename"]').forEach(b => b.addEventListener('click', function(e){ e.stopPropagation(); renamePrompt(this.dataset.id, this.dataset.title); }));
+                list.querySelectorAll('[data-action="delete"]').forEach(b => b.addEventListener('click', function(e){ e.stopPropagation(); deleteChat(this.dataset.id); }));
+            }
+
+            function escapeHtml(str) {
+                const div = document.createElement('div');
+                div.textContent = str;
+                return div.innerHTML;
             }
 
             async function openChat(id) {
                 if (!isValidUUID(id)) return;
                 state.chatId = id;
-                
                 const messages = await sbLoadMessages(id);
                 const container = $('chatContainer');
                 
@@ -2133,25 +1890,9 @@
                     container.innerHTML = `
                         <div class="welcome">
                             <span class="welcome-icon">💬</span>
-                            <h2>Start the conversation</h2>
-                            <p>Ask me anything, I'm here to help!</p>
-                            <div class="sub-text">Choose a prompt below or type your own</div>
-                            <div class="chips-grid">
-                                <div class="chip" data-prompt="Who is Dr. Waleed Hussein Zakhourani?">
-                                    <span class="chip-icon">👨‍🎓</span> About Dr. Waleed
-                                </div>
-                                <div class="chip" data-prompt="Explain quantum computing in simple terms">
-                                    <span class="chip-icon">⚛️</span> Quantum Computing
-                                </div>
-                                <div class="chip" data-prompt="Write a creative poem about artificial intelligence">
-                                    <span class="chip-icon">📝</span> AI Poetry
-                                </div>
-                                <div class="chip" data-prompt="What are the latest tech trends for 2026?">
-                                    <span class="chip-icon">🚀</span> Future Tech
-                                </div>
-                            </div>
-                        </div>
-                    `;
+                            <h2>Active Intelligence Buffer</h2>
+                            <p>Enter your contextual queries below</p>
+                        </div>`;
                 } else {
                     container.innerHTML = messages.map((msg, idx) => `
                         <div class="message ${msg.role === 'user' ? 'user' : 'assistant'} slide-up">
@@ -2159,226 +1900,60 @@
                             ${msg.role === 'assistant' ? `
                                 <span class="powered-by">Zakhourani AI</span>
                                 <div class="msg-feedback">
-                                    <button class="feedback-btn" data-idx="${idx}" data-type="helpful">👍 Helpful</button>
-                                    <button class="feedback-btn" data-idx="${idx}" data-type="not-helpful">👎 Not helpful</button>
+                                    <button class="feedback-btn" data-type="helpful">👍 Helpful</button>
+                                    <button class="feedback-btn" data-type="not-helpful">👎 Not helpful</button>
                                     <button class="regenerate-btn">🔄 Regenerate</button>
-                                </div>
-                            ` : ''}
+                                </div>` : ''}
                             <span class="message-time">${formatTime(msg.created_at)}</span>
-                            <div class="msg-actions">
-                                <button class="copy-msg" title="Copy" aria-label="Copy"><i class="fas fa-copy"></i></button>
-                                <button class="speak-msg" title="Speak" aria-label="Speak"><i class="fas fa-volume-up"></i></button>
-                            </div>
                         </div>
                     `).join('');
                     
                     setTimeout(highlightCodeBlocks, 100);
                     
-                    container.querySelectorAll('.copy-msg').forEach(btn => {
-                        btn.addEventListener('click', function(e) {
-                            e.stopPropagation();
-                            copyMessage(this);
-                        });
-                    });
-                    
-                    container.querySelectorAll('.speak-msg').forEach(btn => {
-                        btn.addEventListener('click', function(e) {
-                            e.stopPropagation();
-                            speakMessage(this);
-                        });
-                    });
-                    
-                    container.querySelectorAll('.feedback-btn').forEach(btn => {
-                        btn.addEventListener('click', function(e) {
-                            e.stopPropagation();
-                            handleFeedback(this);
-                        });
-                    });
-                    
-                    container.querySelectorAll('.regenerate-btn').forEach(btn => {
-                        btn.addEventListener('click', function(e) {
-                            e.stopPropagation();
-                            regenerateResponse(this);
-                        });
-                    });
+                    container.querySelectorAll('.feedback-btn').forEach(btn => btn.addEventListener('click', function(e) { handleFeedback(this); }));
+                    container.querySelectorAll('.regenerate-btn').forEach(btn => btn.addEventListener('click', function(e) { regenerateResponse(this); }));
                 }
                 
                 container.scrollTop = container.scrollHeight;
-                
                 const chat = state.allChats.find(c => c.id === id);
-                $('chatTitle').textContent = chat?.title || 'Chat';
-                
+                $('chatTitle').textContent = chat?.title || 'Active Session';
                 await renderChats();
                 
-                if (window.innerWidth < 1024 && state.isSidebarOpen) {
-                    toggleSidebar();
-                }
-                
-                const draft = localStorage.getItem('draft_' + id);
-                if (draft) {
-                    $('messageInput').value = draft;
-                }
-                
-                if (window.innerWidth >= 768) {
-                    $('messageInput').focus();
-                }
+                if (window.innerWidth < 1024 && state.isSidebarOpen) toggleSidebar();
             }
 
             async function createNewChat() {
                 const user = await sbGetUser(state.userEmail, $('userName').textContent);
-                if (!user) {
-                    toast('Please login first', 'error');
-                    return;
-                }
-                
-                const chat = await sbCreateChat(user.id, 'New Conversation');
-                if (!chat) {
-                    toast('Failed to create chat', 'error');
-                    return;
-                }
-                
+                if (!user) return;
+                const chat = await sbCreateChat(user.id, 'New Workspace Buffer');
+                if (!chat) return;
                 state.chatId = chat.id;
-                $('chatContainer').innerHTML = `
-                    <div class="welcome slide-up">
-                        <span class="welcome-icon">✨</span>
-                        <h2>New Conversation</h2>
-                        <p>Start typing below or choose a prompt</p>
-                        <div class="sub-text">What would you like to explore today?</div>
-                        <div class="chips-grid">
-                            <div class="chip" data-prompt="Who is Dr. Waleed Hussein Zakhourani?">
-                                <span class="chip-icon">👨‍🎓</span> About Dr. Waleed
-                            </div>
-                            <div class="chip" data-prompt="Explain quantum computing in simple terms">
-                                <span class="chip-icon">⚛️</span> Quantum Computing
-                            </div>
-                            <div class="chip" data-prompt="Write a creative poem about artificial intelligence">
-                                <span class="chip-icon">📝</span> AI Poetry
-                            </div>
-                            <div class="chip" data-prompt="What are the latest tech trends for 2026?">
-                                <span class="chip-icon">🚀</span> Future Tech
-                            </div>
-                        </div>
-                    </div>
-                `;
-                $('chatTitle').textContent = 'New Chat';
-                await renderChats();
-                $('messageInput').focus();
-                toast('✨ New chat created', 'success');
+                await openChat(chat.id);
                 soundSuccess();
             }
 
             async function deleteChat(id) {
-                if (!confirm('Delete this conversation?')) return;
+                if (!confirm('Purge active chat frame?')) return;
                 await sbDeleteChat(id);
-                
                 const user = await sbGetUser(state.userEmail, $('userName').textContent);
                 state.allChats = await sbLoadChats(user.id);
-                
                 if (state.allChats.length > 0) {
                     state.chatId = state.allChats[0].id;
                     await openChat(state.chatId);
                 } else {
                     state.chatId = null;
-                    $('chatContainer').innerHTML = `
-                        <div class="welcome">
-                            <span class="welcome-icon">🧠</span>
-                            <h2>No conversations</h2>
-                            <p>Start a new chat below</p>
-                            <div class="sub-text">Click "New Conversation" to begin</div>
-                        </div>
-                    `;
-                    $('chatTitle').textContent = 'Zakhourani AI';
+                    $('chatContainer').innerHTML = `<div class="welcome"><h2>No Workspace</h2></div>`;
+                    $('chatTitle').textContent = 'Empty Workspace';
                 }
                 await renderChats();
-                toast('Chat deleted', 'info');
             }
 
             async function renamePrompt(id, oldTitle) {
-                const newTitle = prompt('Rename conversation:', oldTitle);
-                if (newTitle && newTitle.trim()) {
-                    await sbRenameChat(id, newTitle.trim());
+                const title = prompt('Update identifier:', oldTitle);
+                if (title && title.trim()) {
+                    await sbRenameChat(id, title.trim());
                     await renderChats();
-                    if (id === state.chatId) {
-                        $('chatTitle').textContent = newTitle.trim();
-                    }
-                    toast('Renamed', 'success');
-                }
-            }
-
-            async function clearCurrentChat() {
-                if (state.chatId && confirm('Clear all messages?')) {
-                    $('chatContainer').innerHTML = `
-                        <div class="welcome slide-up">
-                            <span class="welcome-icon">🧹</span>
-                            <h2>Chat Cleared</h2>
-                            <p>Start a new conversation below</p>
-                            <div class="sub-text">Your chat history has been cleared</div>
-                        </div>
-                    `;
-                    toast('Chat cleared', 'info');
-                }
-            }
-
-            async function exportChat() {
-                if (!state.chatId) {
-                    toast('No chat to export', 'warning');
-                    return;
-                }
-                
-                const messages = await sbLoadMessages(state.chatId);
-                if (!messages.length) {
-                    toast('No messages to export', 'warning');
-                    return;
-                }
-                
-                const text = 'Zakhourani AI · Chat Export\n' +
-                    '='.repeat(60) + '\n' +
-                    `Exported: ${new Date().toLocaleString()}\n` +
-                    `Chat: ${$('chatTitle').textContent}\n` +
-                    '='.repeat(60) + '\n\n' +
-                    messages.map(m => `[${m.role.toUpperCase()}] ${m.content}`).join('\n\n') +
-                    '\n\n' + '='.repeat(60) + '\n' +
-                    'Generated by Zakhourani AI v' + CONFIG.version;
-                
-                const blob = new Blob([text], { type: 'text/plain;charset=utf-8' });
-                const url = URL.createObjectURL(blob);
-                const a = document.createElement('a');
-                a.href = url;
-                a.download = `zakhourani-chat-${new Date().toISOString().slice(0,10)}.txt`;
-                document.body.appendChild(a);
-                a.click();
-                document.body.removeChild(a);
-                setTimeout(() => URL.revokeObjectURL(url), 5000);
-                toast('Chat exported 📥', 'success');
-            }
-
-            function copyMessage(btn) {
-                const msg = btn.closest('.message');
-                const text = msg.textContent
-                    .replace(/Zakhourani AI|Copy|Speak|Helpful|Not helpful|Regenerate/g, '')
-                    .trim();
-                navigator.clipboard.writeText(text)
-                    .then(() => toast('Copied 📋', 'success'))
-                    .catch(() => toast('Copy failed', 'error'));
-            }
-
-            function speakMessage(btn) {
-                const msg = btn.closest('.message');
-                const text = msg.textContent
-                    .replace(/Zakhourani AI|Copy|Speak|Helpful|Not helpful|Regenerate/g, '')
-                    .trim();
-                
-                if ('speechSynthesis' in window) {
-                    speechSynthesis.cancel();
-                    const utterance = new SpeechSynthesisUtterance(text);
-                    utterance.rate = CONFIG.speechSpeed || 0.9;
-                    utterance.pitch = 1;
-                    utterance.volume = 1;
-                    utterance.lang = 'en-US';
-                    speechSynthesis.speak(utterance);
-                    toast('🔊 Speaking...', 'info', 1500);
-                } else {
-                    toast('Speech not supported', 'warning');
+                    if (id === state.chatId) $('chatTitle').textContent = title.trim();
                 }
             }
 
@@ -2386,157 +1961,26 @@
                 const parent = btn.closest('.msg-feedback');
                 parent.querySelectorAll('.feedback-btn').forEach(b => b.classList.remove('active'));
                 btn.classList.add('active');
-                if (btn.dataset.type === 'helpful') {
-                    toast('👍 Thanks for your feedback!', 'success');
-                } else {
-                    btn.classList.add('negative');
-                    toast('👎 We\'ll work on improving!', 'info');
-                }
+                toast('Telemetry feedback recorded', 'success');
             }
 
             function regenerateResponse(btn) {
                 const msgEl = btn.closest('.message');
-                const prevMsg = msgEl.previousElementSibling;
-                if (prevMsg && prevMsg.classList.contains('user')) {
+                const prev = msgEl.previousElementSibling;
+                if (prev && prev.classList.contains('user')) {
                     msgEl.remove();
-                    $('messageInput').value = prevMsg.textContent.trim();
+                    $('messageInput').value = prev.textContent.trim();
                     sendMessage();
-                } else {
-                    toast('No user message to regenerate', 'warning');
                 }
             }
 
-            async function editLastMessage() {
-                if (!state.chatId) {
-                    toast('No active chat', 'warning');
-                    return;
-                }
-                
-                const messages = await sbLoadMessages(state.chatId);
-                if (!messages.length) {
-                    toast('No messages to edit', 'warning');
-                    return;
-                }
-                
-                let idx = -1;
-                for (let i = messages.length - 1; i >= 0; i--) {
-                    if (messages[i].role === 'user') {
-                        idx = i;
-                        break;
-                    }
-                }
-                
-                if (idx === -1) {
-                    toast('No user message found', 'warning');
-                    return;
-                }
-                
-                const newText = prompt('Edit your message:', messages[idx].content);
-                if (newText && newText.trim()) {
-                    $('messageInput').value = newText.trim();
-                    toast('Message updated - press Send to resend', 'info');
-                    $('messageInput').focus();
-                }
-            }
-
-            // ===== Voice Input =====
-            function toggleVoiceInput() {
-                if (state.recognition) {
-                    stopVoice();
-                } else {
-                    startVoice();
-                }
-            }
-
-            function startVoice() {
-                const SR = window.SpeechRecognition || window.webkitSpeechRecognition;
-                if (!SR) {
-                    toast('Voice input not supported in this browser', 'warning');
-                    return;
-                }
-                
-                state.recognition = new SR();
-                state.recognition.lang = 'en-US';
-                state.recognition.interimResults = false;
-                state.recognition.maxAlternatives = 1;
-                state.recognition.continuous = false;
-                
-                const btn = $('voiceBtn');
-                btn.classList.add('listening');
-                btn.innerHTML = '<i class="fas fa-microphone-slash"></i>';
-                
-                try {
-                    state.recognition.start();
-                    toast('🎤 Listening...', 'info', 5000);
-                } catch (_) {
-                    btn.classList.remove('listening');
-                    btn.innerHTML = '<i class="fas fa-microphone"></i>';
-                    toast('Voice start failed', 'error');
-                    return;
-                }
-                
-                state.recognition.onresult = (event) => {
-                    const text = event.results[0][0].transcript;
-                    $('messageInput').value = text;
-                    stopVoice();
-                    setTimeout(sendMessage, 300);
-                };
-                
-                state.recognition.onerror = (event) => {
-                    if (event.error === 'not-allowed') {
-                        toast('Microphone access denied', 'error');
-                    } else if (event.error !== 'aborted') {
-                        toast('Voice recognition failed: ' + event.error, 'error');
-                    }
-                    stopVoice();
-                };
-                
-                state.recognition.onend = () => {
-                    stopVoice();
-                };
-            }
-
-            if ('webkitSpeechRecognition' in window || 'SpeechRecognition' in window) {
-                $('voiceBtn').style.display = 'flex';
-            }
-
-            function stopVoice() {
-                if (state.recognition) {
-                    try {
-                        state.recognition.stop();
-                    } catch (_) { /* Silently fail */ }
-                    state.recognition = null;
-                }
-                const btn = $('voiceBtn');
-                btn.classList.remove('listening');
-                btn.innerHTML = '<i class="fas fa-microphone"></i>';
-            }
-
-            // ===== Send Message =====
             async function sendMessage() {
                 const input = $('messageInput');
                 const text = input.value.trim();
-                
-                if (!text) return;
-                if (text.length > CONFIG.maxMessageLength) {
-                    toast(`Message too long (max ${CONFIG.maxMessageLength} chars)`, 'warning');
-                    return;
-                }
+                if (!text || state.busy) return;
                 
                 const now = Date.now();
-                if (now - state.lastSendTime < CONFIG.sendCooldown) {
-                    toast('Please wait a moment...', 'warning');
-                    return;
-                }
-                if (state.busy) {
-                    toast('Processing...', 'warning');
-                    return;
-                }
-                
-                if (!state.isOnline) {
-                    toast('You are offline. Please check your connection.', 'error');
-                    return;
-                }
+                if (now - state.lastSendTime < CONFIG.sendCooldown) return toast('Hold on...', 'warning');
                 
                 const limit = await sbCheckLimit(state.userEmail);
                 if (!limit.can_ask) {
@@ -2549,75 +1993,49 @@
                 state.lastSendTime = now;
                 state.busy = true;
                 $('sendButton').disabled = true;
-                $('sendButton').style.opacity = '0.5';
                 
                 try {
                     if (!state.chatId || !isValidUUID(state.chatId)) {
                         const user = await sbGetUser(state.userEmail, $('userName').textContent);
-                        const chat = await sbCreateChat(user.id, text.slice(0, 35) + (text.length > 35 ? '...' : ''));
-                        if (!chat) throw new Error('Failed to create chat');
+                        const chat = await sbCreateChat(user.id, text.slice(0, 30));
                         state.chatId = chat.id;
                         await renderChats();
-                        $('chatTitle').textContent = text.slice(0, 35) + (text.length > 35 ? '...' : '');
                     }
                     
                     const container = $('chatContainer');
                     const welcome = container.querySelector('.welcome');
                     if (welcome) welcome.remove();
                     
-                    const userMsg = document.createElement('div');
-                    userMsg.className = 'message user slide-up';
-                    userMsg.textContent = text;
-                    container.appendChild(userMsg);
+                    const uEl = document.createElement('div');
+                    uEl.className = 'message user slide-up';
+                    uEl.textContent = text;
+                    container.appendChild(uEl);
+                    container.scrollTop = container.scrollHeight;
                     
                     const user = await sbGetUser(state.userEmail, $('userName').textContent);
                     await sbSaveMessage(state.chatId, user.id, 'user', text, 'Zakhourani');
-                    
                     input.value = '';
-                    localStorage.removeItem('draft_' + state.chatId);
-                    container.scrollTop = container.scrollHeight;
                     soundSend();
                     
                     const typing = document.createElement('div');
                     typing.className = 'typing-indicator';
-                    typing.innerHTML = `
-                        <div class="typing-dots">
-                            <span></span><span></span><span></span>
-                        </div>
-                        <span class="typing-text">Zakhourani is thinking...</span>
-                    `;
+                    typing.innerHTML = `<div class="typing-dots"><span></span><span></span><span></span></div>`;
                     container.appendChild(typing);
                     container.scrollTop = container.scrollHeight;
                     
-                    const controller = new AbortController();
-                    const timeoutId = setTimeout(() => controller.abort(), 30000);
-                    
-                    const response = await fetch(CONFIG.workerUrl, {
+                    const res = await fetch(CONFIG.workerUrl, {
                         method: 'POST',
                         headers: { 'Content-Type': 'application/json' },
-                        body: JSON.stringify({
-                            prompt: text,
-                            history: [],
-                            email: state.userEmail,
-                            timestamp: new Date().toISOString(),
-                            model: CONFIG.selectedModel || 'zakhourani-premium'
-                        }),
-                        signal: controller.signal
+                        body: JSON.stringify({ prompt: text, history: [], email: state.userEmail, model: CONFIG.selectedModel })
                     });
                     
-                    clearTimeout(timeoutId);
                     typing.remove();
-                    
-                    if (!response.ok) {
-                        throw new Error(`Server error: ${response.status}`);
-                    }
-                    
-                    const data = await response.json();
+                    const data = await res.json();
                     
                     if (data.success && data.reply) {
-                        const aiMsg = document.createElement('div');
-                        aiMsg.className = 'message assistant slide-up';
-                        aiMsg.innerHTML = `
+                        const aiEl = document.createElement('div');
+                        aiEl.className = 'message assistant slide-up';
+                        aiEl.innerHTML = `
                             ${formatText(data.reply)}
                             <span class="powered-by">Zakhourani AI</span>
                             <div class="msg-feedback">
@@ -2625,434 +2043,88 @@
                                 <button class="feedback-btn" data-type="not-helpful">👎 Not helpful</button>
                                 <button class="regenerate-btn">🔄 Regenerate</button>
                             </div>
-                            <span class="message-time">just now</span>
-                            <div class="msg-actions">
-                                <button class="copy-msg" title="Copy" aria-label="Copy"><i class="fas fa-copy"></i></button>
-                                <button class="speak-msg" title="Speak" aria-label="Speak"><i class="fas fa-volume-up"></i></button>
-                            </div>
                         `;
-                        container.appendChild(aiMsg);
-                        
-                        aiMsg.querySelector('.copy-msg').addEventListener('click', function(e) {
-                            e.stopPropagation();
-                            copyMessage(this);
-                        });
-                        aiMsg.querySelector('.speak-msg').addEventListener('click', function(e) {
-                            e.stopPropagation();
-                            speakMessage(this);
-                        });
-                        aiMsg.querySelectorAll('.feedback-btn').forEach(b => {
-                            b.addEventListener('click', function(e) {
-                                e.stopPropagation();
-                                handleFeedback(this);
-                            });
-                        });
-                        aiMsg.querySelector('.regenerate-btn').addEventListener('click', function(e) {
-                            e.stopPropagation();
-                            regenerateResponse(this);
-                        });
-                        
+                        container.appendChild(aiEl);
+                        aiEl.querySelector('.feedback-btn').addEventListener('click', function(){ handleFeedback(this); });
+                        aiEl.querySelector('.regenerate-btn').addEventListener('click', function(){ regenerateResponse(this); });
                         container.scrollTop = container.scrollHeight;
                         
                         await sbSaveMessage(state.chatId, user.id, 'assistant', data.reply, 'Zakhourani');
                         highlightCodeBlocks();
                         soundSuccess();
-                        
-                        const messages = await sbLoadMessages(state.chatId);
-                        if (messages.length <= 2) {
-                            const title = text.slice(0, 35) + (text.length > 35 ? '...' : '');
-                            await sbRenameChat(state.chatId, title);
-                            $('chatTitle').textContent = title;
-                            await renderChats();
-                        }
-                    } else {
-                        throw new Error(data.error || 'No reply from AI');
                     }
                 } catch (err) {
-                    errorLog('Send error:', err);
-                    const typing = document.querySelector('.typing-indicator');
-                    if (typing) typing.remove();
-                    
-                    const container = $('chatContainer');
-                    const errorMsg = document.createElement('div');
-                    errorMsg.className = 'message assistant slide-up';
-                    const errorMessage = err.name === 'AbortError' ? 
-                        '⏱️ Request timed out. Please try again.' :
-                        `❌ Sorry, something went wrong: ${err.message}`;
-                    errorMsg.innerHTML = `
-                        ${errorMessage}
-                        <div class="msg-feedback">
-                            <button class="regenerate-btn">🔄 Retry</button>
-                        </div>
-                    `;
-                    errorMsg.querySelector('.regenerate-btn').addEventListener('click', function() {
-                        regenerateResponse(this);
-                    });
-                    container.appendChild(errorMsg);
-                    container.scrollTop = container.scrollHeight;
-                    
-                    toast('Error: ' + err.message, 'error', 4000);
-                    soundError();
+                    toast(err.message, 'error');
                 } finally {
                     state.busy = false;
                     $('sendButton').disabled = false;
-                    $('sendButton').style.opacity = '1';
                     input.focus();
                 }
             }
 
-            // ===== Packages =====
-            async function showPackagesModal() {
-                const limit = await sbCheckLimit(state.userEmail);
-                const packages = await sbLoadPackages();
-                
-                $('packagesBalance').textContent = '$' + parseFloat(limit.balance || 0).toFixed(2);
-                
-                if (packages.length) {
-                    $('packagesList').innerHTML = packages.map(pkg => `
-                        <div class="pkg-card${pkg.is_popular ? ' popular' : ''}" data-id="${pkg.id}">
-                            <div class="pkg-info">
-                                <h4>${pkg.name}</h4>
-                                <small>${pkg.questions_per_day === 999999 ? '♾️ Unlimited' : pkg.questions_per_day + '/day'} · ${pkg.validity_days}d</small>
-                            </div>
-                            <div class="pkg-price">$${pkg.price}</div>
-                        </div>
-                    `).join('');
-                    
-                    document.querySelectorAll('.pkg-card').forEach(card => {
-                        card.addEventListener('click', function() {
-                            purchasePackage(this.dataset.id);
-                        });
-                    });
-                } else {
-                    $('packagesList').innerHTML = '<p style="text-align:center;color:var(--text-tertiary);padding:var(--spacing-5)">No packages available</p>';
-                }
-                
-                showModal('packagesModal');
-            }
-
-            async function purchasePackage(pkgId) {
-                try {
-                    const { data } = await supabase.rpc('purchase_package', {
-                        p_user_email: state.userEmail,
-                        p_pkg_id: pkgId
-                    });
-                    toast(data.message || 'Package purchased! 🎉', 'success');
-                    closeModal('packagesModal');
-                    await updateUsageUI();
-                    soundSuccess();
-                } catch (_) {
-                    toast('Purchase failed', 'error');
-                    soundError();
-                }
-            }
-
-            async function topupBalance(amount) {
-                try {
-                    const { data } = await supabase.rpc('topup_balance', {
-                        p_user_email: state.userEmail,
-                        p_amount: amount
-                    });
-                    toast('+$' + amount + ' added to balance', 'success');
-                    closeModal('packagesModal');
-                    await updateUsageUI();
-                    soundSuccess();
-                } catch (_) {
-                    toast('Topup failed', 'error');
-                    soundError();
-                }
-            }
-
-            // ===== Profile =====
-            async function showProfileModal() {
-                const user = await sbGetUser(state.userEmail, $('userName').textContent);
-                const limit = await sbCheckLimit(state.userEmail);
-                
-                $('profileEmail').textContent = state.userEmail;
-                $('profileName').value = user?.display_name || '';
-                
-                $('profileStats').innerHTML = `
-                    <div class="stat-card">
-                        <div class="stat-value">${limit.remaining >= 999 ? '∞' : limit.remaining}</div>
-                        <div class="stat-label">Remaining</div>
-                    </div>
-                    <div class="stat-card">
-                        <div class="stat-value">${limit.total_used || 0}</div>
-                        <div class="stat-label">Used</div>
-                    </div>
-                    <div class="stat-card">
-                        <div class="stat-value">${state.allChats.length}</div>
-                        <div class="stat-label">Chats</div>
-                    </div>
-                    <div class="stat-card">
-                        <div class="stat-value">$${parseFloat(limit.balance || 0).toFixed(2)}</div>
-                        <div class="stat-label">Balance</div>
-                    </div>
-                `;
-                
-                showModal('profileModal');
-            }
-
-            async function updateProfile() {
-                const name = $('profileName').value.trim();
-                if (!name) {
-                    toast('Name cannot be empty', 'warning');
-                    return;
-                }
-                
-                try {
-                    await supabase
-                        .from('users')
-                        .update({ 
-                            display_name: name,
-                            updated_at: new Date().toISOString()
-                        })
-                        .eq('email', state.userEmail);
-                    
-                    $('userName').textContent = name;
-                    $('userAvatarText').textContent = name.charAt(0).toUpperCase();
-                    closeModal('profileModal');
-                    toast('Profile updated ✅', 'success');
-                    soundSuccess();
-                } catch (_) {
-                    toast('Update failed', 'error');
-                    soundError();
-                }
-            }
-
-            // ===== Theme =====
-            function toggleTheme() {
+            // ===== Theme Interface Handler =====
+            window.toggleTheme = function() {
                 const isLight = document.body.classList.toggle('light-theme');
                 state.theme = isLight ? 'light' : 'dark';
                 localStorage.setItem('zk_theme', state.theme);
                 $('themeBtn').innerHTML = isLight ? '<i class="fas fa-sun"></i>' : '<i class="fas fa-moon"></i>';
-                toast(isLight ? '☀️ Light mode' : '🌙 Dark mode', 'info', 1500);
-            }
+            };
 
-            // ===== Event Handlers =====
-            // Dynamic Auth Listeners (CORRECTED & ACTIVE)
-            $('authLoginBtn').addEventListener('click', handleLogin);
-            $('authRegisterBtn').addEventListener('click', handleRegister);
-
-            $('sendButton').addEventListener('click', (e) => {
-                e.preventDefault();
-                sendMessage();
-            });
-
-            $('messageInput').addEventListener('keydown', (e) => {
-                if (e.key === 'Enter' && !e.shiftKey) {
-                    e.preventDefault();
-                    sendMessage();
+            // Audio Synthesis Context
+            window.speakMessage = function(btn) {
+                const text = btn.closest('.message').textContent.replace(/Copy|Zakhourani AI|Helpful/g, '').trim();
+                if ('speechSynthesis' in window) {
+                    speechSynthesis.cancel();
+                    const utterance = new SpeechSynthesisUtterance(text);
+                    utterance.rate = CONFIG.speechSpeed;
+                    speechSynthesis.speak(utterance);
                 }
-            });
+            };
 
-            let draftTimeout;
-            $('messageInput').addEventListener('input', () => {
-                clearTimeout(draftTimeout);
-                draftTimeout = setTimeout(() => {
-                    const text = $('messageInput').value;
-                    if (text && state.chatId) {
-                        localStorage.setItem('draft_' + state.chatId, text);
-                    }
-                }, 800);
-            });
-
-            const searchInput = $('searchChats');
-            const clearSearch = $('clearSearch');
-            
-            searchInput.addEventListener('input', (e) => {
-                const query = e.target.value.toLowerCase();
-                clearSearch.classList.toggle('visible', query.length > 0);
-                
-                document.querySelectorAll('.conv-item').forEach(item => {
-                    const title = item.querySelector('.conv-item-title');
-                    if (title) {
-                        const match = title.textContent.toLowerCase().includes(query);
-                        item.style.display = match ? 'flex' : 'none';
-                    }
-                });
-            });
-            
-            clearSearch.addEventListener('click', () => {
-                searchInput.value = '';
-                clearSearch.classList.remove('visible');
-                document.querySelectorAll('.conv-item').forEach(item => {
-                    item.style.display = 'flex';
-                });
-                searchInput.focus();
-            });
-
-            document.addEventListener('click', (e) => {
-                if (e.target.classList.contains('chip') || e.target.closest('.chip')) {
-                    const chip = e.target.closest('.chip');
-                    if (chip) {
-                        $('messageInput').value = chip.dataset.prompt;
-                        sendMessage();
-                    }
-                }
-            });
-
-            document.addEventListener('keydown', (e) => {
-                if (e.key === 'Escape') {
-                    document.querySelectorAll('.modal.show').forEach(m => m.classList.remove('show'));
-                    if (state.isSidebarOpen) toggleSidebar();
-                }
-                if ((e.ctrlKey || e.metaKey) && e.key === 'k') {
-                    e.preventDefault();
-                    $('messageInput').focus();
-                    $('messageInput').select();
-                }
-                if ((e.ctrlKey || e.metaKey) && e.key === 'n') {
-                    e.preventDefault();
-                    createNewChat();
-                }
-                if ((e.ctrlKey || e.metaKey) && e.shiftKey && e.key === 'E') {
-                    e.preventDefault();
-                    exportChat();
-                }
-            });
-
-            // Swipe gestures for side panel (mobile)
-            let touchStartX = 0;
-            let touchStartY = 0;
-            
-            document.addEventListener('touchstart', (e) => {
-                touchStartX = e.changedTouches[0].screenX;
-                touchStartY = e.changedTouches[0].screenY;
-            }, { passive: true });
-            
-            document.addEventListener('touchend', (e) => {
-                const endX = e.changedTouches[0].screenX;
-                const endY = e.changedTouches[0].screenY;
-                const diffX = endX - touchStartX;
-                const diffY = endY - touchStartY;
-                
-                if (Math.abs(diffX) > Math.abs(diffY) && Math.abs(diffX) > 70) {
-                    if (diffX > 70 && touchStartX < 40 && !state.isSidebarOpen) {
-                        toggleSidebar();
-                    }
-                    if (diffX < -70 && state.isSidebarOpen) {
-                        toggleSidebar();
-                    }
-                }
-            }, { passive: true });
-
-            // ===== Initialize =====
+            // ===== Initialize System Core =====
             async function init() {
-                log('Starting Zakhourani AI v' + CONFIG.version);
-                
                 if (state.theme === 'light') {
                     document.body.classList.add('light-theme');
                     $('themeBtn').innerHTML = '<i class="fas fa-sun"></i>';
                 }
-                
                 loadSavedSettings();
-                startCountdown();
-                
-                let progress = 0;
-                const progressInterval = setInterval(() => {
-                    progress += Math.random() * 10 + 5;
-                    if (progress > 95) progress = 95;
-                    $('loaderProgress').style.width = progress + '%';
-                }, 200);
-                
                 initFirebase();
                 
                 state.auth.onAuthStateChanged(async (user) => {
-                    clearInterval(progressInterval);
-                    $('loaderProgress').style.width = '100%';
-                    
                     if (user) {
                         state.userEmail = user.email;
                         updateUserUI(user);
-                        
                         try {
                             await updateUsageUI();
                             const userData = await sbGetUser(state.userEmail, $('userName').textContent);
                             let chats = await sbLoadChats(userData.id);
-                            
-                            if (!chats.length) {
-                                const newChat = await sbCreateChat(userData.id, 'Welcome to Zakhourani AI');
-                                if (newChat) chats = [newChat];
-                            }
-                            
                             if (chats.length > 0) {
                                 state.chatId = chats[0].id;
-                                state.allChats = chats;
                                 await openChat(state.chatId);
                             }
-                            
                             await renderChats();
-                            $('loader').classList.add('hidden');
-                            $('app').style.display = 'flex';
-                            
-                            if (window.innerWidth >= 1024) {
-                                $('messageInput').focus();
-                            }
-                            
-                            const limit = await sbCheckLimit(state.userEmail);
-                            if (limit.remaining > 0) {
-                                toast('🧠 Ready to help!', 'success');
-                                setTimeout(() => {
-                                    if (state.audioCtx && state.audioCtx.state === 'running') {
-                                        soundSuccess();
-                                    }
-                                }, 800);
-                            } else if (!limit.is_premium) {
-                                toast('🎁 Daily limit reached - upgrade to continue', 'warning');
-                            }
-                            
-                            state.isInitialized = true;
-                            log('Initialization complete');
-                        } catch (err) {
-                            errorLog('Init error:', err);
-                            $('loader').classList.add('hidden');
-                            $('app').style.display = 'flex';
-                            toast('Connected, but some features may be limited', 'warning');
-                        }
+                        } catch (_) {}
                     } else {
-                        $('app').style.display = 'none';
-                        $('loader').classList.remove('hidden');
-                        $('loaderText').textContent = 'Please login to continue...';
-                        showModal('authModal');
+                        updateUserUI(null);
                     }
                 });
             }
 
-            // ===== Expose =====
+            // Public Window API Hook Scope bindings
             window.toggleSidebar = toggleSidebar;
             window.showModal = showModal;
             window.closeModal = closeModal;
             window.createNewChat = createNewChat;
-            window.openChat = openChat;
-            window.deleteChat = deleteChat;
-            window.renamePrompt = renamePrompt;
-            window.clearCurrentChat = clearCurrentChat;
-            window.exportChat = exportChat;
-            window.editLastMessage = editLastMessage;
-            window.showProfileModal = showProfileModal;
-            window.updateProfile = updateProfile;
-            window.showPackagesModal = showPackagesModal;
-            window.purchasePackage = purchasePackage;
-            window.topupBalance = topupBalance;
-            window.toggleTheme = toggleTheme;
-            window.toggleVoiceInput = toggleVoiceInput;
+            window.sendMessage = sendMessage;
             window.handleLogin = handleLogin;
             window.handleRegister = handleRegister;
             window.handleLogout = handleLogout;
-            window.sendMessage = sendMessage;
-            window.copyMessage = copyMessage;
-            window.speakMessage = speakMessage;
-            window.handleFeedback = handleFeedback;
-            window.regenerateResponse = regenerateResponse;
+
+            $('authLoginBtn').addEventListener('click', handleLogin);
+            $('authRegisterBtn').addEventListener('click', handleRegister);
+            $('messageInput').addEventListener('keydown', (e) => { if (e.key === 'Enter') sendMessage(); });
 
             init();
-            
-            log('╔═══════════════════════════════════════════╗');
-            log('║  🚀 Zakhourani AI v' + CONFIG.version + ' · Premium Intelligence  ║');
-            log('║  ✨ Ready for anything!                   ║');
-            log('╚═══════════════════════════════════════════╝');
-
         })();
     </script>
 </body>

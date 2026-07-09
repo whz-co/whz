@@ -10,34 +10,39 @@ jobs:
     steps:
       - uses: actions/checkout@v3
       
-      - name: Create config file from secret
+      - name: Create zai-config.js with real keys
         run: |
-          echo "const ZAI_CONFIG = {
-            supabaseUrl: 'https://wkgldyfxsmkjyallrdtq.supabase.co',
-            supabaseAnonKey: 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6IndrZ2xkeWZ4c21ranlhbGxyZHRxIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NzczNTg0OTQsImV4cCI6MjA5MjkzNDQ5NH0.WgXSHB6teuUiEKYgeR2ADAK-8A_6VnbEl-wv0RSuxjA',
-            firebase: {
-              apiKey: 'AIzaSyAE8wf24HXrfmpMluaFOv1OHPrf_YFfqTQ',
-              authDomain: 'www.whzco.com',
-              projectId: 'whaai-c388e',
-              storageBucket: 'whaai-c388e.firebasestorage.app',
-              messagingSenderId: '640598205524',
-              appId: '1:640598205524:web:c975f5e8b371b1043e39c1'
-            },
-            workerUrl: 'https://aged-recipe-80db.wabdo3762.workers.dev/',
-            dailyLimit: 50,
-            soundEnabled: true
-          };" > zaijs/zai-config.js
+          cat > zaijs/zai-config.js << 'CONFIGEOF'
+          const ZAI_CONFIG = {
+              supabaseUrl: 'https://wkgldyfxsmkjyallrdtq.supabase.co',
+              supabaseAnonKey: 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6IndrZ2xkeWZ4c21ranlhbGxyZHRxIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NzczNTg0OTQsImV4cCI6MjA5MjkzNDQ5NH0.WgXSHB6teuUiEKYgeR2ADAK-8A_6VnbEl-wv0RSuxjA',
+              firebase: {
+                  apiKey: 'AIzaSyAE8wf24HXrfmpMluaFOv1OHPrf_YFfqTQ',
+                  authDomain: 'www.whzco.com',
+                  projectId: 'whaai-c388e',
+                  storageBucket: 'whaai-c388e.firebasestorage.app',
+                  messagingSenderId: '640598205524',
+                  appId: '1:640598205524:web:c975f5e8b371b1043e39c1'
+              },
+              workerUrl: 'https://aged-recipe-80db.wabdo3762.workers.dev/',
+              dailyLimit: 50,
+              soundEnabled: true
+          };
+          CONFIGEOF
       
-      - name: Verify files exist
+      - name: Verify all files present
         run: |
-          echo "=== Checking file structure ==="
-          ls -la
-          echo "--- zaijs folder ---"
-          ls -la zaijs/ || echo "zaijs folder missing!"
-          echo "--- zaicss folder ---"
-          ls -la zaicss/ || echo "zaicss folder missing!"
-          echo "--- Main HTML ---"
-          ls -la Zakhourani.AI.Html || echo "Zakhourani.AI.Html missing!"
+          echo "=== Root Files ==="
+          ls -la *.html *.json 2>/dev/null || echo "No root HTML/JSON files"
+          echo ""
+          echo "=== zaijs folder ==="
+          ls -la zaijs/ 2>/dev/null || echo "MISSING: zaijs/ folder"
+          echo ""
+          echo "=== zaicss folder ==="
+          ls -la zaicss/ 2>/dev/null || echo "MISSING: zaicss/ folder"
+          echo ""
+          echo "=== Checking zai-config.js ==="
+          cat zaijs/zai-config.js 2>/dev/null || echo "MISSING: zai-config.js"
       
       - name: Deploy to Firebase
         uses: FirebaseExtended/action-hosting-deploy@v0

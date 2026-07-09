@@ -1,0 +1,197 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=yes, viewport-fit=cover">
+    <title>Zakhourani AI · Premium Assistant</title>
+    <meta name="description" content="Zakhourani AI - Claim 50 Free Questions Every 24 Hours">
+    <meta name="theme-color" content="#0a0e17">
+    <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><defs><linearGradient id='g' x1='0%25' y1='0%25' x2='100%25' y2='100%25'><stop offset='0%25' style='stop-color:%233b82f6'/><stop offset='100%25' style='stop-color:%238b5cf6'/></linearGradient></defs><circle cx='50' cy='50' r='45' fill='none' stroke='url(%23g)' stroke-width='4'/><circle cx='30' cy='35' r='8' fill='%233b82f6' opacity='0.9'/><circle cx='70' cy='35' r='8' fill='%238b5cf6' opacity='0.9'/><circle cx='30' cy='65' r='8' fill='%2322c55e' opacity='0.9'/><circle cx='70' cy='65' r='8' fill='%23f59e0b' opacity='0.9'/><circle cx='50' cy='50' r='6' fill='white'/></svg>">
+    
+    <!-- Styles -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:opsz,wght@14..32,400;500;600;700;800;900&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="zaicss/zai-style.css">
+    
+    <!-- External Libraries -->
+    <script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-app-compat.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+    
+    <!-- Application Scripts (Order matters!) -->
+    <script src="zaijs/zai-config.js"></script>
+    <script src="zaijs/zai-utils.js"></script>
+    <script src="zaijs/zai-audio.js"></script>
+    <script src="zaijs/zai-supabase.js"></script>
+    <script src="zaijs/zai-firebase.js"></script>
+    <script src="zaijs/zai-ui.js"></script>
+    <script src="zaijs/zai-chat.js"></script>
+    <script src="zaijs/zai-app.js"></script>
+</head>
+<body>
+
+    <!-- Network Background -->
+    <div class="net-bg" id="netBg"></div>
+    <div class="sidebar-overlay" id="sidebarOverlay" onclick="Utils.toggleSidebar()"></div>
+    
+    <!-- Loader -->
+    <div id="loader">
+        <div class="loader-spinner"></div>
+        <div class="loader-text" id="loaderText">Initializing Zakhourani AI...</div>
+    </div>
+    
+    <!-- Toast -->
+    <div class="toast" id="toast"></div>
+
+    <!-- Auth Modal -->
+    <div class="modal" id="authModal">
+        <div class="modal-box">
+            <div style="font-size:3rem;margin-bottom:8px">🔐</div>
+            <h2>Welcome to Zakhourani AI</h2>
+            <p style="color:var(--text2);font-size:13px;margin-bottom:12px">Login or register to claim <strong>50 free questions</strong> every 24h.</p>
+            <div class="auth-form">
+                <input type="email" id="authEmail" placeholder="Email">
+                <input type="password" id="authPassword" placeholder="Password">
+                <button class="modal-btn primary" id="authLoginBtn">Login</button>
+                <button class="modal-btn secondary" id="authRegisterBtn">Register</button>
+                <div class="auth-error" id="authError"></div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Limit Modal -->
+    <div class="modal" id="limitModal">
+        <div class="modal-box">
+            <div style="font-size:3.5rem;margin-bottom:8px">⏳</div>
+            <h2>Daily Questions Used</h2>
+            <p style="color:var(--text2)">You've used all <strong>50 questions</strong>. Resets at midnight UTC.</p>
+            <div id="limitTimer" style="font-size:1.2rem;font-weight:700;margin:10px 0;color:var(--accent)"></div>
+            <button class="modal-btn gold" onclick="Utils.closeModal('limitModal');UIManager.showPackagesModal(window._userEmail)">Upgrade</button>
+            <button class="modal-btn secondary" onclick="Utils.closeModal('limitModal')">Close</button>
+        </div>
+    </div>
+
+    <!-- Packages Modal -->
+    <div class="modal" id="packagesModal">
+        <div class="modal-box" style="text-align:left;max-width:500px">
+            <h2 style="text-align:center">💰 Packages & Balance</h2>
+            <p style="text-align:center">Balance: <strong id="packagesBalance">$0.00</strong></p>
+            <div style="display:flex;gap:6px;margin:8px 0">
+                <button class="modal-btn primary" style="flex:1;font-size:11px" onclick="ChatManager.topupBalance(window._userEmail,5)">+$5</button>
+                <button class="modal-btn primary" style="flex:1;font-size:11px" onclick="ChatManager.topupBalance(window._userEmail,10)">+$10</button>
+                <button class="modal-btn primary" style="flex:1;font-size:11px" onclick="ChatManager.topupBalance(window._userEmail,25)">+$25</button>
+            </div>
+            <div id="packagesList"></div>
+            <div style="display:flex;gap:6px;justify-content:center;margin-top:10px">
+                <span class="payment-card"><i class="fab fa-cc-visa" style="color:#1a1f71"></i> Visa</span>
+                <span class="payment-card"><i class="fab fa-cc-mastercard" style="color:#eb001b"></i> MC</span>
+                <span class="payment-card"><i class="fab fa-bitcoin" style="color:var(--gold)"></i> Crypto</span>
+            </div>
+            <button class="modal-btn secondary" onclick="Utils.closeModal('packagesModal')">Close</button>
+        </div>
+    </div>
+
+    <!-- Profile Modal -->
+    <div class="modal" id="profileModal">
+        <div class="modal-box" style="text-align:left">
+            <h2 style="text-align:center">👤 Profile</h2>
+            <p style="text-align:center;color:var(--text3)" id="profileEmail"></p>
+            <label style="font-size:10px;color:var(--text2)">Display Name</label>
+            <input type="text" id="profileName" style="width:100%;padding:10px;background:var(--bg);border:1px solid var(--border2);border-radius:8px;color:var(--text);margin:8px 0">
+            <div id="profileStats" style="display:grid;grid-template-columns:1fr 1fr;gap:6px"></div>
+            <button class="modal-btn primary" onclick="ChatManager.updateProfile(window._userEmail)">Save</button>
+            <button class="modal-btn secondary" onclick="Utils.closeModal('profileModal')">Close</button>
+        </div>
+    </div>
+
+    <!-- About Dr Modal -->
+    <div class="modal" id="aboutDrModal">
+        <div class="modal-box" style="text-align:left;max-width:550px">
+            <h2>👨‍🎓 Dr. Waleed Zakhourani</h2>
+            <div class="about-dr-card">
+                <p>Distinguished linguist, Harvard PhD, bridging English, Arabic & Kurdish worlds. Founder of Zakhourani.</p>
+                <p><strong>Ancestral Legacy:</strong> Mir Porti (1650-1700 AD) of Zakhoran, descendant of Emirs of Bohtan, sixth grandfather of Dr. Waleed.</p>
+                <a href="https://whzco.com/aboutDrwaleed.html" target="_blank">Read more →</a>
+            </div>
+            <button class="modal-btn secondary" onclick="Utils.closeModal('aboutDrModal')">Close</button>
+        </div>
+    </div>
+
+    <!-- Main App -->
+    <div id="app" style="display:none">
+        <!-- Sidebar -->
+        <aside class="sidebar" id="sidebar">
+            <div class="sidebar-head">
+                <a href="https://whzco.com" class="logo" target="_blank">
+                    <div class="logo-icon"><i class="fas fa-brain"></i></div>
+                    <div><span class="logo-text">Zakhourani</span><span class="logo-badge">AI</span></div>
+                </a>
+                <button class="new-chat-btn" onclick="ChatManager.createNewChat(window._userEmail)">
+                    <i class="fas fa-plus-circle"></i> New Conversation
+                </button>
+            </div>
+            <div class="user-bar">
+                <div class="user-avatar" onclick="UIManager.showProfileModal(window._userEmail)">
+                    <span id="userAvatarText">Z</span><span class="online-dot"></span>
+                </div>
+                <div class="user-info">
+                    <div class="uname" id="userName" onclick="UIManager.showProfileModal(window._userEmail)">Loading...</div>
+                    <div class="uemail" id="userEmail">user@email.com</div>
+                    <div class="bal-info">
+                        <span>Q: <span class="val" id="balanceCount">50</span>/50 | $<span class="val" id="balanceAmount">0.00</span></span>
+                    </div>
+                    <div class="usage-bar"><div class="usage-fill" id="balanceFill" style="width:100%"></div></div>
+                    <div class="countdown-text" id="countdownText">Resets in <span class="time">--:--:--</span></div>
+                </div>
+                <button class="logout-btn" onclick="FirebaseAuth.logout();Utils.toast('👋 Logged out')">
+                    <i class="fas fa-sign-out-alt"></i>
+                </button>
+            </div>
+            <div class="chat-list" id="conversationList"></div>
+        </aside>
+        
+        <!-- Main Chat -->
+        <div class="main-chat">
+            <div class="chat-header">
+                <button class="icon-btn" id="menuBtn" onclick="Utils.toggleSidebar()"><i class="fas fa-bars"></i></button>
+                <div class="cht-title"><span id="chatTitle">Zakhourani AI</span></div>
+                <div class="chat-actions">
+                    <button class="icon-btn" onclick="Utils.showModal('aboutDrModal')"><i class="fas fa-user-graduate"></i></button>
+                    <button class="icon-btn" onclick="UIManager.showPackagesModal(window._userEmail)"><i class="fas fa-crown"></i></button>
+                    <button class="icon-btn" onclick="ChatManager.editLastMessage()"><i class="fas fa-pen"></i></button>
+                    <button class="icon-btn" onclick="ChatManager.clearCurrentChat()"><i class="fas fa-trash-alt"></i></button>
+                    <button class="icon-btn" onclick="ChatManager.exportChat()"><i class="fas fa-download"></i></button>
+                    <button class="icon-btn" onclick="document.body.classList.toggle('light');$('themeBtn').innerHTML=document.body.classList.contains('light')?'<i class=&quot;fas fa-sun&quot;></i>':'<i class=&quot;fas fa-moon&quot;></i>';localStorage.setItem('zk_theme',document.body.classList.contains('light')?'light':'dark')" id="themeBtn"><i class="fas fa-moon"></i></button>
+                </div>
+            </div>
+            
+            <div id="chatContainer">
+                <div class="free-tier-card" id="freeTierCard">
+                    <div style="font-size:2.5rem">🎁</div>
+                    <h3>Claim Your Free 50 Questions</h3>
+                    <p>Activate your <strong>Free Tier</strong> — $0.00, every 24 hours.</p>
+                    <button class="free-tier-btn" id="freeTierBtn">🎯 Activate Free Tier</button>
+                </div>
+                <div class="welcome" id="welcomeMessage">
+                    <div class="welcome-icon">🧠</div>
+                    <h2>Zakhourani AI</h2>
+                    <p>Your premium assistant. Claim free tier to start!</p>
+                    <div class="chips-grid">
+                        <div class="chip" data-prompt="Who is Dr. Waleed Hussein Zakhourani?">👨‍🎓 About Dr. Waleed</div>
+                        <div class="chip" data-prompt="Explain quantum computing simply">⚛️ Quantum Computing</div>
+                        <div class="chip" data-prompt="Write a poem about AI">📝 AI Poetry</div>
+                        <div class="chip" data-prompt="Latest tech trends 2026">🚀 Future Tech</div>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="input-area">
+                <div class="input-wrap">
+                    <input type="text" id="messageInput" placeholder="Ask Zakhourani..." autocomplete="off" inputmode="text" enterkeyhint="send">
+                    <button id="sendButton"><i class="fas fa-paper-plane"></i> Send</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+</body>
+</html>

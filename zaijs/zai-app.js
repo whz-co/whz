@@ -5,6 +5,8 @@ window._userEmail = '';
 
 const App = {
     async init() {
+        console.log('🚀 Starting Zakhourani AI...');
+        
         // Create network background
         this._createNetworkBg();
         
@@ -18,10 +20,16 @@ const App = {
         UIManager.startCountdown();
         
         // Initialize Firebase
-        FirebaseAuth.init();
+        try {
+            FirebaseAuth.init();
+            console.log('✅ Firebase ready');
+        } catch (e) {
+            console.error('❌ Firebase init error:', e);
+        }
         
         // Listen for auth changes
         FirebaseAuth.onAuthChange(async (user) => {
+            console.log('👤 Auth state changed:', user ? user.email : 'logged out');
             $('loaderText').textContent = 'Loading...';
             
             if (user) {
@@ -136,5 +144,9 @@ const App = {
     }
 };
 
-// Start the application
-document.addEventListener('DOMContentLoaded', () => App.init());
+// Start the application when DOM is ready
+if (document.readyState === 'loading') {
+    document.addEventListener('DOMContentLoaded', () => App.init());
+} else {
+    App.init();
+}

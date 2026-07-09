@@ -1,34 +1,48 @@
 // ============================================================
 // ZAKHOURANI AI - FIREBASE AUTHENTICATION
+// Uses Firebase Compat SDK (firebase-app-compat.js)
 // ============================================================
 let zaiAuth = null;
 
 const FirebaseAuth = {
     init() {
+        // Check if Firebase is already initialized
         if (!firebase.apps.length) {
             firebase.initializeApp(ZAI_CONFIG.firebase);
         }
+        // Use firebase.auth() from compat SDK
         zaiAuth = firebase.auth();
+        console.log('✅ Firebase Auth initialized');
         return zaiAuth;
     },
 
     getAuth() {
-        return zaiAuth || this.init();
+        if (!zaiAuth) {
+            return this.init();
+        }
+        return zaiAuth;
     },
 
     async login(email, password) {
-        await this.getAuth().signInWithEmailAndPassword(email, password);
+        const auth = this.getAuth();
+        await auth.signInWithEmailAndPassword(email, password);
     },
 
     async register(email, password) {
-        await this.getAuth().createUserWithEmailAndPassword(email, password);
+        const auth = this.getAuth();
+        await auth.createUserWithEmailAndPassword(email, password);
     },
 
     async logout() {
-        await this.getAuth().signOut();
+        const auth = this.getAuth();
+        await auth.signOut();
     },
 
     onAuthChange(callback) {
-        this.getAuth().onAuthStateChanged(callback);
+        const auth = this.getAuth();
+        auth.onAuthStateChanged(callback);
     }
 };
+
+// Initialize immediately when script loads
+console.log('🔧 Firebase module loaded');

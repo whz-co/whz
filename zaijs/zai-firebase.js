@@ -6,14 +6,20 @@ let zaiAuth = null;
 
 const FirebaseAuth = {
     init() {
-        // Check if Firebase is already initialized
-        if (!firebase.apps.length) {
-            firebase.initializeApp(ZAI_CONFIG.firebase);
+        try {
+            // Check if Firebase is already initialized
+            if (!firebase.apps.length) {
+                firebase.initializeApp(ZAI_CONFIG.firebase);
+                console.log('✅ Firebase initialized with config:', ZAI_CONFIG.firebase.projectId);
+            }
+            // Use firebase.auth() from compat SDK
+            zaiAuth = firebase.auth();
+            console.log('✅ Firebase Auth ready');
+            return zaiAuth;
+        } catch (e) {
+            console.error('❌ Firebase init error:', e.message);
+            throw e;
         }
-        // Use firebase.auth() from compat SDK
-        zaiAuth = firebase.auth();
-        console.log('✅ Firebase Auth initialized');
-        return zaiAuth;
     },
 
     getAuth() {
@@ -25,24 +31,31 @@ const FirebaseAuth = {
 
     async login(email, password) {
         const auth = this.getAuth();
-        await auth.signInWithEmailAndPassword(email, password);
+        const result = await auth.signInWithEmailAndPassword(email, password);
+        console.log('✅ Login successful:', result.user.email);
+        return result;
     },
 
     async register(email, password) {
         const auth = this.getAuth();
-        await auth.createUserWithEmailAndPassword(email, password);
+        const result = await auth.createUserWithEmailAndPassword(email, password);
+        console.log('✅ Registration successful:', result.user.email);
+        return result;
     },
 
     async logout() {
         const auth = this.getAuth();
         await auth.signOut();
+        console.log('✅ Logout successful');
     },
 
     onAuthChange(callback) {
         const auth = this.getAuth();
-        auth.onAuthStateChanged(callback);
+        auth.onAuthStateChanged((user) => {
+            console.log('👤 Auth state:', user ? user.email : 'logged out');
+            callback(user);
+        });
     }
 };
 
-// Initialize immediately when script loads
-console.log('🔧 Firebase module loaded');
+console.log('🔧 Firebase Auth module loaded');

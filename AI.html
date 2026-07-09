@@ -423,14 +423,16 @@
             backdrop-filter: blur(6px);
             -webkit-backdrop-filter: blur(6px);
             z-index: var(--z-overlay);
-            display: none;
             opacity: 0;
-            transition: opacity 0.3s ease;
-            will-change: opacity;
+            visibility: hidden;
+            transition: opacity 0.3s ease, visibility 0.3s ease;
+            will-change: opacity, visibility;
+            pointer-events: none;
         }
         .sidebar-overlay.show {
-            display: block;
             opacity: 1;
+            visibility: visible;
+            pointer-events: auto;
         }
 
         /* ===== Sidebar ===== */
@@ -946,6 +948,7 @@
             color: var(--text-secondary);
             border-radius: var(--radius-sm);
             transition: background 0.2s ease;
+            z-index: 101; /* Fixed z-index placement to allow clicking anywhere/anytime on header overlay */
         }
         .hamburger-svg-btn:active {
             background: rgba(255,255,255,0.05);
@@ -1096,6 +1099,7 @@
             margin-left: auto;
             border-bottom-right-radius: var(--radius-xs);
             box-shadow: 0 2px 12px rgba(59,130,246,0.2);
+            cursor: pointer;
         }
         .message.assistant {
             background: var(--bg-tertiary);
@@ -2130,6 +2134,53 @@
         </div>
     </div>
 
+    <!-- ===== Settings Modal (NEW FEATURE) ===== -->
+    <div class="modal" id="settingsModal">
+        <div class="modal-box" style="max-width:500px">
+            <span class="modal-icon">⚙️</span>
+            <h2>System Settings</h2>
+            <p class="modal-subtitle">Customize your Premium Intelligence experience.</p>
+            
+            <div style="margin-bottom:var(--spacing-4)">
+                <label style="font-size:var(--font-xs);color:var(--text-secondary);font-weight:var(--font-semibold);text-transform:uppercase;letter-spacing:0.5px;display:block;margin-bottom:var(--spacing-1)">AI Model Engine</label>
+                <select id="settingModel" style="width:100%;padding:var(--spacing-2) var(--spacing-3);background:var(--bg-primary);border:1px solid var(--border-medium);border-radius:var(--radius-md);color:var(--text-primary);outline:none;font-size:var(--font-base);height:44px">
+                    <option value="zakhourani-premium">Zakhourani Premium (Default)</option>
+                    <option value="gpt-4o">GPT-4o (High Intelligence)</option>
+                    <option value="claude-3-5">Claude 3.5 Sonnet (Creative Code)</option>
+                    <option value="gemini-pro">Gemini 1.5 Pro</option>
+                </select>
+            </div>
+            
+            <div style="margin-bottom:var(--spacing-4)">
+                <label style="font-size:var(--font-xs);color:var(--text-secondary);font-weight:var(--font-semibold);text-transform:uppercase;letter-spacing:0.5px;display:block;margin-bottom:var(--spacing-1)">Speech Synth Speed</label>
+                <div style="display:flex;align-items:center;gap:var(--spacing-3)">
+                    <input type="range" id="settingSpeechSpeed" min="0.5" max="2" step="0.1" value="0.9" style="flex:1;accent-color:var(--accent-primary)">
+                    <span id="speedValue" style="font-size:var(--font-sm);color:var(--text-primary);min-width:30px">0.9x</span>
+                </div>
+            </div>
+
+            <div style="margin-bottom:var(--spacing-4);display:flex;justify-content:space-between;align-items:center">
+                <div>
+                    <label style="font-size:var(--font-sm);color:var(--text-primary);font-weight:var(--font-semibold);display:block">Interface Sound FX</label>
+                    <span style="font-size:var(--font-xs);color:var(--text-tertiary)">Immersive audio updates</span>
+                </div>
+                <input type="checkbox" id="settingSoundFX" checked style="width:20px;height:20px;accent-color:var(--accent-primary)">
+            </div>
+            
+            <div style="margin-bottom:var(--spacing-4)">
+                <label style="font-size:var(--font-xs);color:var(--text-secondary);font-weight:var(--font-semibold);text-transform:uppercase;letter-spacing:0.5px;display:block;margin-bottom:var(--spacing-1)">Backup & Restore Data</label>
+                <div style="display:flex;gap:var(--spacing-2)">
+                    <button class="modal-btn secondary" style="flex:1;margin-top:0" onclick="exportAllChatsJSON()"><i class="fas fa-file-export"></i> Backup</button>
+                    <button class="modal-btn secondary" style="flex:1;margin-top:0" onclick="$('importFileInput').click()"><i class="fas fa-file-import"></i> Restore</button>
+                    <input type="file" id="importFileInput" accept=".json" style="display:none" onchange="importChatsJSON(event)">
+                </div>
+            </div>
+
+            <button class="modal-btn primary" onclick="saveSettings()"><i class="fas fa-check"></i> Save Settings</button>
+            <button class="modal-btn secondary" onclick="closeModal('settingsModal')">Close</button>
+        </div>
+    </div>
+
     <!-- ===== Limit Modal ===== -->
     <div class="modal" id="limitModal">
         <div class="modal-box">
@@ -2265,6 +2316,9 @@
                     <button class="icon-btn" onclick="showModal('aboutDrModal')" title="About Dr. Zakhourani" aria-label="About">
                         <i class="fas fa-user-graduate"></i>
                     </button>
+                    <button class="icon-btn" onclick="showModal('settingsModal')" title="System Settings" aria-label="Settings">
+                        <i class="fas fa-cog"></i>
+                    </button>
                     <button class="icon-btn" onclick="showPackagesModal()" title="Packages & Balance" aria-label="Packages">
                         <i class="fas fa-crown"></i>
                     </button>
@@ -2346,6 +2400,8 @@
                 workerUrl: 'https://aged-recipe-80db.wabdo3762.workers.dev/',
                 dailyLimit: 50,
                 soundEnabled: true,
+                speechSpeed: 0.9,
+                selectedModel: 'zakhourani-premium',
                 sendCooldown: 1500,
                 maxMessageLength: 4000,
                 maxChats: 100,
@@ -2480,7 +2536,6 @@
                 const modal = $(id);
                 if (modal) {
                     modal.classList.add('show');
-                    document.body.style.overflow = 'hidden';
                 }
             }
 
@@ -2488,7 +2543,6 @@
                 const modal = $(id);
                 if (modal) {
                     modal.classList.remove('show');
-                    document.body.style.overflow = '';
                 }
             }
 
@@ -2496,11 +2550,10 @@
             document.addEventListener('click', (e) => {
                 if (e.target.classList.contains('modal')) {
                     e.target.classList.remove('show');
-                    document.body.style.overflow = '';
                 }
             });
 
-            // ===== Sidebar System =====
+            // ===== Sidebar System (FIXED MOBILE TOGGLE) =====
             function toggleSidebar() {
                 const sidebar = $('sidebar');
                 const overlay = $('sidebarOverlay');
@@ -2511,18 +2564,164 @@
                     sidebar.classList.remove('open');
                     overlay.classList.remove('show');
                     menuBtn.classList.remove('active');
-                    document.body.style.overflow = '';
-                    document.body.style.position = '';
                     state.isSidebarOpen = false;
                 } else {
                     sidebar.classList.add('open');
                     overlay.classList.add('show');
                     menuBtn.classList.add('active');
-                    document.body.style.overflow = 'hidden';
-                    document.body.style.position = 'fixed';
                     state.isSidebarOpen = true;
                 }
             }
+
+            // Dismiss sidebar when tapping the outside backdrop overlay
+            $('sidebarOverlay').addEventListener('click', () => {
+                if (state.isSidebarOpen) toggleSidebar();
+            });
+
+            // ===== Settings Management (NEW FEATURE) =====
+            function loadSavedSettings() {
+                const model = localStorage.getItem('zk_setting_model') || 'zakhourani-premium';
+                const speed = parseFloat(localStorage.getItem('zk_setting_speed') || '0.9');
+                const soundEnabled = localStorage.getItem('zk_setting_sound') !== 'false';
+                
+                CONFIG.selectedModel = model;
+                CONFIG.speechSpeed = speed;
+                CONFIG.soundEnabled = soundEnabled;
+                
+                if ($('settingModel')) $('settingModel').value = model;
+                if ($('settingSpeechSpeed')) {
+                    $('settingSpeechSpeed').value = speed;
+                    $('speedValue').textContent = speed + 'x';
+                }
+                if ($('settingSoundFX')) $('settingSoundFX').checked = soundEnabled;
+            }
+
+            window.saveSettings = function() {
+                const model = $('settingModel').value;
+                const speed = parseFloat($('settingSpeechSpeed').value);
+                const soundEnabled = $('settingSoundFX').checked;
+                
+                CONFIG.selectedModel = model;
+                CONFIG.speechSpeed = speed;
+                CONFIG.soundEnabled = soundEnabled;
+                
+                localStorage.setItem('zk_setting_model', model);
+                localStorage.setItem('zk_setting_speed', speed.toString());
+                localStorage.setItem('zk_setting_sound', soundEnabled.toString());
+                
+                closeModal('settingsModal');
+                toast('Settings saved successfully! ⚙️', 'success');
+                soundSuccess();
+            };
+
+            // Updates settings speech display when slider shifts
+            document.addEventListener('DOMContentLoaded', () => {
+                const speedInput = $('settingSpeechSpeed');
+                if (speedInput) {
+                    speedInput.addEventListener('input', (e) => {
+                        $('speedValue').textContent = e.target.value + 'x';
+                    });
+                }
+            });
+
+            // ===== Backup & Restore JSON Database (NEW FEATURE) =====
+            window.exportAllChatsJSON = async function() {
+                try {
+                    const user = await sbGetUser(state.userEmail, $('userName').textContent);
+                    if (!user) return toast('Please log in first', 'error');
+                    
+                    const chats = await sbLoadChats(user.id);
+                    const backupData = [];
+                    for (const chat of chats) {
+                        const messages = await sbLoadMessages(chat.id);
+                        backupData.push({ chat, messages });
+                    }
+                    
+                    const blob = new Blob([JSON.stringify(backupData, null, 2)], { type: 'application/json' });
+                    const url = URL.createObjectURL(blob);
+                    const a = document.createElement('a');
+                    a.href = url;
+                    a.download = `zakhourani-backup-${new Date().toISOString().slice(0,10)}.json`;
+                    document.body.appendChild(a);
+                    a.click();
+                    document.body.removeChild(a);
+                    URL.revokeObjectURL(url);
+                    
+                    toast('Backup created successfully! 💾', 'success');
+                } catch (err) {
+                    toast('Backup failed: ' + err.message, 'error');
+                }
+            };
+
+            window.importChatsJSON = function(event) {
+                const file = event.target.files[0];
+                if (!file) return;
+                const reader = new FileReader();
+                reader.onload = async function(e) {
+                    try {
+                        const data = JSON.parse(e.target.result);
+                        if (!Array.isArray(data)) throw new Error('Invalid backup format');
+                        const user = await sbGetUser(state.userEmail, $('userName').textContent);
+                        if (!user) return toast('Please log in first', 'error');
+                        
+                        toast('Restoring conversations...', 'info');
+                        for (const item of data) {
+                            const newChat = await sbCreateChat(user.id, item.chat.title || 'Restored Chat');
+                            if (newChat && item.messages) {
+                                for (const msg of item.messages) {
+                                    await sbSaveMessage(newChat.id, user.id, msg.role, msg.content, msg.engine || 'Zakhourani');
+                                }
+                            }
+                        }
+                        toast('Restore completed successfully! 🎉', 'success');
+                        await renderChats();
+                        if (state.allChats.length > 0) {
+                            await openChat(state.allChats[0].id);
+                        }
+                    } catch (err) {
+                        toast('Restore failed: ' + err.message, 'error');
+                    }
+                };
+                reader.readAsText(file);
+            };
+
+            // ===== Universal Code Copy Block Callback =====
+            window.copyCodeBlock = function(id, btn) {
+                const el = document.getElementById(id);
+                if (!el) return;
+                navigator.clipboard.writeText(el.textContent)
+                    .then(() => {
+                        btn.innerHTML = '<i class="fas fa-check"></i> Copied!';
+                        btn.style.background = 'rgba(34,197,94,0.2)';
+                        btn.style.borderColor = 'var(--success)';
+                        setTimeout(() => {
+                            btn.innerHTML = '<i class="fas fa-copy"></i> Copy';
+                            btn.style.background = 'rgba(255,255,255,0.1)';
+                            btn.style.borderColor = 'rgba(255,255,255,0.15)';
+                        }, 2000);
+                        toast('Code block copied! 📋', 'success');
+                    })
+                    .catch(() => toast('Copy block failed', 'error'));
+            };
+
+            // Double Click Event Listener delegation on chat panel container
+            document.addEventListener('DOMContentLoaded', () => {
+                const container = $('chatContainer');
+                if (container) {
+                    container.addEventListener('dblclick', (e) => {
+                        const userMsg = e.target.closest('.message.user');
+                        if (userMsg) {
+                            const originalText = userMsg.textContent.trim();
+                            const editedText = prompt('Edit your message:', originalText);
+                            if (editedText && editedText.trim() !== originalText) {
+                                $('messageInput').value = editedText.trim();
+                                $('messageInput').focus();
+                                toast('Message loaded back to prompt input.', 'info');
+                            }
+                        }
+                    });
+                }
+            });
 
             // ===== Countdown Timer =====
             function startCountdown() {
@@ -2538,8 +2737,6 @@
                     const hours = Math.floor(diff / 3600000);
                     const minutes = Math.floor((diff % 3600000) / 60000);
                     const seconds = Math.floor((diff % 60000) / 1000);
-                    
-                    const timeStr = `${String(hours).padStart(2, '0')}:${String(minutes).padStart(2, '0')}:${String(seconds).padStart(2, '0')}`;
                     
                     const limitTimer = $('limitTimer');
                     if (limitTimer) {
@@ -2818,11 +3015,6 @@
                         $('userName').textContent = limit.username;
                         $('userAvatarText').textContent = limit.username.charAt(0).toUpperCase();
                     }
-                    
-                    // Show free tier status
-                    if (limit.remaining === 0 && !limit.is_premium) {
-                        // Could show upgrade prompt
-                    }
                 } catch (_) { /* Silently fail */ }
             }
 
@@ -2841,14 +3033,22 @@
                 // Italic
                 html = html.replace(/\*(.*?)\*/g, '<em>$1</em>');
                 
-                // Code blocks
+                // Code blocks with elegant COPY action overlay
                 html = html.replace(/```(\w+)?\n([\s\S]*?)```/g, (_, lang, code) => {
                     const language = lang || 'plaintext';
                     const escaped = code.trim()
                         .replace(/&/g, '&amp;')
                         .replace(/</g, '&lt;')
                         .replace(/>/g, '&gt;');
-                    return `<pre><code class="language-${language}">${escaped}</code></pre>`;
+                    const uniqueId = 'code-' + Math.random().toString(36).substr(2, 9);
+                    return `
+                        <div class="code-block-wrapper" style="position:relative; margin: var(--spacing-2) 0;">
+                            <button class="copy-code-btn" data-target="${uniqueId}" style="position:absolute; top:8px; right:8px; background:rgba(255,255,255,0.1); border:1px solid rgba(255,255,255,0.15); color:var(--text-secondary); border-radius:var(--radius-sm); padding:4px 8px; font-size:var(--font-xs); cursor:pointer; z-index:10; transition:var(--transition-fast);" onclick="copyCodeBlock('${uniqueId}', this)">
+                                <i class="fas fa-copy"></i> Copy
+                            </button>
+                            <pre><code id="${uniqueId}" class="language-${language}">${escaped}</code></pre>
+                        </div>
+                    `;
                 });
                 
                 // Inline code
@@ -2946,7 +3146,6 @@
                 // Event delegation for conv-item click
                 list.querySelectorAll('.conv-item').forEach(item => {
                     item.addEventListener('click', function(e) {
-                        // Ignore clicks on action buttons
                         if (e.target.closest('.conv-item-actions')) return;
                         const id = this.dataset.id;
                         if (id) openChat(id);
@@ -3222,7 +3421,7 @@
                 if ('speechSynthesis' in window) {
                     speechSynthesis.cancel();
                     const utterance = new SpeechSynthesisUtterance(text);
-                    utterance.rate = 0.9;
+                    utterance.rate = CONFIG.speechSpeed || 0.9;
                     utterance.pitch = 1;
                     utterance.volume = 1;
                     utterance.lang = 'en-US';
@@ -3249,7 +3448,6 @@
                 const msgEl = btn.closest('.message');
                 const prevMsg = msgEl.previousElementSibling;
                 if (prevMsg && prevMsg.classList.contains('user')) {
-                    // Remove the assistant message
                     msgEl.remove();
                     $('messageInput').value = prevMsg.textContent.trim();
                     sendMessage();
@@ -3285,12 +3483,8 @@
                 
                 const newText = prompt('Edit your message:', messages[idx].content);
                 if (newText && newText.trim()) {
-                    // Remove all messages after this one
-                    const user = await sbGetUser(state.userEmail, $('userName').textContent);
-                    // We'll just update locally and resend
                     $('messageInput').value = newText.trim();
                     toast('Message updated - press Send to resend', 'info');
-                    // Focus input
                     $('messageInput').focus();
                 }
             }
@@ -3352,6 +3546,11 @@
                 };
             }
 
+            // Show voice button on mobile or if supported
+            if ('webkitSpeechRecognition' in window || 'SpeechRecognition' in window) {
+                $('voiceBtn').style.display = 'flex';
+            }
+
             function stopVoice() {
                 if (state.recognition) {
                     try {
@@ -3362,11 +3561,6 @@
                 const btn = $('voiceBtn');
                 btn.classList.remove('listening');
                 btn.innerHTML = '<i class="fas fa-microphone"></i>';
-            }
-
-            // Show voice button on mobile or if supported
-            if ('webkitSpeechRecognition' in window || 'SpeechRecognition' in window) {
-                $('voiceBtn').style.display = 'flex';
             }
 
             // ===== Send Message =====
@@ -3390,13 +3584,11 @@
                     return;
                 }
                 
-                // Check online status
                 if (!state.isOnline) {
                     toast('You are offline. Please check your connection.', 'error');
                     return;
                 }
                 
-                // Check limit
                 const limit = await sbCheckLimit(state.userEmail);
                 if (!limit.can_ask) {
                     showModal('limitModal');
@@ -3404,7 +3596,6 @@
                     return;
                 }
                 
-                // Increment usage
                 await sbIncrementUsage(state.userEmail);
                 state.lastSendTime = now;
                 state.busy = true;
@@ -3412,7 +3603,6 @@
                 $('sendButton').style.opacity = '0.5';
                 
                 try {
-                    // Create chat if none exists
                     if (!state.chatId || !isValidUUID(state.chatId)) {
                         const user = await sbGetUser(state.userEmail, $('userName').textContent);
                         const chat = await sbCreateChat(user.id, text.slice(0, 35) + (text.length > 35 ? '...' : ''));
@@ -3426,13 +3616,11 @@
                     const welcome = container.querySelector('.welcome');
                     if (welcome) welcome.remove();
                     
-                    // Add user message
                     const userMsg = document.createElement('div');
                     userMsg.className = 'message user slide-up';
                     userMsg.textContent = text;
                     container.appendChild(userMsg);
                     
-                    // Save user message
                     const user = await sbGetUser(state.userEmail, $('userName').textContent);
                     await sbSaveMessage(state.chatId, user.id, 'user', text, 'Zakhourani');
                     
@@ -3441,7 +3629,6 @@
                     container.scrollTop = container.scrollHeight;
                     soundSend();
                     
-                    // Typing indicator
                     const typing = document.createElement('div');
                     typing.className = 'typing-indicator';
                     typing.innerHTML = `
@@ -3453,7 +3640,6 @@
                     container.appendChild(typing);
                     container.scrollTop = container.scrollHeight;
                     
-                    // Call worker with timeout
                     const controller = new AbortController();
                     const timeoutId = setTimeout(() => controller.abort(), 30000);
                     
@@ -3464,7 +3650,8 @@
                             prompt: text,
                             history: [],
                             email: state.userEmail,
-                            timestamp: new Date().toISOString()
+                            timestamp: new Date().toISOString(),
+                            model: CONFIG.selectedModel || 'zakhourani-premium'
                         }),
                         signal: controller.signal
                     });
@@ -3479,7 +3666,6 @@
                     const data = await response.json();
                     
                     if (data.success && data.reply) {
-                        // Add assistant message
                         const aiMsg = document.createElement('div');
                         aiMsg.className = 'message assistant slide-up';
                         aiMsg.innerHTML = `
@@ -3498,7 +3684,6 @@
                         `;
                         container.appendChild(aiMsg);
                         
-                        // Bind actions
                         aiMsg.querySelector('.copy-msg').addEventListener('click', function(e) {
                             e.stopPropagation();
                             copyMessage(this);
@@ -3520,12 +3705,10 @@
                         
                         container.scrollTop = container.scrollHeight;
                         
-                        // Save assistant message
                         await sbSaveMessage(state.chatId, user.id, 'assistant', data.reply, 'Zakhourani');
                         highlightCodeBlocks();
                         soundSuccess();
                         
-                        // Update chat title if first message
                         const messages = await sbLoadMessages(state.chatId);
                         if (messages.length <= 2) {
                             const title = text.slice(0, 35) + (text.length > 35 ? '...' : '');
@@ -3698,13 +3881,11 @@
             }
 
             // ===== Event Handlers =====
-            // Send button
             $('sendButton').addEventListener('click', (e) => {
                 e.preventDefault();
                 sendMessage();
             });
 
-            // Enter key
             $('messageInput').addEventListener('keydown', (e) => {
                 if (e.key === 'Enter' && !e.shiftKey) {
                     e.preventDefault();
@@ -3712,7 +3893,6 @@
                 }
             });
 
-            // Draft saving with debounce
             let draftTimeout;
             $('messageInput').addEventListener('input', () => {
                 clearTimeout(draftTimeout);
@@ -3724,7 +3904,6 @@
                 }, 800);
             });
 
-            // Search with clear button
             const searchInput = $('searchChats');
             const clearSearch = $('clearSearch');
             
@@ -3750,7 +3929,6 @@
                 searchInput.focus();
             });
 
-            // Chip clicks
             document.addEventListener('click', (e) => {
                 if (e.target.classList.contains('chip') || e.target.closest('.chip')) {
                     const chip = e.target.closest('.chip');
@@ -3761,34 +3939,27 @@
                 }
             });
 
-            // Keyboard shortcuts
             document.addEventListener('keydown', (e) => {
-                // Escape: close modals and sidebar
                 if (e.key === 'Escape') {
                     document.querySelectorAll('.modal.show').forEach(m => m.classList.remove('show'));
                     if (state.isSidebarOpen) toggleSidebar();
-                    document.body.style.overflow = '';
-                    document.body.style.position = '';
                 }
-                // Ctrl/Cmd + K: focus input
                 if ((e.ctrlKey || e.metaKey) && e.key === 'k') {
                     e.preventDefault();
                     $('messageInput').focus();
                     $('messageInput').select();
                 }
-                // Ctrl/Cmd + N: new chat
                 if ((e.ctrlKey || e.metaKey) && e.key === 'n') {
                     e.preventDefault();
                     createNewChat();
                 }
-                // Ctrl/Cmd + Shift + E: export
                 if ((e.ctrlKey || e.metaKey) && e.shiftKey && e.key === 'E') {
                     e.preventDefault();
                     exportChat();
                 }
             });
 
-            // Swipe for sidebar (mobile)
+            // Swipe gesture for side panel (mobile)
             let touchStartX = 0;
             let touchStartY = 0;
             
@@ -3817,16 +3988,14 @@
             async function init() {
                 log('Starting Zakhourani AI v' + CONFIG.version);
                 
-                // Load theme
                 if (state.theme === 'light') {
                     document.body.classList.add('light-theme');
                     $('themeBtn').innerHTML = '<i class="fas fa-sun"></i>';
                 }
                 
-                // Start countdown
+                loadSavedSettings();
                 startCountdown();
                 
-                // Simulate loading progress
                 let progress = 0;
                 const progressInterval = setInterval(() => {
                     progress += Math.random() * 10 + 5;
@@ -3834,10 +4003,8 @@
                     $('loaderProgress').style.width = progress + '%';
                 }, 200);
                 
-                // Init Firebase
                 initFirebase();
                 
-                // Auth state listener
                 state.auth.onAuthStateChanged(async (user) => {
                     clearInterval(progressInterval);
                     $('loaderProgress').style.width = '100%';
@@ -3925,7 +4092,6 @@
             // ===== Start =====
             init();
             
-            // ===== Version Info =====
             log('╔═══════════════════════════════════════════╗');
             log('║  🚀 Zakhourani AI v' + CONFIG.version + ' · Premium Intelligence  ║');
             log('║  ✨ Ready for anything!                   ║');

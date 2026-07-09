@@ -3,35 +3,41 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>4D Red Card Duel: CR7 vs Messi | Coaches: Laween Kovan & Lawand Kovan</title>
+    <title>5D Red Card Playground: CR7 vs Messi | Coaches: Laween Kovan & Lawand Kovan</title>
     <style>
         :root {
             --gold: #ffd700;
             --red: #ff4444;
             --blue: #4444ff;
             --dark: #0a0a0a;
-            --cr7-color: #ffd700;
-            --messi-color: #ff4444;
+            --grass: #1a5c1a;
+            --pitch: #0d3b0d;
+            --line: #ffffff;
         }
 
         * {
             margin: 0;
             padding: 0;
             box-sizing: border-box;
+            user-select: none;
         }
 
         body {
             font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
             background: radial-gradient(ellipse at center, #1a1a2e 0%, #0a0a0a 100%);
             min-height: 100vh;
-            color: white;
-            overflow-x: hidden;
-            perspective: 1000px;
-            cursor: default;
+            overflow: hidden;
+            cursor: grab;
+            perspective: 2000px;
+            transform-style: preserve-3d;
         }
 
-        /* 4D Particle Background */
-        .particles-container {
+        body:active {
+            cursor: grabbing;
+        }
+
+        /* 5D Particle Universe */
+        .universe-bg {
             position: fixed;
             top: 0;
             left: 0;
@@ -39,40 +45,47 @@
             height: 100%;
             pointer-events: none;
             z-index: 0;
+            transform-style: preserve-3d;
         }
 
-        .particle {
+        .star {
             position: absolute;
             border-radius: 50%;
-            animation: floatParticle linear infinite;
-            opacity: 0.3;
+            background: white;
+            animation: starPulse 2s ease-in-out infinite;
         }
 
-        @keyframes floatParticle {
-            0% {
-                transform: translateY(100vh) translateX(0) rotate(0deg) scale(1);
-                opacity: 0;
-            }
-            10% {
-                opacity: 0.5;
-            }
-            90% {
-                opacity: 0.5;
-            }
-            100% {
-                transform: translateY(-100vh) translateX(100px) rotate(720deg) scale(0);
-                opacity: 0;
-            }
+        @keyframes starPulse {
+            0%, 100% { opacity: 0.3; transform: scale(1); }
+            50% { opacity: 1; transform: scale(1.5); }
         }
 
-        /* Fullscreen Button */
-        .fullscreen-btn {
+        .dimension-ring {
+            position: absolute;
+            border-radius: 50%;
+            border: 2px solid rgba(255, 215, 0, 0.2);
+            animation: ringRotate 10s linear infinite;
+            pointer-events: none;
+        }
+
+        @keyframes ringRotate {
+            0% { transform: rotateX(0deg) rotateY(0deg) rotateZ(0deg); }
+            100% { transform: rotateX(360deg) rotateY(360deg) rotateZ(360deg); }
+        }
+
+        /* Fullscreen & Controls */
+        .controls-bar {
             position: fixed;
             top: 20px;
             right: 20px;
             z-index: 1000;
-            background: rgba(255, 215, 0, 0.2);
-            backdrop-filter: blur(10px);
+            display: flex;
+            gap: 10px;
+        }
+
+        .control-btn {
+            background: rgba(0, 0, 0, 0.7);
+            backdrop-filter: blur(15px);
             border: 2px solid var(--gold);
             color: var(--gold);
             padding: 12px 20px;
@@ -81,34 +94,36 @@
             font-size: 16px;
             font-weight: bold;
             transition: all 0.3s ease;
-            display: flex;
-            align-items: center;
-            gap: 8px;
+            transform-style: preserve-3d;
         }
 
-        .fullscreen-btn:hover {
-            background: rgba(255, 215, 0, 0.4);
-            transform: scale(1.1);
+        .control-btn:hover {
+            background: rgba(255, 215, 0, 0.2);
+            transform: translateZ(20px) scale(1.1);
             box-shadow: 0 0 30px rgba(255, 215, 0, 0.5);
         }
 
         /* Coaches Banner */
         .coaches-banner {
-            position: relative;
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            z-index: 999;
             display: flex;
             justify-content: space-between;
             align-items: center;
-            background: linear-gradient(135deg, #ffd700 0%, #ff6b6b 50%, #ffd700 100%);
-            padding: 20px 40px;
+            background: linear-gradient(135deg, rgba(255,215,0,0.9) 0%, rgba(255,107,107,0.9) 50%, rgba(255,215,0,0.9) 100%);
+            padding: 15px 30px;
             color: #000;
-            box-shadow: 0 10px 40px rgba(255, 215, 0, 0.4);
-            z-index: 1;
+            box-shadow: 0 10px 40px rgba(255, 215, 0, 0.5);
+            backdrop-filter: blur(20px);
+            animation: bannerPulse 3s ease-in-out infinite;
             transform-style: preserve-3d;
-            animation: bannerGlow 3s ease-in-out infinite;
         }
 
-        @keyframes bannerGlow {
-            0%, 100% { box-shadow: 0 10px 40px rgba(255, 215, 0, 0.4); }
+        @keyframes bannerPulse {
+            0%, 100% { box-shadow: 0 10px 40px rgba(255, 215, 0, 0.5); }
             50% { box-shadow: 0 20px 60px rgba(255, 215, 0, 0.8); }
         }
 
@@ -116,146 +131,238 @@
             text-align: center;
             flex: 1;
             transform-style: preserve-3d;
-            transition: transform 0.5s ease;
         }
 
         .coach:hover {
-            transform: translateZ(20px) rotateY(5deg);
+            transform: translateZ(30px);
         }
 
-        .coach-badge {
-            font-size: 50px;
-            animation: bounce3D 1s infinite;
-            filter: drop-shadow(0 5px 15px rgba(0,0,0,0.3));
-        }
-
-        @keyframes bounce3D {
-            0%, 100% { transform: translateY(0) translateZ(0); }
-            50% { transform: translateY(-15px) translateZ(30px); }
-        }
-
-        .coach h2 {
-            font-size: 24px;
+        .coach-name {
+            font-size: 22px;
             font-weight: bold;
-            margin: 10px 0 5px;
             text-shadow: 2px 2px 4px rgba(0,0,0,0.2);
         }
 
         .coach-title {
-            font-size: 16px;
+            font-size: 14px;
             font-style: italic;
-            opacity: 0.9;
         }
 
         .banner-center {
             text-align: center;
             flex: 2;
-            transform-style: preserve-3d;
         }
 
         .banner-center h1 {
-            font-size: 42px;
+            font-size: 32px;
             text-shadow: 3px 3px 6px rgba(0,0,0,0.3);
-            animation: titleFloat 3s ease-in-out infinite;
-        }
-
-        @keyframes titleFloat {
-            0%, 100% { transform: translateY(0) translateZ(0); }
-            50% { transform: translateY(-5px) translateZ(20px); }
-        }
-
-        .banner-center .subtitle {
-            font-size: 20px;
-            font-weight: bold;
-            color: #333;
-            margin-top: 5px;
         }
 
         /* Game Container */
-        .game-container {
+        .game-wrapper {
             position: relative;
-            max-width: 1400px;
-            margin: 30px auto;
-            padding: 30px;
+            width: 100vw;
+            height: 100vh;
             z-index: 1;
             transform-style: preserve-3d;
+            padding-top: 100px;
         }
 
-        /* Players Section */
-        .players-section {
+        /* Scoreboard */
+        .scoreboard {
+            position: fixed;
+            bottom: 20px;
+            left: 50%;
+            transform: translateX(-50%) translateZ(50px);
+            z-index: 100;
             display: flex;
-            justify-content: space-between;
-            align-items: center;
-            margin-bottom: 40px;
             gap: 30px;
-            transform-style: preserve-3d;
-        }
-
-        .player {
-            flex: 1;
-            transform-style: preserve-3d;
-            transition: transform 0.5s ease;
-        }
-
-        .player:hover {
-            transform: translateZ(30px);
-        }
-
-        .player-card {
-            background: rgba(255, 255, 255, 0.08);
+            background: rgba(0, 0, 0, 0.8);
             backdrop-filter: blur(20px);
-            border-radius: 30px;
-            padding: 40px;
+            padding: 20px 40px;
+            border-radius: 50px;
+            border: 3px solid var(--gold);
+            box-shadow: 0 20px 60px rgba(0,0,0,0.5);
+            transform-style: preserve-3d;
+        }
+
+        .score-item {
             text-align: center;
             transform-style: preserve-3d;
-            transition: all 0.5s ease;
+            transition: all 0.3s ease;
         }
 
-        .cr7-side .player-card {
-            border: 4px solid var(--cr7-color);
-            box-shadow: 0 20px 60px rgba(255, 215, 0, 0.4),
-                        inset 0 0 30px rgba(255, 215, 0, 0.1);
-            animation: cr7CardGlow 2s ease-in-out infinite;
+        .score-item:hover {
+            transform: translateZ(20px);
         }
 
-        @keyframes cr7CardGlow {
-            0%, 100% { box-shadow: 0 20px 60px rgba(255, 215, 0, 0.4), inset 0 0 30px rgba(255, 215, 0, 0.1); }
-            50% { box-shadow: 0 30px 80px rgba(255, 215, 0, 0.6), inset 0 0 50px rgba(255, 215, 0, 0.2); }
+        .score-label {
+            font-size: 14px;
+            color: #ccc;
+            text-transform: uppercase;
+            letter-spacing: 2px;
         }
 
-        .messi-side .player-card {
-            border: 4px solid var(--messi-color);
-            box-shadow: 0 20px 60px rgba(255, 68, 68, 0.4),
-                        inset 0 0 30px rgba(255, 68, 68, 0.1);
-            animation: messiCardGlow 2s ease-in-out infinite 0.5s;
+        .score-value {
+            font-size: 42px;
+            font-weight: bold;
+            color: var(--gold);
+            text-shadow: 0 0 20px rgba(255, 215, 0, 0.8);
+            animation: scoreGlow 2s ease-in-out infinite;
         }
 
-        @keyframes messiCardGlow {
-            0%, 100% { box-shadow: 0 20px 60px rgba(255, 68, 68, 0.4), inset 0 0 30px rgba(255, 68, 68, 0.1); }
-            50% { box-shadow: 0 30px 80px rgba(255, 68, 68, 0.6), inset 0 0 50px rgba(255, 68, 68, 0.2); }
+        @keyframes scoreGlow {
+            0%, 100% { text-shadow: 0 0 20px rgba(255, 215, 0, 0.8); }
+            50% { text-shadow: 0 0 40px rgba(255, 215, 0, 1); }
         }
 
-        .player-image-container {
-            position: relative;
-            display: inline-block;
-            margin-bottom: 20px;
+        /* Football Pitch */
+        .pitch-container {
+            position: absolute;
+            top: 120px;
+            left: 50%;
+            transform: translateX(-50%) rotateX(5deg);
+            width: 90%;
+            max-width: 1200px;
+            height: 600px;
             transform-style: preserve-3d;
+            animation: pitchFloat 4s ease-in-out infinite;
+        }
+
+        @keyframes pitchFloat {
+            0%, 100% { transform: translateX(-50%) rotateX(5deg) translateZ(0); }
+            50% { transform: translateX(-50%) rotateX(5deg) translateZ(30px); }
+        }
+
+        .pitch {
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(180deg, #1a5c1a 0%, #0d3b0d 50%, #1a5c1a 100%);
+            border-radius: 30px;
+            position: relative;
+            border: 4px solid white;
+            box-shadow: 0 30px 80px rgba(0,0,0,0.5), inset 0 0 100px rgba(0,0,0,0.3);
+            overflow: hidden;
+            transform-style: preserve-3d;
+        }
+
+        /* Pitch markings */
+        .pitch::before {
+            content: '';
+            position: absolute;
+            top: 50%;
+            left: 0;
+            right: 0;
+            height: 4px;
+            background: white;
+            transform: translateY(-50%);
+            box-shadow: 0 0 20px rgba(255,255,255,0.5);
+        }
+
+        .center-circle {
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            width: 150px;
+            height: 150px;
+            border: 4px solid white;
+            border-radius: 50%;
+            box-shadow: 0 0 30px rgba(255,255,255,0.3);
+        }
+
+        .center-dot {
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            width: 15px;
+            height: 15px;
+            background: white;
+            border-radius: 50%;
+            box-shadow: 0 0 20px rgba(255,255,255,0.5);
+        }
+
+        /* Red Line - Card Zone */
+        .red-line {
+            position: absolute;
+            right: 100px;
+            top: 0;
+            bottom: 0;
+            width: 6px;
+            background: #ff0000;
+            box-shadow: 0 0 40px rgba(255, 0, 0, 0.8), 0 0 80px rgba(255, 0, 0, 0.4);
+            animation: redLinePulse 1s ease-in-out infinite;
+            z-index: 5;
+        }
+
+        @keyframes redLinePulse {
+            0%, 100% { box-shadow: 0 0 40px rgba(255, 0, 0, 0.8), 0 0 80px rgba(255, 0, 0, 0.4); }
+            50% { box-shadow: 0 0 60px rgba(255, 0, 0, 1), 0 0 120px rgba(255, 0, 0, 0.6); }
+        }
+
+        .red-line-label {
+            position: absolute;
+            right: 100px;
+            top: -40px;
+            transform: translateX(50%);
+            color: #ff0000;
+            font-weight: bold;
+            font-size: 16px;
+            text-shadow: 0 0 20px rgba(255, 0, 0, 0.8);
+            animation: redLinePulse 1s ease-in-out infinite;
+            white-space: nowrap;
+        }
+
+        /* Goal Area */
+        .goal-area {
+            position: absolute;
+            right: 0;
+            top: 50%;
+            transform: translateY(-50%) translateZ(10px);
+            width: 80px;
+            height: 200px;
+            border: 4px solid white;
+            border-right: none;
+            border-radius: 10px 0 0 10px;
+            background: rgba(255,255,255,0.1);
+            box-shadow: 0 0 40px rgba(255,255,255,0.3);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .goal-text {
+            color: white;
+            font-weight: bold;
+            font-size: 20px;
+            text-shadow: 0 0 20px rgba(255,255,255,0.8);
+            transform: rotate(-90deg);
+        }
+
+        /* Players */
+        .player-sprite {
+            position: absolute;
+            width: 80px;
+            height: 80px;
+            cursor: grab;
+            z-index: 10;
+            transform-style: preserve-3d;
+            transition: filter 0.3s ease;
+        }
+
+        .player-sprite:active {
+            cursor: grabbing;
         }
 
         .player-img {
-            width: 250px;
-            height: 250px;
+            width: 100%;
+            height: 100%;
             border-radius: 50%;
             object-fit: cover;
-            border: 6px solid white;
-            position: relative;
-            z-index: 2;
-            transition: all 0.5s ease;
+            border: 4px solid white;
             box-shadow: 0 10px 30px rgba(0,0,0,0.5);
-        }
-
-        .player-img:hover {
-            transform: scale(1.1) rotate(5deg);
+            pointer-events: none;
         }
 
         .player-glow {
@@ -263,1222 +370,1021 @@
             top: 50%;
             left: 50%;
             transform: translate(-50%, -50%);
-            width: 280px;
-            height: 280px;
+            width: 100px;
+            height: 100px;
             border-radius: 50%;
-            z-index: 1;
-            animation: rotate3D 4s linear infinite;
+            pointer-events: none;
+            z-index: -1;
+            animation: playerGlowSpin 3s linear infinite;
         }
 
-        @keyframes rotate3D {
+        @keyframes playerGlowSpin {
             0% { transform: translate(-50%, -50%) rotateY(0deg); }
             100% { transform: translate(-50%, -50%) rotateY(360deg); }
         }
 
         .cr7-glow {
-            background: conic-gradient(from 0deg, 
-                rgba(255,215,0,0.8), 
-                rgba(255,215,0,0.2), 
-                rgba(255,215,0,0.8), 
-                rgba(255,215,0,0.2));
+            background: radial-gradient(circle, rgba(255,215,0,0.6), transparent 70%);
         }
 
         .messi-glow {
-            background: conic-gradient(from 0deg, 
-                rgba(255,68,68,0.8), 
-                rgba(255,68,68,0.2), 
-                rgba(255,68,68,0.8), 
-                rgba(255,68,68,0.2));
+            background: radial-gradient(circle, rgba(255,68,68,0.6), transparent 70%);
         }
 
-        .player-name {
-            font-size: 28px;
-            margin: 20px 0 10px;
-            text-shadow: 3px 3px 6px rgba(0,0,0,0.5);
-            letter-spacing: 2px;
-        }
-
-        .player-number {
-            font-size: 48px;
+        .player-name-tag {
+            position: absolute;
+            bottom: -25px;
+            left: 50%;
+            transform: translateX(-50%);
+            background: rgba(0,0,0,0.8);
+            color: white;
+            padding: 5px 15px;
+            border-radius: 20px;
+            font-size: 14px;
             font-weight: bold;
-            background: linear-gradient(45deg, var(--gold), #ff6b6b);
-            -webkit-background-clip: text;
-            -webkit-text-fill-color: transparent;
-            background-clip: text;
-            margin: 10px 0;
-            text-shadow: none;
+            white-space: nowrap;
+            pointer-events: none;
         }
 
-        .coach-tag {
-            background: rgba(255, 255, 255, 0.15);
-            padding: 10px 25px;
-            border-radius: 25px;
-            display: inline-block;
-            font-size: 16px;
-            margin: 15px 0;
-            border: 2px solid rgba(255,255,255,0.3);
-            backdrop-filter: blur(10px);
+        .cr7-name {
+            border: 2px solid var(--gold);
         }
 
-        .stats {
-            margin-top: 20px;
-            transform-style: preserve-3d;
+        .messi-name {
+            border: 2px solid var(--red);
         }
 
-        .stat-label {
-            font-size: 16px;
-            opacity: 0.9;
-            display: block;
-            margin-bottom: 5px;
+        /* Player Selection Indicator */
+        .selected-indicator {
+            position: absolute;
+            top: -15px;
+            left: 50%;
+            transform: translateX(-50%);
+            font-size: 24px;
+            animation: bounce 0.5s ease infinite;
+            pointer-events: none;
         }
 
-        .stat-value {
-            font-size: 56px;
-            font-weight: bold;
-            color: var(--gold);
-            text-shadow: 0 0 20px rgba(255, 215, 0, 0.8);
-            display: block;
-            transition: all 0.3s ease;
+        @keyframes bounce {
+            0%, 100% { transform: translateX(-50%) translateY(0); }
+            50% { transform: translateX(-50%) translateY(-10px); }
         }
 
-        /* Versus Section */
-        .versus-section {
-            text-align: center;
-            flex: 0 0 180px;
-            transform-style: preserve-3d;
-            animation: versusFloat 3s ease-in-out infinite;
-        }
-
-        @keyframes versusFloat {
-            0%, 100% { transform: translateZ(0); }
-            50% { transform: translateZ(40px); }
-        }
-
-        .vs-circle {
-            width: 100px;
-            height: 100px;
-            background: linear-gradient(45deg, #ff4444, #ffd700, #ff4444);
-            background-size: 200% 200%;
-            border-radius: 50%;
-            display: flex;
-            align-items: center;
-            justify-content: center;
+        /* Red Card Alert */
+        .red-card-alert {
+            position: fixed;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%) translateZ(200px) scale(0);
+            z-index: 500;
+            background: linear-gradient(135deg, #ff0000, #cc0000);
+            color: white;
+            padding: 40px 60px;
+            border-radius: 20px;
             font-size: 36px;
             font-weight: bold;
-            margin: 0 auto 25px;
-            box-shadow: 0 0 40px rgba(255, 255, 255, 0.4);
-            animation: vsPulse 2s ease-in-out infinite, gradientShift 3s linear infinite;
-        }
-
-        @keyframes vsPulse {
-            0%, 100% { transform: scale(1); }
-            50% { transform: scale(1.1); }
-        }
-
-        @keyframes gradientShift {
-            0% { background-position: 0% 50%; }
-            50% { background-position: 100% 50%; }
-            100% { background-position: 0% 50%; }
-        }
-
-        .score-display {
-            font-size: 64px;
-            font-weight: bold;
-            color: var(--gold);
-            text-shadow: 0 0 30px rgba(255, 215, 0, 0.8);
-            line-height: 1;
-        }
-
-        .score-label {
-            font-size: 18px;
-            opacity: 0.9;
-            margin-top: 10px;
-            text-transform: uppercase;
-            letter-spacing: 2px;
-        }
-
-        /* Game Arena */
-        .game-arena {
-            background: rgba(255, 255, 255, 0.05);
-            backdrop-filter: blur(30px);
-            border-radius: 30px;
-            padding: 50px;
             text-align: center;
-            margin: 40px 0;
+            box-shadow: 0 0 100px rgba(255, 0, 0, 0.8), 0 0 200px rgba(255, 0, 0, 0.4);
+            border: 5px solid white;
+            pointer-events: none;
+            transition: all 0.5s cubic-bezier(0.68, -0.55, 0.265, 1.55);
             transform-style: preserve-3d;
-            transition: transform 0.3s ease;
-            border: 2px solid rgba(255,255,255,0.1);
         }
 
-        .game-arena:hover {
-            transform: translateZ(10px);
+        .red-card-alert.show {
+            transform: translate(-50%, -50%) translateZ(200px) scale(1);
         }
 
-        .coaches-instruction {
-            display: flex;
-            justify-content: space-around;
-            margin-bottom: 40px;
-            padding: 25px;
-            background: rgba(0, 0, 0, 0.4);
-            border-radius: 20px;
-            gap: 20px;
-            border: 1px solid rgba(255,255,255,0.1);
-        }
-
-        .instruction-item {
-            flex: 1;
-            font-size: 18px;
-            padding: 20px;
-            border-radius: 15px;
-            background: rgba(255,255,255,0.05);
-            transition: all 0.3s ease;
-        }
-
-        .instruction-item:hover {
-            background: rgba(255,255,255,0.1);
-            transform: translateY(-5px);
-        }
-
-        .instruction-item strong {
-            color: var(--gold);
+        .red-card-alert .card-icon {
+            font-size: 80px;
             display: block;
-            margin-bottom: 10px;
-            font-size: 20px;
+            animation: cardSpin 1s ease-in-out infinite;
         }
 
-        .card-stack {
-            position: relative;
-            margin: 40px 0;
-            display: inline-block;
-            transform-style: preserve-3d;
-            animation: cardStackFloat 3s ease-in-out infinite;
+        @keyframes cardSpin {
+            0% { transform: rotateY(0deg); }
+            100% { transform: rotateY(360deg); }
         }
 
-        @keyframes cardStackFloat {
-            0%, 100% { transform: translateY(0) rotateY(0deg); }
-            50% { transform: translateY(-10px) rotateY(10deg); }
-        }
-
-        .red-card-img {
-            width: 180px;
-            height: 240px;
-            object-fit: cover;
-            border-radius: 15px;
-            box-shadow: 0 15px 50px rgba(255, 0, 0, 0.6);
-            transition: all 0.3s ease;
-        }
-
-        .red-card-img:hover {
-            transform: scale(1.1) rotateY(180deg);
-            box-shadow: 0 20px 60px rgba(255, 0, 0, 0.8);
-        }
-
-        .cards-remaining {
-            margin-top: 20px;
-            background: rgba(0, 0, 0, 0.6);
-            padding: 20px;
-            border-radius: 20px;
-            border: 2px solid rgba(255,255,255,0.1);
-        }
-
-        .cards-remaining span {
-            font-size: 52px;
-            font-weight: bold;
-            color: var(--gold);
-            transition: all 0.3s ease;
-            text-shadow: 0 0 20px rgba(255, 215, 0, 0.5);
-        }
-
-        .cards-remaining p {
-            font-size: 16px;
-            opacity: 0.8;
-            margin-top: 5px;
-            text-transform: uppercase;
-            letter-spacing: 2px;
-        }
-
-        .progress-bar {
-            width: 100%;
-            height: 15px;
-            background: rgba(255, 255, 255, 0.1);
-            border-radius: 10px;
-            margin: 25px 0;
-            overflow: hidden;
-            border: 1px solid rgba(255,255,255,0.2);
-        }
-
-        .progress-fill {
-            height: 100%;
-            background: linear-gradient(90deg, #ffd700, #ff6b6b, #ff0000);
-            border-radius: 10px;
-            transition: width 0.3s ease;
-            width: 0%;
-            box-shadow: 0 0 20px rgba(255, 215, 0, 0.5);
-            animation: progressGlow 2s ease-in-out infinite;
-        }
-
-        @keyframes progressGlow {
-            0%, 100% { box-shadow: 0 0 20px rgba(255, 215, 0, 0.5); }
-            50% { box-shadow: 0 0 40px rgba(255, 215, 0, 0.8); }
-        }
-
-        .action-button {
-            background: linear-gradient(135deg, #ff4444, #cc0000);
-            color: white;
-            border: none;
-            padding: 30px 60px;
-            font-size: 32px;
-            font-weight: bold;
-            border-radius: 60px;
-            cursor: pointer;
-            transition: all 0.3s ease;
-            box-shadow: 0 15px 50px rgba(255, 0, 0, 0.5);
-            position: relative;
-            overflow: hidden;
-            margin: 30px 0;
-            transform-style: preserve-3d;
-            letter-spacing: 2px;
-        }
-
-        .action-button::before {
-            content: '';
-            position: absolute;
-            top: -50%;
-            left: -50%;
-            width: 200%;
-            height: 200%;
-            background: linear-gradient(45deg, transparent, rgba(255,255,255,0.1), transparent);
-            transform: rotate(45deg);
-            animation: buttonShine 3s infinite;
-        }
-
-        @keyframes buttonShine {
-            0% { left: -50%; }
-            100% { left: 150%; }
-        }
-
-        .action-button:hover {
-            transform: translateY(-8px) scale(1.05) translateZ(20px);
-            box-shadow: 0 20px 60px rgba(255, 0, 0, 0.8);
-        }
-
-        .action-button:active {
-            transform: translateY(0) scale(0.95);
-        }
-
-        .action-button:disabled {
-            background: #666;
-            cursor: not-allowed;
-            transform: none;
-            box-shadow: none;
-        }
-
-        .button-subtitle {
-            display: block;
-            font-size: 16px;
-            opacity: 0.8;
-            margin-top: 8px;
-            letter-spacing: 1px;
-        }
-
-        .animation-container {
-            height: 200px;
-            position: relative;
-            overflow: hidden;
-            margin: 20px 0;
-            transform-style: preserve-3d;
-        }
-
-        /* Flying Card 4D Animation */
-        .flying-red-card {
-            position: absolute;
-            width: 100px;
-            height: 140px;
-            background: linear-gradient(135deg, #ff0000, #cc0000);
-            border-radius: 10px;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            font-size: 60px;
-            animation: fly4D 2s cubic-bezier(0.4, 0, 0.2, 1) forwards;
+        /* Control Panel */
+        .control-panel {
+            position: fixed;
+            left: 20px;
+            top: 50%;
+            transform: translateY(-50%) translateZ(30px);
             z-index: 100;
-            box-shadow: 0 10px 30px rgba(255, 0, 0, 0.5);
-            border: 3px solid #fff;
-        }
-
-        @keyframes fly4D {
-            0% {
-                left: 15%;
-                top: 60%;
-                transform: rotate3d(0, 1, 0, 0deg) scale(0.3) translateZ(-100px);
-                opacity: 0;
-            }
-            15% {
-                opacity: 1;
-                transform: rotate3d(0, 1, 0, 180deg) scale(1.2) translateZ(50px);
-            }
-            40% {
-                left: 50%;
-                top: 20%;
-                transform: rotate3d(1, 1, 0, 360deg) scale(1.5) translateZ(100px);
-            }
-            70% {
-                left: 75%;
-                top: 50%;
-                transform: rotate3d(0, 1, 1, 720deg) scale(1) translateZ(0px);
-            }
-            100% {
-                left: 90%;
-                top: 60%;
-                transform: rotate3d(1, 1, 1, 1080deg) scale(0.2) translateZ(-200px);
-                opacity: 0;
-            }
-        }
-
-        /* Coaches Corner */
-        .coaches-corner {
-            display: flex;
-            justify-content: space-between;
-            gap: 30px;
-            margin: 40px 0;
-            transform-style: preserve-3d;
-        }
-
-        .coach-message {
-            flex: 1;
-            display: flex;
-            align-items: flex-start;
-            gap: 20px;
-            background: rgba(255, 255, 255, 0.08);
+            background: rgba(0, 0, 0, 0.8);
             backdrop-filter: blur(20px);
-            padding: 25px;
+            padding: 20px;
             border-radius: 20px;
-            border: 2px solid rgba(255,255,255,0.1);
-            transition: all 0.5s ease;
+            border: 2px solid var(--gold);
+            box-shadow: 0 20px 60px rgba(0,0,0,0.5);
             transform-style: preserve-3d;
         }
 
-        .coach-message:hover {
+        .control-title {
+            color: var(--gold);
+            font-weight: bold;
+            margin-bottom: 15px;
+            text-align: center;
+            font-size: 18px;
+        }
+
+        .player-select-btn {
+            display: block;
+            width: 100%;
+            margin: 10px 0;
+            padding: 12px 25px;
+            border: 2px solid;
+            border-radius: 25px;
+            background: rgba(255,255,255,0.1);
+            color: white;
+            cursor: pointer;
+            font-weight: bold;
+            font-size: 16px;
+            transition: all 0.3s ease;
+            transform-style: preserve-3d;
+        }
+
+        .player-select-btn:hover {
+            transform: translateZ(15px);
+        }
+
+        .player-select-btn.active {
             transform: translateZ(20px);
+            box-shadow: 0 10px 30px rgba(255,215,0,0.5);
+        }
+
+        .cr7-btn {
             border-color: var(--gold);
         }
 
-        .coach-avatar {
-            width: 70px;
-            height: 70px;
-            background: linear-gradient(135deg, #ffd700, #ff6b6b);
-            border-radius: 50%;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            font-weight: bold;
-            font-size: 32px;
-            flex-shrink: 0;
-            box-shadow: 0 10px 30px rgba(0,0,0,0.3);
+        .cr7-btn.active {
+            background: rgba(255,215,0,0.3);
+            box-shadow: 0 0 30px rgba(255,215,0,0.5);
         }
 
-        .lawan-avatar {
-            background: linear-gradient(135deg, #667eea, #764ba2);
+        .messi-btn {
+            border-color: var(--red);
         }
 
-        .message-bubble {
-            background: rgba(0, 0, 0, 0.3);
-            padding: 20px;
-            border-radius: 20px;
-            position: relative;
-            flex: 1;
-            border: 1px solid rgba(255,255,255,0.1);
+        .messi-btn.active {
+            background: rgba(255,68,68,0.3);
+            box-shadow: 0 0 30px rgba(255,68,68,0.5);
         }
 
-        .message-bubble strong {
-            color: var(--gold);
-            display: block;
-            margin-bottom: 10px;
-            font-size: 20px;
-        }
-
-        .message-bubble span {
-            font-size: 16px;
-            line-height: 1.5;
-            font-style: italic;
-        }
-
-        /* Winner Section */
-        .winner-section {
+        .control-keys {
+            color: #ccc;
+            font-size: 12px;
+            margin-top: 15px;
             text-align: center;
-            padding: 60px;
-            background: rgba(255, 215, 0, 0.15);
-            border-radius: 30px;
-            border: 4px solid var(--gold);
-            margin: 40px 0;
-            animation: slideIn3D 0.8s ease;
-            box-shadow: 0 0 80px rgba(255, 215, 0, 0.4);
-            transform-style: preserve-3d;
+            line-height: 1.8;
         }
 
-        @keyframes slideIn3D {
-            from {
-                transform: translateY(-100px) translateZ(-50px) rotateX(10deg);
-                opacity: 0;
-            }
-            to {
-                transform: translateY(0) translateZ(0) rotateX(0);
-                opacity: 1;
-            }
-        }
-
-        .winner-section.hidden {
-            display: none;
-        }
-
-        .winner-content h2 {
-            font-size: 48px;
-            color: var(--gold);
-            margin-bottom: 25px;
-            text-shadow: 0 0 40px rgba(255, 215, 0, 0.8);
-            animation: winnerPulse 1s ease-in-out infinite;
-        }
-
-        @keyframes winnerPulse {
-            0%, 100% { transform: scale(1); }
-            50% { transform: scale(1.05); }
-        }
-
-        .winner-content p {
-            font-size: 24px;
-            margin-bottom: 35px;
-            color: white;
-            line-height: 1.6;
-        }
-
-        .reset-button {
-            background: linear-gradient(135deg, #667eea, #764ba2);
-            color: white;
-            border: none;
-            padding: 25px 50px;
-            font-size: 24px;
-            border-radius: 40px;
-            cursor: pointer;
-            transition: all 0.3s ease;
-            box-shadow: 0 15px 40px rgba(102, 126, 234, 0.4);
+        .key {
+            background: rgba(255,255,255,0.2);
+            padding: 3px 8px;
+            border-radius: 5px;
             font-weight: bold;
-            letter-spacing: 2px;
+            color: var(--gold);
         }
 
-        .reset-button:hover {
-            transform: scale(1.1) translateZ(20px);
-            box-shadow: 0 20px 50px rgba(102, 126, 234, 0.6);
-        }
-
-        /* Footer */
-        .game-footer {
-            text-align: center;
-            padding: 30px;
-            background: rgba(0, 0, 0, 0.6);
-            margin-top: 50px;
-            border-top: 2px solid rgba(255,215,0,0.3);
-        }
-
-        .game-footer p {
-            margin: 8px 0;
-            font-size: 18px;
-        }
-
-        .copyright {
-            opacity: 0.7;
-            font-size: 14px;
-        }
-
-        /* Screen Shake 4D */
-        @keyframes shake4D {
-            0%, 100% { transform: translate3d(0, 0, 0) rotate3d(0, 0, 0, 0deg); }
-            25% { transform: translate3d(-15px, 5px, 20px) rotate3d(0, 1, 0, 2deg); }
-            75% { transform: translate3d(15px, -5px, -20px) rotate3d(0, 1, 0, -2deg); }
-        }
-
-        .shake4D {
-            animation: shake4D 0.6s ease-in-out;
-        }
-
-        /* Confetti 4D */
-        .confetti-piece {
+        /* Notification Toast */
+        .toast {
             position: fixed;
-            width: 15px;
-            height: 15px;
-            z-index: 1000;
+            top: 120px;
+            left: 50%;
+            transform: translateX(-50%) translateZ(100px);
+            z-index: 400;
+            background: rgba(0,0,0,0.9);
+            color: white;
+            padding: 15px 30px;
+            border-radius: 30px;
+            font-weight: bold;
+            border: 2px solid var(--gold);
+            box-shadow: 0 10px 40px rgba(0,0,0,0.5);
+            animation: toastIn 0.5s ease, toastOut 0.5s ease 2.5s forwards;
             pointer-events: none;
-            animation: confettiFall4D 4s ease-out forwards;
-            border-radius: 3px;
         }
 
-        @keyframes confettiFall4D {
-            0% {
-                transform: translateY(-100vh) translateZ(-200px) rotate3d(1, 1, 1, 0deg);
-                opacity: 1;
-            }
-            100% {
-                transform: translateY(100vh) translateZ(200px) rotate3d(1, 1, 1, 1080deg);
-                opacity: 0;
-            }
+        @keyframes toastIn {
+            from { opacity: 0; transform: translateX(-50%) translateZ(100px) translateY(-20px); }
+            to { opacity: 1; transform: translateX(-50%) translateZ(100px) translateY(0); }
         }
 
-        /* Responsive Design */
-        @media (max-width: 1024px) {
-            .players-section {
-                flex-direction: column;
+        @keyframes toastOut {
+            from { opacity: 1; }
+            to { opacity: 0; }
+        }
+
+        /* 5D Trail Effect */
+        .trail {
+            position: absolute;
+            border-radius: 50%;
+            pointer-events: none;
+            animation: trailFade 1s ease-out forwards;
+            z-index: 1;
+        }
+
+        @keyframes trailFade {
+            0% { opacity: 0.8; transform: scale(1); }
+            100% { opacity: 0; transform: scale(0); }
+        }
+
+        /* Responsive */
+        @media (max-width: 768px) {
+            .pitch-container {
+                height: 400px;
+                width: 95%;
             }
 
-            .versus-section {
-                margin: 20px 0;
-            }
-
-            .coaches-corner {
-                flex-direction: column;
-            }
-
-            .action-button {
-                padding: 25px 40px;
-                font-size: 24px;
-            }
-
-            .player-img {
-                width: 200px;
-                height: 200px;
+            .player-sprite {
+                width: 60px;
+                height: 60px;
             }
 
             .player-glow {
-                width: 230px;
-                height: 230px;
-            }
-        }
-
-        @media (max-width: 768px) {
-            .coaches-banner {
-                flex-direction: column;
-                gap: 15px;
-                padding: 15px;
+                width: 80px;
+                height: 80px;
             }
 
-            .banner-center h1 {
-                font-size: 28px;
+            .red-line {
+                right: 60px;
             }
 
-            .game-arena {
-                padding: 30px 20px;
+            .red-line-label {
+                right: 60px;
+                font-size: 12px;
             }
 
-            .coaches-instruction {
-                flex-direction: column;
-            }
-
-            .player-img {
-                width: 150px;
+            .goal-area {
+                width: 50px;
                 height: 150px;
             }
 
-            .player-glow {
-                width: 180px;
-                height: 180px;
+            .control-panel {
+                left: 5px;
+                padding: 10px;
             }
 
-            .stat-value {
-                font-size: 42px;
+            .player-select-btn {
+                padding: 8px 15px;
+                font-size: 14px;
             }
 
-            .score-display {
-                font-size: 48px;
+            .scoreboard {
+                padding: 15px 25px;
+                gap: 20px;
+            }
+
+            .score-value {
+                font-size: 32px;
             }
         }
     </style>
 </head>
 <body>
-    <!-- 4D Particle Background -->
-    <div class="particles-container" id="particles"></div>
+    <!-- 5D Universe Background -->
+    <div class="universe-bg" id="universe"></div>
 
-    <!-- Fullscreen Button -->
-    <button class="fullscreen-btn" id="fullscreenBtn" title="Toggle Fullscreen">
-        ⛶ Fullscreen
-    </button>
+    <!-- Controls Bar -->
+    <div class="controls-bar">
+        <button class="control-btn" id="fullscreenBtn">⛶ Fullscreen</button>
+        <button class="control-btn" id="resetBtn">🔄 Reset</button>
+        <button class="control-btn" id="soundBtn">🔊 Sound</button>
+    </div>
 
     <!-- Coaches Banner -->
     <div class="coaches-banner">
         <div class="coach">
-            <div class="coach-badge">👑</div>
-            <h2>Laween Kovan</h2>
-            <p class="coach-title">CR7's Master Coach</p>
+            <div class="coach-name">👑 Laween Kovan</div>
+            <div class="coach-title">CR7's 5D Attack Coach</div>
         </div>
         <div class="banner-center">
-            <h1>⚽ 4D RED CARD DUEL ⚽</h1>
-            <p class="subtitle">CRISTIANO RONALDO vs LIONEL MESSI</p>
+            <h1>⚽ 5D RED CARD PLAYGROUND ⚽</h1>
+            <div style="font-size: 14px;">Move players toward goal • Cross red line = RED CARD!</div>
         </div>
         <div class="coach">
-            <div class="coach-badge">🎯</div>
-            <h2>Lawand Kovan</h2>
-            <p class="coach-title">Messi's Elite Coach</p>
+            <div class="coach-name">🎯 Lawand Kovan</div>
+            <div class="coach-title">Messi's 5D Defense Coach</div>
         </div>
     </div>
 
-    <div class="game-container" id="gameContainer">
-        <!-- Players Section -->
-        <div class="players-section">
-            <div class="player cr7-side">
-                <div class="player-card" id="cr7Card">
-                    <div class="player-image-container">
-                        <img src="https://upload.wikimedia.org/wikipedia/commons/8/8c/Cristiano_Ronaldo_2018.jpg" 
-                             alt="Cristiano Ronaldo" 
-                             class="player-img" 
-                             id="cr7Img"
-                             onerror="this.src='https://via.placeholder.com/250/333/ffd700?text=CR7'">
-                        <div class="player-glow cr7-glow"></div>
-                    </div>
-                    <h2 class="player-name">CRISTIANO RONALDO</h2>
-                    <div class="player-number">CR7</div>
-                    <div class="coach-tag">👑 Trained by Laween Kovan</div>
-                    <div class="stats">
-                        <span class="stat-label">Red Cards Given</span>
-                        <span class="stat-value" id="cr7Cards">0</span>
-                    </div>
+    <!-- Red Card Alert -->
+    <div class="red-card-alert" id="redCardAlert">
+        <span class="card-icon">🟥</span>
+        <span id="alertText">RED CARD!</span>
+    </div>
+
+    <!-- Game -->
+    <div class="game-wrapper" id="gameWrapper">
+        <!-- Pitch -->
+        <div class="pitch-container" id="pitchContainer">
+            <div class="pitch" id="pitch">
+                <div class="center-circle"></div>
+                <div class="center-dot"></div>
+                
+                <!-- Red Card Line -->
+                <div class="red-line" id="redLine"></div>
+                <div class="red-line-label">⚠️ RED CARD LINE ⚠️</div>
+                
+                <!-- Goal -->
+                <div class="goal-area">
+                    <span class="goal-text">GOAL</span>
                 </div>
-            </div>
-
-            <div class="versus-section">
-                <div class="vs-circle">VS</div>
-                <div class="score-display">
-                    <span id="currentScore">0</span>/100
-                </div>
-                <div class="score-label">4D Battle</div>
-            </div>
-
-            <div class="player messi-side">
-                <div class="player-card" id="messiCard">
-                    <div class="player-image-container">
-                        <img src="https://upload.wikimedia.org/wikipedia/commons/b/b4/Lionel-Messi-Argentina-2022-FIFA-World-Cup_%28cropped%29.jpg" 
-                             alt="Lionel Messi" 
-                             class="player-img" 
-                             id="messiImg"
-                             onerror="this.src='https://via.placeholder.com/250/333/ff4444?text=LM10'">
-                        <div class="player-glow messi-glow"></div>
-                    </div>
-                    <h2 class="player-name">LIONEL MESSI</h2>
-                    <div class="player-number">LM10</div>
-                    <div class="coach-tag">🎯 Trained by Lawand Kovan</div>
-                    <div class="stats">
-                        <span class="stat-label">Red Cards Received</span>
-                        <span class="stat-value" id="messiCards">0</span>
-                    </div>
-                </div>
-            </div>
-        </div>
-
-        <!-- Game Arena -->
-        <div class="game-arena">
-            <div class="coaches-instruction">
-                <div class="instruction-item">
-                    <strong>👑 Coach Laween Kovan:</strong>
-                    "CR7! Execute the 4D card attack! Give them all!"
-                </div>
-                <div class="instruction-item">
-                    <strong>🎯 Coach Lawand Kovan:</strong>
-                    "Messi! Activate 4D defense! You've trained for this!"
-                </div>
-            </div>
-
-            <div class="card-stack">
-                <img src="https://upload.wikimedia.org/wikipedia/commons/thumb/e/e7/Red_card.svg/1200px-Red_card.svg.png" 
-                     alt="Red Card" 
-                     class="red-card-img"
-                     onerror="this.src='data:image/svg+xml,%3Csvg xmlns=%27http://www.w3.org/2000/svg%27 width=%27180%27 height=%27240%27%3E%3Crect fill=%27%23ff0000%27 width=%27180%27 height=%27240%27 rx=%2715%27/%3E%3Ctext fill=%27white%27 x=%2750%25%27 y=%2750%25%27 text-anchor=%27middle%27 dy=%27.3em%27 font-size=%2730%27 font-weight=%27bold%27%3E🔴%3C/text%3E%3C/svg%3E'">
-                <div class="cards-remaining">
-                    <span id="remainingCards">100</span>
-                    <p>4D Cards Remaining</p>
-                </div>
-            </div>
-
-            <div class="progress-bar">
-                <div class="progress-fill" id="progressFill"></div>
-            </div>
-
-            <button id="giveCardBtn" class="action-button">
-                🟥 LAUNCH 4D RED CARD 🟥
-                <span class="button-subtitle">Press SPACE or Click | 4D Trajectory</span>
-            </button>
-
-            <div id="animationContainer" class="animation-container"></div>
-        </div>
-
-        <!-- Coaches Corner -->
-        <div class="coaches-corner">
-            <div class="coach-message" id="laweenMessage">
-                <div class="coach-avatar">👑</div>
-                <div class="message-bubble">
-                    <strong>Coach Laween Kovan:</strong>
-                    <span id="laweenQuote">"The 4D technique is flawless! CR7, unleash the cards!"</span>
-                </div>
-            </div>
-            <div class="coach-message" id="lawanMessage">
-                <div class="coach-avatar lawan-avatar">🎯</div>
-                <div class="message-bubble">
-                    <strong>Coach Lawand Kovan:</strong>
-                    <span id="lawanQuote">"4D defense systems online! We're ready for anything!"</span>
-                </div>
-            </div>
-        </div>
-
-        <!-- Winner Display -->
-        <div id="winnerSection" class="winner-section hidden">
-            <div class="winner-content">
-                <h2 id="winnerText"></h2>
-                <p id="coachesCelebration"></p>
-                <button id="resetBtn" class="reset-button">🔄 New 4D Battle</button>
             </div>
         </div>
     </div>
 
-    <footer class="game-footer">
-        <p>🏆 4D Red Card Duel Championship 🏆</p>
-        <p><strong>Coaches:</strong> Laween Kovan & Lawand Kovan</p>
-        <p class="copyright">© 2024 The Ultimate 4D Football Card Game Experience</p>
-    </footer>
+    <!-- Scoreboard -->
+    <div class="scoreboard">
+        <div class="score-item">
+            <div class="score-label">CR7 Red Cards</div>
+            <div class="score-value" id="cr7Cards">0</div>
+        </div>
+        <div class="score-item">
+            <div class="score-label">Messi Red Cards</div>
+            <div class="score-value" id="messiCards">0</div>
+        </div>
+        <div class="score-item">
+            <div class="score-label">Total Cards</div>
+            <div class="score-value" id="totalCards">0</div>
+        </div>
+    </div>
+
+    <!-- Control Panel -->
+    <div class="control-panel" id="controlPanel">
+        <div class="control-title">🎮 SELECT PLAYER</div>
+        <button class="player-select-btn cr7-btn active" id="selectCR7">👑 CR7</button>
+        <button class="player-select-btn messi-btn" id="selectMessi">🐐 Messi</button>
+        <div class="control-keys">
+            <span class="key">↑↓←→</span> or <span class="key">WASD</span> Move<br>
+            <span class="key">SPACE</span> Sprint<br>
+            <span class="key">1/2</span> Switch Player<br>
+            <span class="key">R</span> Reset Position
+        </div>
+    </div>
 
     <script>
-        // 4D Red Card Duel - CR7 vs Messi
-        // Coaches: Laween Kovan and Lawand Kovan
+        // 5D Red Card Playground
+        // Coaches: Laween Kovan & Lawand Kovan
 
-        class RedCardDuel4D {
+        class RedCardPlayground5D {
             constructor() {
-                this.totalCards = 100;
-                this.cardsGiven = 0;
-                this.isAnimating = false;
-                this.gameOver = false;
+                this.pitch = document.getElementById('pitch');
+                this.pitchContainer = document.getElementById('pitchContainer');
+                this.gameWrapper = document.getElementById('gameWrapper');
+                this.redLine = document.getElementById('redLine');
+                
+                // Players
+                this.selectedPlayer = 'cr7';
+                this.cr7Element = null;
+                this.messiElement = null;
+                
+                // Player positions (percentage based)
+                this.cr7Pos = { x: 20, y: 50 };
+                this.messiPos = { x: 30, y: 50 };
+                
+                // Red card counters
+                this.cr7RedCards = 0;
+                this.messiRedCards = 0;
+                
+                // Movement
+                this.keys = {};
+                this.moveSpeed = 1.5;
+                this.sprintMultiplier = 2;
+                this.isMoving = false;
+                
+                // Red card cooldown
+                this.redCardCooldown = false;
+                this.cooldownTime = 2000;
+                
+                // Mouse tracking for 5D
                 this.mouseX = 0;
                 this.mouseY = 0;
                 
-                // Coach quotes
-                this.laweenQuotes = [
-                    "The 4D technique is flawless! CR7, unleash the cards!",
-                    "Perfect 4D trajectory! Laween Kovan is impressed!",
-                    "That's it CR7! The 4D cards are unstoppable!",
-                    "Execute the Laween Kovan special! Full power!",
-                    "4D cards cutting through dimensions! Brilliant!",
-                    "CR7! You're mastering the 4D red card art!",
-                    "Laween Kovan's training paying off beautifully!",
-                    "Keep the 4D pressure! They can't handle it!",
-                    "Each card is a masterpiece of 4D technique!",
-                    "The Laween Kovan strategy is working perfectly!"
-                ];
+                // Audio context
+                this.audioContext = null;
+                this.soundEnabled = true;
                 
-                this.lawanQuotes = [
-                    "4D defense systems online! We're ready for anything!",
-                    "Lawand Kovan's 4D training will protect you Messi!",
-                    "Activate dimensional shields! Absorb those cards!",
-                    "We've prepared for this 4D assault! Stay strong!",
-                    "Lawand Kovan calculated every 4D trajectory!",
-                    "Messi! The 4D defense matrix is holding!",
-                    "Trust the Lawand Kovan method! It's battle-tested!",
-                    "4D resilience at maximum! Keep absorbing!",
-                    "The Lawand Kovan defense protocol is engaged!",
-                    "We're rewriting 4D defense history right now!"
-                ];
+                // Trail particles
+                this.trailParticles = [];
                 
                 this.init();
             }
             
             init() {
-                this.cacheElements();
-                this.createParticles();
-                this.bindEvents();
-                this.updateCoachMessages();
-                this.updateDisplays();
-                this.enableMouseTracking();
-                this.setupFullscreen();
+                this.createUniverse();
+                this.createPlayers();
+                this.setupEventListeners();
+                this.startGameLoop();
+                this.createCoachMessages();
             }
             
-            cacheElements() {
-                this.giveCardBtn = document.getElementById('giveCardBtn');
-                this.resetBtn = document.getElementById('resetBtn');
-                this.cr7Cards = document.getElementById('cr7Cards');
-                this.messiCards = document.getElementById('messiCards');
-                this.remainingCards = document.getElementById('remainingCards');
-                this.currentScore = document.getElementById('currentScore');
-                this.progressFill = document.getElementById('progressFill');
-                this.laweenQuote = document.getElementById('laweenQuote');
-                this.lawanQuote = document.getElementById('lawanQuote');
-                this.animationContainer = document.getElementById('animationContainer');
-                this.winnerSection = document.getElementById('winnerSection');
-                this.winnerText = document.getElementById('winnerText');
-                this.coachesCelebration = document.getElementById('coachesCelebration');
-                this.cr7Img = document.getElementById('cr7Img');
-                this.messiImg = document.getElementById('messiImg');
-                this.cr7Card = document.getElementById('cr7Card');
-                this.messiCard = document.getElementById('messiCard');
-                this.gameContainer = document.getElementById('gameContainer');
-                this.fullscreenBtn = document.getElementById('fullscreenBtn');
-            }
-            
-            createParticles() {
-                const container = document.getElementById('particles');
-                const colors = ['#ffd700', '#ff4444', '#ff6600', '#ff9900'];
+            createUniverse() {
+                const universe = document.getElementById('universe');
                 
-                for (let i = 0; i < 50; i++) {
-                    const particle = document.createElement('div');
-                    particle.className = 'particle';
-                    particle.style.cssText = `
+                // Create stars
+                for (let i = 0; i < 100; i++) {
+                    const star = document.createElement('div');
+                    star.className = 'star';
+                    star.style.cssText = `
                         left: ${Math.random() * 100}%;
-                        width: ${Math.random() * 8 + 3}px;
-                        height: ${Math.random() * 8 + 3}px;
-                        background: ${colors[Math.floor(Math.random() * colors.length)]};
-                        animation-duration: ${Math.random() * 10 + 5}s;
-                        animation-delay: ${Math.random() * 10}s;
+                        top: ${Math.random() * 100}%;
+                        width: ${Math.random() * 3 + 1}px;
+                        height: ${Math.random() * 3 + 1}px;
+                        animation-delay: ${Math.random() * 2}s;
+                        animation-duration: ${Math.random() * 2 + 1}s;
                     `;
-                    container.appendChild(particle);
+                    universe.appendChild(star);
+                }
+                
+                // Create dimension rings
+                for (let i = 0; i < 3; i++) {
+                    const ring = document.createElement('div');
+                    ring.className = 'dimension-ring';
+                    ring.style.cssText = `
+                        left: ${50 + (i - 1) * 20}%;
+                        top: ${50 + (i - 1) * 20}%;
+                        width: ${300 + i * 100}px;
+                        height: ${300 + i * 100}px;
+                        animation-duration: ${8 + i * 4}s;
+                        animation-delay: ${i * 2}s;
+                    `;
+                    universe.appendChild(ring);
                 }
             }
             
-            enableMouseTracking() {
+            createPlayers() {
+                // Create CR7
+                this.cr7Element = document.createElement('div');
+                this.cr7Element.className = 'player-sprite';
+                this.cr7Element.id = 'cr7Player';
+                this.cr7Element.innerHTML = `
+                    <img src="https://upload.wikimedia.org/wikipedia/commons/8/8c/Cristiano_Ronaldo_2018.jpg" 
+                         class="player-img"
+                         onerror="this.src='data:image/svg+xml,%3Csvg xmlns=%27http://www.w3.org/2000/svg%27 width=%2780%27 height=%2780%27%3E%3Ccircle fill=%27%23333%27 cx=%2740%27 cy=%2740%27 r=%2740%27/%3E%3Ctext fill=%27%23ffd700%27 x=%2740%27 y=%2745%27 text-anchor=%27middle%27 font-size=%2720%27%3ECR7%3C/text%3E%3C/svg%3E'">
+                    <div class="player-glow cr7-glow"></div>
+                    <div class="player-name-tag cr7-name">CR7 👑</div>
+                    <div class="selected-indicator">👆</div>
+                `;
+                
+                // Create Messi
+                this.messiElement = document.createElement('div');
+                this.messiElement.className = 'player-sprite';
+                this.messiElement.id = 'messiPlayer';
+                this.messiElement.innerHTML = `
+                    <img src="https://upload.wikimedia.org/wikipedia/commons/b/b4/Lionel-Messi-Argentina-2022-FIFA-World-Cup_%28cropped%29.jpg" 
+                         class="player-img"
+                         onerror="this.src='data:image/svg+xml,%3Csvg xmlns=%27http://www.w3.org/2000/svg%27 width=%2780%27 height=%2780%27%3E%3Ccircle fill=%27%23333%27 cx=%2740%27 cy=%2740%27 r=%2740%27/%3E%3Ctext fill=%27%23ff4444%27 x=%2740%27 y=%2745%27 text-anchor=%27middle%27 font-size=%2720%27%3ELM10%3C/text%3E%3C/svg%3E'">
+                    <div class="player-glow messi-glow"></div>
+                    <div class="player-name-tag messi-name">Messi 🐐</div>
+                `;
+                
+                this.pitch.appendChild(this.cr7Element);
+                this.pitch.appendChild(this.messiElement);
+                
+                this.updatePlayerPositions();
+                this.updateSelectionIndicator();
+                
+                // Make players draggable
+                this.makeDraggable(this.cr7Element, 'cr7');
+                this.makeDraggable(this.messiElement, 'messi');
+            }
+            
+            makeDraggable(element, player) {
+                let isDragging = false;
+                let startX, startY, initialLeft, initialTop;
+                
+                element.addEventListener('mousedown', (e) => {
+                    if (e.target === element || e.target.closest('.player-img')) {
+                        isDragging = true;
+                        this.selectedPlayer = player;
+                        this.updateSelectionIndicator();
+                        this.updateControlButtons();
+                        
+                        const rect = element.getBoundingClientRect();
+                        startX = e.clientX;
+                        startY = e.clientY;
+                        initialLeft = rect.left;
+                        initialTop = rect.top;
+                        
+                        element.style.cursor = 'grabbing';
+                        e.preventDefault();
+                    }
+                });
+                
+                document.addEventListener('mousemove', (e) => {
+                    if (!isDragging) return;
+                    
+                    const pitchRect = this.pitch.getBoundingClientRect();
+                    const dx = e.clientX - startX;
+                    const dy = e.clientY - startY;
+                    
+                    const newLeft = ((initialLeft + dx - pitchRect.left) / pitchRect.width) * 100;
+                    const newTop = ((initialTop + dy - pitchRect.top) / pitchRect.height) * 100;
+                    
+                    const clampedX = Math.max(5, Math.min(85, newLeft));
+                    const clampedY = Math.max(5, Math.min(90, newTop));
+                    
+                    if (player === 'cr7') {
+                        this.cr7Pos = { x: clampedX, y: clampedY };
+                    } else {
+                        this.messiPos = { x: clampedX, y: clampedY };
+                    }
+                    
+                    this.updatePlayerPositions();
+                    this.createTrail(player);
+                    this.checkRedCardLine(player);
+                });
+                
+                document.addEventListener('mouseup', () => {
+                    if (isDragging) {
+                        isDragging = false;
+                        element.style.cursor = 'grab';
+                    }
+                });
+                
+                // Touch support
+                element.addEventListener('touchstart', (e) => {
+                    isDragging = true;
+                    this.selectedPlayer = player;
+                    this.updateSelectionIndicator();
+                    this.updateControlButtons();
+                    
+                    const touch = e.touches[0];
+                    startX = touch.clientX;
+                    startY = touch.clientY;
+                    
+                    const rect = element.getBoundingClientRect();
+                    initialLeft = rect.left;
+                    initialTop = rect.top;
+                });
+                
+                document.addEventListener('touchmove', (e) => {
+                    if (!isDragging) return;
+                    
+                    const touch = e.touches[0];
+                    const pitchRect = this.pitch.getBoundingClientRect();
+                    const dx = touch.clientX - startX;
+                    const dy = touch.clientY - startY;
+                    
+                    const newLeft = ((initialLeft + dx - pitchRect.left) / pitchRect.width) * 100;
+                    const newTop = ((initialTop + dy - pitchRect.top) / pitchRect.height) * 100;
+                    
+                    const clampedX = Math.max(5, Math.min(85, newLeft));
+                    const clampedY = Math.max(5, Math.min(90, newTop));
+                    
+                    if (player === 'cr7') {
+                        this.cr7Pos = { x: clampedX, y: clampedY };
+                    } else {
+                        this.messiPos = { x: clampedX, y: clampedY };
+                    }
+                    
+                    this.updatePlayerPositions();
+                    this.checkRedCardLine(player);
+                });
+                
+                document.addEventListener('touchend', () => {
+                    isDragging = false;
+                });
+            }
+            
+            updatePlayerPositions() {
+                if (this.cr7Element) {
+                    this.cr7Element.style.left = `${this.cr7Pos.x}%`;
+                    this.cr7Element.style.top = `${this.cr7Pos.y}%`;
+                    this.cr7Element.style.transform = `translate(-50%, -50%) translateZ(${this.selectedPlayer === 'cr7' ? 30 : 0}px)`;
+                }
+                
+                if (this.messiElement) {
+                    this.messiElement.style.left = `${this.messiPos.x}%`;
+                    this.messiElement.style.top = `${this.messiPos.y}%`;
+                    this.messiElement.style.transform = `translate(-50%, -50%) translateZ(${this.selectedPlayer === 'messi' ? 30 : 0}px)`;
+                }
+            }
+            
+            updateSelectionIndicator() {
+                // Remove all indicators
+                document.querySelectorAll('.selected-indicator').forEach(el => el.remove());
+                
+                // Add to selected player
+                const selectedElement = this.selectedPlayer === 'cr7' ? this.cr7Element : this.messiElement;
+                if (selectedElement) {
+                    const indicator = document.createElement('div');
+                    indicator.className = 'selected-indicator';
+                    indicator.textContent = '👆';
+                    selectedElement.appendChild(indicator);
+                }
+            }
+            
+            updateControlButtons() {
+                document.getElementById('selectCR7').classList.toggle('active', this.selectedPlayer === 'cr7');
+                document.getElementById('selectMessi').classList.toggle('active', this.selectedPlayer === 'messi');
+            }
+            
+            checkRedCardLine(player) {
+                const pos = player === 'cr7' ? this.cr7Pos : this.messiPos;
+                const redLineX = 85; // Red line position in percentage
+                
+                if (pos.x >= redLineX && !this.redCardCooldown) {
+                    this.triggerRedCard(player);
+                }
+            }
+            
+            triggerRedCard(player) {
+                this.redCardCooldown = true;
+                
+                // Update counters
+                if (player === 'cr7') {
+                    this.cr7RedCards++;
+                } else {
+                    this.messiRedCards++;
+                }
+                
+                this.updateScoreboard();
+                
+                // Show alert
+                this.showRedCardAlert(player);
+                
+                // Play sound
+                this.playRedCardSound();
+                
+                // Create explosion effect
+                this.createCardExplosion(player);
+                
+                // Shake screen
+                this.shakeScreen();
+                
+                // Push player back
+                if (player === 'cr7') {
+                    this.cr7Pos.x = Math.max(5, this.cr7Pos.x - 20);
+                } else {
+                    this.messiPos.x = Math.max(5, this.messiPos.x - 20);
+                }
+                this.updatePlayerPositions();
+                
+                // Show toast
+                this.showToast(player);
+                
+                // Reset cooldown
+                setTimeout(() => {
+                    this.redCardCooldown = false;
+                }, this.cooldownTime);
+            }
+            
+            showRedCardAlert(player) {
+                const alert = document.getElementById('redCardAlert');
+                const alertText = document.getElementById('alertText');
+                
+                alertText.textContent = player === 'cr7' ? 
+                    '🟥 RED CARD FOR CR7! 🟥' : 
+                    '🟥 RED CARD FOR MESSI! 🟥';
+                
+                alert.classList.add('show');
+                
+                setTimeout(() => {
+                    alert.classList.remove('show');
+                }, 2000);
+            }
+            
+            createCardExplosion(player) {
+                const pos = player === 'cr7' ? this.cr7Pos : this.messiPos;
+                const pitchRect = this.pitch.getBoundingClientRect();
+                
+                for (let i = 0; i < 20; i++) {
+                    const card = document.createElement('div');
+                    card.textContent = '🟥';
+                    card.style.cssText = `
+                        position: absolute;
+                        left: ${pos.x}%;
+                        top: ${pos.y}%;
+                        font-size: ${Math.random() * 30 + 20}px;
+                        pointer-events: none;
+                        z-index: 200;
+                        animation: cardExplode ${Math.random() * 1 + 0.5}s ease-out forwards;
+                        transform: translate(-50%, -50%);
+                    `;
+                    
+                    this.pitch.appendChild(card);
+                    
+                    setTimeout(() => {
+                        if (card.parentNode) card.remove();
+                    }, 1500);
+                }
+                
+                // Add keyframe if not exists
+                if (!document.getElementById('explodeKeyframes')) {
+                    const style = document.createElement('style');
+                    style.id = 'explodeKeyframes';
+                    style.textContent = `
+                        @keyframes cardExplode {
+                            0% { transform: translate(-50%, -50%) scale(0); opacity: 1; }
+                            50% { transform: translate(-50%, -50%) scale(2); opacity: 0.8; }
+                            100% { transform: translate(${Math.random() * 200 - 100}px, ${Math.random() * 200 - 100}px) scale(0); opacity: 0; }
+                        }
+                    `;
+                    document.head.appendChild(style);
+                }
+            }
+            
+            createTrail(player) {
+                const pos = player === 'cr7' ? this.cr7Pos : this.messiPos;
+                const trail = document.createElement('div');
+                trail.className = 'trail';
+                trail.style.cssText = `
+                    left: ${pos.x}%;
+                    top: ${pos.y}%;
+                    width: 20px;
+                    height: 20px;
+                    background: ${player === 'cr7' ? 'rgba(255,215,0,0.5)' : 'rgba(255,68,68,0.5)'};
+                    box-shadow: 0 0 10px ${player === 'cr7' ? 'rgba(255,215,0,0.8)' : 'rgba(255,68,68,0.8)'};
+                `;
+                
+                this.pitch.appendChild(trail);
+                
+                setTimeout(() => {
+                    if (trail.parentNode) trail.remove();
+                }, 1000);
+            }
+            
+            shakeScreen() {
+                const wrapper = document.getElementById('gameWrapper');
+                wrapper.style.animation = 'none';
+                wrapper.offsetHeight;
+                wrapper.style.animation = 'shake5D 0.5s ease-in-out';
+                
+                if (!document.getElementById('shake5DKeyframes')) {
+                    const style = document.createElement('style');
+                    style.id = 'shake5DKeyframes';
+                    style.textContent = `
+                        @keyframes shake5D {
+                            0%, 100% { transform: translate3d(0, 0, 0); }
+                            10% { transform: translate3d(-10px, 5px, 20px); }
+                            30% { transform: translate3d(10px, -5px, -20px); }
+                            50% { transform: translate3d(-5px, 10px, 30px); }
+                            70% { transform: translate3d(5px, -10px, -30px); }
+                            90% { transform: translate3d(-2px, 2px, 10px); }
+                        }
+                    `;
+                    document.head.appendChild(style);
+                }
+            }
+            
+            playRedCardSound() {
+                if (!this.soundEnabled) return;
+                
+                try {
+                    if (!this.audioContext) {
+                        this.audioContext = new (window.AudioContext || window.webkitAudioContext)();
+                    }
+                    
+                    const ctx = this.audioContext;
+                    
+                    // Whistle sound
+                    const osc1 = ctx.createOscillator();
+                    const osc2 = ctx.createOscillator();
+                    const gain = ctx.createGain();
+                    
+                    osc1.connect(gain);
+                    osc2.connect(gain);
+                    gain.connect(ctx.destination);
+                    
+                    osc1.frequency.setValueAtTime(800, ctx.currentTime);
+                    osc1.frequency.exponentialRampToValueAtTime(1200, ctx.currentTime + 0.1);
+                    osc1.type = 'sawtooth';
+                    
+                    osc2.frequency.setValueAtTime(600, ctx.currentTime);
+                    osc2.frequency.exponentialRampToValueAtTime(1000, ctx.currentTime + 0.1);
+                    osc2.type = 'square';
+                    
+                    gain.gain.setValueAtTime(0.15, ctx.currentTime);
+                    gain.gain.exponentialRampToValueAtTime(0.001, ctx.currentTime + 0.3);
+                    
+                    osc1.start(ctx.currentTime);
+                    osc2.start(ctx.currentTime);
+                    osc1.stop(ctx.currentTime + 0.3);
+                    osc2.stop(ctx.currentTime + 0.3);
+                    
+                    // Card whoosh
+                    setTimeout(() => {
+                        const osc3 = ctx.createOscillator();
+                        const gain2 = ctx.createGain();
+                        const filter = ctx.createBiquadFilter();
+                        
+                        osc3.connect(filter);
+                        filter.connect(gain2);
+                        gain2.connect(ctx.destination);
+                        
+                        osc3.frequency.setValueAtTime(200, ctx.currentTime);
+                        osc3.frequency.exponentialRampToValueAtTime(800, ctx.currentTime + 0.2);
+                        osc3.type = 'sawtooth';
+                        
+                        filter.type = 'lowpass';
+                        filter.frequency.setValueAtTime(1000, ctx.currentTime);
+                        
+                        gain2.gain.setValueAtTime(0.1, ctx.currentTime);
+                        gain2.gain.exponentialRampToValueAtTime(0.001, ctx.currentTime + 0.3);
+                        
+                        osc3.start(ctx.currentTime);
+                        osc3.stop(ctx.currentTime + 0.3);
+                    }, 100);
+                    
+                } catch (error) {
+                    console.log('Audio not supported');
+                }
+            }
+            
+            showToast(player) {
+                const toast = document.createElement('div');
+                toast.className = 'toast';
+                toast.textContent = player === 'cr7' ? 
+                    '🟥 CR7 crossed the line! RED CARD!' : 
+                    '🟥 Messi crossed the line! RED CARD!';
+                document.body.appendChild(toast);
+                
+                setTimeout(() => {
+                    if (toast.parentNode) toast.remove();
+                }, 3000);
+            }
+            
+            updateScoreboard() {
+                document.getElementById('cr7Cards').textContent = this.cr7RedCards;
+                document.getElementById('messiCards').textContent = this.messiRedCards;
+                document.getElementById('totalCards').textContent = this.cr7RedCards + this.messiRedCards;
+            }
+            
+            setupEventListeners() {
+                // Keyboard controls
+                document.addEventListener('keydown', (e) => {
+                    this.keys[e.key.toLowerCase()] = true;
+                    
+                    // Switch player
+                    if (e.key === '1') {
+                        this.selectedPlayer = 'cr7';
+                        this.updateSelectionIndicator();
+                        this.updateControlButtons();
+                    }
+                    if (e.key === '2') {
+                        this.selectedPlayer = 'messi';
+                        this.updateSelectionIndicator();
+                        this.updateControlButtons();
+                    }
+                    
+                    // Reset position
+                    if (e.key.toLowerCase() === 'r') {
+                        this.resetPlayerPosition();
+                    }
+                });
+                
+                document.addEventListener('keyup', (e) => {
+                    this.keys[e.key.toLowerCase()] = false;
+                });
+                
+                // Mouse tracking for 5D
                 document.addEventListener('mousemove', (e) => {
                     this.mouseX = (e.clientX / window.innerWidth - 0.5) * 2;
                     this.mouseY = (e.clientY / window.innerHeight - 0.5) * 2;
-                    this.update3DEffect();
+                    this.update5DEffect();
                 });
-            }
-            
-            update3DEffect() {
-                if (this.gameContainer) {
-                    const rotateX = this.mouseY * 5;
-                    const rotateY = this.mouseX * 5;
-                    this.gameContainer.style.transform = `perspective(1000px) rotateX(${rotateX}deg) rotateY(${rotateY}deg)`;
-                }
-            }
-            
-            setupFullscreen() {
-                this.fullscreenBtn.addEventListener('click', () => {
+                
+                // Control buttons
+                document.getElementById('selectCR7').addEventListener('click', () => {
+                    this.selectedPlayer = 'cr7';
+                    this.updateSelectionIndicator();
+                    this.updateControlButtons();
+                });
+                
+                document.getElementById('selectMessi').addEventListener('click', () => {
+                    this.selectedPlayer = 'messi';
+                    this.updateSelectionIndicator();
+                    this.updateControlButtons();
+                });
+                
+                // Fullscreen
+                document.getElementById('fullscreenBtn').addEventListener('click', () => {
                     if (!document.fullscreenElement) {
-                        document.documentElement.requestFullscreen().catch(err => {
-                            console.log('Fullscreen error:', err);
-                        });
-                        this.fullscreenBtn.innerHTML = '⛶ Exit Fullscreen';
+                        document.documentElement.requestFullscreen();
+                        document.getElementById('fullscreenBtn').textContent = '⛶ Exit';
                     } else {
                         document.exitFullscreen();
-                        this.fullscreenBtn.innerHTML = '⛶ Fullscreen';
+                        document.getElementById('fullscreenBtn').textContent = '⛶ Fullscreen';
                     }
                 });
                 
-                document.addEventListener('fullscreenchange', () => {
-                    if (!document.fullscreenElement) {
-                        this.fullscreenBtn.innerHTML = '⛶ Fullscreen';
-                    }
+                // Reset
+                document.getElementById('resetBtn').addEventListener('click', () => {
+                    this.resetGame();
+                });
+                
+                // Sound toggle
+                document.getElementById('soundBtn').addEventListener('click', () => {
+                    this.soundEnabled = !this.soundEnabled;
+                    document.getElementById('soundBtn').textContent = this.soundEnabled ? '🔊 Sound' : '🔇 Muted';
+                });
+                
+                // Window resize
+                window.addEventListener('resize', () => {
+                    this.updatePlayerPositions();
                 });
             }
             
-            bindEvents() {
-                this.giveCardBtn.addEventListener('click', () => this.giveRedCard4D());
-                this.resetBtn.addEventListener('click', () => this.resetGame());
+            update5DEffect() {
+                const rotateX = this.mouseY * 8;
+                const rotateY = this.mouseX * 8;
+                const translateZ = Math.abs(this.mouseX) * 50 + Math.abs(this.mouseY) * 50;
                 
-                document.addEventListener('keydown', (e) => {
-                    if (e.code === 'Space' && !this.gameOver && !this.isAnimating) {
-                        e.preventDefault();
-                        this.giveRedCard4D();
-                    }
-                });
-                
-                this.cr7Card.addEventListener('click', () => {
-                    if (!this.gameOver && !this.isAnimating) {
-                        this.giveRedCard4D();
-                        this.showCr7Celebration4D();
-                    }
-                });
-                
-                this.messiCard.addEventListener('click', () => {
-                    if (!this.gameOver && !this.isAnimating) {
-                        this.showMessiReaction4D();
-                    }
-                });
+                this.pitchContainer.style.transform = 
+                    `translateX(-50%) rotateX(${5 + rotateX}deg) rotateY(${rotateY}deg) translateZ(${translateZ}px)`;
             }
             
-            giveRedCard4D() {
-                if (this.isAnimating || this.gameOver) return;
-                
-                this.cardsGiven++;
-                this.isAnimating = true;
-                this.giveCardBtn.disabled = true;
-                
-                this.updateDisplays();
-                this.create4DFlyingCard();
-                this.shakeScreen4D();
-                this.playCardSound4D();
-                this.updateCoachMessages();
-                
-                if (this.cardsGiven % 5 === 0) {
-                    this.createMultipleCards4D();
-                }
-                
-                setTimeout(() => {
-                    this.isAnimating = false;
-                    this.giveCardBtn.disabled = false;
-                    
-                    if (this.cardsGiven >= this.totalCards) {
-                        this.declareWinner4D();
-                    }
-                }, 2200);
-            }
-            
-            create4DFlyingCard() {
-                const card = document.createElement('div');
-                card.className = 'flying-red-card';
-                card.innerHTML = '🟥';
-                card.style.animationDuration = (1.5 + Math.random()) + 's';
-                
-                this.animationContainer.appendChild(card);
-                
-                setTimeout(() => {
-                    if (card.parentNode) {
-                        card.remove();
-                    }
-                }, 2500);
-            }
-            
-            createMultipleCards4D() {
-                for (let i = 1; i <= 5; i++) {
-                    setTimeout(() => {
-                        const card = document.createElement('div');
-                        card.className = 'flying-red-card';
-                        card.innerHTML = '🟥';
-                        card.style.animationDelay = `${i * 50}ms`;
-                        card.style.animationDuration = (1.5 + Math.random()) + 's';
-                        this.animationContainer.appendChild(card);
-                        
-                        setTimeout(() => {
-                            if (card.parentNode) {
-                                card.remove();
-                            }
-                        }, 2800);
-                    }, i * 100);
-                }
-            }
-            
-            shakeScreen4D() {
-                this.gameContainer.classList.add('shake4D');
-                setTimeout(() => {
-                    this.gameContainer.classList.remove('shake4D');
-                }, 600);
-            }
-            
-            playCardSound4D() {
-                try {
-                    const audioContext = new (window.AudioContext || window.webkitAudioContext)();
-                    
-                    // Create whoosh effect
-                    const oscillator = audioContext.createOscillator();
-                    const gainNode = audioContext.createGain();
-                    const filter = audioContext.createBiquadFilter();
-                    
-                    oscillator.connect(filter);
-                    filter.connect(gainNode);
-                    gainNode.connect(audioContext.destination);
-                    
-                    oscillator.frequency.setValueAtTime(400, audioContext.currentTime);
-                    oscillator.frequency.exponentialRampToValueAtTime(1200, audioContext.currentTime + 0.15);
-                    oscillator.frequency.exponentialRampToValueAtTime(200, audioContext.currentTime + 0.3);
-                    
-                    oscillator.type = 'sawtooth';
-                    filter.frequency.setValueAtTime(1000, audioContext.currentTime);
-                    gainNode.gain.setValueAtTime(0.15, audioContext.currentTime);
-                    gainNode.gain.exponentialRampToValueAtTime(0.001, audioContext.currentTime + 0.4);
-                    
-                    oscillator.start(audioContext.currentTime);
-                    oscillator.stop(audioContext.currentTime + 0.4);
-                } catch (error) {
-                    // Audio not supported
-                }
-            }
-            
-            updateDisplays() {
-                const remaining = this.totalCards - this.cardsGiven;
-                const progress = (this.cardsGiven / this.totalCards) * 100;
-                
-                this.cr7Cards.textContent = this.cardsGiven;
-                this.messiCards.textContent = this.cardsGiven;
-                this.remainingCards.textContent = remaining;
-                this.currentScore.textContent = this.cardsGiven;
-                this.progressFill.style.width = progress + '%';
-                
-                if (progress > 75) {
-                    this.remainingCards.style.color = '#ff4444';
-                    this.currentScore.style.color = '#ff4444';
-                } else if (progress > 50) {
-                    this.remainingCards.style.color = '#ffaa00';
-                    this.currentScore.style.color = '#ffaa00';
+            resetPlayerPosition() {
+                if (this.selectedPlayer === 'cr7') {
+                    this.cr7Pos = { x: 20, y: 50 };
                 } else {
-                    this.remainingCards.style.color = '#ffd700';
-                    this.currentScore.style.color = '#ffd700';
+                    this.messiPos = { x: 30, y: 50 };
                 }
-                
-                // 4D scale animation
-                this.cr7Cards.style.transform = 'scale(1.3) translateZ(20px)';
-                this.messiCards.style.transform = 'scale(1.3) translateZ(20px)';
-                setTimeout(() => {
-                    this.cr7Cards.style.transform = 'scale(1) translateZ(0)';
-                    this.messiCards.style.transform = 'scale(1) translateZ(0)';
-                }, 300);
-            }
-            
-            updateCoachMessages() {
-                const laweenMsg = this.laweenQuotes[Math.floor(Math.random() * this.laweenQuotes.length)];
-                const lawanMsg = this.lawanQuotes[Math.floor(Math.random() * this.lawanQuotes.length)];
-                
-                this.laweenQuote.textContent = `"${laweenMsg}"`;
-                this.lawanQuote.textContent = `"${lawanMsg}"`;
-                
-                // 4D flash effect
-                this.laweenQuote.parentElement.style.transform = 'translateZ(30px)';
-                this.lawanQuote.parentElement.style.transform = 'translateZ(30px)';
-                
-                setTimeout(() => {
-                    this.laweenQuote.parentElement.style.transform = 'translateZ(0)';
-                    this.lawanQuote.parentElement.style.transform = 'translateZ(0)';
-                }, 500);
-            }
-            
-            showCr7Celebration4D() {
-                this.cr7Img.style.transform = 'rotateY(360deg) scale(1.3) translateZ(50px)';
-                this.giveCardBtn.innerHTML = '⚡ 4D SIUUU! ⚡';
-                
-                setTimeout(() => {
-                    this.cr7Img.style.transform = 'rotateY(0deg) scale(1) translateZ(0)';
-                    this.giveCardBtn.innerHTML = '🟥 LAUNCH 4D RED CARD 🟥<span class="button-subtitle">Press SPACE or Click | 4D Trajectory</span>';
-                }, 1500);
-            }
-            
-            showMessiReaction4D() {
-                this.messiImg.style.transform = 'rotateX(15deg) translateZ(-20px)';
-                setTimeout(() => {
-                    this.messiImg.style.transform = 'rotateX(-15deg) translateZ(20px)';
-                }, 150);
-                setTimeout(() => {
-                    this.messiImg.style.transform = 'rotateX(0deg) translateZ(0)';
-                }, 300);
-                
-                const tempMsg = document.createElement('div');
-                tempMsg.textContent = '😱';
-                tempMsg.style.cssText = `
-                    position: absolute;
-                    font-size: 50px;
-                    top: -30px;
-                    right: -10px;
-                    z-index: 10;
-                    animation: bounce3D 0.5s ease;
-                    filter: drop-shadow(0 0 10px rgba(255,255,255,0.5));
-                `;
-                this.messiCard.querySelector('.player-image-container').appendChild(tempMsg);
-                
-                setTimeout(() => tempMsg.remove(), 600);
-            }
-            
-            declareWinner4D() {
-                this.gameOver = true;
-                this.giveCardBtn.disabled = true;
-                
-                this.winnerSection.classList.remove('hidden');
-                this.winnerText.innerHTML = '🏆 CR7 WINS IN 4D! 🏆<br>All 100 Red Cards Delivered!';
-                this.coachesCelebration.innerHTML = `
-                    👑 <strong>Coach Laween Kovan</strong> celebrates the 4D victory! 🎉<br>
-                    🎯 <strong>Coach Lawand Kovan</strong> acknowledges the 4D mastery! 🤝
-                `;
-                
-                this.createConfetti4D();
-                this.playVictorySound4D();
-                
-                setTimeout(() => {
-                    this.winnerSection.scrollIntoView({ behavior: 'smooth' });
-                }, 300);
-            }
-            
-            createConfetti4D() {
-                const colors = ['#ffd700', '#ff4444', '#44ff44', '#4444ff', '#ff44ff', '#ffff44', '#ff8800', '#00ffff'];
-                
-                for (let i = 0; i < 150; i++) {
-                    setTimeout(() => {
-                        const confetti = document.createElement('div');
-                        confetti.className = 'confetti-piece';
-                        confetti.style.backgroundColor = colors[Math.floor(Math.random() * colors.length)];
-                        confetti.style.left = Math.random() * 100 + '%';
-                        confetti.style.width = (Math.random() * 15 + 8) + 'px';
-                        confetti.style.height = (Math.random() * 15 + 8) + 'px';
-                        confetti.style.animationDelay = Math.random() * 3 + 's';
-                        confetti.style.animationDuration = (Math.random() * 3 + 3) + 's';
-                        confetti.style.borderRadius = Math.random() > 0.5 ? '50%' : '3px';
-                        confetti.style.transform = `rotate(${Math.random() * 360}deg)`;
-                        
-                        document.body.appendChild(confetti);
-                        
-                        setTimeout(() => {
-                            if (confetti.parentNode) {
-                                confetti.remove();
-                            }
-                        }, 6000);
-                    }, i * 20);
-                }
-            }
-            
-            playVictorySound4D() {
-                try {
-                    const audioContext = new (window.AudioContext || window.webkitAudioContext)();
-                    
-                    const notes = [523, 659, 784, 880, 1047, 1318];
-                    notes.forEach((freq, index) => {
-                        const oscillator = audioContext.createOscillator();
-                        const gainNode = audioContext.createGain();
-                        
-                        oscillator.connect(gainNode);
-                        gainNode.connect(audioContext.destination);
-                        
-                        oscillator.frequency.value = freq;
-                        oscillator.type = 'sine';
-                        gainNode.gain.setValueAtTime(0.12, audioContext.currentTime + index * 0.15);
-                        gainNode.gain.exponentialRampToValueAtTime(0.001, audioContext.currentTime + index * 0.15 + 0.4);
-                        
-                        oscillator.start(audioContext.currentTime + index * 0.15);
-                        oscillator.stop(audioContext.currentTime + index * 0.15 + 0.4);
-                    });
-                } catch (error) {
-                    // Audio not supported
-                }
+                this.updatePlayerPositions();
             }
             
             resetGame() {
-                this.cardsGiven = 0;
-                this.gameOver = false;
-                this.isAnimating = false;
-                this.giveCardBtn.disabled = false;
+                this.cr7Pos = { x: 20, y: 50 };
+                this.messiPos = { x: 30, y: 50 };
+                this.cr7RedCards = 0;
+                this.messiRedCards = 0;
+                this.redCardCooldown = false;
+                this.updatePlayerPositions();
+                this.updateScoreboard();
+            }
+            
+            startGameLoop() {
+                const movePlayer = () => {
+                    if (!this.isMoving && Object.values(this.keys).some(k => k)) {
+                        this.isMoving = true;
+                    } else if (!Object.values(this.keys).some(k => k)) {
+                        this.isMoving = false;
+                    }
+                    
+                    if (this.isMoving && !this.redCardCooldown) {
+                        const pos = this.selectedPlayer === 'cr7' ? this.cr7Pos : this.messiPos;
+                        const speed = this.keys[' '] || this.keys['space'] ? 
+                            this.moveSpeed * this.sprintMultiplier : this.moveSpeed;
+                        
+                        if (this.keys['arrowleft'] || this.keys['a']) pos.x -= speed * 0.5;
+                        if (this.keys['arrowright'] || this.keys['d']) pos.x += speed * 0.5;
+                        if (this.keys['arrowup'] || this.keys['w']) pos.y -= speed * 0.5;
+                        if (this.keys['arrowdown'] || this.keys['s']) pos.y += speed * 0.5;
+                        
+                        // Clamp positions
+                        pos.x = Math.max(5, Math.min(90, pos.x));
+                        pos.y = Math.max(5, Math.min(90, pos.y));
+                        
+                        this.updatePlayerPositions();
+                        this.createTrail(this.selectedPlayer);
+                        this.checkRedCardLine(this.selectedPlayer);
+                    }
+                    
+                    requestAnimationFrame(movePlayer);
+                };
                 
-                this.updateDisplays();
-                this.progressFill.style.width = '0%';
-                this.remainingCards.style.color = '#ffd700';
-                this.currentScore.style.color = '#ffd700';
-                
-                this.winnerSection.classList.add('hidden');
-                this.animationContainer.innerHTML = '';
-                
-                this.giveCardBtn.innerHTML = '🟥 LAUNCH 4D RED CARD 🟥<span class="button-subtitle">Press SPACE or Click | 4D Trajectory</span>';
-                
-                this.updateCoachMessages();
-                
-                window.scrollTo({ top: 0, behavior: 'smooth' });
+                movePlayer();
+            }
+            
+            createCoachMessages() {
+                setInterval(() => {
+                    const messages = [
+                        { coach: 'Laween Kovan', text: 'Push forward CR7! The goal is yours!' },
+                        { coach: 'Lawand Kovan', text: 'Messi! Control the field!' },
+                        { coach: 'Laween Kovan', text: '5D acceleration! Go go go!' },
+                        { coach: 'Lawand Kovan', text: 'Watch the red line! Stay sharp!' },
+                    ];
+                    
+                    const msg = messages[Math.floor(Math.random() * messages.length)];
+                    const toast = document.createElement('div');
+                    toast.className = 'toast';
+                    toast.textContent = `${msg.coach}: "${msg.text}"`;
+                    toast.style.top = '180px';
+                    document.body.appendChild(toast);
+                    
+                    setTimeout(() => {
+                        if (toast.parentNode) toast.remove();
+                    }, 3000);
+                }, 8000);
             }
         }
 
-        // Initialize 4D Game
+        // Initialize the 5D Playground
         document.addEventListener('DOMContentLoaded', () => {
-            const game = new RedCardDuel4D();
+            const playground = new RedCardPlayground5D();
             
-            console.log('🌟 4D Red Card Duel Initialized!');
-            console.log('👑 Coach: Laween Kovan');
-            console.log('🎯 Coach: Lawand Kovan');
-            console.log('⚽ CR7 vs Messi - 4D Battle');
-            console.log('🖱️ Move mouse for 4D perspective effect');
-            console.log('⌨️ Press SPACE to launch cards');
-            console.log('🖼️ Click players for special 4D animations');
-            console.log('⛶ Click Fullscreen button for immersive experience');
+            console.log('🌟 5D Red Card Playground Activated!');
+            console.log('👑 Coach: Laween Kovan - 5D Attack Specialist');
+            console.log('🎯 Coach: Lawand Kovan - 5D Defense Expert');
+            console.log('🎮 Controls: Arrow Keys/WASD to move, SPACE to sprint');
+            console.log('🖱️ Drag players with mouse or touch');
+            console.log('📱 Press 1 for CR7, 2 for Messi');
+            console.log('⚠️ Cross the red line to get a RED CARD!');
+            console.log('🔄 Press R to reset player position');
         });
     </script>
 </body>

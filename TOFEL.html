@@ -2,99 +2,264 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>TOEFL · Zakhourani Learning Hub</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover">
+    <title>TOEFL iBT Mastery Hub | Zakhourani</title>
+    
+    <!-- Meta Tags for SEO -->
+    <meta name="description" content="TOEFL iBT Mastery Hub by Dr. Waleed Hussien Zakhourani. Ace the Reading, Listening, Speaking, and Writing sections with tailored tools and challenges.">
+    <meta name="keywords" content="TOEFL iBT, TOEFL Mastery, Dr. Waleed Hussien Zakhourani, English learning, mock exams">
+    <meta name="author" content="Dr. Waleed Hussien Zakhourani">
+    <meta name="robots" content="index, follow">
+    
+    <!-- Fonts and Icons -->
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/animate.css/4.1.1/animate.min.css">
+    
     <style>
-        * { margin: 0; padding: 0; box-sizing: border-box; font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; }
+        /* ===== RESET & GLOBAL STYLES ===== */
+        * { 
+            margin: 0; 
+            padding: 0; 
+            box-sizing: border-box; 
+            -webkit-tap-highlight-color: transparent;
+        }
         
         :root {
-            --primary: #2c3e50;
+            --primary: #1a2634;
+            --primary-light: #2c3e50;
             --secondary: #3498db;
-            --toefl-accent: #e67e22;    /* TOEFL specific orange accent */
+            --secondary-dark: #2980b9;
+            --secondary-light: #5faee3;
+            --toefl-accent: #e67e22;
+            --toefl-accent-dark: #d35400;
+            --accent: #e74c3c;
+            --accent-dark: #c0392b;
             --success: #27ae60;
             --warning: #f39c12;
+            --info: #3498db;
             --light: #ecf0f1;
+            --light-gray: #f8f9fa;
+            --gray: #95a5a6;
             --dark: #2c3e50;
+            --darker: #1a252f;
+            --white: #ffffff;
+            --black: #000000;
+            
+            --shadow-sm: 0 2px 4px rgba(0,0,0,0.1);
+            --shadow-md: 0 4px 6px rgba(0,0,0,0.1);
+            --shadow-lg: 0 10px 15px rgba(0,0,0,0.1);
+            --shadow-xl: 0 20px 25px rgba(0,0,0,0.1);
+            --shadow-2xl: 0 25px 50px rgba(0,0,0,0.25);
+            --gradient-primary: linear-gradient(135deg, var(--primary) 0%, var(--primary-light) 100%);
+            --gradient-secondary: linear-gradient(135deg, var(--secondary) 0%, var(--secondary-dark) 100%);
+            --gradient-toefl: linear-gradient(135deg, var(--toefl-accent) 0%, var(--toefl-accent-dark) 100%);
+            --gradient-accent: linear-gradient(135deg, var(--accent) 0%, var(--accent-dark) 100%);
+            --gradient-gold: linear-gradient(135deg, #f7971e 0%, #ffd200 100%);
         }
         
-        body {
+        body { 
+            font-family: 'Poppins', 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
             background: linear-gradient(135deg, #f5f7fa 0%, #c3cfe2 100%);
             min-height: 100vh;
+            color: var(--dark);
+            line-height: 1.6;
+            overflow-x: hidden;
+            padding-bottom: calc(65px + env(safe-area-inset-bottom));
         }
         
-        /* Header */
+        /* ===== TYPOGRAPHY ===== */
+        h1, h2, h3, h4, h5, h6 {
+            font-weight: 700;
+            line-height: 1.2;
+            margin-bottom: 1rem;
+        }
+        
+        h1 { font-size: 3.5rem; }
+        h2 { font-size: 2.5rem; }
+        h3 { font-size: 1.75rem; }
+        
+        p {
+            margin-bottom: 1rem;
+            color: #4a5568;
+        }
+        
+        /* ===== UTILITY CLASSES ===== */
+        .container {
+            max-width: 1400px;
+            margin: 0 auto;
+            padding: 0 2rem;
+        }
+        
+        .btn {
+            display: inline-block;
+            padding: 1rem 2rem;
+            border-radius: 50px;
+            font-weight: 600;
+            text-decoration: none;
+            transition: all 0.3s ease;
+            border: none;
+            cursor: pointer;
+            font-size: 1rem;
+            position: relative;
+            overflow: hidden;
+            user-select: none;
+            text-align: center;
+        }
+        
+        .btn::before {
+            content: '';
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            width: 0;
+            height: 0;
+            border-radius: 50%;
+            background: rgba(255, 255, 255, 0.3);
+            transform: translate(-50%, -50%);
+            transition: width 0.6s, height 0.6s;
+        }
+        
+        .btn:hover::before {
+            width: 300px;
+            height: 300px;
+        }
+        
+        .btn-toefl {
+            background: var(--toefl-accent);
+            color: var(--white);
+            border: 2px solid var(--toefl-accent);
+        }
+        
+        .btn-toefl:hover {
+            background: var(--toefl-accent-dark);
+            border-color: var(--toefl-accent-dark);
+            transform: translateY(-3px);
+            box-shadow: 0 10px 20px rgba(230, 126, 34, 0.3);
+        }
+
+        .btn-success {
+            background: var(--success);
+            color: var(--white);
+            border: 2px solid var(--success);
+        }
+
+        .btn-success:hover {
+            background: #219a52;
+            transform: translateY(-3px);
+            box-shadow: 0 10px 20px rgba(39, 174, 96, 0.3);
+        }
+        
+        /* ===== ANIMATIONS ===== */
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(20px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+        
+        @keyframes pulse {
+            0% { transform: scale(1); }
+            50% { transform: scale(1.05); }
+            100% { transform: scale(1); }
+        }
+        
+        @keyframes spin {
+            from { transform: rotate(0deg); }
+            to { transform: rotate(360deg); }
+        }
+        
+        /* ===== HEADER STYLES (App-Optimized) ===== */
         header {
-            background: white;
-            box-shadow: 0 4px 20px rgba(0,0,0,0.1);
-            padding: 15px 40px;
+            background: var(--white);
+            box-shadow: var(--shadow-md);
             position: sticky;
             top: 0;
-            z-index: 100;
+            z-index: 1000;
         }
         
-        .header-content {
+        .header-top {
+            background: var(--gradient-primary);
+            color: var(--white);
+            padding: calc(1rem + env(safe-area-inset-top)) 2rem 1rem;
             display: flex;
             justify-content: space-between;
             align-items: center;
-            max-width: 1200px;
-            margin: 0 auto;
         }
         
         .logo {
             display: flex;
             align-items: center;
-            gap: 15px;
+            gap: 0.5rem;
             text-decoration: none;
         }
         
-        .logo h1 {
-            font-size: 28px;
-            font-weight: 700;
-            color: var(--primary);
-        }
-        
-        .nav-links {
-            display: flex;
-            gap: 20px;
-            align-items: center;
-            flex-wrap: wrap;
-        }
-        
-        .nav-links a {
-            text-decoration: none;
-            color: var(--dark);
-            font-weight: 600;
-            padding: 10px 15px;
-            border-radius: 8px;
-            transition: 0.3s;
-            display: flex;
-            align-items: center;
-            gap: 8px;
-        }
-        
-        .nav-links a:hover {
-            background: var(--light);
+        .logo-icon {
+            font-size: 1.75rem;
             color: var(--secondary);
         }
         
-        .nav-links a.active {
-            background: var(--toefl-accent);
-            color: white;
+        .logo h1 {
+            font-size: 1.5rem;
+            font-weight: 800;
+            color: var(--white);
+            letter-spacing: 0.5px;
+            margin: 0;
+        }
+        
+        .logo span {
+            color: var(--secondary);
+        }
+        
+        .auth-buttons {
+            display: flex;
+            gap: 0.75rem;
+        }
+        
+        .auth-btn {
+            padding: 0.5rem 1.25rem;
+            border-radius: 50px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s;
+            text-decoration: none;
+            display: inline-flex;
+            align-items: center;
+            gap: 0.5rem;
+            font-size: 0.875rem;
+            user-select: none;
+        }
+        
+        .login-btn {
+            background: transparent;
+            color: var(--white);
+            border: 2px solid var(--white);
+        }
+        
+        .login-btn:hover {
+            background: var(--white);
+            color: var(--primary);
+        }
+        
+        .signup-btn {
+            background: var(--secondary);
+            color: var(--white);
+            border: 2px solid var(--secondary);
+        }
+        
+        .signup-btn:hover {
+            background: var(--secondary-dark);
+            border-color: var(--secondary-dark);
         }
         
         .user-menu {
             display: flex;
             align-items: center;
-            gap: 15px;
-            margin-left: 20px;
-            padding-left: 20px;
-            border-left: 2px solid var(--light);
+            gap: 1rem;
+            color: var(--white);
         }
         
         .user-avatar {
-            width: 40px;
-            height: 40px;
+            width: 38px;
+            height: 38px;
             border-radius: 50%;
             object-fit: cover;
             border: 2px solid var(--secondary);
@@ -102,645 +267,946 @@
         
         .user-name {
             font-weight: 600;
-            color: var(--dark);
+            font-size: 0.875rem;
         }
         
-        .login-btn {
-            background: var(--secondary);
-            color: white !important;
-            padding: 8px 20px !important;
-            border-radius: 50px !important;
+        .logout-btn {
+            background: var(--accent);
+            color: var(--white);
+            border: none;
+            padding: 0.5rem 1rem;
+            border-radius: 50px;
+            cursor: pointer;
+            text-decoration: none;
+            display: inline-flex;
+            align-items: center;
+            gap: 0.5rem;
+            transition: all 0.3s;
+            font-weight: 600;
+            font-size: 0.875rem;
         }
         
-        .signup-btn {
-            background: var(--success);
-            color: white !important;
-            padding: 8px 20px !important;
-            border-radius: 50px !important;
+        /* Navigation (Swipe-Optimized for App Structure) */
+        nav {
+            padding: 0;
+            background: var(--white);
+            border-bottom: 1px solid var(--light);
+            overflow: hidden;
         }
         
-        /* Main Container */
-        .container {
-            max-width: 1200px;
-            margin: 40px auto;
-            padding: 0 20px;
-        }
-        
-        /* Page Header */
-        .page-header {
-            text-align: center;
-            margin-bottom: 40px;
-        }
-        
-        .page-header h1 {
-            font-size: 42px;
-            color: var(--dark);
-            margin-bottom: 15px;
+        .nav-container {
             display: flex;
             align-items: center;
-            justify-content: center;
-            gap: 15px;
+            padding: 0;
+            position: relative;
         }
         
-        .page-header h1 i {
+        .nav-links {
+            display: flex;
+            list-style: none;
+            gap: 0.5rem;
+            margin: 0;
+            padding: 0.75rem 1.5rem;
+            overflow-x: auto;
+            scroll-behavior: smooth;
+            -webkit-overflow-scrolling: touch;
+            width: 100%;
+        }
+        
+        .nav-links::-webkit-scrollbar {
+            display: none;
+        }
+        
+        .nav-links {
+            -ms-overflow-style: none;
+            scrollbar-width: none;
+        }
+        
+        .nav-links li {
+            position: relative;
+            flex-shrink: 0;
+        }
+        
+        .nav-links a {
+            text-decoration: none;
+            color: var(--dark);
+            font-weight: 600;
+            font-size: 0.9rem;
+            padding: 0.5rem 1rem;
+            border-radius: 50px;
+            transition: all 0.2s ease;
+            white-space: nowrap;
+            display: flex;
+            align-items: center;
+            gap: 0.4rem;
+            border: 1px solid transparent;
+            user-select: none;
+        }
+        
+        .nav-links a i {
+            font-size: 1rem;
+            color: var(--secondary);
+        }
+        
+        .nav-links a:hover, .nav-links a:focus {
+            background: var(--light-gray);
+            color: var(--secondary);
+        }
+        
+        .nav-links a.active {
+            background: rgba(230, 126, 34, 0.15);
+            color: var(--toefl-accent-dark);
+            border-color: rgba(230, 126, 34, 0.3);
+        }
+        
+        .nav-links a.active i {
+            color: var(--toefl-accent-dark);
+        }
+        
+        .nav-badge {
+            background: var(--accent);
+            color: var(--white);
+            font-size: 0.65rem;
+            padding: 0.1rem 0.4rem;
+            border-radius: 10px;
+            font-weight: 700;
+        }
+        
+        .nav-container::before, .nav-container::after {
+            content: '';
+            position: absolute;
+            top: 0;
+            bottom: 0;
+            width: 25px;
+            z-index: 2;
+            pointer-events: none;
+        }
+        .nav-container::before {
+            left: 0;
+            background: linear-gradient(to right, rgba(255,255,255,0.9), transparent);
+        }
+        .nav-container::after {
+            right: 0;
+            background: linear-gradient(to left, rgba(255,255,255,0.9), transparent);
+        }
+        
+        /* ===== BOTTOM TAB NAVIGATION BAR ===== */
+        .bottom-tab-bar {
+            position: fixed;
+            bottom: 0;
+            left: 0;
+            right: 0;
+            background: var(--white);
+            box-shadow: 0 -4px 15px rgba(0,0,0,0.08);
+            display: none;
+            justify-content: space-around;
+            align-items: center;
+            height: 65px;
+            padding-bottom: env(safe-area-inset-bottom);
+            z-index: 1000;
+            border-top: 1px solid var(--light);
+        }
+        
+        .tab-item {
+            text-decoration: none;
+            color: var(--gray);
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            font-size: 0.7rem;
+            font-weight: 500;
+            flex: 1;
+            height: 100%;
+            transition: color 0.2s;
+            position: relative;
+        }
+        
+        .tab-item i {
+            font-size: 1.3rem;
+            margin-bottom: 2px;
+            transition: transform 0.2s;
+        }
+        
+        .tab-item.active {
             color: var(--toefl-accent);
         }
         
-        .page-header p {
-            color: #666;
-            font-size: 18px;
-            max-width: 600px;
+        .tab-item.active i {
+            transform: translateY(-2px);
+            color: var(--toefl-accent);
+        }
+        
+        /* ===== HERO SECTION ===== */
+        .hero {
+            background: var(--gradient-primary);
+            color: var(--white);
+            border-radius: 2rem;
+            padding: 4rem 4rem;
+            margin: 2rem auto;
+            max-width: 1400px;
+            position: relative;
+            overflow: hidden;
+            text-align: center;
+        }
+        
+        .hero::before {
+            content: '';
+            position: absolute;
+            top: -50%;
+            right: -50%;
+            width: 100%;
+            height: 200%;
+            background: radial-gradient(circle, rgba(230,126,34,0.2) 0%, transparent 70%);
+            animation: spin 20s linear infinite;
+        }
+        
+        .hero-content {
+            position: relative;
+            z-index: 2;
+            max-width: 900px;
             margin: 0 auto;
         }
         
-        /* Loading Spinner */
+        .hero-badge {
+            display: inline-block;
+            background: rgba(255,255,255,0.2);
+            color: var(--white);
+            padding: 0.5rem 1.5rem;
+            border-radius: 50px;
+            font-size: 0.875rem;
+            font-weight: 600;
+            margin-bottom: 2rem;
+            backdrop-filter: blur(10px);
+            border: 1px solid rgba(255,255,255,0.3);
+        }
+        
+        .hero h2 {
+            font-size: 3.5rem;
+            font-weight: 800;
+            margin-bottom: 1.5rem;
+            text-shadow: 2px 2px 4px rgba(0,0,0,0.3);
+        }
+        
+        .hero h2 span {
+            color: var(--toefl-accent);
+        }
+        
+        .hero p {
+            font-size: 1.25rem;
+            max-width: 700px;
+            margin: 0 auto;
+            line-height: 1.8;
+            opacity: 0.9;
+        }
+        
+        /* ===== LOADING SPINNER ===== */
         .loading-spinner {
             text-align: center;
-            padding: 60px;
+            padding: 5rem 2rem;
+            background: var(--white);
+            border-radius: 24px;
+            max-width: 1400px;
+            margin: 2rem auto;
+            box-shadow: var(--shadow-lg);
         }
         
         .spinner {
-            width: 50px;
-            height: 50px;
+            width: 60px;
+            height: 60px;
             border: 5px solid var(--light);
             border-top: 5px solid var(--toefl-accent);
             border-radius: 50%;
             animation: spin 1s linear infinite;
-            margin: 0 auto 20px;
+            margin: 0 auto 1.5rem;
         }
         
-        @keyframes spin {
-            0% { transform: rotate(0deg); }
-            100% { transform: rotate(360deg); }
-        }
-        
-        /* Login Prompt */
+        /* ===== LOGIN PROMPT ===== */
         .login-prompt {
-            background: white;
-            border-radius: 30px;
-            padding: 60px;
+            background: var(--white);
+            border-radius: 24px;
+            padding: 4rem 2rem;
             text-align: center;
-            box-shadow: 0 20px 60px rgba(0,0,0,0.1);
-            max-width: 500px;
-            margin: 40px auto;
-            animation: slideUp 0.5s ease;
-        }
-        
-        @keyframes slideUp {
-            from { transform: translateY(30px); opacity: 0; }
-            to { transform: translateY(0); opacity: 1; }
+            box-shadow: var(--shadow-xl);
+            max-width: 550px;
+            margin: 4rem auto;
+            border: 2px solid rgba(0,0,0,0.05);
+            animation: fadeIn 0.8s ease;
         }
         
         .login-prompt .icon {
-            font-size: 80px;
+            font-size: 4.5rem;
             color: var(--toefl-accent);
-            margin-bottom: 30px;
+            margin-bottom: 1.5rem;
+            animation: pulse 2s infinite;
         }
         
         .login-prompt h2 {
-            font-size: 32px;
-            color: var(--dark);
-            margin-bottom: 15px;
+            font-size: 2rem;
+            color: var(--primary);
+            margin-bottom: 1rem;
         }
         
         .login-prompt p {
-            color: #666;
-            font-size: 18px;
-            margin-bottom: 30px;
-            line-height: 1.6;
+            color: var(--gray);
+            font-size: 1.1rem;
+            margin-bottom: 2rem;
         }
         
-        .login-prompt .login-btn {
-            display: inline-flex;
-            align-items: center;
-            gap: 10px;
-            padding: 16px 40px;
-            background: var(--toefl-accent);
-            color: white;
-            text-decoration: none;
-            border-radius: 50px;
-            font-size: 18px;
-            font-weight: 600;
-            transition: 0.3s;
-            border: none;
-            cursor: pointer;
-        }
-        
-        .login-prompt .login-btn:hover {
-            background: #d35400;
-            transform: translateY(-2px);
-            box-shadow: 0 10px 20px rgba(230, 126, 34, 0.3);
-        }
-        
-        /* Protected Content */
-        .protected-content {
-            display: none;
-        }
-        
-        /* Welcome Banner - TOEFL themed */
+        /* ===== WELCOME BANNER ===== */
         .welcome-banner {
-            background: linear-gradient(135deg, var(--toefl-accent), #d35400);
-            color: white;
-            padding: 40px;
-            border-radius: 30px;
-            margin-bottom: 40px;
+            background: var(--gradient-toefl);
+            color: var(--white);
+            padding: 2.5rem;
+            border-radius: 24px;
+            margin-bottom: 3rem;
             display: flex;
             align-items: center;
             justify-content: space-between;
             flex-wrap: wrap;
-            gap: 30px;
+            gap: 1.5rem;
+            box-shadow: var(--shadow-lg);
         }
         
         .welcome-text h2 {
-            font-size: 32px;
-            margin-bottom: 10px;
+            font-size: 2rem;
+            margin-bottom: 0.5rem;
+            color: var(--white);
         }
         
         .welcome-text p {
-            font-size: 18px;
+            font-size: 1.1rem;
             opacity: 0.9;
+            color: var(--light);
+            margin-bottom: 0;
         }
         
         .user-welcome {
-            background: rgba(255,255,255,0.2);
-            padding: 15px 25px;
+            background: rgba(255,255,255,0.15);
+            padding: 0.75rem 1.5rem;
             border-radius: 50px;
-            font-size: 18px;
+            font-size: 1rem;
             font-weight: 600;
             backdrop-filter: blur(10px);
+            border: 1px solid rgba(255,255,255,0.25);
         }
         
-        /* Section Grid */
+        /* ===== FEATURE GRID ===== */
         .section-grid {
             display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
-            gap: 30px;
-            margin: 40px 0;
+            grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
+            gap: 2.5rem;
+            margin: 3rem 0;
         }
         
         .feature-card {
-            background: white;
-            padding: 35px 25px;
-            border-radius: 30px;
-            box-shadow: 0 10px 30px rgba(0,0,0,0.08);
+            background: var(--white);
+            padding: 3rem 2rem;
+            border-radius: 24px;
+            box-shadow: var(--shadow-lg);
             text-align: center;
             text-decoration: none;
             color: inherit;
-            transition: 0.3s;
-            border: 2px solid transparent;
+            transition: all 0.4s;
+            border: 2px solid rgba(0,0,0,0.05);
             cursor: pointer;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
         }
         
         .feature-card:hover {
-            transform: translateY(-10px);
+            transform: translateY(-12px);
             border-color: var(--toefl-accent);
-            box-shadow: 0 20px 40px rgba(230, 126, 34, 0.15);
+            box-shadow: var(--shadow-2xl);
         }
         
         .feature-card i {
-            font-size: 50px;
-            color: var(--toefl-accent);
-            background: var(--light);
-            padding: 20px;
-            border-radius: 60px;
-            margin-bottom: 20px;
+            font-size: 2.5rem;
+            color: var(--white);
+            background: var(--gradient-toefl);
+            width: 80px;
+            height: 80px;
+            line-height: 80px;
+            border-radius: 50%;
+            margin-bottom: 1.5rem;
+            box-shadow: var(--shadow-md);
         }
         
         .feature-card h3 {
-            font-size: 24px;
-            margin-bottom: 15px;
-            color: var(--dark);
+            font-size: 1.5rem;
+            margin-bottom: 1rem;
+            color: var(--primary);
         }
         
         .feature-card p {
-            color: #666;
-            line-height: 1.6;
+            color: var(--gray);
+            line-height: 1.7;
+            font-size: 0.95rem;
+            margin-bottom: 1.5rem;
+        }
+
+        .skill-badge {
+            display: inline-flex;
+            align-items: center;
+            gap: 0.5rem;
+            background: var(--light-gray);
+            padding: 0.4rem 1rem;
+            border-radius: 50px;
+            font-size: 0.8rem;
+            font-weight: 600;
+            color: var(--toefl-accent-dark);
+            margin: 0.25rem;
+            border: 1px solid rgba(230,126,34,0.1);
         }
         
-        /* Challenge Highlight - TOEFL themed */
+        /* ===== CHALLENGE HIGHLIGHT ===== */
         .challenge-highlight {
-            background: white;
-            border-radius: 30px;
-            padding: 40px;
-            margin: 40px 0;
+            background: var(--white);
+            border-radius: 24px;
+            padding: 3rem;
+            margin: 4rem 0;
             display: flex;
             align-items: center;
             justify-content: space-between;
             flex-wrap: wrap;
-            gap: 30px;
+            gap: 2rem;
             border: 3px dashed var(--toefl-accent);
+            box-shadow: var(--shadow-md);
         }
         
         .challenge-text h2 {
-            font-size: 28px;
-            color: var(--dark);
-            margin-bottom: 10px;
+            font-size: 2rem;
+            color: var(--primary);
+            margin-bottom: 0.5rem;
             display: flex;
             align-items: center;
-            gap: 10px;
+            gap: 0.75rem;
         }
         
         .challenge-text p {
-            color: #666;
-            font-size: 18px;
+            color: var(--gray);
+            font-size: 1.1rem;
+            margin-bottom: 1rem;
         }
-        
-        .challenge-btn {
-            background: var(--success);
-            color: white;
-            padding: 18px 35px;
-            border-radius: 50px;
-            text-decoration: none;
-            font-weight: 600;
-            font-size: 18px;
-            display: inline-flex;
+
+        /* ===== STRATEGY CARD ROW ===== */
+        .strategy-banner {
+            background: var(--white);
+            border-radius: 24px;
+            padding: 3rem;
+            margin: 4rem 0;
+            display: flex;
+            flex-wrap: wrap;
+            justify-content: space-between;
             align-items: center;
-            gap: 10px;
-            transition: 0.3s;
+            gap: 2rem;
+            box-shadow: var(--shadow-lg);
+            border: 1px solid rgba(0,0,0,0.05);
+        }
+
+        .strategy-banner h3 {
+            color: var(--primary);
+            margin-bottom: 0.5rem;
+            font-size: 1.75rem;
+        }
+
+        .strategy-banner p {
+            color: var(--gray);
+            max-width: 700px;
+            margin-bottom: 0;
         }
         
-        .challenge-btn:hover {
-            background: #219a52;
-            transform: scale(1.05);
-        }
-        
-        /* Skill badges */
-        .skill-badge {
-            display: inline-flex;
-            align-items: center;
-            gap: 8px;
-            background: var(--light);
-            padding: 8px 16px;
-            border-radius: 50px;
-            font-size: 14px;
-            font-weight: 600;
-            color: var(--toefl-accent);
-        }
-        
-        /* Footer */
+        /* ===== FOOTER ===== */
         footer {
             background: var(--primary);
-            color: white;
-            padding: 40px;
-            margin-top: 60px;
-            text-align: center;
+            color: var(--white);
+            padding: 4rem 2rem 2rem;
+            position: relative;
+            overflow: hidden;
+        }
+        
+        footer::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            height: 5px;
+            background: var(--gradient-secondary);
+        }
+        
+        .footer-content {
+            max-width: 1400px;
+            margin: 0 auto;
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 3rem;
+            padding: 0 2rem;
+        }
+        
+        .footer-section h3 {
+            font-size: 1.5rem;
+            margin-bottom: 1.5rem;
+            color: var(--white);
+            position: relative;
+            padding-bottom: 0.5rem;
+        }
+        
+        .footer-section h3::after {
+            content: '';
+            position: absolute;
+            bottom: 0;
+            left: 0;
+            width: 50px;
+            height: 3px;
+            background: var(--secondary);
+        }
+        
+        .footer-section p {
+            color: rgba(255,255,255,0.7);
+            line-height: 1.8;
+            margin-bottom: 1.5rem;
+        }
+        
+        .social-links {
+            display: flex;
+            gap: 1rem;
+        }
+        
+        .social-links a {
+            width: 40px;
+            height: 40px;
+            background: rgba(255,255,255,0.1);
+            border-radius: 50%;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            color: var(--white);
+            text-decoration: none;
+            transition: all 0.3s;
+        }
+        
+        .social-links a:hover {
+            background: var(--secondary);
+            transform: translateY(-3px) rotate(360deg);
         }
         
         .footer-links {
             list-style: none;
-            display: flex;
-            justify-content: center;
-            gap: 30px;
-            margin: 20px 0;
-            flex-wrap: wrap;
+        }
+        
+        .footer-links li {
+            margin-bottom: 0.75rem;
         }
         
         .footer-links a {
-            color: white;
+            color: rgba(255,255,255,0.7);
             text-decoration: none;
-            display: flex;
+            transition: all 0.3s;
+            display: inline-flex;
             align-items: center;
-            gap: 5px;
+            gap: 0.5rem;
         }
         
         .footer-links a:hover {
-            color: var(--toefl-accent);
+            color: var(--secondary);
+            transform: translateX(5px);
+        }
+        
+        .footer-links i {
+            font-size: 0.75rem;
+        }
+        
+        .contact-info {
+            list-style: none;
+        }
+        
+        .contact-info li {
+            margin-bottom: 1rem;
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+            color: rgba(255,255,255,0.7);
+        }
+        
+        .contact-info i {
+            width: 30px;
+            height: 30px;
+            background: rgba(255,255,255,0.1);
+            border-radius: 50%;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            color: var(--secondary);
+        }
+        
+        .newsletter-form {
+            display: flex;
+            gap: 0.5rem;
+            margin-top: 1rem;
+        }
+        
+        .newsletter-form input {
+            flex: 1;
+            padding: 0.75rem 1rem;
+            border: none;
+            border-radius: 50px;
+            font-family: inherit;
+        }
+        
+        .newsletter-form button {
+            padding: 0.75rem 1.5rem;
+            background: var(--secondary);
+            color: var(--white);
+            border: none;
+            border-radius: 50px;
+            cursor: pointer;
+            transition: all 0.3s;
+        }
+        
+        .newsletter-form button:hover {
+            background: var(--secondary-dark);
+            transform: scale(1.05);
+        }
+        
+        .footer-bottom {
+            max-width: 1400px;
+            margin: 3rem auto 0;
+            padding: 2rem 2rem 0;
+            border-top: 1px solid rgba(255,255,255,0.1);
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            flex-wrap: wrap;
+            gap: 1rem;
+        }
+        
+        .copyright {
+            color: rgba(255,255,255,0.7);
+            font-size: 0.875rem;
+        }
+        
+        .footer-bottom-links {
+            display: flex;
+            gap: 2rem;
+        }
+        
+        .footer-bottom-links a {
+            color: rgba(255,255,255,0.7);
+            text-decoration: none;
+            font-size: 0.875rem;
+            transition: color 0.3s;
+        }
+        
+        .footer-bottom-links a:hover {
+            color: var(--secondary);
+        }
+        
+        /* ===== RESPONSIVE ===== */
+        @media (max-width: 1200px) {
+            h1 { font-size: 3rem; }
+            h2 { font-size: 2.25rem; }
+            .hero h2 { font-size: 3rem; }
+        }
+        
+        @media (max-width: 992px) {
+            .header-top { padding: 1.5rem 1.5rem 1rem; }
+            .hero { padding: 3rem 2rem; }
+            .hero h2 { font-size: 2.5rem; }
         }
         
         @media (max-width: 768px) {
-            header { padding: 15px 20px; }
-            .header-content { flex-direction: column; gap: 15px; }
-            .nav-links { justify-content: center; }
-            .user-menu { border-left: none; padding-left: 0; margin-left: 0; }
-            .welcome-banner { flex-direction: column; text-align: center; }
-            .challenge-highlight { flex-direction: column; text-align: center; }
+            .bottom-tab-bar {
+                display: flex;
+            }
+            
+            .header-top {
+                padding: calc(0.75rem + env(safe-area-inset-top)) 1rem 0.75rem;
+                flex-direction: row;
+                justify-content: space-between;
+            }
+            
+            .logo { justify-content: flex-start; }
+            
+            .nav-links {
+                padding: 0.5rem 1rem;
+            }
+            
+            .hero {
+                margin: 1rem;
+                padding: 2rem 1rem;
+            }
+            
+            .hero h2 {
+                font-size: 2rem;
+            }
+            
+            .welcome-banner {
+                flex-direction: column;
+                text-align: center;
+                align-items: center;
+            }
+            
+            .challenge-highlight {
+                flex-direction: column;
+                text-align: center;
+            }
+
+            .strategy-banner {
+                flex-direction: column;
+                text-align: center;
+                padding: 2rem;
+            }
+            
+            .footer-bottom {
+                flex-direction: column;
+                text-align: center;
+                padding-bottom: 2rem;
+            }
+            
+            .footer-bottom-links {
+                justify-content: center;
+            }
+            
+            footer {
+                padding-bottom: calc(80px + env(safe-area-inset-bottom));
+            }
+        }
+        
+        @media (max-width: 576px) {
+            h1 { font-size: 1.85rem; }
+            h2 { font-size: 1.5rem; }
+            .hero h2 { font-size: 1.85rem; }
+            
+            .auth-btn {
+                font-size: 0.8rem;
+                padding: 0.4rem 0.875rem;
+            }
         }
     </style>
 </head>
 <body>
-    <!-- Header with Navigation -->
+    <!-- Skip to main content -->
+    <a href="#main-content" class="skip-link" style="position:absolute;top:-40px;left:0;background:var(--toefl-accent);color:white;padding:8px;z-index:1001;">Skip to main content</a>
+
+    <!-- Header -->
     <header>
-        <div class="header-content">
+        <div class="header-top">
             <a href="index.html" class="logo">
-                <i class="fas fa-graduation-cap" style="font-size: 32px; color: #3498db;"></i>
-                <h1>Zakhourani</h1>
+                <i class="fas fa-graduation-cap logo-icon"></i>
+                <h1>Zakhourani<span>.</span></h1>
             </a>
             
-            <div class="nav-links">
-                <a href="index.html"><i class="fas fa-home"></i> Home</a>
-                <a href="AI.html"><i class="fas fa-microchip"></i> AI Power</a>
-                <a href="IELS.html"><i class="fas fa-language"></i> IELTS</a>
-                <a href="TOFEL.html" class="active"><i class="fas fa-scroll"></i> TOEFL</a>
-                <a href="aboutDrwaleed.html"><i class="fas fa-user-graduate"></i> Dr Waleed</a>
-                <a href="TA.html"><i class="fas fa-chalkboard-teacher"></i> TA</a>
-                <a href="talandilovan.html"><i class="fas fa-globe"></i> talandilovan</a>
-                
-                <div class="user-menu" id="userMenu" style="display: none;">
-                    <img id="userAvatar" class="user-avatar" src="" alt="User">
-                    <span id="userDisplayName" class="user-name"></span>
-                    <a href="profile.html"><i class="fas fa-user-circle"></i></a>
-                    <a href="logout.html"><i class="fas fa-sign-out-alt"></i></a>
-                </div>
-                
-                <div id="authButtons" style="display: flex; gap: 10px;">
-                    <a href="login.html" class="login-btn">Login</a>
-                    <a href="signup.html" class="signup-btn">Sign Up</a>
-                </div>
+            <div class="auth-buttons" id="authButtons">
+                <!-- Populated by JavaScript -->
             </div>
         </div>
+        
+        <!-- Touch-Swipeable Top Header Categorization Bar -->
+        <nav aria-label="Main navigation">
+            <div class="nav-container">
+                <ul class="nav-links" id="navLinks">
+                    <li><a href="index.html"><i class="fas fa-home"></i> Home</a></li>
+                    <li><a href="products.html"><i class="fas fa-box"></i> Products <span class="nav-badge">NEW</span></a></li>
+                    <li><a href="AI.html"><i class="fas fa-robot"></i> AI Assistant</a></li>
+                    <li><a href="JihanDictionary.html"><i class="fas fa-book"></i> Dictionary</a></li>
+                    <li><a href="IELS.html"><i class="fas fa-language"></i> IELTS</a></li>
+                    <li><a href="TOFEL.html" class="active" aria-current="page"><i class="fas fa-scroll"></i> TOEFL</a></li>
+                    <li><a href="aboutDrwaleed.html"><i class="fas fa-user-md"></i> About Dr. Waleed</a></li>
+                    <li><a href="contact.html"><i class="fas fa-envelope"></i> Contact</a></li>
+                    <li><a href="profile.html"><i class="fas fa-user-circle"></i> Profile</a></li>
+                </ul>
+            </div>
+        </nav>
     </header>
 
-    <!-- Main Content -->
-    <div class="container">
-        <!-- Page Header -->
-        <div class="page-header">
-            <h1><i class="fas fa-scroll"></i> TOEFL iBT Mastery Hub</h1>
-            <p>Your complete TOEFL preparation platform by Dr. Waleed Hussien Zakhourani — ace the Reading, Listening, Speaking & Writing sections</p>
-        </div>
+    <!-- Native App Bottom Tab Bar (Displays on screens below 768px wide) -->
+    <div class="bottom-tab-bar" aria-label="App Navigation Tabs">
+        <a href="index.html" class="tab-item">
+            <i class="fas fa-home"></i>
+            <span>Home</span>
+        </a>
+        <a href="AI.html" class="tab-item">
+            <i class="fas fa-robot"></i>
+            <span>AI Tutor</span>
+        </a>
+        <a href="JihanDictionary.html" class="tab-item">
+            <i class="fas fa-book"></i>
+            <span>Dictionary</span>
+        </a>
+        <a href="TOFEL.html" class="tab-item active">
+            <i class="fas fa-scroll"></i>
+            <span>TOEFL</span>
+        </a>
+        <a href="profile.html" class="tab-item">
+            <i class="fas fa-user-circle"></i>
+            <span>Profile</span>
+        </a>
+    </div>
+
+    <main id="main-content" class="container">
+        <!-- Hero Section -->
+        <section class="hero" aria-labelledby="hero-heading">
+            <div class="hero-content">
+                <span class="hero-badge"><i class="fas fa-scroll"></i> TOEFL Preparation Hub</span>
+                <h2 id="hero-heading">TOEFL iBT <span>Mastery Hub</span></h2>
+                <p>Complete TOEFL preparation platform engineered by Dr. Waleed Hussien Zakhourani — master Reading, Listening, Speaking, and Writing.</p>
+            </div>
+        </section>
 
         <!-- Loading State -->
         <div id="loading" class="loading-spinner">
             <div class="spinner"></div>
-            <p>Loading TOEFL preparation hub...</p>
+            <p style="color:var(--gray);">Loading TOEFL preparation hub...</p>
         </div>
 
-        <!-- Login Prompt (shown when not authenticated) -->
-        <div id="loginPrompt" class="login-prompt" style="display: none;">
+        <!-- Login Prompt (Shown when not authenticated) -->
+        <section id="loginPrompt" class="login-prompt" style="display: none;" aria-labelledby="prompt-heading">
             <div class="icon">
                 <i class="fas fa-lock"></i>
             </div>
-            <h2>Secure TOEFL Hub</h2>
-            <p>Unlock Dr. Waleed's exclusive TOEFL materials, integrated practice tests, and the 7-day intensive challenge. Please login to continue your journey.</p>
-            <a href="login.html" class="login-btn">
+            <h2 id="prompt-heading">Secure TOEFL Hub</h2>
+            <p>Unlock Dr. Waleed's exclusive TOEFL learning materials, integrated tests, and the 7-day intensive challenge.</p>
+            <a href="login.html" class="btn btn-toefl">
                 <i class="fas fa-sign-in-alt"></i> Login to Access
             </a>
-            <p style="margin-top: 20px; font-size: 14px;">
-                New here? <a href="signup.html" style="color: var(--toefl-accent);">Create free account</a>
+            <p style="margin-top: 1.5rem; font-size: 0.9rem; color:var(--gray);">
+                New student? <a href="signup.html" style="color: var(--toefl-accent); font-weight: 600; text-decoration: none;">Create free account</a>
             </p>
-        </div>
+        </section>
 
-        <!-- Protected TOEFL Content (shown when authenticated) -->
-        <div id="protectedContent" class="protected-content">
+        <!-- Protected TOEFL Content (Shown when authenticated) -->
+        <div id="protectedContent" style="display: none;" class="animate__animated animate__fadeIn">
             <!-- Welcome Banner -->
             <div class="welcome-banner">
                 <div class="welcome-text">
                     <h2><i class="fas fa-globe-americas"></i> Welcome to TOEFL Mastery</h2>
-                    <p>Your structured path to 100+ iBT score with Dr. Waleed's proven methodology</p>
+                    <p>Your structured path to a 100+ iBT score with Dr. Waleed's proven methodology</p>
                 </div>
                 <div class="user-welcome" id="welcomeMessage">
-                    Loading...
+                    <i class="fas fa-circle-notch fa-spin"></i> Loading...
                 </div>
             </div>
 
-            <!-- Skill cards & resources -->
+            <!-- Skill Cards Grid -->
             <div class="section-grid">
-                <!-- Comprehensive Guide - TOEFL structure & strategies -->
+                <!-- Comprehensive Guide -->
                 <a href="toefl-guide.html" class="feature-card">
                     <i class="fas fa-book-open"></i>
                     <h3>Complete TOEFL Guide</h3>
-                    <p>Deep dive into TOEFL iBT structure: question types, time management, note-taking strategies & scoring criteria</p>
-                    <div style="margin-top: 15px;">
+                    <p>Deep dive into TOEFL iBT structure: question types, time management, note-taking strategies, and scoring rubrics.</p>
+                    <div>
                         <span class="skill-badge"><i class="fas fa-microphone-alt"></i> Speaking</span>
                         <span class="skill-badge"><i class="fas fa-pen"></i> Writing</span>
                     </div>
                 </a>
                 
-                <!-- Full Practice Exams (Simulated) -->
+                <!-- Full Practice Exams -->
                 <a href="toefl-practice.html" class="feature-card">
                     <i class="fas fa-chalkboard"></i>
                     <h3>Full-Length Practice Tests</h3>
-                    <p>Realistic TOEFL iBT simulations with timers, integrated tasks, and automated band score estimator (0-120)</p>
-                    <div style="margin-top: 15px;">
+                    <p>Realistic TOEFL iBT simulations with timers, integrated tasks, and automated score predictions (0-120).</p>
+                    <div>
                         <span class="skill-badge"><i class="fas fa-head-side-vr"></i> Adaptive</span>
                         <span class="skill-badge"><i class="fas fa-chart-line"></i> Score Predictor</span>
                     </div>
                 </a>
                 
-                <!-- Integrated Writing & Speaking Feedback -->
+                <!-- Feedback Lab -->
                 <a href="toefl-feedback.html" class="feature-card">
                     <i class="fas fa-comments"></i>
                     <h3>Integrated Feedback Lab</h3>
-                    <p>Submit speaking responses and writing essays (integrated + independent). Get AI-powered and instructor feedback using Dr. Waleed’s rubrics</p>
-                    <div style="margin-top: 15px;">
+                    <p>Submit speaking clips and essays. Receive analysis and evaluation built on Dr. Waleed's expert scoring templates.</p>
+                    <div>
                         <span class="skill-badge"><i class="fas fa-robot"></i> AI Analysis</span>
                         <span class="skill-badge"><i class="fas fa-user-check"></i> Expert Review</span>
                     </div>
                 </a>
             </div>
 
-            <!-- Second row: additional TOEFL-specific resources -->
+            <!-- Second Grid: Skill Modules -->
             <div class="section-grid">
-                <!-- Academic Listening Vault -->
+                <!-- Academic Listening -->
                 <a href="toefl-listening.html" class="feature-card">
                     <i class="fas fa-headphones-alt"></i>
                     <h3>Listening & Lecture Vault</h3>
-                    <p>Academic lectures, campus conversations, and note-taking drills with comprehension quizzes. Accents: US, UK, Canadian</p>
-                    <div style="margin-top: 10px;"><i class="fas fa-university"></i> 40+ lectures</div>
+                    <p>Academic lectures, campus dialogues, and high-intensity note-taking drills. Includes US, UK, and Canadian accents.</p>
+                    <div style="font-size:0.9rem; color:var(--gray);"><i class="fas fa-university"></i> 40+ lectures</div>
                 </a>
                 
-                <!-- Reading Pro Simulator -->
+                <!-- Reading Pro -->
                 <a href="toefl-reading.html" class="feature-card">
                     <i class="fas fa-newspaper"></i>
                     <h3>Reading Pro Simulator</h3>
-                    <p>Academic texts with 10 question types: inference, vocabulary, rhetorical purpose, insert sentence. Detailed explanations.</p>
-                    <div style="margin-top: 10px;"><i class="fas fa-clock"></i> Timed & untimed modes</div>
+                    <p>Complex scientific and humanities texts across 10 core question types, including inference, vocabulary, and insert tasks.</p>
+                    <div style="font-size:0.9rem; color:var(--gray);"><i class="fas fa-clock"></i> Timed & untimed modes</div>
                 </a>
                 
-                <!-- Speaking Fluency Studio -->
+                <!-- Speaking Fluency -->
                 <a href="toefl-speaking.html" class="feature-card">
                     <i class="fas fa-microphone-alt"></i>
                     <h3>Speaking Fluency Studio</h3>
-                    <p>Record and evaluate independent & integrated tasks (Question 1-4). Get instant feedback on delivery, grammar & coherence.</p>
-                    <div style="margin-top: 10px;"><i class="fas fa-waveform"></i> Voice analytics</div>
+                    <p>Record, manage, and analyze responses to questions 1-4. Real-time feedback on pronunciation and grammatical delivery.</p>
+                    <div style="font-size:0.9rem; color:var(--gray);"><i class="fas fa-waveform"></i> Voice analytics</div>
                 </a>
             </div>
 
-            <!-- TOEFL Complete Challenge: 7 days to mastery -->
+            <!-- TOEFL Complete Challenge -->
             <div class="challenge-highlight">
                 <div class="challenge-text">
                     <h2><i class="fas fa-trophy" style="color: var(--toefl-accent);"></i> TOEFL 7‑Day Intensive Challenge</h2>
-                    <p>Daily integrated tasks: reading passages, listening sets, speaking drills, and writing prompts. Track progress & unlock certificates.</p>
-                    <div style="margin-top: 12px; display: flex; flex-wrap: wrap; gap: 8px;">
-                        <span class="skill-badge"><i class="fas fa-calendar-day"></i> Day 1: Reading Foundations</span>
-                        <span class="skill-badge"><i class="fas fa-calendar-week"></i> Day 4: Integrated Speaking</span>
-                        <span class="skill-badge"><i class="fas fa-certificate"></i> Final mock test</span>
+                    <p>Engineered daily integrated tasks: reading sets, speech recordings, and essay prompts. Build momentum and earn completion badges.</p>
+                    <div style="margin-top: 1rem; display: flex; flex-wrap: wrap; gap: 0.5rem;">
+                        <span class="skill-badge"><i class="fas fa-calendar-day"></i> Day 1: Reading foundations</span>
+                        <span class="skill-badge"><i class="fas fa-calendar-week"></i> Day 4: Integrated speaking</span>
+                        <span class="skill-badge"><i class="fas fa-certificate"></i> Final Mock Test</span>
                     </div>
                 </div>
-                <a href="toefl-challenge.html" class="challenge-btn">
+                <a href="toefl-challenge.html" class="btn btn-success">
                     <i class="fas fa-flag-checkered"></i> Launch Challenge
                 </a>
             </div>
 
-            <!-- Strategy resources: Dr. Waleed’s TOEFL notes -->
-            <div style="background: white; border-radius: 28px; padding: 30px; margin: 40px 0; display: flex; flex-wrap: wrap; justify-content: space-between; align-items: center; gap: 20px; box-shadow: 0 8px 20px rgba(0,0,0,0.05);">
+            <!-- Strategy Banner -->
+            <div class="strategy-banner">
                 <div>
-                    <h3 style="color: var(--dark); margin-bottom: 10px;"><i class="fas fa-chalkboard-user" style="color: var(--toefl-accent);"></i> Dr. Waleed's TOEFL Insider Tips</h3>
-                    <p style="color: #555; max-width: 700px;">"Master the integrated tasks: synthesize reading & listening. For independent writing, always use personal examples. Practice with academic tone."</p>
+                    <h3><i class="fas fa-chalkboard-user" style="color: var(--toefl-accent);"></i> Dr. Waleed's TOEFL Tips</h3>
+                    <p>Master integrated tasks: learn to synthesize reading and listening effectively. For writing, back your claim with concrete examples.</p>
                 </div>
-                <a href="toefl-strategies.html" style="background: var(--toefl-accent); color: white; padding: 12px 28px; border-radius: 60px; text-decoration: none; font-weight: 600; display: inline-flex; align-items: center; gap: 8px;">
+                <a href="toefl-strategies.html" class="btn btn-toefl">
                     <i class="fas fa-download"></i> Free Strategy Kit
                 </a>
             </div>
 
-            <!-- Additional motivational / study tracker -->
-            <div style="text-align: center; margin: 20px 0 30px;">
-                <p style="color: #666;"><i class="fas fa-chart-simple" style="color: var(--toefl-accent);"></i> Your study activity is tracked — complete tasks to earn badges & improve your TOEFL readiness score.</p>
+            <!-- Tracker Quote -->
+            <div style="text-align: center; margin: 2rem 0;">
+                <p style="color: var(--gray); font-size: 0.95rem;">
+                    <i class="fas fa-chart-simple" style="color: var(--toefl-accent);"></i> Your study progress is updated in real-time. Completing assignments builds your predicted score.
+                </p>
             </div>
         </div>
-    </div>
+    </main>
 
     <!-- Footer -->
     <footer>
-        <div style="display: flex; align-items: center; justify-content: center; gap: 15px; margin-bottom: 20px;">
-            <i class="fas fa-graduation-cap" style="font-size: 32px; color: #3498db;"></i>
-            <h1 style="color: white;">Zakhourani</h1>
-        </div>
-        
-        <p>English language & test preparation platform by Dr. Waleed Hussien Zakhourani — TOEFL, IELTS, Academic English</p>
-        
-        <ul class="footer-links">
-            <li><a href="index.html"><i class="fas fa-home"></i> Home</a></li>
-            <li><a href="IELS.html"><i class="fas fa-language"></i> IELTS</a></li>
-            <li><a href="TOFEL.html"><i class="fas fa-scroll"></i> TOEFL</a></li>
-            <li><a href="AI.html"><i class="fas fa-microchip"></i> AI Power</a></li>
-            <li><a href="aboutDrwaleed.html"><i class="fas fa-user-graduate"></i> Dr Waleed</a></li>
-            <li><a href="TA.html"><i class="fas fa-chalkboard-teacher"></i> TA</a></li>
-            <li><a href="talandilovan.html"><i class="fas fa-globe"></i> talandilovan</a></li>
-        </ul>
-        
-        <p style="margin-top: 30px; color: #ccc;">© 2025 Zakhourani. All rights reserved. TOEFL® is a registered trademark of ETS.</p>
-    </footer>
+        <div class="footer-content">
+            <div class="footer-section">
+                <h3>Zakhourani</h3>
+                <p>Empowering learners worldwide with AI-powered tools and expert guidance from Dr. Waleed Hussien Zakhourani.</p>
+                <div class="social-links">
+                    <a href="https://www.facebook.com/profile.php?id=61590774116973&sk=directory_links" target="_blank" aria-label="Facebook"><i class="fab fa-facebook-f"></i></a>
+                    <a href="https://www.tiktok.com/@dr.waleed.hussien" target="_blank" aria-label="TikTok"><i class="fab fa-tiktok"></i></a>
+                    <a href="https://www.instagram.com/dr.waleed.hussien/" target="_blank" aria-label="Instagram"><i class="fab fa-instagram"></i></a>
+                    <a href="#" aria-label="LinkedIn"><i class="fab fa-linkedin-in"></i></a>
+                    <a href="#" aria-label="YouTube"><i class="fab fa-youtube"></i></a>
+                </div>
+            </div>
 
-    <!-- Firebase SDK -->
-    <script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-app-compat.js"></script>
-    <script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-auth-compat.js"></script>
-    <script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-firestore-compat.js"></script>
-
-    <script>
-        // Firebase Configuration (same as original for consistency)
-        const firebaseConfig = {
-            apiKey: "AIzaSyAE8wf24HXrfmpMluaFOv1OHPrf_YFfqTQ",
-            authDomain: "whaai-c388e.firebaseapp.com",
-            projectId: "whaai-c388e",
-            storageBucket: "whaai-c388e.firebasestorage.app",
-            messagingSenderId: "640598205524",
-            appId: "1:640598205524:web:c975f5e8b371b1043e39c1",
-            measurementId: "G-1MHE0JBZJR"
-        };
-
-        // Initialize Firebase if not already initialized
-        if (!firebase.apps.length) {
-            firebase.initializeApp(firebaseConfig);
-            console.log('✅ Firebase initialized for TOEFL page');
-        }
-
-        const auth = firebase.auth();
-        const db = firebase.firestore();
-
-        // DOM Elements
-        const loadingEl = document.getElementById('loading');
-        const loginPrompt = document.getElementById('loginPrompt');
-        const protectedContent = document.getElementById('protectedContent');
-        const userMenu = document.getElementById('userMenu');
-        const authButtons = document.getElementById('authButtons');
-        const userAvatar = document.getElementById('userAvatar');
-        const userDisplayName = document.getElementById('userDisplayName');
-        const welcomeMessage = document.getElementById('welcomeMessage');
-
-        // Helper: update UI based on auth state
-        function updateUI(user) {
-            loadingEl.style.display = 'none';
-
-            if (user) {
-                // User authenticated
-                console.log('✅ TOEFL hub: user logged in', user.email);
-                loginPrompt.style.display = 'none';
-                protectedContent.style.display = 'block';
-                userMenu.style.display = 'flex';
-                authButtons.style.display = 'none';
-
-                // Avatar and name
-                const photoURL = user.photoURL || `https://ui-avatars.com/api/?name=${encodeURIComponent(user.displayName || user.email)}&size=40&background=e67e22&color=fff&bold=true`;
-                userAvatar.src = photoURL;
-                userDisplayName.textContent = user.displayName || user.email.split('@')[0];
-                
-                // Personalized welcome with time-based greeting
-                const hour = new Date().getHours();
-                let greeting = '';
-                if (hour < 12) greeting = 'Good Morning';
-                else if (hour < 18) greeting = 'Good Afternoon';
-                else greeting = 'Good Evening';
-                
-                const firstName = (user.displayName || user.email.split('@')[0]).split(' ')[0];
-                welcomeMessage.innerHTML = `<i class="fas fa-leaf"></i> ${greeting}, ${firstName}! Ready to boost your TOEFL score?`;
-                
-                // Optional: Firestore user data fetch (no impact on UI errors)
-                loadUserTOEFLData(user);
-            } else {
-                // Not authenticated
-                console.log('❌ TOEFL hub: no user');
-                loginPrompt.style.display = 'block';
-                protectedContent.style.display = 'none';
-                userMenu.style.display = 'none';
-                authButtons.style.display = 'flex';
-            }
-        }
-
-        // Load any additional TOEFL progress data (optional)
-        async function loadUserTOEFLData(user) {
-            try {
-                const docRef = db.collection('users').doc(user.uid);
-                const docSnap = await docRef.get();
-                if (docSnap.exists) {
-                    const data = docSnap.data();
-                    // could store toefl-specific progress but not required for MVP
-                    console.log('✅ TOEFL user data synced');
-                    // For extra touch: if user has TOEFL challenge progress, show a subtle indicator?
-                    if (data && data.toeflChallengeStarted) {
-                        // just a lightweight enhancement, but we keep UI consistent
-                        const challengeBtn = document.querySelector('.challenge-btn');
-                        if (challengeBtn && data.toeflChallengeDay) {
-                            challengeBtn.style.background = "#f39c12";
-                            challengeBtn.innerHTML = `<i class="fas fa-play-circle"></i> Continue Challenge (Day ${data.toeflChallengeDay})`;
-                        }
-                    }
-                }
-            } catch (err) {
-                console.warn("Error fetching user TOEFL data:", err);
-            }
-        }
-
-        // Listen for auth state changes
-        auth.onAuthStateChanged((user) => {
-            updateUI(user);
-        });
-
-        // fallback in case Firebase loading takes long (avoid forever spinner)
-        setTimeout(() => {
-            if (loadingEl.style.display !== 'none' && !auth.currentUser) {
-                loadingEl.style.display = 'none';
-                loginPrompt.style.display = 'block';
-            } else if (loadingEl.style.display !== 'none' && auth.currentUser) {
-                loadingEl.style.display = 'none';
-                protectedContent.style.display = 'block';
-            }
-        }, 2800);
-
-        // active nav link management based on current file (TOFEL.html)
-        const currentFile = window.location.pathname.split('/').pop() || 'TOFEL.html';
-        document.querySelectorAll('.nav-links a').forEach(link => {
-            const href = link.getAttribute('href');
-            if (href === currentFile || (currentFile === 'TOFEL.html' && href === 'TOFEL.html')) {
-                link.classList.add('active');
-            } else if (link.classList.contains('active') && href !== currentFile) {
-                link.classList.remove('active');
-            }
-        });
-        
-        // Additional smooth demo: if user clicks any protected feature link while not logged in?
-        // but all links will redirect to login if not logged in due to firebase + page logic.
-        // However we add a small handler for future-proofing: ensure "Start Challenge" and cards
-        // only work when protected content visible. But since UI is conditional, no extra logic needed.
-    </script>
-</body>
-</html>
+            <div class="footer-section">
+                <h3>Quick Links</h3>
+                <ul class="footer-links">
+                    <li><a href="index.html"><i class="fas fa-chevron-right"></i> Home</a></li>
+                    <li><a href="products.html"><i class="fas fa-chevron-right"></i> Products</a></li>
+                    <li><a href="AI.html"><i class="fas fa-chevron-right"></i> AI Assistant</a></li>
+                    <li><a href="IELS.html"><i class="fas fa-chevron-right"></i> IELTS</a></li>

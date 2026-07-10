@@ -2,198 +2,550 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Complete IELTS Guide · Zakhourani</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover">
+    <title>Complete IELTS Guide | Zakhourani</title>
+    
+    <!-- Meta Tags for SEO -->
+    <meta name="description" content="Complete IELTS Guide by Dr. Waleed Hussien Zakhourani. Master Listening, Reading, Writing, and Speaking with actionable frameworks.">
+    <meta name="keywords" content="IELTS guide, Dr. Waleed Hussien Zakhourani, IELTS strategies, Listening, Reading, Writing, Speaking">
+    <meta name="author" content="Dr. Waleed Hussien Zakhourani">
+    <meta name="robots" content="index, follow">
+    
+    <!-- Fonts and Icons -->
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/animate.css/4.1.1/animate.min.css">
+    
     <style>
-        * { margin: 0; padding: 0; box-sizing: border-box; font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; }
+        /* ===== RESET & GLOBAL STYLES ===== */
+        * { 
+            margin: 0; 
+            padding: 0; 
+            box-sizing: border-box; 
+            -webkit-tap-highlight-color: transparent;
+        }
         
         :root {
-            --primary: #2c3e50;
+            --primary: #1a2634;
+            --primary-light: #2c3e50;
             --secondary: #3498db;
+            --secondary-dark: #2980b9;
+            --secondary-light: #5faee3;
             --accent: #e74c3c;
+            --accent-dark: #c0392b;
             --success: #27ae60;
             --warning: #f39c12;
+            --info: #3498db;
             --light: #ecf0f1;
+            --light-gray: #f8f9fa;
+            --gray: #95a5a6;
             --dark: #2c3e50;
+            --darker: #1a252f;
+            --white: #ffffff;
+            --black: #000000;
+            
             --listening: #9b59b6;
             --reading: #3498db;
             --writing: #e67e22;
             --speaking: #27ae60;
+            
+            --shadow-sm: 0 2px 4px rgba(0,0,0,0.1);
+            --shadow-md: 0 4px 6px rgba(0,0,0,0.1);
+            --shadow-lg: 0 10px 15px rgba(0,0,0,0.1);
+            --shadow-xl: 0 20px 25px rgba(0,0,0,0.1);
+            --shadow-2xl: 0 25px 50px rgba(0,0,0,0.25);
+            --gradient-primary: linear-gradient(135deg, var(--primary) 0%, var(--primary-light) 100%);
+            --gradient-secondary: linear-gradient(135deg, var(--secondary) 0%, var(--secondary-dark) 100%);
+            --gradient-accent: linear-gradient(135deg, var(--accent) 0%, var(--accent-dark) 100%);
+            --gradient-gold: linear-gradient(135deg, #f7971e 0%, #ffd200 100%);
         }
         
-        body {
-            background: #f8fafd;
+        body { 
+            font-family: 'Poppins', 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: linear-gradient(135deg, #f5f7fa 0%, #c3cfe2 100%);
             min-height: 100vh;
+            color: var(--dark);
+            line-height: 1.6;
+            overflow-x: hidden;
+            padding-bottom: calc(65px + env(safe-area-inset-bottom));
         }
         
-        /* Header */
+        /* ===== TYPOGRAPHY ===== */
+        h1, h2, h3, h4, h5, h6 {
+            font-weight: 700;
+            line-height: 1.2;
+            margin-bottom: 1rem;
+        }
+        
+        h1 { font-size: 3.5rem; }
+        h2 { font-size: 2.5rem; }
+        h3 { font-size: 1.75rem; }
+        
+        p {
+            margin-bottom: 1rem;
+            color: #4a5568;
+        }
+        
+        /* ===== UTILITY CLASSES ===== */
+        .container {
+            max-width: 1400px;
+            margin: 0 auto;
+            padding: 0 2rem;
+        }
+        
+        .btn {
+            display: inline-block;
+            padding: 1rem 2rem;
+            border-radius: 50px;
+            font-weight: 600;
+            text-decoration: none;
+            transition: all 0.3s ease;
+            border: none;
+            cursor: pointer;
+            font-size: 1rem;
+            position: relative;
+            overflow: hidden;
+            user-select: none;
+            text-align: center;
+        }
+        
+        .btn::before {
+            content: '';
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            width: 0;
+            height: 0;
+            border-radius: 50%;
+            background: rgba(255, 255, 255, 0.3);
+            transform: translate(-50%, -50%);
+            transition: width 0.6s, height 0.6s;
+        }
+        
+        .btn:hover::before {
+            width: 300px;
+            height: 300px;
+        }
+        
+        .btn-primary {
+            background: var(--secondary);
+            color: var(--white);
+            border: 2px solid var(--secondary);
+        }
+        
+        .btn-primary:hover {
+            background: var(--secondary-dark);
+            border-color: var(--secondary-dark);
+            transform: translateY(-3px);
+            box-shadow: 0 10px 20px rgba(52, 152, 219, 0.3);
+        }
+        
+        /* ===== HEADER STYLES (App-Optimized) ===== */
         header {
-            background: white;
-            box-shadow: 0 4px 20px rgba(0,0,0,0.1);
-            padding: 15px 40px;
+            background: var(--white);
+            box-shadow: var(--shadow-md);
             position: sticky;
             top: 0;
-            z-index: 100;
+            z-index: 1000;
         }
         
-        .header-content {
+        .header-top {
+            background: var(--gradient-primary);
+            color: var(--white);
+            padding: calc(1rem + env(safe-area-inset-top)) 2rem 1rem;
             display: flex;
             justify-content: space-between;
             align-items: center;
-            max-width: 1200px;
-            margin: 0 auto;
         }
         
         .logo {
             display: flex;
             align-items: center;
-            gap: 15px;
+            gap: 0.5rem;
             text-decoration: none;
         }
         
+        .logo-icon {
+            font-size: 1.75rem;
+            color: var(--secondary);
+        }
+        
         .logo h1 {
-            font-size: 28px;
-            font-weight: 700;
+            font-size: 1.5rem;
+            font-weight: 800;
+            color: var(--white);
+            letter-spacing: 0.5px;
+            margin: 0;
+        }
+        
+        .logo span {
+            color: var(--secondary);
+        }
+        
+        .auth-buttons {
+            display: flex;
+            gap: 0.75rem;
+        }
+        
+        .auth-btn {
+            padding: 0.5rem 1.25rem;
+            border-radius: 50px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s;
+            text-decoration: none;
+            display: inline-flex;
+            align-items: center;
+            gap: 0.5rem;
+            font-size: 0.875rem;
+            user-select: none;
+        }
+        
+        .login-btn {
+            background: transparent;
+            color: var(--white);
+            border: 2px solid var(--white);
+        }
+        
+        .login-btn:hover {
+            background: var(--white);
             color: var(--primary);
+        }
+        
+        .signup-btn {
+            background: var(--secondary);
+            color: var(--white);
+            border: 2px solid var(--secondary);
+        }
+        
+        .signup-btn:hover {
+            background: var(--secondary-dark);
+            border-color: var(--secondary-dark);
+        }
+        
+        .user-menu {
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+            color: var(--white);
+        }
+        
+        .user-avatar {
+            width: 38px;
+            height: 38px;
+            border-radius: 50%;
+            object-fit: cover;
+            border: 2px solid var(--secondary);
+        }
+        
+        .user-name {
+            font-weight: 600;
+            font-size: 0.875rem;
+        }
+        
+        .logout-btn {
+            background: var(--accent);
+            color: var(--white);
+            border: none;
+            padding: 0.5rem 1rem;
+            border-radius: 50px;
+            cursor: pointer;
+            text-decoration: none;
+            display: inline-flex;
+            align-items: center;
+            gap: 0.5rem;
+            transition: all 0.3s;
+            font-weight: 600;
+            font-size: 0.875rem;
+        }
+        
+        /* Navigation (Swipe-Optimized for App Structure) */
+        nav {
+            padding: 0;
+            background: var(--white);
+            border-bottom: 1px solid var(--light);
+            overflow: hidden;
+        }
+        
+        .nav-container {
+            display: flex;
+            align-items: center;
+            padding: 0;
+            position: relative;
         }
         
         .nav-links {
             display: flex;
-            gap: 20px;
-            align-items: center;
+            list-style: none;
+            gap: 0.5rem;
+            margin: 0;
+            padding: 0.75rem 1.5rem;
+            overflow-x: auto;
+            scroll-behavior: smooth;
+            -webkit-overflow-scrolling: touch;
+            width: 100%;
+        }
+        
+        .nav-links::-webkit-scrollbar {
+            display: none;
+        }
+        
+        .nav-links {
+            -ms-overflow-style: none;
+            scrollbar-width: none;
+        }
+        
+        .nav-links li {
+            position: relative;
+            flex-shrink: 0;
         }
         
         .nav-links a {
             text-decoration: none;
             color: var(--dark);
             font-weight: 600;
-            padding: 10px 15px;
-            border-radius: 8px;
-            transition: 0.3s;
+            font-size: 0.9rem;
+            padding: 0.5rem 1rem;
+            border-radius: 50px;
+            transition: all 0.2s ease;
+            white-space: nowrap;
             display: flex;
             align-items: center;
-            gap: 8px;
+            gap: 0.4rem;
+            border: 1px solid transparent;
+            user-select: none;
         }
         
-        .nav-links a:hover {
-            background: var(--light);
+        .nav-links a i {
+            font-size: 1rem;
+            color: var(--secondary);
+        }
+        
+        .nav-links a:hover, .nav-links a:focus {
+            background: var(--light-gray);
             color: var(--secondary);
         }
         
         .nav-links a.active {
-            background: var(--secondary);
-            color: white;
+            background: rgba(52, 152, 219, 0.15);
+            color: var(--secondary-dark);
+            border-color: rgba(52, 152, 219, 0.3);
         }
         
-        /* Main Container */
-        .container {
-            max-width: 1200px;
-            margin: 40px auto;
-            padding: 0 20px;
+        .nav-links a.active i {
+            color: var(--secondary-dark);
         }
         
-        /* Page Header */
-        .page-header {
-            text-align: center;
-            margin-bottom: 40px;
+        .nav-badge {
+            background: var(--accent);
+            color: var(--white);
+            font-size: 0.65rem;
+            padding: 0.1rem 0.4rem;
+            border-radius: 10px;
+            font-weight: 700;
         }
         
-        .page-header h1 {
-            font-size: 42px;
-            color: var(--dark);
-            margin-bottom: 15px;
+        .nav-container::before, .nav-container::after {
+            content: '';
+            position: absolute;
+            top: 0;
+            bottom: 0;
+            width: 25px;
+            z-index: 2;
+            pointer-events: none;
+        }
+        .nav-container::before {
+            left: 0;
+            background: linear-gradient(to right, rgba(255,255,255,0.9), transparent);
+        }
+        .nav-container::after {
+            right: 0;
+            background: linear-gradient(to left, rgba(255,255,255,0.9), transparent);
+        }
+        
+        /* ===== BOTTOM TAB NAVIGATION BAR ===== */
+        .bottom-tab-bar {
+            position: fixed;
+            bottom: 0;
+            left: 0;
+            right: 0;
+            background: var(--white);
+            box-shadow: 0 -4px 15px rgba(0,0,0,0.08);
+            display: none;
+            justify-content: space-around;
+            align-items: center;
+            height: 65px;
+            padding-bottom: env(safe-area-inset-bottom);
+            z-index: 1000;
+            border-top: 1px solid var(--light);
+        }
+        
+        .tab-item {
+            text-decoration: none;
+            color: var(--gray);
             display: flex;
+            flex-direction: column;
             align-items: center;
             justify-content: center;
-            gap: 15px;
+            font-size: 0.7rem;
+            font-weight: 500;
+            flex: 1;
+            height: 100%;
+            transition: color 0.2s;
+            position: relative;
         }
         
-        .page-header h1 i {
+        .tab-item i {
+            font-size: 1.3rem;
+            margin-bottom: 2px;
+            transition: transform 0.2s;
+        }
+        
+        .tab-item.active {
             color: var(--secondary);
         }
         
-        .page-header p {
-            color: #666;
-            font-size: 18px;
-            max-width: 600px;
+        .tab-item.active i {
+            transform: translateY(-2px);
+            color: var(--secondary);
+        }
+        
+        /* ===== HERO SECTION ===== */
+        .hero {
+            background: var(--gradient-primary);
+            color: var(--white);
+            border-radius: 2rem;
+            padding: 4rem 4rem;
+            margin: 2rem auto;
+            max-width: 1400px;
+            position: relative;
+            overflow: hidden;
+            text-align: center;
+        }
+        
+        .hero::before {
+            content: '';
+            position: absolute;
+            top: -50%;
+            right: -50%;
+            width: 100%;
+            height: 200%;
+            background: radial-gradient(circle, rgba(52,152,219,0.2) 0%, transparent 70%);
+            animation: spin 20s linear infinite;
+        }
+        
+        .hero-content {
+            position: relative;
+            z-index: 2;
+            max-width: 900px;
             margin: 0 auto;
         }
         
-        .header-badge {
+        .hero-badge {
             display: inline-block;
-            background: var(--secondary);
-            color: white;
-            padding: 8px 25px;
+            background: rgba(255,255,255,0.2);
+            color: var(--white);
+            padding: 0.5rem 1.5rem;
             border-radius: 50px;
+            font-size: 0.875rem;
             font-weight: 600;
-            margin-top: 20px;
+            margin-bottom: 2rem;
+            backdrop-filter: blur(10px);
+            border: 1px solid rgba(255,255,255,0.3);
         }
         
-        /* Quick Navigation */
+        .hero h2 {
+            font-size: 3.5rem;
+            font-weight: 800;
+            margin-bottom: 1.5rem;
+            text-shadow: 2px 2px 4px rgba(0,0,0,0.3);
+        }
+        
+        .hero h2 span {
+            color: var(--secondary);
+        }
+        
+        .hero p {
+            font-size: 1.25rem;
+            max-width: 700px;
+            margin: 0 auto;
+            line-height: 1.8;
+            opacity: 0.9;
+        }
+
+        /* ===== QUICK NAVIGATION PILLS ===== */
         .quick-nav {
-            background: white;
-            border-radius: 60px;
-            padding: 15px 25px;
-            margin-bottom: 40px;
+            background: var(--white);
+            border-radius: 50px;
+            padding: 0.75rem 1.5rem;
+            margin-bottom: 3rem;
             display: flex;
-            flex-wrap: wrap;
-            justify-content: center;
-            gap: 20px;
-            box-shadow: 0 5px 20px rgba(0,0,0,0.05);
+            flex-wrap: nowrap;
+            overflow-x: auto;
+            -webkit-overflow-scrolling: touch;
+            justify-content: flex-start;
+            gap: 1rem;
+            box-shadow: var(--shadow-md);
+            border: 1px solid rgba(0,0,0,0.05);
         }
-        
+
+        .quick-nav::-webkit-scrollbar {
+            display: none;
+        }
+
         .quick-nav a {
             text-decoration: none;
             color: var(--dark);
             font-weight: 600;
-            padding: 10px 20px;
-            border-radius: 30px;
-            transition: 0.3s;
+            padding: 0.75rem 1.5rem;
+            border-radius: 50px;
+            transition: all 0.3s;
             display: flex;
             align-items: center;
-            gap: 8px;
+            gap: 0.5rem;
+            white-space: nowrap;
+            border: 1px solid transparent;
         }
-        
+
         .quick-nav a:hover {
-            background: var(--light);
+            background: var(--light-gray);
+            transform: translateY(-2px);
         }
-        
-        .quick-nav a i {
-            font-size: 18px;
-        }
-        
+
         .quick-nav .listening i { color: var(--listening); }
         .quick-nav .reading i { color: var(--reading); }
         .quick-nav .writing i { color: var(--writing); }
         .quick-nav .speaking i { color: var(--speaking); }
         
-        /* Skill Sections */
+        /* ===== SKILL SECTIONS ===== */
         .skill-section {
-            background: white;
-            border-radius: 40px;
-            padding: 40px;
-            margin-bottom: 40px;
-            box-shadow: 0 15px 40px rgba(0,0,0,0.05);
+            background: var(--white);
+            border-radius: 24px;
+            padding: 3rem;
+            margin-bottom: 3rem;
+            box-shadow: var(--shadow-lg);
+            border: 1px solid rgba(0,0,0,0.05);
         }
         
         .skill-header {
             display: flex;
             align-items: center;
-            gap: 20px;
-            margin-bottom: 30px;
-            padding-bottom: 20px;
-            border-bottom: 3px solid var(--light);
+            gap: 1.5rem;
+            margin-bottom: 2.5rem;
+            padding-bottom: 1.5rem;
+            border-bottom: 2px solid var(--light);
+            flex-wrap: wrap;
         }
         
         .skill-icon {
             width: 70px;
             height: 70px;
-            border-radius: 30px;
+            border-radius: 20px;
             display: flex;
             align-items: center;
             justify-content: center;
-            font-size: 32px;
+            font-size: 2rem;
+            box-shadow: var(--shadow-md);
         }
         
         .skill-icon.listening { background: #f3e8ff; color: var(--listening); }
@@ -202,50 +554,61 @@
         .skill-icon.speaking { background: #e8f8f0; color: var(--speaking); }
         
         .skill-title h2 {
-            font-size: 32px;
-            color: var(--dark);
+            font-size: 2rem;
+            color: var(--primary);
+            margin-bottom: 0.25rem;
         }
         
         .skill-title p {
-            color: #666;
-            font-size: 16px;
+            color: var(--gray);
+            font-size: 1rem;
+            margin-bottom: 0;
         }
         
         .skill-badge {
             margin-left: auto;
             background: var(--light);
-            padding: 10px 25px;
-            border-radius: 40px;
-            font-weight: 600;
+            color: var(--primary);
+            padding: 0.5rem 1.5rem;
+            border-radius: 50px;
+            font-weight: 700;
+            font-size: 0.875rem;
+            box-shadow: var(--shadow-sm);
         }
         
-        /* Guide Grid */
+        /* ===== GUIDE GRID ===== */
         .guide-grid {
             display: grid;
             grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
-            gap: 25px;
-            margin-top: 30px;
+            gap: 2rem;
+            margin-top: 2rem;
         }
         
         .guide-card {
-            background: var(--light);
-            border-radius: 30px;
-            padding: 25px;
-            transition: 0.3s;
+            background: var(--light-gray);
+            border-radius: 20px;
+            padding: 2rem;
+            transition: all 0.3s;
+            border: 1px solid rgba(0,0,0,0.05);
         }
         
         .guide-card:hover {
-            transform: translateY(-5px);
-            box-shadow: 0 10px 30px rgba(0,0,0,0.1);
+            transform: translateY(-8px);
+            box-shadow: var(--shadow-lg);
+            border-color: var(--secondary-light);
         }
         
         .guide-card h3 {
-            font-size: 20px;
-            margin-bottom: 15px;
-            color: var(--dark);
+            font-size: 1.25rem;
+            margin-bottom: 1.25rem;
+            color: var(--primary);
             display: flex;
             align-items: center;
-            gap: 10px;
+            gap: 0.75rem;
+        }
+        
+        .guide-card h3 i {
+            color: var(--secondary);
         }
         
         .guide-card ul {
@@ -253,240 +616,549 @@
         }
         
         .guide-card ul li {
-            margin-bottom: 12px;
-            color: #555;
+            margin-bottom: 1rem;
+            color: #4a5568;
             display: flex;
-            align-items: center;
-            gap: 10px;
+            align-items: flex-start;
+            gap: 0.75rem;
+            font-size: 0.95rem;
         }
         
         .guide-card ul li i {
-            color: var(--secondary);
-            font-size: 14px;
+            color: var(--success);
+            font-size: 1rem;
+            margin-top: 0.2rem;
         }
         
+        /* ===== TIPS & ALERT BOXES ===== */
         .tip-box {
             background: #fff9e6;
             border-left: 5px solid var(--warning);
-            padding: 20px;
-            border-radius: 20px;
-            margin-top: 20px;
+            padding: 1.5rem;
+            border-radius: 16px;
+            margin-top: 2.5rem;
+            display: flex;
+            align-items: flex-start;
+            gap: 1rem;
+            box-shadow: var(--shadow-sm);
         }
         
         .tip-box i {
             color: var(--warning);
-            margin-right: 10px;
+            font-size: 1.5rem;
+            margin-top: 0.1rem;
         }
         
-        /* Sample Questions */
+        .tip-box p {
+            margin-bottom: 0;
+            color: #7f5f00;
+        }
+
+        /* ===== SAMPLE QUESTIONS MODULES ===== */
         .sample-questions {
-            background: var(--light);
-            border-radius: 25px;
-            padding: 25px;
-            margin-top: 30px;
+            background: var(--light-gray);
+            border-radius: 20px;
+            padding: 2rem;
+            margin-top: 2.5rem;
+            border: 1px solid rgba(0,0,0,0.05);
         }
         
         .sample-question {
-            background: white;
-            border-radius: 20px;
-            padding: 20px;
-            margin-bottom: 15px;
+            background: var(--white);
+            border-radius: 16px;
+            padding: 1.5rem;
+            margin-bottom: 1rem;
+            box-shadow: var(--shadow-sm);
+            border-left: 4px solid var(--secondary);
+        }
+        
+        .sample-question:last-child {
+            margin-bottom: 0;
         }
         
         .sample-question .question {
-            font-weight: 600;
-            color: var(--dark);
-            margin-bottom: 10px;
+            font-weight: 700;
+            color: var(--primary);
+            margin-bottom: 0.5rem;
+            font-size: 1.1rem;
         }
         
         .sample-question .answer {
-            color: #666;
-            padding-left: 20px;
-            border-left: 3px solid var(--secondary);
+            color: #555;
+            padding-left: 1rem;
+            font-family: inherit;
+            font-size: 0.95rem;
         }
         
-        /* Accordion */
+        /* ===== ACCORDIONS ===== */
         .accordion-item {
-            margin-bottom: 15px;
+            margin-bottom: 1rem;
+            border-radius: 16px;
+            overflow: hidden;
+            border: 1px solid rgba(0,0,0,0.05);
+            box-shadow: var(--shadow-sm);
         }
         
         .accordion-header {
-            background: var(--light);
-            padding: 18px 25px;
-            border-radius: 30px;
+            background: var(--light-gray);
+            padding: 1.25rem 1.75rem;
             cursor: pointer;
             display: flex;
             align-items: center;
             justify-content: space-between;
-            transition: 0.3s;
+            transition: all 0.3s;
         }
         
         .accordion-header:hover {
-            background: #e0e8f0;
+            background: #eef1f6;
         }
         
         .accordion-header h4 {
-            font-size: 18px;
-            color: var(--dark);
+            font-size: 1.1rem;
+            color: var(--primary);
             display: flex;
             align-items: center;
-            gap: 10px;
+            gap: 0.75rem;
+            margin-bottom: 0;
+        }
+        
+        .accordion-header h4 i {
+            color: var(--secondary);
         }
         
         .accordion-content {
-            padding: 0 25px;
+            background: var(--white);
             max-height: 0;
             overflow: hidden;
-            transition: max-height 0.3s ease-out;
+            transition: all 0.3s ease-out;
         }
         
         .accordion-content.show {
-            padding: 25px;
             max-height: 1000px;
         }
         
         .accordion-content-inner {
-            background: white;
-            border-radius: 20px;
-            padding: 20px;
+            padding: 2rem;
+            border-top: 1px solid rgba(0,0,0,0.05);
         }
         
-        /* Writing Templates */
+        /* ===== TEMPLATE WRITING & SPEAKING ===== */
         .writing-template {
-            background: white;
-            border-radius: 25px;
-            padding: 25px;
-            margin: 20px 0;
-            border: 2px solid var(--light);
+            background: var(--white);
+            border-radius: 20px;
+            padding: 2rem;
+            margin: 2rem 0;
+            border: 1px solid rgba(0,0,0,0.08);
+            box-shadow: var(--shadow-md);
         }
         
         .template-title {
-            font-size: 20px;
+            font-size: 1.25rem;
             color: var(--writing);
-            margin-bottom: 15px;
+            margin-bottom: 1.25rem;
+            font-weight: 700;
+            display: flex;
+            align-items: center;
+            gap: 0.75rem;
         }
         
         .template-content {
-            background: #fafafa;
-            padding: 20px;
-            border-radius: 20px;
-            font-family: monospace;
+            background: var(--light-gray);
+            padding: 1.5rem;
+            border-radius: 16px;
+            font-family: inherit;
             line-height: 1.8;
+            font-size: 0.95rem;
+            color: #4a5568;
+            border: 1px solid rgba(0,0,0,0.03);
         }
         
-        /* Speaking Cards */
         .speaking-card {
-            background: white;
-            border-radius: 25px;
-            padding: 25px;
-            margin: 20px 0;
+            background: var(--white);
+            border-radius: 20px;
+            padding: 2rem;
+            margin: 2rem 0;
             border: 2px solid var(--speaking);
+            box-shadow: var(--shadow-md);
         }
         
         .cue-card {
             background: #e8f8f0;
-            border-radius: 20px;
-            padding: 25px;
+            border-radius: 16px;
+            padding: 1.5rem;
             font-style: italic;
+            color: #1e5235;
+            border-left: 5px solid var(--speaking);
         }
         
-        /* Back to Top */
-        .back-to-top {
-            position: fixed;
-            bottom: 40px;
-            right: 40px;
-            background: var(--secondary);
-            color: white;
-            width: 60px;
-            height: 60px;
-            border-radius: 30px;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            font-size: 24px;
-            cursor: pointer;
-            opacity: 0;
-            transition: 0.3s;
-            border: none;
-            box-shadow: 0 5px 20px rgba(0,0,0,0.2);
-        }
-        
-        .back-to-top.show {
-            opacity: 1;
-        }
-        
-        .back-to-top:hover {
-            background: #2980b9;
-            transform: translateY(-5px);
-        }
-        
-        /* Footer */
+        /* ===== FOOTER ===== */
         footer {
             background: var(--primary);
-            color: white;
-            padding: 40px;
-            margin-top: 60px;
-            text-align: center;
+            color: var(--white);
+            padding: 4rem 2rem 2rem;
+            position: relative;
+            overflow: hidden;
+        }
+        
+        footer::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            height: 5px;
+            background: var(--gradient-secondary);
+        }
+        
+        .footer-content {
+            max-width: 1400px;
+            margin: 0 auto;
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 3rem;
+            padding: 0 2rem;
+        }
+        
+        .footer-section h3 {
+            font-size: 1.5rem;
+            margin-bottom: 1.5rem;
+            color: var(--white);
+            position: relative;
+            padding-bottom: 0.5rem;
+        }
+        
+        .footer-section h3::after {
+            content: '';
+            position: absolute;
+            bottom: 0;
+            left: 0;
+            width: 50px;
+            height: 3px;
+            background: var(--secondary);
+        }
+        
+        .footer-section p {
+            color: rgba(255,255,255,0.7);
+            line-height: 1.8;
+            margin-bottom: 1.5rem;
+        }
+        
+        .social-links {
+            display: flex;
+            gap: 1rem;
+        }
+        
+        .social-links a {
+            width: 40px;
+            height: 40px;
+            background: rgba(255,255,255,0.1);
+            border-radius: 50%;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            color: var(--white);
+            text-decoration: none;
+            transition: all 0.3s;
+        }
+        
+        .social-links a:hover {
+            background: var(--secondary);
+            transform: translateY(-3px) rotate(360deg);
         }
         
         .footer-links {
             list-style: none;
-            display: flex;
-            justify-content: center;
-            gap: 30px;
-            margin: 20px 0;
+        }
+        
+        .footer-links li {
+            margin-bottom: 0.75rem;
         }
         
         .footer-links a {
-            color: white;
+            color: rgba(255,255,255,0.7);
             text-decoration: none;
+            transition: all 0.3s;
+            display: inline-flex;
+            align-items: center;
+            gap: 0.5rem;
         }
         
         .footer-links a:hover {
             color: var(--secondary);
+            transform: translateX(5px);
+        }
+        
+        .footer-links i {
+            font-size: 0.75rem;
+        }
+        
+        .contact-info {
+            list-style: none;
+        }
+        
+        .contact-info li {
+            margin-bottom: 1rem;
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+            color: rgba(255,255,255,0.7);
+        }
+        
+        .contact-info i {
+            width: 30px;
+            height: 30px;
+            background: rgba(255,255,255,0.1);
+            border-radius: 50%;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            color: var(--secondary);
+        }
+        
+        .newsletter-form {
+            display: flex;
+            gap: 0.5rem;
+            margin-top: 1rem;
+        }
+        
+        .newsletter-form input {
+            flex: 1;
+            padding: 0.75rem 1rem;
+            border: none;
+            border-radius: 50px;
+            font-family: inherit;
+        }
+        
+        .newsletter-form button {
+            padding: 0.75rem 1.5rem;
+            background: var(--secondary);
+            color: var(--white);
+            border: none;
+            border-radius: 50px;
+            cursor: pointer;
+            transition: all 0.3s;
+        }
+        
+        .newsletter-form button:hover {
+            background: var(--secondary-dark);
+            transform: scale(1.05);
+        }
+        
+        .footer-bottom {
+            max-width: 1400px;
+            margin: 3rem auto 0;
+            padding: 2rem 2rem 0;
+            border-top: 1px solid rgba(255,255,255,0.1);
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            flex-wrap: wrap;
+            gap: 1rem;
+        }
+        
+        .copyright {
+            color: rgba(255,255,255,0.7);
+            font-size: 0.875rem;
+        }
+        
+        .footer-bottom-links {
+            display: flex;
+            gap: 2rem;
+        }
+        
+        .footer-bottom-links a {
+            color: rgba(255,255,255,0.7);
+            text-decoration: none;
+            font-size: 0.875rem;
+            transition: color 0.3s;
+        }
+        
+        .footer-bottom-links a:hover {
+            color: var(--secondary);
+        }
+        
+        /* ===== BACK TO TOP ===== */
+        .back-to-top {
+            position: fixed;
+            bottom: 80px;
+            right: 1.5rem;
+            width: 45px;
+            height: 45px;
+            background: var(--secondary);
+            color: var(--white);
+            border-radius: 50%;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            text-decoration: none;
+            box-shadow: var(--shadow-lg);
+            opacity: 0;
+            visibility: hidden;
+            transition: all 0.3s;
+            z-index: 999;
+            border: none;
+            cursor: pointer;
+        }
+        
+        .back-to-top.show {
+            opacity: 1;
+            visibility: visible;
+        }
+        
+        /* ===== RESPONSIVE ===== */
+        @media (max-width: 1200px) {
+            h1 { font-size: 3rem; }
+            h2 { font-size: 2.25rem; }
+            .hero h2 { font-size: 3rem; }
+        }
+        
+        @media (max-width: 992px) {
+            .header-top { padding: 1.5rem 1.5rem 1rem; }
+            .hero { padding: 3rem 2rem; }
+            .hero h2 { font-size: 2.5rem; }
         }
         
         @media (max-width: 768px) {
-            header { padding: 15px 20px; }
-            .header-content { flex-direction: column; gap: 15px; }
-            .nav-links { flex-wrap: wrap; justify-content: center; }
-            .skill-section { padding: 25px; }
+            .bottom-tab-bar {
+                display: flex;
+            }
+            
+            .header-top {
+                padding: calc(0.75rem + env(safe-area-inset-top)) 1rem 0.75rem;
+                flex-direction: row;
+                justify-content: space-between;
+            }
+            
+            .logo { justify-content: flex-start; }
+            
+            .nav-links {
+                padding: 0.5rem 1rem;
+            }
+            
+            .hero {
+                margin: 1rem;
+                padding: 2rem 1rem;
+            }
+            
+            .hero h2 {
+                font-size: 2rem;
+            }
+
+            .quick-nav {
+                border-radius: 0;
+                margin-left: -2rem;
+                margin-right: -2rem;
+                padding-left: 2rem;
+                padding-right: 2rem;
+                background: transparent;
+                box-shadow: none;
+            }
+
+            .quick-nav a {
+                background: var(--white);
+                box-shadow: var(--shadow-sm);
+            }
+            
+            .skill-section { padding: 1.5rem; }
             .skill-header { flex-direction: column; text-align: center; }
-            .skill-badge { margin: 0; }
-            .quick-nav { border-radius: 30px; }
-            .back-to-top { bottom: 20px; right: 20px; }
+            .skill-badge { margin: 1rem 0 0 0; }
+            
+            .footer-bottom {
+                flex-direction: column;
+                text-align: center;
+                padding-bottom: 2rem;
+            }
+            
+            .footer-bottom-links {
+                justify-content: center;
+            }
+            
+            footer {
+                padding-bottom: calc(80px + env(safe-area-inset-bottom));
+            }
+        }
+        
+        @media (max-width: 576px) {
+            h1 { font-size: 1.85rem; }
+            h2 { font-size: 1.5rem; }
+            .hero h2 { font-size: 1.85rem; }
+            
+            .auth-btn {
+                font-size: 0.8rem;
+                padding: 0.4rem 0.875rem;
+            }
         }
     </style>
 </head>
 <body>
+    <!-- Skip to main content -->
+    <a href="#main-content" class="skip-link" style="position:absolute;top:-40px;left:0;background:var(--secondary);color:white;padding:8px;z-index:1001;">Skip to main content</a>
+
     <!-- Header -->
     <header>
-        <div class="header-content">
+        <div class="header-top">
             <a href="index.html" class="logo">
-                <i class="fas fa-graduation-cap" style="font-size: 32px; color: #3498db;"></i>
-                <h1>Zakhourani</h1>
+                <i class="fas fa-graduation-cap logo-icon"></i>
+                <h1>Zakhourani<span>.</span></h1>
             </a>
             
-            <div class="nav-links">
-                <a href="index.html"><i class="fas fa-home"></i> Home</a>
-                <a href="AI.html"><i class="fas fa-microchip"></i> AI Power</a>
-                <a href="IELS.html"><i class="fas fa-language"></i> IELTS</a>
-                <a href="TOFEL.html"><i class="fas fa-scroll"></i> TOFEL</a>
-                <a href="aboutDrwaleed.html"><i class="fas fa-user-graduate"></i> Dr Waleed</a>
-                <a href="TA.html"><i class="fas fa-chalkboard-teacher"></i> TA</a>
-                <a href="talandilovan.html"><i class="fas fa-globe"></i> talandilovan</a>
+            <div class="auth-buttons" id="authButtons">
+                <!-- Populated by JavaScript -->
             </div>
         </div>
+        
+        <!-- Touch-Swipeable Top Header Categorization Bar -->
+        <nav aria-label="Main navigation">
+            <div class="nav-container">
+                <ul class="nav-links" id="navLinks">
+                    <li><a href="index.html"><i class="fas fa-home"></i> Home</a></li>
+                    <li><a href="products.html"><i class="fas fa-box"></i> Products <span class="nav-badge">NEW</span></a></li>
+                    <li><a href="AI.html"><i class="fas fa-robot"></i> AI Assistant</a></li>
+                    <li><a href="JihanDictionary.html"><i class="fas fa-book"></i> Dictionary</a></li>
+                    <li><a href="IELS.html" class="active"><i class="fas fa-language"></i> IELTS</a></li>
+                    <li><a href="TOFEL.html"><i class="fas fa-globe-americas"></i> TOEFL</a></li>
+                    <li><a href="aboutDrwaleed.html"><i class="fas fa-user-md"></i> About Dr. Waleed</a></li>
+                    <li><a href="contact.html"><i class="fas fa-envelope"></i> Contact</a></li>
+                    <li><a href="profile.html"><i class="fas fa-user-circle"></i> Profile</a></li>
+                </ul>
+            </div>
+        </nav>
     </header>
 
-    <!-- Main Content -->
-    <div class="container">
-        <!-- Page Header -->
-        <div class="page-header">
-            <h1><i class="fas fa-compass"></i> Complete IELTS Guide</h1>
-            <p>Your comprehensive roadmap to IELTS success, created by Dr. Waleed Hussien Zakhourani</p>
-            <span class="header-badge">Academic & General Training</span>
-        </div>
+    <!-- Native App Bottom Tab Bar (Will display on screens below 768px wide) -->
+    <div class="bottom-tab-bar" aria-label="App Navigation Tabs">
+        <a href="index.html" class="tab-item">
+            <i class="fas fa-home"></i>
+            <span>Home</span>
+        </a>
+        <a href="AI.html" class="tab-item">
+            <i class="fas fa-robot"></i>
+            <span>AI Tutor</span>
+        </a>
+        <a href="JihanDictionary.html" class="tab-item">
+            <i class="fas fa-book"></i>
+            <span>Dictionary</span>
+        </a>
+        <a href="IELS.html" class="tab-item active">
+            <i class="fas fa-language"></i>
+            <span>IELTS</span>
+        </a>
+        <a href="profile.html" class="tab-item">
+            <i class="fas fa-user-circle"></i>
+            <span>Profile</span>
+        </a>
+    </div>
+
+    <main id="main-content" class="container">
+        <!-- Hero Section -->
+        <section class="hero" aria-labelledby="hero-heading">
+            <div class="hero-content">
+                <span class="hero-badge"><i class="fas fa-compass"></i> Study Guides</span>
+                <h2 id="hero-heading">Complete <span>IELTS Guide</span></h2>
+                <p>Your comprehensive, high-yield roadmap to IELTS success, created by Dr. Waleed Hussien Zakhourani.</p>
+                <span class="hero-badge" style="background: var(--secondary); border: none; margin-top: 1rem;">Academic & General Training</span>
+            </div>
+        </section>
 
         <!-- Quick Navigation -->
         <div class="quick-nav">
@@ -497,7 +1169,7 @@
         </div>
 
         <!-- LISTENING SECTION -->
-        <section id="listening" class="skill-section">
+        <section id="listening" class="skill-section animate__animated animate__fadeInUp">
             <div class="skill-header">
                 <div class="skill-icon listening">
                     <i class="fas fa-headphones"></i>
@@ -553,11 +1225,11 @@
 
             <div class="tip-box">
                 <i class="fas fa-lightbulb"></i>
-                <strong>Dr. Waleed's Golden Tip:</strong> Before each section, read ahead. Use the 30-second breaks to preview upcoming questions. Underline keywords - names, dates, places - so you know exactly what to listen for.
+                <p><strong>Dr. Waleed's Golden Tip:</strong> Before each section begins, read ahead. Use the 30-second breaks to preview upcoming questions. Underline keywords—names, dates, places—so you know exactly what to listen for.</p>
             </div>
 
             <div class="sample-questions">
-                <h3 style="margin-bottom: 20px;">📝 Sample Question Types</h3>
+                <h3 style="margin-bottom: 1.5rem; color: var(--primary);">📝 Sample Question Types</h3>
                 <div class="sample-question">
                     <div class="question">Form Completion (Section 1)</div>
                     <div class="answer">Customer Name: _ _ _ _ _ _ _ _ _<br>Phone Number: _ _ _ _ _ _ _ _ _<br>Date of Booking: _ _ _ _ / _ _ / _ _</div>
@@ -574,7 +1246,7 @@
         </section>
 
         <!-- READING SECTION -->
-        <section id="reading" class="skill-section">
+        <section id="reading" class="skill-section animate__animated animate__fadeInUp">
             <div class="skill-header">
                 <div class="skill-icon reading">
                     <i class="fas fa-book-open"></i>
@@ -618,31 +1290,33 @@
                 </div>
             </div>
 
-            <div class="accordion-item">
-                <div class="accordion-header" onclick="toggleAccordion(this)">
-                    <h4><i class="fas fa-chess"></i> Reading Strategies by Dr. Waleed</h4>
-                    <i class="fas fa-chevron-down"></i>
-                </div>
-                <div class="accordion-content">
-                    <div class="accordion-content-inner">
-                        <ul style="list-style: none;">
-                            <li style="margin-bottom: 15px;"><i class="fas fa-check-circle" style="color: var(--success);"></i> <strong>Skimming (2 min/passage):</strong> Read title, headings, first sentences of each paragraph</li>
-                            <li style="margin-bottom: 15px;"><i class="fas fa-check-circle" style="color: var(--success);"></i> <strong>Scanning (1 min):</strong> Find keywords from questions in the text</li>
-                            <li style="margin-bottom: 15px;"><i class="fas fa-check-circle" style="color: var(--success);"></i> <strong>Time Management:</strong> 20 minutes per passage maximum</li>
-                            <li style="margin-bottom: 15px;"><i class="fas fa-check-circle" style="color: var(--success);"></i> <strong>Question Order:</strong> Questions usually follow text order</li>
-                        </ul>
+            <div style="margin-top: 2.5rem;">
+                <div class="accordion-item">
+                    <div class="accordion-header" onclick="toggleAccordion(this)">
+                        <h4><i class="fas fa-chess"></i> Reading Strategies by Dr. Waleed</h4>
+                        <i class="fas fa-chevron-down"></i>
+                    </div>
+                    <div class="accordion-content">
+                        <div class="accordion-content-inner">
+                            <ul style="list-style: none; padding: 0;">
+                                <li style="margin-bottom: 15px; display: flex; align-items: flex-start; gap: 0.5rem;"><i class="fas fa-check-circle" style="color: var(--success); margin-top: 0.2rem;"></i> <span><strong>Skimming (2 min/passage):</strong> Read title, headings, and the first sentences of each paragraph.</span></li>
+                                <li style="margin-bottom: 15px; display: flex; align-items: flex-start; gap: 0.5rem;"><i class="fas fa-check-circle" style="color: var(--success); margin-top: 0.2rem;"></i> <span><strong>Scanning (1 min):</strong> Find keywords from questions in the text.</span></li>
+                                <li style="margin-bottom: 15px; display: flex; align-items: flex-start; gap: 0.5rem;"><i class="fas fa-check-circle" style="color: var(--success); margin-top: 0.2rem;"></i> <span><strong>Time Management:</strong> Allocate a maximum of 20 minutes per passage.</span></li>
+                                <li style="margin-bottom: 15px; display: flex; align-items: flex-start; gap: 0.5rem;"><i class="fas fa-check-circle" style="color: var(--success); margin-top: 0.2rem;"></i> <span><strong>Question Order:</strong> Questions usually follow the order of the text.</span></li>
+                            </ul>
+                        </div>
                     </div>
                 </div>
             </div>
 
             <div class="tip-box">
                 <i class="fas fa-lightbulb"></i>
-                <strong>Vocabulary Building:</strong> Create a notebook of academic words. Group by theme: education, environment, technology, health. Review daily.
+                <p><strong>Vocabulary Building:</strong> Create a dedicated notebook for academic words. Group them by themes: education, environment, technology, and health. Review them daily.</p>
             </div>
         </section>
 
         <!-- WRITING SECTION -->
-        <section id="writing" class="skill-section">
+        <section id="writing" class="skill-section animate__animated animate__fadeInUp">
             <div class="skill-header">
                 <div class="skill-icon writing">
                     <i class="fas fa-pencil-alt"></i>
@@ -661,12 +1335,12 @@
                 </div>
                 <div class="template-content">
                     <strong>Structure (150 words):</strong><br><br>
-                    1. <strong>Introduction (1-2 sentences):</strong> Paraphrase the question<br>
-                    "The line graph illustrates the changes in ..."<br><br>
-                    2. <strong>Overview (2-3 sentences):</strong> Main trends (no numbers)<br>
-                    "Overall, there was a significant increase in ..."<br><br>
-                    3. <strong>Details Paragraph 1:</strong> Describe first main feature<br>
-                    4. <strong>Details Paragraph 2:</strong> Describe second feature/comparison
+                    1. <strong>Introduction (1-2 sentences):</strong> Paraphrase the question.<br>
+                    <em>"The line graph illustrates the changes in..."</em><br><br>
+                    2. <strong>Overview (2-3 sentences):</strong> Note the main trends without repeating exact figures.<br>
+                    <em>"Overall, there was a significant increase in..."</em><br><br>
+                    3. <strong>Details Paragraph 1:</strong> Describe the first main feature with metrics.<br>
+                    4. <strong>Details Paragraph 2:</strong> Describe the second feature/comparison parameters.
                 </div>
             </div>
 
@@ -677,12 +1351,12 @@
                 </div>
                 <div class="template-content">
                     <strong>Formal Letter Opening:</strong><br>
-                    "Dear Sir/Madam,"<br>
-                    "I am writing to express my concern about ..."<br><br>
+                    <em>"Dear Sir/Madam,"</em><br>
+                    <em>"I am writing to express my concern about..."</em><br><br>
                     <strong>Informal Letter Opening:</strong><br>
-                    "Dear [Name],"<br>
-                    "Hope you're doing well! I'm writing to invite you to ..."<br><br>
-                    <strong>Always include:</strong> Purpose, details, required action
+                    <em>"Dear [Name],"</em><br>
+                    <em>"Hope you're doing well! I'm writing to invite you to..."</em><br><br>
+                    <strong>Always include:</strong> Clear statement of purpose, supporting details, and expected action steps.
                 </div>
             </div>
 
@@ -694,25 +1368,25 @@
                 <div class="template-content">
                     <strong>4-Paragraph Structure:</strong><br><br>
                     <strong>Introduction (40 words):</strong><br>
-                    - Hook + background<br>
-                    - Thesis statement (your opinion)<br><br>
+                    - Hook + background context<br>
+                    - Thesis statement (your direct stance)<br><br>
                     <strong>Body Paragraph 1 (90 words):</strong><br>
                     - Topic sentence<br>
-                    - Explanation + example<br><br>
+                    - Explanation + strong example<br><br>
                     <strong>Body Paragraph 2 (90 words):</strong><br>
-                    - Second point with example<br><br>
+                    - Second stance with reference example<br><br>
                     <strong>Conclusion (30 words):</strong><br>
-                    - Summarize + restate opinion
+                    - Summarize core points + restate stance
                 </div>
             </div>
 
             <div class="tip-box">
                 <i class="fas fa-lightbulb"></i>
-                <strong>Dr. Waleed's Writing Formula:</strong> C-E-E (Claim - Explanation - Example). Every paragraph must have all three elements. Never write without an example!
+                <p><strong>Dr. Waleed's Writing Formula:</strong> C-E-E (Claim - Explanation - Example). Every paragraph must contain all three elements. Never establish a claim without a supportive example.</p>
             </div>
 
             <div class="sample-questions">
-                <h3 style="margin-bottom: 20px;">✍️ Common Essay Topics</h3>
+                <h3 style="margin-bottom: 1.5rem; color: var(--primary);">✍️ Common Essay Topics</h3>
                 <div class="sample-question">
                     <div class="question">Education</div>
                     <div class="answer">"Some people believe that university education should be free for all. To what extent do you agree or disagree?"</div>
@@ -729,7 +1403,7 @@
         </section>
 
         <!-- SPEAKING SECTION -->
-        <section id="speaking" class="skill-section">
+        <section id="speaking" class="skill-section animate__animated animate__fadeInUp">
             <div class="skill-header">
                 <div class="skill-icon speaking">
                     <i class="fas fa-comments"></i>
@@ -774,7 +1448,7 @@
             </div>
 
             <div class="speaking-card">
-                <h3 style="margin-bottom: 20px;">🎯 Sample Cue Card (Part 2)</h3>
+                <h3 style="margin-bottom: 1.5rem; color: var(--primary);">🎯 Sample Cue Card (Part 2)</h3>
                 <div class="cue-card">
                     <strong>Describe a memorable journey you have taken.</strong><br><br>
                     You should say:<br>
@@ -783,7 +1457,7 @@
                     - What happened during the journey<br>
                     - And explain why it was memorable
                 </div>
-                <div style="margin-top: 20px;">
+                <div style="margin-top: 1.5rem; font-size: 0.95rem;">
                     <strong>Preparation Notes (1 minute):</strong><br>
                     • Where: Mountains of Kurdistan<br>
                     • Who: Family, summer 2022<br>
@@ -794,11 +1468,11 @@
 
             <div class="tip-box">
                 <i class="fas fa-lightbulb"></i>
-                <strong>Dr. Waleed's Fluency Secret:</strong> Don't worry about perfect grammar. Keep talking! Use fillers naturally: "That's an interesting question...", "Well, let me think...", "I suppose..."
+                <p><strong>Dr. Waleed's Fluency Secret:</strong> Don't halt to self-correct minor grammar issues. Keep talking! Use natural transition phrases: <em>"That's an interesting question...", "Well, let me think...", "I suppose..."</em></p>
             </div>
 
             <div class="sample-questions">
-                <h3 style="margin-bottom: 20px;">💬 Part 3 Discussion Topics</h3>
+                <h3 style="margin-bottom: 1.5rem; color: var(--primary);">💬 Part 3 Discussion Topics</h3>
                 <div class="sample-question">
                     <div class="question">Travel & Tourism</div>
                     <div class="answer">"How has tourism changed in your country over the last decade? What are the positive and negative impacts?"</div>
@@ -811,7 +1485,7 @@
         </section>
 
         <!-- Study Plan Section -->
-        <section class="skill-section">
+        <section class="skill-section animate__animated animate__fadeInUp">
             <div class="skill-header">
                 <div class="skill-icon" style="background: #ffe6e6; color: #e74c3c;">
                     <i class="fas fa-calendar-alt"></i>
@@ -834,7 +1508,7 @@
                 </div>
 
                 <div class="guide-card">
-                    <h3><i class="fas fa-chart-line"></i> Week 2: Skills Development</h3>
+                    <h3><i class="fas fa-chart-line"></i> Week 2: Skills</h3>
                     <ul>
                         <li><i class="fas fa-check-circle"></i> Reading strategies</li>
                         <li><i class="fas fa-check-circle"></i> Writing Task 1 practice</li>
@@ -844,7 +1518,7 @@
                 </div>
 
                 <div class="guide-card">
-                    <h3><i class="fas fa-rocket"></i> Week 3: Advanced Practice</h3>
+                    <h3><i class="fas fa-rocket"></i> Week 3: Advanced</h3>
                     <ul>
                         <li><i class="fas fa-check-circle"></i> Full Writing Task 2</li>
                         <li><i class="fas fa-check-circle"></i> Speaking Part 2-3</li>
@@ -864,57 +1538,268 @@
                 </div>
             </div>
 
-            <div style="text-align: center; margin-top: 30px;">
-                <a href="ielts-complete.html" class="challenge-btn" style="background: var(--success); padding: 15px 40px; border-radius: 50px; color: white; text-decoration: none; display: inline-flex; align-items: center; gap: 10px;">
+            <div style="text-align: center; margin-top: 3rem;">
+                <a href="ielts-complete.html" class="btn btn-primary" style="background: var(--success); border-color: var(--success);">
                     <i class="fas fa-flag-checkered"></i> Start the 8-Step Challenge Now
                 </a>
             </div>
         </section>
-    </div>
-
-    <!-- Back to Top Button -->
-    <button id="backToTop" class="back-to-top">
-        <i class="fas fa-arrow-up"></i>
-    </button>
+    </main>
 
     <!-- Footer -->
     <footer>
-        <div style="display: flex; align-items: center; justify-content: center; gap: 15px; margin-bottom: 20px;">
-            <i class="fas fa-graduation-cap" style="font-size: 32px; color: #3498db;"></i>
-            <h1 style="color: white;">Zakhourani</h1>
+        <div class="footer-content">
+            <div class="footer-section">
+                <h3>Zakhourani</h3>
+                <p>Empowering learners worldwide with AI-powered tools and expert guidance from Dr. Waleed Hussien Zakhourani.</p>
+                <div class="social-links">
+                    <a href="https://www.facebook.com/profile.php?id=61590774116973&sk=directory_links" target="_blank" aria-label="Facebook"><i class="fab fa-facebook-f"></i></a>
+                    <a href="https://www.tiktok.com/@dr.waleed.hussien" target="_blank" aria-label="TikTok"><i class="fab fa-tiktok"></i></a>
+                    <a href="https://www.instagram.com/dr.waleed.hussien/" target="_blank" aria-label="Instagram"><i class="fab fa-instagram"></i></a>
+                    <a href="#" aria-label="LinkedIn"><i class="fab fa-linkedin-in"></i></a>
+                    <a href="#" aria-label="YouTube"><i class="fab fa-youtube"></i></a>
+                </div>
+            </div>
+
+            <div class="footer-section">
+                <h3>Quick Links</h3>
+                <ul class="footer-links">
+                    <li><a href="index.html"><i class="fas fa-chevron-right"></i> Home</a></li>
+                    <li><a href="products.html"><i class="fas fa-chevron-right"></i> Products</a></li>
+                    <li><a href="AI.html"><i class="fas fa-chevron-right"></i> AI Assistant</a></li>
+                    <li><a href="IELS.html"><i class="fas fa-chevron-right"></i> IELTS</a></li>
+                    <li><a href="TOFEL.html"><i class="fas fa-chevron-right"></i> TOEFL</a></li>
+                    <li><a href="aboutDrwaleed.html"><i class="fas fa-chevron-right"></i> About Dr. Waleed</a></li>
+                </ul>
+            </div>
+
+            <div class="footer-section">
+                <h3>Support</h3>
+                <ul class="footer-links">
+                    <li><a href="contact.html"><i class="fas fa-chevron-right"></i> Contact Us</a></li>
+                    <li><a href="#"><i class="fas fa-chevron-right"></i> FAQ</a></li>
+                    <li><a href="#"><i class="fas fa-chevron-right"></i> Privacy Policy</a></li>
+                    <li><a href="#"><i class="fas fa-chevron-right"></i> Terms of Service</a></li>
+                </ul>
+            </div>
+
+            <div class="footer-section">
+                <h3>Contact Info</h3>
+                <ul class="contact-info">
+                    <li><i class="fas fa-map-marker-alt"></i> Dubai Knowledge Park, UAE</li>
+                    <li><i class="fas fa-phone"></i> +971 4 123 4567</li>
+                    <li><i class="fas fa-envelope"></i> info@zakhourani.com</li>
+                </ul>
+                
+                <h3 style="margin-top:2rem;">Newsletter</h3>
+                <form class="newsletter-form">
+                    <input type="email" placeholder="Your email" aria-label="Email for newsletter">
+                    <button type="submit" aria-label="Subscribe"><i class="fas fa-paper-plane"></i></button>
+                </form>
+            </div>
         </div>
-        
-        <p>English language learning platform by Dr. Waleed Hussien Zakhourani</p>
-        
-        <ul class="footer-links">
-            <li><a href="index.html">Home</a></li>
-            <li><a href="IELS.html">IELTS</a></li>
-            <li><a href="AI.html">AI Power</a></li>
-            <li><a href="aboutDrwaleed.html">Dr. Waleed</a></li>
-            <li><a href="TA.html">TA</a></li>
-            <li><a href="talandilovan.html">talandilovan</a></li>
-        </ul>
-        
-        <p style="margin-top: 30px; color: #ccc;">© 2024 Zakhourani. All rights reserved.</p>
+
+        <div class="footer-bottom">
+            <p class="copyright">© 2024 Zakhourani. All rights reserved. Founded by Dr. Waleed Hussien Zakhourani.</p>
+            <div class="footer-bottom-links">
+                <a href="#">Privacy</a>
+                <a href="#">Terms</a>
+                <a href="#">Cookies</a>
+            </div>
+        </div>
     </footer>
 
+    <!-- Back to Top Button -->
+    <button id="backToTop" class="back-to-top" aria-label="Back to top">
+        <i class="fas fa-arrow-up"></i>
+    </button>
+
+    <!-- Firebase SDK -->
+    <script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-app-compat.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-auth-compat.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-firestore-compat.js"></script>
+
     <script>
-        // Back to Top Button
-        const backToTop = document.getElementById('backToTop');
-        
-        window.addEventListener('scroll', () => {
-            if (window.scrollY > 300) {
-                backToTop.classList.add('show');
+        // ===== FIREBASE CONFIGURATION =====
+        const firebaseConfig = {
+            apiKey: "AIzaSyAE8wf24HXrfmpMluaFOv1OHPrf_YFfqTQ",
+            authDomain: "whaai-c388e.firebaseapp.com",
+            projectId: "whaai-c388e",
+            storageBucket: "whaai-c388e.firebasestorage.app",
+            messagingSenderId: "640598205524",
+            appId: "1:640598205524:web:c975f5e8b371b1043e39c1",
+            measurementId: "G-1MHE0JBZJR"
+        };
+
+        if (!firebase.apps.length) {
+            firebase.initializeApp(firebaseConfig);
+        }
+
+        const auth = firebase.auth();
+        const db = firebase.firestore();
+
+        // ===== AUTHENTICATION UI UPDATE =====
+        function updateAuthUI(user) {
+            const authButtons = document.getElementById('authButtons');
+            
+            if (user) {
+                const photoURL = user.photoURL || `https://ui-avatars.com/api/?name=${encodeURIComponent(user.displayName || user.email)}&background=3498db&color=fff&size=45`;
+                const displayName = user.displayName || user.email.split('@')[0];
+                
+                authButtons.innerHTML = `
+                    <div class="user-menu">
+                        <img src="${photoURL}" alt="${displayName}" class="user-avatar" loading="lazy">
+                        <span class="user-name">${displayName}</span>
+                        <a href="#" class="logout-btn" id="logoutButton">
+                            <i class="fas fa-sign-out-alt"></i> Logout
+                        </a>
+                    </div>
+                `;
+                
+                document.getElementById('logoutButton').addEventListener('click', function(e) {
+                    e.preventDefault();
+                    auth.signOut().then(() => {
+                        window.location.reload();
+                    }).catch((error) => {
+                        console.error('Logout error:', error);
+                    });
+                });
             } else {
-                backToTop.classList.remove('show');
+                authButtons.innerHTML = `
+                    <a href="login.html" class="auth-btn login-btn">
+                        <i class="fas fa-sign-in-alt"></i> Login
+                    </a>
+                    <a href="signup.html" class="auth-btn signup-btn">
+                        <i class="fas fa-user-plus"></i> Sign Up
+                    </a>
+                `;
             }
-        });
-        
-        backToTop.addEventListener('click', () => {
-            window.scrollTo({ top: 0, behavior: 'smooth' });
+        }
+
+        auth.onAuthStateChanged((user) => {
+            updateAuthUI(user);
         });
 
-        // Accordion Function
+        // ===== WEB INTERACTIVITY =====
+        document.addEventListener('DOMContentLoaded', function() {
+            // ===== BACK TO TOP =====
+            const backToTop = document.getElementById('backToTop');
+            
+            if (backToTop) {
+                window.addEventListener('scroll', function() {
+                    if (window.scrollY > 300) {
+                        backToTop.classList.add('show');
+                    } else {
+                        backToTop.classList.remove('show');
+                    }
+                });
+
+                backToTop.addEventListener('click', function(e) {
+                    e.preventDefault();
+                    window.scrollTo({
+                        top: 0,
+                        behavior: 'smooth'
+                    });
+                });
+            }
+
+            // ===== ACTIVE LINK DETECTION =====
+            const currentLocation = window.location.pathname.split("/").pop() || 'ielts-guide.html';
+            const navItems = document.querySelectorAll('.nav-links a');
+            const tabItems = document.querySelectorAll('.bottom-tab-bar .tab-item');
+            
+            // Map sub-guides to "IELTS" nav tab
+            const isIeltsRoute = currentLocation.includes('ielts') || currentLocation.includes('IELS');
+
+            navItems.forEach(link => {
+                const linkHref = link.getAttribute('href');
+                if (linkHref === 'IELS.html' && isIeltsRoute) {
+                    link.classList.add('active');
+                    link.setAttribute('aria-current', 'page');
+                    
+                    const navContainer = document.getElementById('navLinks');
+                    if (navContainer) {
+                        const offsetLeft = link.parentElement.offsetLeft;
+                        navContainer.scrollLeft = offsetLeft - 30;
+                    }
+                } else if (linkHref === currentLocation) {
+                    link.classList.add('active');
+                    link.setAttribute('aria-current', 'page');
+                } else {
+                    link.classList.remove('active');
+                    link.removeAttribute('aria-current');
+                }
+            });
+
+            tabItems.forEach(tab => {
+                const tabHref = tab.getAttribute('href');
+                if (tabHref === 'IELS.html' && isIeltsRoute) {
+                    tab.classList.add('active');
+                    tab.setAttribute('aria-current', 'page');
+                } else {
+                    tab.classList.remove('active');
+                    tab.removeAttribute('aria-current');
+                }
+            });
+
+            // ===== SMOOTH SCROLL FOR QUICK NAV =====
+            document.querySelectorAll('.quick-nav a').forEach(link => {
+                link.addEventListener('click', (e) => {
+                    e.preventDefault();
+                    const targetId = link.getAttribute('href');
+                    const targetElement = document.querySelector(targetId);
+                    
+                    if (targetElement) {
+                        window.scrollTo({
+                            top: targetElement.offsetTop - 100,
+                            behavior: 'smooth'
+                        });
+                    }
+                });
+            });
+
+            // ===== NEWSLETTER FORM =====
+            const newsletterForm = document.querySelector('.newsletter-form');
+            if (newsletterForm) {
+                newsletterForm.addEventListener('submit', function(e) {
+                    e.preventDefault();
+                    const email = this.querySelector('input[type="email"]').value;
+                    
+                    if (email && email.includes('@')) {
+                        alert('✅ Thank you for subscribing to our newsletter!');
+                        this.reset();
+                    } else {
+                        alert('❌ Please enter a valid email address.');
+                    }
+                });
+            }
+
+            // ===== ANIMATION ON SCROLL =====
+            const animatedElements = document.querySelectorAll('.animate__animated');
+            
+            if ('IntersectionObserver' in window) {
+                const animationObserver = new IntersectionObserver((entries) => {
+                    entries.forEach(entry => {
+                        if (entry.isIntersecting) {
+                            entry.target.style.visibility = 'visible';
+                            const animation = entry.target.dataset.animation || 'fadeInUp';
+                            entry.target.classList.add(`animate__${animation}`);
+                        }
+                    });
+                });
+
+                animatedElements.forEach(el => {
+                    el.style.visibility = 'hidden';
+                    animationObserver.observe(el);
+                });
+            } else {
+                animatedElements.forEach(el => {
+                    el.style.visibility = 'visible';
+                });
+            }
+        });
+
+        // ===== ACCORDION SYSTEM =====
         function toggleAccordion(header) {
             const content = header.nextElementSibling;
             const icon = header.querySelector('.fa-chevron-down');
@@ -923,31 +1808,11 @@
             
             if (content.classList.contains('show')) {
                 icon.style.transform = 'rotate(180deg)';
+                icon.style.transition = 'transform 0.3s';
             } else {
                 icon.style.transform = 'rotate(0deg)';
             }
         }
-
-        // Smooth scrolling for quick nav
-        document.querySelectorAll('.quick-nav a').forEach(link => {
-            link.addEventListener('click', (e) => {
-                e.preventDefault();
-                const targetId = link.getAttribute('href');
-                const targetElement = document.querySelector(targetId);
-                
-                window.scrollTo({
-                    top: targetElement.offsetTop - 100,
-                    behavior: 'smooth'
-                });
-            });
-        });
-
-        // Update IELTS link in navigation to point back to main IELTS page
-        document.querySelectorAll('.nav-links a').forEach(link => {
-            if (link.textContent.includes('IELTS')) {
-                link.href = 'IELS.html';
-            }
-        });
     </script>
 </body>
 </html>

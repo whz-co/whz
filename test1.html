@@ -1884,6 +1884,23 @@
                     </div>
                 </div>
 
+                <!-- Typewriter Revealed Delay Slider -->
+                <div class="setting-option-card">
+                    <div class="setting-meta">
+                        <div class="setting-icon-badge" style="background: rgba(139, 92, 246, 0.1); color: var(--accent-secondary);">
+                            <i class="fas fa-keyboard"></i>
+                        </div>
+                        <div class="setting-meta-details">
+                            <h4 data-i18n="settings.typewriter_speed">Typewriter Speed</h4>
+                            <p data-i18n="settings.typewriter_speed_sub">Revealing delay interval in ms</p>
+                        </div>
+                    </div>
+                    <div class="setting-action" style="display:flex;align-items:center;gap:var(--spacing-2)">
+                        <input type="range" id="settingTypewriterSpeed" min="5" max="50" step="5" value="15" style="width:70px;accent-color:var(--accent-primary)">
+                        <span id="typewriterSpeedValue" style="font-size:var(--font-xs);color:var(--text-primary);min-width:24px">15ms</span>
+                    </div>
+                </div>
+
                 <!-- Continuous Voice Output -->
                 <div class="setting-option-card">
                     <div class="setting-meta">
@@ -2220,6 +2237,13 @@
 
             <!-- Enhanced Input Container Segment -->
             <div class="input-area">
+                <!-- Floating Stop Button (Visible during generation) -->
+                <div id="stopGenerationContainer" style="display:none; justify-content:center; margin-bottom:var(--spacing-2); width:100%;">
+                    <button class="modal-btn secondary" id="stopGenerationBtn" onclick="cancelGeneration()" style="min-height:36px; padding:6px var(--spacing-4); border-color:var(--danger); color:var(--danger); background:rgba(239,68,68,0.05); font-size:12px;">
+                        <i class="fas fa-stop-circle"></i> <span data-i18n="btn.stop">Stop Generation</span>
+                    </button>
+                </div>
+
                 <!-- Style Selector Pills -->
                 <div class="style-pills-container" style="display:flex; gap:var(--spacing-2); margin-bottom:var(--spacing-2); overflow-x:auto; padding-bottom:2px; -webkit-overflow-scrolling:touch;">
                     <div class="style-pill active" data-style="general" onclick="setStylePill('general')"><i class="fas fa-brain"></i> <span data-i18n="pill.general">General</span></div>
@@ -2296,10 +2320,11 @@
                 autoVoiceSpeak: false,
                 selectedModel: 'zakhourani-premium',
                 selectedLanguage: localStorage.getItem('zk_locale') || 'en',
+                typewriterSpeed: parseInt(localStorage.getItem('zk_setting_typewriter_speed')) || 15,
                 sendCooldown: 1500,
                 maxMessageLength: 4000,
                 maxChats: 100,
-                version: '5.7'
+                version: '5.8'
             };
 
             // ===== DOM Utility Helper =====
@@ -2316,6 +2341,188 @@
                     timeout = setTimeout(() => func.apply(this, args), wait);
                 };
             }
+
+            // ===== Localization Reference Dictionary (i18n) =====
+            const TRANSLATIONS = {
+                en: {
+                    'app.title': 'Zakhourani AI',
+                    'app.subtitle': 'Premium Intelligence',
+                    'chat.new': 'New Conversation',
+                    'chat.send': 'Send',
+                    'chat.type': 'Ask Zakhourani anything...',
+                    'sidebar.search': 'Search conversations...',
+                    'claim.daily': 'Claim Daily 50 Questions',
+                    'auth.title': 'Welcome to Zakhourani AI',
+                    'auth.subtitle': 'Login or register to claim 50 free questions every 24 hours.',
+                    'auth.email': 'Email address',
+                    'auth.password': 'Password (min 6 characters)',
+                    'auth.login': 'Login',
+                    'auth.register': 'Register',
+                    'settings.title': 'System Settings',
+                    'settings.subtitle': 'Customize your Premium Intelligence experience.',
+                    'settings.preset': 'Color Theme Preset',
+                    'settings.preset_sub': 'Select your interface design language',
+                    'settings.engine': 'AI Engine',
+                    'settings.engine_sub': 'Select platform brain routing',
+                    'settings.lang': 'System Language',
+                    'settings.lang_sub': 'Switch platform interface layout',
+                    'settings.autovoice': 'Auto Voice Speak',
+                    'settings.autovoice_sub': 'Read back replies automatically',
+                    'settings.voice_speed': 'Speech Synth Speed',
+                    'settings.voice_speed_sub': 'Vocal narration frequency',
+                    'settings.typewriter_speed': 'Typewriter Speed',
+                    'settings.typewriter_speed_sub': 'Revealing delay interval in ms',
+                    'settings.soundfx': 'Audio Sound FX',
+                    'settings.soundfx_sub': 'System UI interaction signals',
+                    'settings.backup': 'Backup & Recovery',
+                    'settings.backup_sub': 'Export or load your conversation buffers offline',
+                    'btn.backup': 'Backup',
+                    'btn.restore': 'Restore',
+                    'btn.save': 'Save Settings',
+                    'btn.close': 'Close',
+                    'btn.cancel': 'Cancel',
+                    'btn.stop': 'Stop Generation',
+                    'pay.title': 'Secure Checkout',
+                    'shortcuts.title': 'Keyboard Shortcuts',
+                    'shortcuts.subtitle': 'Control your ecosystem with speed.',
+                    'voice.listening': 'Listening Carefully...',
+                    'voice.subtitle': 'Speak now, Zakhourani is capturing your query',
+                    'welcome.title': 'Welcome to Zakhourani AI',
+                    'welcome.subtitle': 'Your intelligent assistant, ready to help',
+                    'welcome.subtext': 'Powered by advanced language models',
+                    'pill.general': 'General',
+                    'pill.academic': 'Academic',
+                    'pill.creative': 'Creative',
+                    'pill.concise': 'Concise',
+                    'pill.translate': 'Translate'
+                },
+                ar: {
+                    'app.title': 'زخوراني AI',
+                    'app.subtitle': 'الذكاء الفائق',
+                    'chat.new': 'محادثة جديدة',
+                    'chat.send': 'إرسال',
+                    'chat.type': 'اسأل زخوراني عن أي شيء...',
+                    'sidebar.search': 'البحث في المحادثات...',
+                    'claim.daily': 'المطالبة بـ 50 سؤالاً يومياً',
+                    'auth.title': 'مرحباً بك في زخوراني AI',
+                    'auth.subtitle': 'سجل الدخول أو أنشئ حساباً للحصول على 50 سؤالاً مجانياً كل 24 ساعة.',
+                    'auth.email': 'البريد الإلكتروني',
+                    'auth.password': 'كلمة المرور (6 رموز على الأقل)',
+                    'auth.login': 'تسجيل الدخول',
+                    'auth.register': 'تسجيل حساب جديد',
+                    'settings.title': 'إعدادات النظام',
+                    'settings.subtitle': 'تخصيص تجربة الذكاء الممتازة الخاصة بك.',
+                    'settings.preset': 'نمط اللون المسبق',
+                    'settings.preset_sub': 'اختر لغة تصميم واجهة المستخدم الخاصة بك',
+                    'settings.engine': 'محرك الذكاء الاصطناعي',
+                    'settings.engine_sub': 'اختر توجيه معالجة المنصة',
+                    'settings.lang': 'لغة النظام',
+                    'settings.lang_sub': 'تبديل اتجاه وتصميم واجهة المستخدم',
+                    'settings.autovoice': 'القراءة الصوتية التلقائية',
+                    'settings.autovoice_sub': 'قراءة الردود تلقائياً فور إنشائها',
+                    'settings.voice_speed': 'سرعة النطق',
+                    'settings.voice_speed_sub': 'معدل وتيرة السرد الصوتي',
+                    'settings.typewriter_speed': 'سرعة الآلة الكاتبة',
+                    'settings.typewriter_speed_sub': 'مهلة ظهور الحروف بالميلي ثانية',
+                    'settings.soundfx': 'تأثيرات الصوت التفاعلية',
+                    'settings.soundfx_sub': 'إشارات الصوت عند استخدام الواجهة',
+                    'settings.backup': 'النسخ الاحتياطي والاستعادة',
+                    'settings.backup_sub': 'تصدير أو تحميل محفوظات المحادثة دون اتصال بالإنترنت',
+                    'btn.backup': 'تصدير نسخة احتياطية',
+                    'btn.restore': 'استعادة البيانات',
+                    'btn.save': 'حفظ الإعدادات',
+                    'btn.close': 'إغلاق',
+                    'btn.cancel': 'إلغاء',
+                    'btn.stop': 'إيقاف التوليد',
+                    'pay.title': 'الدفع الآمن',
+                    'shortcuts.title': 'اختصارات لوحة المفاتيح',
+                    'shortcuts.subtitle': 'تحكم بالنظام بسرعة فائقة.',
+                    'voice.listening': 'جاري الاستماع بدقة...',
+                    'voice.subtitle': 'تحدث الآن، محرك زخوراني يلتقط صوتك',
+                    'welcome.title': 'مرحباً بك في زخوراني AI',
+                    'welcome.subtitle': 'مساعدك الذكي، مستعد للمساعدة في أي وقت',
+                    'welcome.subtext': 'مدعوم بأحدث النماذج اللغوية',
+                    'pill.general': 'عام',
+                    'pill.academic': 'أكاديمي',
+                    'pill.creative': 'إبداعي',
+                    'pill.concise': 'موجز',
+                    'pill.translate': 'ترجمة'
+                },
+                ku: {
+                    'app.title': 'زاخورانی AI',
+                    'app.subtitle': 'هۆشمەندی نایاب',
+                    'chat.new': 'گفتوگۆی نوێ',
+                    'chat.send': 'بنێرە',
+                    'chat.type': 'هەر شتێک لە زاخورانی بپرسە...',
+                    'sidebar.search': 'گەڕان لە گفتوگۆکاندا...',
+                    'claim.daily': 'وەرگرتنی 50 پرسیاری ڕۆژانە',
+                    'auth.title': 'بەخێربێیت بۆ زاخورانی AI',
+                    'auth.subtitle': 'بچۆ ژوورەوە یان تۆمار بە بۆ وەرگرتنی 50 پرسیاری بێبەرامبەر لە هەر 24 کاتژمێرێکدا.',
+                    'auth.email': 'ناونیشانی ئیمەیڵ',
+                    'auth.password': 'وشەی نهێنی (لەکەمتر لە 6 پیت نەبێت)',
+                    'auth.login': 'چوونە ژوورەوە',
+                    'auth.register': 'تۆمارکردن',
+                    'settings.title': 'ڕێکخستنەکانی سیستەم',
+                    'settings.subtitle': 'ئەزموونی هۆشمەندی نایابی خۆت دابڕێژە.',
+                    'settings.preset': 'ڕەنگی پێشوەختە',
+                    'settings.preset_sub': 'ڕەنگی سەرەکی دیزاینی واجهەکە هەڵبژێرە',
+                    'settings.engine': 'مۆدێلی ژیری',
+                    'settings.engine_sub': 'ڕێڕەوی کارکردنی مۆدێلەکە دیاری بکە',
+                    'settings.lang': 'زمانی سیستەم',
+                    'settings.lang_sub': 'گۆڕینی زمانی بەکارهێنانی واجهەکە',
+                    'settings.autovoice': 'خوێندنەوەی دەنگی خۆکار',
+                    'settings.autovoice_sub': 'خوێندنەوەی دەنگیی وەڵامەکان بە شێوەیەکی خۆکار',
+                    'settings.voice_speed': 'خێرایی دەنگ',
+                    'settings.voice_speed_sub': 'خێرایی خوێندنەوەی دەنگی پەیامەکە',
+                    'settings.typewriter_speed': 'خێرایی نووسین',
+                    'settings.typewriter_speed_sub': 'دواکەوتنی پیشاندانی پیتەکان بە میلی چرکە',
+                    'settings.soundfx': 'کارتێکەری دەنگی',
+                    'settings.soundfx_sub': 'ئاماژە دەنگییەکانی کارکردن لە سیستەمەکەدا',
+                    'settings.backup': 'پashەکەوت و هێنانەوەی زانیاری',
+                    'settings.backup_sub': 'پاشەکەوتکردن یان هێنانەوەی گفتوگۆکانت بە شێوەی ئۆفلاین',
+                    'btn.backup': 'پاشەکەوتکردن',
+                    'btn.restore': 'هێنانەوەی پاشەکەوت',
+                    'btn.save': 'ڕێکخستنەکان پاشەکەوت بکە',
+                    'btn.close': 'داخستن',
+                    'btn.cancel': 'پاشگەزبوونەوە',
+                    'btn.stop': 'ڕاگرتنی دروستکردن',
+                    'pay.title': 'پارەدانی پارێزراو',
+                    'shortcuts.title': 'کورتکراوەکانی تەختەکلیل',
+                    'shortcuts.subtitle': 'سیستەمەکەت بە خێرایی کۆنتڕۆڵ بکە.',
+                    'voice.listening': 'گوێ دەگرم بە وردی...',
+                    'voice.subtitle': 'ئێستا قسە بکە، زاخورانی دەنگەکەت وەردەگرێت',
+                    'welcome.title': 'بەخێربێیت بۆ زاخورانی AI',
+                    'welcome.subtitle': 'یارمەتیدەرە ژیرەکەت، هەمیشە ئامادەیە بۆ خزمەت',
+                    'welcome.subtext': 'هێز پێدراوە بە مۆدێلە پێشکەوتووەکانی زمان',
+                    'pill.general': 'گشتی',
+                    'pill.academic': 'ئەکادیمی',
+                    'pill.creative': 'داهێنەرانە',
+                    'pill.concise': 'کورتبڕ',
+                    'pill.translate': 'وهرگێڕان'
+                }
+            };
+
+            // ===== Draft Management System =====
+            const DraftManager = {
+                saveDraft(chatId, text) {
+                    if (!chatId) return;
+                    try {
+                        localStorage.setItem(`zk_draft_${chatId}`, text);
+                    } catch (_) {}
+                },
+                loadDraft(chatId) {
+                    if (!chatId) return '';
+                    try {
+                        return localStorage.getItem(`zk_draft_${chatId}`) || '';
+                    } catch (_) { return ''; }
+                },
+                clearDraft(chatId) {
+                    if (!chatId) return;
+                    try {
+                        localStorage.removeItem(`zk_draft_${chatId}`);
+                    } catch (_) {}
+                }
+            };
 
             // ===== IndexedDB Offline Storage Layer =====
             class LocalDatabase {
@@ -2543,362 +2750,15 @@
                 }
             }
 
-            // ===== Client State Module =====
-            const state = {
-                auth: null,
-                supabase: null,
-                chatId: null,
-                busy: false,
-                userEmail: '',
-                allChats: [],
-                countdownInterval: null,
-                audioCtx: null,
-                recognition: null,
-                lastSendTime: 0,
-                isSidebarOpen: false,
-                theme: localStorage.getItem('zk_theme') || 'dark',
-                isOnline: navigator.onLine,
-                loadingProgress: 0,
-                isInitialized: false,
-                pendingTransaction: { type: null, amount: 0, pkgId: null },
-                
-                selectedStylePill: 'general',
-                activeAttachment: null,
-                shortcuts: null
-            };
-
-            // ===== Toast Message System =====
-            function toast(message, type = 'info', duration = 3500) {
-                const container = $('toastContainer');
-                if (!container) return;
-                
-                const toastEl = document.createElement('div');
-                toastEl.className = `toast ${type}`;
-                toastEl.textContent = message;
-                container.appendChild(toastEl);
-                
-                while (container.children.length > 5) {
-                    const first = container.firstChild;
-                    if (first) first.remove();
-                }
-                
-                setTimeout(() => {
-                    if (toastEl.parentNode) {
-                        toastEl.style.opacity = '0';
-                        toastEl.style.transition = 'opacity 0.25s ease';
-                        setTimeout(() => { if (toastEl.parentNode) toastEl.remove(); }, 250);
-                    }
-                }, duration);
-            }
-
-            // ===== UI Feedback & Keyboard Synthesizer Sound FX =====
-            function initAudio() {
-                if (!state.audioCtx) {
-                    try {
-                        state.audioCtx = new (window.AudioContext || window.webkitAudioContext)();
-                    } catch (_) { return null; }
-                }
-                if (state.audioCtx && state.audioCtx.state === 'suspended') {
-                    state.audioCtx.resume().catch(() => {});
-                }
-                return state.audioCtx;
-            }
-
-            function playSound(freq = 800, volume = 0.04, duration = 0.1) {
-                if (!CONFIG.soundEnabled) return;
-                try {
-                    const ctx = initAudio();
-                    if (!ctx || ctx.state !== 'running') return;
-                    const osc = ctx.createOscillator();
-                    const gain = ctx.createGain();
-                    osc.connect(gain);
-                    gain.connect(ctx.destination);
-                    osc.frequency.value = freq;
-                    osc.type = 'sine';
-                    gain.gain.value = volume;
-                    osc.start();
-                    osc.stop(ctx.currentTime + duration);
-                } catch (_) {}
-            }
-
-            // Synthetic typewriter mechanical click audio synthesizer
-            function playTypewriterClick() {
-                if (!CONFIG.soundEnabled) return;
-                try {
-                    const ctx = initAudio();
-                    if (!ctx || ctx.state !== 'running') return;
-                    const osc = ctx.createOscillator();
-                    const gain = ctx.createGain();
-                    
-                    osc.type = 'triangle';
-                    // Varied frequency modeling for organic auditory simulation
-                    osc.frequency.setValueAtTime(1000 + Math.random() * 800, ctx.currentTime);
-                    
-                    gain.gain.setValueAtTime(0.005, ctx.currentTime); // Whisper quiet click transients
-                    gain.gain.exponentialRampToValueAtTime(0.0001, ctx.currentTime + 0.03);
-                    
-                    osc.connect(gain);
-                    gain.connect(ctx.destination);
-                    osc.start();
-                    osc.stop(ctx.currentTime + 0.04);
-                } catch (_) {}
-            }
-
-            function soundSend() { playSound(800, 0.05, 0.08); }
-            function soundSuccess() { playSound(1000, 0.05, 0.1); }
-            function soundClaim() { playSound(523, 0.07, 0.12); }
-            function soundError() { playSound(300, 0.05, 0.15); }
-
-            document.addEventListener('click', function unlockContextOnInteraction() {
-                initAudio();
-                document.removeEventListener('click', unlockContextOnInteraction);
-            }, { once: true, passive: true });
-
-            // ===== Modal Controllers =====
-            function showModal(id) {
-                const modal = $(id);
-                if (modal) modal.classList.add('show');
-            }
-
-            function closeModal(id) {
-                const modal = $(id);
-                if (modal) modal.classList.remove('show');
-            }
-
-            document.addEventListener('click', (e) => {
-                if (e.target.classList.contains('modal')) {
-                    e.target.classList.remove('show');
-                }
+            // ===== Global Error Boundary Catching =====
+            window.addEventListener('unhandledrejection', (e) => {
+                errorLog('Unhandled async promise transition caught', e.reason);
+                toast('Operation failed: ' + (e.reason?.message || 'Unknown network error'), 'error');
             });
 
-            // ===== Sidebar Controller Panel =====
-            function toggleSidebar() {
-                const sidebar = $('sidebar');
-                const overlay = $('sidebarOverlay');
-                const menuBtn = $('menuBtn');
-                const isOpen = sidebar.classList.contains('open');
-
-                if (isOpen) {
-                    sidebar.classList.remove('open');
-                    overlay.classList.remove('show');
-                    menuBtn.classList.remove('active');
-                    state.isSidebarOpen = false;
-                } else {
-                    sidebar.classList.add('open');
-                    overlay.classList.add('show');
-                    menuBtn.classList.add('active');
-                    state.isSidebarOpen = true;
-                }
-            }
-
-            document.addEventListener('DOMContentLoaded', () => {
-                const overlay = $('sidebarOverlay');
-                if (overlay) {
-                    overlay.addEventListener('click', () => {
-                        if (state.isSidebarOpen) {
-                            toggleSidebar();
-                        }
-                    });
-                }
-            });
-
-            // ===== Settings Modifiers =====
-            function loadSavedSettings() {
-                const model = localStorage.getItem('zk_setting_model') || 'zakhourani-premium';
-                const speed = parseFloat(localStorage.getItem('zk_setting_speed') || '0.9');
-                const soundEnabled = localStorage.getItem('zk_setting_sound') !== 'false';
-                const autoVoice = localStorage.getItem('zk_setting_autovoice') === 'true';
-                const savedThemePreset = localStorage.getItem('zk_theme_preset') || 'blue';
-                const savedLocale = localStorage.getItem('zk_locale') || 'en';
-                
-                CONFIG.selectedModel = model;
-                CONFIG.speechSpeed = speed;
-                CONFIG.soundEnabled = soundEnabled;
-                CONFIG.autoVoiceSpeak = autoVoice;
-                CONFIG.selectedLanguage = savedLocale;
-                
-                if ($('settingModel')) $('settingModel').value = model;
-                if ($('settingSpeechSpeed')) {
-                    $('settingSpeechSpeed').value = speed;
-                    $('speedValue').textContent = speed + 'x';
-                }
-                if ($('settingSoundFX')) $('settingSoundFX').checked = soundEnabled;
-                if ($('settingAutoVoice')) $('settingAutoVoice').checked = autoVoice;
-                if ($('settingLanguage')) $('settingLanguage').value = savedLocale;
-                
-                setThemePreset(savedThemePreset, true);
-                I18nManager.run();
-            }
-
-            window.saveSettings = function() {
-                const model = $('settingModel').value;
-                const speed = parseFloat($('settingSpeechSpeed').value);
-                const soundEnabled = $('settingSoundFX').checked;
-                const autoVoice = $('settingAutoVoice').checked;
-                const locale = $('settingLanguage').value;
-                
-                CONFIG.selectedModel = model;
-                CONFIG.speechSpeed = speed;
-                CONFIG.soundEnabled = soundEnabled;
-                CONFIG.autoVoiceSpeak = autoVoice;
-                CONFIG.selectedLanguage = locale;
-                
-                localStorage.setItem('zk_setting_model', model);
-                localStorage.setItem('zk_setting_speed', speed.toString());
-                localStorage.setItem('zk_setting_sound', soundEnabled.toString());
-                localStorage.setItem('zk_setting_autovoice', autoVoice.toString());
-                localStorage.setItem('zk_locale', locale);
-                
-                closeModal('settingsModal');
-                I18nManager.run();
-                toast('Configuration saved! ⚙️', 'success');
-                soundSuccess();
-            };
-
-            document.addEventListener('DOMContentLoaded', () => {
-                const speedInput = $('settingSpeechSpeed');
-                if (speedInput) {
-                    speedInput.addEventListener('input', (e) => {
-                        $('speedValue').textContent = e.target.value + 'x';
-                    });
-                }
-            });
-
-            // ===== Backup & Restore JSON =====
-            window.exportAllChatsJSON = async function() {
-                try {
-                    const user = await sbGetUser(state.userEmail, $('userName').textContent);
-                    if (!user) return toast('Please log in first', 'error');
-                    
-                    const chats = await sbLoadChats(user.id);
-                    const backupData = [];
-                    for (const chat of chats) {
-                        const messages = await sbLoadMessages(chat.id);
-                        backupData.push({ chat, messages });
-                    }
-                    
-                    const blob = new Blob([JSON.stringify(backupData, null, 2)], { type: 'application/json' });
-                    const url = URL.createObjectURL(blob);
-                    const a = document.createElement('a');
-                    a.href = url;
-                    a.download = `zakhourani-backup-${new Date().toISOString().slice(0,10)}.json`;
-                    document.body.appendChild(a);
-                    a.click();
-                    document.body.removeChild(a);
-                    URL.revokeObjectURL(url);
-                    
-                    toast('Backup created successfully! 💾', 'success');
-                } catch (err) {
-                    errorLog('Failed during Export parsing sequence', err);
-                    toast('Backup failed: ' + err.message, 'error');
-                }
-            };
-
-            window.importChatsJSON = function(event) {
-                const file = event.target.files[0];
-                if (!file) return;
-                const reader = new FileReader();
-                reader.onload = async function(e) {
-                    try {
-                        const data = JSON.parse(e.target.result);
-                        if (!Array.isArray(data)) throw new Error('Invalid backup format');
-                        const user = await sbGetUser(state.userEmail, $('userName').textContent);
-                        if (!user) return toast('Please log in first', 'error');
-                        
-                        toast('Restoring conversations...', 'info');
-                        for (const item of data) {
-                            const newChat = await sbCreateChat(user.id, item.chat.title || 'Restored Chat');
-                            if (newChat && item.messages) {
-                                for (const msg of item.messages) {
-                                    await sbSaveMessage(newChat.id, user.id, msg.role, msg.content, msg.engine || 'Zakhourani');
-                                }
-                            }
-                        }
-                        toast('Restore completed successfully! 🎉', 'success');
-                        await renderChats();
-                        if (state.allChats.length > 0) {
-                            await openChat(state.allChats[0].id);
-                        }
-                    } catch (err) {
-                        errorLog('Failed inside local file storage ingestion stream', err);
-                        toast('Restore failed: ' + err.message, 'error');
-                    }
-                };
-                reader.readAsText(file);
-            };
-
-            // ===== Universal Code Copy Block Callback =====
-            window.copyCodeBlock = function(id, btn) {
-                const el = document.getElementById(id);
-                if (!el) return;
-                navigator.clipboard.writeText(el.textContent)
-                    .then(() => {
-                        btn.innerHTML = '<i class="fas fa-check"></i> Copied!';
-                        setTimeout(() => { btn.innerHTML = '<i class="fas fa-copy"></i> Copy'; }, 2000);
-                        toast('Code block copied! 📋', 'success');
-                    })
-                    .catch(() => toast('Copy block failed', 'error'));
-            };
-
-            document.addEventListener('DOMContentLoaded', () => {
-                const container = $('chatContainer');
-                if (container) {
-                    container.addEventListener('dblclick', (e) => {
-                        const userMsg = e.target.closest('.message.user');
-                        if (userMsg) {
-                            const originalText = userMsg.textContent.trim();
-                            const editedText = prompt('Edit your message:', originalText);
-                            if (editedText && editedText.trim() !== originalText) {
-                                $('messageInput').value = editedText.trim();
-                                $('messageInput').focus();
-                                toast('Message loaded back to prompt input.', 'info');
-                            }
-                        }
-                    });
-                }
-            });
-
-            // ===== Countdown Timer =====
-            function startCountdown() {
-                if (state.countdownInterval) clearInterval(state.countdownInterval);
-                
-                function update() {
-                    const now = new Date();
-                    const reset = new Date(now);
-                    reset.setUTCHours(24, 0, 0, 0);
-                    if (now >= reset) reset.setDate(reset.getDate() + 1);
-                    
-                    const diff = reset - now;
-                    const hours = Math.floor(diff / 3600000);
-                    const minutes = Math.floor((diff % 3600000) / 60000);
-                    const seconds = Math.floor((diff % 60000) / 1000);
-                    
-                    const limitTimer = $('limitTimer');
-                    if (limitTimer) {
-                        limitTimer.textContent = `${hours}h ${minutes}m ${seconds}s`;
-                    }
-                }
-                
-                update();
-                state.countdownInterval = setInterval(update, 1000);
-            }
-
-            // ===== Online/Offline Tracking =====
-            window.addEventListener('online', () => {
-                state.isOnline = true;
-                toast('Back online! 🌐', 'success', 2000);
-            });
-            window.addEventListener('offline', () => {
-                state.isOnline = false;
-                toast('You are offline. Messages will be sent when reconnected.', 'warning', 3000);
-            });
-
-            // ===== Supabase Connection Manager =====
-            const supabase = window.supabase.createClient(
-                CONFIG.supabaseUrl,
-                CONFIG.supabaseAnonKey
-            );
-            state.supabase = supabase;
+            // ===== State =====
+            let currentTypewriter = null;
+            let currentController = null;
 
             // ===== Database Core Functions =====
             async function sbCheckLimit(email) {
@@ -3205,7 +3065,6 @@
 
             // ===== Chat Rendering Modules =====
             function isValidUUID(str) {
-                // Strict RFC 4122 compliant validation schema match
                 return /^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$/i.test(str);
             }
 
@@ -3213,7 +3072,7 @@
                 if (!text) return '';
                 let html = text;
 
-                // Support and beautiful wrapping layout configurations for translations
+                // Multi-lingual Translation specific visual formatting grid
                 if (text.includes('Translation:') || text.includes('English:') || text.includes('Arabic:') || text.includes('Kurdish:')) {
                     html = html.replace(/Translation:\s*([\s\S]*)/i, (_, content) => {
                         return `
@@ -3226,12 +3085,40 @@
                         `;
                     });
                 }
+
+                // Table Markdown layout parser support
+                html = html.replace(/((?:\|[^\n]+\|\n?)+)/g, (tableBlock) => {
+                    const rows = tableBlock.trim().split('\n');
+                    let tableHTML = '<div style="overflow-x:auto; margin: var(--spacing-3) 0;"><table style="width:100%; border-collapse: collapse; border: 1px solid var(--border-medium); font-size: var(--font-sm);">';
+                    rows.forEach((row, i) => {
+                        const cells = row.split('|').filter((_, idx, arr) => idx > 0 && idx < arr.length - 1);
+                        const tag = i === 0 ? 'th' : 'td';
+                        const style = i === 0 ? 'background: var(--bg-quaternary); font-weight: 700; border: 1px solid var(--border-medium); padding: 8px;' : 'border: 1px solid var(--border-medium); padding: 8px;';
+                        tableHTML += '<tr>';
+                        cells.forEach(cell => {
+                            tableHTML += `<${tag} style="${style}">${cell.trim()}</${tag}>`;
+                        });
+                        tableHTML += '</tr>';
+                    });
+                    tableHTML += '</table></div>';
+                    return tableHTML;
+                });
                 
                 html = html.replace(/\*\*(.*?)\*\*/g, '<strong>$1</strong>');
                 html = html.replace(/\*(.*?)\*/g, '<em>$1</em>');
                 
                 html = html.replace(/```(\w+)?\n([\s\S]*?)```/g, (_, lang, code) => {
-                    const language = lang || 'plaintext';
+                    let language = lang || 'plaintext';
+                    // Automatic programmatic language detection triggers
+                    if (!lang) {
+                        if (code.includes('function') || code.includes('=>') || code.includes('const ')) {
+                            language = 'javascript';
+                        } else if (code.includes('def ') || code.includes('import ') || code.includes('print(')) {
+                            language = 'python';
+                        } else if (code.includes('<!DOCTYPE html>') || code.includes('</div>')) {
+                            language = 'html';
+                        }
+                    }
                     const escaped = code.trim()
                         .replace(/&/g, '&amp;')
                         .replace(/</g, '&lt;')
@@ -3359,6 +3246,11 @@
                 const messages = await sbLoadMessages(id);
                 const container = $('chatContainer');
                 
+                // Halt current typing loops during transition to ensure thread safety
+                if (currentTypewriter) {
+                    currentTypewriter.cancelled = true;
+                }
+
                 if (!messages.length) {
                     container.innerHTML = `
                         <div class="welcome">
@@ -3730,15 +3622,23 @@
 
             // Recursive character-by-character typewriter renderer
             function typewriteHTML(element, rawHTML, delay = 15, onComplete) {
-                // Compile rawHTML in virtual node to preserve nested markdown tags
                 const temp = document.createElement('div');
                 temp.innerHTML = rawHTML;
                 
                 element.innerHTML = '';
                 const nodes = Array.from(temp.childNodes);
                 let nodeIndex = 0;
+
+                if (currentTypewriter) {
+                    currentTypewriter.cancelled = true;
+                }
+
+                const animationInstance = { cancelled: false };
+                currentTypewriter = animationInstance;
                 
                 function processNextNode() {
+                    if (animationInstance.cancelled) return;
+
                     if (nodeIndex >= nodes.length) {
                         if (onComplete) onComplete();
                         return;
@@ -3754,6 +3654,8 @@
                         element.appendChild(textNode);
                         
                         function typeChar() {
+                            if (animationInstance.cancelled) return;
+
                             if (charIndex >= text.length) {
                                 nodeIndex++;
                                 processNextNode();
@@ -3761,7 +3663,7 @@
                             }
                             textNode.textContent += text[charIndex];
                             
-                            // Trigger synthetic mechanical click if the character is not space
+                            // Non-space alphanumeric filters for typewriter audio click feedback
                             if (text[charIndex].trim() !== '') {
                                 playTypewriterClick();
                             }
@@ -3778,6 +3680,31 @@
                 }
                 processNextNode();
             }
+
+            // Interrupt/cancel active generation pipeline cleanly
+            window.cancelGeneration = function() {
+                if (currentController) {
+                    currentController.abort();
+                    currentController = null;
+                }
+                if (currentTypewriter) {
+                    currentTypewriter.cancelled = true;
+                    currentTypewriter = null;
+                }
+                state.busy = false;
+                $('sendButton').disabled = false;
+                $('sendButton').style.opacity = '1';
+                $('stopGenerationContainer').style.display = 'none';
+                
+                const loaders = document.querySelectorAll('.skeleton-line');
+                loaders.forEach(l => {
+                    const msg = l.closest('.message');
+                    if (msg) msg.remove();
+                });
+                
+                toast('Generation aborted.', 'warning');
+                soundError();
+            };
 
             // ===== Send Message (Optimistic UI Framework) =====
             async function sendMessage() {
@@ -3820,6 +3747,7 @@
                 state.busy = true;
                 $('sendButton').disabled = true;
                 $('sendButton').style.opacity = '0.5';
+                $('stopGenerationContainer').style.display = 'flex';
                 
                 let processedText = text;
                 if (state.activeAttachment) {
@@ -3854,7 +3782,7 @@
                     const welcome = container.querySelector('.welcome');
                     if (welcome) welcome.remove();
                     
-                    // Optimistic UI user bubble added instantly
+                    // Optimistic user bubble
                     optimisticUserMsg = document.createElement('div');
                     optimisticUserMsg.className = 'message user slide-up';
                     
@@ -3874,7 +3802,7 @@
                     container.scrollTop = container.scrollHeight;
                     soundSend();
                     
-                    // Optimistic UI Assistant Loading Shimmer placeholder added instantly
+                    // Optimistic Loading Shimmer placeholder added instantly
                     optimisticAiMsg = document.createElement('div');
                     optimisticAiMsg.className = 'message assistant slide-up';
                     optimisticAiMsg.innerHTML = `
@@ -3885,8 +3813,8 @@
                     container.appendChild(optimisticAiMsg);
                     container.scrollTop = container.scrollHeight;
                     
-                    const controller = new AbortController();
-                    const timeoutId = setTimeout(() => controller.abort(), 30000);
+                    currentController = new AbortController();
+                    const timeoutId = setTimeout(() => currentController.abort(), 30000);
                     
                     const response = await fetch(CONFIG.workerUrl, {
                         method: 'POST',
@@ -3898,7 +3826,7 @@
                             timestamp: new Date().toISOString(),
                             model: CONFIG.selectedModel || 'zakhourani-premium'
                         }),
-                        signal: controller.signal
+                        signal: currentController.signal
                     });
                     
                     clearTimeout(timeoutId);
@@ -3910,16 +3838,13 @@
                     const data = await response.json();
                     
                     if (data.success && data.reply) {
-                        // Clear shimmer element
+                        $('stopGenerationContainer').style.display = 'none';
                         optimisticAiMsg.innerHTML = '';
                         
-                        // Construct actual layout nodes
                         const typingWrapper = document.createElement('div');
                         optimisticAiMsg.appendChild(typingWrapper);
                         
-                        // Execute typewriter animation inside the node
-                        typewriteHTML(typingWrapper, formatText(data.reply), 15, async () => {
-                            // Append dynamic feedback action tools upon sequence completion
+                        typewriteHTML(typingWrapper, formatText(data.reply), CONFIG.typewriterSpeed, async () => {
                             const actionPanel = document.createElement('div');
                             actionPanel.className = 'feedback-actions-wrapper';
                             actionPanel.innerHTML = `
@@ -3960,8 +3885,7 @@
                     }
                 } catch (err) {
                     errorLog('Failed prompt routing stream to remote worker platform', err);
-                    
-                    // UI Rollback: remove optimistic element on request crash
+                    $('stopGenerationContainer').style.display = 'none';
                     if (optimisticAiMsg) optimisticAiMsg.remove();
                     
                     const errorMsg = document.createElement('div');
@@ -4121,39 +4045,7 @@
                 }
             };
 
-            // ===== Packages =====
-            async function showPackagesModal() {
-                const limit = await sbCheckLimit(state.userEmail);
-                const packages = await sbLoadPackages();
-                
-                $('packagesBalance').textContent = '$' + parseFloat(limit.balance || 0).toFixed(2);
-                
-                if (packages.length) {
-                    $('packagesList').innerHTML = packages.map(pkg => `
-                        <div class="pkg-card${pkg.is_popular ? ' popular' : ''}" data-id="${pkg.id}">
-                            <div class="pkg-info">
-                                <h4 style="font-weight:var(--font-bold); color: var(--text-primary)"><i class="fas fa-crown" style="color:var(--warning); margin-right:4px"></i> ${pkg.name}</h4>
-                                <small style="color: var(--text-secondary)">${pkg.questions_per_day === 999999 ? '♾️ Unlimited' : pkg.questions_per_day + '/day'} · ${pkg.validity_days}d</small>
-                            </div>
-                            <div class="pkg-price" style="font-weight:var(--font-bold); color: var(--accent-primary)">$${pkg.price}</div>
-                        </div>
-                    `).join('');
-                    
-                    document.querySelectorAll('.pkg-card').forEach(card => {
-                        card.addEventListener('click', function() {
-                            const pkgId = this.dataset.id;
-                            const pkg = packages.find(p => p.id === pkgId);
-                            openPackageCheckout(pkgId, pkg ? pkg.name : 'Premium Offering', pkg ? pkg.price : 0);
-                        });
-                    });
-                } else {
-                    $('packagesList').innerHTML = '<p style="text-align:center;color:var(--text-tertiary);padding:var(--spacing-5)">No packages available</p>';
-                }
-                
-                showModal('packagesModal');
-            }
-
-            // ===== Secure Checkout Flow =====
+            // ===== Secure Checkout Flow (Simulated Gateway) =====
             window.openTopUpCheckout = function(amount) {
                 closeModal('packagesModal');
                 state.pendingTransaction = { type: 'topup', amount: amount, pkgId: null };
@@ -4170,103 +4062,6 @@
                 $('paymentDetailsHeader').innerHTML = `Subscribing to: <strong>${pkgName}</strong> for <strong style="color:var(--accent-primary)">$${parseFloat(price).toFixed(2)} USD</strong>`;
                 resetPaymentForm();
                 showModal('paymentModal');
-            };
-
-            function resetPaymentForm() {
-                $('payName').value = '';
-                $('payNumber').value = '';
-                $('payExpiry').value = '';
-                $('payCvv').value = '';
-                $('paymentError').textContent = '';
-                
-                $('cardNumberDisplay').textContent = '•••• •••• •••• ••••';
-                $('cardHolderDisplay').textContent = 'YOUR NAME';
-                $('cardExpiryDisplay').textContent = 'MM/YY';
-                $('cardLogo').textContent = 'CC';
-                $('paymentLoader').classList.remove('active');
-            }
-
-            // Real-time Credit Card preview syncing
-            document.addEventListener('DOMContentLoaded', () => {
-                $('payName').addEventListener('input', (e) => {
-                    $('cardHolderDisplay').textContent = e.target.value.trim().toUpperCase() || 'YOUR NAME';
-                });
-
-                $('payNumber').addEventListener('input', (e) => {
-                    let value = e.target.value.replace(/\D/g, '');
-                    if (value.startsWith('4')) {
-                        $('cardLogo').textContent = 'VISA';
-                    } else if (value.startsWith('5')) {
-                        $('cardLogo').textContent = 'MC';
-                    } else {
-                        $('cardLogo').textContent = 'CC';
-                    }
-                    
-                    let formatted = '';
-                    for (let i = 0; i < value.length; i++) {
-                        if (i > 0 && i % 4 === 0) formatted += ' ';
-                        formatted += value[i];
-                    }
-                    e.target.value = formatted;
-                    $('cardNumberDisplay').textContent = formatted || '•••• •••• •••• ••••';
-                });
-
-                $('payExpiry').addEventListener('input', (e) => {
-                    let value = e.target.value.replace(/\D/g, '');
-                    if (value.length > 2) {
-                        value = value.slice(0, 2) + '/' + value.slice(2, 4);
-                    }
-                    e.target.value = value;
-                    $('cardExpiryDisplay').textContent = value || 'MM/YY';
-                });
-            });
-
-            // Sandbox Payment Processing
-            window.processCardPayment = async function() {
-                const name = $('payName').value.trim();
-                const number = $('payNumber').value.replace(/\s/g, '');
-                const expiry = $('payExpiry').value;
-                const cvv = $('payCvv').value;
-                const errBox = $('paymentError');
-
-                if (!name || number.length < 16 || expiry.length < 5 || cvv.length < 3) {
-                    errBox.textContent = 'Please check card credentials for format errors.';
-                    soundError();
-                    return;
-                }
-
-                errBox.textContent = '';
-                const loader = $('paymentLoader');
-                loader.classList.add('active');
-                
-                const steps = [
-                    'Establishing secure sandbox link...',
-                    'Decrypting dummy certificates...',
-                    'Contacting processing server...',
-                    'Validating virtual transaction ledger...'
-                ];
-                
-                let stepIdx = 0;
-                const progressInterval = setInterval(() => {
-                    if (stepIdx < steps.length) {
-                        $('paymentLoaderText').innerHTML = steps[stepIdx] + '<br><span style="font-family:monospace;font-size:11px;color:var(--text-tertiary)">SANDBOX TRANSACTION STAGING</span>';
-                        stepIdx++;
-                    }
-                }, 900);
-
-                setTimeout(async () => {
-                    clearInterval(progressInterval);
-                    try {
-                        toast('Authorized Successfully (Sandbox Testing Mode). Payment system coming soon!', 'success');
-                        closeModal('paymentModal');
-                        soundClaim();
-                    } catch (err) {
-                        errorLog('Payment sandbox channel failure', err);
-                        loader.classList.remove('active');
-                        errBox.textContent = 'Transaction Failed: Sandbox pipeline offline.';
-                        soundError();
-                    }
-                }, 4000);
             };
 
             // ===== 24-Hour Cooldown Claim 50 Daily Questions System =====
@@ -4340,7 +4135,7 @@
                 window.claimStatusInterval = setInterval(update, 1000);
             }
 
-            // ===== Profile =====
+            // ===== Profile Management =====
             async function showProfileModal() {
                 const user = await sbGetUser(state.userEmail, $('userName').textContent);
                 const limit = await sbCheckLimit(state.userEmail);
@@ -4527,6 +4322,18 @@
                 }
             });
 
+            // Settings preset dynamic sync
+            document.addEventListener('DOMContentLoaded', () => {
+                const speedSlider = $('settingTypewriterSpeed');
+                if (speedSlider) {
+                    speedSlider.addEventListener('input', (e) => {
+                        $('typewriterSpeedValue').textContent = e.target.value + 'ms';
+                        CONFIG.typewriterSpeed = parseInt(e.target.value);
+                        localStorage.setItem('zk_setting_typewriter_speed', e.target.value);
+                    });
+                }
+            });
+
             // ===== System Initialization =====
             async function init() {
                 log('Starting Zakhourani AI v' + CONFIG.version);
@@ -4628,6 +4435,9 @@
                 const el = $('userName');
                 return el ? el.textContent : 'User';
             }
+
+            // ===== Global Helper exposures =====
+            window.$ = $;
 
             // ===== Global API Exposures =====
             window.toggleSidebar = toggleSidebar;

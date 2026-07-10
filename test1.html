@@ -2299,7 +2299,7 @@
                 sendCooldown: 1500,
                 maxMessageLength: 4000,
                 maxChats: 100,
-                version: '5.6'
+                version: '5.7'
             };
 
             // ===== DOM Utility Helper =====
@@ -2307,6 +2307,15 @@
             const $$ = (sel) => document.querySelectorAll(sel);
             const log = (...args) => console.log('[ZAI]', ...args);
             const errorLog = (...args) => console.error('[ZAI ERROR]', ...args);
+
+            // ===== Event Debouncer Wrapper =====
+            function debounce(func, wait) {
+                let timeout;
+                return function(...args) {
+                    clearTimeout(timeout);
+                    timeout = setTimeout(() => func.apply(this, args), wait);
+                };
+            }
 
             // ===== IndexedDB Offline Storage Layer =====
             class LocalDatabase {
@@ -2582,7 +2591,7 @@
                 }, duration);
             }
 
-            // ===== UI Feedback Sound FX Generator =====
+            // ===== UI Feedback & Keyboard Synthesizer Sound FX =====
             function initAudio() {
                 if (!state.audioCtx) {
                     try {
@@ -2609,6 +2618,29 @@
                     gain.gain.value = volume;
                     osc.start();
                     osc.stop(ctx.currentTime + duration);
+                } catch (_) {}
+            }
+
+            // Synthetic typewriter mechanical click audio synthesizer
+            function playTypewriterClick() {
+                if (!CONFIG.soundEnabled) return;
+                try {
+                    const ctx = initAudio();
+                    if (!ctx || ctx.state !== 'running') return;
+                    const osc = ctx.createOscillator();
+                    const gain = ctx.createGain();
+                    
+                    osc.type = 'triangle';
+                    // Varied frequency modeling for organic auditory simulation
+                    osc.frequency.setValueAtTime(1000 + Math.random() * 800, ctx.currentTime);
+                    
+                    gain.gain.setValueAtTime(0.005, ctx.currentTime); // Whisper quiet click transients
+                    gain.gain.exponentialRampToValueAtTime(0.0001, ctx.currentTime + 0.03);
+                    
+                    osc.connect(gain);
+                    gain.connect(ctx.destination);
+                    osc.start();
+                    osc.stop(ctx.currentTime + 0.04);
                 } catch (_) {}
             }
 
@@ -2950,7 +2982,6 @@
                     if (error) throw error;
                     state.allChats = data || [];
                     
-                    // Local IndexedDB cache save
                     state.allChats.forEach(chat => localDb.putChat(chat));
                     
                     return state.allChats;
@@ -3069,7 +3100,6 @@
                 const email = $('authEmail').value.trim();
                 const password = $('authPassword').value;
                 
-                // Security Schema validation rules
                 const schema = {
                     email: { required: true, type: 'string', maxLength: 100 },
                     password: { required: true, type: 'string', maxLength: 50 }
@@ -3175,12 +3205,27 @@
 
             // ===== Chat Rendering Modules =====
             function isValidUUID(str) {
-                return str && str.length > 25 && /^[0-9a-f-]+$/i.test(str);
+                // Strict RFC 4122 compliant validation schema match
+                return /^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$/i.test(str);
             }
 
             function formatText(text) {
                 if (!text) return '';
                 let html = text;
+
+                // Support and beautiful wrapping layout configurations for translations
+                if (text.includes('Translation:') || text.includes('English:') || text.includes('Arabic:') || text.includes('Kurdish:')) {
+                    html = html.replace(/Translation:\s*([\s\S]*)/i, (_, content) => {
+                        return `
+                            <div class="translation-block" style="background: rgba(59,130,246,0.04); border: 1px solid var(--border-medium); border-radius: var(--radius-md); padding: var(--spacing-3); margin: var(--spacing-2) 0;">
+                                <div style="font-weight: 700; font-size: 11px; text-transform: uppercase; color: var(--accent-primary); letter-spacing: 0.5px; margin-bottom: 6px;">
+                                    <i class="fas fa-language"></i> Translation Container Block
+                                </div>
+                                ${content}
+                            </div>
+                        `;
+                    });
+                }
                 
                 html = html.replace(/\*\*(.*?)\*\*/g, '<strong>$1</strong>');
                 html = html.replace(/\*(.*?)\*/g, '<em>$1</em>');
@@ -3371,7 +3416,6 @@
                     toggleSidebar();
                 }
                 
-                // Load saved workspace drafts dynamically
                 const draft = DraftManager.loadDraft(id);
                 $('messageInput').value = draft;
                 
@@ -3684,6 +3728,57 @@
                 toast('🎤 Audio capture canceled', 'info');
             };
 
+            // Recursive character-by-character typewriter renderer
+            function typewriteHTML(element, rawHTML, delay = 15, onComplete) {
+                // Compile rawHTML in virtual node to preserve nested markdown tags
+                const temp = document.createElement('div');
+                temp.innerHTML = rawHTML;
+                
+                element.innerHTML = '';
+                const nodes = Array.from(temp.childNodes);
+                let nodeIndex = 0;
+                
+                function processNextNode() {
+                    if (nodeIndex >= nodes.length) {
+                        if (onComplete) onComplete();
+                        return;
+                    }
+                    
+                    const node = nodes[nodeIndex];
+                    const clone = node.cloneNode(true);
+                    
+                    if (node.nodeType === Node.TEXT_NODE) {
+                        const text = node.textContent;
+                        let charIndex = 0;
+                        const textNode = document.createTextNode('');
+                        element.appendChild(textNode);
+                        
+                        function typeChar() {
+                            if (charIndex >= text.length) {
+                                nodeIndex++;
+                                processNextNode();
+                                return;
+                            }
+                            textNode.textContent += text[charIndex];
+                            
+                            // Trigger synthetic mechanical click if the character is not space
+                            if (text[charIndex].trim() !== '') {
+                                playTypewriterClick();
+                            }
+                            charIndex++;
+                            setTimeout(typeChar, delay);
+                        }
+                        typeChar();
+                    } else {
+                        element.appendChild(clone);
+                        nodeIndex++;
+                        playTypewriterClick();
+                        setTimeout(processNextNode, delay * 2);
+                    }
+                }
+                processNextNode();
+            }
+
             // ===== Send Message (Optimistic UI Framework) =====
             async function sendMessage() {
                 const input = $('messageInput');
@@ -3691,7 +3786,6 @@
                 
                 if (!rawText && !state.activeAttachment) return;
                 
-                // Security verification step
                 const text = SecurityValidator.sanitizeHTML(rawText);
                 
                 if (text.length > CONFIG.maxMessageLength) {
@@ -3760,7 +3854,7 @@
                     const welcome = container.querySelector('.welcome');
                     if (welcome) welcome.remove();
                     
-                    // Optimistic UI update: user bubble added instantly
+                    // Optimistic UI user bubble added instantly
                     optimisticUserMsg = document.createElement('div');
                     optimisticUserMsg.className = 'message user slide-up';
                     
@@ -3780,7 +3874,7 @@
                     container.scrollTop = container.scrollHeight;
                     soundSend();
                     
-                    // Optimistic UI update: Assistant Loading Shimmer placeholder added instantly
+                    // Optimistic UI Assistant Loading Shimmer placeholder added instantly
                     optimisticAiMsg = document.createElement('div');
                     optimisticAiMsg.className = 'message assistant slide-up';
                     optimisticAiMsg.innerHTML = `
@@ -3816,30 +3910,43 @@
                     const data = await response.json();
                     
                     if (data.success && data.reply) {
-                        // Replace Optimistic loading shimmer with actual formatted message content
-                        optimisticAiMsg.innerHTML = `
-                            ${formatText(data.reply)}
-                            <span class="powered-by">Zakhourani AI</span>
-                            <div class="msg-feedback">
-                                <button class="feedback-btn" data-type="helpful">👍 Helpful</button>
-                                <button class="feedback-btn" data-type="not-helpful">👎 Not helpful</button>
-                                <button class="regenerate-btn">🔄 Regenerate</button>
-                            </div>
-                            <span class="message-time">just now</span>
-                            <div class="msg-actions">
-                                <button class="copy-msg" title="Copy" aria-label="Copy"><i class="fas fa-copy"></i></button>
-                                <button class="speak-msg" title="Speak" aria-label="Speak"><i class="fas fa-volume-up"></i></button>
-                            </div>
-                        `;
+                        // Clear shimmer element
+                        optimisticAiMsg.innerHTML = '';
+                        
+                        // Construct actual layout nodes
+                        const typingWrapper = document.createElement('div');
+                        optimisticAiMsg.appendChild(typingWrapper);
+                        
+                        // Execute typewriter animation inside the node
+                        typewriteHTML(typingWrapper, formatText(data.reply), 15, async () => {
+                            // Append dynamic feedback action tools upon sequence completion
+                            const actionPanel = document.createElement('div');
+                            actionPanel.className = 'feedback-actions-wrapper';
+                            actionPanel.innerHTML = `
+                                <span class="powered-by">Zakhourani AI</span>
+                                <div class="msg-feedback">
+                                    <button class="feedback-btn" data-type="helpful">👍 Helpful</button>
+                                    <button class="feedback-btn" data-type="not-helpful">👎 Not helpful</button>
+                                    <button class="regenerate-btn">🔄 Regenerate</button>
+                                </div>
+                                <span class="message-time">just now</span>
+                                <div class="msg-actions">
+                                    <button class="copy-msg" title="Copy" aria-label="Copy"><i class="fas fa-copy"></i></button>
+                                    <button class="speak-msg" title="Speak" aria-label="Speak"><i class="fas fa-volume-up"></i></button>
+                                </div>
+                            `;
+                            optimisticAiMsg.appendChild(actionPanel);
+                            
+                            await sbSaveMessage(state.chatId, user.id, 'assistant', data.reply, 'Zakhourani');
+                            highlightCodeBlocks();
+                            soundSuccess();
+                            
+                            if (CONFIG.autoVoiceSpeak) {
+                                speakMessage(null, data.reply);
+                            }
+                        });
+                        
                         container.scrollTop = container.scrollHeight;
-                        
-                        await sbSaveMessage(state.chatId, user.id, 'assistant', data.reply, 'Zakhourani');
-                        highlightCodeBlocks();
-                        soundSuccess();
-                        
-                        if (CONFIG.autoVoiceSpeak) {
-                            speakMessage(null, data.reply);
-                        }
 
                         const messages = await sbLoadMessages(state.chatId);
                         if (messages.length <= 2) {
@@ -3854,7 +3961,7 @@
                 } catch (err) {
                     errorLog('Failed prompt routing stream to remote worker platform', err);
                     
-                    // UI Rollback: remove optimistic elements if API fails
+                    // UI Rollback: remove optimistic element on request crash
                     if (optimisticAiMsg) optimisticAiMsg.remove();
                     
                     const errorMsg = document.createElement('div');
@@ -4046,7 +4153,7 @@
                 showModal('packagesModal');
             }
 
-            // ===== Secure Checkout Flow (Simulated Gateway) =====
+            // ===== Secure Checkout Flow =====
             window.openTopUpCheckout = function(amount) {
                 closeModal('packagesModal');
                 state.pendingTransaction = { type: 'topup', amount: amount, pkgId: null };
@@ -4079,7 +4186,7 @@
                 $('paymentLoader').classList.remove('active');
             }
 
-            // Real-time Visa input syncing event listeners
+            // Real-time Credit Card preview syncing
             document.addEventListener('DOMContentLoaded', () => {
                 $('payName').addEventListener('input', (e) => {
                     $('cardHolderDisplay').textContent = e.target.value.trim().toUpperCase() || 'YOUR NAME';
@@ -4114,7 +4221,7 @@
                 });
             });
 
-            // Payment verification simulation in Sandbox Environment
+            // Sandbox Payment Processing
             window.processCardPayment = async function() {
                 const name = $('payName').value.trim();
                 const number = $('payNumber').value.replace(/\s/g, '');
@@ -4233,7 +4340,7 @@
                 window.claimStatusInterval = setInterval(update, 1000);
             }
 
-            // ===== Profile Management =====
+            // ===== Profile =====
             async function showProfileModal() {
                 const user = await sbGetUser(state.userEmail, $('userName').textContent);
                 const limit = await sbCheckLimit(state.userEmail);
@@ -4324,10 +4431,8 @@
                 }
             });
 
-            const searchInput = $('searchChats');
-            const clearSearch = $('clearSearch');
-            
-            searchInput.addEventListener('input', (e) => {
+            // Client debounced query indexing search
+            const debouncedSearch = debounce((e) => {
                 const query = e.target.value.toLowerCase();
                 clearSearch.classList.toggle('visible', query.length > 0);
                 
@@ -4338,7 +4443,12 @@
                         item.style.display = match ? 'flex' : 'none';
                     }
                 });
-            });
+            }, 250);
+
+            const searchInput = $('searchChats');
+            const clearSearch = $('clearSearch');
+            
+            searchInput.addEventListener('input', debouncedSearch);
             
             clearSearch.addEventListener('click', () => {
                 searchInput.value = '';
@@ -4506,9 +4616,9 @@
                             toast('Connected, but some features may be limited', 'warning');
                         }
                     } else {
+                        // User is null (unauthenticated): gracefully dismiss loading screen and route to auth
+                        $('loader').classList.add('hidden');
                         $('app').style.display = 'none';
-                        $('loader').classList.remove('hidden');
-                        $('loaderText').textContent = 'Please login to continue...';
                         showModal('authModal');
                     }
                 });

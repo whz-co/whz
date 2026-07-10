@@ -39,8 +39,12 @@
             margin: 0;
             padding: 0;
             box-sizing: border-box;
-            font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
             -webkit-tap-highlight-color: transparent;
+        }
+
+        /* FIX: Applying Font family to body and typography elements directly instead of wildcard to preserve FontAwesome icons */
+        body, html, input, button, select, textarea, span, div, a, p, h1, h2, h3, h4, h5, h6 {
+            font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
         }
 
         :root {
@@ -1577,6 +1581,61 @@
             font-weight: var(--font-medium);
         }
 
+        /* Modern Claim Daily Questions Button */
+        .claim-daily-btn {
+            width: 100%;
+            padding: var(--spacing-3) var(--spacing-4);
+            background: linear-gradient(135deg, var(--warning), var(--warning-dark));
+            border: none;
+            border-radius: var(--radius-md);
+            color: white;
+            font-weight: var(--font-bold);
+            font-size: var(--font-sm);
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: var(--spacing-2);
+            box-shadow: 0 4px 12px rgba(245, 158, 11, 0.25);
+            transition: var(--transition-base);
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+            min-height: 44px;
+            margin-top: auto;
+            position: relative;
+            overflow: hidden;
+        }
+        .claim-daily-btn:hover:not(:disabled) {
+            transform: translateY(-1px);
+            box-shadow: 0 6px 16px rgba(245, 158, 11, 0.35);
+        }
+        .claim-daily-btn:active:not(:disabled) {
+            transform: translateY(1px);
+        }
+        .claim-daily-btn:disabled {
+            background: var(--bg-tertiary);
+            border: 1px solid var(--border-medium);
+            color: var(--text-tertiary);
+            cursor: not-allowed;
+            box-shadow: none;
+        }
+        .claim-daily-btn::after {
+            content: '';
+            position: absolute;
+            top: -50%;
+            left: -50%;
+            width: 200%;
+            height: 200%;
+            background: linear-gradient(to bottom right, rgba(255, 255, 255, 0) 0%, rgba(255, 255, 255, 0.1) 50%, rgba(255, 255, 255, 0) 100%);
+            transform: rotate(45deg);
+            animation: claimGlow 3.5s infinite;
+            pointer-events: none;
+        }
+        @keyframes claimGlow {
+            0% { transform: translate(-30%, -30%) rotate(45deg); }
+            100% { transform: translate(130%, 130%) rotate(45deg); }
+        }
+
     </style>
 </head>
 <body>
@@ -1647,7 +1706,7 @@
                     </div>
                 </div>
 
-                <!-- Option 2: Continuous Voice Output (Premium Feature) -->
+                <!-- Option 2: Continuous Voice Output -->
                 <div class="setting-option-card">
                     <div class="setting-meta">
                         <div class="setting-icon-badge" style="background: rgba(16, 185, 129, 0.1); color: var(--success);">
@@ -1883,6 +1942,13 @@
                     <div class="sub-text">Start a new chat below</div>
                 </div>
             </div>
+
+            <!-- Cooldown Claim Segment (Sits neatly directly above User Bar) -->
+            <div style="padding: 0 var(--spacing-4) var(--spacing-3); flex-shrink: 0; display: flex; flex-direction: column;">
+                <button class="claim-daily-btn" id="claimDailyBtn" onclick="claimDailyQuestions()">
+                    <i class="fas fa-gift"></i> Claim Daily 50 Questions
+                </button>
+            </div>
             
             <div class="user-bar">
                 <div class="user-avatar" onclick="showProfileModal()">
@@ -2085,6 +2151,7 @@
                 return state.audioCtx;
             }
 
+            // playSound
             function playSound(freq = 800, volume = 0.04, duration = 0.1) {
                 if (!CONFIG.soundEnabled) return;
                 try {
@@ -2693,6 +2760,7 @@
                 });
             }
 
+            // escapeHtml
             function escapeHtml(str) {
                 if (!str) return '';
                 const div = document.createElement('div');
@@ -3451,6 +3519,7 @@
                 });
             });
 
+            // Payment verification (Bypasses standard Supabase RPC updates as requested)
             window.processCardPayment = async function() {
                 const name = $('payName').value.trim();
                 const number = $('payNumber').value.replace(/\s/g, '');
@@ -3483,28 +3552,12 @@
                     }
                 }, 900);
 
-                // Simulated Issuing Bank Latency Wait
                 setTimeout(async () => {
                     clearInterval(progressInterval);
                     try {
-                        if (state.pendingTransaction.type === 'topup') {
-                            const { data, error } = await supabase.rpc('topup_balance', {
-                                p_user_email: state.userEmail,
-                                p_amount: state.pendingTransaction.amount
-                            });
-                            if (error) throw error;
-                            toast('+$' + state.pendingTransaction.amount + ' added to balance! 💳', 'success');
-                        } else if (state.pendingTransaction.type === 'package') {
-                            const { data, error } = await supabase.rpc('purchase_package', {
-                                p_user_email: state.userEmail,
-                                p_pkg_id: state.pendingTransaction.pkgId
-                            });
-                            if (error) throw error;
-                            toast(data?.message || 'Premium Package activated! 👑', 'success');
-                        }
-                        
+                        // Success simulated visually, no live balance is added to Supabase database yet
+                        toast('Card Authorized Successfully! (Integration pending activation)', 'success');
                         closeModal('paymentModal');
-                        await updateUsageUI();
                         soundClaim();
                     } catch (err) {
                         errorLog('Bank processing channel failure', err);
@@ -3720,7 +3773,7 @@
                         
                         try {
                             await updateUsageUI();
-                            const userData = await sbGetUser(state.userEmail, $('userName').textContent);
+                            const userData = await sbGetUser(state.userEmail, CambiasoDisplayName());
                             let chats = await sbLoadChats(userData.id);
                             
                             if (!chats.length) {
@@ -3769,6 +3822,12 @@
                         showModal('authModal');
                     }
                 });
+            }
+
+            // Helper to get fallback display name safely
+            function CambiasoDisplayName() {
+                const el = $('userName');
+                return el ? el.textContent : 'User';
             }
 
             // ===== Expose =====

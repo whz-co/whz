@@ -1940,10 +1940,15 @@
 
     <!-- ===== Card Payment Modal ===== -->
     <div class="modal" id="paymentModal">
-        <div class="modal-box" style="max-width:440px">
+        <div class="modal-box" style="max-width:440px; position: relative;">
             <div class="payment-loader" id="paymentLoader">
                 <div class="payment-loader-spinner"></div>
                 <div class="payment-loader-text" id="paymentLoaderText">Contacting card issuing bank...<br>Securing dynamic authorization buffers</div>
+            </div>
+
+            <!-- Coming Soon Banner overlay -->
+            <div style="background: rgba(245, 158, 11, 0.15); border: 1px solid var(--warning); padding: 12px; border-radius: var(--radius-md); margin-bottom: var(--spacing-4); text-align: center; font-size: 12px; color: var(--warning); line-height: 1.4;">
+                <i class="fas fa-tools"></i> <strong>Sandbox Staging Mode</strong><br>The checkout system integration is coming soon. Real charges will not occur during this preview.
             </div>
 
             <span class="modal-icon">💳</span>
@@ -2009,6 +2014,11 @@
     <!-- ===== Packages Modal ===== -->
     <div class="modal" id="packagesModal">
         <div class="modal-box" style="max-width:500px">
+            <!-- Coming Soon Warning Badge -->
+            <div style="background: rgba(245, 158, 11, 0.15); border: 1px solid var(--warning); padding: 10px; border-radius: var(--radius-md); margin-bottom: var(--spacing-4); text-align: center; font-size: 11px; color: var(--warning);">
+                <i class="fas fa-info-circle"></i> <strong>Preview Access</strong>: Live subscriptions and commercial card checking integrations are currently coming soon.
+            </div>
+
             <span class="modal-icon">💰</span>
             <h2>Premium Packages</h2>
             <p class="modal-subtitle">Balance: <strong style="color:var(--accent-primary);font-size:1.3rem" id="packagesBalance">$0.00</strong></p>
@@ -2110,7 +2120,7 @@
 
             <!-- Cooldown Claim Segment -->
             <div style="padding: 0 var(--spacing-4) var(--spacing-3); flex-shrink: 0; display: flex; flex-direction: column;">
-                <button class="claim-daily-btn" id="claimDailyBtn" onclick="claimDailyQuestions()">
+                <button class="claim-daily-btn" id="claimDailyBtn" onclick="claimDailyQuestions()" data-tooltip="Re-credit 50 active questions inside the 24h limit container">
                     <i class="fas fa-gift"></i> <span data-i18n="claim.daily">Claim Daily 50 Questions</span>
                 </button>
             </div>
@@ -2165,7 +2175,7 @@
                     <button class="icon-btn" onclick="clearCurrentChat()" title="Clear Chat" aria-label="Clear" data-tooltip="Empty memory buffers [Ctrl + L]">
                         <i class="fas fa-trash-alt"></i>
                     </button>
-                    <button class="icon-btn" onclick="exportChat()" title="Export Chat" aria-label="Export" data-tooltip="Save text conversation transcription file">
+                    <button class="icon-btn" onclick="exportChat()" title="Export Chat" aria-label="Export" data-tooltip="Save text conversation transcription file [Ctrl + Shift + E]">
                         <i class="fas fa-download"></i>
                     </button>
                     <button class="icon-btn" onclick="toggleTheme()" id="themeBtn" title="Toggle Theme" aria-label="Toggle theme" data-tooltip="Switch light/dark theme models">
@@ -2905,24 +2915,6 @@
                     .catch(() => toast('Copy block failed', 'error'));
             };
 
-            document.addEventListener('DOMContentLoaded', () => {
-                const container = $('chatContainer');
-                if (container) {
-                    container.addEventListener('dblclick', (e) => {
-                        const userMsg = e.target.closest('.message.user');
-                        if (userMsg) {
-                            const originalText = userMsg.textContent.trim();
-                            const editedText = prompt('Edit your message:', originalText);
-                            if (editedText && editedText.trim() !== originalText) {
-                                $('messageInput').value = editedText.trim();
-                                $('messageInput').focus();
-                                toast('Message loaded back to prompt input.', 'info');
-                            }
-                        }
-                    });
-                }
-            });
-
             // ===== Countdown Timer =====
             function startCountdown() {
                 if (state.countdownInterval) clearInterval(state.countdownInterval);
@@ -3444,34 +3436,6 @@
                     `).join('');
                     
                     setTimeout(highlightCodeBlocks, 100);
-                    
-                    container.querySelectorAll('.copy-msg').forEach(btn => {
-                        btn.addEventListener('click', function(e) {
-                            e.stopPropagation();
-                            copyMessage(this);
-                        });
-                    });
-                    
-                    container.querySelectorAll('.speak-msg').forEach(btn => {
-                        btn.addEventListener('click', function(e) {
-                            e.stopPropagation();
-                            speakMessage(this);
-                        });
-                    });
-                    
-                    container.querySelectorAll('.feedback-btn').forEach(btn => {
-                        btn.addEventListener('click', function(e) {
-                            e.stopPropagation();
-                            handleFeedback(this);
-                        });
-                    });
-                    
-                    container.querySelectorAll('.regenerate-btn').forEach(btn => {
-                        btn.addEventListener('click', function(e) {
-                            e.stopPropagation();
-                            regenerateResponse(this);
-                        });
-                    });
                 }
                 
                 container.scrollTop = container.scrollHeight;
@@ -3944,26 +3908,6 @@
                             </div>
                         `;
                         container.appendChild(aiMsg);
-                        
-                        aiMsg.querySelector('.copy-msg').addEventListener('click', function(e) {
-                            e.stopPropagation();
-                            copyMessage(this);
-                        });
-                        aiMsg.querySelector('.speak-msg').addEventListener('click', function(e) {
-                            e.stopPropagation();
-                            speakMessage(this);
-                        });
-                        aiMsg.querySelectorAll('.feedback-btn').forEach(b => {
-                            b.addEventListener('click', function(e) {
-                                e.stopPropagation();
-                                handleFeedback(this);
-                            });
-                        });
-                        aiMsg.querySelector('.regenerate-btn').addEventListener('click', function(e) {
-                            e.stopPropagation();
-                            regenerateResponse(this);
-                        });
-                        
                         container.scrollTop = container.scrollHeight;
                         
                         await sbSaveMessage(state.chatId, user.id, 'assistant', data.reply, 'Zakhourani');
@@ -4001,9 +3945,6 @@
                             <button class="regenerate-btn">🔄 Retry</button>
                         </div>
                     `;
-                    errorMsg.querySelector('.regenerate-btn').addEventListener('click', function() {
-                        regenerateResponse(this);
-                    });
                     container.appendChild(errorMsg);
                     container.scrollTop = container.scrollHeight;
                     
@@ -4182,7 +4123,7 @@
                 showModal('packagesModal');
             }
 
-            // ===== Secure Checkout Flow (Simulated Gateway) =====
+            // ===== Secure Checkout Flow =====
             window.openTopUpCheckout = function(amount) {
                 closeModal('packagesModal');
                 state.pendingTransaction = { type: 'topup', amount: amount, pkgId: null };
@@ -4250,6 +4191,7 @@
                 });
             });
 
+            // Sandbox Payment Processing
             window.processCardPayment = async function() {
                 const name = $('payName').value.trim();
                 const number = $('payNumber').value.replace(/\s/g, '');
@@ -4268,16 +4210,16 @@
                 loader.classList.add('active');
                 
                 const steps = [
-                    'Establishing TLS transaction pipeline...',
-                    'Decrypting authorization signatures...',
-                    'Contacting card issuing network endpoints...',
-                    'Executing ledger asset adjustments...'
+                    'Establishing secure sandbox link...',
+                    'Decrypting dummy certificates...',
+                    'Contacting processing server...',
+                    'Validating virtual transaction ledger...'
                 ];
                 
                 let stepIdx = 0;
                 const progressInterval = setInterval(() => {
                     if (stepIdx < steps.length) {
-                        $('paymentLoaderText').innerHTML = steps[stepIdx] + '<br><span style="font-family:monospace;font-size:11px;color:var(--text-tertiary)">SECURE SEC-328 SSL LINK</span>';
+                        $('paymentLoaderText').innerHTML = steps[stepIdx] + '<br><span style="font-family:monospace;font-size:11px;color:var(--text-tertiary)">SANDBOX TRANSACTION STAGING</span>';
                         stepIdx++;
                     }
                 }, 900);
@@ -4285,13 +4227,13 @@
                 setTimeout(async () => {
                     clearInterval(progressInterval);
                     try {
-                        toast('Card Authorized Successfully! Payment gateway integrations activated soon.', 'success');
+                        toast('Authorized Successfully (Sandbox Testing Mode). Payment system coming soon!', 'success');
                         closeModal('paymentModal');
                         soundClaim();
                     } catch (err) {
-                        errorLog('Bank processing channel failure', err);
+                        errorLog('Payment sandbox channel failure', err);
                         loader.classList.remove('active');
-                        errBox.textContent = 'Transaction Declined: Engine failed connecting to bank terminal pipeline.';
+                        errBox.textContent = 'Transaction Failed: Sandbox pipeline offline.';
                         soundError();
                     }
                 }, 4000);
@@ -4427,7 +4369,7 @@
                 }
             }
 
-            // ===== Theme Theme Switcher =====
+            // ===== Theme Switcher =====
             function toggleTheme() {
                 const isLight = document.body.classList.toggle('light-theme');
                 state.theme = isLight ? 'light' : 'dark';
@@ -4484,13 +4426,38 @@
                 searchInput.focus();
             });
 
-            document.addEventListener('click', (e) => {
-                if (e.target.classList.contains('chip') || e.target.closest('.chip')) {
-                    const chip = e.target.closest('.chip');
-                    if (chip) {
-                        $('messageInput').value = chip.dataset.prompt;
-                        sendMessage();
-                    }
+            // Chat interactive action delegates (event delegation)
+            document.getElementById('chatContainer').addEventListener('click', (e) => {
+                const copyBtn = e.target.closest('.copy-msg');
+                if (copyBtn) {
+                    e.stopPropagation();
+                    copyMessage(copyBtn);
+                    return;
+                }
+                const speakBtn = e.target.closest('.speak-msg');
+                if (speakBtn) {
+                    e.stopPropagation();
+                    speakMessage(speakBtn);
+                    return;
+                }
+                const feedbackBtn = e.target.closest('.feedback-btn');
+                if (feedbackBtn) {
+                    e.stopPropagation();
+                    handleFeedback(feedbackBtn);
+                    return;
+                }
+                const regenBtn = e.target.closest('.regenerate-btn');
+                if (regenBtn) {
+                    e.stopPropagation();
+                    regenerateResponse(regenBtn);
+                    return;
+                }
+                const chip = e.target.closest('.chip');
+                if (chip) {
+                    e.stopPropagation();
+                    $('messageInput').value = chip.dataset.prompt;
+                    sendMessage();
+                    return;
                 }
             });
 
@@ -4519,6 +4486,14 @@
                 }
             }, { passive: true });
 
+            // Keyboard shortcut action definitions
+            document.addEventListener('keydown', (e) => {
+                if (e.key === 'Escape') {
+                    document.querySelectorAll('.modal.show').forEach(m => m.classList.remove('show'));
+                    if (state.isSidebarOpen) toggleSidebar();
+                }
+            });
+
             // ===== Initialization =====
             async function init() {
                 log('Starting Zakhourani AI v' + CONFIG.version);
@@ -4541,6 +4516,8 @@
                 state.shortcuts.register('Ctrl+B', 'Toggle active sidebar visibility', () => toggleSidebar());
                 state.shortcuts.register('Ctrl+L', 'Empty all chat messages in active view', () => clearCurrentChat());
                 state.shortcuts.register('Alt+V', 'Toggle vocal recorder translation overlay', () => toggleVoiceInput());
+                state.shortcuts.register('Ctrl+Shift+E', 'Export active conversation history', () => exportChat());
+                state.shortcuts.register('Ctrl+K', 'Focus platform global search box', () => $('searchChats').focus());
                 state.shortcuts.register('Ctrl+/', 'Open Shortcuts Guide Modal', () => showModal('shortcutsModal'));
                 state.shortcuts.renderHelp();
                 

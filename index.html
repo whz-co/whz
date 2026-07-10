@@ -2,7 +2,7 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=5.0, user-scalable=yes">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover">
     <title>Zakhourani | Master English with AI - Dr. Waleed Hussien Zakhourani</title>
     
     <!-- Meta Tags for SEO -->
@@ -39,6 +39,7 @@
             margin: 0; 
             padding: 0; 
             box-sizing: border-box; 
+            -webkit-tap-highlight-color: transparent; /* Prevents visual flash on mobile taps */
         }
         
         :root {
@@ -77,6 +78,8 @@
             color: var(--dark);
             line-height: 1.6;
             overflow-x: hidden;
+            /* Support safe area padding-bottom for phones with bottom indicators */
+            padding-bottom: calc(65px + env(safe-area-inset-bottom));
         }
         
         /* ===== TYPOGRAPHY ===== */
@@ -142,6 +145,7 @@
             font-size: 1rem;
             position: relative;
             overflow: hidden;
+            user-select: none;
         }
         
         .btn::before {
@@ -256,10 +260,10 @@
         .animate-float { animation: float 3s infinite; }
         .animate-spin { animation: spin 10s linear infinite; }
         
-        /* ===== HEADER STYLES ===== */
+        /* ===== HEADER STYLES (App-Optimized) ===== */
         header {
             background: var(--white);
-            box-shadow: var(--shadow-lg);
+            box-shadow: var(--shadow-md);
             position: sticky;
             top: 0;
             z-index: 1000;
@@ -268,7 +272,7 @@
         .header-top {
             background: var(--gradient-primary);
             color: var(--white);
-            padding: 1rem 4rem;
+            padding: calc(1rem + env(safe-area-inset-top)) 2rem 1rem; /* iOS Safe Area support */
             display: flex;
             justify-content: space-between;
             align-items: center;
@@ -277,35 +281,33 @@
         .logo {
             display: flex;
             align-items: center;
-            gap: 1rem;
+            gap: 0.5rem;
         }
         
         .logo-icon {
-            font-size: 2.5rem;
+            font-size: 1.75rem;
             color: var(--secondary);
-            animation: float 3s infinite;
         }
         
         .logo h1 {
-            font-size: 2rem;
+            font-size: 1.5rem;
             font-weight: 800;
             color: var(--white);
-            letter-spacing: 1px;
+            letter-spacing: 0.5px;
             margin: 0;
         }
         
         .logo span {
             color: var(--secondary);
-            font-weight: 300;
         }
         
         .auth-buttons {
             display: flex;
-            gap: 1rem;
+            gap: 0.75rem;
         }
         
         .auth-btn {
-            padding: 0.75rem 2rem;
+            padding: 0.5rem 1.25rem;
             border-radius: 50px;
             font-weight: 600;
             cursor: pointer;
@@ -314,7 +316,8 @@
             display: inline-flex;
             align-items: center;
             gap: 0.5rem;
-            font-size: 1rem;
+            font-size: 0.875rem;
+            user-select: none;
         }
         
         .login-btn {
@@ -326,8 +329,6 @@
         .login-btn:hover {
             background: var(--white);
             color: var(--primary);
-            transform: translateY(-2px);
-            box-shadow: var(--shadow-md);
         }
         
         .signup-btn {
@@ -339,41 +340,33 @@
         .signup-btn:hover {
             background: var(--secondary-dark);
             border-color: var(--secondary-dark);
-            transform: translateY(-2px);
-            box-shadow: var(--shadow-md);
         }
         
         .user-menu {
             display: flex;
             align-items: center;
-            gap: 1.5rem;
+            gap: 1rem;
             color: var(--white);
         }
         
         .user-avatar {
-            width: 45px;
-            height: 45px;
+            width: 38px;
+            height: 38px;
             border-radius: 50%;
             object-fit: cover;
-            border: 3px solid var(--secondary);
-            transition: all 0.3s;
-        }
-        
-        .user-avatar:hover {
-            transform: scale(1.1);
-            border-color: var(--white);
+            border: 2px solid var(--secondary);
         }
         
         .user-name {
             font-weight: 600;
-            font-size: 1rem;
+            font-size: 0.875rem;
         }
         
         .logout-btn {
             background: var(--accent);
             color: var(--white);
             border: none;
-            padding: 0.75rem 1.5rem;
+            padding: 0.5rem 1rem;
             border-radius: 50px;
             cursor: pointer;
             text-decoration: none;
@@ -382,159 +375,171 @@
             gap: 0.5rem;
             transition: all 0.3s;
             font-weight: 600;
+            font-size: 0.875rem;
         }
         
-        .logout-btn:hover {
-            background: var(--accent-dark);
-            transform: translateY(-2px);
-            box-shadow: var(--shadow-md);
-        }
-        
-        /* Navigation */
+        /* Navigation Navigation Options (Touch Swipe Optimized) */
         nav {
-            padding: 0 4rem;
+            padding: 0;
             background: var(--white);
-            position: relative;
             border-bottom: 1px solid var(--light);
+            overflow: hidden;
         }
         
         .nav-container {
             display: flex;
-            justify-content: space-between;
             align-items: center;
-            padding: 1rem 0;
+            padding: 0;
+            position: relative;
         }
-        
+
+        /* Top Swipeable Category Bar for App Layout */
         .nav-links {
             display: flex;
             list-style: none;
             gap: 0.5rem;
             margin: 0;
-            padding: 0;
+            padding: 0.75rem 1.5rem;
+            overflow-x: auto;
+            scroll-behavior: smooth;
+            -webkit-overflow-scrolling: touch; /* Kinetic scrolling on iOS */
+            width: 100%;
+        }
+
+        /* Hide scrollbars but preserve functionality */
+        .nav-links::-webkit-scrollbar {
+            display: none;
+        }
+        .nav-links {
+            -ms-overflow-style: none;  /* IE/Edge */
+            scrollbar-width: none;  /* Firefox */
         }
         
         .nav-links li {
             position: relative;
+            flex-shrink: 0; /* Prevents item shrinking in scroll layout */
         }
         
         .nav-links a {
             text-decoration: none;
             color: var(--dark);
             font-weight: 600;
-            font-size: 1rem;
-            padding: 0.75rem 1.25rem;
+            font-size: 0.9rem;
+            padding: 0.5rem 1rem;
             border-radius: 50px;
-            transition: all 0.3s;
+            transition: all 0.2s ease;
             white-space: nowrap;
             display: flex;
             align-items: center;
-            gap: 0.5rem;
+            gap: 0.4rem;
+            border: 1px solid transparent;
+            user-select: none;
         }
         
         .nav-links a i {
-            font-size: 1.1rem;
+            font-size: 1rem;
             color: var(--secondary);
-            transition: all 0.3s;
         }
         
-        .nav-links a:hover {
-            background: var(--light);
+        .nav-links a:hover, .nav-links a:focus {
+            background: var(--light-gray);
             color: var(--secondary);
-            transform: translateY(-2px);
-        }
-        
-        .nav-links a:hover i {
-            transform: scale(1.1);
         }
         
         .nav-links a.active {
-            background: var(--secondary);
-            color: var(--white);
+            background: rgba(52, 152, 219, 0.15);
+            color: var(--secondary-dark);
+            border-color: rgba(52, 152, 219, 0.3);
         }
         
         .nav-links a.active i {
-            color: var(--white);
+            color: var(--secondary-dark);
         }
         
-        /* Notification Badge */
+        /* Notification Badge on top of categories */
         .nav-badge {
-            position: absolute;
-            top: -5px;
-            right: -5px;
             background: var(--accent);
             color: var(--white);
-            font-size: 0.7rem;
-            padding: 0.2rem 0.5rem;
-            border-radius: 20px;
-            min-width: 20px;
-            text-align: center;
+            font-size: 0.65rem;
+            padding: 0.1rem 0.4rem;
+            border-radius: 10px;
+            font-weight: 700;
+        }
+
+        /* Left/Right Gradient Fades to show scrolling content on mobile */
+        .nav-container::before, .nav-container::after {
+            content: '';
+            position: absolute;
+            top: 0;
+            bottom: 0;
+            width: 25px;
+            z-index: 2;
+            pointer-events: none;
+        }
+        .nav-container::before {
+            left: 0;
+            background: linear-gradient(to right, rgba(255,255,255,0.9), transparent);
+        }
+        .nav-container::after {
+            right: 0;
+            background: linear-gradient(to left, rgba(255,255,255,0.9), transparent);
         }
         
-        /* Mobile Menu Toggle */
+        /* Mobile Hamburger Toggle - Hidden on hybrid apps */
         .menu-toggle {
             display: none;
-            flex-direction: column;
-            cursor: pointer;
-            padding: 0.5rem;
-            background: transparent;
-            border: none;
-            z-index: 1001;
         }
         
-        .menu-toggle span {
-            width: 30px;
-            height: 3px;
-            background: var(--dark);
-            margin: 3px 0;
-            border-radius: 3px;
-            transition: all 0.3s;
-        }
-        
-        .menu-toggle.active span:nth-child(1) {
-            transform: rotate(45deg) translate(6px, 6px);
-        }
-        
-        .menu-toggle.active span:nth-child(2) {
-            opacity: 0;
-        }
-        
-        .menu-toggle.active span:nth-child(3) {
-            transform: rotate(-45deg) translate(7px, -7px);
-        }
-        
-        /* Search Bar */
+        /* Search Bar in top header hidden or compacted for mobile screen real estate */
         .search-bar {
-            display: flex;
+            display: none; /* Removed from desktop nav to maintain standard application density */
+        }
+        
+        /* ===== BOTTOM TAB NAVIGATION BAR (Mobile Native Layout) ===== */
+        .bottom-tab-bar {
+            position: fixed;
+            bottom: 0;
+            left: 0;
+            right: 0;
+            background: var(--white);
+            box-shadow: 0 -4px 15px rgba(0,0,0,0.08);
+            display: none; /* Displayed via Media Queries on Mobile */
+            justify-content: space-around;
             align-items: center;
-            background: var(--light);
-            border-radius: 50px;
-            padding: 0.25rem;
-            margin-left: 1rem;
+            height: 65px;
+            padding-bottom: env(safe-area-inset-bottom); /* iOS dynamic bottom area spacing */
+            z-index: 1000;
+            border-top: 1px solid var(--light);
         }
-        
-        .search-bar input {
-            border: none;
-            background: transparent;
-            padding: 0.5rem 1rem;
-            width: 200px;
-            outline: none;
-            font-family: inherit;
+
+        .tab-item {
+            text-decoration: none;
+            color: var(--gray);
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            font-size: 0.7rem;
+            font-weight: 500;
+            flex: 1;
+            height: 100%;
+            transition: color 0.2s;
+            position: relative;
         }
-        
-        .search-bar button {
-            background: var(--secondary);
-            color: var(--white);
-            border: none;
-            width: 40px;
-            height: 40px;
-            border-radius: 50%;
-            cursor: pointer;
-            transition: all 0.3s;
+
+        .tab-item i {
+            font-size: 1.3rem;
+            margin-bottom: 2px;
+            transition: transform 0.2s;
         }
-        
-        .search-bar button:hover {
-            background: var(--secondary-dark);
-            transform: rotate(90deg);
+
+        .tab-item.active {
+            color: var(--secondary);
+        }
+
+        .tab-item.active i {
+            transform: translateY(-2px);
+            color: var(--secondary);
         }
         
         /* ===== HERO SECTION ===== */
@@ -1874,10 +1879,10 @@
         /* ===== BACK TO TOP BUTTON ===== */
         .back-to-top {
             position: fixed;
-            bottom: 2rem;
-            right: 2rem;
-            width: 50px;
-            height: 50px;
+            bottom: 80px; /* Elevated on mobile to clear bottom tab bar */
+            right: 1.5rem;
+            width: 45px;
+            height: 45px;
             background: var(--secondary);
             color: var(--white);
             border-radius: 50%;
@@ -1914,7 +1919,7 @@
             animation: spin 1s linear infinite;
         }
         
-        /* ===== RESPONSIVE DESIGN ===== */
+        /* ===== RESPONSIVE DESIGN (Adaptive App & Mobile Fixes) ===== */
         @media (max-width: 1200px) {
             h1 { font-size: 3rem; }
             h2 { font-size: 2.25rem; }
@@ -1924,8 +1929,7 @@
         }
         
         @media (max-width: 992px) {
-            .header-top { padding: 1rem 2rem; }
-            nav { padding: 0 2rem; }
+            .header-top { padding: 1.5rem 1.5rem 1rem; }
             .hero { padding: 4rem 2rem; }
             .hero h2 { font-size: 3rem; }
             .about-container { 
@@ -1937,60 +1941,26 @@
         }
         
         @media (max-width: 768px) {
-            .header-top {
-                padding: 1rem;
-                flex-direction: column;
-                gap: 1rem;
-                text-align: center;
-            }
-            
-            .logo { justify-content: center; }
-            
-            .menu-toggle {
+            /* Active Bottom Tab Bar for App Interface */
+            .bottom-tab-bar {
                 display: flex;
             }
+
+            .header-top {
+                padding: calc(0.75rem + env(safe-area-inset-top)) 1rem 0.75rem;
+                flex-direction: row;
+                justify-content: space-between;
+                gap: 0;
+            }
+            
+            .logo { justify-content: flex-start; }
             
             .nav-container {
                 width: 100%;
-                justify-content: space-between;
             }
             
             .nav-links {
-                display: none;
-                flex-direction: column;
-                width: 100%;
-                position: absolute;
-                top: 100%;
-                left: 0;
-                background: var(--white);
-                padding: 1rem;
-                box-shadow: var(--shadow-lg);
-                z-index: 1000;
-                max-height: 80vh;
-                overflow-y: auto;
-            }
-            
-            .nav-links.active {
-                display: flex;
-            }
-            
-            .nav-links li {
-                width: 100%;
-            }
-            
-            .nav-links a {
-                width: 100%;
-                justify-content: center;
-                padding: 1rem;
-            }
-            
-            .search-bar {
-                margin: 1rem 0;
-                width: 100%;
-            }
-            
-            .search-bar input {
-                width: 100%;
+                padding: 0.5rem 1rem; /* Margins for swipe layout */
             }
             
             .hero {
@@ -1999,7 +1969,7 @@
             }
             
             .hero h2 {
-                font-size: 2.5rem;
+                font-size: 2.25rem;
             }
             
             .hero-stats {
@@ -2009,6 +1979,7 @@
             
             .cta-buttons {
                 flex-direction: column;
+                gap: 0.75rem;
             }
             
             .cta-form {
@@ -2033,6 +2004,7 @@
             .footer-bottom {
                 flex-direction: column;
                 text-align: center;
+                padding-bottom: 2rem; /* Clear bottom space */
             }
             
             .footer-bottom-links {
@@ -2043,28 +2015,28 @@
                 right: 0;
                 bottom: 0;
             }
+
+            footer {
+                /* Prevents bottom navigation from overlapping content */
+                padding-bottom: calc(80px + env(safe-area-inset-bottom));
+            }
         }
         
         @media (max-width: 576px) {
-            h1 { font-size: 2rem; }
-            h2 { font-size: 1.75rem; }
-            .hero h2 { font-size: 2rem; }
-            .section-title { font-size: 2rem; }
-            .cta-section h2 { font-size: 2rem; }
+            h1 { font-size: 1.85rem; }
+            h2 { font-size: 1.5rem; }
+            .hero h2 { font-size: 1.85rem; }
+            .section-title { font-size: 1.85rem; }
+            .cta-section h2 { font-size: 1.85rem; }
             
             .auth-buttons {
-                flex-direction: column;
-                width: 100%;
+                flex-direction: row; /* Avoid stacked auth elements on top */
+                width: auto;
             }
             
             .auth-btn {
-                text-align: center;
-                justify-content: center;
-            }
-            
-            .user-menu {
-                flex-direction: column;
-                text-align: center;
+                font-size: 0.8rem;
+                padding: 0.4rem 0.875rem;
             }
             
             .product-footer {
@@ -2080,7 +2052,7 @@
         
         /* ===== PRINT STYLES ===== */
         @media print {
-            header, footer, .cta-section, .back-to-top {
+            header, footer, .cta-section, .back-to-top, .bottom-tab-bar {
                 display: none;
             }
             
@@ -2145,33 +2117,47 @@
             </div>
         </div>
         
+        <!-- Touch-Swipeable Top Header Categorization Bar for Mobile App Viewports -->
         <nav aria-label="Main navigation">
             <div class="nav-container">
-                <button class="menu-toggle" id="mobileMenuToggle" aria-label="Menu" aria-expanded="false">
-                    <span></span>
-                    <span></span>
-                    <span></span>
-                </button>
-                
                 <ul class="nav-links" id="navLinks">
-                    <li><a href="https://whz-co.github.io/whz/index.html" class="active" aria-current="page"><i class="fas fa-home"></i> Home</a></li>
-                    <li><a href="https://whz-co.github.io/whz/products.html"><i class="fas fa-box"></i> Products <span class="nav-badge">NEW</span></a></li>
-                    <li><a href="https://whz-co.github.io/whz/AI.html"><i class="fas fa-robot"></i> AI Assistant</a></li>
-                    <li><a href="https://whz-co.github.io/whz/JihanDictionary.html"><i class="fas fa-book"></i> Dictionary</a></li>
-                    <li><a href="https://whz-co.github.io/whz/IELTS.html"><i class="fas fa-language"></i> IELTS</a></li>
-                    <li><a href="https://whz-co.github.io/whz/TOFEL.html"><i class="fas fa-globe-americas"></i> TOEFL</a></li>
-                    <li><a href="https://whz-co.github.io/whz/aboutDrwaleed.html"><i class="fas fa-user-md"></i> About Dr. Waleed</a></li>
-                    <li><a href="https://whz-co.github.io/whz/contact.html"><i class="fas fa-envelope"></i> Contact</a></li>
+                    <li><a href="index.html" class="active" aria-current="page"><i class="fas fa-home"></i> Home</a></li>
+                    <li><a href="products.html"><i class="fas fa-box"></i> Products <span class="nav-badge">NEW</span></a></li>
+                    <li><a href="AI.html"><i class="fas fa-robot"></i> AI Assistant</a></li>
+                    <li><a href="JihanDictionary.html"><i class="fas fa-book"></i> Dictionary</a></li>
+                    <li><a href="IELTS.html"><i class="fas fa-language"></i> IELTS</a></li>
+                    <li><a href="TOFEL.html"><i class="fas fa-globe-americas"></i> TOEFL</a></li>
+                    <li><a href="aboutDrwaleed.html"><i class="fas fa-user-md"></i> About Dr. Waleed</a></li>
+                    <li><a href="contact.html"><i class="fas fa-envelope"></i> Contact</a></li>
                     <li><a href="profile.html"><i class="fas fa-user-circle"></i> Profile</a></li>
                 </ul>
-                
-                <div class="search-bar" role="search">
-                    <input type="search" placeholder="Search courses..." aria-label="Search courses">
-                    <button type="submit" aria-label="Submit search"><i class="fas fa-search"></i></button>
-                </div>
             </div>
         </nav>
     </header>
+
+    <!-- Native App Bottom Tab Bar (Will display on screens below 768px wide) -->
+    <div class="bottom-tab-bar" aria-label="App Navigation Tabs">
+        <a href="index.html" class="tab-item active" aria-current="page">
+            <i class="fas fa-home"></i>
+            <span>Home</span>
+        </a>
+        <a href="AI.html" class="tab-item">
+            <i class="fas fa-robot"></i>
+            <span>AI Tutor</span>
+        </a>
+        <a href="JihanDictionary.html" class="tab-item">
+            <i class="fas fa-book"></i>
+            <span>Dictionary</span>
+        </a>
+        <a href="IELTS.html" class="tab-item">
+            <i class="fas fa-language"></i>
+            <span>IELTS</span>
+        </a>
+        <a href="profile.html" class="tab-item">
+            <i class="fas fa-user-circle"></i>
+            <span>Profile</span>
+        </a>
+    </div>
 
     <main id="main-content">
         <!-- Hero Section -->
@@ -2207,7 +2193,7 @@
             </div>
         </section>
 
-        <!-- Products Section - NEW -->
+        <!-- Products Section -->
         <section class="products-section" aria-labelledby="products-heading">
             <div class="section-header">
                 <span class="section-subtitle"><i class="fas fa-box"></i> Our Premium Products</span>
@@ -2222,14 +2208,14 @@
                     <div class="product-image">
                         <i class="fas fa-language"></i>
                         <div class="product-overlay">
-                            <a href="https://whz-co.github.io/whz/products/IELTS.html" aria-label="View product"><i class="fas fa-eye"></i></a>
+                            <a href="products/IELTS.html" aria-label="View product"><i class="fas fa-eye"></i></a>
                             <a href="#" aria-label="Add to cart"><i class="fas fa-shopping-cart"></i></a>
                             <a href="#" aria-label="Add to wishlist"><i class="fas fa-heart"></i></a>
                         </div>
                     </div>
                     <div class="product-info">
                         <span class="product-category">IELTS Preparation</span>
-                        <h3 class="product-title"><a href="https://whz-co.github.io/whz/products/IELTS.html">Complete IELTS Mastery Package</a></h3>
+                        <h3 class="product-title"><a href="products/IELTS.html">Complete IELTS Mastery Package</a></h3>
                         <div class="product-rating">
                             <i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star-half-alt"></i>
                             <span>(4.8/5 - 1,234 reviews)</span>
@@ -2245,7 +2231,7 @@
                             $199 <span class="original">$299</span>
                         </div>
                         <div class="product-footer">
-                            <a href="https://whz-co.github.io/whz/products/IELTS.html" class="product-btn"><i class="fas fa-info-circle"></i> Learn More</a>
+                            <a href="products/IELTS.html" class="product-btn"><i class="fas fa-info-circle"></i> Learn More</a>
                             <a href="#" class="product-btn"><i class="fas fa-shopping-cart"></i> Buy Now</a>
                         </div>
                     </div>
@@ -2257,14 +2243,14 @@
                     <div class="product-image">
                         <i class="fas fa-globe-americas"></i>
                         <div class="product-overlay">
-                            <a href="https://whz-co.github.io/whz/products/toefl-complete.html" aria-label="View product"><i class="fas fa-eye"></i></a>
+                            <a href="products/toefl-complete.html" aria-label="View product"><i class="fas fa-eye"></i></a>
                             <a href="#" aria-label="Add to cart"><i class="fas fa-shopping-cart"></i></a>
                             <a href="#" aria-label="Add to wishlist"><i class="fas fa-heart"></i></a>
                         </div>
                     </div>
                     <div class="product-info">
                         <span class="product-category">TOEFL Preparation</span>
-                        <h3 class="product-title"><a href="https://whz-co.github.io/whz/products/toefl-complete.html">TOEFL iBT Complete Preparation</a></h3>
+                        <h3 class="product-title"><a href="products/toefl-complete.html">TOEFL iBT Complete Preparation</a></h3>
                         <div class="product-rating">
                             <i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star"></i>
                             <span>(4.9/5 - 987 reviews)</span>
@@ -2280,7 +2266,7 @@
                             $229 <span class="original">$329</span>
                         </div>
                         <div class="product-footer">
-                            <a href="https://whz-co.github.io/whz/products/toefl-complete.html" class="product-btn"><i class="fas fa-info-circle"></i> Learn More</a>
+                            <a href="products/toefl-complete.html" class="product-btn"><i class="fas fa-info-circle"></i> Learn More</a>
                             <a href="#" class="product-btn"><i class="fas fa-shopping-cart"></i> Buy Now</a>
                         </div>
                     </div>
@@ -2292,14 +2278,14 @@
                     <div class="product-image">
                         <i class="fas fa-robot"></i>
                         <div class="product-overlay">
-                            <a href="https://whz-co.github.io/whz/products/ai-assistant-pro.html" aria-label="View product"><i class="fas fa-eye"></i></a>
+                            <a href="products/ai-assistant-pro.html" aria-label="View product"><i class="fas fa-eye"></i></a>
                             <a href="#" aria-label="Add to cart"><i class="fas fa-shopping-cart"></i></a>
                             <a href="#" aria-label="Add to wishlist"><i class="fas fa-heart"></i></a>
                         </div>
                     </div>
                     <div class="product-info">
                         <span class="product-category">AI Learning Tools</span>
-                        <h3 class="product-title"><a href="https://whz-co.github.io/whz/products/ai-assistant-pro.html">AI English Assistant Pro</a></h3>
+                        <h3 class="product-title"><a href="products/ai-assistant-pro.html">AI English Assistant Pro</a></h3>
                         <div class="product-rating">
                             <i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star-half-alt"></i>
                             <span>(4.7/5 - 2,567 reviews)</span>
@@ -2315,7 +2301,7 @@
                             $14.99 <span class="original">$29.99</span> /month
                         </div>
                         <div class="product-footer">
-                            <a href="https://whz-co.github.io/whz/products/ai-assistant-pro.html" class="product-btn"><i class="fas fa-info-circle"></i> Learn More</a>
+                            <a href="products/ai-assistant-pro.html" class="product-btn"><i class="fas fa-info-circle"></i> Learn More</a>
                             <a href="#" class="product-btn"><i class="fas fa-shopping-cart"></i> Subscribe</a>
                         </div>
                     </div>
@@ -2323,7 +2309,7 @@
             </div>
             
             <div style="text-align: center; margin-top: 3rem;">
-                <a href="https://whz-co.github.io/whz/products.html" class="btn btn-primary btn-lg">
+                <a href="products.html" class="btn btn-primary btn-lg">
                     <i class="fas fa-box"></i> View All Products
                 </a>
             </div>
@@ -2344,7 +2330,7 @@
                     </div>
                     <h3>AI English Assistant</h3>
                     <p>Our advanced AI tutor provides instant feedback on writing, speaking, and grammar. Available 24/7 for personalized learning support with real-time corrections and suggestions.</p>
-                    <a href="https://whz-co.github.io/whz/AI.html" class="service-link">Try AI Assistant <i class="fas fa-arrow-right"></i></a>
+                    <a href="AI.html" class="service-link">Try AI Assistant <i class="fas fa-arrow-right"></i></a>
                 </div>
 
                 <div class="service-card animate__animated animate__fadeInUp animate__delay-1s">
@@ -2353,7 +2339,7 @@
                     </div>
                     <h3>Smart Dictionary</h3>
                     <p>Access comprehensive definitions, synonyms, antonyms, and examples for over 100,000+ words. Includes pronunciation guides, word origins, and usage examples in context.</p>
-                    <a href="https://whz-co.github.io/whz/JihanDictionary.html" class="service-link">Explore Dictionary <i class="fas fa-arrow-right"></i></a>
+                    <a href="JihanDictionary.html" class="service-link">Explore Dictionary <i class="fas fa-arrow-right"></i></a>
                 </div>
 
                 <div class="service-card animate__animated animate__fadeInUp animate__delay-2s">
@@ -2362,7 +2348,7 @@
                     </div>
                     <h3>IELTS Preparation</h3>
                     <p>Complete IELTS course covering Academic and General Training. Features include practice tests, speaking simulations, writing evaluation, and personalized study plans.</p>
-                    <a href="https://whz-co.github.io/whz/IELTS.html" class="service-link">Start IELTS Prep <i class="fas fa-arrow-right"></i></a>
+                    <a href="IELTS.html" class="service-link">Start IELTS Prep <i class="fas fa-arrow-right"></i></a>
                 </div>
 
                 <div class="service-card animate__animated animate__fadeInUp animate__delay-3s">
@@ -2371,7 +2357,7 @@
                     </div>
                     <h3>TOEFL Training</h3>
                     <p>Comprehensive TOEFL iBT preparation with all four sections: Reading, Listening, Speaking, and Writing. Includes full-length practice tests and performance analytics.</p>
-                    <a href="https://whz-co.github.io/whz/TOFEL.html" class="service-link">Begin TOEFL Prep <i class="fas fa-arrow-right"></i></a>
+                    <a href="TOFEL.html" class="service-link">Begin TOEFL Prep <i class="fas fa-arrow-right"></i></a>
                 </div>
             </div>
         </section>
@@ -2380,7 +2366,7 @@
         <section class="about-section" aria-labelledby="about-heading">
             <div class="about-container">
                 <div class="about-image animate__animated animate__fadeInLeft">
-                    <img src="https://via.placeholder.com/600x800/2c3e50/3498db?text=Dr.+Waleed+Hussien+Zakhourani" alt="Dr. Waleed Hussien Zakhourani - Founder of Zakhourani">
+                    <img src="https://ui-avatars.com/api/?name=Dr+Waleed+Zakhourani&background=2c3e50&color=3498db&size=300" alt="Dr. Waleed Hussien Zakhourani - Founder of Zakhourani" loading="lazy">
                     <div class="experience-badge">
                         <span class="years">20+</span>
                         <span class="text">Years of Excellence</span>
@@ -2429,7 +2415,7 @@
                         </div>
                     </div>
                     
-                    <a href="https://whz-co.github.io/whz/aboutDrwaleed.html" class="btn btn-primary btn-lg">
+                    <a href="aboutDrwaleed.html" class="btn btn-primary btn-lg">
                         <i class="fas fa-user-md"></i> Read Full Biography
                     </a>
                 </div>
@@ -2450,7 +2436,7 @@
                     </div>
                     <p class="testimonial-text">"Dr. Waleed's IELTS preparation course was exactly what I needed. The AI feedback on my speaking and writing helped me improve dramatically. I achieved a band 8.5!"</p>
                     <div class="testimonial-author">
-                        <img src="https://ui-avatars.com/api/?name=Sarah+Ahmed&background=3498db&color=fff&size=60" alt="Sarah Ahmed" class="author-avatar">
+                        <img src="https://ui-avatars.com/api/?name=Sarah+Ahmed&background=3498db&color=fff&size=60" alt="Sarah Ahmed" class="author-avatar" loading="lazy">
                         <div class="author-info">
                             <h4>Sarah Ahmed</h4>
                             <p>IELTS Band 8.5 · UAE</p>
@@ -2464,7 +2450,7 @@
                     </div>
                     <p class="testimonial-text">"The AI English Assistant is revolutionary! It's like having a personal tutor available 24/7. My pronunciation and fluency have improved significantly in just 3 months."</p>
                     <div class="testimonial-author">
-                        <img src="https://ui-avatars.com/api/?name=Carlos+Rodriguez&background=3498db&color=fff&size=60" alt="Carlos Rodriguez" class="author-avatar">
+                        <img src="https://ui-avatars.com/api/?name=Carlos+Rodriguez&background=3498db&color=fff&size=60" alt="Carlos Rodriguez" class="author-avatar" loading="lazy">
                         <div class="author-info">
                             <h4>Carlos Rodriguez</h4>
                             <p>TOEFL 112 · Mexico</p>
@@ -2478,7 +2464,7 @@
                     </div>
                     <p class="testimonial-text">"The smart dictionary feature is incredibly helpful. It doesn't just give definitions but shows word usage in context with examples. Perfect for academic writing."</p>
                     <div class="testimonial-author">
-                        <img src="https://ui-avatars.com/api/?name=Li+Wei&background=3498db&color=fff&size=60" alt="Li Wei" class="author-avatar">
+                        <img src="https://ui-avatars.com/api/?name=Li+Wei&background=3498db&color=fff&size=60" alt="Li Wei" class="author-avatar" loading="lazy">
                         <div class="author-info">
                             <h4>Li Wei</h4>
                             <p>PhD Candidate · China</p>
@@ -2707,7 +2693,7 @@
                     <a href="signup.html" class="cta-btn cta-primary btn-lg">
                         <i class="fas fa-user-plus"></i> Start Your Free Trial
                     </a>
-                    <a href="https://whz-co.github.io/whz/contact.html" class="cta-btn cta-secondary btn-lg">
+                    <a href="contact.html" class="cta-btn cta-secondary btn-lg">
                         <i class="fas fa-headset"></i> Contact Support
                     </a>
                 </div>
@@ -2733,19 +2719,19 @@
             <div class="footer-section">
                 <h3>Quick Links</h3>
                 <ul class="footer-links">
-                    <li><a href="https://whz-co.github.io/whz/index.html"><i class="fas fa-chevron-right"></i> Home</a></li>
-                    <li><a href="https://whz-co.github.io/whz/products.html"><i class="fas fa-chevron-right"></i> Products</a></li>
-                    <li><a href="https://whz-co.github.io/whz/AI.html"><i class="fas fa-chevron-right"></i> AI Assistant</a></li>
-                    <li><a href="https://whz-co.github.io/whz/IELTS.html"><i class="fas fa-chevron-right"></i> IELTS</a></li>
-                    <li><a href="https://whz-co.github.io/whz/TOFEL.html"><i class="fas fa-chevron-right"></i> TOEFL</a></li>
-                    <li><a href="https://whz-co.github.io/whz/aboutDrwaleed.html"><i class="fas fa-chevron-right"></i> About Dr. Waleed</a></li>
+                    <li><a href="index.html"><i class="fas fa-chevron-right"></i> Home</a></li>
+                    <li><a href="products.html"><i class="fas fa-chevron-right"></i> Products</a></li>
+                    <li><a href="AI.html"><i class="fas fa-chevron-right"></i> AI Assistant</a></li>
+                    <li><a href="IELTS.html"><i class="fas fa-chevron-right"></i> IELTS</a></li>
+                    <li><a href="TOFEL.html"><i class="fas fa-chevron-right"></i> TOEFL</a></li>
+                    <li><a href="aboutDrwaleed.html"><i class="fas fa-chevron-right"></i> About Dr. Waleed</a></li>
                 </ul>
             </div>
 
             <div class="footer-section">
                 <h3>Support</h3>
                 <ul class="footer-links">
-                    <li><a href="https://whz-co.github.io/whz/contact.html"><i class="fas fa-chevron-right"></i> Contact Us</a></li>
+                    <li><a href="contact.html"><i class="fas fa-chevron-right"></i> Contact Us</a></li>
                     <li><a href="#"><i class="fas fa-chevron-right"></i> FAQ</a></li>
                     <li><a href="#"><i class="fas fa-chevron-right"></i> Privacy Policy</a></li>
                     <li><a href="#"><i class="fas fa-chevron-right"></i> Terms of Service</a></li>
@@ -2823,7 +2809,7 @@
                 
                 authButtons.innerHTML = `
                     <div class="user-menu">
-                        <img src="${photoURL}" alt="${displayName}" class="user-avatar" loading="lazy">
+                        <img src="${photoURL}" alt="${displayName}" class="user-avatar">
                         <span class="user-name">${displayName}</span>
                         <a href="#" class="logout-btn" id="logoutButton">
                             <i class="fas fa-sign-out-alt"></i> Logout
@@ -2838,7 +2824,6 @@
                         window.location.href = 'index.html';
                     }).catch((error) => {
                         console.error('Logout error:', error);
-                        alert('Error logging out. Please try again.');
                     });
                 });
             } else {
@@ -2859,64 +2844,14 @@
             updateAuthUI(user);
         });
 
-        // ===== MOBILE MENU TOGGLE =====
+        // ===== WEB INTERACTIVITY =====
         document.addEventListener('DOMContentLoaded', function() {
-            const menuToggle = document.getElementById('mobileMenuToggle');
-            const navLinks = document.getElementById('navLinks');
-            
-            if (menuToggle && navLinks) {
-                menuToggle.addEventListener('click', function() {
-                    const expanded = this.getAttribute('aria-expanded') === 'true' ? false : true;
-                    this.setAttribute('aria-expanded', expanded);
-                    this.classList.toggle('active');
-                    navLinks.classList.toggle('active');
-                    
-                    // Prevent body scroll when menu is open on mobile
-                    if (navLinks.classList.contains('active')) {
-                        document.body.style.overflow = 'hidden';
-                    } else {
-                        document.body.style.overflow = '';
-                    }
-                });
-
-                // Close menu when clicking on a link
-                const links = navLinks.querySelectorAll('a');
-                links.forEach(link => {
-                    link.addEventListener('click', function() {
-                        menuToggle.classList.remove('active');
-                        navLinks.classList.remove('active');
-                        menuToggle.setAttribute('aria-expanded', 'false');
-                        document.body.style.overflow = '';
-                    });
-                });
-
-                // Close menu when clicking outside
-                document.addEventListener('click', function(event) {
-                    if (!menuToggle.contains(event.target) && !navLinks.contains(event.target)) {
-                        menuToggle.classList.remove('active');
-                        navLinks.classList.remove('active');
-                        menuToggle.setAttribute('aria-expanded', 'false');
-                        document.body.style.overflow = '';
-                    }
-                });
-
-                // Handle window resize
-                window.addEventListener('resize', function() {
-                    if (window.innerWidth > 768) {
-                        navLinks.classList.remove('active');
-                        menuToggle.classList.remove('active');
-                        menuToggle.setAttribute('aria-expanded', 'false');
-                        document.body.style.overflow = '';
-                    }
-                });
-            }
-
             // ===== BACK TO TOP BUTTON =====
             const backToTop = document.getElementById('backToTop');
             
             if (backToTop) {
                 window.addEventListener('scroll', function() {
-                    if (window.pageYOffset > 300) {
+                    if (window.scrollY > 300) {
                         backToTop.classList.add('show');
                     } else {
                         backToTop.classList.remove('show');
@@ -2940,16 +2875,13 @@
                     const answer = this.nextElementSibling;
                     const icon = this.querySelector('i');
                     
-                    // Toggle current question
                     this.classList.toggle('active');
                     answer.classList.toggle('active');
                     
-                    // Rotate icon
                     if (icon) {
                         icon.style.transform = this.classList.contains('active') ? 'rotate(180deg)' : 'rotate(0)';
                     }
                     
-                    // Close other answers (optional)
                     faqQuestions.forEach(otherQuestion => {
                         if (otherQuestion !== this) {
                             otherQuestion.classList.remove('active');
@@ -2964,33 +2896,40 @@
             });
 
             // ===== ACTIVE LINK DETECTION =====
-            const currentLocation = window.location.href;
+            const currentLocation = window.location.pathname.split("/").pop() || 'index.html';
             const navItems = document.querySelectorAll('.nav-links a');
+            const tabItems = document.querySelectorAll('.bottom-tab-bar .tab-item');
             
+            // Sync Top Nav Links
             navItems.forEach(link => {
-                if (link.href === currentLocation) {
+                const linkHref = link.getAttribute('href');
+                if (linkHref === currentLocation) {
                     link.classList.add('active');
                     link.setAttribute('aria-current', 'page');
+                    
+                    // Auto-scroll mobile swipeable category container to active element on load
+                    const navContainer = document.getElementById('navLinks');
+                    if (navContainer) {
+                        const offsetLeft = link.parentElement.offsetLeft;
+                        navContainer.scrollLeft = offsetLeft - 30; // Center offset padding
+                    }
                 } else {
                     link.classList.remove('active');
                     link.removeAttribute('aria-current');
                 }
             });
 
-            // ===== SEARCH FUNCTIONALITY =====
-            const searchForm = document.querySelector('.search-bar');
-            const searchInput = document.querySelector('.search-bar input');
-            
-            if (searchForm && searchInput) {
-                searchForm.addEventListener('submit', function(e) {
-                    e.preventDefault();
-                    const query = searchInput.value.trim();
-                    if (query) {
-                        // Redirect to search results page with query parameter
-                        window.location.href = `search.html?q=${encodeURIComponent(query)}`;
-                    }
-                });
-            }
+            // Sync Bottom App Tabs
+            tabItems.forEach(tab => {
+                const tabHref = tab.getAttribute('href');
+                if (tabHref === currentLocation) {
+                    tab.classList.add('active');
+                    tab.setAttribute('aria-current', 'page');
+                } else {
+                    tab.classList.remove('active');
+                    tab.removeAttribute('aria-current');
+                }
+            });
 
             // ===== NEWSLETTER FORM =====
             const newsletterForm = document.querySelector('.newsletter-form');
@@ -3001,7 +2940,6 @@
                     const email = this.querySelector('input[type="email"]').value;
                     
                     if (email && email.includes('@')) {
-                        // Here you would typically send to your backend
                         alert('Thank you for subscribing to our newsletter!');
                         this.reset();
                     } else {
@@ -3029,24 +2967,6 @@
                 });
             });
 
-            // ===== LAZY LOAD IMAGES =====
-            if ('IntersectionObserver' in window) {
-                const imageObserver = new IntersectionObserver((entries, observer) => {
-                    entries.forEach(entry => {
-                        if (entry.isIntersecting) {
-                            const img = entry.target;
-                            img.src = img.dataset.src;
-                            img.classList.add('loaded');
-                            imageObserver.unobserve(img);
-                        }
-                    });
-                });
-
-                document.querySelectorAll('img[data-src]').forEach(img => {
-                    imageObserver.observe(img);
-                });
-            }
-
             // ===== ANIMATION ON SCROLL =====
             const animatedElements = document.querySelectorAll('.animate__animated');
             
@@ -3055,7 +2975,6 @@
                     entries.forEach(entry => {
                         if (entry.isIntersecting) {
                             entry.target.style.visibility = 'visible';
-                            // Add animation class based on data attribute or default
                             const animation = entry.target.dataset.animation || 'fadeInUp';
                             entry.target.classList.add(`animate__${animation}`);
                         }
@@ -3067,39 +2986,35 @@
                     animationObserver.observe(el);
                 });
             } else {
-                // Fallback for older browsers
                 animatedElements.forEach(el => {
                     el.style.visibility = 'visible';
                 });
             }
 
-            // ===== PRODUCT CART FUNCTIONALITY =====
-            const addToCartButtons = document.querySelectorAll('.product-btn:contains("Buy Now"), .product-btn:contains("Subscribe")');
+            // ===== PRODUCT CART FUNCTIONALITY (CORRECTED JS) =====
+            const productButtons = document.querySelectorAll('.product-btn');
             
-            addToCartButtons.forEach(button => {
-                button.addEventListener('click', function(e) {
-                    e.preventDefault();
-                    
-                    // Get product info
-                    const productCard = this.closest('.product-card');
-                    const productTitle = productCard.querySelector('.product-title a').textContent;
-                    const productPrice = productCard.querySelector('.product-price').textContent.trim();
-                    
-                    // Here you would typically add to cart system
-                    // For now, show a notification
-                    alert(`Added to cart: ${productTitle} - ${productPrice}`);
-                    
-                    // Optional: Update cart count in header
-                    updateCartCount();
-                });
+            productButtons.forEach(button => {
+                const text = button.textContent.trim();
+                if (text === "Buy Now" || text === "Subscribe") {
+                    button.addEventListener('click', function(e) {
+                        e.preventDefault();
+                        
+                        const productCard = this.closest('.product-card');
+                        const productTitle = productCard.querySelector('.product-title a').textContent;
+                        const productPrice = productCard.querySelector('.product-price').textContent.replace(/\s+/g, ' ').trim();
+                        
+                        alert(`Added to cart: ${productTitle} - ${productPrice}`);
+                        updateCartCount();
+                    });
+                }
             });
 
-            // ===== CART COUNT FUNCTION (if needed) =====
+            // ===== CART COUNT FUNCTION =====
             function updateCartCount() {
                 let cartCount = document.querySelector('.cart-count');
                 
                 if (!cartCount) {
-                    // Create cart count badge if it doesn't exist
                     const authButtons = document.querySelector('.auth-buttons');
                     if (authButtons) {
                         const cartIcon = document.createElement('a');
@@ -3116,7 +3031,6 @@
                     const currentCount = parseInt(cartCount.textContent) || 0;
                     cartCount.textContent = currentCount + 1;
                     
-                    // Add animation
                     cartCount.classList.add('animate-pulse');
                     setTimeout(() => {
                         cartCount.classList.remove('animate-pulse');
@@ -3124,71 +3038,16 @@
                 }
             }
 
-            // ===== PAGE LOADING STATES =====
-            window.addEventListener('load', function() {
-                // Remove any loading spinners
-                document.body.classList.add('page-loaded');
-                
-                // Preload critical resources
-                const preloadLinks = [
-                    'https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css',
-                    'https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700;800&display=swap'
-                ];
-                
-                preloadLinks.forEach(href => {
-                    const link = document.createElement('link');
-                    link.rel = 'preload';
-                    link.as = 'style';
-                    link.href = href;
-                    document.head.appendChild(link);
-                });
-            });
-
             // ===== ERROR HANDLING FOR IMAGES =====
             document.querySelectorAll('img').forEach(img => {
                 img.addEventListener('error', function() {
-                    // Fallback to avatar placeholder
                     if (!this.src.includes('ui-avatars.com')) {
                         this.src = 'https://ui-avatars.com/api/?name=Z&background=3498db&color=fff&size=200';
                     }
                 });
             });
 
-            // ===== TRACKING AND ANALYTICS (if needed) =====
-            // Track page views
-            if (typeof gtag !== 'undefined') {
-                gtag('config', 'G-1MHE0JBZJR', {
-                    'page_title': document.title,
-                    'page_path': window.location.pathname
-                });
-            }
-
-            // Track user engagement
-            let scrollDepth = 0;
-            window.addEventListener('scroll', function() {
-                const scrollPercent = (window.scrollY / (document.documentElement.scrollHeight - window.innerHeight)) * 100;
-                
-                if (scrollPercent > 25 && scrollDepth < 25) {
-                    scrollDepth = 25;
-                    // Track 25% scroll
-                    console.log('User scrolled 25%');
-                } else if (scrollPercent > 50 && scrollDepth < 50) {
-                    scrollDepth = 50;
-                    // Track 50% scroll
-                    console.log('User scrolled 50%');
-                } else if (scrollPercent > 75 && scrollDepth < 75) {
-                    scrollDepth = 75;
-                    // Track 75% scroll
-                    console.log('User scrolled 75%');
-                } else if (scrollPercent > 90 && scrollDepth < 90) {
-                    scrollDepth = 90;
-                    // Track 90% scroll (near bottom)
-                    console.log('User scrolled 90%');
-                }
-            });
-
             // ===== PERFORMANCE OPTIMIZATION =====
-            // Debounce scroll events
             function debounce(func, wait) {
                 let timeout;
                 return function executedFunction(...args) {
@@ -3201,59 +3060,20 @@
                 };
             }
 
-            // Optimize scroll handlers
             const optimizedScroll = debounce(() => {
-                // Handle scroll-based updates
+                // Optimized scroll calculations
             }, 100);
 
             window.addEventListener('scroll', optimizedScroll);
-
-            // ===== ACCESSIBILITY ENHANCEMENTS =====
-            // Add keyboard navigation for dropdowns
-            document.querySelectorAll('.has-dropdown > a').forEach(link => {
-                link.addEventListener('keydown', function(e) {
-                    if (e.key === 'Enter' || e.key === ' ') {
-                        e.preventDefault();
-                        this.click();
-                    }
-                });
-            });
-
-            // Focus trap for mobile menu
-            function trapFocus(element) {
-                const focusableElements = element.querySelectorAll('a[href], button, input, select, textarea, [tabindex]:not([tabindex="-1"])');
-                const firstFocusable = focusableElements[0];
-                const lastFocusable = focusableElements[focusableElements.length - 1];
-
-                element.addEventListener('keydown', function(e) {
-                    if (e.key === 'Tab') {
-                        if (e.shiftKey) {
-                            if (document.activeElement === firstFocusable) {
-                                e.preventDefault();
-                                lastFocusable.focus();
-                            }
-                        } else {
-                            if (document.activeElement === lastFocusable) {
-                                e.preventDefault();
-                                firstFocusable.focus();
-                            }
-                        }
-                    }
-                });
-            }
-
-            if (navLinks) {
-                trapFocus(navLinks);
-            }
         });
 
-        // ===== SERVICE WORKER FOR OFFLINE SUPPORT (optional) =====
+        // ===== SERVICE WORKER FOR OFFLINE SUPPORT (With safety check) =====
         if ('serviceWorker' in navigator) {
             window.addEventListener('load', () => {
-                navigator.serviceWorker.register('/sw.js').then(registration => {
+                navigator.serviceWorker.register('sw.js').then(registration => {
                     console.log('ServiceWorker registration successful');
                 }).catch(err => {
-                    console.log('ServiceWorker registration failed: ', err);
+                    console.warn('ServiceWorker registration deferred or not found. Continuing safely.', err);
                 });
             });
         }
@@ -3262,15 +3082,9 @@
         window.Zakhourani = {
             auth: auth,
             db: db,
-            updateAuthUI: updateAuthUI,
-            version: '2.0.0',
+            version: '2.1.0',
             founder: 'Dr. Waleed Hussien Zakhourani'
         };
-
-        // ===== CONSOLE WELCOME MESSAGE =====
-        console.log('%c🚀 Welcome to Zakhourani v2.0', 'font-size: 20px; color: #3498db; font-weight: bold;');
-        console.log('%c📚 Master English with AI - Founded by Dr. Waleed Hussien Zakhourani', 'font-size: 14px; color: #2c3e50;');
-        console.log('%c💡 Visit whz-co.github.io/whz for more features', 'font-size: 12px; color: #e74c3c;');
     </script>
 
     <!-- JSON-LD Structured Data for SEO -->
@@ -3312,61 +3126,6 @@
             "addressLocality": "Dubai",
             "addressCountry": "UAE"
         }
-    }
-    </script>
-
-    <!-- Additional structured data for courses -->
-    <script type="application/ld+json">
-    {
-        "@context": "https://schema.org",
-        "@type": "ItemList",
-        "itemListElement": [
-            {
-                "@type": "Course",
-                "name": "Complete IELTS Preparation",
-                "description": "Comprehensive IELTS course covering Academic and General Training with AI-powered feedback.",
-                "provider": {
-                    "@type": "Organization",
-                    "name": "Zakhourani",
-                    "sameAs": "https://whz-co.github.io/whz"
-                },
-                "offers": {
-                    "@type": "Offer",
-                    "price": "199",
-                    "priceCurrency": "USD"
-                }
-            },
-            {
-                "@type": "Course",
-                "name": "TOEFL iBT Complete Preparation",
-                "description": "Master the TOEFL iBT with our comprehensive course including all sections.",
-                "provider": {
-                    "@type": "Organization",
-                    "name": "Zakhourani",
-                    "sameAs": "https://whz-co.github.io/whz"
-                },
-                "offers": {
-                    "@type": "Offer",
-                    "price": "229",
-                    "priceCurrency": "USD"
-                }
-            },
-            {
-                "@type": "Course",
-                "name": "AI English Assistant Pro",
-                "description": "24/7 AI-powered English tutor for personalized learning and feedback.",
-                "provider": {
-                    "@type": "Organization",
-                    "name": "Zakhourani",
-                    "sameAs": "https://whz-co.github.io/whz"
-                },
-                "offers": {
-                    "@type": "Offer",
-                    "price": "14.99",
-                    "priceCurrency": "USD"
-                }
-            }
-        ]
     }
     </script>
 </body>

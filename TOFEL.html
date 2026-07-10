@@ -1210,3 +1210,274 @@
                     <li><a href="products.html"><i class="fas fa-chevron-right"></i> Products</a></li>
                     <li><a href="AI.html"><i class="fas fa-chevron-right"></i> AI Assistant</a></li>
                     <li><a href="IELS.html"><i class="fas fa-chevron-right"></i> IELTS</a></li>
+                    <li><a href="TOFEL.html"><i class="fas fa-chevron-right"></i> TOEFL</a></li>
+                    <li><a href="aboutDrwaleed.html"><i class="fas fa-chevron-right"></i> About Dr. Waleed</a></li>
+                </ul>
+            </div>
+
+            <div class="footer-section">
+                <h3>Support</h3>
+                <ul class="footer-links">
+                    <li><a href="contact.html"><i class="fas fa-chevron-right"></i> Contact Us</a></li>
+                    <li><a href="#"><i class="fas fa-chevron-right"></i> FAQ</a></li>
+                    <li><a href="#"><i class="fas fa-chevron-right"></i> Privacy Policy</a></li>
+                    <li><a href="#"><i class="fas fa-chevron-right"></i> Terms of Service</a></li>
+                </ul>
+            </div>
+
+            <div class="footer-section">
+                <h3>Contact Info</h3>
+                <ul class="contact-info">
+                    <li><i class="fas fa-map-marker-alt"></i> Dubai Knowledge Park, UAE</li>
+                    <li><i class="fas fa-phone"></i> +971 4 123 4567</li>
+                    <li><i class="fas fa-envelope"></i> info@zakhourani.com</li>
+                </ul>
+                
+                <h3 style="margin-top:2rem;">Newsletter</h3>
+                <form class="newsletter-form">
+                    <input type="email" placeholder="Your email" aria-label="Email for newsletter">
+                    <button type="submit" aria-label="Subscribe"><i class="fas fa-paper-plane"></i></button>
+                </form>
+            </div>
+        </div>
+
+        <div class="footer-bottom">
+            <p class="copyright">© 2024 Zakhourani. All rights reserved. Founded by Dr. Waleed Hussien Zakhourani. TOEFL® is a registered trademark of ETS.</p>
+            <div class="footer-bottom-links">
+                <a href="#">Privacy</a>
+                <a href="#">Terms</a>
+                <a href="#">Cookies</a>
+            </div>
+        </div>
+    </footer>
+
+    <!-- Firebase SDK -->
+    <script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-app-compat.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-auth-compat.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-firestore-compat.js"></script>
+
+    <script>
+        // Global references
+        let auth = null;
+        let db = null;
+
+        // ===== SAFE FIREBASE INITIALIZATION =====
+        try {
+            const firebaseConfig = {
+                apiKey: "AIzaSyAE8wf24HXrfmpMluaFOv1OHPrf_YFfqTQ",
+                authDomain: "whaai-c388e.firebaseapp.com",
+                projectId: "whaai-c388e",
+                storageBucket: "whaai-c388e.firebasestorage.app",
+                messagingSenderId: "640598205524",
+                appId: "1:640598205524:web:c975f5e8b371b1043e39c1",
+                measurementId: "G-1MHE0JBZJR"
+            };
+
+            if (typeof firebase !== 'undefined') {
+                if (!firebase.apps.length) {
+                    firebase.initializeApp(firebaseConfig);
+                }
+                auth = firebase.auth();
+                db = firebase.firestore();
+                console.log("✅ Firebase initialized successfully.");
+            } else {
+                console.warn("⚠️ Firebase scripts blocked or loaded improperly. Activating safe mode.");
+            }
+        } catch (e) {
+            console.error("❌ Firebase failed to initialize:", e);
+        }
+
+        // ===== AUTHENTICATION STATE SYNC =====
+        function updateUI(user) {
+            const authButtons = document.getElementById('authButtons');
+            const loadingEl = document.getElementById('loading');
+            const loginPrompt = document.getElementById('loginPrompt');
+            const protectedContent = document.getElementById('protectedContent');
+            const welcomeMessage = document.getElementById('welcomeMessage');
+
+            if (loadingEl) {
+                loadingEl.style.display = 'none';
+            }
+
+            if (user) {
+                const photoURL = user.photoURL || `https://ui-avatars.com/api/?name=${encodeURIComponent(user.displayName || user.email || 'Learner')}&background=e67e22&color=fff&size=45`;
+                const displayName = user.displayName || (user.email ? user.email.split('@')[0] : 'Learner');
+                
+                if (authButtons) {
+                    authButtons.innerHTML = `
+                        <div class="user-menu">
+                            <img src="${photoURL}" alt="${displayName}" class="user-avatar" loading="lazy">
+                            <span class="user-name">${displayName}</span>
+                            <a href="#" class="logout-btn" id="logoutButton">
+                                <i class="fas fa-sign-out-alt"></i> Logout
+                            </a>
+                        </div>
+                    `;
+                    
+                    const logoutBtn = document.getElementById('logoutButton');
+                    if (logoutBtn && auth) {
+                        logoutBtn.addEventListener('click', function(e) {
+                            e.preventDefault();
+                            auth.signOut().then(() => {
+                                window.location.reload();
+                            }).catch((error) => {
+                                console.error('Logout error:', error);
+                            });
+                        });
+                    }
+                }
+
+                if (loginPrompt) loginPrompt.style.display = 'none';
+                if (protectedContent) protectedContent.style.display = 'block';
+
+                // Set greeting safely
+                if (welcomeMessage) {
+                    const hour = new Date().getHours();
+                    let greeting = 'Good Evening';
+                    if (hour < 12) greeting = 'Good Morning';
+                    else if (hour < 18) greeting = 'Good Afternoon';
+                    
+                    const firstName = displayName ? displayName.split(' ')[0] : 'Learner';
+                    welcomeMessage.innerHTML = `<i class="fas fa-leaf"></i> ${greeting}, ${firstName}! Ready to build your TOEFL proficiency?`;
+                }
+
+                loadUserTOEFLData(user);
+            } else {
+                if (authButtons) {
+                    authButtons.innerHTML = `
+                        <a href="login.html" class="auth-btn login-btn">
+                            <i class="fas fa-sign-in-alt"></i> Login
+                        </a>
+                        <a href="signup.html" class="auth-btn signup-btn">
+                            <i class="fas fa-user-plus"></i> Sign Up
+                        </a>
+                    `;
+                }
+
+                if (loginPrompt) loginPrompt.style.display = 'block';
+                if (protectedContent) protectedContent.style.display = 'none';
+            }
+        }
+
+        // Load progress details safely
+        async function loadUserTOEFLData(user) {
+            try {
+                if (db) {
+                    const docSnap = await db.collection('users').doc(user.uid).get();
+                    if (docSnap.exists) {
+                        const data = docSnap.data();
+                        if (data && data.toeflChallengeStarted) {
+                            const challengeBtn = document.querySelector('.challenge-btn');
+                            if (challengeBtn && data.toeflChallengeDay) {
+                                challengeBtn.style.background = "var(--warning)";
+                                challengeBtn.innerHTML = `<i class="fas fa-play-circle"></i> Continue Challenge (Day ${data.toeflChallengeDay})`;
+                            }
+                        }
+                    }
+                }
+            } catch (err) {
+                console.warn("User state tracking read timeout:", err);
+            }
+        }
+
+        // Bind standard Auth state listener safely
+        if (auth) {
+            auth.onAuthStateChanged((user) => {
+                updateUI(user);
+            });
+        } else {
+            // Instantly resolve to default logged-out state if Firebase didn't load
+            setTimeout(() => {
+                updateUI(null);
+            }, 500);
+        }
+
+        // ===== ACTIVE LINK SYNC =====
+        document.addEventListener('DOMContentLoaded', function() {
+            const currentLocation = window.location.pathname.split("/").pop() || 'TOFEL.html';
+            const navItems = document.querySelectorAll('.nav-links a');
+            const tabItems = document.querySelectorAll('.bottom-tab-bar .tab-item');
+            
+            const isToeflRoute = currentLocation.includes('toefl') || currentLocation.includes('TOFEL');
+
+            navItems.forEach(link => {
+                const linkHref = link.getAttribute('href');
+                if (linkHref === 'TOFEL.html' && isToeflRoute) {
+                    link.classList.add('active');
+                    link.setAttribute('aria-current', 'page');
+                    
+                    const navContainer = document.getElementById('navLinks');
+                    if (navContainer) {
+                        const offsetLeft = link.parentElement.offsetLeft;
+                        navContainer.scrollLeft = offsetLeft - 30;
+                    }
+                } else if (linkHref === currentLocation) {
+                    link.classList.add('active');
+                    link.setAttribute('aria-current', 'page');
+                } else {
+                    link.classList.remove('active');
+                    link.removeAttribute('aria-current');
+                }
+            });
+
+            tabItems.forEach(tab => {
+                const tabHref = tab.getAttribute('href');
+                if (tabHref === 'TOFEL.html' && isToeflRoute) {
+                    tab.classList.add('active');
+                    tab.setAttribute('aria-current', 'page');
+                } else {
+                    tab.classList.remove('active');
+                    tab.removeAttribute('aria-current');
+                }
+            });
+
+            // ===== NEWSLETTER FORM =====
+            const newsletterForm = document.querySelector('.newsletter-form');
+            if (newsletterForm) {
+                newsletterForm.addEventListener('submit', function(e) {
+                    e.preventDefault();
+                    const email = this.querySelector('input[type="email"]').value;
+                    if (email && email.includes('@')) {
+                        alert('✅ Thank you for subscribing to our newsletter!');
+                        this.reset();
+                    } else {
+                        alert('❌ Please enter a valid email address.');
+                    }
+                });
+            }
+        });
+    </script>
+
+    <!-- ===== STANDALONE BULLETPROOF FALLBACK SCRIPT ===== -->
+    <script>
+        // This independent fallback handles script initialization crashes or SDK loading timeouts.
+        // If the loading state is still active after 3 seconds, it safely dismisses the spinner.
+        setTimeout(() => {
+            const loadingEl = document.getElementById('loading');
+            if (loadingEl && window.getComputedStyle(loadingEl).display !== 'none') {
+                console.warn("⚠️ Standalone fallback triggered. Bypassing infinite loading state.");
+                loadingEl.style.display = 'none';
+                
+                // Show default auth gate
+                const loginPrompt = document.getElementById('loginPrompt');
+                if (loginPrompt) {
+                    loginPrompt.style.display = 'block';
+                }
+                
+                // Set navigation fallback buttons
+                const authButtons = document.getElementById('authButtons');
+                if (authButtons && authButtons.innerHTML.trim() === '') {
+                    authButtons.innerHTML = `
+                        <a href="login.html" class="auth-btn login-btn">
+                            <i class="fas fa-sign-in-alt"></i> Login
+                        </a>
+                        <a href="signup.html" class="auth-btn signup-btn">
+                            <i class="fas fa-user-plus"></i> Sign Up
+                        </a>
+                    `;
+                }
+            }
+        }, 3000);
+    </script>
+</body>
+</html>

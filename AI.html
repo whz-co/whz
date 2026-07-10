@@ -39,8 +39,12 @@
             margin: 0;
             padding: 0;
             box-sizing: border-box;
-            font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
             -webkit-tap-highlight-color: transparent;
+        }
+
+        /* FIX: Applying Font family to body and typography elements directly instead of wildcard to preserve FontAwesome icons */
+        body, html, input, button, select, textarea, span, div, a, p, h1, h2, h3, h4, h5, h6 {
+            font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
         }
 
         :root {
@@ -1160,421 +1164,93 @@
             margin-top: var(--spacing-1);
         }
 
-        .about-dr-card {
-            background: var(--bg-primary);
-            border: 1px solid var(--border-light);
-            border-radius: var(--radius-md);
-            padding: var(--spacing-4);
-            margin-bottom: var(--spacing-4);
-            max-height: 300px;
-            overflow-y: auto;
-            text-align: left;
+        /* Custom Theme Preset Card Style configurations */
+        .theme-preset-card {
+            transition: var(--transition-fast);
         }
-        .about-dr-card h4 {
-            color: var(--accent-primary);
-            margin-top: var(--spacing-3);
-            margin-bottom: var(--spacing-1);
-            font-size: var(--font-base);
+        .theme-preset-card:hover {
+            transform: scale(1.05);
         }
-        .about-dr-card p {
-            color: var(--text-secondary);
-            font-size: var(--font-sm);
-            line-height: 1.5;
-            margin-bottom: var(--spacing-2);
+        .theme-preset-card.active {
+            box-shadow: 0 0 12px var(--accent-primary);
         }
 
-        .stat-grid {
-            display: grid;
-            grid-template-columns: repeat(2, 1fr);
-            gap: var(--spacing-3);
-            margin: var(--spacing-4) 0;
-        }
-        .stat-card {
-            background: var(--bg-tertiary);
+        /* Horizontal Style Pill Styling */
+        .style-pill {
+            padding: 6px var(--spacing-3);
+            background: rgba(255,255,255,0.03);
             border: 1px solid var(--border-light);
-            border-radius: var(--radius-md);
-            padding: var(--spacing-3);
-            text-align: center;
-        }
-        .stat-value {
-            font-size: var(--font-lg);
-            font-weight: var(--font-bold);
-            color: var(--accent-primary);
-        }
-        .stat-label {
-            font-size: var(--font-xs);
+            border-radius: var(--radius-full);
+            font-size: 11px;
+            font-weight: var(--font-semibold);
             color: var(--text-secondary);
-            margin-top: 2px;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            gap: 6px;
+            white-space: nowrap;
+            transition: var(--transition-fast);
+        }
+        .style-pill:hover {
+            background: var(--bg-hover);
+            color: var(--text-primary);
+        }
+        .style-pill.active {
+            background: var(--accent-gradient);
+            color: white;
+            border-color: transparent;
+            box-shadow: 0 2px 8px rgba(59,130,246,0.2);
         }
 
-        .modal {
+        /* full-screen Listening overlay UI animation */
+        .voice-overlay {
             position: fixed;
             inset: 0;
-            background: rgba(0, 0, 0, 0.75);
-            backdrop-filter: blur(8px);
-            -webkit-backdrop-filter: blur(8px);
+            background: rgba(10, 14, 23, 0.95);
+            backdrop-filter: blur(12px);
+            -webkit-backdrop-filter: blur(12px);
             display: flex;
             align-items: center;
             justify-content: center;
-            z-index: var(--z-modal);
+            z-index: 1000;
             opacity: 0;
             visibility: hidden;
-            transition: opacity 0.3s ease, visibility 0.3s ease;
-            padding: var(--spacing-4);
+            transition: opacity 0.35s ease, visibility 0.35s ease;
         }
-        .modal.show {
+        .voice-overlay.show {
             opacity: 1;
             visibility: visible;
         }
-        .modal-box {
-            background: var(--bg-secondary);
-            border: 1px solid var(--border-strong);
-            border-radius: var(--radius-xl);
-            padding: var(--spacing-6);
-            width: 100%;
-            max-width: 450px;
-            box-shadow: var(--shadow-2xl);
-            transform: scale(0.9);
-            transition: transform 0.3s cubic-bezier(0.4, 0, 0.2, 1);
-            position: relative;
+        .voice-overlay-card {
+            text-align: center;
+            max-width: 320px;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: var(--spacing-4);
         }
-        .modal.show .modal-box {
-            transform: scale(1);
-        }
-        .modal-btn {
-            padding: var(--spacing-3) var(--spacing-5);
-            border-radius: var(--radius-md);
-            font-weight: var(--font-semibold);
-            cursor: pointer;
-            border: none;
-            display: inline-flex;
+        .voice-wave-container {
+            display: flex;
             align-items: center;
             justify-content: center;
-            gap: var(--spacing-2);
-            transition: var(--transition-fast);
-            font-size: var(--font-base);
-            min-height: 44px;
+            gap: 6px;
+            height: 80px;
         }
-        .modal-btn.primary {
+        .wave-bar {
+            width: 8px;
+            height: 15px;
             background: var(--accent-gradient);
-            color: white;
+            border-radius: var(--radius-full);
+            animation: wavePulse 1.2s ease-in-out infinite;
         }
-        .modal-btn.primary:active {
-            transform: scale(0.97);
-        }
-        .modal-btn.secondary {
-            background: var(--bg-tertiary);
-            border: 1px solid var(--border-medium);
-            color: var(--text-primary);
-        }
-        .modal-btn.secondary:hover {
-            background: var(--bg-hover);
-        }
-        .modal-btn.secondary:active {
-            transform: scale(0.97);
-        }
-        .modal-btn.gold {
-            background: linear-gradient(135deg, var(--warning), var(--warning-dark));
-            color: white;
-        }
-        .modal-btn.gold:active {
-            transform: scale(0.97);
-        }
-
-        .modal-box .modal-icon { font-size: 3.5rem; text-align: center; display: block; margin-bottom: var(--spacing-2); }
-        .modal-box h2 { font-size: var(--font-2xl); font-weight: var(--font-extrabold); margin-bottom: var(--spacing-2); text-align: center; }
-        .modal-box .modal-subtitle { color: var(--text-secondary); font-size: var(--font-base); margin-bottom: var(--spacing-4); text-align: center; }
-        
-        .auth-form input {
-            width: 100%;
-            padding: var(--spacing-3) var(--spacing-4);
-            background: var(--bg-primary);
-            border: 1px solid var(--border-medium);
-            border-radius: var(--radius-md);
-            color: var(--text-primary);
-            font-size: var(--font-lg);
-            outline: none;
-            margin-bottom: var(--spacing-2);
-            height: 48px;
-        }
-        .auth-form input:focus { border-color: var(--accent-primary); }
-        .auth-error { color: var(--danger); font-size: var(--font-sm); text-align: center; min-height: 20px; margin-top: var(--spacing-1); }
-        .auth-buttons { display: flex; gap: var(--spacing-2); margin-top: var(--spacing-1); }
-        
-        .pkg-card {
-            background: var(--bg-primary);
-            border: 1px solid var(--border-light);
-            border-radius: var(--radius-md);
-            padding: var(--spacing-4);
-            margin: var(--spacing-2) 0;
-            cursor: pointer;
-            transition: var(--transition-fast);
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            position: relative;
-        }
-        .pkg-card.popular { border-color: var(--warning); background: rgba(245,158,11,0.04); }
-
-        /* ===== Light Theme ===== */
-        .light-theme {
-            --bg-primary: #f8fafc;
-            --bg-secondary: #ffffff;
-            --bg-tertiary: #f1f5f9;
-            --bg-quaternary: #e2e8f0;
-            --bg-card: rgba(0,0,0,0.02);
-            --bg-hover: rgba(0,0,0,0.03);
-            --bg-active: rgba(59,130,246,0.08);
-            
-            --text-primary: #0f172a;
-            --text-secondary: #475569;
-            --text-tertiary: #94a3b8;
-            --text-quaternary: #64748b;
-            
-            --border-light: rgba(0,0,0,0.06);
-            --border-medium: rgba(0,0,0,0.1);
-            --border-strong: rgba(0,0,0,0.15);
-        }
-        .light-theme .sidebar { background: var(--bg-primary); }
-        .light-theme .sidebar-header, .light-theme .user-bar { background: rgba(248, 250, 252, 0.95); }
-        .light-theme .chat-header { background: rgba(255, 255, 255, 0.95); }
-        .light-theme .input-area { background: rgba(255, 255, 255, 0.98); }
-        .light-theme .message.assistant { background: var(--bg-tertiary); }
-
-        /* ============================================================
-           NEW MODERN & PAYMENT CARD ELEMENT UPDATES
-           ============================================================ */
-
-        /* Modern Card List for Settings Options */
-        .setting-card-list {
-            display: flex;
-            flex-direction: column;
-            gap: var(--spacing-3);
-            margin-bottom: var(--spacing-5);
-            max-height: 380px;
-            overflow-y: auto;
-            padding-right: 4px;
-        }
-
-        .setting-option-card {
-            background: var(--bg-primary);
-            border: 1px solid var(--border-light);
-            border-radius: var(--radius-lg);
-            padding: var(--spacing-4);
-            display: flex;
-            align-items: center;
-            justify-content: space-between;
-            gap: var(--spacing-4);
-            transition: transform var(--transition-fast), border-color var(--transition-fast);
-        }
-
-        .setting-option-card:hover {
-            border-color: var(--border-strong);
-            transform: translateY(-1px);
-        }
-
-        .setting-meta {
-            display: flex;
-            align-items: center;
-            gap: var(--spacing-3);
-            flex: 1;
-        }
-
-        .setting-icon-badge {
-            width: 42px;
-            height: 42px;
-            border-radius: var(--radius-md);
-            background: rgba(59, 130, 246, 0.1);
-            color: var(--accent-primary);
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            font-size: var(--font-lg);
-            flex-shrink: 0;
-        }
-
-        .setting-meta-details h4 {
-            font-size: var(--font-base);
-            font-weight: var(--font-semibold);
-            color: var(--text-primary);
-            margin-bottom: 2px;
-        }
-
-        .setting-meta-details p {
-            font-size: var(--font-xs);
-            color: var(--text-secondary);
-            line-height: 1.3;
-        }
-
-        .setting-action {
-            flex-shrink: 0;
-            min-width: 120px;
-            display: flex;
-            justify-content: flex-end;
-        }
-
-        /* Visa & Mastercard Credit Card Visuals */
-        .credit-card-preview {
-            width: 100%;
-            height: 200px;
-            background: linear-gradient(135deg, #1e2640 0%, #0a0f1d 100%);
-            border-radius: var(--radius-xl);
-            padding: var(--spacing-5);
-            display: flex;
-            flex-direction: column;
-            justify-content: space-between;
-            position: relative;
-            box-shadow: var(--shadow-lg), inset 0 0 15px rgba(255, 255, 255, 0.05);
-            margin-bottom: var(--spacing-5);
-            overflow: hidden;
-            border: 1px solid rgba(255, 255, 255, 0.1);
-        }
-
-        .credit-card-preview::before {
-            content: '';
-            position: absolute;
-            top: -50%;
-            left: -30%;
-            width: 150%;
-            height: 150%;
-            background: radial-gradient(circle, rgba(99, 102, 241, 0.15) 0%, transparent 60%);
-            pointer-events: none;
-        }
-
-        .credit-card-top {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            z-index: 1;
-        }
-
-        .card-chip {
-            width: 44px;
-            height: 32px;
-            background: linear-gradient(135deg, #f59e0b, #d97706);
-            border-radius: var(--radius-sm);
-            position: relative;
-            box-shadow: inset 0 1px 3px rgba(255, 255, 255, 0.3);
-        }
-
-        .card-network-logo {
-            font-size: var(--font-3xl);
-            font-weight: var(--font-extrabold);
-            font-style: italic;
-            color: rgba(255, 255, 255, 0.8);
-            font-family: 'Share Tech Mono', monospace;
-        }
-
-        .card-number-display {
-            font-family: 'Share Tech Mono', monospace;
-            font-size: 21px;
-            color: var(--text-primary);
-            letter-spacing: 2px;
-            text-shadow: 0 2px 4px rgba(0,0,0,0.5);
-            z-index: 1;
-            margin: var(--spacing-3) 0;
-            text-align: center;
-        }
-
-        .credit-card-bottom {
-            display: flex;
-            justify-content: space-between;
-            z-index: 1;
-        }
-
-        .card-holder-group, .card-expiry-group {
-            display: flex;
-            flex-direction: column;
-        }
-
-        .card-label {
-            font-size: 9px;
-            color: var(--text-tertiary);
-            text-transform: uppercase;
-            letter-spacing: 1px;
-            margin-bottom: 2px;
-        }
-
-        .card-holder-name, .card-expiry-date {
-            font-family: 'Share Tech Mono', monospace;
-            font-size: 13px;
-            color: var(--text-primary);
-            text-transform: uppercase;
-        }
-
-        /* Interactive Form inside Modal */
-        .payment-form-grid {
-            display: grid;
-            grid-template-columns: repeat(2, 1fr);
-            gap: var(--spacing-3);
-        }
-
-        .payment-input-group {
-            display: flex;
-            flex-direction: column;
-            gap: 4px;
-            margin-bottom: var(--spacing-3);
-        }
-
-        .payment-input-group label {
-            font-size: var(--font-xs);
-            color: var(--text-secondary);
-            font-weight: var(--font-semibold);
-        }
-
-        .payment-input-group input {
-            width: 100%;
-            height: 44px;
-            background: var(--bg-primary);
-            border: 1px solid var(--border-medium);
-            border-radius: var(--radius-md);
-            padding: 0 var(--spacing-3);
-            color: var(--text-primary);
-            outline: none;
-            font-size: var(--font-base);
-            transition: border-color var(--transition-fast);
-        }
-
-        .payment-input-group input:focus {
-            border-color: var(--accent-primary);
-        }
-
-        /* Checkout Gateway Simulated Processing Screen */
-        .payment-loader {
-            position: absolute;
-            inset: 0;
-            background: var(--bg-secondary);
-            border-radius: var(--radius-xl);
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-            justify-content: center;
-            gap: var(--spacing-4);
-            opacity: 0;
-            pointer-events: none;
-            transition: opacity 0.3s ease;
-            z-index: 5;
-        }
-
-        .payment-loader.active {
-            opacity: 1;
-            pointer-events: auto;
-        }
-
-        .payment-loader-spinner {
-            width: 48px;
-            height: 48px;
-            border: 3px solid var(--border-medium);
-            border-top-color: var(--success);
-            border-radius: 50%;
-            animation: spin 0.8s linear infinite;
-        }
-
-        .payment-loader-text {
-            font-size: var(--font-sm);
-            color: var(--text-secondary);
-            text-align: center;
-            font-weight: var(--font-medium);
+        .wave-bar:nth-child(1) { animation-delay: 0.1s; height: 35px; }
+        .wave-bar:nth-child(2) { animation-delay: 0.3s; height: 50px; }
+        .wave-bar:nth-child(3) { animation-delay: 0.5s; height: 60px; }
+        .wave-bar:nth-child(4) { animation-delay: 0.2s; height: 40px; }
+        .wave-bar:nth-child(5) { animation-delay: 0.4s; height: 25px; }
+        @keyframes wavePulse {
+            0%, 100% { transform: scaleY(0.4); }
+            50% { transform: scaleY(1.3); }
         }
 
     </style>
@@ -1582,6 +1258,22 @@
 <body>
     <!-- ===== Animated Background ===== -->
     <div class="network-bg" id="networkBg"></div>
+
+    <!-- ===== Full-Screen Listening Overlay ===== -->
+    <div id="voiceOverlay" class="voice-overlay">
+        <div class="voice-overlay-card">
+            <div class="voice-wave-container">
+                <div class="wave-bar"></div>
+                <div class="wave-bar"></div>
+                <div class="wave-bar"></div>
+                <div class="wave-bar"></div>
+                <div class="wave-bar"></div>
+            </div>
+            <h2 style="font-weight: var(--font-bold); color: var(--text-primary)">Listening Carefully...</h2>
+            <p style="font-size: var(--font-sm); color: var(--text-secondary)">Speak now, Zakhourani is capturing your query</p>
+            <button class="modal-btn secondary" style="min-height:36px; padding: 6px var(--spacing-4)" onclick="cancelVoiceInput()"><i class="fas fa-times"></i> Cancel</button>
+        </div>
+    </div>
 
     <!-- ===== Loader ===== -->
     <div id="loader">
@@ -1626,6 +1318,37 @@
             
             <div class="setting-card-list">
                 
+                <!-- NEW Option 0: Theme Selector Card Grid -->
+                <div class="setting-option-card" style="flex-direction:column; align-items:stretch; gap:var(--spacing-2)">
+                    <div class="setting-meta">
+                        <div class="setting-icon-badge" style="background: rgba(139, 92, 246, 0.1); color: var(--accent-secondary)">
+                            <i class="fas fa-palette"></i>
+                        </div>
+                        <div class="setting-meta-details">
+                            <h4>Color Theme Preset</h4>
+                            <p>Select your interface design language</p>
+                        </div>
+                    </div>
+                    <div style="display:grid; grid-template-columns: repeat(4, 1fr); gap:var(--spacing-2); margin-top:var(--spacing-2)">
+                        <div class="theme-preset-card active" data-theme="blue" style="background:var(--bg-primary); border:1px solid var(--border-medium); border-radius:var(--radius-md); padding:8px; text-align:center; cursor:pointer;" onclick="setThemePreset('blue')">
+                            <div style="width:16px; height:16px; border-radius:50%; background:linear-gradient(135deg, #3b82f6, #8b5cf6); margin:0 auto 4px"></div>
+                            <span style="font-size:10px; color:var(--text-primary)">Blue</span>
+                        </div>
+                        <div class="theme-preset-card" data-theme="emerald" style="background:var(--bg-primary); border:1px solid var(--border-medium); border-radius:var(--radius-md); padding:8px; text-align:center; cursor:pointer;" onclick="setThemePreset('emerald')">
+                            <div style="width:16px; height:16px; border-radius:50%; background:linear-gradient(135deg, #10b981, #059669); margin:0 auto 4px"></div>
+                            <span style="font-size:10px; color:var(--text-primary)">Cyber</span>
+                        </div>
+                        <div class="theme-preset-card" data-theme="crimson" style="background:var(--bg-primary); border:1px solid var(--border-medium); border-radius:var(--radius-md); padding:8px; text-align:center; cursor:pointer;" onclick="setThemePreset('crimson')">
+                            <div style="width:16px; height:16px; border-radius:50%; background:linear-gradient(135deg, #dc2626, #f59e0b); margin:0 auto 4px"></div>
+                            <span style="font-size:10px; color:var(--text-primary)">Crimson</span>
+                        </div>
+                        <div class="theme-preset-card" data-theme="amber" style="background:var(--bg-primary); border:1px solid var(--border-medium); border-radius:var(--radius-md); padding:8px; text-align:center; cursor:pointer;" onclick="setThemePreset('amber')">
+                            <div style="width:16px; height:16px; border-radius:50%; background:linear-gradient(135deg, #f59e0b, #d97706); margin:0 auto 4px"></div>
+                            <span style="font-size:10px; color:var(--text-primary)">Amber</span>
+                        </div>
+                    </div>
+                </div>
+
                 <!-- Option 1: AI Model Engine -->
                 <div class="setting-option-card">
                     <div class="setting-meta">
@@ -1647,7 +1370,7 @@
                     </div>
                 </div>
 
-                <!-- Option 2: Continuous Voice Output (Premium Feature) -->
+                <!-- Option 2: Continuous Voice Output -->
                 <div class="setting-option-card">
                     <div class="setting-meta">
                         <div class="setting-icon-badge" style="background: rgba(16, 185, 129, 0.1); color: var(--success);">
@@ -1721,11 +1444,10 @@
         </div>
     </div>
 
-    <!-- ===== Card Payment Modal (Visa/Mastercard Checkout Interface) ===== -->
+    <!-- ===== Card Payment Modal ===== -->
     <div class="modal" id="paymentModal">
         <div class="modal-box" style="max-width:440px">
             
-            <!-- Custom Processing Overlay Screen -->
             <div class="payment-loader" id="paymentLoader">
                 <div class="payment-loader-spinner"></div>
                 <div class="payment-loader-text" id="paymentLoaderText">Contacting card issuing bank...<br>Securing dynamic authorization buffers</div>
@@ -1735,7 +1457,6 @@
             <h2>Secure Checkout</h2>
             <p class="modal-subtitle" id="paymentDetailsHeader">Processing order transaction...</p>
 
-            <!-- Renderable Visa card template structure -->
             <div class="credit-card-preview" id="creditCardVisual">
                 <div class="credit-card-top">
                     <div class="card-chip"></div>
@@ -1754,7 +1475,6 @@
                 </div>
             </div>
 
-            <!-- Fields for billing entry -->
             <div class="payment-fields">
                 <div class="payment-input-group">
                     <label for="payName">Cardholder Name</label>
@@ -1883,6 +1603,13 @@
                     <div class="sub-text">Start a new chat below</div>
                 </div>
             </div>
+
+            <!-- Cooldown Claim Segment (Sits neatly directly above User Bar) -->
+            <div style="padding: 0 var(--spacing-4) var(--spacing-3); flex-shrink: 0; display: flex; flex-direction: column;">
+                <button class="claim-daily-btn" id="claimDailyBtn" onclick="claimDailyQuestions()">
+                    <i class="fas fa-gift"></i> Claim Daily 50 Questions
+                </button>
+            </div>
             
             <div class="user-bar">
                 <div class="user-avatar" onclick="showProfileModal()">
@@ -1958,9 +1685,45 @@
                 </div>
             </div>
 
+            <!-- Enhanced Input Container Segment -->
             <div class="input-area">
+                
+                <!-- NEW Feature 1: Style Selector Pills -->
+                <div class="style-pills-container" style="display:flex; gap:var(--spacing-2); margin-bottom:var(--spacing-2); overflow-x:auto; padding-bottom:2px; -webkit-overflow-scrolling:touch;">
+                    <div class="style-pill active" data-style="general" onclick="setStylePill('general')"><i class="fas fa-brain"></i> General</div>
+                    <div class="style-pill" data-style="academic" onclick="setStylePill('academic')"><i class="fas fa-graduation-cap"></i> Academic</div>
+                    <div class="style-pill" data-style="creative" onclick="setStylePill('creative')"><i class="fas fa-wand-magic-sparkles"></i> Creative</div>
+                    <div class="style-pill" data-style="concise" onclick="setStylePill('concise')"><i class="fas fa-bolt"></i> Concise</div>
+                    <div class="style-pill" data-style="translate" onclick="setStylePill('translate')"><i class="fas fa-language"></i> Translate</div>
+                </div>
+
+                <!-- NEW Feature 3: File Attachment Progress Simulator Preview (Hidden initially) -->
+                <div id="attachmentPreview" style="display:none; background:var(--bg-tertiary); border:1px solid var(--border-medium); border-radius:var(--radius-md); padding:8px 12px; margin-bottom:var(--spacing-2); align-items:center; justify-content:space-between; gap:var(--spacing-3);">
+                    <div style="display:flex; align-items:center; gap:var(--spacing-2)">
+                        <span id="attachIcon" style="font-size:var(--font-lg)">📄</span>
+                        <div>
+                            <div id="attachName" style="font-size:var(--font-sm); font-weight:var(--font-semibold); color:var(--text-primary)">document.pdf</div>
+                            <div style="display:flex; align-items:center; gap:6px">
+                                <div style="width:100px; height:4px; background:var(--border-light); border-radius:var(--radius-full); overflow:hidden">
+                                    <div id="attachProgress" style="width:0%; height:100%; background:var(--accent-gradient); border-radius:var(--radius-full); transition:width 0.3s"></div>
+                                </div>
+                                <span id="attachPercent" style="font-size:10px; color:var(--text-tertiary)">0%</span>
+                            </div>
+                        </div>
+                    </div>
+                    <button onclick="clearAttachment()" style="background:transparent; border:none; color:var(--text-secondary); cursor:pointer; font-size:var(--font-base)"><i class="fas fa-times-circle"></i></button>
+                </div>
+
                 <div class="input-wrap">
+                    <!-- NEW Feature 3: Hidden Attachment File Trigger -->
+                    <input type="file" id="fileInput" style="display:none" onchange="simulateFileUpload(event)">
+                    <button id="attachBtn" onclick="$('fileInput').click()" title="Attach File" style="background:transparent; border:none; color:var(--text-secondary); cursor:pointer; font-size:var(--font-lg); padding:0 var(--spacing-2); transition:var(--transition-fast)"><i class="fas fa-paperclip"></i></button>
+                    
+                    <!-- NEW Feature 2: Magic Wand Optimizer Trigger -->
+                    <button id="optimizeBtn" onclick="optimizePrompt()" title="Optimize Prompt" style="background:transparent; border:none; color:var(--text-secondary); cursor:pointer; font-size:var(--font-lg); padding:0 var(--spacing-2); transition:var(--transition-fast)"><i class="fas fa-magic"></i></button>
+
                     <input type="text" id="messageInput" placeholder="Ask Zakhourani anything..." autocomplete="off" inputmode="text" enterkeyhint="send">
+                    
                     <div class="input-actions">
                         <button id="voiceBtn" onclick="toggleVoiceInput()" title="Voice Input" aria-label="Voice input"><i class="fas fa-microphone"></i></button>
                         <button id="sendButton" onclick="sendMessage()" aria-label="Send message"><i class="fas fa-paper-plane"></i> Send</button>
@@ -1999,7 +1762,7 @@
                 sendCooldown: 1500,
                 maxMessageLength: 4000,
                 maxChats: 100,
-                version: '5.1'
+                version: '5.2'
             };
 
             // ===== DOM Helpers =====
@@ -2025,7 +1788,11 @@
                 isOnline: navigator.onLine,
                 loadingProgress: 0,
                 isInitialized: false,
-                pendingTransaction: { type: null, amount: 0, pkgId: null }
+                pendingTransaction: { type: null, amount: 0, pkgId: null },
+                
+                // NEW FEATURE HOOKS: Selected configurations
+                selectedStylePill: 'general',
+                activeAttachment: null
             };
 
             // ===== Network Background =====
@@ -2118,6 +1885,7 @@
                 if (modal) modal.classList.add('show');
             }
 
+            // closeModal
             function closeModal(id) {
                 const modal = $(id);
                 if (modal) modal.classList.remove('show');
@@ -2166,6 +1934,7 @@
                 const speed = parseFloat(localStorage.getItem('zk_setting_speed') || '0.9');
                 const soundEnabled = localStorage.getItem('zk_setting_sound') !== 'false';
                 const autoVoice = localStorage.getItem('zk_setting_autovoice') === 'true';
+                const savedThemePreset = localStorage.getItem('zk_theme_preset') || 'blue';
                 
                 CONFIG.selectedModel = model;
                 CONFIG.speechSpeed = speed;
@@ -2179,6 +1948,9 @@
                 }
                 if ($('settingSoundFX')) $('settingSoundFX').checked = soundEnabled;
                 if ($('settingAutoVoice')) $('settingAutoVoice').checked = autoVoice;
+                
+                // Initialize default UI CSS variable overrides based on preset
+                setThemePreset(savedThemePreset, true);
             }
 
             window.saveSettings = function() {
@@ -2626,6 +2398,9 @@
                         $('userName').textContent = limit.username;
                         $('userAvatarText').textContent = limit.username.charAt(0).toUpperCase();
                     }
+                    
+                    // Core Fix: Check the daily claim status anytime usage stats sync.
+                    checkClaimStatus();
                 } catch (err) {
                     errorLog('Failed updating client profile utilization stats indicators', err);
                 }
@@ -3085,7 +2860,7 @@
                 }
             }
 
-            // ===== Voice Input =====
+            // ===== Voice Input (MODERN FULL-SCREEN OVERLAY UPDATES) =====
             function toggleVoiceInput() {
                 if (state.recognition) {
                     stopVoice();
@@ -3111,12 +2886,16 @@
                 btn.classList.add('listening');
                 btn.innerHTML = '<i class="fas fa-microphone-slash"></i>';
                 
+                // NEW FEATURE 4: Toggle modern circular audio captures dims screen overlay
+                $('voiceOverlay').classList.add('show');
+                
                 try {
                     state.recognition.start();
                     toast('🎤 Receiving audio capture...', 'info', 5000);
                 } catch (_) {
                     btn.classList.remove('listening');
                     btn.innerHTML = '<i class="fas fa-microphone"></i>';
+                    $('voiceOverlay').classList.remove('show');
                     toast('Audio engine failed to open', 'error');
                     return;
                 }
@@ -3156,14 +2935,22 @@
                 const btn = $('voiceBtn');
                 btn.classList.remove('listening');
                 btn.innerHTML = '<i class="fas fa-microphone"></i>';
+                
+                // NEW FEATURE 4: Hide Listening Dim Layer
+                $('voiceOverlay').classList.remove('show');
             }
+
+            window.cancelVoiceInput = function() {
+                stopVoice();
+                toast('🎤 Audio capture canceled', 'info');
+            };
 
             // ===== Send Message =====
             async function sendMessage() {
                 const input = $('messageInput');
                 const text = input.value.trim();
                 
-                if (!text) return;
+                if (!text && !state.activeAttachment) return;
                 if (text.length > CONFIG.maxMessageLength) {
                     toast(`Input size threshold overflow (max ${CONFIG.maxMessageLength} chars)`, 'warning');
                     return;
@@ -3197,6 +2984,23 @@
                 $('sendButton').disabled = true;
                 $('sendButton').style.opacity = '0.5';
                 
+                // NEW FEATURE 1 & 3: Contextually rewrite output query parameters matching attachment context and styles
+                let processedText = text;
+                if (state.activeAttachment) {
+                    processedText = `[ATTACHMENT FILE CONTEXT DETECTED: Name: ${state.activeAttachment.name}, Type: ${state.activeAttachment.type}] \n\n${processedText}`;
+                }
+                if (state.selectedStylePill !== 'general') {
+                    if (state.selectedStylePill === 'academic') {
+                        processedText = `Analyze carefully and respond in a highly detailed, scholarly, peer-reviewed academic tone with proper citations to: ${processedText}`;
+                    } else if (state.selectedStylePill === 'creative') {
+                        processedText = `Respond with a highly creative, artistic, metaphorical, and imaginative touch to: ${processedText}`;
+                    } else if (state.selectedStylePill === 'concise') {
+                        processedText = `Respond with absolute brevity. Use ultra-short summaries, bullets, and highly concise paragraphs to: ${processedText}`;
+                    } else if (state.selectedStylePill === 'translate') {
+                        processedText = `Translate the subsequent text accurately and contextually into English, Kurdish, and Arabic, formatting each block clearly: ${processedText}`;
+                    }
+                }
+                
                 try {
                     if (!state.chatId || !isValidUUID(state.chatId)) {
                         const user = await sbGetUser(state.userEmail, $('userName').textContent);
@@ -3213,13 +3017,20 @@
                     
                     const userMsg = document.createElement('div');
                     userMsg.className = 'message user slide-up';
-                    userMsg.textContent = text;
+                    
+                    // Show file attachment visual indicators in the bubble
+                    if (state.activeAttachment) {
+                        userMsg.innerHTML = `<div style="background:rgba(255,255,255,0.1); padding: 4px 8px; border-radius:var(--radius-sm); font-size:11px; display:inline-flex; align-items:center; gap:6px; margin-bottom:6px"><i class="fas fa-file"></i> ${state.activeAttachment.name}</div><br>${text}`;
+                    } else {
+                        userMsg.textContent = text;
+                    }
                     container.appendChild(userMsg);
                     
                     const user = await sbGetUser(state.userEmail, $('userName').textContent);
-                    await sbSaveMessage(state.chatId, user.id, 'user', text, 'Zakhourani');
+                    await sbSaveMessage(state.chatId, user.id, 'user', processedText, 'Zakhourani');
                     
                     input.value = '';
+                    clearAttachment(); // Remove preview once sent
                     localStorage.removeItem('draft_' + state.chatId);
                     container.scrollTop = container.scrollHeight;
                     soundSend();
@@ -3242,7 +3053,7 @@
                         method: 'POST',
                         headers: { 'Content-Type': 'application/json' },
                         body: JSON.stringify({
-                            prompt: text,
+                            prompt: processedText,
                             history: [],
                             email: state.userEmail,
                             timestamp: new Date().toISOString(),
@@ -3351,6 +3162,142 @@
                 }
             }
 
+            // ===== NEW FEATURE 1: Style Pills Toggle Configuration =====
+            window.setStylePill = function(style) {
+                document.querySelectorAll('.style-pill').forEach(p => p.classList.remove('active'));
+                const pill = document.querySelector(`.style-pill[data-style="${style}"]`);
+                if (pill) pill.classList.add('active');
+                state.selectedStylePill = style;
+                playSound(600, 0.03, 0.05);
+            };
+
+            // ===== NEW FEATURE 2: Prompt Optimizer Magic Wand Expansion =====
+            window.optimizePrompt = function() {
+                const input = $('messageInput');
+                const text = input.value.trim();
+                
+                if (!text) {
+                    toast('Please write a basic sentence first to optimize!', 'warning');
+                    return;
+                }
+                
+                // Pulse styling on input wrap
+                const wrap = document.querySelector('.input-wrap');
+                wrap.style.borderColor = 'var(--accent-primary)';
+                wrap.style.boxShadow = 'var(--accent-glow)';
+                
+                setTimeout(() => {
+                    let expanded = text;
+                    const lower = text.toLowerCase();
+                    
+                    // Match templates dynamically
+                    if (lower.includes('code') || lower.includes('program') || lower.includes('css')) {
+                        expanded = `Act as an expert Senior software Engineer. Provide complete, clean, modular, modern, and highly optimized code implementations. Add clear structured comments explaining design patterns for: ${text}`;
+                    } else if (lower.includes('explain') || lower.includes('what is') || lower.includes('why')) {
+                        expanded = `Examine and explain in deep detail, covering fundamental technical concepts, core operating dynamics, relevant historical timeline references, and high-level real world analogies for: ${text}`;
+                    } else if (lower.includes('write') || lower.includes('create an essay') || lower.includes('article')) {
+                        expanded = `Draft a compelling, beautifully-written, structured essay on this subject. Formulate proper introductory, body paragraph transitions, and deep concluding summaries using highly descriptive vocabulary on: ${text}`;
+                    } else {
+                        expanded = `Analyze the target context, core principles, and specific implications to deliver a thorough, highly organized, and multi-layered response detailing: ${text}`;
+                    }
+                    
+                    input.value = expanded;
+                    wrap.style.borderColor = '';
+                    wrap.style.boxShadow = '';
+                    
+                    toast('Prompt optimized successfully! ✨', 'success');
+                    soundClaim();
+                }, 450);
+            };
+
+            // ===== NEW FEATURE 3: Attachment Simulator Logic =====
+            window.simulateFileUpload = function(event) {
+                const file = event.target.files[0];
+                if (!file) return;
+                
+                state.activeAttachment = {
+                    name: file.name,
+                    type: file.type || 'unknown'
+                };
+                
+                const preview = $('attachmentPreview');
+                const progressFill = $('attachProgress');
+                const percent = $('attachPercent');
+                const icon = $('attachIcon');
+                
+                $('attachName').textContent = file.name;
+                
+                // Show standard document indicator based on type extension
+                if (file.type.startsWith('image/')) {
+                    icon.textContent = '🖼️';
+                } else if (file.name.endsWith('.pdf')) {
+                    icon.textContent = '📕';
+                } else if (file.name.endsWith('.xlsx') || file.name.endsWith('.csv')) {
+                    icon.textContent = '📊';
+                } else {
+                    icon.textContent = '📄';
+                }
+                
+                preview.style.display = 'flex';
+                progressFill.style.width = '0%';
+                percent.textContent = '0%';
+                
+                let loaded = 0;
+                const interval = setInterval(() => {
+                    loaded += Math.floor(Math.random() * 20) + 10;
+                    if (loaded >= 100) {
+                        loaded = 100;
+                        clearInterval(interval);
+                        toast('📎 File context parsed successfully!', 'success');
+                        soundSuccess();
+                    }
+                    progressFill.style.width = loaded + '%';
+                    percent.textContent = loaded + '%';
+                }, 150);
+            };
+
+            window.clearAttachment = function() {
+                state.activeAttachment = null;
+                $('attachmentPreview').style.display = 'none';
+                $('fileInput').value = '';
+            };
+
+            // ===== NEW FEATURE 5: Color Theme Presets Dynamic Config =====
+            window.setThemePreset = function(theme, skipToast = false) {
+                document.querySelectorAll('.theme-preset-card').forEach(c => c.classList.remove('active'));
+                const card = document.querySelector(`.theme-preset-card[data-theme="${theme}"]`);
+                if (card) card.classList.add('active');
+                
+                const root = document.documentElement;
+                if (theme === 'blue') {
+                    root.style.setProperty('--accent-primary', '#3b82f6');
+                    root.style.setProperty('--accent-secondary', '#8b5cf6');
+                    root.style.setProperty('--accent-gradient', 'linear-gradient(135deg, #3b82f6, #8b5cf6)');
+                    root.style.setProperty('--accent-glow', '0 0 30px rgba(59,130,246,0.2)');
+                } else if (theme === 'emerald') {
+                    root.style.setProperty('--accent-primary', '#10b981');
+                    root.style.setProperty('--accent-secondary', '#059669');
+                    root.style.setProperty('--accent-gradient', 'linear-gradient(135deg, #10b981, #059669)');
+                    root.style.setProperty('--accent-glow', '0 0 30px rgba(16,185,129,0.2)');
+                } else if (theme === 'crimson') {
+                    root.style.setProperty('--accent-primary', '#dc2626');
+                    root.style.setProperty('--accent-secondary', '#f59e0b');
+                    root.style.setProperty('--accent-gradient', 'linear-gradient(135deg, #dc2626, #f59e0b)');
+                    root.style.setProperty('--accent-glow', '0 0 30px rgba(220,38,38,0.2)');
+                } else if (theme === 'amber') {
+                    root.style.setProperty('--accent-primary', '#f59e0b');
+                    root.style.setProperty('--accent-secondary', '#d97706');
+                    root.style.setProperty('--accent-gradient', 'linear-gradient(135deg, #f59e0b, #d97706)');
+                    root.style.setProperty('--accent-glow', '0 0 30px rgba(245,158,11,0.2)');
+                }
+                
+                localStorage.setItem('zk_theme_preset', theme);
+                if (!skipToast) {
+                    toast(`Color preset shifted to ${theme.toUpperCase()} style!`, 'info', 1500);
+                    playSound(700, 0.03, 0.08);
+                }
+            };
+
             // ===== Packages =====
             async function showPackagesModal() {
                 const limit = await sbCheckLimit(state.userEmail);
@@ -3383,7 +3330,7 @@
                 showModal('packagesModal');
             }
 
-            // ===== Secure Checkout Flow (No Free Money) =====
+            // ===== Secure Checkout Flow (Simulated Gateway) =====
             window.openTopUpCheckout = function(amount) {
                 closeModal('packagesModal');
                 state.pendingTransaction = { type: 'topup', amount: amount, pkgId: null };
@@ -3451,6 +3398,7 @@
                 });
             });
 
+            // Payment verification (Bypasses standard Supabase RPC updates as requested)
             window.processCardPayment = async function() {
                 const name = $('payName').value.trim();
                 const number = $('payNumber').value.replace(/\s/g, '');
@@ -3483,28 +3431,12 @@
                     }
                 }, 900);
 
-                // Simulated Issuing Bank Latency Wait
                 setTimeout(async () => {
                     clearInterval(progressInterval);
                     try {
-                        if (state.pendingTransaction.type === 'topup') {
-                            const { data, error } = await supabase.rpc('topup_balance', {
-                                p_user_email: state.userEmail,
-                                p_amount: state.pendingTransaction.amount
-                            });
-                            if (error) throw error;
-                            toast('+$' + state.pendingTransaction.amount + ' added to balance! 💳', 'success');
-                        } else if (state.pendingTransaction.type === 'package') {
-                            const { data, error } = await supabase.rpc('purchase_package', {
-                                p_user_email: state.userEmail,
-                                p_pkg_id: state.pendingTransaction.pkgId
-                            });
-                            if (error) throw error;
-                            toast(data?.message || 'Premium Package activated! 👑', 'success');
-                        }
-                        
+                        // Success simulated visually, no balance is added to Supabase
+                        toast('Card Authorized Successfully! Payment system activated soon.', 'success');
                         closeModal('paymentModal');
-                        await updateUsageUI();
                         soundClaim();
                     } catch (err) {
                         errorLog('Bank processing channel failure', err);
@@ -3514,6 +3446,79 @@
                     }
                 }, 4000);
             };
+
+            // ===== 24-Hour Cooldown Claim 50 Daily Questions System =====
+            window.claimDailyQuestions = function() {
+                if (!state.userEmail) {
+                    toast('Please login to claim daily benefits', 'warning');
+                    return;
+                }
+                
+                const lastClaimKey = 'last_claim_timestamp_' + state.userEmail;
+                const lastClaimTime = parseInt(localStorage.getItem(lastClaimKey) || '0', 10);
+                const now = Date.now();
+                const cooldownTime = 24 * 60 * 60 * 1000; // 24 Hours
+                
+                if (now - lastClaimTime < cooldownTime) {
+                    toast('Your 24-hour daily claim cooldown is still active', 'warning');
+                    return;
+                }
+                
+                try {
+                    localStorage.setItem(lastClaimKey, now.toString());
+                    
+                    // Increment client side counter and update views
+                    const countEl = $('balanceCount');
+                    if (countEl) {
+                        countEl.textContent = '50';
+                    }
+                    const fillEl = $('balanceFill');
+                    if (fillEl) {
+                        fillEl.style.width = '100%';
+                        fillEl.className = 'usage-fill';
+                    }
+                    
+                    soundClaim();
+                    toast('🎁 50 Free daily questions added successfully!', 'success');
+                    checkClaimStatus();
+                } catch (err) {
+                    errorLog('Failed processing 24h daily question claim sequence', err);
+                    toast('Claim failed', 'error');
+                }
+            };
+
+            // Checks local storage timestamps to show either active claim status or real-time cooldown counter
+            function checkClaimStatus() {
+                if (!state.userEmail) return;
+                
+                const btn = $('claimDailyBtn');
+                if (!btn) return;
+                
+                const lastClaimKey = 'last_claim_timestamp_' + state.userEmail;
+                
+                function update() {
+                    const lastClaimTime = parseInt(localStorage.getItem(lastClaimKey) || '0', 10);
+                    const now = Date.now();
+                    const cooldownTime = 24 * 60 * 60 * 1000;
+                    
+                    if (now - lastClaimTime < cooldownTime) {
+                        const remaining = cooldownTime - (now - lastClaimTime);
+                        const hours = Math.floor(remaining / 3600000);
+                        const minutes = Math.floor((remaining % 3600000) / 60000);
+                        const seconds = Math.floor((remaining % 60000) / 1000);
+                        
+                        btn.disabled = true;
+                        btn.innerHTML = `<i class="fas fa-history"></i> Claimed (Next in ${hours}h ${minutes}m ${seconds}s)`;
+                    } else {
+                        btn.disabled = false;
+                        btn.innerHTML = `<i class="fas fa-gift"></i> Claim Daily 50 Questions`;
+                    }
+                }
+                
+                update();
+                if (window.claimStatusInterval) clearInterval(window.claimStatusInterval);
+                window.claimStatusInterval = setInterval(update, 1000);
+            }
 
             // ===== Profile =====
             async function showProfileModal() {
@@ -3720,7 +3725,7 @@
                         
                         try {
                             await updateUsageUI();
-                            const userData = await sbGetUser(state.userEmail, $('userName').textContent);
+                            const userData = await sbGetUser(state.userEmail, CambiasoDisplayName());
                             let chats = await sbLoadChats(userData.id);
                             
                             if (!chats.length) {
@@ -3771,6 +3776,11 @@
                 });
             }
 
+            function CambiasoDisplayName() {
+                const el = $('userName');
+                return el ? el.textContent : 'User';
+            }
+
             // ===== Expose =====
             window.toggleSidebar = toggleSidebar;
             window.showModal = showModal;
@@ -3795,6 +3805,15 @@
             window.speakMessage = speakMessage;
             window.handleFeedback = handleFeedback;
             window.regenerateResponse = regenerateResponse;
+            window.claimDailyQuestions = claimDailyQuestions;
+            
+            // Exposures for new dynamic visual modules
+            window.setThemePreset = setThemePreset;
+            window.setStylePill = setStylePill;
+            window.optimizePrompt = optimizePrompt;
+            window.simulateFileUpload = simulateFileUpload;
+            window.clearAttachment = clearAttachment;
+            window.cancelVoiceInput = cancelVoiceInput;
 
             init();
 

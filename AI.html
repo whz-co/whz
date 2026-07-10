@@ -14,12 +14,11 @@
     
     <!-- Favicon -->
     <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><defs><linearGradient id='g' x1='0%25' y1='0%25' x2='100%25' y2='100%25'><stop offset='0%25' style='stop-color:%233b82f6'/><stop offset='100%25' style='stop-color:%238b5cf6'/></linearGradient></defs><circle cx='50' cy='50' r='45' fill='none' stroke='url(%23g)' stroke-width='4'/><circle cx='30' cy='35' r='8' fill='%233b82f6' opacity='0.9'/><circle cx='70' cy='35' r='8' fill='%238b5cf6' opacity='0.9'/><circle cx='30' cy='65' r='8' fill='%2322c55e' opacity='0.9'/><circle cx='70' cy='65' r='8' fill='%23f59e0b' opacity='0.9'/><circle cx='50' cy='50' r='6' fill='white'/></svg>">
-    <link rel="apple-touch-icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><defs><linearGradient id='g' x1='0%25' y1='0%25' x2='100%25' y2='100%25'><stop offset='0%25' style='stop-color:%233b82f6'/><stop offset='100%25' style='stop-color:%238b5cf6'/></linearGradient></defs><circle cx='50' cy='50' r='45' fill='none' stroke='url(%23g)' stroke-width='4'/><circle cx='30' cy='35' r='8' fill='%233b82f6' opacity='0.9'/><circle cx='70' cy='35' r='8' fill='%238b5cf6' opacity='0.9'/><circle cx='30' cy='65' r='8' fill='%2322c55e' opacity='0.9'/><circle cx='70' cy='65' r='8' fill='%23f59e0b' opacity='0.9'/><circle cx='50' cy='50' r='6' fill='white'/></svg>">
     
     <!-- Fonts -->
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&family=Share+Tech+Mono&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     
     <!-- Code Highlighting -->
@@ -99,7 +98,6 @@
             --z-header: 50;
             --z-input: 40;
 
-            /* Core Fixes: Spacing Variables */
             --spacing-1: 4px;
             --spacing-2: 8px;
             --spacing-3: 12px;
@@ -109,7 +107,6 @@
             --spacing-8: 32px;
             --spacing-10: 40px;
 
-            /* Core Fixes: Typography Variables */
             --font-xs: 12px;
             --font-sm: 14px;
             --font-base: 15px;
@@ -123,7 +120,6 @@
             --font-bold: 700;
             --font-extrabold: 800;
 
-            /* Core Fixes: Shadows and Offsets */
             --shadow-sm: 0 1px 2px 0 rgba(0, 0, 0, 0.05);
             --shadow-md: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06);
             --shadow-lg: 0 10px 15px -3px rgba(0, 0, 0, 0.1), 0 4px 6px -2px rgba(0, 0, 0, 0.05);
@@ -402,7 +398,6 @@
             transition: padding-left 0.35s cubic-bezier(0.4, 0, 0.2, 1);
         }
 
-        /* Core Fix: Prevent fixed hamburger overlapping with Sidebar Brand logo on Mobile */
         @media (max-width: 1023px) {
             .sidebar-header .brand {
                 padding-left: 50px;
@@ -742,7 +737,6 @@
             transition: margin-left 0.35s cubic-bezier(0.4, 0, 0.2, 1);
         }
 
-        /* Core Fix: Offset mobile header title to clear fixed toggle */
         @media (max-width: 1023px) {
             .chat-header .chat-title {
                 margin-left: 50px;
@@ -792,13 +786,12 @@
         .hamburger-svg-btn.active .line2 { opacity: 0; transform: scaleX(0); }
         .hamburger-svg-btn.active .line3 { transform: translate(0px, -6px) rotate(-45deg); stroke: var(--accent-primary); }
         
-        /* Core Fix: Elevate hamburger out of header's trapped stacking context on Mobile */
         @media (max-width: 1023px) {
             .hamburger-svg-btn {
                 position: fixed;
                 top: calc(8px + var(--safe-top));
                 left: 16px;
-                z-index: 101; /* High stacking order to sit on top of Sidebar and Blur Overlay */
+                z-index: 101;
             }
         }
 
@@ -896,7 +889,6 @@
             color: var(--text-primary);
         }
 
-        /* Core Fix: Markdown formatting support inside chat responses */
         .message.assistant blockquote {
             border-left: 3px solid var(--accent-primary);
             padding-left: var(--spacing-3);
@@ -920,7 +912,6 @@
         .message.assistant h2 { font-size: 1.2rem; }
         .message.assistant h3 { font-size: 1.05rem; }
         
-        /* Floating Code Copy Action */
         .copy-code-btn {
             position: absolute;
             top: 8px;
@@ -957,7 +948,6 @@
             opacity: 0.6;
         }
 
-        /* ===== Message Tool Actions ===== */
         .msg-actions {
             position: absolute;
             top: var(--spacing-2);
@@ -985,7 +975,6 @@
             transition: var(--transition-fast);
         }
 
-        /* ===== Message Feedback ===== */
         .msg-feedback {
             display: flex;
             gap: var(--spacing-2);
@@ -1011,7 +1000,6 @@
         .feedback-btn.active { background: rgba(59,130,246,0.15); border-color: var(--accent-primary); color: var(--accent-primary); }
         .feedback-btn.active.negative { background: rgba(239,68,68,0.15); border-color: var(--danger); color: var(--danger); }
 
-        /* Core Fix: Animated Typing Indicator Styles */
         .typing-indicator {
             display: flex;
             align-items: center;
@@ -1172,7 +1160,6 @@
             margin-top: var(--spacing-1);
         }
 
-        /* Core Fixes: Custom layout styling for Dr. Waleed description modal */
         .about-dr-card {
             background: var(--bg-primary);
             border: 1px solid var(--border-light);
@@ -1196,7 +1183,6 @@
             margin-bottom: var(--spacing-2);
         }
 
-        /* Core Fixes: Profile Stats Grid layout styling */
         .stat-grid {
             display: grid;
             grid-template-columns: repeat(2, 1fr);
@@ -1221,7 +1207,6 @@
             margin-top: 2px;
         }
 
-        /* Core Fixes: Modals Base Styles */
         .modal {
             position: fixed;
             inset: 0;
@@ -1251,6 +1236,7 @@
             box-shadow: var(--shadow-2xl);
             transform: scale(0.9);
             transition: transform 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+            position: relative;
         }
         .modal.show .modal-box {
             transform: scale(1);
@@ -1354,6 +1340,243 @@
         .light-theme .chat-header { background: rgba(255, 255, 255, 0.95); }
         .light-theme .input-area { background: rgba(255, 255, 255, 0.98); }
         .light-theme .message.assistant { background: var(--bg-tertiary); }
+
+        /* ============================================================
+           NEW MODERN & PAYMENT CARD ELEMENT UPDATES
+           ============================================================ */
+
+        /* Modern Card List for Settings Options */
+        .setting-card-list {
+            display: flex;
+            flex-direction: column;
+            gap: var(--spacing-3);
+            margin-bottom: var(--spacing-5);
+            max-height: 380px;
+            overflow-y: auto;
+            padding-right: 4px;
+        }
+
+        .setting-option-card {
+            background: var(--bg-primary);
+            border: 1px solid var(--border-light);
+            border-radius: var(--radius-lg);
+            padding: var(--spacing-4);
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            gap: var(--spacing-4);
+            transition: transform var(--transition-fast), border-color var(--transition-fast);
+        }
+
+        .setting-option-card:hover {
+            border-color: var(--border-strong);
+            transform: translateY(-1px);
+        }
+
+        .setting-meta {
+            display: flex;
+            align-items: center;
+            gap: var(--spacing-3);
+            flex: 1;
+        }
+
+        .setting-icon-badge {
+            width: 42px;
+            height: 42px;
+            border-radius: var(--radius-md);
+            background: rgba(59, 130, 246, 0.1);
+            color: var(--accent-primary);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: var(--font-lg);
+            flex-shrink: 0;
+        }
+
+        .setting-meta-details h4 {
+            font-size: var(--font-base);
+            font-weight: var(--font-semibold);
+            color: var(--text-primary);
+            margin-bottom: 2px;
+        }
+
+        .setting-meta-details p {
+            font-size: var(--font-xs);
+            color: var(--text-secondary);
+            line-height: 1.3;
+        }
+
+        .setting-action {
+            flex-shrink: 0;
+            min-width: 120px;
+            display: flex;
+            justify-content: flex-end;
+        }
+
+        /* Visa & Mastercard Credit Card Visuals */
+        .credit-card-preview {
+            width: 100%;
+            height: 200px;
+            background: linear-gradient(135deg, #1e2640 0%, #0a0f1d 100%);
+            border-radius: var(--radius-xl);
+            padding: var(--spacing-5);
+            display: flex;
+            flex-direction: column;
+            justify-content: space-between;
+            position: relative;
+            box-shadow: var(--shadow-lg), inset 0 0 15px rgba(255, 255, 255, 0.05);
+            margin-bottom: var(--spacing-5);
+            overflow: hidden;
+            border: 1px solid rgba(255, 255, 255, 0.1);
+        }
+
+        .credit-card-preview::before {
+            content: '';
+            position: absolute;
+            top: -50%;
+            left: -30%;
+            width: 150%;
+            height: 150%;
+            background: radial-gradient(circle, rgba(99, 102, 241, 0.15) 0%, transparent 60%);
+            pointer-events: none;
+        }
+
+        .credit-card-top {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            z-index: 1;
+        }
+
+        .card-chip {
+            width: 44px;
+            height: 32px;
+            background: linear-gradient(135deg, #f59e0b, #d97706);
+            border-radius: var(--radius-sm);
+            position: relative;
+            box-shadow: inset 0 1px 3px rgba(255, 255, 255, 0.3);
+        }
+
+        .card-network-logo {
+            font-size: var(--font-3xl);
+            font-weight: var(--font-extrabold);
+            font-style: italic;
+            color: rgba(255, 255, 255, 0.8);
+            font-family: 'Share Tech Mono', monospace;
+        }
+
+        .card-number-display {
+            font-family: 'Share Tech Mono', monospace;
+            font-size: 21px;
+            color: var(--text-primary);
+            letter-spacing: 2px;
+            text-shadow: 0 2px 4px rgba(0,0,0,0.5);
+            z-index: 1;
+            margin: var(--spacing-3) 0;
+            text-align: center;
+        }
+
+        .credit-card-bottom {
+            display: flex;
+            justify-content: space-between;
+            z-index: 1;
+        }
+
+        .card-holder-group, .card-expiry-group {
+            display: flex;
+            flex-direction: column;
+        }
+
+        .card-label {
+            font-size: 9px;
+            color: var(--text-tertiary);
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            margin-bottom: 2px;
+        }
+
+        .card-holder-name, .card-expiry-date {
+            font-family: 'Share Tech Mono', monospace;
+            font-size: 13px;
+            color: var(--text-primary);
+            text-transform: uppercase;
+        }
+
+        /* Interactive Form inside Modal */
+        .payment-form-grid {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: var(--spacing-3);
+        }
+
+        .payment-input-group {
+            display: flex;
+            flex-direction: column;
+            gap: 4px;
+            margin-bottom: var(--spacing-3);
+        }
+
+        .payment-input-group label {
+            font-size: var(--font-xs);
+            color: var(--text-secondary);
+            font-weight: var(--font-semibold);
+        }
+
+        .payment-input-group input {
+            width: 100%;
+            height: 44px;
+            background: var(--bg-primary);
+            border: 1px solid var(--border-medium);
+            border-radius: var(--radius-md);
+            padding: 0 var(--spacing-3);
+            color: var(--text-primary);
+            outline: none;
+            font-size: var(--font-base);
+            transition: border-color var(--transition-fast);
+        }
+
+        .payment-input-group input:focus {
+            border-color: var(--accent-primary);
+        }
+
+        /* Checkout Gateway Simulated Processing Screen */
+        .payment-loader {
+            position: absolute;
+            inset: 0;
+            background: var(--bg-secondary);
+            border-radius: var(--radius-xl);
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            gap: var(--spacing-4);
+            opacity: 0;
+            pointer-events: none;
+            transition: opacity 0.3s ease;
+            z-index: 5;
+        }
+
+        .payment-loader.active {
+            opacity: 1;
+            pointer-events: auto;
+        }
+
+        .payment-loader-spinner {
+            width: 48px;
+            height: 48px;
+            border: 3px solid var(--border-medium);
+            border-top-color: var(--success);
+            border-radius: 50%;
+            animation: spin 0.8s linear infinite;
+        }
+
+        .payment-loader-text {
+            font-size: var(--font-sm);
+            color: var(--text-secondary);
+            text-align: center;
+            font-weight: var(--font-medium);
+        }
+
     </style>
 </head>
 <body>
@@ -1401,43 +1624,160 @@
             <h2>System Settings</h2>
             <p class="modal-subtitle">Customize your Premium Intelligence experience.</p>
             
-            <div style="margin-bottom:var(--spacing-4)">
-                <label style="font-size:var(--font-xs);color:var(--text-secondary);font-weight:var(--font-semibold);text-transform:uppercase;letter-spacing:0.5px;display:block;margin-bottom:var(--spacing-1)">AI Model Engine</label>
-                <select id="settingModel" style="width:100%;padding:var(--spacing-2) var(--spacing-3);background:var(--bg-primary);border:1px solid var(--border-medium);border-radius:var(--radius-md);color:var(--text-primary);outline:none;font-size:var(--font-base);height:44px">
-                    <option value="zakhourani-premium">Zakhourani Premium (Default)</option>
-                    <option value="gpt-4o">GPT-4o (High Intelligence)</option>
-                    <option value="claude-3-5">Claude 3.5 Sonnet (Creative Code)</option>
-                    <option value="gemini-pro">Gemini 1.5 Pro</option>
-                </select>
+            <div class="setting-card-list">
+                
+                <!-- Option 1: AI Model Engine -->
+                <div class="setting-option-card">
+                    <div class="setting-meta">
+                        <div class="setting-icon-badge" style="background: rgba(59, 130, 246, 0.1); color: var(--accent-primary);">
+                            <i class="fas fa-microchip"></i>
+                        </div>
+                        <div class="setting-meta-details">
+                            <h4>AI Engine</h4>
+                            <p>Select platform brain routing</p>
+                        </div>
+                    </div>
+                    <div class="setting-action">
+                        <select id="settingModel" style="width:100%;padding:4px var(--spacing-2);background:var(--bg-tertiary);border:1px solid var(--border-medium);border-radius:var(--radius-sm);color:var(--text-primary);outline:none;font-size:var(--font-sm);height:36px">
+                            <option value="zakhourani-premium">Zakhourani Premium</option>
+                            <option value="gpt-4o">GPT-4o (Intelligence)</option>
+                            <option value="claude-3-5">Claude 3.5 (Creative Code)</option>
+                            <option value="gemini-pro">Gemini 1.5 Pro</option>
+                        </select>
+                    </div>
+                </div>
+
+                <!-- Option 2: Continuous Voice Output (Premium Feature) -->
+                <div class="setting-option-card">
+                    <div class="setting-meta">
+                        <div class="setting-icon-badge" style="background: rgba(16, 185, 129, 0.1); color: var(--success);">
+                            <i class="fas fa-volume-up"></i>
+                        </div>
+                        <div class="setting-meta-details">
+                            <h4>Auto Voice Speak</h4>
+                            <p>Read back replies automatically</p>
+                        </div>
+                    </div>
+                    <div class="setting-action">
+                        <input type="checkbox" id="settingAutoVoice" style="width:20px;height:20px;accent-color:var(--accent-primary)">
+                    </div>
+                </div>
+
+                <!-- Option 3: Speech Speed -->
+                <div class="setting-option-card">
+                    <div class="setting-meta">
+                        <div class="setting-icon-badge" style="background: rgba(139, 92, 246, 0.1); color: var(--accent-secondary);">
+                            <i class="fas fa-tachometer-alt"></i>
+                        </div>
+                        <div class="setting-meta-details">
+                            <h4>Speech Synth Speed</h4>
+                            <p>Vocal narration frequency</p>
+                        </div>
+                    </div>
+                    <div class="setting-action" style="display:flex;align-items:center;gap:var(--spacing-2)">
+                        <input type="range" id="settingSpeechSpeed" min="0.5" max="2" step="0.1" value="0.9" style="width:70px;accent-color:var(--accent-primary)">
+                        <span id="speedValue" style="font-size:var(--font-xs);color:var(--text-primary);min-width:24px">0.9x</span>
+                    </div>
+                </div>
+
+                <!-- Option 4: Audio Sound FX -->
+                <div class="setting-option-card">
+                    <div class="setting-meta">
+                        <div class="setting-icon-badge" style="background: rgba(245, 158, 11, 0.1); color: var(--warning);">
+                            <i class="fas fa-music"></i>
+                        </div>
+                        <div class="setting-meta-details">
+                            <h4>Audio Sound FX</h4>
+                            <p>System UI interaction signals</p>
+                        </div>
+                    </div>
+                    <div class="setting-action">
+                        <input type="checkbox" id="settingSoundFX" checked style="width:20px;height:20px;accent-color:var(--accent-primary)">
+                    </div>
+                </div>
+
+                <!-- Option 5: Backup/Restore -->
+                <div class="setting-option-card" style="flex-direction:column; align-items:stretch; gap:var(--spacing-2)">
+                    <div class="setting-meta">
+                        <div class="setting-icon-badge" style="background: rgba(239, 68, 68, 0.1); color: var(--danger);">
+                            <i class="fas fa-database"></i>
+                        </div>
+                        <div class="setting-meta-details">
+                            <h4>Backup & Recovery</h4>
+                            <p>Export or load your conversation buffers offline</p>
+                        </div>
+                    </div>
+                    <div style="display:flex;gap:var(--spacing-2);margin-top:var(--spacing-1)">
+                        <button class="modal-btn secondary" style="flex:1;min-height:36px;font-size:var(--font-xs)" onclick="exportAllChatsJSON()"><i class="fas fa-file-export"></i> Backup</button>
+                        <button class="modal-btn secondary" style="flex:1;min-height:36px;font-size:var(--font-xs)" onclick="$('importFileInput').click()"><i class="fas fa-file-import"></i> Restore</button>
+                        <input type="file" id="importFileInput" accept=".json" style="display:none" onchange="importChatsJSON(event)">
+                    </div>
+                </div>
+
             </div>
+
+            <button class="modal-btn primary" style="width:100%" onclick="saveSettings()"><i class="fas fa-check"></i> Save Settings</button>
+            <button class="modal-btn secondary" style="width:100%; margin-top: var(--spacing-2)" onclick="closeModal('settingsModal')">Close</button>
+        </div>
+    </div>
+
+    <!-- ===== Card Payment Modal (Visa/Mastercard Checkout Interface) ===== -->
+    <div class="modal" id="paymentModal">
+        <div class="modal-box" style="max-width:440px">
             
-            <div style="margin-bottom:var(--spacing-4)">
-                <label style="font-size:var(--font-xs);color:var(--text-secondary);font-weight:var(--font-semibold);text-transform:uppercase;letter-spacing:0.5px;display:block;margin-bottom:var(--spacing-1)">Speech Synth Speed</label>
-                <div style="display:flex;align-items:center;gap:var(--spacing-3)">
-                    <input type="range" id="settingSpeechSpeed" min="0.5" max="2" step="0.1" value="0.9" style="flex:1;accent-color:var(--accent-primary)">
-                    <span id="speedValue" style="font-size:var(--font-sm);color:var(--text-primary);min-width:30px">0.9x</span>
+            <!-- Custom Processing Overlay Screen -->
+            <div class="payment-loader" id="paymentLoader">
+                <div class="payment-loader-spinner"></div>
+                <div class="payment-loader-text" id="paymentLoaderText">Contacting card issuing bank...<br>Securing dynamic authorization buffers</div>
+            </div>
+
+            <span class="modal-icon">💳</span>
+            <h2>Secure Checkout</h2>
+            <p class="modal-subtitle" id="paymentDetailsHeader">Processing order transaction...</p>
+
+            <!-- Renderable Visa card template structure -->
+            <div class="credit-card-preview" id="creditCardVisual">
+                <div class="credit-card-top">
+                    <div class="card-chip"></div>
+                    <div class="card-network-logo" id="cardLogo">VISA</div>
+                </div>
+                <div class="card-number-display" id="cardNumberDisplay">•••• •••• •••• ••••</div>
+                <div class="credit-card-bottom">
+                    <div class="card-holder-group">
+                        <span class="card-label">Card Holder</span>
+                        <span class="card-holder-name" id="cardHolderDisplay">YOUR NAME</span>
+                    </div>
+                    <div class="card-expiry-group">
+                        <span class="card-label">Expires</span>
+                        <span class="card-expiry-date" id="cardExpiryDisplay">MM/YY</span>
+                    </div>
                 </div>
             </div>
 
-            <div style="margin-bottom:var(--spacing-4);display:flex;justify-content:space-between;align-items:center">
-                <div>
-                    <label style="font-size:var(--font-sm);color:var(--text-primary);font-weight:var(--font-semibold);display:block">Interface Sound FX</label>
-                    <span style="font-size:var(--font-xs);color:var(--text-tertiary)">Immersive audio updates</span>
+            <!-- Fields for billing entry -->
+            <div class="payment-fields">
+                <div class="payment-input-group">
+                    <label for="payName">Cardholder Name</label>
+                    <input type="text" id="payName" placeholder="John Doe" autocomplete="cc-name">
                 </div>
-                <input type="checkbox" id="settingSoundFX" checked style="width:20px;height:20px;accent-color:var(--accent-primary)">
-            </div>
-            
-            <div style="margin-bottom:var(--spacing-4)">
-                <label style="font-size:var(--font-xs);color:var(--text-secondary);font-weight:var(--font-semibold);text-transform:uppercase;letter-spacing:0.5px;display:block;margin-bottom:var(--spacing-1)">Backup & Restore Data</label>
-                <div style="display:flex;gap:var(--spacing-2)">
-                    <button class="modal-btn secondary" style="flex:1;margin-top:0" onclick="exportAllChatsJSON()"><i class="fas fa-file-export"></i> Backup</button>
-                    <button class="modal-btn secondary" style="flex:1;margin-top:0" onclick="$('importFileInput').click()"><i class="fas fa-file-import"></i> Restore</button>
-                    <input type="file" id="importFileInput" accept=".json" style="display:none" onchange="importChatsJSON(event)">
+                <div class="payment-input-group">
+                    <label for="payNumber">Card Number</label>
+                    <input type="text" id="payNumber" placeholder="4111 2222 3333 4444" maxlength="19" autocomplete="cc-number">
                 </div>
+                <div class="payment-form-grid">
+                    <div class="payment-input-group">
+                        <label for="payExpiry">Expiration</label>
+                        <input type="text" id="payExpiry" placeholder="MM/YY" maxlength="5" autocomplete="cc-exp">
+                    </div>
+                    <div class="payment-input-group">
+                        <label for="payCvv">CVV / Security Code</label>
+                        <input type="password" id="payCvv" placeholder="•••" maxlength="4" autocomplete="cc-csc">
+                    </div>
+                </div>
+                <div class="auth-error" id="paymentError" style="margin-bottom:var(--spacing-2)"></div>
+                <button class="modal-btn gold" style="width:100%" id="paySubmitBtn" onclick="processCardPayment()"><i class="fas fa-lock"></i> Authorize & Pay</button>
+                <button class="modal-btn secondary" style="width:100%; margin-top:var(--spacing-2)" onclick="closeModal('paymentModal')">Cancel</button>
             </div>
-
-            <button class="modal-btn primary" onclick="saveSettings()"><i class="fas fa-check"></i> Save Settings</button>
-            <button class="modal-btn secondary" onclick="closeModal('settingsModal')">Close</button>
         </div>
     </div>
 
@@ -1459,14 +1799,18 @@
             <span class="modal-icon">💰</span>
             <h2>Premium Packages</h2>
             <p class="modal-subtitle">Balance: <strong style="color:var(--accent-primary);font-size:1.3rem" id="packagesBalance">$0.00</strong></p>
-            <div style="display:flex;gap:var(--spacing-2);margin:var(--spacing-3) 0">
-                <button class="modal-btn primary" style="flex:1;font-size:var(--font-sm);padding:var(--spacing-2)" onclick="topupBalance(5)"><i class="fas fa-plus"></i> $5</button>
-                <button class="modal-btn primary" style="flex:1;font-size:var(--font-sm);padding:var(--spacing-2)" onclick="topupBalance(10)"><i class="fas fa-plus"></i> $10</button>
-                <button class="modal-btn primary" style="flex:1;font-size:var(--font-sm);padding:var(--spacing-2)" onclick="topupBalance(25)"><i class="fas fa-plus"></i> $25</button>
+            
+            <label style="font-size: var(--font-xs); color: var(--text-secondary); font-weight: var(--font-semibold); text-transform: uppercase; letter-spacing: 0.5px; display: block; margin-bottom: var(--spacing-2)">Quick Balance Top-Up</label>
+            <div style="display:flex;gap:var(--spacing-2);margin:0 0 var(--spacing-4)">
+                <button class="modal-btn primary" style="flex:1;font-size:var(--font-sm);padding:var(--spacing-2)" onclick="openTopUpCheckout(5)"><i class="fas fa-plus"></i> $5</button>
+                <button class="modal-btn primary" style="flex:1;font-size:var(--font-sm);padding:var(--spacing-2)" onclick="openTopUpCheckout(10)"><i class="fas fa-plus"></i> $10</button>
+                <button class="modal-btn primary" style="flex:1;font-size:var(--font-sm);padding:var(--spacing-2)" onclick="openTopUpCheckout(25)"><i class="fas fa-plus"></i> $25</button>
             </div>
+            
+            <label style="font-size: var(--font-xs); color: var(--text-secondary); font-weight: var(--font-semibold); text-transform: uppercase; letter-spacing: 0.5px; display: block; margin-bottom: var(--spacing-1)">AI Subscription Tier Models</label>
             <div id="packagesList"></div>
-            <p style="font-size:var(--font-xs);color:var(--text-tertiary);margin-top:var(--spacing-3);text-align:center"><i class="fas fa-lock"></i> Secure payments coming soon</p>
-            <button class="modal-btn secondary" onclick="closeModal('packagesModal')">Close</button>
+            <p style="font-size:var(--font-xs);color:var(--text-tertiary);margin-top:var(--spacing-3);text-align:center"><i class="fas fa-lock"></i> Secured payment system activated</p>
+            <button class="modal-btn secondary" style="width:100%; margin-top: var(--spacing-2)" onclick="closeModal('packagesModal')">Close</button>
         </div>
     </div>
 
@@ -1650,11 +1994,12 @@
                 dailyLimit: 50,
                 soundEnabled: true,
                 speechSpeed: 0.9,
+                autoVoiceSpeak: false,
                 selectedModel: 'zakhourani-premium',
                 sendCooldown: 1500,
                 maxMessageLength: 4000,
                 maxChats: 100,
-                version: '5.0'
+                version: '5.1'
             };
 
             // ===== DOM Helpers =====
@@ -1679,7 +2024,8 @@
                 theme: localStorage.getItem('zk_theme') || 'dark',
                 isOnline: navigator.onLine,
                 loadingProgress: 0,
-                isInitialized: false
+                isInitialized: false,
+                pendingTransaction: { type: null, amount: 0, pkgId: null }
             };
 
             // ===== Network Background =====
@@ -1726,7 +2072,7 @@
                 }, duration);
             }
 
-            // ===== Sound System (AUTOPLAY COMPLIANT) =====
+            // ===== Sound System =====
             function initAudio() {
                 if (!state.audioCtx) {
                     try {
@@ -1761,7 +2107,6 @@
             function soundClaim() { playSound(523, 0.07, 0.12); }
             function soundError() { playSound(300, 0.05, 0.15); }
 
-            // One-time user gesture trigger to unlock AudioContext
             document.addEventListener('click', function unlockContextOnInteraction() {
                 initAudio();
                 document.removeEventListener('click', unlockContextOnInteraction);
@@ -1804,7 +2149,6 @@
                 }
             }
 
-            // Core Fix: Enable dismiss sidebar by tapping background overlay on Mobile
             document.addEventListener('DOMContentLoaded', () => {
                 const overlay = $('sidebarOverlay');
                 if (overlay) {
@@ -1821,10 +2165,12 @@
                 const model = localStorage.getItem('zk_setting_model') || 'zakhourani-premium';
                 const speed = parseFloat(localStorage.getItem('zk_setting_speed') || '0.9');
                 const soundEnabled = localStorage.getItem('zk_setting_sound') !== 'false';
+                const autoVoice = localStorage.getItem('zk_setting_autovoice') === 'true';
                 
                 CONFIG.selectedModel = model;
                 CONFIG.speechSpeed = speed;
                 CONFIG.soundEnabled = soundEnabled;
+                CONFIG.autoVoiceSpeak = autoVoice;
                 
                 if ($('settingModel')) $('settingModel').value = model;
                 if ($('settingSpeechSpeed')) {
@@ -1832,20 +2178,24 @@
                     $('speedValue').textContent = speed + 'x';
                 }
                 if ($('settingSoundFX')) $('settingSoundFX').checked = soundEnabled;
+                if ($('settingAutoVoice')) $('settingAutoVoice').checked = autoVoice;
             }
 
             window.saveSettings = function() {
                 const model = $('settingModel').value;
                 const speed = parseFloat($('settingSpeechSpeed').value);
                 const soundEnabled = $('settingSoundFX').checked;
+                const autoVoice = $('settingAutoVoice').checked;
                 
                 CONFIG.selectedModel = model;
                 CONFIG.speechSpeed = speed;
                 CONFIG.soundEnabled = soundEnabled;
+                CONFIG.autoVoiceSpeak = autoVoice;
                 
                 localStorage.setItem('zk_setting_model', model);
                 localStorage.setItem('zk_setting_speed', speed.toString());
                 localStorage.setItem('zk_setting_sound', soundEnabled.toString());
+                localStorage.setItem('zk_setting_autovoice', autoVoice.toString());
                 
                 closeModal('settingsModal');
                 toast('Configuration saved! ⚙️', 'success');
@@ -1886,6 +2236,7 @@
                     
                     toast('Backup created successfully! 💾', 'success');
                 } catch (err) {
+                    errorLog('Failed during Export parsing sequence', err);
                     toast('Backup failed: ' + err.message, 'error');
                 }
             };
@@ -1916,6 +2267,7 @@
                             await openChat(state.allChats[0].id);
                         }
                     } catch (err) {
+                        errorLog('Failed inside local file storage ingestion stream', err);
                         toast('Restore failed: ' + err.message, 'error');
                     }
                 };
@@ -1935,7 +2287,6 @@
                     .catch(() => toast('Copy block failed', 'error'));
             };
 
-            // Double Click user message load back editing helper
             document.addEventListener('DOMContentLoaded', () => {
                 const container = $('chatContainer');
                 if (container) {
@@ -1999,7 +2350,8 @@
             // ===== Database Functions =====
             async function sbCheckLimit(email) {
                 try {
-                    const { data } = await supabase.rpc('check_daily_limit', { p_user_email: email });
+                    const { data, error } = await supabase.rpc('check_daily_limit', { p_user_email: email });
+                    if (error) throw error;
                     return data || { 
                         can_ask: true, 
                         remaining: 50, 
@@ -2009,7 +2361,8 @@
                         total_used: 0,
                         is_premium: false
                     };
-                } catch (_) {
+                } catch (err) {
+                    errorLog('Failed checking usage restrictions', err);
                     return { 
                         can_ask: true, 
                         remaining: 50, 
@@ -2024,20 +2377,25 @@
 
             async function sbIncrementUsage(email) {
                 try {
-                    await supabase.rpc('increment_usage', { p_user_email: email });
-                } catch (_) { /* Silently fail */ }
+                    const { error } = await supabase.rpc('increment_usage', { p_user_email: email });
+                    if (error) throw error;
+                } catch (err) {
+                    errorLog('Failed logging question incremental metrics', err);
+                }
             }
 
             async function sbGetUser(email, displayName) {
                 try {
-                    let { data } = await supabase
+                    let { data, error } = await supabase
                         .from('users')
                         .select('*')
                         .eq('email', email)
                         .maybeSingle();
                     
+                    if (error) throw error;
+                    
                     if (!data) {
-                        await supabase.from('users').insert({
+                        const { data: newUser, error: createError } = await supabase.from('users').insert({
                             email: email,
                             username: displayName,
                             display_name: displayName,
@@ -2047,33 +2405,39 @@
                             balance_credits: 0,
                             is_premium: false,
                             created_at: new Date().toISOString()
-                        });
-                        return sbGetUser(email, displayName);
+                        }).select().single();
+                        
+                        if (createError) throw createError;
+                        return newUser;
                     }
                     return data;
-                } catch (_) {
+                } catch (err) {
+                    errorLog('Failed fetching or instantiating user credentials profile', err);
                     return null;
                 }
             }
 
             async function sbLoadChats(userId) {
                 try {
-                    const { data } = await supabase
+                    const { data, error } = await supabase
                         .from('conversations')
                         .select('*')
                         .eq('user_id', userId)
                         .order('updated_at', { ascending: false })
                         .limit(CONFIG.maxChats);
+                    
+                    if (error) throw error;
                     state.allChats = data || [];
                     return state.allChats;
-                } catch (_) {
+                } catch (err) {
+                    errorLog('Failed loaded conversation instances list', err);
                     return [];
                 }
             }
 
             async function sbCreateChat(userId, title) {
                 try {
-                    const { data } = await supabase
+                    const { data, error } = await supabase
                         .from('conversations')
                         .insert({ 
                             user_id: userId, 
@@ -2083,8 +2447,10 @@
                         })
                         .select()
                         .single();
+                    if (error) throw error;
                     return data;
-                } catch (_) {
+                } catch (err) {
+                    errorLog('Failed creating new database thread container', err);
                     return null;
                 }
             }
@@ -2092,33 +2458,41 @@
             async function sbDeleteChat(id) {
                 if (!isValidUUID(id)) return;
                 try {
-                    await supabase.from('conversations').delete().eq('id', id);
-                } catch (_) { /* Silently fail */ }
+                    const { error } = await supabase.from('conversations').delete().eq('id', id);
+                    if (error) throw error;
+                } catch (err) {
+                    errorLog('Failed to delete targeted message session', err);
+                }
             }
 
             async function sbRenameChat(id, title) {
                 if (!isValidUUID(id)) return;
                 try {
-                    await supabase
+                    const { error } = await supabase
                         .from('conversations')
                         .update({ 
                             title: title, 
                             updated_at: new Date().toISOString() 
                         })
                         .eq('id', id);
-                } catch (_) { /* Silently fail */ }
+                    if (error) throw error;
+                } catch (err) {
+                    errorLog('Failed renaming target workspace topic context', err);
+                }
             }
 
             async function sbLoadMessages(chatId) {
                 if (!isValidUUID(chatId)) return [];
                 try {
-                    const { data } = await supabase
+                    const { data, error } = await supabase
                         .from('messages')
                         .select('*')
                         .eq('conversation_id', chatId)
                         .order('created_at', { ascending: true });
+                    if (error) throw error;
                     return data || [];
-                } catch (_) {
+                } catch (err) {
+                    errorLog('Failed pulling session contextual log elements', err);
                     return [];
                 }
             }
@@ -2126,7 +2500,7 @@
             async function sbSaveMessage(chatId, userId, role, content, engine) {
                 if (!isValidUUID(chatId)) return;
                 try {
-                    await supabase.from('messages').insert({
+                    const { error } = await supabase.from('messages').insert({
                         conversation_id: chatId,
                         user_id: userId,
                         role: role,
@@ -2134,17 +2508,22 @@
                         engine: engine,
                         created_at: new Date().toISOString()
                     });
-                } catch (_) { /* Silently fail */ }
+                    if (error) throw error;
+                } catch (err) {
+                    errorLog('Failed inserting message block trace record', err);
+                }
             }
 
             async function sbLoadPackages() {
                 try {
-                    const { data } = await supabase
+                    const { data, error } = await supabase
                         .from('packages')
                         .select('*')
                         .order('price', { ascending: true });
+                    if (error) throw error;
                     return data || [];
-                } catch (_) {
+                } catch (err) {
+                    errorLog('Failed loading premium commercial offer profiles', err);
                     return [];
                 }
             }
@@ -2204,7 +2583,7 @@
                 if (confirm('Are you sure you want to logout?')) {
                     try {
                         await state.auth.signOut();
-                        toast('👋 Logged out successfully', 'info');
+                        toast('Log out sequence complete 👋', 'info');
                     } catch (_) {
                         toast('Logout failed', 'error');
                     }
@@ -2247,7 +2626,9 @@
                         $('userName').textContent = limit.username;
                         $('userAvatarText').textContent = limit.username.charAt(0).toUpperCase();
                     }
-                } catch (_) { /* Silently fail */ }
+                } catch (err) {
+                    errorLog('Failed updating client profile utilization stats indicators', err);
+                }
             }
 
             // ===== Chat Functions =====
@@ -2525,7 +2906,7 @@
                 $('chatTitle').textContent = 'New Chat';
                 await renderChats();
                 $('messageInput').focus();
-                toast('✨ New chat created', 'success');
+                toast('New workspace initiated', 'success');
                 soundSuccess();
             }
 
@@ -2552,7 +2933,7 @@
                     $('chatTitle').textContent = 'Zakhourani AI';
                 }
                 await renderChats();
-                toast('Chat deleted', 'info');
+                toast('Conversation expunged', 'info');
             }
 
             async function renamePrompt(id, oldTitle) {
@@ -2563,7 +2944,7 @@
                     if (id === state.chatId) {
                         $('chatTitle').textContent = newTitle.trim();
                     }
-                    toast('Renamed', 'success');
+                    toast('Workspace context modified', 'success');
                 }
             }
 
@@ -2577,7 +2958,7 @@
                             <div class="sub-text">Your chat history has been cleared</div>
                         </div>
                     `;
-                    toast('Chat cleared', 'info');
+                    toast('Buffers emptied', 'info');
                 }
             }
 
@@ -2624,11 +3005,14 @@
                     .catch(() => toast('Copy failed', 'error'));
             }
 
-            function speakMessage(btn) {
-                const msg = btn.closest('.message');
-                const text = msg.textContent
-                    .replace(/Zakhourani AI|Copy|Speak|Helpful|Not helpful|Regenerate/g, '')
-                    .trim();
+            function speakMessage(btn, customText = null) {
+                let text = customText;
+                if (!text) {
+                    const msg = btn.closest('.message');
+                    text = msg.textContent
+                        .replace(/Zakhourani AI|Copy|Speak|Helpful|Not helpful|Regenerate/g, '')
+                        .trim();
+                }
                 
                 if ('speechSynthesis' in window) {
                     speechSynthesis.cancel();
@@ -2638,9 +3022,9 @@
                     utterance.volume = 1;
                     utterance.lang = 'en-US';
                     speechSynthesis.speak(utterance);
-                    toast('🔊 Speaking...', 'info', 1500);
+                    toast('🔊 Audio synth online...', 'info', 1500);
                 } else {
-                    toast('Speech not supported', 'warning');
+                    toast('Local audio engine missing', 'warning');
                 }
             }
 
@@ -2649,10 +3033,10 @@
                 parent.querySelectorAll('.feedback-btn').forEach(b => b.classList.remove('active'));
                 btn.classList.add('active');
                 if (btn.dataset.type === 'helpful') {
-                    toast('👍 Thanks for your feedback!', 'success');
+                    toast('👍 Feedback logged. Thank you!', 'success');
                 } else {
                     btn.classList.add('negative');
-                    toast('👎 We\'ll work on improving!', 'info');
+                    toast('👎 Feedback logged. Re-indexing response logic.', 'info');
                 }
             }
 
@@ -2664,19 +3048,19 @@
                     $('messageInput').value = prevMsg.textContent.trim();
                     sendMessage();
                 } else {
-                    toast('No user message to regenerate', 'warning');
+                    toast('Target system entry query lost', 'warning');
                 }
             }
 
             async function editLastMessage() {
                 if (!state.chatId) {
-                    toast('No active chat', 'warning');
+                    toast('No active session found', 'warning');
                     return;
                 }
                 
                 const messages = await sbLoadMessages(state.chatId);
                 if (!messages.length) {
-                    toast('No messages to edit', 'warning');
+                    toast('No data values available to trace back', 'warning');
                     return;
                 }
                 
@@ -2689,14 +3073,14 @@
                 }
                 
                 if (idx === -1) {
-                    toast('No user message found', 'warning');
+                    toast('Prior query execution sequence not found', 'warning');
                     return;
                 }
                 
                 const newText = prompt('Edit your message:', messages[idx].content);
                 if (newText && newText.trim()) {
                     $('messageInput').value = newText.trim();
-                    toast('Message updated - press Send to resend', 'info');
+                    toast('Prompt loaded back - press send to execute', 'info');
                     $('messageInput').focus();
                 }
             }
@@ -2713,7 +3097,7 @@
             function startVoice() {
                 const SR = window.SpeechRecognition || window.webkitSpeechRecognition;
                 if (!SR) {
-                    toast('Voice input not supported in this browser', 'warning');
+                    toast('System Speech API unavailable', 'warning');
                     return;
                 }
                 
@@ -2729,11 +3113,11 @@
                 
                 try {
                     state.recognition.start();
-                    toast('🎤 Listening...', 'info', 5000);
+                    toast('🎤 Receiving audio capture...', 'info', 5000);
                 } catch (_) {
                     btn.classList.remove('listening');
                     btn.innerHTML = '<i class="fas fa-microphone"></i>';
-                    toast('Voice start failed', 'error');
+                    toast('Audio engine failed to open', 'error');
                     return;
                 }
                 
@@ -2746,9 +3130,9 @@
                 
                 state.recognition.onerror = (event) => {
                     if (event.error === 'not-allowed') {
-                        toast('Microphone access denied', 'error');
+                        toast('Audio capture denied', 'error');
                     } else if (event.error !== 'aborted') {
-                        toast('Voice recognition failed: ' + event.error, 'error');
+                        toast('Engine translation error: ' + event.error, 'error');
                     }
                     stopVoice();
                 };
@@ -2781,22 +3165,22 @@
                 
                 if (!text) return;
                 if (text.length > CONFIG.maxMessageLength) {
-                    toast(`Message too long (max ${CONFIG.maxMessageLength} chars)`, 'warning');
+                    toast(`Input size threshold overflow (max ${CONFIG.maxMessageLength} chars)`, 'warning');
                     return;
                 }
                 
                 const now = Date.now();
                 if (now - state.lastSendTime < CONFIG.sendCooldown) {
-                    toast('Please wait a moment...', 'warning');
+                    toast('Cooling down transaction buffers...', 'warning');
                     return;
                 }
                 if (state.busy) {
-                    toast('Processing...', 'warning');
+                    toast('Computing...', 'warning');
                     return;
                 }
                 
                 if (!state.isOnline) {
-                    toast('You are offline. Please check your connection.', 'error');
+                    toast('Link offline. Reconnecting...', 'error');
                     return;
                 }
                 
@@ -2920,6 +3304,10 @@
                         highlightCodeBlocks();
                         soundSuccess();
                         
+                        if (CONFIG.autoVoiceSpeak) {
+                            speakMessage(null, data.reply);
+                        }
+
                         const messages = await sbLoadMessages(state.chatId);
                         if (messages.length <= 2) {
                             const title = text.slice(0, 35) + (text.length > 35 ? '...' : '');
@@ -2931,7 +3319,7 @@
                         throw new Error(data.error || 'No reply from AI');
                     }
                 } catch (err) {
-                    errorLog('Send error:', err);
+                    errorLog('Failed prompt routing stream to remote worker platform', err);
                     const typing = document.querySelector('.typing-indicator');
                     if (typing) typing.remove();
                     
@@ -2974,16 +3362,18 @@
                     $('packagesList').innerHTML = packages.map(pkg => `
                         <div class="pkg-card${pkg.is_popular ? ' popular' : ''}" data-id="${pkg.id}">
                             <div class="pkg-info">
-                                <h4>${pkg.name}</h4>
-                                <small>${pkg.questions_per_day === 999999 ? '♾️ Unlimited' : pkg.questions_per_day + '/day'} · ${pkg.validity_days}d</small>
+                                <h4 style="font-weight:var(--font-bold); color: var(--text-primary)"><i class="fas fa-crown" style="color:var(--warning); margin-right:4px"></i> ${pkg.name}</h4>
+                                <small style="color: var(--text-secondary)">${pkg.questions_per_day === 999999 ? '♾️ Unlimited' : pkg.questions_per_day + '/day'} · ${pkg.validity_days}d</small>
                             </div>
-                            <div class="pkg-price">$${pkg.price}</div>
+                            <div class="pkg-price" style="font-weight:var(--font-bold); color: var(--accent-primary)">$${pkg.price}</div>
                         </div>
                     `).join('');
                     
                     document.querySelectorAll('.pkg-card').forEach(card => {
                         card.addEventListener('click', function() {
-                            purchasePackage(this.dataset.id);
+                            const pkgId = this.dataset.id;
+                            const pkg = packages.find(p => p.id === pkgId);
+                            openPackageCheckout(pkgId, pkg ? pkg.name : 'Premium Offering', pkg ? pkg.price : 0);
                         });
                     });
                 } else {
@@ -2993,37 +3383,137 @@
                 showModal('packagesModal');
             }
 
-            async function purchasePackage(pkgId) {
-                try {
-                    const { data } = await supabase.rpc('purchase_package', {
-                        p_user_email: state.userEmail,
-                        p_pkg_id: pkgId
-                    });
-                    toast(data.message || 'Package purchased! 🎉', 'success');
-                    closeModal('packagesModal');
-                    await updateUsageUI();
-                    soundSuccess();
-                } catch (_) {
-                    toast('Purchase failed', 'error');
-                    soundError();
-                }
+            // ===== Secure Checkout Flow (No Free Money) =====
+            window.openTopUpCheckout = function(amount) {
+                closeModal('packagesModal');
+                state.pendingTransaction = { type: 'topup', amount: amount, pkgId: null };
+                
+                $('paymentDetailsHeader').innerHTML = `Funding balance credits with: <strong style="color:var(--success)">$${amount.toFixed(2)} USD</strong>`;
+                resetPaymentForm();
+                showModal('paymentModal');
+            };
+
+            window.openPackageCheckout = function(pkgId, pkgName, price) {
+                closeModal('packagesModal');
+                state.pendingTransaction = { type: 'package', amount: price, pkgId: pkgId };
+                
+                $('paymentDetailsHeader').innerHTML = `Subscribing to: <strong>${pkgName}</strong> for <strong style="color:var(--accent-primary)">$${parseFloat(price).toFixed(2)} USD</strong>`;
+                resetPaymentForm();
+                showModal('paymentModal');
+            };
+
+            function resetPaymentForm() {
+                $('payName').value = '';
+                $('payNumber').value = '';
+                $('payExpiry').value = '';
+                $('payCvv').value = '';
+                $('paymentError').textContent = '';
+                
+                $('cardNumberDisplay').textContent = '•••• •••• •••• ••••';
+                $('cardHolderDisplay').textContent = 'YOUR NAME';
+                $('cardExpiryDisplay').textContent = 'MM/YY';
+                $('cardLogo').textContent = 'CC';
+                $('paymentLoader').classList.remove('active');
             }
 
-            async function topupBalance(amount) {
-                try {
-                    const { data } = await supabase.rpc('topup_balance', {
-                        p_user_email: state.userEmail,
-                        p_amount: amount
-                    });
-                    toast('+$' + amount + ' added to balance', 'success');
-                    closeModal('packagesModal');
-                    await updateUsageUI();
-                    soundSuccess();
-                } catch (_) {
-                    toast('Topup failed', 'error');
+            // Real-time Visa input syncing event listeners
+            document.addEventListener('DOMContentLoaded', () => {
+                $('payName').addEventListener('input', (e) => {
+                    $('cardHolderDisplay').textContent = e.target.value.trim().toUpperCase() || 'YOUR NAME';
+                });
+
+                $('payNumber').addEventListener('input', (e) => {
+                    let value = e.target.value.replace(/\D/g, '');
+                    if (value.startsWith('4')) {
+                        $('cardLogo').textContent = 'VISA';
+                    } else if (value.startsWith('5')) {
+                        $('cardLogo').textContent = 'MC';
+                    } else {
+                        $('cardLogo').textContent = 'CC';
+                    }
+                    
+                    let formatted = '';
+                    for (let i = 0; i < value.length; i++) {
+                        if (i > 0 && i % 4 === 0) formatted += ' ';
+                        formatted += value[i];
+                    }
+                    e.target.value = formatted;
+                    $('cardNumberDisplay').textContent = formatted || '•••• •••• •••• ••••';
+                });
+
+                $('payExpiry').addEventListener('input', (e) => {
+                    let value = e.target.value.replace(/\D/g, '');
+                    if (value.length > 2) {
+                        value = value.slice(0, 2) + '/' + value.slice(2, 4);
+                    }
+                    e.target.value = value;
+                    $('cardExpiryDisplay').textContent = value || 'MM/YY';
+                });
+            });
+
+            window.processCardPayment = async function() {
+                const name = $('payName').value.trim();
+                const number = $('payNumber').value.replace(/\s/g, '');
+                const expiry = $('payExpiry').value;
+                const cvv = $('payCvv').value;
+                const errBox = $('paymentError');
+
+                if (!name || number.length < 16 || expiry.length < 5 || cvv.length < 3) {
+                    errBox.textContent = 'Please check card credentials for format errors.';
                     soundError();
+                    return;
                 }
-            }
+
+                errBox.textContent = '';
+                const loader = $('paymentLoader');
+                loader.classList.add('active');
+                
+                const steps = [
+                    'Establishing TLS transaction pipeline...',
+                    'Decrypting authorization signatures...',
+                    'Contacting card issuing network endpoints...',
+                    'Executing ledger asset adjustments...'
+                ];
+                
+                let stepIdx = 0;
+                const progressInterval = setInterval(() => {
+                    if (stepIdx < steps.length) {
+                        $('paymentLoaderText').innerHTML = steps[stepIdx] + '<br><span style="font-family:monospace;font-size:11px;color:var(--text-tertiary)">SECURE SEC-328 SSL LINK</span>';
+                        stepIdx++;
+                    }
+                }, 900);
+
+                // Simulated Issuing Bank Latency Wait
+                setTimeout(async () => {
+                    clearInterval(progressInterval);
+                    try {
+                        if (state.pendingTransaction.type === 'topup') {
+                            const { data, error } = await supabase.rpc('topup_balance', {
+                                p_user_email: state.userEmail,
+                                p_amount: state.pendingTransaction.amount
+                            });
+                            if (error) throw error;
+                            toast('+$' + state.pendingTransaction.amount + ' added to balance! 💳', 'success');
+                        } else if (state.pendingTransaction.type === 'package') {
+                            const { data, error } = await supabase.rpc('purchase_package', {
+                                p_user_email: state.userEmail,
+                                p_pkg_id: state.pendingTransaction.pkgId
+                            });
+                            if (error) throw error;
+                            toast(data?.message || 'Premium Package activated! 👑', 'success');
+                        }
+                        
+                        closeModal('paymentModal');
+                        await updateUsageUI();
+                        soundClaim();
+                    } catch (err) {
+                        errorLog('Bank processing channel failure', err);
+                        loader.classList.remove('active');
+                        errBox.textContent = 'Transaction Declined: Engine failed connecting to bank terminal pipeline.';
+                        soundError();
+                    }
+                }, 4000);
+            };
 
             // ===== Profile =====
             async function showProfileModal() {
@@ -3063,20 +3553,22 @@
                 }
                 
                 try {
-                    await supabase
+                    const { error } = await supabase
                         .from('users')
                         .update({ 
                             display_name: name,
                             updated_at: new Date().toISOString()
                         })
                         .eq('email', state.userEmail);
+                    if (error) throw error;
                     
                     $('userName').textContent = name;
                     $('userAvatarText').textContent = name.charAt(0).toUpperCase();
                     closeModal('profileModal');
-                    toast('Profile updated ✅', 'success');
+                    toast('Profile modified successfully', 'success');
                     soundSuccess();
-                } catch (_) {
+                } catch (err) {
+                    errorLog('Failed modifying profile identity tags', err);
                     toast('Update failed', 'error');
                     soundError();
                 }
@@ -3088,7 +3580,7 @@
                 state.theme = isLight ? 'light' : 'dark';
                 localStorage.setItem('zk_theme', state.theme);
                 $('themeBtn').innerHTML = isLight ? '<i class="fas fa-sun"></i>' : '<i class="fas fa-moon"></i>';
-                toast(isLight ? '☀️ Light mode' : '🌙 Dark mode', 'info', 1500);
+                toast(isLight ? '☀️ Light theme active' : '🌙 Dark theme active', 'info', 1500);
             }
 
             // ===== Event Handlers =====
@@ -3173,7 +3665,6 @@
                 }
             });
 
-            // Swipe gestures for side panel (mobile)
             let touchStartX = 0;
             let touchStartY = 0;
             
@@ -3253,7 +3744,7 @@
                             
                             const limit = await sbCheckLimit(state.userEmail);
                             if (limit.remaining > 0) {
-                                toast('🧠 Ready to help!', 'success');
+                                toast('🧠 System interface online', 'success');
                                 setTimeout(() => {
                                     if (state.audioCtx && state.audioCtx.state === 'running') {
                                         soundSuccess();
@@ -3266,7 +3757,7 @@
                             state.isInitialized = true;
                             log('Initialization complete');
                         } catch (err) {
-                            errorLog('Init error:', err);
+                            errorLog('Terminal boot orchestration sequence halted', err);
                             $('loader').classList.add('hidden');
                             $('app').style.display = 'flex';
                             toast('Connected, but some features may be limited', 'warning');
@@ -3294,8 +3785,6 @@
             window.showProfileModal = showProfileModal;
             window.updateProfile = updateProfile;
             window.showPackagesModal = showPackagesModal;
-            window.purchasePackage = purchasePackage;
-            window.topupBalance = topupBalance;
             window.toggleTheme = toggleTheme;
             window.toggleVoiceInput = toggleVoiceInput;
             window.handleLogin = handleLogin;
@@ -3308,11 +3797,6 @@
             window.regenerateResponse = regenerateResponse;
 
             init();
-            
-            log('╔═══════════════════════════════════════════╗');
-            log('║  🚀 Zakhourani AI v' + CONFIG.version + ' · Premium Intelligence  ║');
-            log('║  ✨ Ready for anything!                   ║');
-            log('╚═══════════════════════════════════════════╝');
 
         })();
     </script>

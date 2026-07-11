@@ -2827,10 +2827,10 @@
                 } catch (_) {}
             }
 
-            soundSend = () => { playSound(800, 0.05, 0.08); };
-            soundSuccess = () => { playSound(1000, 0.05, 0.1); };
-            soundClaim = () => { playSound(523, 0.07, 0.12); };
-            soundError = () => { playSound(300, 0.05, 0.15); };
+            function soundSend() { playSound(800, 0.05, 0.08); }
+            function soundSuccess() { playSound(1000, 0.05, 0.1); }
+            function soundClaim() { playSound(523, 0.07, 0.12); }
+            function soundError() { playSound(300, 0.05, 0.15); }
 
             document.addEventListener('click', function unlockContextOnInteraction() {
                 initAudio();
@@ -3958,21 +3958,6 @@
                 }
                 
                 await sbIncrementUsage(state.userEmail);
-
-                // Add this after the sbIncrementUsage call in sendMessage()
-                // Get current limit data and update UI
-                try {
-                    const updatedLimit = await sbCheckLimit(state.userEmail);
-                    const remaining = updatedLimit.remaining >= 999 ? '∞' : updatedLimit.remaining;
-                    $('balanceCount').textContent = remaining;
-                    const percentage = updatedLimit.total > 0 ? (updatedLimit.remaining / updatedLimit.total) * 100 : 100;
-                    const fill = $('balanceFill');
-                    fill.style.width = Math.min(percentage, 100) + '%';
-                    fill.className = 'usage-fill' + (percentage < 15 ? ' danger' : percentage < 35 ? ' warning' : '');
-                } catch (e) {
-                    // Silent fail - just use the existing UI
-                }
-
                 state.lastSendTime = now;
                 state.busy = true;
                 $('sendButton').disabled = true;
@@ -4177,7 +4162,7 @@
                     } else if (lower.includes('explain') || lower.includes('what is') || lower.includes('why')) {
                         expanded = `Examine and explain in deep detail, covering fundamental technical concepts, core operating dynamics, relevant historical timeline references, and high-level real world analogies for: ${text}`;
                     } else if (lower.includes('write') || lower.includes('create an essay') || lower.includes('article')) {
-                        expanded = `Draft a captivating, beautifully structured essay on this subject. Formulate proper introductory, body paragraph transitions, and deep concluding summaries using highly descriptive vocabulary on: ${text}`;
+                        expanded = `Draft a compelling, beautifully-written, structured essay on this subject. Formulate proper introductory, body paragraph transitions, and deep concluding summaries using highly descriptive vocabulary on: ${text}`;
                     } else {
                         expanded = `Analyze the target context, core principles, and specific implications to deliver a thorough, highly organized, and multi-layered response detailing: ${text}`;
                     }

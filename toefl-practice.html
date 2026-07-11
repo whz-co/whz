@@ -2,648 +2,1562 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
-    <title>TOEFL Practice Tests · Full Mock Exams | Zakhourani</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover">
+    <title>TOEFL Practice Tests | Zakhourani</title>
+    
+    <!-- Meta Tags for SEO -->
+    <meta name="description" content="Simulate real test conditions with full-length timed TOEFL mock exams. Get instant band scores and strategic breakdowns prepared by Dr. Waleed Hussien Zakhourani.">
+    <meta name="keywords" content="TOEFL mock test, TOEFL practice, TOEFL iBT simulator, Dr. Waleed Hussien Zakhourani">
+    <meta name="author" content="Dr. Waleed Hussien Zakhourani">
+    <meta name="robots" content="index, follow">
+    
+    <!-- Fonts and Icons -->
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/animate.css/4.1.1/animate.min.css">
+    
     <style>
-        * {
-            margin: 0;
-            padding: 0;
-            box-sizing: border-box;
+        /* ===== RESET & GLOBAL STYLES ===== */
+        * { 
+            margin: 0; 
+            padding: 0; 
+            box-sizing: border-box; 
+            -webkit-tap-highlight-color: transparent;
         }
-
+        
         :root {
-            --toefl-primary: #e67e22;
-            --toefl-dark: #d35400;
-            --toefl-light: #fff5e8;
+            --primary: #1a2634;
+            --primary-light: #2c3e50;
+            --secondary: #3498db;
+            --secondary-dark: #2980b9;
+            --secondary-light: #5faee3;
+            --toefl-accent: #e67e22;
+            --toefl-accent-dark: #d35400;
+            --accent: #e74c3c;
+            --accent-dark: #c0392b;
             --success: #27ae60;
-            --danger: #e74c3c;
             --warning: #f39c12;
-            --text-dark: #2c3e50;
-            --text-muted: #5a6e7c;
-            --border-light: #ffdec2;
-            --card-white: #ffffff;
-            --shadow-sm: 0 8px 20px rgba(0,0,0,0.05);
-            --shadow-md: 0 15px 35px rgba(230,126,34,0.12);
+            --danger: #e74c3c;
+            --info: #3498db;
+            --light: #ecf0f1;
+            --light-gray: #f8f9fa;
+            --gray: #95a5a6;
+            --dark: #2c3e50;
+            --darker: #1a252f;
+            --white: #ffffff;
+            --black: #000000;
+            
+            --shadow-sm: 0 2px 4px rgba(0,0,0,0.1);
+            --shadow-md: 0 4px 6px rgba(0,0,0,0.1);
+            --shadow-lg: 0 10px 15px rgba(0,0,0,0.1);
+            --shadow-xl: 0 20px 25px rgba(0,0,0,0.1);
+            --shadow-2xl: 0 25px 50px rgba(0,0,0,0.25);
+            --gradient-primary: linear-gradient(135deg, var(--primary) 0%, var(--primary-light) 100%);
+            --gradient-secondary: linear-gradient(135deg, var(--secondary) 0%, var(--secondary-dark) 100%);
+            --gradient-toefl: linear-gradient(135deg, var(--toefl-accent) 0%, var(--toefl-accent-dark) 100%);
+            --gradient-accent: linear-gradient(135deg, var(--accent) 0%, var(--accent-dark) 100%);
+            --gradient-gold: linear-gradient(135deg, #f7971e 0%, #ffd200 100%);
         }
-
-        body {
-            font-family: system-ui, 'Segoe UI', 'Inter', -apple-system, sans-serif;
-            background: linear-gradient(145deg, #fef8f0 0%, #fff3e8 100%);
-            color: var(--text-dark);
-            line-height: 1.5;
+        
+        body { 
+            font-family: 'Poppins', 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: linear-gradient(135deg, #f5f7fa 0%, #c3cfe2 100%);
+            min-height: 100vh;
+            color: var(--dark);
+            line-height: 1.6;
+            overflow-x: hidden;
+            padding-bottom: calc(65px + env(safe-area-inset-bottom));
         }
-
-        html {
-            font-size: 16px;
+        
+        /* ===== TYPOGRAPHY ===== */
+        h1, h2, h3, h4, h5, h6 {
+            font-weight: 700;
+            line-height: 1.2;
+            margin-bottom: 1rem;
         }
-        @media (max-width: 640px) {
-            html { font-size: 15px; }
+        
+        h1 { font-size: 3.5rem; }
+        h2 { font-size: 2.25rem; }
+        h3 { font-size: 1.5rem; }
+        
+        p {
+            margin-bottom: 1rem;
+            color: #4a5568;
         }
-        @media (max-width: 480px) {
-            html { font-size: 14px; }
-        }
-
-        h1 { font-size: 2rem; font-weight: 800; letter-spacing: -0.01em; }
-        h2 { font-size: 1.6rem; font-weight: 700; margin: 0.75rem 0; }
-        h3 { font-size: 1.25rem; font-weight: 700; }
-
+        
+        /* ===== UTILITY CLASSES ===== */
         .container {
-            max-width: 1300px;
+            max-width: 1400px;
             margin: 0 auto;
-            padding: 0 1.5rem;
+            padding: 0 2rem;
         }
-
-        /* Header */
+        
+        .btn {
+            display: inline-block;
+            padding: 1rem 2rem;
+            border-radius: 50px;
+            font-weight: 600;
+            text-decoration: none;
+            transition: all 0.3s ease;
+            border: none;
+            cursor: pointer;
+            font-size: 1rem;
+            position: relative;
+            overflow: hidden;
+            user-select: none;
+            text-align: center;
+        }
+        
+        .btn::before {
+            content: '';
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            width: 0;
+            height: 0;
+            border-radius: 50%;
+            background: rgba(255, 255, 255, 0.3);
+            transform: translate(-50%, -50%);
+            transition: width 0.6s, height 0.6s;
+        }
+        
+        .btn:hover::before {
+            width: 300px;
+            height: 300px;
+        }
+        
+        .btn-toefl {
+            background: var(--toefl-accent);
+            color: var(--white);
+            border: 2px solid var(--toefl-accent);
+        }
+        
+        .btn-toefl:hover {
+            background: var(--toefl-accent-dark);
+            border-color: var(--toefl-accent-dark);
+            transform: translateY(-3px);
+            box-shadow: 0 10px 20px rgba(230, 126, 34, 0.3);
+        }
+        
+        /* ===== HEADER STYLES (App-Optimized) ===== */
         header {
-            background: white;
-            box-shadow: 0 2px 15px rgba(0,0,0,0.05);
-            padding: 0.8rem 1.5rem;
+            background: var(--white);
+            box-shadow: var(--shadow-md);
             position: sticky;
             top: 0;
-            z-index: 100;
-            backdrop-filter: blur(2px);
-            background: rgba(255,255,255,0.97);
+            z-index: 1000;
         }
-        .header-content {
+        
+        .header-top {
+            background: var(--gradient-primary);
+            color: var(--white);
+            padding: calc(1rem + env(safe-area-inset-top)) 2rem 1rem;
             display: flex;
             justify-content: space-between;
             align-items: center;
-            max-width: 1300px;
-            margin: 0 auto;
-            flex-wrap: wrap;
-            gap: 1rem;
         }
+        
         .logo {
             display: flex;
             align-items: center;
-            gap: 10px;
+            gap: 0.5rem;
             text-decoration: none;
         }
+        
+        .logo-icon {
+            font-size: 1.75rem;
+            color: var(--secondary);
+        }
+        
         .logo h1 {
-            font-size: 1.6rem;
-            font-weight: 700;
-            color: #2c3e50;
+            font-size: 1.5rem;
+            font-weight: 800;
+            color: var(--white);
+            letter-spacing: 0.5px;
             margin: 0;
         }
-        .nav-links {
-            display: flex;
-            gap: 0.7rem;
-            flex-wrap: wrap;
-            align-items: center;
+        
+        .logo span {
+            color: var(--secondary);
         }
-        .nav-links a {
-            text-decoration: none;
-            color: #2c3e50;
+        
+        .auth-buttons {
+            display: flex;
+            gap: 0.75rem;
+        }
+        
+        .auth-btn {
+            padding: 0.5rem 1.25rem;
+            border-radius: 50px;
             font-weight: 600;
-            padding: 0.45rem 1rem;
-            border-radius: 40px;
-            transition: 0.2s;
-            font-size: 0.85rem;
+            cursor: pointer;
+            transition: all 0.3s;
+            text-decoration: none;
             display: inline-flex;
             align-items: center;
-            gap: 6px;
+            gap: 0.5rem;
+            font-size: 0.875rem;
+            user-select: none;
         }
-        .nav-links a.active {
-            background: var(--toefl-primary);
-            color: white;
+        
+        .login-btn {
+            background: transparent;
+            color: var(--white);
+            border: 2px solid var(--white);
         }
-        .login-btn, .signup-btn {
-            padding: 0.4rem 1.2rem;
-            border-radius: 40px;
-            font-weight: 600;
-            text-decoration: none;
-            font-size: 0.85rem;
+        
+        .login-btn:hover {
+            background: var(--white);
+            color: var(--primary);
         }
-        .login-btn { background: #3498db; color: white; }
-        .signup-btn { background: #27ae60; color: white; }
+        
+        .signup-btn {
+            background: var(--secondary);
+            color: var(--white);
+            border: 2px solid var(--secondary);
+        }
+        
+        .signup-btn:hover {
+            background: var(--secondary-dark);
+            border-color: var(--secondary-dark);
+        }
+        
+        .user-menu {
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+            color: var(--white);
+        }
+        
         .user-avatar {
-            width: 34px;
-            height: 34px;
+            width: 38px;
+            height: 38px;
             border-radius: 50%;
             object-fit: cover;
-            border: 2px solid var(--toefl-primary);
+            border: 2px solid var(--secondary);
         }
-
-        /* Breadcrumb */
+        
+        .user-name {
+            font-weight: 600;
+            font-size: 0.875rem;
+        }
+        
+        .logout-btn {
+            background: var(--accent);
+            color: var(--white);
+            border: none;
+            padding: 0.5rem 1rem;
+            border-radius: 50px;
+            cursor: pointer;
+            text-decoration: none;
+            display: inline-flex;
+            align-items: center;
+            gap: 0.5rem;
+            transition: all 0.3s;
+            font-weight: 600;
+            font-size: 0.875rem;
+        }
+        
+        /* Navigation (Swipe-Optimized for App Structure) */
+        nav {
+            padding: 0;
+            background: var(--white);
+            border-bottom: 1px solid var(--light);
+            overflow: hidden;
+        }
+        
+        .nav-container {
+            display: flex;
+            align-items: center;
+            padding: 0;
+            position: relative;
+        }
+        
+        .nav-links {
+            display: flex;
+            list-style: none;
+            gap: 0.5rem;
+            margin: 0;
+            padding: 0.75rem 1.5rem;
+            overflow-x: auto;
+            scroll-behavior: smooth;
+            -webkit-overflow-scrolling: touch;
+            width: 100%;
+        }
+        
+        .nav-links::-webkit-scrollbar {
+            display: none;
+        }
+        
+        .nav-links {
+            -ms-overflow-style: none;
+            scrollbar-width: none;
+        }
+        
+        .nav-links li {
+            position: relative;
+            flex-shrink: 0;
+        }
+        
+        .nav-links a {
+            text-decoration: none;
+            color: var(--dark);
+            font-weight: 600;
+            font-size: 0.9rem;
+            padding: 0.5rem 1rem;
+            border-radius: 50px;
+            transition: all 0.2s ease;
+            white-space: nowrap;
+            display: flex;
+            align-items: center;
+            gap: 0.4rem;
+            border: 1px solid transparent;
+            user-select: none;
+        }
+        
+        .nav-links a i {
+            font-size: 1rem;
+            color: var(--secondary);
+        }
+        
+        .nav-links a:hover, .nav-links a:focus {
+            background: var(--light-gray);
+            color: var(--secondary);
+        }
+        
+        .nav-links a.active {
+            background: rgba(230, 126, 34, 0.15);
+            color: var(--toefl-accent-dark);
+            border-color: rgba(230, 126, 34, 0.3);
+        }
+        
+        .nav-links a.active i {
+            color: var(--toefl-accent-dark);
+        }
+        
+        .nav-badge {
+            background: var(--accent);
+            color: var(--white);
+            font-size: 0.65rem;
+            padding: 0.1rem 0.4rem;
+            border-radius: 10px;
+            font-weight: 700;
+        }
+        
+        .nav-container::before, .nav-container::after {
+            content: '';
+            position: absolute;
+            top: 0;
+            bottom: 0;
+            width: 25px;
+            z-index: 2;
+            pointer-events: none;
+        }
+        .nav-container::before {
+            left: 0;
+            background: linear-gradient(to right, rgba(255,255,255,0.9), transparent);
+        }
+        .nav-container::after {
+            right: 0;
+            background: linear-gradient(to left, rgba(255,255,255,0.9), transparent);
+        }
+        
+        /* ===== BOTTOM TAB NAVIGATION BAR ===== */
+        .bottom-tab-bar {
+            position: fixed;
+            bottom: 0;
+            left: 0;
+            right: 0;
+            background: var(--white);
+            box-shadow: 0 -4px 15px rgba(0,0,0,0.08);
+            display: none;
+            justify-content: space-around;
+            align-items: center;
+            height: 65px;
+            padding-bottom: env(safe-area-inset-bottom);
+            z-index: 1000;
+            border-top: 1px solid var(--light);
+        }
+        
+        .tab-item {
+            text-decoration: none;
+            color: var(--gray);
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            font-size: 0.7rem;
+            font-weight: 500;
+            flex: 1;
+            height: 100%;
+            transition: color 0.2s;
+            position: relative;
+        }
+        
+        .tab-item i {
+            font-size: 1.3rem;
+            margin-bottom: 2px;
+            transition: transform 0.2s;
+        }
+        
+        .tab-item.active {
+            color: var(--toefl-accent);
+        }
+        
+        .tab-item.active i {
+            transform: translateY(-2px);
+            color: var(--toefl-accent);
+        }
+        
+        /* ===== BREADCRUMB ===== */
         .breadcrumb {
-            margin: 1.2rem 0 1rem;
-            font-size: 0.85rem;
-            color: #b97f44;
+            margin: 2rem 0 1rem;
+            font-size: 0.9rem;
+            color: var(--toefl-accent-dark);
+            font-weight: 500;
         }
-
-        /* Hero */
+        .breadcrumb a {
+            color: var(--primary-light);
+            text-decoration: none;
+            transition: color 0.2s;
+        }
+        .breadcrumb a:hover {
+            color: var(--toefl-accent);
+        }
+        
+        /* ===== HERO SECTION ===== */
         .hero-practice {
-            background: linear-gradient(115deg, #e67e22 0%, #f39c12 100%);
+            background: var(--gradient-toefl);
             border-radius: 2rem;
-            padding: 2rem;
-            color: white;
+            padding: 3rem 3rem;
+            color: var(--white);
             margin-bottom: 2rem;
+            box-shadow: var(--shadow-lg);
+            border: 1px solid rgba(230,126,34,0.1);
         }
-        .hero-practice h1 i, .hero-practice p { color: white; }
+        .hero-practice h1 {
+            color: var(--white);
+            font-size: 3rem;
+            margin-bottom: 1rem;
+        }
+        .hero-practice p {
+            font-size: 1.2rem;
+            color: rgba(255, 255, 255, 0.9);
+            line-height: 1.7;
+        }
         .score-badge {
-            background: rgba(255,255,255,0.2);
-            backdrop-filter: blur(4px);
             display: inline-block;
-            padding: 0.3rem 1rem;
-            border-radius: 60px;
+            background: rgba(255,255,255,0.2);
+            color: var(--white);
+            padding: 0.4rem 1.2rem;
+            border-radius: 50px;
             font-size: 0.8rem;
-            margin-top: 0.8rem;
+            font-weight: 600;
+            margin-top: 1.5rem;
+            backdrop-filter: blur(10px);
+            box-shadow: var(--shadow-sm);
         }
 
-        /* Test cards grid */
+        /* ===== TEST CARDS GRID ===== */
         .tests-grid {
             display: grid;
             grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
-            gap: 1.8rem;
-            margin: 2rem 0;
+            gap: 2rem;
+            margin: 3rem 0;
         }
         .test-card {
-            background: var(--card-white);
-            border-radius: 1.5rem;
-            padding: 1.6rem;
-            box-shadow: var(--shadow-sm);
-            transition: all 0.25s ease;
-            border: 1px solid var(--border-light);
-            cursor: pointer;
+            background: var(--white);
+            border-radius: 24px;
+            padding: 2.5rem;
+            box-shadow: var(--shadow-lg);
+            transition: all 0.3s;
+            border: 1px solid rgba(230,126,34,0.1);
+            display: flex;
+            flex-direction: column;
         }
         .test-card:hover {
-            transform: translateY(-5px);
-            box-shadow: var(--shadow-md);
-            border-color: var(--toefl-primary);
+            transform: translateY(-8px);
+            box-shadow: var(--shadow-2xl);
+            border-color: var(--toefl-accent);
         }
         .test-icon {
-            font-size: 2.2rem;
-            color: var(--toefl-primary);
-            margin-bottom: 0.8rem;
+            font-size: 2.5rem;
+            color: var(--toefl-accent);
+            margin-bottom: 1.5rem;
+        }
+        .test-card h3 {
+            font-size: 1.5rem;
+            color: var(--primary);
+            margin-bottom: 0.5rem;
         }
         .test-meta {
             display: flex;
             gap: 1rem;
             margin: 1rem 0;
-            font-size: 0.8rem;
-            color: var(--text-muted);
+            font-size: 0.85rem;
+            color: var(--gray);
+            font-weight: 500;
         }
         .btn-start {
-            background: var(--toefl-primary);
-            color: white;
+            background: var(--toefl-accent);
+            color: var(--white);
             border: none;
-            padding: 0.6rem 1.2rem;
+            padding: 1rem 2rem;
             border-radius: 50px;
-            font-weight: 600;
+            font-weight: 700;
             cursor: pointer;
             width: 100%;
-            margin-top: 0.8rem;
-            transition: 0.2s;
+            margin-top: auto;
+            transition: all 0.3s;
+            font-size: 0.95rem;
+            box-shadow: var(--shadow-md);
         }
-        .btn-start:hover { background: var(--toefl-dark); transform: scale(0.98); }
+        .btn-start:hover { 
+            background: var(--toefl-accent-dark); 
+            transform: translateY(-2px);
+            box-shadow: 0 10px 20px rgba(230, 126, 34, 0.3);
+        }
 
-        /* Modal overlay (test simulation) */
+        /* ===== MOCK INTERACTION WINDOW (Modal) ===== */
         .modal-overlay {
             position: fixed;
             top: 0;
             left: 0;
             width: 100%;
             height: 100%;
-            background: rgba(0,0,0,0.85);
-            z-index: 1000;
+            background: rgba(0,0,0,0.6);
+            z-index: 2000;
             display: flex;
             align-items: center;
             justify-content: center;
             backdrop-filter: blur(5px);
             overflow-y: auto;
-            padding: 1rem;
+            padding: 1.5rem;
         }
         .test-modal {
-            background: white;
+            background: var(--white);
             max-width: 900px;
             width: 100%;
-            border-radius: 2rem;
+            border-radius: 24px;
             max-height: 90vh;
             overflow-y: auto;
-            box-shadow: 0 25px 50px rgba(0,0,0,0.3);
-            animation: slideUp 0.2s ease;
+            box-shadow: var(--shadow-2xl);
+            animation: slideUp 0.3s cubic-bezier(0.16, 1, 0.3, 1);
+            border: 1px solid rgba(0,0,0,0.05);
         }
         @keyframes slideUp {
             from { transform: translateY(30px); opacity: 0; }
             to { transform: translateY(0); opacity: 1; }
         }
         .modal-header {
-            background: var(--toefl-primary);
-            color: white;
-            padding: 1.2rem 1.5rem;
-            border-radius: 2rem 2rem 0 0;
+            background: var(--gradient-toefl);
+            color: var(--white);
+            padding: 1.5rem 2.5rem;
+            border-radius: 24px 24px 0 0;
             display: flex;
             justify-content: space-between;
             align-items: center;
             flex-wrap: wrap;
-            gap: 0.5rem;
+            gap: 1rem;
+        }
+        .modal-header h3 {
+            margin-bottom: 0;
+            font-size: 1.5rem;
+            color: var(--white);
         }
         .timer-box {
             background: rgba(0,0,0,0.3);
-            padding: 0.3rem 1rem;
-            border-radius: 60px;
+            padding: 0.5rem 1.5rem;
+            border-radius: 50px;
             font-family: monospace;
-            font-weight: bold;
-            font-size: 1.3rem;
+            font-weight: 800;
+            font-size: 1.4rem;
+            color: var(--white);
         }
         .modal-body {
-            padding: 1.8rem;
+            padding: 2.5rem;
         }
         .question-item {
-            margin-bottom: 1.8rem;
+            margin-bottom: 2rem;
             border-bottom: 1px solid #f0e0d0;
-            padding-bottom: 1.2rem;
+            padding-bottom: 1.5rem;
+        }
+        .question-item:last-of-type {
+            border-bottom: none;
+            padding-bottom: 0;
+            margin-bottom: 1.5rem;
         }
         .question-text {
             font-weight: 700;
-            margin-bottom: 0.8rem;
-            font-size: 1rem;
+            margin-bottom: 1rem;
+            font-size: 1.1rem;
+            color: var(--primary);
         }
         .options label {
-            display: block;
-            margin: 0.5rem 0;
+            display: flex;
+            align-items: center;
+            gap: 0.75rem;
+            margin: 0.75rem 0;
             cursor: pointer;
-            padding: 0.4rem;
+            padding: 0.75rem 1rem;
             border-radius: 12px;
-            transition: background 0.1s;
+            transition: all 0.2s;
+            border: 1px solid rgba(0,0,0,0.05);
+            font-size: 0.95rem;
+            color: var(--dark);
         }
-        .options input { margin-right: 10px; }
+        .options label:hover {
+            background: #fff5e8;
+            border-color: var(--border-light);
+        }
+        .options input { 
+            width: 20px;
+            height: 20px;
+            cursor: pointer; 
+            accent-color: var(--toefl-accent);
+        }
         .submit-test-btn {
             background: var(--success);
-            color: white;
+            color: var(--white);
             border: none;
-            padding: 0.9rem;
+            padding: 1rem;
             width: 100%;
-            border-radius: 60px;
+            border-radius: 50px;
             font-weight: 700;
-            font-size: 1rem;
-            margin-top: 1.5rem;
+            font-size: 1.1rem;
+            margin-top: 2rem;
             cursor: pointer;
+            transition: all 0.3s;
+            box-shadow: var(--shadow-md);
+        }
+        .submit-test-btn:hover {
+            background: #219a52;
+            transform: translateY(-2px);
+            box-shadow: 0 10px 20px rgba(39, 174, 96, 0.3);
         }
         .result-area {
             background: #f0f7ea;
-            padding: 1rem;
-            border-radius: 1rem;
-            margin-top: 1rem;
+            padding: 2rem;
+            border-radius: 16px;
+            margin-top: 1.5rem;
             text-align: center;
+            border: 1px solid rgba(39, 174, 96, 0.1);
+        }
+        .result-area h4 {
+            color: var(--primary);
+            font-size: 1.5rem;
+            margin: 0.75rem 0;
         }
         .close-modal {
-            background: rgba(255,255,255,0.2);
+            background: rgba(255,255,255,0.25);
             border: none;
-            color: white;
-            font-size: 1.5rem;
+            color: var(--white);
+            font-size: 1.25rem;
             cursor: pointer;
-            width: 32px;
-            height: 32px;
+            width: 36px;
+            height: 36px;
             border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            transition: all 0.2s;
+        }
+        .close-modal:hover {
+            background: rgba(255,255,255,0.4);
         }
 
-        /* Score estimator section */
+        /* ===== SCORE ESTIMATOR BOX ===== */
         .score-estimator {
-            background: white;
-            border-radius: 1.5rem;
-            padding: 1.6rem;
-            margin: 2rem 0;
+            background: var(--white);
+            border-radius: 24px;
+            padding: 2.5rem;
+            margin: 3rem 0;
             text-align: center;
+            border: 1px solid rgba(230,126,34,0.1);
+            box-shadow: var(--shadow-lg);
+        }
+        .score-estimator h3 {
+            font-size: 1.5rem;
+            color: var(--primary);
+            margin-top: 0.5rem;
+            margin-bottom: 0.5rem;
+        }
+        .score-estimator p {
+            color: var(--gray);
+            max-width: 650px;
+            margin: 0 auto 1.5rem;
         }
 
+        /* ===== FOOTER ===== */
         footer {
-            background: #1e2a36;
-            color: white;
-            padding: 2rem 1rem;
-            margin-top: 3rem;
-            text-align: center;
-            border-radius: 2rem 2rem 0 0;
+            background: var(--primary);
+            color: var(--white);
+            padding: 4rem 2rem 2rem;
+            position: relative;
+            overflow: hidden;
+            border-radius: 0;
         }
+        
+        footer::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            height: 5px;
+            background: var(--gradient-secondary);
+        }
+        
+        .footer-content {
+            max-width: 1400px;
+            margin: 0 auto;
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 3rem;
+            padding: 0 2rem;
+        }
+        
+        .footer-section h3 {
+            font-size: 1.5rem;
+            margin-bottom: 1.5rem;
+            color: var(--white);
+            position: relative;
+            padding-bottom: 0.5rem;
+        }
+        
+        .footer-section h3::after {
+            content: '';
+            position: absolute;
+            bottom: 0;
+            left: 0;
+            width: 50px;
+            height: 3px;
+            background: var(--secondary);
+        }
+        
+        .footer-section p {
+            color: rgba(255,255,255,0.7);
+            line-height: 1.8;
+            margin-bottom: 1.5rem;
+        }
+        
+        .social-links {
+            display: flex;
+            gap: 1rem;
+        }
+        
+        .social-links a {
+            width: 40px;
+            height: 40px;
+            background: rgba(255,255,255,0.1);
+            border-radius: 50%;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            color: var(--white);
+            text-decoration: none;
+            transition: all 0.3s;
+        }
+        
+        .social-links a:hover {
+            background: var(--secondary);
+            transform: translateY(-3px) rotate(360deg);
+        }
+        
+        .footer-links {
+            list-style: none;
+        }
+        
+        .footer-links li {
+            margin-bottom: 0.75rem;
+        }
+        
+        .footer-links a {
+            color: rgba(255,255,255,0.7);
+            text-decoration: none;
+            transition: all 0.3s;
+            display: inline-flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+        
+        .footer-links a:hover {
+            color: var(--secondary);
+            transform: translateX(5px);
+        }
+        
+        .footer-links i {
+            font-size: 0.75rem;
+        }
+        
+        .contact-info {
+            list-style: none;
+        }
+        
+        .contact-info li {
+            margin-bottom: 1rem;
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+            color: rgba(255,255,255,0.7);
+        }
+        
+        .contact-info i {
+            width: 30px;
+            height: 30px;
+            background: rgba(255,255,255,0.1);
+            border-radius: 50%;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            color: var(--secondary);
+        }
+        
+        .newsletter-form {
+            display: flex;
+            gap: 0.5rem;
+            margin-top: 1rem;
+        }
+        
+        .newsletter-form input {
+            flex: 1;
+            padding: 0.75rem 1rem;
+            border: none;
+            border-radius: 50px;
+            font-family: inherit;
+        }
+        
+        .newsletter-form button {
+            padding: 0.75rem 1.5rem;
+            background: var(--secondary);
+            color: var(--white);
+            border: none;
+            border-radius: 50px;
+            cursor: pointer;
+            transition: all 0.3s;
+        }
+        
+        .newsletter-form button:hover {
+            background: var(--secondary-dark);
+            transform: scale(1.05);
+        }
+        
+        .footer-bottom {
+            max-width: 1400px;
+            margin: 3rem auto 0;
+            padding: 2rem 2rem 0;
+            border-top: 1px solid rgba(255,255,255,0.1);
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            flex-wrap: wrap;
+            gap: 1rem;
+        }
+        
+        .copyright {
+            color: rgba(255,255,255,0.7);
+            font-size: 0.875rem;
+        }
+        
+        .footer-bottom-links {
+            display: flex;
+            gap: 2rem;
+        }
+        
+        .footer-bottom-links a {
+            color: rgba(255,255,255,0.7);
+            text-decoration: none;
+            font-size: 0.875rem;
+            transition: color 0.3s;
+        }
+        
+        .footer-bottom-links a:hover {
+            color: var(--secondary);
+        }
+        
+        /* ===== BACK TO TOP ===== */
+        .back-to-top {
+            position: fixed;
+            bottom: 80px;
+            right: 1.5rem;
+            width: 45px;
+            height: 45px;
+            background: var(--secondary);
+            color: var(--white);
+            border-radius: 50%;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            text-decoration: none;
+            box-shadow: var(--shadow-lg);
+            opacity: 0;
+            visibility: hidden;
+            transition: all 0.3s;
+            z-index: 999;
+        }
+        
+        .back-to-top.show {
+            opacity: 1;
+            visibility: visible;
+        }
+        
+        /* ===== RESPONSIVE ===== */
+        @media (max-width: 1200px) {
+            h1 { font-size: 3rem; }
+            h2 { font-size: 2.25rem; }
+            .hero-practice h1 { font-size: 2.5rem; }
+        }
+        
+        @media (max-width: 780px) {
+            .bottom-tab-bar {
+                display: flex;
+            }
+            
+            .header-top {
+                padding: calc(0.75rem + env(safe-area-inset-top)) 1rem 0.75rem;
+                flex-direction: row;
+                justify-content: space-between;
+            }
+            
+            .logo { justify-content: flex-start; }
+            
+            .nav-links {
+                padding: 0.5rem 1rem;
+            }
+            
+            .hero-practice {
+                margin: 1rem;
+                padding: 2rem 1.5rem;
+            }
+            
+            .hero-practice h1 {
+                font-size: 2rem;
+            }
+            
+            .hero-practice p {
+                font-size: 1.1rem;
+            }
 
-        @media (max-width: 680px) {
-            .modal-body { padding: 1rem; }
-            .timer-box { font-size: 1rem; }
+            .test-modal {
+                max-height: 95vh;
+            }
+
+            .modal-body {
+                padding: 1.5rem;
+            }
+            
+            .footer-bottom {
+                flex-direction: column;
+                text-align: center;
+                padding-bottom: 2rem;
+            }
+            
+            .footer-bottom-links {
+                justify-content: center;
+            }
+            
+            footer {
+                padding-bottom: calc(80px + env(safe-area-inset-bottom));
+            }
+        }
+        
+        @media (max-width: 576px) {
+            h1 { font-size: 1.85rem; }
+            h2 { font-size: 1.5rem; }
+            
+            .auth-btn {
+                font-size: 0.8rem;
+                padding: 0.4rem 0.875rem;
+            }
         }
     </style>
 </head>
 <body>
+    <!-- Skip to main content -->
+    <a href="#main-content" class="skip-link" style="position:absolute;top:-40px;left:0;background:var(--toefl-accent);color:white;padding:8px;z-index:1001;">Skip to main content</a>
 
-<header>
-    <div class="header-content">
-        <a href="index.html" class="logo">
-            <i class="fas fa-graduation-cap" style="font-size: 28px; color: #e67e22;"></i>
-            <h1>Zakhourani</h1>
-        </a>
-        <div class="nav-links">
-            <a href="index.html"><i class="fas fa-home"></i> Home</a>
-            <a href="IELS.html"><i class="fas fa-language"></i> IELTS</a>
-            <a href="TOFEL.html" class="active"><i class="fas fa-scroll"></i> TOEFL</a>
-            <a href="AI.html"><i class="fas fa-microchip"></i> AI Power</a>
-            <a href="aboutDrwaleed.html"><i class="fas fa-user-graduate"></i> Dr Waleed</a>
-            <div id="userMenuHeader" style="display: none;" class="user-menu" style="display:flex; gap:8px; align-items:center;">
-                <img id="userAvatarHeader" class="user-avatar" src="" alt="user">
-                <span id="userNameHeader" style="font-weight:500;"></span>
-            </div>
-            <div id="authButtonsHeader" style="display: flex; gap: 8px;">
-                <a href="login.html" class="login-btn">Login</a>
-                <a href="signup.html" class="signup-btn">Sign Up</a>
+    <!-- Header -->
+    <header>
+        <div class="header-top">
+            <a href="index.html" class="logo">
+                <i class="fas fa-graduation-cap logo-icon"></i>
+                <h1>Zakhourani<span>.</span></h1>
+            </a>
+            
+            <div class="auth-buttons" id="authButtons">
+                <!-- Populated by JavaScript -->
             </div>
         </div>
-    </div>
-</header>
-
-<main class="container">
-    <div class="breadcrumb">
-        <a href="TOFEL.html" style="color:#e67e22;"><i class="fas fa-scroll"></i> TOEFL Hub</a> / <span>Full Practice Tests</span>
-    </div>
-
-    <div class="hero-practice">
-        <h1><i class="fas fa-puzzle-piece"></i> TOEFL iBT Practice Exams</h1>
-        <p>Simulate real test conditions with timed full sections. Get instant band score estimation (0–30 per section) + detailed feedback.</p>
-        <div class="score-badge"><i class="fas fa-chart-line"></i> 3 full mock exams | Adaptive timer | Score predictor 0-120</div>
-    </div>
-
-    <div class="tests-grid" id="testsGrid">
-        <!-- dynamic test cards will be injected but static for demo -->
-    </div>
-
-    <!-- Score estimator tooltip -->
-    <div class="score-estimator">
-        <i class="fas fa-calculator" style="font-size: 2rem; color: #e67e22;"></i>
-        <h3>How scoring works?</h3>
-        <p>Reading & Listening: raw correct answers → scaled 0–30. Speaking/Writing simulated rubrics. Our mocks give estimated range based on correct answers.</p>
-        <small><i class="fas fa-info-circle"></i> Complete each section to unlock your predicted TOEFL total score.</small>
-    </div>
-</main>
-
-<footer>
-    <i class="fas fa-graduation-cap"></i> Zakhourani TOEFL Prep · Dr. Waleed Hussien
-    <p style="margin-top: 10px; font-size: 0.8rem;">Practice under real conditions — improve fluency & accuracy</p>
-</footer>
-
-<script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-app-compat.js"></script>
-<script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-auth-compat.js"></script>
-<script>
-    // Firebase config
-    const firebaseConfig = {
-        apiKey: "AIzaSyAE8wf24HXrfmpMluaFOv1OHPrf_YFfqTQ",
-        authDomain: "whaai-c388e.firebaseapp.com",
-        projectId: "whaai-c388e",
-        storageBucket: "whaai-c388e.firebasestorage.app",
-        messagingSenderId: "640598205524",
-        appId: "1:640598205524:web:c975f5e8b371b1043e39c1"
-    };
-    if (!firebase.apps.length) firebase.initializeApp(firebaseConfig);
-    const auth = firebase.auth();
-
-    // header user state
-    const userMenuDiv = document.getElementById('userMenuHeader');
-    const authBtnsDiv = document.getElementById('authButtonsHeader');
-    const userAvatarImg = document.getElementById('userAvatarHeader');
-    const userNameSpan = document.getElementById('userNameHeader');
-
-    auth.onAuthStateChanged(user => {
-        if (user) {
-            userMenuDiv.style.display = 'flex';
-            authBtnsDiv.style.display = 'none';
-            const photo = user.photoURL || `https://ui-avatars.com/api/?name=${encodeURIComponent(user.displayName || user.email)}&background=e67e22&color=fff&size=32`;
-            userAvatarImg.src = photo;
-            userNameSpan.textContent = user.displayName?.split(' ')[0] || user.email.split('@')[0];
-        } else {
-            userMenuDiv.style.display = 'none';
-            authBtnsDiv.style.display = 'flex';
-        }
-    });
-
-    // ------------------- MOCK QUESTION BANK (Reading + Listening + Speaking/Writing simulation simplified) ------------------
-    const mockTests = [
-        {
-            id: 1,
-            name: "TOEFL Full Mock 1 (Realistic)",
-            icon: "fas fa-file-alt",
-            time: "3h 10min",
-            questions: 54,
-            description: "Complete reading, listening, speaking & writing tasks with estimated scores.",
-            sections: {
-                reading: {
-                    passages: [
-                        { title: "Passage 1: Urban Heat Islands", questions: [
-                            { text: "What is the primary cause of urban heat islands?", options: ["Increased vegetation", "Absorption of heat by concrete", "Ocean currents", "Wind patterns"], correct: 1 },
-                            { text: "According to the passage, which surface material reflects the most sunlight?", options: ["Asphalt", "Concrete", "Green roofs", "Glass"], correct: 2 },
-                            { text: "The author mentions 'albedo effect' to illustrate...", options: ["Cooling strategies", "Air pollution", "Traffic density", "Water evaporation"], correct: 0 }
-                        ] },
-                        { title: "Passage 2: Renaissance Art", questions: [
-                            { text: "What innovation characterized Renaissance painting?", options: ["Use of tempera", "Linear perspective", "Abstract forms", "Digital media"], correct: 1 },
-                            { text: "The word 'patron' in line 12 most nearly means:", options: ["Artist", "Supporter", "Critic", "Seller"], correct: 1 }
-                        ] }
-                    ]
-                },
-                listening: {
-                    lectures: [
-                        { title: "Biology Lecture: Coral Reefs", questions: [
-                            { text: "What causes coral bleaching?", options: ["Ocean acidification", "Rising sea temperatures", "Overfishing", "Pollution"], correct: 1 },
-                            { text: "According to the professor, what is the main function of zooxanthellae?", options: ["Provide oxygen", "Provide nutrients via photosynthesis", "Protect from predators", "Reef structure"], correct: 1 }
-                        ] }
-                    ]
-                }
-            }
-        },
-        {
-            id: 2,
-            name: "TOEFL Reading Intensive",
-            icon: "fas fa-book-reader",
-            time: "60 min",
-            questions: 28,
-            description: "Focus on academic reading: 3 passages, 28 questions. Score predictor included.",
-            sections: { reading: { passages: [{ title: "Climate Change Economics", questions: [
-                { text: "What is the main argument of the passage?", options: ["Carbon tax is inefficient", "Market-based solutions work", "Government regulation fails", "Renewables are expensive"], correct: 1 },
-                { text: "The term 'externality' refers to:", options: ["Internal profit", "Unaccounted cost on society", "Tax reduction", "Subsidy"], correct: 1 }
-            ] }] }, listening: null }
-        },
-        {
-            id: 3,
-            name: "Listening + Speaking Combo",
-            icon: "fas fa-headphones",
-            time: "55 min",
-            questions: 24,
-            description: "Academic lectures & conversations. Integrated speaking prompts.",
-            sections: { listening: { lectures: [{ title: "Psychology: Memory Recall", questions: [
-                { text: "What did the study reveal about chunking?", options: ["Decreases memory", "Improves recall capacity", "Causes interference", "Only works for children"], correct: 1 }
-            ] }] }, reading: null }
-        }
-    ];
-
-    // Helper to compute estimated reading/listening score based on % correct (simplified scale 0-30)
-    function computeScore(correct, total) {
-        let percent = (correct / total) * 100;
-        if (percent >= 90) return 28 + Math.floor((percent-90)/2);
-        if (percent >= 70) return 22 + Math.floor((percent-70)/3.5);
-        if (percent >= 50) return 15 + Math.floor((percent-50)/2.5);
-        if (percent >= 30) return 8 + Math.floor((percent-30)/3);
-        return Math.floor(percent/6);
-    }
-
-    let activeModal = null;
-    function renderTests() {
-        const grid = document.getElementById('testsGrid');
-        grid.innerHTML = '';
-        mockTests.forEach(test => {
-            const card = document.createElement('div');
-            card.className = 'test-card';
-            card.innerHTML = `
-                <div class="test-icon"><i class="${test.icon}"></i></div>
-                <h3>${test.name}</h3>
-                <div class="test-meta"><span><i class="far fa-clock"></i> ${test.time}</span> <span><i class="fas fa-question-circle"></i> ${test.questions} tasks</span></div>
-                <p style="font-size:0.85rem; margin:0.6rem 0;">${test.description}</p>
-                <button class="btn-start" data-id="${test.id}"><i class="fas fa-play"></i> Start Practice</button>
-            `;
-            grid.appendChild(card);
-        });
-        document.querySelectorAll('.btn-start').forEach(btn => {
-            btn.addEventListener('click', (e) => {
-                const id = parseInt(btn.getAttribute('data-id'));
-                const testData = mockTests.find(t => t.id === id);
-                if (testData) openTestModal(testData);
-            });
-        });
-    }
-
-    function openTestModal(test) {
-        if (activeModal) return;
-        const modalDiv = document.createElement('div');
-        modalDiv.className = 'modal-overlay';
-        let allQuestions = [];
-        if (test.sections.reading && test.sections.reading.passages) {
-            test.sections.reading.passages.forEach(pass => {
-                pass.questions.forEach(q => {
-                    allQuestions.push({ text: q.text, options: q.options, correct: q.correct, type: 'reading' });
-                });
-            });
-        }
-        if (test.sections.listening && test.sections.listening.lectures) {
-            test.sections.listening.lectures.forEach(lec => {
-                lec.questions.forEach(q => {
-                    allQuestions.push({ text: q.text, options: q.options, correct: q.correct, type: 'listening' });
-                });
-            });
-        }
-        // If no questions (should not happen) fallback
-        if (allQuestions.length === 0) {
-            allQuestions.push({ text: "Sample question: What is the main idea?", options: ["A","B","C","D"], correct: 0 });
-        }
         
-        let answers = new Array(allQuestions.length).fill(null);
-        let timerSeconds = test.id === 1 ? 7200 : (test.id === 2 ? 3600 : 3300);
-        let timerInterval;
-        
-        const modalHtml = `
-            <div class="test-modal">
-                <div class="modal-header">
-                    <h3><i class="${test.icon}"></i> ${test.name}</h3>
-                    <div class="timer-box" id="modalTimer">${Math.floor(timerSeconds/60)}:${(timerSeconds%60).toString().padStart(2,'0')}</div>
-                    <button class="close-modal" id="closeModalBtn"><i class="fas fa-times"></i></button>
-                </div>
-                <div class="modal-body" id="modalBody">
-                    ${allQuestions.map((q, idx) => `
-                        <div class="question-item" data-qidx="${idx}">
-                            <div class="question-text">${idx+1}. ${q.text}</div>
-                            <div class="options">
-                                ${q.options.map((opt, optIdx) => `
-                                    <label><input type="radio" name="q_${idx}" value="${optIdx}"> ${opt}</label>
-                                `).join('')}
-                            </div>
-                        </div>
-                    `).join('')}
-                    <button class="submit-test-btn" id="submitTestBtn">Submit & Get Score</button>
-                    <div id="resultArea" style="margin-top:20px;"></div>
+        <!-- Touch-Swipeable Top Header Categorization Bar -->
+        <nav aria-label="Main navigation">
+            <div class="nav-container">
+                <ul class="nav-links" id="navLinks">
+                    <li><a href="index.html"><i class="fas fa-home"></i> Home</a></li>
+                    <li><a href="products.html"><i class="fas fa-box"></i> Products <span class="nav-badge">NEW</span></a></li>
+                    <li><a href="AI.html"><i class="fas fa-robot"></i> AI Assistant</a></li>
+                    <li><a href="JihanDictionary.html"><i class="fas fa-book"></i> Dictionary</a></li>
+                    <li><a href="IELS.html"><i class="fas fa-language"></i> IELTS</a></li>
+                    <li><a href="TOFEL.html" class="active" aria-current="page"><i class="fas fa-scroll"></i> TOEFL</a></li>
+                    <li><a href="aboutDrwaleed.html"><i class="fas fa-user-md"></i> About Dr. Waleed</a></li>
+                    <li><a href="contact.html"><i class="fas fa-envelope"></i> Contact</a></li>
+                    <li><a href="profile.html"><i class="fas fa-user-circle"></i> Profile</a></li>
+                </ul>
+            </div>
+        </nav>
+    </header>
+
+    <!-- Native App Bottom Tab Bar (Displays on screens below 768px wide) -->
+    <div class="bottom-tab-bar" aria-label="App Navigation Tabs">
+        <a href="index.html" class="tab-item">
+            <i class="fas fa-home"></i>
+            <span>Home</span>
+        </a>
+        <a href="AI.html" class="tab-item">
+            <i class="fas fa-robot"></i>
+            <span>AI Tutor</span>
+        </a>
+        <a href="JihanDictionary.html" class="tab-item">
+            <i class="fas fa-book"></i>
+            <span>Dictionary</span>
+        </a>
+        <a href="TOFEL.html" class="tab-item active">
+            <i class="fas fa-scroll"></i>
+            <span>TOEFL</span>
+        </a>
+        <a href="profile.html" class="tab-item">
+            <i class="fas fa-user-circle"></i>
+            <span>Profile</span>
+        </a>
+    </div>
+
+    <main id="main-content" class="container">
+        <div class="breadcrumb">
+            <a href="TOFEL.html"><i class="fas fa-scroll"></i> TOEFL Hub</a> / <span style="color: var(--toefl-accent-dark);">Full Practice Tests</span>
+        </div>
+
+        <div class="hero-practice animate__animated animate__fadeIn">
+            <h1><i class="fas fa-puzzle-piece" style="color: var(--white);"></i> TOEFL iBT Practice Exams</h1>
+            <p>Simulate official exam conditions under tight segment timers. Obtain diagnostic raw score metrics translated directly into estimated TOEFL bands (0–30 scales).</p>
+            <div class="score-badge"><i class="fas fa-chart-line"></i> 3 full mock exams | Adaptive timer | Score predictor 0-120</div>
+        </div>
+
+        <!-- Cards injected dynamically -->
+        <div class="tests-grid" id="testsGrid"></div>
+
+        <!-- Score Estimator Legend -->
+        <div class="score-estimator">
+            <i class="fas fa-calculator" style="font-size: 2.5rem; color: var(--toefl-accent); margin-bottom: 1rem;"></i>
+            <h3>How scoring works?</h3>
+            <p>Reading & Listening evaluations translate raw correct entries directly into scaled 0–30 bounds. Independent sections simulate official rater metrics, predicting your performance across full TOEFL tasks.</p>
+            <small style="color: var(--gray);"><i class="fas fa-info-circle"></i> Complete practice sections to generate predicted scorecard bands.</small>
+        </div>
+    </main>
+
+    <!-- Footer -->
+    <footer>
+        <div class="footer-content">
+            <div class="footer-section">
+                <h3>Zakhourani</h3>
+                <p>Empowering learners worldwide with AI-powered tools and expert guidance from Dr. Waleed Hussien Zakhourani.</p>
+                <div class="social-links">
+                    <a href="https://www.facebook.com/profile.php?id=61590774116973&sk=directory_links" target="_blank" aria-label="Facebook"><i class="fab fa-facebook-f"></i></a>
+                    <a href="https://www.tiktok.com/@dr.waleed.hussien" target="_blank" aria-label="TikTok"><i class="fab fa-tiktok"></i></a>
+                    <a href="https://www.instagram.com/dr.waleed.hussien/" target="_blank" aria-label="Instagram"><i class="fab fa-instagram"></i></a>
+                    <a href="#" aria-label="LinkedIn"><i class="fab fa-linkedin-in"></i></a>
+                    <a href="#" aria-label="YouTube"><i class="fab fa-youtube"></i></a>
                 </div>
             </div>
-        `;
-        modalDiv.innerHTML = modalHtml;
-        document.body.appendChild(modalDiv);
-        activeModal = modalDiv;
-        
-        // Timer update
-        function updateTimerDisplay() {
-            const mins = Math.floor(timerSeconds/60);
-            const secs = timerSeconds%60;
-            const timerSpan = document.getElementById('modalTimer');
-            if(timerSpan) timerSpan.innerText = `${mins}:${secs.toString().padStart(2,'0')}`;
-            if(timerSeconds <= 0) {
-                clearInterval(timerInterval);
-                autoSubmit();
-            }
-        }
-        timerInterval = setInterval(() => {
-            if(timerSeconds > 0) {
-                timerSeconds--;
-                updateTimerDisplay();
+
+            <div class="footer-section">
+                <h3>Quick Links</h3>
+                <ul class="footer-links">
+                    <li><a href="index.html"><i class="fas fa-chevron-right"></i> Home</a></li>
+                    <li><a href="products.html"><i class="fas fa-chevron-right"></i> Products</a></li>
+                    <li><a href="AI.html"><i class="fas fa-chevron-right"></i> AI Assistant</a></li>
+                    <li><a href="IELS.html"><i class="fas fa-chevron-right"></i> IELTS</a></li>
+                    <li><a href="TOFEL.html"><i class="fas fa-chevron-right"></i> TOEFL</a></li>
+                    <li><a href="aboutDrwaleed.html"><i class="fas fa-chevron-right"></i> About Dr. Waleed</a></li>
+                </ul>
+            </div>
+
+            <div class="footer-section">
+                <h3>Support</h3>
+                <ul class="footer-links">
+                    <li><a href="contact.html"><i class="fas fa-chevron-right"></i> Contact Us</a></li>
+                    <li><a href="#"><i class="fas fa-chevron-right"></i> FAQ</a></li>
+                    <li><a href="#"><i class="fas fa-chevron-right"></i> Privacy Policy</a></li>
+                    <li><a href="#"><i class="fas fa-chevron-right"></i> Terms of Service</a></li>
+                </ul>
+            </div>
+
+            <div class="footer-section">
+                <h3>Contact Info</h3>
+                <ul class="contact-info">
+                    <li><i class="fas fa-map-marker-alt"></i> Dubai Knowledge Park, UAE</li>
+                    <li><i class="fas fa-phone"></i> +971 4 123 4567</li>
+                    <li><i class="fas fa-envelope"></i> info@zakhourani.com</li>
+                </ul>
+                
+                <h3 style="margin-top:2rem;">Newsletter</h3>
+                <form class="newsletter-form">
+                    <input type="email" placeholder="Your email" aria-label="Email for newsletter">
+                    <button type="submit" aria-label="Subscribe"><i class="fas fa-paper-plane"></i></button>
+                </form>
+            </div>
+        </div>
+
+        <div class="footer-bottom">
+            <p class="copyright">© 2024 Zakhourani. All rights reserved. Founded by Dr. Waleed Hussien Zakhourani. TOEFL® is a registered trademark of ETS.</p>
+            <div class="footer-bottom-links">
+                <a href="#">Privacy</a>
+                <a href="#">Terms</a>
+                <a href="#">Cookies</a>
+            </div>
+        </div>
+    </footer>
+
+    <!-- Back to Top -->
+    <a href="#" class="back-to-top" id="backToTop" aria-label="Back to top">
+        <i class="fas fa-arrow-up"></i>
+    </a>
+
+    <!-- Firebase Compat SDK -->
+    <script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-app-compat.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-auth-compat.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-firestore-compat.js"></script>
+
+    <script>
+        // Global Auth references
+        let auth = null;
+        let db = null;
+
+        // ===== SAFE FIREBASE INITIALIZATION =====
+        try {
+            const firebaseConfig = {
+                apiKey: "AIzaSyAE8wf24HXrfmpMluaFOv1OHPrf_YFfqTQ",
+                authDomain: "whaai-c388e.firebaseapp.com",
+                projectId: "whaai-c388e",
+                storageBucket: "whaai-c388e.firebasestorage.app",
+                messagingSenderId: "640598205524",
+                appId: "1:640598205524:web:c975f5e8b371b1043e39c1"
+            };
+
+            if (typeof firebase !== 'undefined') {
+                if (!firebase.apps.length) {
+                    firebase.initializeApp(firebaseConfig);
+                }
+                auth = firebase.auth();
+                db = firebase.firestore();
+                console.log("✅ Firebase initialized inside Mock Practice.");
             } else {
-                clearInterval(timerInterval);
+                console.warn("⚠️ Firebase blocked. Activating offline exam features safely.");
             }
-        }, 1000);
-        
-        function autoSubmit() {
-            const radios = document.querySelectorAll('.test-modal input[type="radio"]:checked');
-            radios.forEach(radio => {
-                const name = radio.getAttribute('name');
-                const idx = parseInt(name.split('_')[1]);
-                answers[idx] = parseInt(radio.value);
-            });
-            calculateAndShowScore();
+        } catch (e) {
+            console.error("❌ Firebase failed to initialize inside Mock Practice:", e);
         }
-        
-        function calculateAndShowScore() {
-            let correctCount = 0;
-            allQuestions.forEach((q, idx) => {
-                if(answers[idx] !== null && answers[idx] === q.correct) correctCount++;
+
+        // ===== AUTHENTICATION STATE SYNC =====
+        function updateUI(user) {
+            const authButtons = document.getElementById('authButtons');
+            
+            if (!authButtons) return;
+
+            if (user) {
+                const photoURL = user.photoURL || `https://ui-avatars.com/api/?name=${encodeURIComponent(user.displayName || user.email || 'Learner')}&background=e67e22&color=fff&size=45`;
+                const displayName = user.displayName || (user.email ? user.email.split('@')[0] : 'Learner');
+                
+                authButtons.innerHTML = `
+                    <div class="user-menu">
+                        <img src="${photoURL}" alt="${displayName}" class="user-avatar" loading="lazy">
+                        <span class="user-name">${displayName}</span>
+                        <a href="#" class="logout-btn" id="logoutButton">
+                            <i class="fas fa-sign-out-alt"></i> Logout
+                        </a>
+                    </div>
+                `;
+                
+                const logoutBtn = document.getElementById('logoutButton');
+                if (logoutBtn && auth) {
+                    logoutBtn.addEventListener('click', function(e) {
+                        e.preventDefault();
+                        auth.signOut().then(() => {
+                            window.location.reload();
+                        }).catch((error) => {
+                            console.error('Logout error:', error);
+                        });
+                    });
+                }
+            } else {
+                authButtons.innerHTML = `
+                    <a href="login.html" class="auth-btn login-btn">
+                        <i class="fas fa-sign-in-alt"></i> Login
+                    </a>
+                    <a href="signup.html" class="auth-btn signup-btn">
+                        <i class="fas fa-user-plus"></i> Sign Up
+                    </a>
+                `;
+            }
+        }
+
+        // Auth listeners safe dispatch
+        if (auth) {
+            auth.onAuthStateChanged((user) => {
+                updateUI(user);
             });
-            const total = allQuestions.length;
-            const percentCorrect = (correctCount/total)*100;
-            let estimatedScore = computeScore(correctCount, total);
-            if(estimatedScore > 30) estimatedScore = 30;
-            const resultDiv = document.getElementById('resultArea');
-            resultDiv.innerHTML = `
-                <div class="result-area">
-                    <i class="fas fa-chart-pie" style="font-size: 1.8rem; color:#e67e22;"></i>
-                    <h4>Your Estimated Score (Reading/Listening combined)</h4>
-                    <p style="font-size:2rem; font-weight:800;">${estimatedScore} / 30</p>
-                    <p>✅ Correct: ${correctCount} / ${total} (${Math.round(percentCorrect)}%)</p>
-                    <p><small>⚠️ This is an estimate for the attempted sections. Full TOEFL includes Speaking/Writing official scoring.</small></p>
-                    <button id="retryCloseBtn" style="background:#e67e22; border:none; padding:8px 20px; border-radius:40px; color:white; margin-top:10px;">Close & Continue</button>
+        } else {
+            setTimeout(() => {
+                updateUI(null);
+            }, 300);
+        }
+
+        // ------------------- MOCK QUESTION BANK (Reading + Listening + Speaking/Writing simulation simplified) ------------------
+        const mockTests = [
+            {
+                id: 1,
+                name: "TOEFL Full Mock 1 (Realistic)",
+                icon: "fas fa-file-alt",
+                time: "3h 10min",
+                questions: 54,
+                description: "Complete reading, listening, speaking & writing tasks with estimated scores.",
+                sections: {
+                    reading: {
+                        passages: [
+                            { title: "Passage 1: Urban Heat Islands", questions: [
+                                { text: "What is the primary cause of urban heat islands?", options: ["Increased vegetation", "Absorption of heat by concrete", "Ocean currents", "Wind patterns"], correct: 1 },
+                                { text: "According to the passage, which surface material reflects the most sunlight?", options: ["Asphalt", "Concrete", "Green roofs", "Glass"], correct: 2 },
+                                { text: "The author mentions 'albedo effect' to illustrate...", options: ["Cooling strategies", "Air pollution", "Traffic density", "Water evaporation"], correct: 0 }
+                            ] },
+                            { title: "Passage 2: Renaissance Art", questions: [
+                                { text: "What innovation characterized Renaissance painting?", options: ["Use of tempera", "Linear perspective", "Abstract forms", "Digital media"], correct: 1 },
+                                { text: "The word 'patron' in line 12 most nearly means:", options: ["Artist", "Supporter", "Critic", "Seller"], correct: 1 }
+                            ] }
+                        ]
+                    },
+                    listening: {
+                        lectures: [
+                            { title: "Biology Lecture: Coral Reefs", questions: [
+                                { text: "What causes coral bleaching?", options: ["Ocean acidification", "Rising sea temperatures", "Overfishing", "Pollution"], correct: 1 },
+                                { text: "According to the professor, what is the main function of zooxanthellae?", options: ["Provide oxygen", "Provide nutrients via photosynthesis", "Protect from predators", "Reef structure"], correct: 1 }
+                            ] }
+                        ]
+                    }
+                }
+            },
+            {
+                id: 2,
+                name: "TOEFL Reading Intensive",
+                icon: "fas fa-book-reader",
+                time: "60 min",
+                questions: 28,
+                description: "Focus on academic reading: 3 passages, 28 questions. Score predictor included.",
+                sections: { reading: { passages: [{ title: "Climate Change Economics", questions: [
+                    { text: "What is the main argument of the passage?", options: ["Carbon tax is inefficient", "Market-based solutions work", "Government regulation fails", "Renewables are expensive"], correct: 1 },
+                    { text: "The term 'externality' refers to:", options: ["Internal profit", "Unaccounted cost on society", "Tax reduction", "Subsidy"], correct: 1 }
+                ] }] }, listening: null }
+            },
+            {
+                id: 3,
+                name: "Listening + Speaking Combo",
+                icon: "fas fa-headphones",
+                time: "55 min",
+                questions: 24,
+                description: "Academic lectures & conversations. Integrated speaking prompts.",
+                sections: { listening: { lectures: [{ title: "Psychology: Memory Recall", questions: [
+                    { text: "What did the study reveal about chunking?", options: ["Decreases memory", "Improves recall capacity", "Causes interference", "Only works for children"], correct: 1 }
+                ] }] }, reading: null }
+            }
+        ];
+
+        // Compute estimated scores scaled to 0-30
+        function computeScore(correct, total) {
+            let percent = (correct / total) * 100;
+            if (percent >= 90) return 28 + Math.floor((percent-90)/2);
+            if (percent >= 70) return 22 + Math.floor((percent-70)/3.5);
+            if (percent >= 50) return 15 + Math.floor((percent-50)/2.5);
+            if (percent >= 30) return 8 + Math.floor((percent-30)/3);
+            return Math.floor(percent/6);
+        }
+
+        let activeModal = null;
+        function renderTests() {
+            const grid = document.getElementById('testsGrid');
+            if (!grid) return;
+            grid.innerHTML = '';
+            mockTests.forEach(test => {
+                const card = document.createElement('div');
+                card.className = 'test-card animate__animated animate__fadeInUp';
+                card.innerHTML = `
+                    <div class="test-icon"><i class="${test.icon}"></i></div>
+                    <h3>${test.name}</h3>
+                    <div class="test-meta">
+                        <span><i class="far fa-clock"></i> ${test.time}</span> 
+                        <span><i class="fas fa-question-circle"></i> ${test.questions} tasks</span>
+                    </div>
+                    <p style="font-size:0.9rem; margin-bottom:1.5rem; color:var(--gray); flex-grow:1;">${test.description}</p>
+                    <button class="btn-start" data-id="${test.id}"><i class="fas fa-play"></i> Start Practice</button>
+                `;
+                grid.appendChild(card);
+            });
+            
+            document.querySelectorAll('.btn-start').forEach(btn => {
+                btn.addEventListener('click', (e) => {
+                    const id = parseInt(btn.getAttribute('data-id'));
+                    const testData = mockTests.find(t => t.id === id);
+                    if (testData) openTestModal(testData);
+                });
+            });
+        }
+
+        // Modal Simulator Execution
+        function openTestModal(test) {
+            if (activeModal) return;
+            const modalDiv = document.createElement('div');
+            modalDiv.className = 'modal-overlay';
+            let allQuestions = [];
+            
+            if (test.sections.reading && test.sections.reading.passages) {
+                test.sections.reading.passages.forEach(pass => {
+                    pass.questions.forEach(q => {
+                        allQuestions.push({ text: q.text, options: q.options, correct: q.correct, type: 'reading' });
+                    });
+                });
+            }
+            if (test.sections.listening && test.sections.listening.lectures) {
+                test.sections.listening.lectures.forEach(lec => {
+                    lec.questions.forEach(q => {
+                        allQuestions.push({ text: q.text, options: q.options, correct: q.correct, type: 'listening' });
+                    });
+                });
+            }
+            if (allQuestions.length === 0) {
+                allQuestions.push({ text: "Sample question: What is the main idea?", options: ["Option A","Option B","Option C","Option D"], correct: 0 });
+            }
+            
+            let answers = new Array(allQuestions.length).fill(null);
+            let timerSeconds = test.id === 1 ? 7200 : (test.id === 2 ? 3600 : 3300);
+            let timerInterval;
+            
+            const modalHtml = `
+                <div class="test-modal">
+                    <div class="modal-header">
+                        <h3><i class="${test.icon}"></i> ${test.name}</h3>
+                        <div class="timer-box" id="modalTimer">${Math.floor(timerSeconds/60)}:${(timerSeconds%60).toString().padStart(2,'0')}</div>
+                        <button class="close-modal" id="closeModalBtn" aria-label="Close modal"><i class="fas fa-times"></i></button>
+                    </div>
+                    <div class="modal-body" id="modalBody">
+                        ${allQuestions.map((q, idx) => `
+                            <div class="question-item" data-qidx="${idx}">
+                                <div class="question-text">${idx+1}. ${q.text}</div>
+                                <div class="options">
+                                    ${q.options.map((opt, optIdx) => `
+                                        <label><input type="radio" name="q_${idx}" value="${optIdx}"> ${opt}</label>
+                                    `).join('')}
+                                </div>
+                            </div>
+                        `).join('')}
+                        <button class="submit-test-btn" id="submitTestBtn">Submit & Get Score</button>
+                        <div id="resultArea" style="margin-top:20px;"></div>
+                    </div>
                 </div>
             `;
-            const submitBtn = document.getElementById('submitTestBtn');
-            if(submitBtn) submitBtn.disabled = true;
-            document.getElementById('retryCloseBtn')?.addEventListener('click', () => closeModal());
-        }
-        
-        function closeModal() {
-            if(timerInterval) clearInterval(timerInterval);
-            if(activeModal) activeModal.remove();
-            activeModal = null;
-        }
-        
-        document.getElementById('closeModalBtn').addEventListener('click', closeModal);
-        document.getElementById('submitTestBtn').addEventListener('click', () => {
-            // gather final answers
-            const radios = document.querySelectorAll('.test-modal input[type="radio"]:checked');
-            radios.forEach(radio => {
-                const name = radio.getAttribute('name');
-                const idx = parseInt(name.split('_')[1]);
-                answers[idx] = parseInt(radio.value);
+            modalDiv.innerHTML = modalHtml;
+            document.body.appendChild(modalDiv);
+            activeModal = modalDiv;
+            
+            // Timer state execution
+            function updateTimerDisplay() {
+                const mins = Math.floor(timerSeconds/60);
+                const secs = timerSeconds%60;
+                const timerSpan = document.getElementById('modalTimer');
+                if(timerSpan) timerSpan.innerText = `${mins}:${secs.toString().padStart(2,'0')}`;
+                if(timerSeconds <= 0) {
+                    clearInterval(timerInterval);
+                    autoSubmit();
+                }
+            }
+            
+            timerInterval = setInterval(() => {
+                if(timerSeconds > 0) {
+                    timerSeconds--;
+                    updateTimerDisplay();
+                } else {
+                    clearInterval(timerInterval);
+                }
+            }, 1000);
+            
+            function autoSubmit() {
+                const radios = document.querySelectorAll('.test-modal input[type="radio"]:checked');
+                radios.forEach(radio => {
+                    const name = radio.getAttribute('name');
+                    const idx = parseInt(name.split('_')[1]);
+                    answers[idx] = parseInt(radio.value);
+                });
+                calculateAndShowScore();
+            }
+            
+            function calculateAndShowScore() {
+                let correctCount = 0;
+                allQuestions.forEach((q, idx) => {
+                    if(answers[idx] !== null && answers[idx] === q.correct) correctCount++;
+                });
+                const total = allQuestions.length;
+                const percentCorrect = (correctCount/total)*100;
+                let estimatedScore = computeScore(correctCount, total);
+                if(estimatedScore > 30) estimatedScore = 30;
+                
+                // Firestore save transaction (optional)
+                const user = auth ? auth.currentUser : null;
+                if (user && db) {
+                    db.collection('toefl_results').add({
+                        userId: user.uid,
+                        testName: test.name,
+                        rawCorrect: correctCount,
+                        totalQuestions: total,
+                        percent: percentCorrect,
+                        estimatedScaled: estimatedScore,
+                        timestamp: firebase.firestore.FieldValue.serverTimestamp()
+                    }).then(() => console.log("Archived test metrics successfully."));
+                }
+
+                const resultDiv = document.getElementById('resultArea');
+                resultDiv.innerHTML = `
+                    <div class="result-area">
+                        <i class="fas fa-chart-pie" style="font-size: 2.2rem; color: var(--toefl-accent); margin-bottom: 0.5rem;"></i>
+                        <h4>Estimated Score (Reading/Listening combined)</h4>
+                        <p style="font-size: 2.5rem; font-weight: 800; color: var(--success); margin: 0.5rem 0;">${estimatedScore} / 30</p>
+                        <p style="font-size: 0.95rem; color: var(--gray);">Correct entries: ${correctCount} / ${total} (${Math.round(percentCorrect)}%)</p>
+                        <button id="retryCloseBtn" class="btn btn-toefl" style="margin-top: 1.5rem; padding: 0.75rem 2rem;">Close & Continue</button>
+                    </div>
+                `;
+                const submitBtn = document.getElementById('submitTestBtn');
+                if(submitBtn) submitBtn.disabled = true;
+                document.getElementById('retryCloseBtn')?.addEventListener('click', () => closeModal());
+            }
+            
+            function closeModal() {
+                if(timerInterval) clearInterval(timerInterval);
+                if(activeModal) activeModal.remove();
+                activeModal = null;
+            }
+            
+            document.getElementById('closeModalBtn').addEventListener('click', closeModal);
+            document.getElementById('submitTestBtn').addEventListener('click', () => {
+                const radios = document.querySelectorAll('.test-modal input[type="radio"]:checked');
+                radios.forEach(radio => {
+                    const name = radio.getAttribute('name');
+                    const idx = parseInt(name.split('_')[1]);
+                    answers[idx] = parseInt(radio.value);
+                });
+                calculateAndShowScore();
+                clearInterval(timerInterval);
             });
-            calculateAndShowScore();
-            clearInterval(timerInterval);
-        });
-        // auto track radio changes
-        modalDiv.querySelectorAll('input[type="radio"]').forEach(radio => {
-            radio.addEventListener('change', (e) => {
-                const name = e.target.getAttribute('name');
-                const idx = parseInt(name.split('_')[1]);
-                answers[idx] = parseInt(e.target.value);
+
+            modalDiv.querySelectorAll('input[type="radio"]').forEach(radio => {
+                radio.addEventListener('change', (e) => {
+                    const name = e.target.getAttribute('name');
+                    const idx = parseInt(name.split('_')[1]);
+                    answers[idx] = parseInt(e.target.value);
+                });
             });
+        }
+
+        // ===== WEB INTERACTIVITY =====
+        document.addEventListener('DOMContentLoaded', function() {
+            renderTests();
+
+            // Back to Top Button
+            const backToTop = document.getElementById('backToTop');
+            if (backToTop) {
+                window.addEventListener('scroll', function() {
+                    if (window.scrollY > 300) {
+                        backToTop.classList.add('show');
+                    } else {
+                        backToTop.classList.remove('show');
+                    }
+                });
+
+                backToTop.addEventListener('click', function(e) {
+                    e.preventDefault();
+                    window.scrollTo({
+                        top: 0,
+                        behavior: 'smooth'
+                    });
+                });
+            }
+
+            // Sync Active Categories Navigation bar
+            const currentLocation = window.location.pathname.split("/").pop() || 'TOFEL.html';
+            const navItems = document.querySelectorAll('.nav-links a');
+            const tabItems = document.querySelectorAll('.bottom-tab-bar .tab-item');
+            
+            const isToeflRoute = currentLocation.includes('toefl') || currentLocation.includes('TOFEL');
+
+            navItems.forEach(link => {
+                const linkHref = link.getAttribute('href');
+                if (linkHref === 'TOFEL.html' && isToeflRoute) {
+                    link.classList.add('active');
+                    link.setAttribute('aria-current', 'page');
+                    
+                    const navContainer = document.getElementById('navLinks');
+                    if (navContainer) {
+                        const offsetLeft = link.parentElement.offsetLeft;
+                        navContainer.scrollLeft = offsetLeft - 30;
+                    }
+                } else if (linkHref === currentLocation) {
+                    link.classList.add('active');
+                    link.setAttribute('aria-current', 'page');
+                } else {
+                    link.classList.remove('active');
+                    link.removeAttribute('aria-current');
+                }
+            });
+
+            tabItems.forEach(tab => {
+                const tabHref = tab.getAttribute('href');
+                if (tabHref === 'TOFEL.html' && isToeflRoute) {
+                    tab.classList.add('active');
+                    tab.setAttribute('aria-current', 'page');
+                } else {
+                    tab.classList.remove('active');
+                    tab.removeAttribute('aria-current');
+                }
+            });
+
+            // Newsletter Validation
+            const newsletterForm = document.querySelector('.newsletter-form');
+            if (newsletterForm) {
+                newsletterForm.addEventListener('submit', function(e) {
+                    e.preventDefault();
+                    const email = this.querySelector('input[type="email"]').value;
+                    if (email && email.includes('@')) {
+                        alert('✅ Thank you for subscribing to our newsletter!');
+                        this.reset();
+                    } else {
+                        alert('❌ Please enter a valid email address.');
+                    }
+                });
+            }
         });
-    }
-    
-    renderTests();
-</script>
+    </script>
+
+    <!-- ===== STANDALONE BULLETPROOF SCRIPT FOR NAVIGATION FALLBACKS ===== -->
+    <script>
+        // Independent safety fallback script
+        setTimeout(() => {
+            const authButtons = document.getElementById('authButtons');
+            if (authButtons && authButtons.innerHTML.trim() === '') {
+                console.warn("⚠️ Bypassed blocked authorization state in header buttons.");
+                authButtons.innerHTML = `
+                    <a href="login.html" class="auth-btn login-btn">
+                        <i class="fas fa-sign-in-alt"></i> Login
+                    </a>
+                    <a href="signup.html" class="auth-btn signup-btn">
+                        <i class="fas fa-user-plus"></i> Sign Up
+                    </a>
+                `;
+            }
+        }, 1500);
+    </script>
 </body>
 </html>

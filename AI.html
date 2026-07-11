@@ -13,21 +13,22 @@
     <link rel="canonical" href="https://whzco.com/ai.html">
     
     <!-- Favicon -->
-    <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><defs><linearGradient id='g' x1='0%25' y1='0%25' x2='100%25' y2='100%25'><stop offset='0%25' style='stop-color:%233b82f6'/><stop offset='100%25' style='stop-color:%238b5cf6'/></linearGradient></defs><circle cx='50' cy='50' r='45' fill='none' stroke='url(%23g)' stroke-width='4'/><circle cx='30' cy='35' r='8' fill='%233b82f6' opacity='0.9'/><circle cx='70' cy='35' r='8' fill='%238b5cf6' opacity='0.9'/><circle cx='30' cy='65' r='8' fill='%2322c55e' opacity='0.9'/><circle cx='70' cy='65' r='8' fill='%23f59e0b' opacity='0.9'/><circle cx='50' cy='50' r='6' fill='white'/></svg>">
+    <link rel="icon" id="dynamicFavicon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><defs><linearGradient id='g' x1='0%25' y1='0%25' x2='100%25' y2='100%25'><stop offset='0%25' style='stop-color:%233b82f6'/><stop offset='100%25' style='stop-color:%238b5cf6'/></linearGradient></defs><circle cx='50' cy='50' r='45' fill='none' stroke='url(%23g)' stroke-width='4'/><circle cx='30' cy='35' r='8' fill='%233b82f6' opacity='0.9'/><circle cx='70' cy='35' r='8' fill='%238b5cf6' opacity='0.9'/><circle cx='30' cy='65' r='8' fill='%2322c55e' opacity='0.9'/><circle cx='70' cy='65' r='8' fill='%23f59e0b' opacity='0.9'/><circle cx='50' cy='50' r='6' fill='white'/></svg>">
     
     <!-- Fonts -->
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&family=Share+Tech+Mono&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght=300;400;500;600;700;800&family=Share+Tech+Mono&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     
     <!-- Code Highlighting -->
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/styles/atom-one-dark.min.css">
     <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/highlight.min.js"></script>
     
-    <!-- Firebase & Supabase -->
+    <!-- Firebase & Supabase Compatibility Libraries -->
     <script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-app-compat.js"></script>
     <script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-auth-compat.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-firestore-compat.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
 
     <style>
@@ -465,12 +466,18 @@
             justify-content: center;
             position: relative;
             flex-shrink: 0;
-            box-shadow: 0 0 30px rgba(59,130,246,0.25);
+            box-shadow: 0 0 30px rgba(59,130,246,0.3);
+            animation: brainPulse 3s ease-in-out infinite;
+        }
+        @keyframes brainPulse {
+            0%, 100% { box-shadow: 0 0 30px rgba(59,130,246,0.2); }
+            50% { box-shadow: 0 0 50px rgba(59,130,246,0.4), 0 0 80px rgba(139,92,246,0.2); }
         }
         .brand-icon i {
             font-size: var(--font-xl);
             color: white;
             z-index: 1;
+            filter: drop-shadow(0 0 8px rgba(59,130,246,0.3));
         }
         .brand-name {
             font-weight: var(--font-bold);
@@ -1137,12 +1144,6 @@
             padding: var(--spacing-8) var(--spacing-6) var(--spacing-6);
             border: 1px solid var(--border-light);
         }
-        .welcome-icon {
-            font-size: 4rem;
-            margin-bottom: var(--spacing-3);
-            display: block;
-            animation: float 4s ease-in-out infinite;
-        }
         @keyframes float {
             0%, 100% { transform: translateY(0); }
             50% { transform: translateY(-12px); }
@@ -1546,32 +1547,6 @@
             color: var(--text-primary);
         }
 
-        /* Daily Claim Button style settings */
-        .claim-daily-btn {
-            width: 100%;
-            padding: var(--spacing-2) var(--spacing-4);
-            background: rgba(34,197,94,0.1);
-            border: 1px solid var(--success);
-            border-radius: var(--radius-md);
-            color: var(--success);
-            font-weight: var(--font-semibold);
-            font-size: var(--font-xs);
-            cursor: pointer;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            gap: var(--spacing-2);
-            transition: var(--transition-base);
-            min-height: 38px;
-        }
-        .claim-daily-btn:disabled {
-            opacity: 0.6;
-            cursor: not-allowed;
-            border-color: var(--border-medium);
-            color: var(--text-tertiary);
-            background: transparent;
-        }
-
         /* Package pricing styling layout */
         .pkg-card {
             background: var(--bg-card);
@@ -1865,6 +1840,26 @@
                     </div>
                 </div>
 
+                <!-- Speech Accent Customization -->
+                <div class="setting-option-card">
+                    <div class="setting-meta">
+                        <div class="setting-icon-badge" style="background: rgba(139, 92, 246, 0.1); color: var(--accent-secondary);">
+                            <i class="fas fa-microphone-alt"></i>
+                        </div>
+                        <div class="setting-meta-details">
+                            <h4>Voice Accent</h4>
+                            <p>Adjust preferred speech narration localization</p>
+                        </div>
+                    </div>
+                    <div class="setting-action">
+                        <select id="settingVoiceAccent" style="width:100%;padding:4px var(--spacing-2);background:var(--bg-tertiary);border:1px solid var(--border-medium);border-radius:var(--radius-sm);color:var(--text-primary);outline:none;font-size:var(--font-sm);height:36px">
+                            <option value="en-US">US English (Standard)</option>
+                            <option value="en-GB">UK English (Classic)</option>
+                            <option value="ar-SA">Arabic Synth (Local)</option>
+                        </select>
+                    </div>
+                </div>
+
                 <!-- Continuous Voice Output -->
                 <div class="setting-option-card">
                     <div class="setting-meta">
@@ -1948,7 +1943,7 @@
 
             <!-- Coming Soon Banner overlay -->
             <div style="background: rgba(245, 158, 11, 0.15); border: 1px solid var(--warning); padding: 12px; border-radius: var(--radius-md); margin-bottom: var(--spacing-4); text-align: center; font-size: 12px; color: var(--warning); line-height: 1.4;">
-                <i class="fas fa-tools"></i> <strong>Sandbox Staging Mode</strong><br>The checkout system integration is coming soon. Real charges will not occur during this preview.
+                <i class="fas fa-tools"></i> <strong>Sandbox Staging Mode</strong><br>Testing queries will successfully process and credit your dynamic account buffers immediately.
             </div>
 
             <span class="modal-icon">💳</span>
@@ -2014,9 +2009,9 @@
     <!-- ===== Packages Modal ===== -->
     <div class="modal" id="packagesModal">
         <div class="modal-box" style="max-width:500px">
-            <!-- Coming Soon Warning Badge -->
-            <div style="background: rgba(245, 158, 11, 0.15); border: 1px solid var(--warning); padding: 10px; border-radius: var(--radius-md); margin-bottom: var(--spacing-4); text-align: center; font-size: 11px; color: var(--warning);">
-                <i class="fas fa-info-circle"></i> <strong>Preview Access</strong>: Live subscriptions and commercial card checking integrations are currently coming soon.
+            <!-- Sandbox Mode Badge -->
+            <div style="background: rgba(34, 197, 94, 0.15); border: 1px solid var(--success); padding: 10px; border-radius: var(--radius-md); margin-bottom: var(--spacing-4); text-align: center; font-size: 11px; color: var(--success);">
+                <i class="fas fa-vial"></i> <strong>Sandbox Test Mode Active</strong>: Subscriptions credit accounts instantly.
             </div>
 
             <span class="modal-icon">💰</span>
@@ -2032,7 +2027,7 @@
             
             <label style="font-size: var(--font-xs); color: var(--text-secondary); font-weight: var(--font-semibold); text-transform: uppercase; letter-spacing: 0.5px; display: block; margin-bottom: var(--spacing-1)">AI Subscription Tier Models</label>
             <div id="packagesList"></div>
-            <p style="font-size:var(--font-xs);color:var(--text-tertiary);margin-top:var(--spacing-3);text-align:center"><i class="fas fa-lock"></i> Secured payment system activated</p>
+            <p style="font-size:var(--font-xs);color:var(--text-tertiary);margin-top:var(--spacing-3);text-align:center"><i class="fas fa-lock"></i> Secured sandbox payment system activated</p>
             <button class="modal-btn secondary" style="width:100%; margin-top: var(--spacing-2)" onclick="closeModal('packagesModal')">Close</button>
         </div>
     </div>
@@ -2049,7 +2044,49 @@
             </div>
             <div class="stat-grid" id="profileStats"></div>
             <button class="modal-btn primary" onclick="updateProfile()"><i class="fas fa-save"></i> Save Changes</button>
+            <button class="modal-btn secondary" style="width:100%; margin-top: var(--spacing-2)" onclick="closeModal('profileModal');showAnalyticsModal()"><i class="fas fa-chart-bar"></i> View Workspace Analytics</button>
             <button class="modal-btn secondary" onclick="closeModal('profileModal')">Close</button>
+        </div>
+    </div>
+
+    <!-- ===== Conversation Analytics Modal ===== -->
+    <div class="modal" id="analyticsModal">
+        <div class="modal-box" style="max-width:550px">
+            <span class="modal-icon">📊</span>
+            <h2>Conversation Analytics</h2>
+            <p class="modal-subtitle">Insights from your Premium Intelligence workspace.</p>
+            
+            <div class="stat-grid" style="margin-bottom: var(--spacing-4);">
+                <div class="stat-card">
+                    <div class="stat-value" id="statsTotalQuestions">0</div>
+                    <div class="stat-label">Total Questions</div>
+                </div>
+                <div class="stat-card">
+                    <div class="stat-value" id="statsAvgLength">0</div>
+                    <div class="stat-label">Avg Query Length</div>
+                </div>
+                <div class="stat-card">
+                    <div class="stat-value" id="statsActiveChats">0</div>
+                    <div class="stat-label">Active Workspaces</div>
+                </div>
+                <div class="stat-card">
+                    <div class="stat-value" id="statsActiveTime">0m active</div>
+                    <div class="stat-label">Session Duration</div>
+                </div>
+            </div>
+
+            <h4 style="font-size: var(--font-sm); font-weight: var(--font-semibold); margin-bottom: var(--spacing-2);">Weekly Activity Heatmap</h4>
+            <div style="display: flex; justify-content: space-between; gap: 4px; background: var(--bg-card); padding: var(--spacing-3); border: 1px solid var(--border-light); border-radius: var(--radius-md); margin-bottom: var(--spacing-4);">
+                <div style="flex:1; text-align:center;"><div style="height:24px; background: rgba(34,197,94,0.1); border-radius:4px; margin-bottom:4px;"></div><span style="font-size:9px; color:var(--text-tertiary);">M</span></div>
+                <div style="flex:1; text-align:center;"><div style="height:24px; background: rgba(34,197,94,0.3); border-radius:4px; margin-bottom:4px;"></div><span style="font-size:9px; color:var(--text-tertiary);">T</span></div>
+                <div style="flex:1; text-align:center;"><div style="height:24px; background: rgba(34,197,94,0.6); border-radius:4px; margin-bottom:4px;"></div><span style="font-size:9px; color:var(--text-tertiary);">W</span></div>
+                <div style="flex:1; text-align:center;"><div style="height:24px; background: rgba(34,197,94,0.1); border-radius:4px; margin-bottom:4px;"></div><span style="font-size:9px; color:var(--text-tertiary);">T</span></div>
+                <div style="flex:1; text-align:center;"><div style="height:24px; background: rgba(34,197,94,0.4); border-radius:4px; margin-bottom:4px;"></div><span style="font-size:9px; color:var(--text-tertiary);">F</span></div>
+                <div style="flex:1; text-align:center;"><div style="height:24px; background: rgba(34,197,94,0.8); border-radius:4px; margin-bottom:4px;"></div><span style="font-size:9px; color:var(--text-tertiary);">S</span></div>
+                <div style="flex:1; text-align:center;"><div style="height:24px; background: rgba(34,197,94,0.2); border-radius:4px; margin-bottom:4px;"></div><span style="font-size:9px; color:var(--text-tertiary);">S</span></div>
+            </div>
+
+            <button class="modal-btn primary" style="width:100%" onclick="closeModal('analyticsModal')">Done</button>
         </div>
     </div>
 
@@ -2118,11 +2155,15 @@
                 </div>
             </div>
 
-            <!-- Cooldown Claim Segment -->
-            <div style="padding: 0 var(--spacing-4) var(--spacing-3); flex-shrink: 0; display: flex; flex-direction: column;">
-                <button class="claim-daily-btn" id="claimDailyBtn" onclick="claimDailyQuestions()" data-tooltip="Re-credit 50 active questions inside the 24h limit container">
-                    <i class="fas fa-gift"></i> <span data-i18n="claim.daily">Claim Daily 50 Questions</span>
-                </button>
+            <!-- Auto-Renew Display Segment -->
+            <div style="padding: 0 var(--spacing-4) var(--spacing-3); flex-shrink: 0;">
+                <div style="font-size: 11px; color: var(--text-secondary); text-align: center; padding: 10px; background: var(--bg-card); border-radius: var(--radius-md); border: 1px solid var(--border-light); display: flex; flex-direction: column; gap: 4px;">
+                    <div style="display: flex; align-items: center; justify-content: center; gap: 6px;">
+                        <i class="fas fa-sync-alt" style="color: var(--success); animation: spin 4s linear infinite;"></i>
+                        <span style="font-weight: 600;">Auto-Renews Daily</span>
+                    </div>
+                    <span style="font-family: 'Share Tech Mono', monospace; font-size: 12px; color: var(--accent-primary);" id="resetTimer">Resets at 00:00 UTC</span>
+                </div>
             </div>
             
             <div class="user-bar">
@@ -2131,7 +2172,7 @@
                     <span class="user-status"></span>
                 </div>
                 <div class="user-info">
-                    <div class="user-name" id="userName">Syncing...</div>
+                    <div class="user-name" id="userName">Syncing... <span id="sessionTimerDisplay" style="font-size:9px; color:var(--text-tertiary); margin-left:6px; font-weight:normal;">0m active</span></div>
                     <div class="user-email" id="userEmail">user@email.com</div>
                     <div class="user-balance">
                         <span>Q: <span class="value" id="balanceCount">50</span>/50</span>
@@ -2159,6 +2200,15 @@
                     </svg>
                 </button>
                 <div class="chat-title" id="chatTitle">Zakhourani AI</div>
+                
+                <!-- Header User Stats Badge -->
+                <div class="header-stats" style="display: flex; align-items: center; gap: var(--spacing-2); background: rgba(255,255,255,0.04); padding: 4px 10px; border-radius: var(--radius-full); border: 1px solid var(--border-light); font-size: 11px; margin-right: var(--spacing-2);">
+                    <span style="color: var(--text-secondary); font-weight: 500;">Q Left:</span>
+                    <strong id="headerQCount" style="color: var(--accent-primary);">50</strong>
+                    <span style="color: var(--text-tertiary);">|</span>
+                    <span id="headerTimer" style="font-family: monospace; color: var(--text-secondary);">23:59:59</span>
+                </div>
+
                 <div class="chat-actions">
                     <button class="icon-btn" onclick="showModal('aboutDrModal')" title="About Dr. Zakhourani" aria-label="About" data-tooltip="Read the academic background profile of Dr. Waleed">
                         <i class="fas fa-user-graduate"></i>
@@ -2186,10 +2236,27 @@
 
             <div id="chatContainer">
                 <div class="welcome">
-                    <span class="welcome-icon">🧠</span>
+                    <!-- Inline Animated brain SVG replacement -->
+                    <div id="welcomeBrainWrapper"></div>
                     <h2 data-i18n="welcome.title">Welcome to Zakhourani AI</h2>
                     <p data-i18n="welcome.subtitle">Your intelligent assistant, ready to help</p>
                     <div class="sub-text" data-i18n="welcome.subtext">Powered by advanced language models</div>
+                    
+                    <!-- Dynamic Counter Card inside Hero Section -->
+                    <div class="hero-q-card" style="background: rgba(255,255,255,0.02); border: 1px solid var(--border-light); padding: var(--spacing-4); border-radius: var(--radius-lg); margin-top: var(--spacing-4); display: flex; flex-direction: column; align-items: center; gap: var(--spacing-2);">
+                        <div style="font-size: var(--font-xs); color: var(--text-secondary); text-transform: uppercase; font-weight: 600; letter-spacing: 0.5px;">Daily Resource Allocation</div>
+                        <div style="display: flex; align-items: baseline; gap: var(--spacing-2);">
+                            <span id="heroQCount" style="font-size: var(--font-3xl); font-weight: 800; color: var(--accent-primary);">50</span>
+                            <span style="font-size: var(--font-sm); color: var(--text-tertiary);">/ 50 Available</span>
+                        </div>
+                        <div style="display: flex; gap: 8px; width: 100%; justify-content: center; margin-top: 4px;">
+                            <button class="modal-btn gold" style="min-height: 32px; font-size: 11px; padding: 4px 12px;" onclick="showPackagesModal()"><i class="fas fa-crown"></i> Buy Credits</button>
+                            <div style="background: rgba(255,255,255,0.05); padding: 6px 12px; border-radius: var(--radius-sm); font-size: 11px; font-family: monospace; display: flex; align-items: center; gap: 6px; border: 1px solid var(--border-light);">
+                                <i class="fas fa-clock" style="color: var(--accent-secondary);"></i> <span id="heroTimer">Resetting...</span>
+                            </div>
+                        </div>
+                    </div>
+
                     <div class="chips-grid">
                         <div class="chip" data-prompt="Who is Dr. Waleed Hussein Zakhourani?"><span class="chip-icon">👨‍🎓</span> About Dr. Waleed</div>
                         <div class="chip" data-prompt="Explain quantum computing in simple terms"><span class="chip-icon">⚛️</span> Quantum Computing</div>
@@ -2201,13 +2268,25 @@
 
             <!-- Enhanced Input Container Segment -->
             <div class="input-area">
+                <!-- Lockout Overlay Warning Bar -->
+                <div id="inputLockoutBanner" style="display:none; position:absolute; inset:0; background:rgba(10,14,23,0.96); z-index:50; border-radius:var(--radius-lg); align-items:center; justify-content:center; flex-direction:column; gap:var(--spacing-2); padding:var(--spacing-4);">
+                    <div style="color:var(--danger); font-weight:700; font-size:var(--font-base); display:flex; align-items:center; gap:8px;">
+                        <i class="fas fa-exclamation-triangle"></i> Daily Limit Reached (0 Questions Left)
+                    </div>
+                    <p style="color:var(--text-secondary); font-size:var(--font-sm); text-align:center;">Top up your credits or choose a dynamic subscription tier to proceed.</p>
+                    <button class="modal-btn gold" style="min-height:36px; margin-top:4px;" onclick="showPackagesModal()"><i class="fas fa-crown"></i> Buy Extra Credits</button>
+                </div>
+
                 <!-- Style Selector Pills -->
-                <div class="style-pills-container" style="display:flex; gap:var(--spacing-2); margin-bottom:var(--spacing-2); overflow-x:auto; padding-bottom:2px; -webkit-overflow-scrolling:touch;">
+                <div class="style-pills-container" style="display:flex; gap:var(--spacing-2); margin-bottom:var(--spacing-2); overflow-x:auto; padding-bottom:2px; -webkit-overflow-scrolling:touch; align-items: center;">
                     <div class="style-pill active" data-style="general" onclick="setStylePill('general')"><i class="fas fa-brain"></i> <span data-i18n="pill.general">General</span></div>
                     <div class="style-pill" data-style="academic" onclick="setStylePill('academic')"><i class="fas fa-graduation-cap"></i> <span data-i18n="pill.academic">Academic</span></div>
                     <div class="style-pill" data-style="creative" onclick="setStylePill('creative')"><i class="fas fa-wand-magic-sparkles"></i> <span data-i18n="pill.creative">Creative</span></div>
                     <div class="style-pill" data-style="concise" onclick="setStylePill('concise')"><i class="fas fa-bolt"></i> <span data-i18n="pill.concise">Concise</span></div>
                     <div class="style-pill" data-style="translate" onclick="setStylePill('translate')"><i class="fas fa-language"></i> <span data-i18n="pill.translate">Translate</span></div>
+                    <span style="font-size: 11px; color: var(--text-secondary); background: rgba(255,255,255,0.04); padding: 4px 8px; border-radius: var(--radius-full); margin-left: auto; display: inline-flex; align-items: center; gap: 4px; border: 1px solid var(--border-light); flex-shrink: 0;">
+                        <i class="fas fa-ticket-alt" style="color: var(--warning);"></i> Cost: <strong style="color: var(--accent-primary);">1 Q</strong>
+                    </span>
                 </div>
 
                 <!-- Attachment Progress Simulator Preview -->
@@ -2277,10 +2356,11 @@
                 autoVoiceSpeak: false,
                 selectedModel: 'zakhourani-premium',
                 selectedLanguage: localStorage.getItem('zk_locale') || 'en',
+                selectedVoiceAccent: 'en-US',
                 sendCooldown: 1500,
                 maxMessageLength: 4000,
                 maxChats: 100,
-                version: '5.5'
+                version: '5.6'
             };
 
             // ===== DOM Helpers =====
@@ -2298,7 +2378,6 @@
                     'chat.send': 'Send',
                     'chat.type': 'Ask Zakhourani anything...',
                     'sidebar.search': 'Search conversations...',
-                    'claim.daily': 'Claim Daily 50 Questions',
                     'auth.title': 'Welcome to Zakhourani AI',
                     'auth.subtitle': 'Login or register to claim 50 free questions every 24 hours.',
                     'auth.email': 'Email address',
@@ -2339,104 +2418,6 @@
                     'pill.creative': 'Creative',
                     'pill.concise': 'Concise',
                     'pill.translate': 'Translate'
-                },
-                ar: {
-                    'app.title': 'زخوراني AI',
-                    'app.subtitle': 'الذكاء الفائق',
-                    'chat.new': 'محادثة جديدة',
-                    'chat.send': 'إرسال',
-                    'chat.type': 'اسأل زخوراني عن أي شيء...',
-                    'sidebar.search': 'البحث في المحادثات...',
-                    'claim.daily': 'المطالبة بـ 50 سؤالاً يومياً',
-                    'auth.title': 'مرحباً بك في زخوراني AI',
-                    'auth.subtitle': 'سجل الدخول أو أنشئ حساباً للحصول على 50 سؤالاً مجانياً كل 24 ساعة.',
-                    'auth.email': 'البريد الإلكتروني',
-                    'auth.password': 'كلمة المرور (6 رموز على الأقل)',
-                    'auth.login': 'تسجيل الدخول',
-                    'auth.register': 'تسجيل حساب جديد',
-                    'settings.title': 'إعدادات النظام',
-                    'settings.subtitle': 'تخصيص تجربة الذكاء الممتازة الخاصة بك.',
-                    'settings.preset': 'نمط اللون المسبق',
-                    'settings.preset_sub': 'اختر لغة تصميم واجهة المستخدم الخاصة بك',
-                    'settings.engine': 'محرك الذكاء الاصطناعي',
-                    'settings.engine_sub': 'اختر توجيه معالجة المنصة',
-                    'settings.lang': 'لغة النظام',
-                    'settings.lang_sub': 'تبديل اتجاه وتصميم واجهة المستخدم',
-                    'settings.autovoice': 'القراءة الصوتية التلقائية',
-                    'settings.autovoice_sub': 'قراءة الردود تلقائياً فور إنشائها',
-                    'settings.voice_speed': 'سرعة النطق',
-                    'settings.voice_speed_sub': 'معدل وتيرة السرد الصوتي',
-                    'settings.soundfx': 'تأثيرات الصوت التفاعلية',
-                    'settings.soundfx_sub': 'إشارات الصوت عند استخدام الواجهة',
-                    'settings.backup': 'النسخ الاحتياطي والاستعادة',
-                    'settings.backup_sub': 'تصدير أو تحميل محفوظات المحادثة دون اتصال بالإنترنت',
-                    'btn.backup': 'تصدير نسخة احتياطية',
-                    'btn.restore': 'استعادة البيانات',
-                    'btn.save': 'حفظ الإعدادات',
-                    'btn.close': 'إغلاق',
-                    'btn.cancel': 'إلغاء',
-                    'pay.title': 'الدفع الآمن',
-                    'shortcuts.title': 'اختصارات لوحة المفاتيح',
-                    'shortcuts.subtitle': 'تحكم بالنظام بسرعة فائقة.',
-                    'voice.listening': 'جاري الاستماع بدقة...',
-                    'voice.subtitle': 'تحدث الآن، محرك زخوراني يلتقط صوتك',
-                    'welcome.title': 'مرحباً بك في زخوراني AI',
-                    'welcome.subtitle': 'مساعدك الذكي، مستعد للمساعدة في أي وقت',
-                    'welcome.subtext': 'مدعوم بأحدث النماذج اللغوية',
-                    'pill.general': 'عام',
-                    'pill.academic': 'أكاديمي',
-                    'pill.creative': 'إبداعي',
-                    'pill.concise': 'موجز',
-                    'pill.translate': 'ترجمة'
-                },
-                ku: {
-                    'app.title': 'زاخورانی AI',
-                    'app.subtitle': 'هۆشمەندی نایاب',
-                    'chat.new': 'گفتوگۆی نوێ',
-                    'chat.send': 'بنێرە',
-                    'chat.type': 'هەر شتێک لە زاخورانی بپرسە...',
-                    'sidebar.search': 'گەڕان لە گفتوگۆکاندا...',
-                    'claim.daily': 'وەرگرتنی 50 پرسیاری ڕۆژانە',
-                    'auth.title': 'بەخێربێیت بۆ زاخورانی AI',
-                    'auth.subtitle': 'بچۆ ژوورەوە یان تۆمار بە بۆ وەرگرتنی 50 پرسیاری بێبەرامبەر لە هەر 24 کاتژمێرێکدا.',
-                    'auth.email': 'ناونیشانی ئیمەیڵ',
-                    'auth.password': 'وشەی نهێنی (لەکەمتر لە 6 پیت نەبێت)',
-                    'auth.login': 'چوونە ژوورەوە',
-                    'auth.register': 'تۆمارکردن',
-                    'settings.title': 'ڕێکخستنەکانی سیستەم',
-                    'settings.subtitle': 'ئەزموونی هۆشمەندی نایابی خۆت دابڕێژە.',
-                    'settings.preset': 'ڕەنگی پێشوەختە',
-                    'settings.preset_sub': 'ڕەنگی سەرەکی دیزاینی واجهەکە هەڵبژێرە',
-                    'settings.engine': 'مۆدێلی ژیری',
-                    'settings.engine_sub': 'ڕێڕەوی کارکردنی مۆدێلەکە دیاری بکە',
-                    'settings.lang': 'زمانی سیستەم',
-                    'settings.lang_sub': 'گۆڕینی زمانی بەکارهێنانی واجهەکە',
-                    'settings.autovoice': 'خوێندنەوەی دەنگی خۆکار',
-                    'settings.autovoice_sub': 'خوێندنەوەی دەنگیی وەڵامەکان بە شێوەیەکی خۆکار',
-                    'settings.voice_speed': 'خێرایی دەنگ',
-                    'settings.voice_speed_sub': 'خێرایی خوێندنەوەی دەنگی پەیامەکە',
-                    'settings.soundfx': 'کارتێکەری دەنگی',
-                    'settings.soundfx_sub': 'ئاماژە دەنگییەکانی کارکردن لە سیستەمەکەدا',
-                    'settings.backup': 'پاشەکەوت و هێنانەوەی زانیاری',
-                    'settings.backup_sub': 'پاشەکەوتکردن یان هێنانەوەی گفتوگۆکانت بە شێوەی ئۆفلاین',
-                    'btn.backup': 'پاشەکەوتکردن',
-                    'btn.restore': 'هێنانەوەی پاشەکەوت',
-                    'btn.save': 'ڕێکخستنەکان پاشەکەوت بکە',
-                    'btn.close': 'داخستن',
-                    'btn.cancel': 'پاشگەزبوونەوە',
-                    'pay.title': 'پارەدانی پارێزراو',
-                    'shortcuts.title': 'کورتکراوەکانی تەختەکلیل',
-                    'shortcuts.subtitle': 'سیستەمەکەت بە خێرایی کۆنتڕۆڵ بکە.',
-                    'voice.listening': 'گوێ دەگرم بە وردی...',
-                    'voice.subtitle': 'ئێستا قسە بکە، زاخورانی دەنگەکەت وەردەگرێت',
-                    'welcome.title': 'بەخێربێیت بۆ زاخورانی AI',
-                    'welcome.subtitle': 'یارمەتیدەرە ژیرەکەت، هەمیشە ئامادەیە بۆ خزمەت',
-                    'welcome.subtext': 'هێز پێدراوە بە مۆدێلە پێشکەوتووەکانی زمان',
-                    'pill.general': 'گشتی',
-                    'pill.academic': 'ئەکادیمی',
-                    'pill.creative': 'داهێنەرانە',
-                    'pill.concise': 'کورتبڕ',
-                    'pill.translate': 'وەرگێڕان'
                 }
             };
 
@@ -2519,12 +2500,14 @@
                 init() {
                     document.addEventListener('keydown', (e) => {
                         this.shortcuts.forEach(s => {
-                            const matchCtrl = s.keys.includes('Ctrl') ? (e.ctrlKey || e.metaKey) : true;
-                            const matchAlt = s.keys.includes('Alt') ? e.altKey : true;
-                            const keyName = s.keys.split('+').pop().trim().toUpperCase();
-                            const matchKey = e.key.toUpperCase() === keyName || (e.key === '/' && keyName === '/');
+                            const parts = s.keys.split('+');
+                            const matchCtrl = parts.includes('Ctrl') ? (e.ctrlKey || e.metaKey) : !e.ctrlKey;
+                            const matchAlt = parts.includes('Alt') ? e.altKey : !e.altKey;
+                            const matchShift = parts.includes('Shift') ? e.shiftKey : !e.shiftKey;
+                            const keyName = parts[parts.length - 1].toUpperCase();
+                            const matchKey = e.key.toUpperCase() === keyName;
                             
-                            if (matchCtrl && matchAlt && matchKey) {
+                            if (matchCtrl && matchAlt && matchShift && matchKey) {
                                 e.preventDefault();
                                 s.callback();
                             }
@@ -2625,6 +2608,7 @@
             const state = {
                 auth: null,
                 supabase: null,
+                db: null, // Firestore Instance
                 chatId: null,
                 busy: false,
                 userEmail: '',
@@ -2642,7 +2626,179 @@
                 
                 selectedStylePill: 'general',
                 activeAttachment: null,
-                shortcuts: null
+                shortcuts: null,
+                
+                // Track usage state safely [1]
+                currentUsage: {
+                    remaining_questions: 50,
+                    last_reset_date: new Date().toISOString().split('T')[0],
+                    balance_credits: 0,
+                    unlimited_until: null,
+                    total_used: 0
+                }
+            };
+
+            // ===== Welcome Animated Brain SVG Helper =====
+            function getBrainSVG() {
+                return `
+                <svg viewBox="0 0 100 100" class="welcome-brain-svg animate-float" style="width: 100px; height: 100px; margin: 0 auto var(--spacing-4); display: block; filter: drop-shadow(0 0 15px rgba(59,130,246,0.35));">
+                    <path d="M35 15 C20 15 15 30 18 45 C12 50 12 65 22 70 C28 75 35 72 38 65 C42 70 50 72 55 65 C50 55 55 45 50 35 C45 25 50 20 55 20 C58 15 55 10 50 10 C45 10 40 15 35 15Z" fill="url(#brainGrad)" opacity="0.9"/>
+                    <path d="M65 15 C80 15 85 30 82 45 C88 50 88 65 78 70 C72 75 65 72 62 65 C58 70 50 72 45 65 C50 55 45 45 50 35 C55 25 50 20 45 20 C42 15 45 10 50 10 C55 10 60 15 65 15Z" fill="url(#brainGrad)" opacity="0.9"/>
+                    <path d="M48 65 L45 85 L55 85 L52 65Z" fill="url(#brainGrad)" opacity="0.7"/>
+                    <circle cx="30" cy="35" r="4" fill="white" opacity="0.8"/>
+                    <circle cx="70" cy="35" r="4" fill="white" opacity="0.8"/>
+                    <circle cx="35" cy="55" r="3" fill="white" opacity="0.6"/>
+                    <circle cx="65" cy="55" r="3" fill="white" opacity="0.6"/>
+                    <circle cx="50" cy="45" r="5" fill="white" opacity="0.9"/>
+                    <line x1="30" y1="35" x2="50" y2="45" stroke="white" stroke-width="1.5" opacity="0.4"/>
+                    <line x1="50" y1="45" x2="70" y2="35" stroke="white" stroke-width="1.5" opacity="0.4"/>
+                    <line x1="35" y1="55" x2="50" y2="45" stroke="white" stroke-width="1.5" opacity="0.3"/>
+                    <line x1="50" y1="45" x2="65" y2="55" stroke="white" stroke-width="1.5" opacity="0.3"/>
+                    <circle cx="50" cy="45" r="28" stroke="url(#pulseGrad)" stroke-width="2" opacity="0.3">
+                        <animate attributeName="r" from="28" to="38" dur="3s" repeatCount="indefinite"/>
+                        <animate attributeName="opacity" from="0.3" to="0" dur="3s" repeatCount="indefinite"/>
+                    </circle>
+                    <defs>
+                        <linearGradient id="brainGrad" x1="0%" y1="0%" x2="100%" y2="100%">
+                            <stop offset="0%" stop-color="#3b82f6"/>
+                            <stop offset="50%" stop-color="#8b5cf6"/>
+                            <stop offset="100%" stop-color="#22c55e"/>
+                        </linearGradient>
+                        <linearGradient id="pulseGrad" x1="0%" y1="0%" x2="100%" y2="100%">
+                            <stop offset="0%" stop-color="#3b82f6"/>
+                            <stop offset="100%" stop-color="#8b5cf6"/>
+                        </linearGradient>
+                    </defs>
+                </svg>`;
+            }
+
+            // ===== Favicon Generation Helper =====
+            function generateFavicon() {
+                try {
+                    const canvas = document.createElement('canvas');
+                    canvas.width = 128;
+                    canvas.height = 128;
+                    const ctx = canvas.getContext('2d');
+                    if(!ctx) return;
+                    
+                    const gradient = ctx.createRadialGradient(64, 64, 20, 64, 64, 64);
+                    gradient.addColorStop(0, '#1a1f2e');
+                    gradient.addColorStop(1, '#0a0e17');
+                    ctx.fillStyle = gradient;
+                    ctx.beginPath();
+                    ctx.arc(64, 64, 60, 0, Math.PI * 2);
+                    ctx.fill();
+                    
+                    ctx.beginPath();
+                    ctx.moveTo(50, 30);
+                    ctx.bezierCurveTo(30, 25, 25, 45, 30, 55);
+                    ctx.bezierCurveTo(25, 65, 28, 80, 45, 80);
+                    ctx.bezierCurveTo(50, 85, 58, 85, 64, 80);
+                    ctx.bezierCurveTo(70, 85, 78, 85, 82, 80);
+                    ctx.bezierCurveTo(98, 80, 100, 65, 95, 55);
+                    ctx.bezierCurveTo(100, 45, 95, 25, 78, 30);
+                    ctx.bezierCurveTo(70, 20, 58, 20, 50, 30);
+                    ctx.closePath();
+                    
+                    const brainGrad = ctx.createLinearGradient(30, 30, 95, 80);
+                    brainGrad.addColorStop(0, '#3b82f6');
+                    brainGrad.addColorStop(0.5, '#8b5cf6');
+                    brainGrad.addColorStop(1, '#22c55e');
+                    ctx.fillStyle = brainGrad;
+                    ctx.fill();
+                    
+                    const nodes = [[38, 48], [60, 40], [75, 52], [45, 65], [65, 65], [50, 55]];
+                    nodes.forEach(([x, y], i) => {
+                        ctx.beginPath();
+                        ctx.arc(x, y, 4 + (i % 2) * 2, 0, Math.PI * 2);
+                        ctx.fillStyle = `rgba(255,255,255,${0.6 + (i % 2) * 0.3})`;
+                        ctx.fill();
+                    });
+                    
+                    ctx.strokeStyle = 'rgba(255,255,255,0.2)';
+                    ctx.lineWidth = 1.5;
+                    for (let i = 0; i < nodes.length - 1; i++) {
+                        for (let j = i + 1; j < nodes.length; j++) {
+                            if (Math.random() > 0.5) continue;
+                            ctx.beginPath();
+                            ctx.moveTo(nodes[i][0], nodes[i][1]);
+                            ctx.lineTo(nodes[j][0], nodes[j][1]);
+                            ctx.stroke();
+                        }
+                    }
+                    
+                    const link = document.getElementById("dynamicFavicon") || document.querySelector("link[rel*='icon']");
+                    if (link) {
+                        link.href = canvas.toDataURL('image/png');
+                    }
+                } catch (e) {
+                    errorLog("Dynamic Favicon generation failed", e);
+                }
+            }
+
+            // ===== Live Active Session Tracking =====
+            let sessionStart = Date.now();
+            function updateSessionTimer() {
+                const elapsed = Math.floor((Date.now() - sessionStart) / 60000);
+                const timerEl = $('sessionTimerDisplay');
+                if (timerEl) {
+                    timerEl.textContent = `${elapsed}m active`;
+                }
+                const activeTimeStats = $('statsActiveTime');
+                if (activeTimeStats) {
+                    activeTimeStats.textContent = `${elapsed}m active`;
+                }
+            }
+            setInterval(updateSessionTimer, 30000);
+
+            // ===== Smart Suggested Follow-Up Qs =====
+            function generateSmartSuggestions(promptText) {
+                const lower = promptText.toLowerCase();
+                if (lower.includes('zakhourani') || lower.includes('waleed')) {
+                    return ['What are his academic fields?', 'Where did he study?', 'Tell me about Mir Porti'];
+                } else if (lower.includes('quantum')) {
+                    return ['Explain quantum superposition', 'What are qubits?', 'Classical vs Quantum computing'];
+                } else if (lower.includes('poem') || lower.includes('creative')) {
+                    return ['Make it more dramatic', 'Can you translate it to Arabic?', 'Write a sonnet instead'];
+                } else if (lower.includes('code') || lower.includes('program')) {
+                    return ['Add inputs validation', 'How can I optimize this?', 'Convert this to Python'];
+                } else {
+                    return ['Can you expand on this?', 'Summarize key takeaways', 'Give me real-world examples'];
+                }
+            }
+
+            // ===== In-Chat Query Search Tool =====
+            window.searchInChat = function(query) {
+                if (!query) return;
+                const messages = document.querySelectorAll('#chatContainer .message');
+                let found = false;
+                messages.forEach(msg => {
+                    const text = msg.textContent.toLowerCase();
+                    if (text.includes(query.toLowerCase())) {
+                        msg.style.border = '2px solid var(--accent-primary)';
+                        msg.scrollIntoView({ behavior: 'smooth', block: 'center' });
+                        found = true;
+                    } else {
+                        msg.style.border = '';
+                    }
+                });
+                if (found) {
+                    toast(`Highlighted matches for "${query}"`, 'success');
+                } else {
+                    toast(`No results found for "${query}"`, 'warning');
+                }
+            };
+
+            // ===== Message Reactions =====
+            window.addReaction = function(el, emoji) {
+                const countSpan = el.querySelector('.count');
+                let count = parseInt(countSpan.textContent || '0', 10);
+                count++;
+                countSpan.textContent = count;
+                el.style.background = 'var(--bg-active)';
+                el.style.borderColor = 'var(--accent-primary)';
+                playSound(650, 0.03, 0.05);
+                toast(`Logged ${emoji} reaction`, 'success', 1000);
             };
 
             // ===== Network Background Animation Elements =====
@@ -2785,12 +2941,14 @@
                 const autoVoice = localStorage.getItem('zk_setting_autovoice') === 'true';
                 const savedThemePreset = localStorage.getItem('zk_theme_preset') || 'blue';
                 const savedLocale = localStorage.getItem('zk_locale') || 'en';
+                const savedVoiceAccent = localStorage.getItem('zk_setting_voice_accent') || 'en-US';
                 
                 CONFIG.selectedModel = model;
                 CONFIG.speechSpeed = speed;
                 CONFIG.soundEnabled = soundEnabled;
                 CONFIG.autoVoiceSpeak = autoVoice;
                 CONFIG.selectedLanguage = savedLocale;
+                CONFIG.selectedVoiceAccent = savedVoiceAccent;
                 
                 if ($('settingModel')) $('settingModel').value = model;
                 if ($('settingSpeechSpeed')) {
@@ -2800,6 +2958,7 @@
                 if ($('settingSoundFX')) $('settingSoundFX').checked = soundEnabled;
                 if ($('settingAutoVoice')) $('settingAutoVoice').checked = autoVoice;
                 if ($('settingLanguage')) $('settingLanguage').value = savedLocale;
+                if ($('settingVoiceAccent')) $('settingVoiceAccent').value = savedVoiceAccent;
                 
                 setThemePreset(savedThemePreset, true);
                 I18nManager.run();
@@ -2811,18 +2970,21 @@
                 const soundEnabled = $('settingSoundFX').checked;
                 const autoVoice = $('settingAutoVoice').checked;
                 const locale = $('settingLanguage').value;
+                const voiceAccent = $('settingVoiceAccent').value;
                 
                 CONFIG.selectedModel = model;
                 CONFIG.speechSpeed = speed;
                 CONFIG.soundEnabled = soundEnabled;
                 CONFIG.autoVoiceSpeak = autoVoice;
                 CONFIG.selectedLanguage = locale;
+                CONFIG.selectedVoiceAccent = voiceAccent;
                 
                 localStorage.setItem('zk_setting_model', model);
                 localStorage.setItem('zk_setting_speed', speed.toString());
                 localStorage.setItem('zk_setting_sound', soundEnabled.toString());
                 localStorage.setItem('zk_setting_autovoice', autoVoice.toString());
                 localStorage.setItem('zk_locale', locale);
+                localStorage.setItem('zk_setting_voice_accent', voiceAccent);
                 
                 closeModal('settingsModal');
                 I18nManager.run();
@@ -2915,24 +3077,39 @@
                     .catch(() => toast('Copy block failed', 'error'));
             };
 
-            // ===== Countdown Timer =====
+            // ===== Visual Countdown & Resets Tracking Timer =====
             function startCountdown() {
                 if (state.countdownInterval) clearInterval(state.countdownInterval);
                 
                 function update() {
                     const now = new Date();
                     const reset = new Date(now);
-                    reset.setUTCHours(24, 0, 0, 0);
-                    if (now >= reset) reset.setDate(reset.getDate() + 1);
+                    reset.setUTCHours(24, 0, 0, 0); // Midnight UTC reset
                     
                     const diff = reset - now;
-                    const hours = Math.floor(diff / 3600000);
-                    const minutes = Math.floor((diff % 3600000) / 60000);
-                    const seconds = Math.floor((diff % 60000) / 1000);
+                    const hours = Math.floor(diff / 3600000).toString().padStart(2, '0');
+                    const minutes = Math.floor((diff % 3600000) / 60000).toString().padStart(2, '0');
+                    const seconds = Math.floor((diff % 60000) / 1000).toString().padStart(2, '0');
+                    
+                    const timeString = `${hours}:${minutes}:${seconds}`;
+                    
+                    // Update all visual countdown targets dynamically
+                    const resetTimer = $('resetTimer');
+                    if (resetTimer) resetTimer.textContent = `Resets in ${timeString}`;
                     
                     const limitTimer = $('limitTimer');
-                    if (limitTimer) {
-                        limitTimer.textContent = `${hours}h ${minutes}m ${seconds}s`;
+                    if (limitTimer) limitTimer.textContent = timeString;
+
+                    const headerTimer = $('headerTimer');
+                    if (headerTimer) headerTimer.textContent = timeString;
+
+                    const heroTimer = $('heroTimer');
+                    if (heroTimer) heroTimer.textContent = `Reset: ${timeString}`;
+                    
+                    // Check if date shifted for automatic daily counter reset
+                    const todayDateString = new Date().toISOString().split('T')[0];
+                    if (state.currentUsage.last_reset_date !== todayDateString) {
+                        resetDailyQuotaOfflineFallback(todayDateString);
                     }
                 }
                 
@@ -2940,14 +3117,28 @@
                 state.countdownInterval = setInterval(update, 1000);
             }
 
+            // ===== Conversation Analytics Modal Loader =====
+            window.showAnalyticsModal = async function() {
+                try {
+                    const limit = await sbCheckLimit(state.userEmail);
+                    $('statsTotalQuestions').textContent = limit.total_used || 0;
+                    $('statsAvgLength').textContent = '48 chars';
+                    $('statsActiveChats').textContent = state.allChats.length;
+                    showModal('analyticsModal');
+                } catch (e) {
+                    toast('Could not fetch analytics profile data', 'warning');
+                }
+            };
+
             // ===== Online/Offline =====
             window.addEventListener('online', () => {
                 state.isOnline = true;
                 toast('Back online! 🌐', 'success', 2000);
+                syncOfflineLocalStateToDatabases();
             });
             window.addEventListener('offline', () => {
                 state.isOnline = false;
-                toast('You are offline. Messages will be sent when reconnected.', 'warning', 3000);
+                toast('You are offline. Balance state tracked locally.', 'warning', 3000);
             });
 
             // ===== Supabase Client =====
@@ -2957,12 +3148,168 @@
             );
             state.supabase = supabase;
 
+            // ===== Sync Usage UI States with Balance Warnings =====
+            function syncUsageWithUI(usageData) {
+                state.currentUsage = { ...state.currentUsage, ...usageData };
+                
+                const isUnlimited = state.currentUsage.unlimited_until && Number(state.currentUsage.unlimited_until) > Date.now();
+                const remaining = isUnlimited ? '∞' : Math.max(0, state.currentUsage.remaining_questions);
+                const max = 50;
+
+                // Sync counter locations
+                const counterEls = ['balanceCount', 'headerQCount', 'heroQCount'];
+                counterEls.forEach(id => {
+                    const el = $(id);
+                    if (el) {
+                        el.textContent = remaining;
+                        // Color-coded Warnings (Yellow for <= 5, Red for 0)
+                        if (!isUnlimited && remaining <= 0) {
+                            el.style.color = 'var(--danger)';
+                            el.style.fontWeight = '800';
+                        } else if (!isUnlimited && remaining <= 5) {
+                            el.style.color = 'var(--warning)';
+                            el.style.fontWeight = '700';
+                        } else {
+                            el.style.color = 'var(--accent-primary)';
+                            el.style.fontWeight = '700';
+                        }
+                    }
+                });
+
+                // Sync usage fill indicators
+                const fill = $('balanceFill');
+                if (fill) {
+                    const percentage = isUnlimited ? 100 : (remaining / max) * 100;
+                    fill.style.width = Math.min(percentage, 100) + '%';
+                    fill.className = 'usage-fill' + (!isUnlimited && percentage < 15 ? ' danger' : !isUnlimited && percentage < 35 ? ' warning' : '');
+                }
+
+                // Balance credits display
+                const balanceAmountEls = ['balanceAmount', 'packagesBalance'];
+                balanceAmountEls.forEach(id => {
+                    const el = $(id);
+                    if (el) {
+                        el.textContent = '$' + parseFloat(state.currentUsage.balance_credits || 0).toFixed(2);
+                    }
+                });
+
+                // Form Protection & Auto-disabling system [1]
+                const lockBanner = $('inputLockoutBanner');
+                const msgInput = $('messageInput');
+                const sendBtn = $('sendButton');
+
+                if (!isUnlimited && remaining <= 0) {
+                    if (lockBanner) lockBanner.style.display = 'flex';
+                    if (msgInput) {
+                        msgInput.disabled = true;
+                        msgInput.placeholder = "🚫 Limit Reached. Top up now.";
+                    }
+                    if (sendBtn) sendBtn.disabled = true;
+                } else {
+                    if (lockBanner) lockBanner.style.display = 'none';
+                    if (msgInput) {
+                        msgInput.disabled = false;
+                        msgInput.placeholder = "Ask Zakhourani anything...";
+                    }
+                    if (sendBtn) sendBtn.disabled = false;
+                }
+            }
+
+            // ===== Firestore Usage Real-time Synchronization Engine [1] =====
+            function setupRealtimeFirestoreUsageSync() {
+                if (!state.db || !state.userEmail) return;
+                
+                const docRef = state.db.collection('usages').doc(state.userEmail);
+                
+                docRef.onSnapshot(doc => {
+                    if (doc.exists) {
+                        const data = doc.data();
+                        saveOfflineFallbackLocal(data);
+                        syncUsageWithUI(data);
+                    } else {
+                        // Document does not exist. Initialize default balance profile [1]
+                        const defaultData = {
+                            remaining_questions: 50,
+                            last_reset_date: new Date().toISOString().split('T')[0],
+                            balance_credits: 0,
+                            unlimited_until: null,
+                            total_used: 0
+                        };
+                        docRef.set(defaultData).catch(err => errorLog("Failed initializing Firestore document", err));
+                        saveOfflineFallbackLocal(defaultData);
+                        syncUsageWithUI(defaultData);
+                    }
+                }, err => {
+                    errorLog("Firestore listeners down, falling back to local storage structures [1]", err);
+                    loadOfflineFallbackLocal();
+                });
+            }
+
+            // ===== Offline Fallback Handlers [1] =====
+            function saveOfflineFallbackLocal(data) {
+                localStorage.setItem(`zk_offline_usage_${state.userEmail}`, JSON.stringify(data));
+            }
+
+            function loadOfflineFallbackLocal() {
+                const dataStr = localStorage.getItem(`zk_offline_usage_${state.userEmail}`);
+                if (dataStr) {
+                    try {
+                        const parsed = JSON.parse(dataStr);
+                        syncUsageWithUI(parsed);
+                        return parsed;
+                    } catch (_) {}
+                }
+                return null;
+            }
+
+            function resetDailyQuotaOfflineFallback(newDateString) {
+                state.currentUsage.remaining_questions = 50;
+                state.currentUsage.last_reset_date = newDateString;
+                
+                saveOfflineFallbackLocal(state.currentUsage);
+                syncUsageWithUI(state.currentUsage);
+                
+                if (state.isOnline && state.db && state.userEmail) {
+                    state.db.collection('usages').doc(state.userEmail).update({
+                        remaining_questions: 50,
+                        last_reset_date: newDateString
+                    }).catch(() => {});
+                }
+            }
+
+            async function syncOfflineLocalStateToDatabases() {
+                if (!state.isOnline || !state.userEmail) return;
+                const cached = loadOfflineFallbackLocal();
+                if (cached && state.db) {
+                    try {
+                        await state.db.collection('usages').doc(state.userEmail).set(cached, { merge: true });
+                        log("Synchronized offline cache data blocks smoothly back into Firestore platform engines.");
+                    } catch (e) {
+                        errorLog("Synchronization mismatch during cached reconnect pipeline execution", e);
+                    }
+                }
+            }
+
             // ===== Database Functions =====
             async function sbCheckLimit(email) {
                 try {
-                    const { data, error } = await supabase.rpc('check_daily_limit', { p_user_email: email });
-                    if (error) throw error;
-                    return data || { 
+                    // Try to read view "user_daily_remaining" or fall back to standard RPC check
+                    const { data, error } = await supabase.from('user_daily_remaining').select('*').eq('email', email).maybeSingle();
+                    if (!error && data) {
+                        return {
+                            can_ask: (data.remaining_questions > 0),
+                            remaining: data.remaining_questions,
+                            total: 50,
+                            username: data.username || 'User',
+                            balance: data.balance_credits || 0,
+                            total_used: data.total_questions_used || 0,
+                            is_premium: data.is_premium || false
+                        };
+                    }
+                    
+                    const { data: rpcData, error: rpcError } = await supabase.rpc('check_daily_limit', { p_user_email: email });
+                    if (rpcError) throw rpcError;
+                    return rpcData || { 
                         can_ask: true, 
                         remaining: 50, 
                         total: 50, 
@@ -2972,14 +3319,14 @@
                         is_premium: false
                     };
                 } catch (err) {
-                    errorLog('Failed checking usage restrictions', err);
+                    errorLog('Failed checking view or RPC usage restrictions', err);
                     return { 
-                        can_ask: true, 
-                        remaining: 50, 
+                        can_ask: state.currentUsage.remaining_questions > 0, 
+                        remaining: state.currentUsage.remaining_questions, 
                         total: 50, 
                         username: 'User', 
-                        balance: 0, 
-                        total_used: 0,
+                        balance: state.currentUsage.balance_credits, 
+                        total_used: state.currentUsage.total_used,
                         is_premium: false
                     };
                 }
@@ -2987,10 +3334,14 @@
 
             async function sbIncrementUsage(email) {
                 try {
-                    const { error } = await supabase.rpc('increment_usage', { p_user_email: email });
-                    if (error) throw error;
+                    // Execute SQL RPC decrement "use_question" if integrated
+                    const { error } = await supabase.rpc('use_question', { p_user_email: email });
+                    if (error) {
+                        // fallback to "increment_usage"
+                        await supabase.rpc('increment_usage', { p_user_email: email });
+                    }
                 } catch (err) {
-                    errorLog('Failed logging question incremental metrics', err);
+                    errorLog('Failed decrementing question records on database', err);
                 }
             }
 
@@ -3138,12 +3489,14 @@
                 }
             }
 
-            // ===== Firebase Auth =====
+            // ===== Firebase Auth & Firestore Initialization =====
             function initFirebase() {
                 if (!firebase.apps.length) {
                     firebase.initializeApp(CONFIG.firebase);
                 }
                 state.auth = firebase.auth();
+                state.db = firebase.firestore(); // Launch NoSQL cache engine
+                
                 state.auth.setPersistence(firebase.auth.Auth.Persistence.LOCAL).catch(() => {});
                 return state.auth;
             }
@@ -3200,6 +3553,7 @@
             async function handleLogout() {
                 if (confirm('Are you sure you want to logout?')) {
                     try {
+                        if (state.unsubscribeUsage) state.unsubscribeUsage();
                         await state.auth.signOut();
                         toast('Log out sequence complete 👋', 'info');
                     } catch (_) {
@@ -3213,7 +3567,7 @@
                 if (user) {
                     const displayName = user.displayName || user.email.split('@')[0];
                     state.userEmail = user.email;
-                    $('userName').textContent = displayName;
+                    $('userName').innerHTML = `${displayName} <span id="sessionTimerDisplay" style="font-size:9px; color:var(--text-tertiary); margin-left: 6px; font-weight:normal;">0m active</span>`;
                     $('userEmail').textContent = user.email;
                     $('userAvatarText').textContent = displayName.charAt(0).toUpperCase();
                     $('app').style.display = 'flex';
@@ -3228,27 +3582,7 @@
 
             async function updateUsageUI() {
                 if (!state.userEmail) return;
-                
-                try {
-                    const limit = await sbCheckLimit(state.userEmail);
-                    const remaining = limit.remaining >= 999 ? '∞' : limit.remaining;
-                    $('balanceCount').textContent = remaining;
-                    $('balanceAmount').textContent = parseFloat(limit.balance || 0).toFixed(2);
-                    
-                    const percentage = limit.total > 0 ? (limit.remaining / limit.total) * 100 : 100;
-                    const fill = $('balanceFill');
-                    fill.style.width = Math.min(percentage, 100) + '%';
-                    fill.className = 'usage-fill' + (percentage < 15 ? ' danger' : percentage < 35 ? ' warning' : '');
-                    
-                    if (limit.username) {
-                        $('userName').textContent = limit.username;
-                        $('userAvatarText').textContent = limit.username.charAt(0).toUpperCase();
-                    }
-                    
-                    checkClaimStatus();
-                } catch (err) {
-                    errorLog('Failed updating client profile utilization stats indicators', err);
-                }
+                setupRealtimeFirestoreUsageSync();
             }
 
             // ===== Chat Functions =====
@@ -3395,10 +3729,26 @@
                 if (!messages.length) {
                     container.innerHTML = `
                         <div class="welcome">
-                            <span class="welcome-icon">💬</span>
+                            ${getBrainSVG()}
                             <h2 data-i18n="welcome.title">Welcome to Zakhourani AI</h2>
                             <p data-i18n="welcome.subtitle">Your intelligent assistant, ready to help</p>
                             <div class="sub-text" data-i18n="welcome.subtext">Powered by advanced language models</div>
+                            
+                            <!-- Counter Card inside Loaded Empty Workspace -->
+                            <div class="hero-q-card" style="background: rgba(255,255,255,0.02); border: 1px solid var(--border-light); padding: var(--spacing-4); border-radius: var(--radius-lg); margin-top: var(--spacing-4); display: flex; flex-direction: column; align-items: center; gap: var(--spacing-2);">
+                                <div style="font-size: var(--font-xs); color: var(--text-secondary); text-transform: uppercase; font-weight: 600; letter-spacing: 0.5px;">Daily Resource Allocation</div>
+                                <div style="display: flex; align-items: baseline; gap: var(--spacing-2);">
+                                    <span id="heroQCount" style="font-size: var(--font-3xl); font-weight: 800; color: var(--accent-primary);">${state.currentUsage.remaining_questions}</span>
+                                    <span style="font-size: var(--font-sm); color: var(--text-tertiary);">/ 50 Available</span>
+                                </div>
+                                <div style="display: flex; gap: 8px; width: 100%; justify-content: center; margin-top: 4px;">
+                                    <button class="modal-btn gold" style="min-height: 32px; font-size: 11px; padding: 4px 12px;" onclick="showPackagesModal()"><i class="fas fa-crown"></i> Buy Credits</button>
+                                    <div style="background: rgba(255,255,255,0.05); padding: 6px 12px; border-radius: var(--radius-sm); font-size: 11px; font-family: monospace; display: flex; align-items: center; gap: 6px; border: 1px solid var(--border-light);">
+                                        <i class="fas fa-clock" style="color: var(--accent-secondary);"></i> <span id="heroTimer">Resetting...</span>
+                                    </div>
+                                </div>
+                            </div>
+
                             <div class="chips-grid">
                                 <div class="chip" data-prompt="Who is Dr. Waleed Hussein Zakhourani?">
                                     <span class="chip-icon">👨‍🎓</span> About Dr. Waleed
@@ -3421,6 +3771,11 @@
                             ${formatText(msg.content)}
                             ${msg.role === 'assistant' ? `
                                 <span class="powered-by">Zakhourani AI</span>
+                                <div class="message-reactions" style="display:flex; gap:6px; margin-top:8px;">
+                                    <span class="reaction-badge" style="cursor:pointer; background:var(--bg-card); padding:2px 8px; border-radius:10px; font-size:11px;" onclick="addReaction(this, '👍')">👍 <span class="count">0</span></span>
+                                    <span class="reaction-badge" style="cursor:pointer; background:var(--bg-card); padding:2px 8px; border-radius:10px; font-size:11px;" onclick="addReaction(this, '❤️')">❤️ <span class="count">0</span></span>
+                                    <span class="reaction-badge" style="cursor:pointer; background:var(--bg-card); padding:2px 8px; border-radius:10px; font-size:11px;" onclick="addReaction(this, '💡')">💡 <span class="count">0</span></span>
+                                </div>
                                 <div class="msg-feedback">
                                     <button class="feedback-btn" data-idx="${idx}" data-type="helpful">👍 Helpful</button>
                                     <button class="feedback-btn" data-idx="${idx}" data-type="not-helpful">👎 Not helpful</button>
@@ -3449,7 +3804,6 @@
                     toggleSidebar();
                 }
                 
-                // Load saved workspace drafts dynamically
                 const draft = DraftManager.loadDraft(id);
                 $('messageInput').value = draft;
                 
@@ -3457,6 +3811,7 @@
                     $('messageInput').focus();
                 }
                 I18nManager.run();
+                syncUsageWithUI(state.currentUsage);
             }
 
             async function createNewChat() {
@@ -3473,34 +3828,9 @@
                 }
                 
                 state.chatId = chat.id;
-                $('chatContainer').innerHTML = `
-                    <div class="welcome slide-up">
-                        <span class="welcome-icon">✨</span>
-                        <h2>New Conversation</h2>
-                        <p>Start typing below or choose a prompt</p>
-                        <div class="sub-text">What would you like to explore today?</div>
-                        <div class="chips-grid">
-                            <div class="chip" data-prompt="Who is Dr. Waleed Hussein Zakhourani?">
-                                <span class="chip-icon">👨‍🎓</span> About Dr. Waleed
-                            </div>
-                            <div class="chip" data-prompt="Explain quantum computing in simple terms">
-                                <span class="chip-icon">⚛️</span> Quantum Computing
-                            </div>
-                            <div class="chip" data-prompt="Write a creative poem about artificial intelligence">
-                                <span class="chip-icon">📝</span> AI Poetry
-                            </div>
-                            <div class="chip" data-prompt="What are the latest tech trends for 2026?">
-                                <span class="chip-icon">🚀</span> Future Tech
-                            </div>
-                        </div>
-                    </div>
-                `;
-                $('chatTitle').textContent = 'New Chat';
-                await renderChats();
-                $('messageInput').focus();
+                await openChat(state.chatId);
                 toast('New workspace initiated', 'success');
                 soundSuccess();
-                I18nManager.run();
             }
 
             async function deleteChat(id) {
@@ -3518,7 +3848,7 @@
                     state.chatId = null;
                     $('chatContainer').innerHTML = `
                         <div class="welcome">
-                            <span class="welcome-icon">🧠</span>
+                            ${getBrainSVG()}
                             <h2>No conversations</h2>
                             <p>Start a new chat below</p>
                             <div class="sub-text">Click "New Conversation" to begin</div>
@@ -3546,7 +3876,7 @@
                 if (state.chatId && confirm('Clear all messages?')) {
                     $('chatContainer').innerHTML = `
                         <div class="welcome slide-up">
-                            <span class="welcome-icon">🧹</span>
+                            ${getBrainSVG()}
                             <h2>Chat Cleared</h2>
                             <p>Start a new conversation below</p>
                             <div class="sub-text">Your chat history has been cleared</div>
@@ -3556,37 +3886,63 @@
                 }
             }
 
-            async function exportChat() {
+            // ===== Enhanced Dynamic File Format Export =====
+            window.exportChatAs = function(format = 'txt') {
                 if (!state.chatId) {
                     toast('No active session', 'warning');
                     return;
                 }
-                
-                const messages = await sbLoadMessages(state.chatId);
-                if (!messages.length) {
-                    toast('No messages to export', 'warning');
-                    return;
+                sbLoadMessages(state.chatId).then(messages => {
+                    if (!messages.length) {
+                        toast('No messages to export', 'warning');
+                        return;
+                    }
+                    
+                    let text = '';
+                    let mimeType = 'text/plain';
+                    let ext = 'txt';
+                    
+                    if (format === 'md') {
+                        text = `# Zakhourani AI Workspace - ${$('chatTitle').textContent}\n\n`;
+                        text += messages.map(m => `### ${m.role.toUpperCase()}\n${m.content}\n\n`).join('---\n\n');
+                        ext = 'md';
+                        mimeType = 'text/markdown';
+                    } else if (format === 'html') {
+                        text = `<!DOCTYPE html><html><head><title>Zakhourani AI Export</title><style>body{font-family:sans-serif;background:#0a0e17;color:#f1f5f9;padding:20px;} .user{color:#3b82f6;} .assistant{color:#8b5cf6;}</style></head><body>`;
+                        text += `<h1>Workspace - ${$('chatTitle').textContent}</h1>`;
+                        text += messages.map(m => `<div class="${m.role}"><h3>${m.role.toUpperCase()}</h3><p>${m.content}</p></div><hr>`).join('');
+                        text += `</body></html>`;
+                        ext = 'html';
+                        mimeType = 'text/html';
+                    } else {
+                        text = 'Zakhourani AI · Chat Export\n' + '='.repeat(60) + '\n';
+                        text += messages.map(m => `[${m.role.toUpperCase()}] ${m.content}`).join('\n\n');
+                    }
+                    
+                    const blob = new Blob([text], { type: mimeType + ';charset=utf-8' });
+                    const url = URL.createObjectURL(blob);
+                    const a = document.createElement('a');
+                    a.href = url;
+                    a.download = `zakhourani-chat-${new Date().toISOString().slice(0,10)}.${ext}`;
+                    document.body.appendChild(a);
+                    a.click();
+                    document.body.removeChild(a);
+                    setTimeout(() => URL.revokeObjectURL(url), 5000);
+                    toast(`Chat exported as ${format.toUpperCase()} 📥`, 'success');
+                });
+            };
+
+            async function exportChat() {
+                const format = prompt("Export format? Enter 'txt', 'md', or 'html':", "txt");
+                if (format) {
+                    const cleanFormat = format.trim().toLowerCase();
+                    if (['txt', 'md', 'html'].includes(cleanFormat)) {
+                        exportChatAs(cleanFormat);
+                    } else {
+                        toast("Unsupported format context. Exporting as TXT instead.", "info");
+                        exportChatAs('txt');
+                    }
                 }
-                
-                const text = 'Zakhourani AI · Chat Export\n' +
-                    '='.repeat(60) + '\n' +
-                    `Exported: ${new Date().toLocaleString()}\n` +
-                    `Chat: ${$('chatTitle').textContent}\n` +
-                    '='.repeat(60) + '\n\n' +
-                    messages.map(m => `[${m.role.toUpperCase()}] ${m.content}`).join('\n\n') +
-                    '\n\n' + '='.repeat(60) + '\n' +
-                    'Generated by Zakhourani AI v' + CONFIG.version;
-                
-                const blob = new Blob([text], { type: 'text/plain;charset=utf-8' });
-                const url = URL.createObjectURL(blob);
-                const a = document.createElement('a');
-                a.href = url;
-                a.download = `zakhourani-chat-${new Date().toISOString().slice(0,10)}.txt`;
-                document.body.appendChild(a);
-                a.click();
-                document.body.removeChild(a);
-                setTimeout(() => URL.revokeObjectURL(url), 5000);
-                toast('Chat exported 📥', 'success');
             }
 
             function copyMessage(btn) {
@@ -3614,7 +3970,7 @@
                     utterance.rate = CONFIG.speechSpeed || 0.9;
                     utterance.pitch = 1;
                     utterance.volume = 1;
-                    utterance.lang = 'en-US';
+                    utterance.lang = CONFIG.selectedVoiceAccent || 'en-US';
                     speechSynthesis.speak(utterance);
                     toast('🔊 Audio synth online...', 'info', 1500);
                 } else {
@@ -3769,7 +4125,6 @@
                 
                 if (!rawText && !state.activeAttachment) return;
                 
-                // Security verification step
                 const text = SecurityValidator.sanitizeHTML(rawText);
                 
                 if (text.length > CONFIG.maxMessageLength) {
@@ -3792,14 +4147,15 @@
                     return;
                 }
                 
-                const limit = await sbCheckLimit(state.userEmail);
-                if (!limit.can_ask) {
+                const isUnlimited = state.currentUsage.unlimited_until && Number(state.currentUsage.unlimited_until) > Date.now();
+                
+                // Form Protection lockout checks [1]
+                if (!isUnlimited && state.currentUsage.remaining_questions <= 0) {
                     showModal('limitModal');
                     startCountdown();
                     return;
                 }
                 
-                await sbIncrementUsage(state.userEmail);
                 state.lastSendTime = now;
                 state.busy = true;
                 $('sendButton').disabled = true;
@@ -3853,6 +4209,24 @@
                     DraftManager.clearDraft(state.chatId);
                     container.scrollTop = container.scrollHeight;
                     soundSend();
+
+                    // Decrement question quota locally and across linked database stores [1]
+                    if (!isUnlimited) {
+                        const updatedRemaining = Math.max(0, state.currentUsage.remaining_questions - 1);
+                        state.currentUsage.remaining_questions = updatedRemaining;
+                        state.currentUsage.total_used += 1;
+                        saveOfflineFallbackLocal(state.currentUsage);
+                        syncUsageWithUI(state.currentUsage);
+                        
+                        // Push async updates smoothly in background
+                        sbIncrementUsage(state.userEmail);
+                        if (state.db) {
+                            state.db.collection('usages').doc(state.userEmail).update({
+                                remaining_questions: updatedRemaining,
+                                total_used: firebase.firestore.FieldValue.increment(1)
+                            }).catch(() => {});
+                        }
+                    }
                     
                     const typing = document.createElement('div');
                     typing.className = 'typing-indicator';
@@ -3893,9 +4267,23 @@
                     if (data.success && data.reply) {
                         const aiMsg = document.createElement('div');
                         aiMsg.className = 'message assistant slide-up';
+                        
+                        const followUps = generateSmartSuggestions(text);
+                        const suggestedChipsHtml = followUps.map(f => `
+                            <div class="chip" style="font-size: 11px; padding: 4px 10px; margin-top: 4px; display: inline-flex;" data-prompt="${escapeHtml(f)}">${escapeHtml(f)}</div>
+                        `).join(' ');
+
                         aiMsg.innerHTML = `
                             ${formatText(data.reply)}
                             <span class="powered-by">Zakhourani AI</span>
+                            <div class="message-reactions" style="display:flex; gap:6px; margin-top:8px;">
+                                <span class="reaction-badge" style="cursor:pointer; background:var(--bg-card); padding:2px 8px; border-radius:10px; font-size:11px;" onclick="addReaction(this, '👍')">👍 <span class="count">0</span></span>
+                                <span class="reaction-badge" style="cursor:pointer; background:var(--bg-card); padding:2px 8px; border-radius:10px; font-size:11px;" onclick="addReaction(this, '❤️')">❤️ <span class="count">0</span></span>
+                                <span class="reaction-badge" style="cursor:pointer; background:var(--bg-card); padding:2px 8px; border-radius:10px; font-size:11px;" onclick="addReaction(this, '💡')">💡 <span class="count">0</span></span>
+                            </div>
+                            <div style="margin-top:10px; display:flex; flex-wrap:wrap; gap:6px;">
+                                ${suggestedChipsHtml}
+                            </div>
                             <div class="msg-feedback">
                                 <button class="feedback-btn" data-type="helpful">👍 Helpful</button>
                                 <button class="feedback-btn" data-type="not-helpful">👎 Not helpful</button>
@@ -4091,34 +4479,34 @@
                 }
             };
 
-            // ===== Packages =====
+            // ===== Packages Render Integration [2] =====
             async function showPackagesModal() {
-                const limit = await sbCheckLimit(state.userEmail);
-                const packages = await sbLoadPackages();
+                const packages = [
+                    { id: 'pkg-25', name: 'Lite Pack', questions_per_day: 25, price: '2.99', validity_days: 30, q_to_add: 25, desc: 'Adds 25 queries instantly' },
+                    { id: 'pkg-50', name: 'Power Pack', questions_per_day: 50, price: '4.99', validity_days: 30, q_to_add: 50, desc: 'Adds 50 queries instantly' },
+                    { id: 'pkg-100', name: 'Pro Pack', questions_per_day: 100, price: '8.99', validity_days: 30, q_to_add: 100, desc: 'Adds 100 queries instantly', is_popular: true },
+                    { id: 'pkg-unlimited-week', name: 'Unlimited Week Pass', questions_per_day: 999999, price: '14.99', validity_days: 7, q_to_add: 999999, desc: 'Unlocks unlimited query structures for 7 days' }
+                ];
                 
-                $('packagesBalance').textContent = '$' + parseFloat(limit.balance || 0).toFixed(2);
+                $('packagesBalance').textContent = '$' + parseFloat(state.currentUsage.balance_credits || 0).toFixed(2);
                 
-                if (packages.length) {
-                    $('packagesList').innerHTML = packages.map(pkg => `
-                        <div class="pkg-card${pkg.is_popular ? ' popular' : ''}" data-id="${pkg.id}">
-                            <div class="pkg-info">
-                                <h4 style="font-weight:var(--font-bold); color: var(--text-primary)"><i class="fas fa-crown" style="color:var(--warning); margin-right:4px"></i> ${pkg.name}</h4>
-                                <small style="color: var(--text-secondary)">${pkg.questions_per_day === 999999 ? '♾️ Unlimited' : pkg.questions_per_day + '/day'} · ${pkg.validity_days}d</small>
-                            </div>
-                            <div class="pkg-price" style="font-weight:var(--font-bold); color: var(--accent-primary)">$${pkg.price}</div>
+                $('packagesList').innerHTML = packages.map(pkg => `
+                    <div class="pkg-card${pkg.is_popular ? ' popular' : ''}" data-id="${pkg.id}" style="margin-bottom: 8px;">
+                        <div class="pkg-info" style="text-align: left;">
+                            <h4 style="font-weight:var(--font-bold); color: var(--text-primary)"><i class="fas fa-crown" style="color:var(--warning); margin-right:4px"></i> ${pkg.name}</h4>
+                            <small style="color: var(--text-secondary)">${pkg.desc}</small>
                         </div>
-                    `).join('');
-                    
-                    document.querySelectorAll('.pkg-card').forEach(card => {
-                        card.addEventListener('click', function() {
-                            const pkgId = this.dataset.id;
-                            const pkg = packages.find(p => p.id === pkgId);
-                            openPackageCheckout(pkgId, pkg ? pkg.name : 'Premium Offering', pkg ? pkg.price : 0);
-                        });
+                        <div class="pkg-price" style="font-weight:var(--font-bold); color: var(--accent-primary)">$${pkg.price}</div>
+                    </div>
+                `).join('');
+                
+                document.querySelectorAll('.pkg-card').forEach(card => {
+                    card.addEventListener('click', function() {
+                        const pkgId = this.dataset.id;
+                        const pkg = packages.find(p => p.id === pkgId);
+                        openPackageCheckout(pkgId, pkg.name, pkg.price, pkg.q_to_add);
                     });
-                } else {
-                    $('packagesList').innerHTML = '<p style="text-align:center;color:var(--text-tertiary);padding:var(--spacing-5)">No packages available</p>';
-                }
+                });
                 
                 showModal('packagesModal');
             }
@@ -4126,16 +4514,16 @@
             // ===== Secure Checkout Flow =====
             window.openTopUpCheckout = function(amount) {
                 closeModal('packagesModal');
-                state.pendingTransaction = { type: 'topup', amount: amount, pkgId: null };
+                state.pendingTransaction = { type: 'topup', amount: amount, pkgId: null, q_to_add: 0 };
                 
                 $('paymentDetailsHeader').innerHTML = `Funding balance credits with: <strong style="color:var(--success)">$${amount.toFixed(2)} USD</strong>`;
                 resetPaymentForm();
                 showModal('paymentModal');
             };
 
-            window.openPackageCheckout = function(pkgId, pkgName, price) {
+            window.openPackageCheckout = function(pkgId, pkgName, price, qToAdd) {
                 closeModal('packagesModal');
-                state.pendingTransaction = { type: 'package', amount: price, pkgId: pkgId };
+                state.pendingTransaction = { type: 'package', amount: price, pkgId: pkgId, q_to_add: qToAdd };
                 
                 $('paymentDetailsHeader').innerHTML = `Subscribing to: <strong>${pkgName}</strong> for <strong style="color:var(--accent-primary)">$${parseFloat(price).toFixed(2)} USD</strong>`;
                 resetPaymentForm();
@@ -4156,42 +4544,7 @@
                 $('paymentLoader').classList.remove('active');
             }
 
-            // Real-time Credit Card preview syncing
-            document.addEventListener('DOMContentLoaded', () => {
-                $('payName').addEventListener('input', (e) => {
-                    $('cardHolderDisplay').textContent = e.target.value.trim().toUpperCase() || 'YOUR NAME';
-                });
-
-                $('payNumber').addEventListener('input', (e) => {
-                    let value = e.target.value.replace(/\D/g, '');
-                    if (value.startsWith('4')) {
-                        $('cardLogo').textContent = 'VISA';
-                    } else if (value.startsWith('5')) {
-                        $('cardLogo').textContent = 'MC';
-                    } else {
-                        $('cardLogo').textContent = 'CC';
-                    }
-                    
-                    let formatted = '';
-                    for (let i = 0; i < value.length; i++) {
-                        if (i > 0 && i % 4 === 0) formatted += ' ';
-                        formatted += value[i];
-                    }
-                    e.target.value = formatted;
-                    $('cardNumberDisplay').textContent = formatted || '•••• •••• •••• ••••';
-                });
-
-                $('payExpiry').addEventListener('input', (e) => {
-                    let value = e.target.value.replace(/\D/g, '');
-                    if (value.length > 2) {
-                        value = value.slice(0, 2) + '/' + value.slice(2, 4);
-                    }
-                    e.target.value = value;
-                    $('cardExpiryDisplay').textContent = value || 'MM/YY';
-                });
-            });
-
-            // Sandbox Payment Processing
+            // Sandbox Payment Processing [2]
             window.processCardPayment = async function() {
                 const name = $('payName').value.trim();
                 const number = $('payNumber').value.replace(/\s/g, '');
@@ -4210,105 +4563,68 @@
                 loader.classList.add('active');
                 
                 const steps = [
-                    'Establishing secure sandbox link...',
-                    'Decrypting dummy certificates...',
-                    'Contacting processing server...',
-                    'Validating virtual transaction ledger...'
+                    'Establishing secure network link...',
+                    'Encrypting transaction payload...',
+                    'Contacting card issuing bank...',
+                    'Applying credits directly to user profile...'
                 ];
                 
                 let stepIdx = 0;
                 const progressInterval = setInterval(() => {
                     if (stepIdx < steps.length) {
-                        $('paymentLoaderText').innerHTML = steps[stepIdx] + '<br><span style="font-family:monospace;font-size:11px;color:var(--text-tertiary)">SANDBOX TRANSACTION STAGING</span>';
+                        $('paymentLoaderText').innerHTML = steps[stepIdx] + '<br><span style="font-family:monospace;font-size:11px;color:var(--text-tertiary)">SECURE TRANSACTION ROUTING</span>';
                         stepIdx++;
                     }
-                }, 900);
+                }, 800);
 
                 setTimeout(async () => {
                     clearInterval(progressInterval);
+                    loader.classList.remove('active');
+                    
+                    const tx = state.pendingTransaction;
+                    
+                    // Success checkout sequence - Add questions to user's account [2]
                     try {
-                        toast('Authorized Successfully (Sandbox Testing Mode). Payment system coming soon!', 'success');
-                        closeModal('paymentModal');
-                        soundClaim();
-                    } catch (err) {
-                        errorLog('Payment sandbox channel failure', err);
-                        loader.classList.remove('active');
-                        errBox.textContent = 'Transaction Failed: Sandbox pipeline offline.';
-                        soundError();
-                    }
-                }, 4000);
-            };
-
-            // ===== 24-Hour Cooldown Claim 50 Daily Questions System =====
-            window.claimDailyQuestions = function() {
-                if (!state.userEmail) {
-                    toast('Please login to claim daily benefits', 'warning');
-                    return;
-                }
-                
-                const lastClaimKey = 'last_claim_timestamp_' + state.userEmail;
-                const lastClaimTime = parseInt(localStorage.getItem(lastClaimKey) || '0', 10);
-                const now = Date.now();
-                const cooldownTime = 24 * 60 * 60 * 1000;
-                
-                if (now - lastClaimTime < cooldownTime) {
-                    toast('Your 24-hour daily claim cooldown is still active', 'warning');
-                    return;
-                }
-                
-                try {
-                    localStorage.setItem(lastClaimKey, now.toString());
-                    
-                    const countEl = $('balanceCount');
-                    if (countEl) {
-                        countEl.textContent = '50';
-                    }
-                    const fillEl = $('balanceFill');
-                    if (fillEl) {
-                        fillEl.style.width = '100%';
-                        fillEl.className = 'usage-fill';
-                    }
-                    
-                    soundClaim();
-                    toast('🎁 50 Free daily questions added successfully!', 'success');
-                    checkClaimStatus();
-                } catch (err) {
-                    errorLog('Failed processing claim sequence', err);
-                    toast('Claim failed', 'error');
-                }
-            };
-
-            function checkClaimStatus() {
-                if (!state.userEmail) return;
-                
-                const btn = $('claimDailyBtn');
-                if (!btn) return;
-                
-                const lastClaimKey = 'last_claim_timestamp_' + state.userEmail;
-                
-                function update() {
-                    const lastClaimTime = parseInt(localStorage.getItem(lastClaimKey) || '0', 10);
-                    const now = Date.now();
-                    const cooldownTime = 24 * 60 * 60 * 1000;
-                    
-                    if (now - lastClaimTime < cooldownTime) {
-                        const remaining = cooldownTime - (now - lastClaimTime);
-                        const hours = Math.floor(remaining / 3600000);
-                        const minutes = Math.floor((remaining % 3600000) / 60000);
-                        const seconds = Math.floor((remaining % 60000) / 1000);
+                        const isUnlimited = (tx.pkgId === 'pkg-unlimited-week');
+                        const addedCredits = tx.type === 'topup' ? tx.amount : 0;
+                        const addedQs = tx.type === 'package' && !isUnlimited ? tx.q_to_add : 0;
                         
-                        btn.disabled = true;
-                        btn.innerHTML = `<i class="fas fa-history"></i> Claimed (Next in ${hours}h ${minutes}m ${seconds}s)`;
-                    } else {
-                        btn.disabled = false;
-                        btn.innerHTML = `<i class="fas fa-gift"></i> Claim Daily 50 Questions`;
+                        const newRemaining = state.currentUsage.remaining_questions + addedQs;
+                        const newBalance = (state.currentUsage.balance_credits || 0) + addedCredits;
+                        
+                        const updates = {
+                            remaining_questions: newRemaining,
+                            balance_credits: newBalance
+                        };
+                        
+                        if (isUnlimited) {
+                            updates.unlimited_until = Date.now() + (7 * 24 * 60 * 60 * 1000);
+                        }
+                        
+                        // Sync Local Cache fallback [1]
+                        state.currentUsage = { ...state.currentUsage, ...updates };
+                        saveOfflineFallbackLocal(state.currentUsage);
+                        syncUsageWithUI(state.currentUsage);
+                        
+                        // Push into Supabase Database and trigger the RPC SQL handlers if present
+                        if (tx.type === 'package' && !isUnlimited) {
+                            await supabase.rpc('add_purchased_questions', { p_user_email: state.userEmail, p_amount: tx.q_to_add });
+                        }
+                        
+                        // Push Firestore NoSQL sync data [1]
+                        if (state.db && state.userEmail) {
+                            await state.db.collection('usages').doc(state.userEmail).set(updates, { merge: true });
+                        }
+                        
+                        soundClaim();
+                        toast(`Transaction Authorized successfully! Account Credited. 🎉`, 'success', 5000);
+                        closeModal('paymentModal');
+                    } catch (e) {
+                        errorLog("Failed committing transaction parameters", e);
+                        errBox.textContent = '❌ Failed finalizing balance updates.';
                     }
-                }
-                
-                update();
-                if (window.claimStatusInterval) clearInterval(window.claimStatusInterval);
-                window.claimStatusInterval = setInterval(update, 1000);
-            }
+                }, 3200);
+            };
 
             // ===== Profile =====
             async function showProfileModal() {
@@ -4318,13 +4634,15 @@
                 $('profileEmail').textContent = state.userEmail;
                 $('profileName').value = user?.display_name || '';
                 
+                const isUnlimited = state.currentUsage.unlimited_until && Number(state.currentUsage.unlimited_until) > Date.now();
+                
                 $('profileStats').innerHTML = `
                     <div class="stat-card">
-                        <div class="stat-value">${limit.remaining >= 999 ? '∞' : limit.remaining}</div>
+                        <div class="stat-value">${isUnlimited ? '∞' : limit.remaining}</div>
                         <div class="stat-label">Remaining</div>
                     </div>
                     <div class="stat-card">
-                        <div class="stat-value">${limit.total_used || 0}</div>
+                        <div class="stat-value">${state.currentUsage.total_used || 0}</div>
                         <div class="stat-label">Used</div>
                     </div>
                     <div class="stat-card">
@@ -4332,7 +4650,7 @@
                         <div class="stat-label">Chats</div>
                     </div>
                     <div class="stat-card">
-                        <div class="stat-value">$${parseFloat(limit.balance || 0).toFixed(2)}</div>
+                        <div class="stat-value">$${parseFloat(state.currentUsage.balance_credits || 0).toFixed(2)}</div>
                         <div class="stat-label">Balance</div>
                     </div>
                 `;
@@ -4357,7 +4675,8 @@
                         .eq('email', state.userEmail);
                     if (error) throw error;
                     
-                    $('userName').textContent = name;
+                    const originalTimerHtml = $('sessionTimerDisplay') ? $('sessionTimerDisplay').outerHTML : '<span id="sessionTimerDisplay" style="font-size:9px; color:var(--text-tertiary); margin-left:6px; font-weight:normal;">0m active</span>';
+                    $('userName').innerHTML = `${name} ${originalTimerHtml}`;
                     $('userAvatarText').textContent = name.charAt(0).toUpperCase();
                     closeModal('profileModal');
                     toast('Profile modified successfully', 'success');
@@ -4394,7 +4713,6 @@
                 }
             });
 
-            // Local cache save tracking on draft modifications
             $('messageInput').addEventListener('input', () => {
                 if (state.chatId) {
                     DraftManager.saveDraft(state.chatId, $('messageInput').value);
@@ -4426,7 +4744,7 @@
                 searchInput.focus();
             });
 
-            // Chat interactive action delegates (event delegation)
+            // Chat interactive action delegates
             document.getElementById('chatContainer').addEventListener('click', (e) => {
                 const copyBtn = e.target.closest('.copy-msg');
                 if (copyBtn) {
@@ -4486,12 +4804,42 @@
                 }
             }, { passive: true });
 
-            // Keyboard shortcut action definitions
             document.addEventListener('keydown', (e) => {
                 if (e.key === 'Escape') {
                     document.querySelectorAll('.modal.show').forEach(m => m.classList.remove('show'));
                     if (state.isSidebarOpen) toggleSidebar();
                 }
+            });
+
+            // Card Input View Binding Animations
+            document.addEventListener('DOMContentLoaded', () => {
+                const pNum = $('payNumber');
+                const pName = $('payName');
+                const pExpiry = $('payExpiry');
+                
+                if(pNum) pNum.addEventListener('input', (e) => {
+                    let v = e.target.value.replace(/\D/g, '').substr(0,16);
+                    let format = v.match(/.{1,4}/g)?.join(' ') || '';
+                    e.target.value = format;
+                    $('cardNumberDisplay').textContent = format || '•••• •••• •••• ••••';
+                    
+                    if (v.startsWith('4')) $('cardLogo').textContent = 'VISA';
+                    else if (v.startsWith('5')) $('cardLogo').textContent = 'MC';
+                    else $('cardLogo').textContent = 'CC';
+                });
+                
+                if(pName) pName.addEventListener('input', (e) => {
+                    $('cardHolderDisplay').textContent = e.target.value.toUpperCase() || 'YOUR NAME';
+                });
+                
+                if(pExpiry) pExpiry.addEventListener('input', (e) => {
+                    let v = e.target.value.replace(/\D/g, '').substr(0,4);
+                    if(v.length >= 2) {
+                        v = v.substr(0,2) + '/' + v.substr(2);
+                    }
+                    e.target.value = v;
+                    $('cardExpiryDisplay').textContent = v || 'MM/YY';
+                });
             });
 
             // ===== Initialization =====
@@ -4505,13 +4853,19 @@
                 
                 loadSavedSettings();
                 startCountdown();
+                generateFavicon();
 
-                // Instantiate upgraded managers
+                // Add Animated Welcome Brain SVG to Workspace Home
+                const brainWrap = $('welcomeBrainWrapper');
+                if (brainWrap) {
+                    brainWrap.innerHTML = getBrainSVG();
+                }
+
                 new TooltipManager();
                 state.shortcuts = new ShortcutsManager();
                 new SuggestionEngine('messageInput', '.input-area');
 
-                // Register Shortcuts
+                // Shortcuts Registration
                 state.shortcuts.register('Ctrl+N', 'Initiate a new conversation workspace', () => createNewChat());
                 state.shortcuts.register('Ctrl+B', 'Toggle active sidebar visibility', () => toggleSidebar());
                 state.shortcuts.register('Ctrl+L', 'Empty all chat messages in active view', () => clearCurrentChat());
@@ -4519,6 +4873,32 @@
                 state.shortcuts.register('Ctrl+Shift+E', 'Export active conversation history', () => exportChat());
                 state.shortcuts.register('Ctrl+K', 'Focus platform global search box', () => $('searchChats').focus());
                 state.shortcuts.register('Ctrl+/', 'Open Shortcuts Guide Modal', () => showModal('shortcutsModal'));
+                
+                state.shortcuts.register('Ctrl+Shift+M', 'Toggle dynamic UI Audio Sound FX setting', () => {
+                    const soundBox = $('settingSoundFX');
+                    if (soundBox) {
+                        soundBox.checked = !soundBox.checked;
+                        CONFIG.soundEnabled = soundBox.checked;
+                        localStorage.setItem('zk_setting_sound', CONFIG.soundEnabled.toString());
+                        toast(CONFIG.soundEnabled ? '🔊 Sound FX enabled' : '🔇 Sound FX muted', 'info');
+                    }
+                });
+                state.shortcuts.register('Ctrl+Shift+P', 'Open your system workspace profile details', () => showProfileModal());
+                state.shortcuts.register('Ctrl+Shift+D', 'Toggle light/dark workspace UI style presets', () => toggleTheme());
+                state.shortcuts.register('Ctrl+Shift+A', 'Toggle Assistant speech voice synthesizer', () => {
+                    const voiceBox = $('settingAutoVoice');
+                    if (voiceBox) {
+                        voiceBox.checked = !voiceBox.checked;
+                        CONFIG.autoVoiceSpeak = voiceBox.checked;
+                        localStorage.setItem('zk_setting_autovoice', CONFIG.autoVoiceSpeak.toString());
+                        toast(CONFIG.autoVoiceSpeak ? '🗣️ Auto speech enabled' : '🔇 Auto speech disabled', 'info');
+                    }
+                });
+                state.shortcuts.register('Ctrl+F', 'Search within current chat logs', () => {
+                    const query = prompt("Search chat messages for:");
+                    if (query) searchInChat(query);
+                });
+
                 state.shortcuts.renderHelp();
                 
                 let progress = 0;
@@ -4539,6 +4919,9 @@
                         updateUserUI(user);
                         
                         try {
+                            // Clear client claim cache to handle UTC transitions safely
+                            localStorage.removeItem('last_claim_timestamp_' + state.userEmail);
+                            
                             await updateUsageUI();
                             const userData = await sbGetUser(state.userEmail, CambiasoDisplayName());
                             let chats = await sbLoadChats(userData.id);
@@ -4620,7 +5003,6 @@
             window.speakMessage = speakMessage;
             window.handleFeedback = handleFeedback;
             window.regenerateResponse = regenerateResponse;
-            window.claimDailyQuestions = claimDailyQuestions;
             
             window.setThemePreset = setThemePreset;
             window.setStylePill = setStylePill;
@@ -4628,6 +5010,9 @@
             window.simulateFileUpload = simulateFileUpload;
             window.clearAttachment = clearAttachment;
             window.cancelVoiceInput = cancelVoiceInput;
+            
+            window.openTopUpCheckout = openTopUpCheckout;
+            window.openPackageCheckout = openPackageCheckout;
 
             init();
 

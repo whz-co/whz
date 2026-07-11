@@ -25,9 +25,10 @@
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/styles/atom-one-dark.min.css">
     <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/highlight.min.js"></script>
     
-    <!-- Firebase & Supabase -->
+    <!-- Firebase & Supabase Compatibility Libraries -->
     <script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-app-compat.js"></script>
     <script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-auth-compat.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-firestore-compat.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
 
     <style>
@@ -1942,7 +1943,7 @@
 
             <!-- Coming Soon Banner overlay -->
             <div style="background: rgba(245, 158, 11, 0.15); border: 1px solid var(--warning); padding: 12px; border-radius: var(--radius-md); margin-bottom: var(--spacing-4); text-align: center; font-size: 12px; color: var(--warning); line-height: 1.4;">
-                <i class="fas fa-tools"></i> <strong>Sandbox Staging Mode</strong><br>The checkout system integration is coming soon. Real charges will not occur during this preview.
+                <i class="fas fa-tools"></i> <strong>Sandbox Staging Mode</strong><br>Testing queries will successfully process and credit your dynamic account buffers immediately.
             </div>
 
             <span class="modal-icon">💳</span>
@@ -2008,9 +2009,9 @@
     <!-- ===== Packages Modal ===== -->
     <div class="modal" id="packagesModal">
         <div class="modal-box" style="max-width:500px">
-            <!-- Coming Soon Warning Badge -->
-            <div style="background: rgba(245, 158, 11, 0.15); border: 1px solid var(--warning); padding: 10px; border-radius: var(--radius-md); margin-bottom: var(--spacing-4); text-align: center; font-size: 11px; color: var(--warning);">
-                <i class="fas fa-info-circle"></i> <strong>Preview Access</strong>: Live subscriptions and commercial card checking integrations are currently coming soon.
+            <!-- Sandbox Mode Badge -->
+            <div style="background: rgba(34, 197, 94, 0.15); border: 1px solid var(--success); padding: 10px; border-radius: var(--radius-md); margin-bottom: var(--spacing-4); text-align: center; font-size: 11px; color: var(--success);">
+                <i class="fas fa-vial"></i> <strong>Sandbox Test Mode Active</strong>: Subscriptions credit accounts instantly.
             </div>
 
             <span class="modal-icon">💰</span>
@@ -2026,7 +2027,7 @@
             
             <label style="font-size: var(--font-xs); color: var(--text-secondary); font-weight: var(--font-semibold); text-transform: uppercase; letter-spacing: 0.5px; display: block; margin-bottom: var(--spacing-1)">AI Subscription Tier Models</label>
             <div id="packagesList"></div>
-            <p style="font-size:var(--font-xs);color:var(--text-tertiary);margin-top:var(--spacing-3);text-align:center"><i class="fas fa-lock"></i> Secured payment system activated</p>
+            <p style="font-size:var(--font-xs);color:var(--text-tertiary);margin-top:var(--spacing-3);text-align:center"><i class="fas fa-lock"></i> Secured sandbox payment system activated</p>
             <button class="modal-btn secondary" style="width:100%; margin-top: var(--spacing-2)" onclick="closeModal('packagesModal')">Close</button>
         </div>
     </div>
@@ -2199,6 +2200,15 @@
                     </svg>
                 </button>
                 <div class="chat-title" id="chatTitle">Zakhourani AI</div>
+                
+                <!-- Header User Stats Badge -->
+                <div class="header-stats" style="display: flex; align-items: center; gap: var(--spacing-2); background: rgba(255,255,255,0.04); padding: 4px 10px; border-radius: var(--radius-full); border: 1px solid var(--border-light); font-size: 11px; margin-right: var(--spacing-2);">
+                    <span style="color: var(--text-secondary); font-weight: 500;">Q Left:</span>
+                    <strong id="headerQCount" style="color: var(--accent-primary);">50</strong>
+                    <span style="color: var(--text-tertiary);">|</span>
+                    <span id="headerTimer" style="font-family: monospace; color: var(--text-secondary);">23:59:59</span>
+                </div>
+
                 <div class="chat-actions">
                     <button class="icon-btn" onclick="showModal('aboutDrModal')" title="About Dr. Zakhourani" aria-label="About" data-tooltip="Read the academic background profile of Dr. Waleed">
                         <i class="fas fa-user-graduate"></i>
@@ -2231,6 +2241,22 @@
                     <h2 data-i18n="welcome.title">Welcome to Zakhourani AI</h2>
                     <p data-i18n="welcome.subtitle">Your intelligent assistant, ready to help</p>
                     <div class="sub-text" data-i18n="welcome.subtext">Powered by advanced language models</div>
+                    
+                    <!-- Dynamic Counter Card inside Hero Section -->
+                    <div class="hero-q-card" style="background: rgba(255,255,255,0.02); border: 1px solid var(--border-light); padding: var(--spacing-4); border-radius: var(--radius-lg); margin-top: var(--spacing-4); display: flex; flex-direction: column; align-items: center; gap: var(--spacing-2);">
+                        <div style="font-size: var(--font-xs); color: var(--text-secondary); text-transform: uppercase; font-weight: 600; letter-spacing: 0.5px;">Daily Resource Allocation</div>
+                        <div style="display: flex; align-items: baseline; gap: var(--spacing-2);">
+                            <span id="heroQCount" style="font-size: var(--font-3xl); font-weight: 800; color: var(--accent-primary);">50</span>
+                            <span style="font-size: var(--font-sm); color: var(--text-tertiary);">/ 50 Available</span>
+                        </div>
+                        <div style="display: flex; gap: 8px; width: 100%; justify-content: center; margin-top: 4px;">
+                            <button class="modal-btn gold" style="min-height: 32px; font-size: 11px; padding: 4px 12px;" onclick="showPackagesModal()"><i class="fas fa-crown"></i> Buy Credits</button>
+                            <div style="background: rgba(255,255,255,0.05); padding: 6px 12px; border-radius: var(--radius-sm); font-size: 11px; font-family: monospace; display: flex; align-items: center; gap: 6px; border: 1px solid var(--border-light);">
+                                <i class="fas fa-clock" style="color: var(--accent-secondary);"></i> <span id="heroTimer">Resetting...</span>
+                            </div>
+                        </div>
+                    </div>
+
                     <div class="chips-grid">
                         <div class="chip" data-prompt="Who is Dr. Waleed Hussein Zakhourani?"><span class="chip-icon">👨‍🎓</span> About Dr. Waleed</div>
                         <div class="chip" data-prompt="Explain quantum computing in simple terms"><span class="chip-icon">⚛️</span> Quantum Computing</div>
@@ -2242,13 +2268,25 @@
 
             <!-- Enhanced Input Container Segment -->
             <div class="input-area">
+                <!-- Lockout Overlay Warning Bar -->
+                <div id="inputLockoutBanner" style="display:none; position:absolute; inset:0; background:rgba(10,14,23,0.96); z-index:50; border-radius:var(--radius-lg); align-items:center; justify-content:center; flex-direction:column; gap:var(--spacing-2); padding:var(--spacing-4);">
+                    <div style="color:var(--danger); font-weight:700; font-size:var(--font-base); display:flex; align-items:center; gap:8px;">
+                        <i class="fas fa-exclamation-triangle"></i> Daily Limit Reached (0 Questions Left)
+                    </div>
+                    <p style="color:var(--text-secondary); font-size:var(--font-sm); text-align:center;">Top up your credits or choose a dynamic subscription tier to proceed.</p>
+                    <button class="modal-btn gold" style="min-height:36px; margin-top:4px;" onclick="showPackagesModal()"><i class="fas fa-crown"></i> Buy Extra Credits</button>
+                </div>
+
                 <!-- Style Selector Pills -->
-                <div class="style-pills-container" style="display:flex; gap:var(--spacing-2); margin-bottom:var(--spacing-2); overflow-x:auto; padding-bottom:2px; -webkit-overflow-scrolling:touch;">
+                <div class="style-pills-container" style="display:flex; gap:var(--spacing-2); margin-bottom:var(--spacing-2); overflow-x:auto; padding-bottom:2px; -webkit-overflow-scrolling:touch; align-items: center;">
                     <div class="style-pill active" data-style="general" onclick="setStylePill('general')"><i class="fas fa-brain"></i> <span data-i18n="pill.general">General</span></div>
                     <div class="style-pill" data-style="academic" onclick="setStylePill('academic')"><i class="fas fa-graduation-cap"></i> <span data-i18n="pill.academic">Academic</span></div>
                     <div class="style-pill" data-style="creative" onclick="setStylePill('creative')"><i class="fas fa-wand-magic-sparkles"></i> <span data-i18n="pill.creative">Creative</span></div>
                     <div class="style-pill" data-style="concise" onclick="setStylePill('concise')"><i class="fas fa-bolt"></i> <span data-i18n="pill.concise">Concise</span></div>
                     <div class="style-pill" data-style="translate" onclick="setStylePill('translate')"><i class="fas fa-language"></i> <span data-i18n="pill.translate">Translate</span></div>
+                    <span style="font-size: 11px; color: var(--text-secondary); background: rgba(255,255,255,0.04); padding: 4px 8px; border-radius: var(--radius-full); margin-left: auto; display: inline-flex; align-items: center; gap: 4px; border: 1px solid var(--border-light); flex-shrink: 0;">
+                        <i class="fas fa-ticket-alt" style="color: var(--warning);"></i> Cost: <strong style="color: var(--accent-primary);">1 Q</strong>
+                    </span>
                 </div>
 
                 <!-- Attachment Progress Simulator Preview -->
@@ -2322,7 +2360,7 @@
                 sendCooldown: 1500,
                 maxMessageLength: 4000,
                 maxChats: 100,
-                version: '5.5'
+                version: '5.6'
             };
 
             // ===== DOM Helpers =====
@@ -2570,6 +2608,7 @@
             const state = {
                 auth: null,
                 supabase: null,
+                db: null, // Firestore Instance
                 chatId: null,
                 busy: false,
                 userEmail: '',
@@ -2587,7 +2626,16 @@
                 
                 selectedStylePill: 'general',
                 activeAttachment: null,
-                shortcuts: null
+                shortcuts: null,
+                
+                // Track usage state safely [1]
+                currentUsage: {
+                    remaining_questions: 50,
+                    last_reset_date: new Date().toISOString().split('T')[0],
+                    balance_credits: 0,
+                    unlimited_until: null,
+                    total_used: 0
+                }
             };
 
             // ===== Welcome Animated Brain SVG Helper =====
@@ -3029,7 +3077,7 @@
                     .catch(() => toast('Copy block failed', 'error'));
             };
 
-            // ===== Real-time Auto-Reset Tracker System =====
+            // ===== Visual Countdown & Resets Tracking Timer =====
             function startCountdown() {
                 if (state.countdownInterval) clearInterval(state.countdownInterval);
                 
@@ -3043,13 +3091,25 @@
                     const minutes = Math.floor((diff % 3600000) / 60000).toString().padStart(2, '0');
                     const seconds = Math.floor((diff % 60000) / 1000).toString().padStart(2, '0');
                     
+                    const timeString = `${hours}:${minutes}:${seconds}`;
+                    
+                    // Update all visual countdown targets dynamically
                     const resetTimer = $('resetTimer');
-                    if (resetTimer) {
-                        resetTimer.textContent = `Resets in ${hours}:${minutes}:${seconds}`;
-                    }
+                    if (resetTimer) resetTimer.textContent = `Resets in ${timeString}`;
+                    
                     const limitTimer = $('limitTimer');
-                    if (limitTimer) {
-                        limitTimer.textContent = `${hours}:${minutes}:${seconds}`;
+                    if (limitTimer) limitTimer.textContent = timeString;
+
+                    const headerTimer = $('headerTimer');
+                    if (headerTimer) headerTimer.textContent = timeString;
+
+                    const heroTimer = $('heroTimer');
+                    if (heroTimer) heroTimer.textContent = `Reset: ${timeString}`;
+                    
+                    // Check if date shifted for automatic daily counter reset
+                    const todayDateString = new Date().toISOString().split('T')[0];
+                    if (state.currentUsage.last_reset_date !== todayDateString) {
+                        resetDailyQuotaOfflineFallback(todayDateString);
                     }
                 }
                 
@@ -3074,10 +3134,11 @@
             window.addEventListener('online', () => {
                 state.isOnline = true;
                 toast('Back online! 🌐', 'success', 2000);
+                syncOfflineLocalStateToDatabases();
             });
             window.addEventListener('offline', () => {
                 state.isOnline = false;
-                toast('You are offline. Messages will be sent when reconnected.', 'warning', 3000);
+                toast('You are offline. Balance state tracked locally.', 'warning', 3000);
             });
 
             // ===== Supabase Client =====
@@ -3087,12 +3148,168 @@
             );
             state.supabase = supabase;
 
+            // ===== Sync Usage UI States with Balance Warnings =====
+            function syncUsageWithUI(usageData) {
+                state.currentUsage = { ...state.currentUsage, ...usageData };
+                
+                const isUnlimited = state.currentUsage.unlimited_until && Number(state.currentUsage.unlimited_until) > Date.now();
+                const remaining = isUnlimited ? '∞' : Math.max(0, state.currentUsage.remaining_questions);
+                const max = 50;
+
+                // Sync counter locations
+                const counterEls = ['balanceCount', 'headerQCount', 'heroQCount'];
+                counterEls.forEach(id => {
+                    const el = $(id);
+                    if (el) {
+                        el.textContent = remaining;
+                        // Color-coded Warnings (Yellow for <= 5, Red for 0)
+                        if (!isUnlimited && remaining <= 0) {
+                            el.style.color = 'var(--danger)';
+                            el.style.fontWeight = '800';
+                        } else if (!isUnlimited && remaining <= 5) {
+                            el.style.color = 'var(--warning)';
+                            el.style.fontWeight = '700';
+                        } else {
+                            el.style.color = 'var(--accent-primary)';
+                            el.style.fontWeight = '700';
+                        }
+                    }
+                });
+
+                // Sync usage fill indicators
+                const fill = $('balanceFill');
+                if (fill) {
+                    const percentage = isUnlimited ? 100 : (remaining / max) * 100;
+                    fill.style.width = Math.min(percentage, 100) + '%';
+                    fill.className = 'usage-fill' + (!isUnlimited && percentage < 15 ? ' danger' : !isUnlimited && percentage < 35 ? ' warning' : '');
+                }
+
+                // Balance credits display
+                const balanceAmountEls = ['balanceAmount', 'packagesBalance'];
+                balanceAmountEls.forEach(id => {
+                    const el = $(id);
+                    if (el) {
+                        el.textContent = '$' + parseFloat(state.currentUsage.balance_credits || 0).toFixed(2);
+                    }
+                });
+
+                // Form Protection & Auto-disabling system [1]
+                const lockBanner = $('inputLockoutBanner');
+                const msgInput = $('messageInput');
+                const sendBtn = $('sendButton');
+
+                if (!isUnlimited && remaining <= 0) {
+                    if (lockBanner) lockBanner.style.display = 'flex';
+                    if (msgInput) {
+                        msgInput.disabled = true;
+                        msgInput.placeholder = "🚫 Limit Reached. Top up now.";
+                    }
+                    if (sendBtn) sendBtn.disabled = true;
+                } else {
+                    if (lockBanner) lockBanner.style.display = 'none';
+                    if (msgInput) {
+                        msgInput.disabled = false;
+                        msgInput.placeholder = "Ask Zakhourani anything...";
+                    }
+                    if (sendBtn) sendBtn.disabled = false;
+                }
+            }
+
+            // ===== Firestore Usage Real-time Synchronization Engine [1] =====
+            function setupRealtimeFirestoreUsageSync() {
+                if (!state.db || !state.userEmail) return;
+                
+                const docRef = state.db.collection('usages').doc(state.userEmail);
+                
+                docRef.onSnapshot(doc => {
+                    if (doc.exists) {
+                        const data = doc.data();
+                        saveOfflineFallbackLocal(data);
+                        syncUsageWithUI(data);
+                    } else {
+                        // Document does not exist. Initialize default balance profile [1]
+                        const defaultData = {
+                            remaining_questions: 50,
+                            last_reset_date: new Date().toISOString().split('T')[0],
+                            balance_credits: 0,
+                            unlimited_until: null,
+                            total_used: 0
+                        };
+                        docRef.set(defaultData).catch(err => errorLog("Failed initializing Firestore document", err));
+                        saveOfflineFallbackLocal(defaultData);
+                        syncUsageWithUI(defaultData);
+                    }
+                }, err => {
+                    errorLog("Firestore listeners down, falling back to local storage structures [1]", err);
+                    loadOfflineFallbackLocal();
+                });
+            }
+
+            // ===== Offline Fallback Handlers [1] =====
+            function saveOfflineFallbackLocal(data) {
+                localStorage.setItem(`zk_offline_usage_${state.userEmail}`, JSON.stringify(data));
+            }
+
+            function loadOfflineFallbackLocal() {
+                const dataStr = localStorage.getItem(`zk_offline_usage_${state.userEmail}`);
+                if (dataStr) {
+                    try {
+                        const parsed = JSON.parse(dataStr);
+                        syncUsageWithUI(parsed);
+                        return parsed;
+                    } catch (_) {}
+                }
+                return null;
+            }
+
+            function resetDailyQuotaOfflineFallback(newDateString) {
+                state.currentUsage.remaining_questions = 50;
+                state.currentUsage.last_reset_date = newDateString;
+                
+                saveOfflineFallbackLocal(state.currentUsage);
+                syncUsageWithUI(state.currentUsage);
+                
+                if (state.isOnline && state.db && state.userEmail) {
+                    state.db.collection('usages').doc(state.userEmail).update({
+                        remaining_questions: 50,
+                        last_reset_date: newDateString
+                    }).catch(() => {});
+                }
+            }
+
+            async function syncOfflineLocalStateToDatabases() {
+                if (!state.isOnline || !state.userEmail) return;
+                const cached = loadOfflineFallbackLocal();
+                if (cached && state.db) {
+                    try {
+                        await state.db.collection('usages').doc(state.userEmail).set(cached, { merge: true });
+                        log("Synchronized offline cache data blocks smoothly back into Firestore platform engines.");
+                    } catch (e) {
+                        errorLog("Synchronization mismatch during cached reconnect pipeline execution", e);
+                    }
+                }
+            }
+
             // ===== Database Functions =====
             async function sbCheckLimit(email) {
                 try {
-                    const { data, error } = await supabase.rpc('check_daily_limit', { p_user_email: email });
-                    if (error) throw error;
-                    return data || { 
+                    // Try to read view "user_daily_remaining" or fall back to standard RPC check
+                    const { data, error } = await supabase.from('user_daily_remaining').select('*').eq('email', email).maybeSingle();
+                    if (!error && data) {
+                        return {
+                            can_ask: (data.remaining_questions > 0),
+                            remaining: data.remaining_questions,
+                            total: 50,
+                            username: data.username || 'User',
+                            balance: data.balance_credits || 0,
+                            total_used: data.total_questions_used || 0,
+                            is_premium: data.is_premium || false
+                        };
+                    }
+                    
+                    const { data: rpcData, error: rpcError } = await supabase.rpc('check_daily_limit', { p_user_email: email });
+                    if (rpcError) throw rpcError;
+                    return rpcData || { 
                         can_ask: true, 
                         remaining: 50, 
                         total: 50, 
@@ -3102,14 +3319,14 @@
                         is_premium: false
                     };
                 } catch (err) {
-                    errorLog('Failed checking usage restrictions', err);
+                    errorLog('Failed checking view or RPC usage restrictions', err);
                     return { 
-                        can_ask: true, 
-                        remaining: 50, 
+                        can_ask: state.currentUsage.remaining_questions > 0, 
+                        remaining: state.currentUsage.remaining_questions, 
                         total: 50, 
                         username: 'User', 
-                        balance: 0, 
-                        total_used: 0,
+                        balance: state.currentUsage.balance_credits, 
+                        total_used: state.currentUsage.total_used,
                         is_premium: false
                     };
                 }
@@ -3117,10 +3334,14 @@
 
             async function sbIncrementUsage(email) {
                 try {
-                    const { error } = await supabase.rpc('increment_usage', { p_user_email: email });
-                    if (error) throw error;
+                    // Execute SQL RPC decrement "use_question" if integrated
+                    const { error } = await supabase.rpc('use_question', { p_user_email: email });
+                    if (error) {
+                        // fallback to "increment_usage"
+                        await supabase.rpc('increment_usage', { p_user_email: email });
+                    }
                 } catch (err) {
-                    errorLog('Failed logging question incremental metrics', err);
+                    errorLog('Failed decrementing question records on database', err);
                 }
             }
 
@@ -3268,12 +3489,14 @@
                 }
             }
 
-            // ===== Firebase Auth =====
+            // ===== Firebase Auth & Firestore Initialization =====
             function initFirebase() {
                 if (!firebase.apps.length) {
                     firebase.initializeApp(CONFIG.firebase);
                 }
                 state.auth = firebase.auth();
+                state.db = firebase.firestore(); // Launch NoSQL cache engine
+                
                 state.auth.setPersistence(firebase.auth.Auth.Persistence.LOCAL).catch(() => {});
                 return state.auth;
             }
@@ -3330,6 +3553,7 @@
             async function handleLogout() {
                 if (confirm('Are you sure you want to logout?')) {
                     try {
+                        if (state.unsubscribeUsage) state.unsubscribeUsage();
                         await state.auth.signOut();
                         toast('Log out sequence complete 👋', 'info');
                     } catch (_) {
@@ -3358,26 +3582,7 @@
 
             async function updateUsageUI() {
                 if (!state.userEmail) return;
-                
-                try {
-                    const limit = await sbCheckLimit(state.userEmail);
-                    const remaining = limit.remaining >= 999 ? '∞' : limit.remaining;
-                    $('balanceCount').textContent = remaining;
-                    $('balanceAmount').textContent = parseFloat(limit.balance || 0).toFixed(2);
-                    
-                    const percentage = limit.total > 0 ? (limit.remaining / limit.total) * 100 : 100;
-                    const fill = $('balanceFill');
-                    fill.style.width = Math.min(percentage, 100) + '%';
-                    fill.className = 'usage-fill' + (percentage < 15 ? ' danger' : percentage < 35 ? ' warning' : '');
-                    
-                    if (limit.username) {
-                        const originalTimerHtml = $('sessionTimerDisplay') ? $('sessionTimerDisplay').outerHTML : '<span id="sessionTimerDisplay" style="font-size:9px; color:var(--text-tertiary); margin-left:6px; font-weight:normal;">0m active</span>';
-                        $('userName').innerHTML = `${limit.username} ${originalTimerHtml}`;
-                        $('userAvatarText').textContent = limit.username.charAt(0).toUpperCase();
-                    }
-                } catch (err) {
-                    errorLog('Failed updating client profile utilization stats indicators', err);
-                }
+                setupRealtimeFirestoreUsageSync();
             }
 
             // ===== Chat Functions =====
@@ -3528,6 +3733,22 @@
                             <h2 data-i18n="welcome.title">Welcome to Zakhourani AI</h2>
                             <p data-i18n="welcome.subtitle">Your intelligent assistant, ready to help</p>
                             <div class="sub-text" data-i18n="welcome.subtext">Powered by advanced language models</div>
+                            
+                            <!-- Counter Card inside Loaded Empty Workspace -->
+                            <div class="hero-q-card" style="background: rgba(255,255,255,0.02); border: 1px solid var(--border-light); padding: var(--spacing-4); border-radius: var(--radius-lg); margin-top: var(--spacing-4); display: flex; flex-direction: column; align-items: center; gap: var(--spacing-2);">
+                                <div style="font-size: var(--font-xs); color: var(--text-secondary); text-transform: uppercase; font-weight: 600; letter-spacing: 0.5px;">Daily Resource Allocation</div>
+                                <div style="display: flex; align-items: baseline; gap: var(--spacing-2);">
+                                    <span id="heroQCount" style="font-size: var(--font-3xl); font-weight: 800; color: var(--accent-primary);">${state.currentUsage.remaining_questions}</span>
+                                    <span style="font-size: var(--font-sm); color: var(--text-tertiary);">/ 50 Available</span>
+                                </div>
+                                <div style="display: flex; gap: 8px; width: 100%; justify-content: center; margin-top: 4px;">
+                                    <button class="modal-btn gold" style="min-height: 32px; font-size: 11px; padding: 4px 12px;" onclick="showPackagesModal()"><i class="fas fa-crown"></i> Buy Credits</button>
+                                    <div style="background: rgba(255,255,255,0.05); padding: 6px 12px; border-radius: var(--radius-sm); font-size: 11px; font-family: monospace; display: flex; align-items: center; gap: 6px; border: 1px solid var(--border-light);">
+                                        <i class="fas fa-clock" style="color: var(--accent-secondary);"></i> <span id="heroTimer">Resetting...</span>
+                                    </div>
+                                </div>
+                            </div>
+
                             <div class="chips-grid">
                                 <div class="chip" data-prompt="Who is Dr. Waleed Hussein Zakhourani?">
                                     <span class="chip-icon">👨‍🎓</span> About Dr. Waleed
@@ -3590,6 +3811,7 @@
                     $('messageInput').focus();
                 }
                 I18nManager.run();
+                syncUsageWithUI(state.currentUsage);
             }
 
             async function createNewChat() {
@@ -3606,34 +3828,9 @@
                 }
                 
                 state.chatId = chat.id;
-                $('chatContainer').innerHTML = `
-                    <div class="welcome slide-up">
-                        ${getBrainSVG()}
-                        <h2>New Conversation</h2>
-                        <p>Start typing below or choose a prompt</p>
-                        <div class="sub-text">What would you like to explore today?</div>
-                        <div class="chips-grid">
-                            <div class="chip" data-prompt="Who is Dr. Waleed Hussein Zakhourani?">
-                                <span class="chip-icon">👨‍🎓</span> About Dr. Waleed
-                            </div>
-                            <div class="chip" data-prompt="Explain quantum computing in simple terms">
-                                <span class="chip-icon">⚛️</span> Quantum Computing
-                            </div>
-                            <div class="chip" data-prompt="Write a creative poem about artificial intelligence">
-                                <span class="chip-icon">📝</span> AI Poetry
-                            </div>
-                            <div class="chip" data-prompt="What are the latest tech trends for 2026?">
-                                <span class="chip-icon">🚀</span> Future Tech
-                            </div>
-                        </div>
-                    </div>
-                `;
-                $('chatTitle').textContent = 'New Chat';
-                await renderChats();
-                $('messageInput').focus();
+                await openChat(state.chatId);
                 toast('New workspace initiated', 'success');
                 soundSuccess();
-                I18nManager.run();
             }
 
             async function deleteChat(id) {
@@ -3950,14 +4147,15 @@
                     return;
                 }
                 
-                const limit = await sbCheckLimit(state.userEmail);
-                if (!limit.can_ask) {
+                const isUnlimited = state.currentUsage.unlimited_until && Number(state.currentUsage.unlimited_until) > Date.now();
+                
+                // Form Protection lockout checks [1]
+                if (!isUnlimited && state.currentUsage.remaining_questions <= 0) {
                     showModal('limitModal');
                     startCountdown();
                     return;
                 }
                 
-                await sbIncrementUsage(state.userEmail);
                 state.lastSendTime = now;
                 state.busy = true;
                 $('sendButton').disabled = true;
@@ -4011,6 +4209,24 @@
                     DraftManager.clearDraft(state.chatId);
                     container.scrollTop = container.scrollHeight;
                     soundSend();
+
+                    // Decrement question quota locally and across linked database stores [1]
+                    if (!isUnlimited) {
+                        const updatedRemaining = Math.max(0, state.currentUsage.remaining_questions - 1);
+                        state.currentUsage.remaining_questions = updatedRemaining;
+                        state.currentUsage.total_used += 1;
+                        saveOfflineFallbackLocal(state.currentUsage);
+                        syncUsageWithUI(state.currentUsage);
+                        
+                        // Push async updates smoothly in background
+                        sbIncrementUsage(state.userEmail);
+                        if (state.db) {
+                            state.db.collection('usages').doc(state.userEmail).update({
+                                remaining_questions: updatedRemaining,
+                                total_used: firebase.firestore.FieldValue.increment(1)
+                            }).catch(() => {});
+                        }
+                    }
                     
                     const typing = document.createElement('div');
                     typing.className = 'typing-indicator';
@@ -4263,34 +4479,34 @@
                 }
             };
 
-            // ===== Packages =====
+            // ===== Packages Render Integration [2] =====
             async function showPackagesModal() {
-                const limit = await sbCheckLimit(state.userEmail);
-                const packages = await sbLoadPackages();
+                const packages = [
+                    { id: 'pkg-25', name: 'Lite Pack', questions_per_day: 25, price: '2.99', validity_days: 30, q_to_add: 25, desc: 'Adds 25 queries instantly' },
+                    { id: 'pkg-50', name: 'Power Pack', questions_per_day: 50, price: '4.99', validity_days: 30, q_to_add: 50, desc: 'Adds 50 queries instantly' },
+                    { id: 'pkg-100', name: 'Pro Pack', questions_per_day: 100, price: '8.99', validity_days: 30, q_to_add: 100, desc: 'Adds 100 queries instantly', is_popular: true },
+                    { id: 'pkg-unlimited-week', name: 'Unlimited Week Pass', questions_per_day: 999999, price: '14.99', validity_days: 7, q_to_add: 999999, desc: 'Unlocks unlimited query structures for 7 days' }
+                ];
                 
-                $('packagesBalance').textContent = '$' + parseFloat(limit.balance || 0).toFixed(2);
+                $('packagesBalance').textContent = '$' + parseFloat(state.currentUsage.balance_credits || 0).toFixed(2);
                 
-                if (packages.length) {
-                    $('packagesList').innerHTML = packages.map(pkg => `
-                        <div class="pkg-card${pkg.is_popular ? ' popular' : ''}" data-id="${pkg.id}">
-                            <div class="pkg-info">
-                                <h4 style="font-weight:var(--font-bold); color: var(--text-primary)"><i class="fas fa-crown" style="color:var(--warning); margin-right:4px"></i> ${pkg.name}</h4>
-                                <small style="color: var(--text-secondary)">${pkg.questions_per_day === 999999 ? '♾️ Unlimited' : pkg.questions_per_day + '/day'} · ${pkg.validity_days}d</small>
-                            </div>
-                            <div class="pkg-price" style="font-weight:var(--font-bold); color: var(--accent-primary)">$${pkg.price}</div>
+                $('packagesList').innerHTML = packages.map(pkg => `
+                    <div class="pkg-card${pkg.is_popular ? ' popular' : ''}" data-id="${pkg.id}" style="margin-bottom: 8px;">
+                        <div class="pkg-info" style="text-align: left;">
+                            <h4 style="font-weight:var(--font-bold); color: var(--text-primary)"><i class="fas fa-crown" style="color:var(--warning); margin-right:4px"></i> ${pkg.name}</h4>
+                            <small style="color: var(--text-secondary)">${pkg.desc}</small>
                         </div>
-                    `).join('');
-                    
-                    document.querySelectorAll('.pkg-card').forEach(card => {
-                        card.addEventListener('click', function() {
-                            const pkgId = this.dataset.id;
-                            const pkg = packages.find(p => p.id === pkgId);
-                            openPackageCheckout(pkgId, pkg ? pkg.name : 'Premium Offering', pkg ? pkg.price : 0);
-                        });
+                        <div class="pkg-price" style="font-weight:var(--font-bold); color: var(--accent-primary)">$${pkg.price}</div>
+                    </div>
+                `).join('');
+                
+                document.querySelectorAll('.pkg-card').forEach(card => {
+                    card.addEventListener('click', function() {
+                        const pkgId = this.dataset.id;
+                        const pkg = packages.find(p => p.id === pkgId);
+                        openPackageCheckout(pkgId, pkg.name, pkg.price, pkg.q_to_add);
                     });
-                } else {
-                    $('packagesList').innerHTML = '<p style="text-align:center;color:var(--text-tertiary);padding:var(--spacing-5)">No packages available</p>';
-                }
+                });
                 
                 showModal('packagesModal');
             }
@@ -4298,16 +4514,16 @@
             // ===== Secure Checkout Flow =====
             window.openTopUpCheckout = function(amount) {
                 closeModal('packagesModal');
-                state.pendingTransaction = { type: 'topup', amount: amount, pkgId: null };
+                state.pendingTransaction = { type: 'topup', amount: amount, pkgId: null, q_to_add: 0 };
                 
                 $('paymentDetailsHeader').innerHTML = `Funding balance credits with: <strong style="color:var(--success)">$${amount.toFixed(2)} USD</strong>`;
                 resetPaymentForm();
                 showModal('paymentModal');
             };
 
-            window.openPackageCheckout = function(pkgId, pkgName, price) {
+            window.openPackageCheckout = function(pkgId, pkgName, price, qToAdd) {
                 closeModal('packagesModal');
-                state.pendingTransaction = { type: 'package', amount: price, pkgId: pkgId };
+                state.pendingTransaction = { type: 'package', amount: price, pkgId: pkgId, q_to_add: qToAdd };
                 
                 $('paymentDetailsHeader').innerHTML = `Subscribing to: <strong>${pkgName}</strong> for <strong style="color:var(--accent-primary)">$${parseFloat(price).toFixed(2)} USD</strong>`;
                 resetPaymentForm();
@@ -4328,7 +4544,7 @@
                 $('paymentLoader').classList.remove('active');
             }
 
-            // Sandbox Payment Processing
+            // Sandbox Payment Processing [2]
             window.processCardPayment = async function() {
                 const name = $('payName').value.trim();
                 const number = $('payNumber').value.replace(/\s/g, '');
@@ -4350,7 +4566,7 @@
                     'Establishing secure network link...',
                     'Encrypting transaction payload...',
                     'Contacting card issuing bank...',
-                    'Routing to primary merchant ledger...'
+                    'Applying credits directly to user profile...'
                 ];
                 
                 let stepIdx = 0;
@@ -4361,27 +4577,52 @@
                     }
                 }, 800);
 
-                setTimeout(() => {
+                setTimeout(async () => {
                     clearInterval(progressInterval);
                     loader.classList.remove('active');
                     
-                    errBox.textContent = '❌ Your card is not allowed to purchase our service.';
-                    errBox.style.color = 'var(--danger)';
-                    errBox.style.fontWeight = 'bold';
+                    const tx = state.pendingTransaction;
                     
-                    toast('Transaction declined by issuer bank', 'error');
-                    soundError();
-                    
-                    const btn = $('paySubmitBtn');
-                    btn.disabled = true;
-                    btn.textContent = '❌ Card Declined';
-                    btn.style.opacity = '0.5';
-                    
-                    setTimeout(() => {
-                        btn.disabled = false;
-                        btn.innerHTML = '<i class="fas fa-lock"></i> Authorize & Pay';
-                        btn.style.opacity = '1';
-                    }, 4000);
+                    // Success checkout sequence - Add questions to user's account [2]
+                    try {
+                        const isUnlimited = (tx.pkgId === 'pkg-unlimited-week');
+                        const addedCredits = tx.type === 'topup' ? tx.amount : 0;
+                        const addedQs = tx.type === 'package' && !isUnlimited ? tx.q_to_add : 0;
+                        
+                        const newRemaining = state.currentUsage.remaining_questions + addedQs;
+                        const newBalance = (state.currentUsage.balance_credits || 0) + addedCredits;
+                        
+                        const updates = {
+                            remaining_questions: newRemaining,
+                            balance_credits: newBalance
+                        };
+                        
+                        if (isUnlimited) {
+                            updates.unlimited_until = Date.now() + (7 * 24 * 60 * 60 * 1000);
+                        }
+                        
+                        // Sync Local Cache fallback [1]
+                        state.currentUsage = { ...state.currentUsage, ...updates };
+                        saveOfflineFallbackLocal(state.currentUsage);
+                        syncUsageWithUI(state.currentUsage);
+                        
+                        // Push into Supabase Database and trigger the RPC SQL handlers if present
+                        if (tx.type === 'package' && !isUnlimited) {
+                            await supabase.rpc('add_purchased_questions', { p_user_email: state.userEmail, p_amount: tx.q_to_add });
+                        }
+                        
+                        // Push Firestore NoSQL sync data [1]
+                        if (state.db && state.userEmail) {
+                            await state.db.collection('usages').doc(state.userEmail).set(updates, { merge: true });
+                        }
+                        
+                        soundClaim();
+                        toast(`Transaction Authorized successfully! Account Credited. 🎉`, 'success', 5000);
+                        closeModal('paymentModal');
+                    } catch (e) {
+                        errorLog("Failed committing transaction parameters", e);
+                        errBox.textContent = '❌ Failed finalizing balance updates.';
+                    }
                 }, 3200);
             };
 
@@ -4393,13 +4634,15 @@
                 $('profileEmail').textContent = state.userEmail;
                 $('profileName').value = user?.display_name || '';
                 
+                const isUnlimited = state.currentUsage.unlimited_until && Number(state.currentUsage.unlimited_until) > Date.now();
+                
                 $('profileStats').innerHTML = `
                     <div class="stat-card">
-                        <div class="stat-value">${limit.remaining >= 999 ? '∞' : limit.remaining}</div>
+                        <div class="stat-value">${isUnlimited ? '∞' : limit.remaining}</div>
                         <div class="stat-label">Remaining</div>
                     </div>
                     <div class="stat-card">
-                        <div class="stat-value">${limit.total_used || 0}</div>
+                        <div class="stat-value">${state.currentUsage.total_used || 0}</div>
                         <div class="stat-label">Used</div>
                     </div>
                     <div class="stat-card">
@@ -4407,7 +4650,7 @@
                         <div class="stat-label">Chats</div>
                     </div>
                     <div class="stat-card">
-                        <div class="stat-value">$${parseFloat(limit.balance || 0).toFixed(2)}</div>
+                        <div class="stat-value">$${parseFloat(state.currentUsage.balance_credits || 0).toFixed(2)}</div>
                         <div class="stat-label">Balance</div>
                     </div>
                 `;
@@ -4568,6 +4811,37 @@
                 }
             });
 
+            // Card Input View Binding Animations
+            document.addEventListener('DOMContentLoaded', () => {
+                const pNum = $('payNumber');
+                const pName = $('payName');
+                const pExpiry = $('payExpiry');
+                
+                if(pNum) pNum.addEventListener('input', (e) => {
+                    let v = e.target.value.replace(/\D/g, '').substr(0,16);
+                    let format = v.match(/.{1,4}/g)?.join(' ') || '';
+                    e.target.value = format;
+                    $('cardNumberDisplay').textContent = format || '•••• •••• •••• ••••';
+                    
+                    if (v.startsWith('4')) $('cardLogo').textContent = 'VISA';
+                    else if (v.startsWith('5')) $('cardLogo').textContent = 'MC';
+                    else $('cardLogo').textContent = 'CC';
+                });
+                
+                if(pName) pName.addEventListener('input', (e) => {
+                    $('cardHolderDisplay').textContent = e.target.value.toUpperCase() || 'YOUR NAME';
+                });
+                
+                if(pExpiry) pExpiry.addEventListener('input', (e) => {
+                    let v = e.target.value.replace(/\D/g, '').substr(0,4);
+                    if(v.length >= 2) {
+                        v = v.substr(0,2) + '/' + v.substr(2);
+                    }
+                    e.target.value = v;
+                    $('cardExpiryDisplay').textContent = v || 'MM/YY';
+                });
+            });
+
             // ===== Initialization =====
             async function init() {
                 log('Starting Zakhourani AI v' + CONFIG.version);
@@ -4600,7 +4874,6 @@
                 state.shortcuts.register('Ctrl+K', 'Focus platform global search box', () => $('searchChats').focus());
                 state.shortcuts.register('Ctrl+/', 'Open Shortcuts Guide Modal', () => showModal('shortcutsModal'));
                 
-                // Enhanced New Shortcuts Integration
                 state.shortcuts.register('Ctrl+Shift+M', 'Toggle dynamic UI Audio Sound FX setting', () => {
                     const soundBox = $('settingSoundFX');
                     if (soundBox) {
@@ -4646,7 +4919,7 @@
                         updateUserUI(user);
                         
                         try {
-                            // Automatically clear client claim cache to handle UTC day transitions safely
+                            // Clear client claim cache to handle UTC transitions safely
                             localStorage.removeItem('last_claim_timestamp_' + state.userEmail);
                             
                             await updateUsageUI();
@@ -4737,6 +5010,9 @@
             window.simulateFileUpload = simulateFileUpload;
             window.clearAttachment = clearAttachment;
             window.cancelVoiceInput = cancelVoiceInput;
+            
+            window.openTopUpCheckout = openTopUpCheckout;
+            window.openPackageCheckout = openPackageCheckout;
 
             init();
 

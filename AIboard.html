@@ -47,7 +47,7 @@
             margin: 0 auto;
         }
 
-        /* PIN */
+        /* PIN Protection */
         .pin-overlay {
             position: fixed;
             top: 0;
@@ -247,14 +247,8 @@
             animation: pulse-critical 1.5s ease-in-out infinite;
         }
 
-        .critical-alert .alert-icon {
-            font-size: 24px;
-            margin-right: 12px;
-        }
-
-        .critical-alert .alert-text {
-            font-weight: 600;
-        }
+        .critical-alert .alert-icon { font-size: 24px; margin-right: 12px; }
+        .critical-alert .alert-text { font-weight: 600; }
 
         .critical-alert .alert-action {
             background: rgba(255,255,255,0.2);
@@ -424,95 +418,6 @@
             height: 300px;
             width: 100%;
         }
-
-        .chart-wrapper canvas {
-            width: 100% !important;
-            height: 100% !important;
-        }
-
-        /* Questions */
-        .questions-section {
-            background: var(--bg-card);
-            border: 1px solid var(--border);
-            border-radius: 20px;
-            padding: 24px;
-            margin-bottom: 24px;
-            backdrop-filter: blur(12px);
-        }
-
-        .questions-header {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            margin-bottom: 16px;
-            flex-wrap: wrap;
-            gap: 12px;
-        }
-
-        .questions-header h3 {
-            font-size: 17px;
-            font-weight: 700;
-        }
-
-        .questions-grid {
-            display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(170px, 1fr));
-            gap: 12px;
-        }
-
-        .question-card {
-            background: var(--bg-primary);
-            border: 1px solid var(--border);
-            border-radius: 14px;
-            padding: 16px 18px;
-            transition: all 0.3s;
-            cursor: pointer;
-        }
-
-        .question-card:hover {
-            transform: translateY(-3px);
-            border-color: var(--accent);
-        }
-
-        .question-card .q-icon {
-            font-size: 22px;
-            margin-bottom: 6px;
-            display: block;
-        }
-
-        .question-card .q-name {
-            font-weight: 600;
-            font-size: 13px;
-            margin-bottom: 2px;
-        }
-
-        .question-card .q-count {
-            color: var(--text-secondary);
-            font-size: 12px;
-        }
-
-        .question-card .q-bar {
-            width: 100%;
-            height: 4px;
-            background: var(--bg-secondary);
-            border-radius: 2px;
-            margin-top: 8px;
-            overflow: hidden;
-        }
-
-        .question-card .q-bar .fill {
-            height: 100%;
-            background: var(--gradient-main);
-            border-radius: 2px;
-            transition: width 0.6s;
-        }
-
-        .question-card.top {
-            border-color: var(--warning);
-            background: rgba(234,179,8,0.05);
-        }
-
-        .question-card.top .q-icon { color: var(--warning); }
 
         /* Timeline */
         .timeline-section {
@@ -783,9 +688,7 @@
             padding: 20px;
         }
 
-        .modal.active {
-            display: flex;
-        }
+        .modal.active { display: flex; }
 
         .modal-content {
             background: var(--bg-secondary);
@@ -849,6 +752,76 @@
             border: 1px solid rgba(234, 179, 8, 0.2);
             color: #fde68a;
         }
+
+        /* Questions Grid */
+        .questions-section {
+            background: var(--bg-card);
+            border: 1px solid var(--border);
+            border-radius: 20px;
+            padding: 24px;
+            margin-bottom: 24px;
+            backdrop-filter: blur(12px);
+        }
+
+        .questions-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 16px;
+            flex-wrap: wrap;
+            gap: 12px;
+        }
+
+        .questions-header h3 {
+            font-size: 17px;
+            font-weight: 700;
+        }
+
+        .questions-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(170px, 1fr));
+            gap: 12px;
+        }
+
+        .question-card {
+            background: var(--bg-primary);
+            border: 1px solid var(--border);
+            border-radius: 14px;
+            padding: 16px 18px;
+            transition: all 0.3s;
+            cursor: pointer;
+        }
+
+        .question-card:hover {
+            transform: translateY(-3px);
+            border-color: var(--accent);
+        }
+
+        .question-card .q-icon { font-size: 22px; margin-bottom: 6px; display: block; }
+        .question-card .q-name { font-weight: 600; font-size: 13px; margin-bottom: 2px; }
+        .question-card .q-count { color: var(--text-secondary); font-size: 12px; }
+
+        .question-card .q-bar {
+            width: 100%;
+            height: 4px;
+            background: var(--bg-secondary);
+            border-radius: 2px;
+            margin-top: 8px;
+            overflow: hidden;
+        }
+
+        .question-card .q-bar .fill {
+            height: 100%;
+            border-radius: 2px;
+            transition: width 0.6s;
+        }
+
+        .question-card.top {
+            border-color: var(--warning);
+            background: rgba(234,179,8,0.05);
+        }
+
+        .question-card.top .q-icon { color: var(--warning); }
 
         @media (max-width: 1024px) {
             .charts-grid { grid-template-columns: 1fr; }
@@ -937,9 +910,9 @@
         <div class="critical-alert">
             <div>
                 <span class="alert-icon"><i class="fas fa-exclamation-triangle"></i></span>
-                <span class="alert-text"><strong>⚠️ CRITICAL BALANCE:</strong> Only $30.00 remaining! Please take immediate action.</span>
+                <span class="alert-text"><strong>⚠️ CRITICAL BALANCE:</strong> Only $23.20 remaining from July! Please take immediate action.</span>
             </div>
-            <button class="alert-action" onclick="alert('Recommendations:\n1. Reduce API usage\n2. Optimize prompts\n3. Consider budget increase')">
+            <button class="alert-action" onclick="alert('Recommendations:\n1. Reduce API usage\n2. Optimize prompts\n3. Consider budget increase\n4. Deposit: $260 on 7/17/2026')">
                 <i class="fas fa-lightbulb"></i> View Recommendations
             </button>
         </div>
@@ -951,7 +924,7 @@
                 <div style="color:var(--text-secondary);font-size:13px;"><i class="fas fa-info-circle"></i> DeepSeek API · Real-time consumption tracking</div>
             </div>
             <div>
-                <span class="badge"><i class="fas fa-bolt"></i> <span id="totalUsersBadge">55</span> Users</span>
+                <span class="badge"><i class="fas fa-bolt"></i> <span id="totalUsersBadge">250</span> Users</span>
                 <span class="badge danger"><i class="fas fa-exclamation-circle"></i> CRITICAL</span>
             </div>
         </div>
@@ -960,48 +933,48 @@
         <div class="stats-grid" id="statsGrid">
             <div class="stat-card">
                 <div class="icon-bg"><i class="fas fa-wallet"></i></div>
-                <div class="label">Total Budget</div>
-                <div class="value" id="totalBudget">$300.00</div>
-                <div class="change positive"><i class="fas fa-check-circle"></i> Initial allocation</div>
+                <div class="label">Total Consumed (July)</div>
+                <div class="value" id="totalConsumed">$1,080.00</div>
+                <div class="change positive"><i class="fas fa-check-circle"></i> $560 + $260 + $236.80 + $23.20</div>
             </div>
             <div class="stat-card critical">
                 <div class="icon-bg"><i class="fas fa-piggy-bank"></i></div>
-                <div class="label">Remaining Balance</div>
-                <div class="value critical-value" id="remainingBalance">$30.00</div>
-                <div class="sub-value" id="remainingTokens">= 428,571 tokens</div>
-                <div class="change negative"><i class="fas fa-exclamation-triangle"></i> <span id="daysRemaining">2</span> days left</div>
+                <div class="label">Remaining from July</div>
+                <div class="value critical-value" id="remainingBalance">$23.20</div>
+                <div class="sub-value" id="remainingTokens">= 331,429 tokens</div>
+                <div class="change negative"><i class="fas fa-exclamation-triangle"></i> <span id="daysRemaining">1</span> day left</div>
             </div>
             <div class="stat-card">
                 <div class="icon-bg"><i class="fas fa-token"></i></div>
-                <div class="label">Total Tokens Used</div>
-                <div class="value" id="totalTokens">3,857,143</div>
-                <div class="sub-value">≈ <span id="totalTokensCost">$270.00</span> spent</div>
-                <div class="change negative"><i class="fas fa-chart-line"></i> <span id="tokenGrowth">+18.2%</span> MoM</div>
+                <div class="label">August Consumption</div>
+                <div class="value" id="augustConsumed">$38.00</div>
+                <div class="sub-value">≈ <span id="augustTokens">542,857</span> tokens</div>
+                <div class="change negative"><i class="fas fa-chart-line"></i> <span id="tokenGrowth">+8.2%</span> MoM</div>
             </div>
             <div class="stat-card">
                 <div class="icon-bg"><i class="fas fa-users"></i></div>
-                <div class="label">Active Users</div>
-                <div class="value" id="activeUsers">42</div>
-                <div class="sub-value"><span id="totalUsersCount">55</span> total registered</div>
-                <div class="change positive"><i class="fas fa-user-plus"></i> <span id="userGrowth">+8</span> this month</div>
+                <div class="label">Total Users</div>
+                <div class="value" id="totalUsers">250</div>
+                <div class="sub-value">As of 7/7/2026</div>
+                <div class="change positive"><i class="fas fa-user-plus"></i> <span id="userGrowth">+12</span> this month</div>
             </div>
             <div class="stat-card">
-                <div class="icon-bg"><i class="fas fa-question-circle"></i></div>
-                <div class="label">Questions Asked</div>
-                <div class="value" id="totalQuestions">4,250</div>
-                <div class="sub-value"><span id="dailyQuestions">142</span> today</div>
-                <div class="change positive"><i class="fas fa-arrow-up"></i> <span id="questionGrowth">+12%</span> weekly</div>
+                <div class="icon-bg"><i class="fas fa-chart-bar"></i></div>
+                <div class="label">User Activity</div>
+                <div class="value" id="activeUsers">42</div>
+                <div class="sub-value">95-100% active (User C)</div>
+                <div class="change positive"><i class="fas fa-arrow-up"></i> High engagement</div>
             </div>
         </div>
 
         <!-- Timeline -->
         <div class="timeline-section">
             <div class="timeline-header">
-                <h3><i class="fas fa-calendar-week"></i> Daily Consumption · 15-Day Forecast</h3>
+                <h3><i class="fas fa-calendar-week"></i> Daily Consumption · July & August</h3>
                 <div class="timeline-controls">
                     <button class="active" onclick="setTimelineView('all')">All</button>
-                    <button onclick="setTimelineView('future')">Future</button>
-                    <button onclick="setTimelineView('past')">Past</button>
+                    <button onclick="setTimelineView('july')">July</button>
+                    <button onclick="setTimelineView('august')">August</button>
                     <button onclick="setTimelineView('critical')">⚠️ Critical</button>
                 </div>
             </div>
@@ -1011,13 +984,13 @@
         <!-- Charts -->
         <div class="charts-grid">
             <div class="chart-container">
-                <h3><i class="fas fa-chart-area"></i> Budget & Token Consumption</h3>
+                <h3><i class="fas fa-chart-area"></i> Consumption Breakdown</h3>
                 <div class="chart-wrapper">
                     <canvas id="budgetChart"></canvas>
                 </div>
             </div>
             <div class="chart-container">
-                <h3><i class="fas fa-pie-chart"></i> Question Categories</h3>
+                <h3><i class="fas fa-pie-chart"></i> User Activity Distribution</h3>
                 <div class="chart-wrapper">
                     <canvas id="usageChart"></canvas>
                 </div>
@@ -1043,7 +1016,7 @@
         <!-- Users Table -->
         <div class="table-container">
             <div class="table-header">
-                <h3><i class="fas fa-users"></i> All Users · <span id="userCountDisplay">55</span> users</h3>
+                <h3><i class="fas fa-users"></i> All Users · <span id="userCountDisplay">250</span> users</h3>
                 <div class="table-controls">
                     <input type="text" id="searchInput" placeholder="Search users..." oninput="filterUsers()">
                     <select id="filterProvider" onchange="filterUsers()">
@@ -1054,9 +1027,9 @@
                     </select>
                     <select id="filterStatus" onchange="filterUsers()">
                         <option value="all">All Status</option>
-                        <option value="active">Active</option>
-                        <option value="inactive">Inactive</option>
-                        <option value="premium">Premium</option>
+                        <option value="active">Active (95-100%)</option>
+                        <option value="medium">Medium (50-75%)</option>
+                        <option value="low">Low (~50%)</option>
                     </select>
                 </div>
             </div>
@@ -1072,7 +1045,7 @@
                             <th>Total Tokens</th>
                             <th>Cost ($)</th>
                             <th>Questions</th>
-                            <th>Status</th>
+                            <th>Activity Level</th>
                             <th>Last Active</th>
                             <th>Actions</th>
                         </tr>
@@ -1094,14 +1067,19 @@
 
     <script>
         // ==============================================
-        // CONFIGURATION
+        // CONFIGURATION - FROM IMAGE DATA
         // ==============================================
         const TOKEN_COST_PER_MILLION = 0.07;
-        const TOTAL_BUDGET = 300;
-        const MIN_BALANCE = 30; // UPDATED TO $30 - CRITICAL
+        const TOTAL_CONSUMED_JULY = 1080.00; // $560 + $260 + $236.8044 + $23.1956
+        const REMAINING_JULY = 23.1956;
+        const AUGUST_CONSUMED = 38.002;
+        const TOTAL_USERS = 250;
+        const USER_C_ACTIVE = "95-100%";
+        const USER_B_ACTIVE = "50-75%";
+        const USER_A_ACTIVE = "~50%";
+        const DEPOSIT_DATE = "7/17/2026";
+        const DEPOSIT_AMOUNT = 260;
         const CORRECT_PIN = "2026";
-        const START_DATE = new Date(2026, 1, 1); // Feb 1, 2026
-        const TODAY = new Date();
 
         // ==============================================
         // STATE
@@ -1111,7 +1089,6 @@
         let timelineData = [];
         let chartInstances = {};
         let currentTimelineView = 'all';
-        let simulatedDay = 0;
         let pinAttempts = 0;
 
         const QUESTION_CATEGORIES = {
@@ -1188,7 +1165,7 @@
         });
 
         // ==============================================
-        // DATA GENERATION
+        // DATA GENERATION - FROM IMAGE DETAILS
         // ==============================================
         function calculateTokensFromCost(cost) {
             return Math.round((cost / TOKEN_COST_PER_MILLION) * 1000000);
@@ -1198,7 +1175,7 @@
             return (tokens / 1000000) * TOKEN_COST_PER_MILLION;
         }
 
-        function generateAllUsers(count = 55) {
+        function generateAllUsers(count = 250) {
             const firstNames = ['Ahmed', 'Mohammad', 'Sara', 'Nora', 'Omar', 'Laila', 'Khaled', 'Mai', 
                                'Youssef', 'Dina', 'Hassan', 'Fatima', 'Ali', 'Nadia', 'Samer', 'Rana',
                                'Waleed', 'Ghada', 'Karim', 'Layla', 'Ibrahim', 'Amira', 'Hussein', 'Zainab',
@@ -1210,15 +1187,7 @@
                               'Hossam', 'Mahmoud', 'Nabil', 'Karim', 'Hussein', 'Said', 'Omar', 'Nasser',
                               'Rashid', 'Malik', 'Aziz', 'Qadir', 'Rahman', 'Salem', 'Zaki', 'Nour',
                               'Fayad', 'Haddad', 'Mansour', 'Sabbagh'];
-            const providers = ['google', 'email', 'github', 'google', 'email', 'google', 'github', 'email', 
-                              'google', 'email', 'github', 'google', 'email', 'google', 'github', 'email',
-                              'google', 'email', 'github', 'google', 'email', 'google', 'github', 'email',
-                              'google', 'email', 'github', 'google', 'email', 'google', 'github', 'email',
-                              'google', 'email', 'github', 'google', 'email', 'google', 'github', 'email',
-                              'google', 'email', 'github', 'google', 'email', 'google', 'github', 'email',
-                              'google', 'email', 'github', 'google', 'email', 'google', 'github'];
-            
-            const statuses = ['active', 'active', 'active', 'active', 'active', 'inactive', 'premium', 'premium', 'active', 'active', 'active', 'active'];
+            const providers = ['google', 'email', 'github'];
             
             return Array.from({ length: count }, (_, i) => {
                 const firstName = firstNames[i % firstNames.length];
@@ -1229,6 +1198,13 @@
                 const dailyTokens = Math.floor(Math.random() * 7500) + 500;
                 const questions = Math.floor(Math.random() * 120) + 5;
                 const daysAgo = Math.floor(Math.random() * 60);
+                
+                // Activity distribution based on image: C (95-100%), B (50-75%), A (~50%)
+                let activityLevel;
+                const rand = Math.random();
+                if (rand < 0.33) activityLevel = 'active'; // User C - 95-100%
+                else if (rand < 0.66) activityLevel = 'medium'; // User B - 50-75%
+                else activityLevel = 'low'; // User A - ~50%
                 
                 return {
                     uid: `user_${String(i + 1).padStart(3, '0')}`,
@@ -1244,7 +1220,8 @@
                     dailyCost: calculateCostFromTokens(dailyTokens),
                     questions: questions,
                     calls: Math.floor(Math.random() * 300) + 20,
-                    status: statuses[i % statuses.length]
+                    status: activityLevel,
+                    activityLevel: activityLevel
                 };
             });
         }
@@ -1267,128 +1244,60 @@
 
         function generateTimelineData() {
             const data = [];
-            let balance = TOTAL_BUDGET;
-            let totalTokens = 0;
-            const days = Math.floor((TODAY - START_DATE) / (1000 * 60 * 60 * 24)) + 1;
-            const totalDays = Math.min(days, 200);
-
-            for (let i = 0; i < totalDays; i++) {
-                const date = new Date(START_DATE);
-                date.setDate(date.getDate() + i);
-                
-                let dailySpend = 2 + Math.random() * 8;
-                
-                const dayOfWeek = date.getDay();
-                if (dayOfWeek === 0 || dayOfWeek === 6) dailySpend *= 0.7;
-                if (dayOfWeek === 2 || dayOfWeek === 3) dailySpend *= 1.2;
-                
-                if (date.getDate() === 1) dailySpend *= 0.6;
-                if (date.getDate() === 15) dailySpend *= 1.3;
-                if (date.getDate() === 28) dailySpend *= 1.1;
-                
-                const growthFactor = 1 + (i / totalDays) * 0.5;
-                dailySpend *= growthFactor;
-                
+            const totalDays = 31; // July days
+            
+            // July 1-31
+            for (let i = 1; i <= 31; i++) {
+                const date = new Date(2026, 6, i);
+                let dailySpend = (TOTAL_CONSUMED_JULY / 31) * (0.5 + Math.random() * 1.0);
                 dailySpend = Math.round(dailySpend * 100) / 100;
-                const dailyTokens = calculateTokensFromCost(dailySpend);
-                
-                const totalDailyUserTokens = users.reduce((sum, u) => sum + (u.dailyTokens || Math.floor(Math.random() * 7500) + 500), 0);
-                const avgUserTokens = users.length > 0 ? Math.round(totalDailyUserTokens / users.length) : 0;
-                
-                if (balance - dailySpend < MIN_BALANCE) {
-                    dailySpend = Math.round((balance - MIN_BALANCE) * 100) / 100;
-                    if (dailySpend < 0) dailySpend = 0;
-                    balance = MIN_BALANCE;
-                } else {
-                    balance = Math.round((balance - dailySpend) * 100) / 100;
-                }
-                
-                totalTokens += dailyTokens;
-                
-                const isCritical = balance < MIN_BALANCE + 10;
-                const isToday = date.toDateString() === TODAY.toDateString();
                 
                 data.push({
                     date: date,
                     spend: dailySpend,
-                    balance: balance,
-                    tokens: dailyTokens,
-                    totalTokens: totalTokens,
-                    day: i + 1,
+                    balance: Math.max(0, TOTAL_CONSUMED_JULY - dailySpend * i),
+                    tokens: calculateTokensFromCost(dailySpend),
+                    totalTokens: calculateTokensFromCost(TOTAL_CONSUMED_JULY * (i / 31)),
+                    day: i,
                     predicted: false,
                     dayOfWeek: date.toLocaleDateString('en-US', { weekday: 'short' }),
-                    avgUserTokens: avgUserTokens,
-                    userCount: users.length,
-                    isCritical: isCritical,
-                    isToday: isToday
+                    month: 'July',
+                    isCritical: i > 28,
+                    isToday: date.toDateString() === new Date().toDateString()
+                });
+            }
+            
+            // August 1-7
+            for (let i = 1; i <= 7; i++) {
+                const date = new Date(2026, 7, i);
+                let dailySpend = (AUGUST_CONSUMED / 7) * (0.6 + Math.random() * 0.8);
+                dailySpend = Math.round(dailySpend * 100) / 100;
+                
+                data.push({
+                    date: date,
+                    spend: dailySpend,
+                    balance: Math.max(0, REMAINING_JULY - dailySpend * i),
+                    tokens: calculateTokensFromCost(dailySpend),
+                    totalTokens: calculateTokensFromCost(AUGUST_CONSUMED * (i / 7)),
+                    day: 31 + i,
+                    predicted: false,
+                    dayOfWeek: date.toLocaleDateString('en-US', { weekday: 'short' }),
+                    month: 'August',
+                    isCritical: i > 4,
+                    isToday: date.toDateString() === new Date().toDateString()
                 });
             }
             
             return data;
         }
 
-        function generateFutureData(history) {
-            const lastData = history[history.length - 1];
-            const avgSpend = history.slice(-30).reduce((sum, d) => sum + d.spend, 0) / Math.min(30, history.length);
-            const projections = [];
-            let balance = lastData.balance;
-            let totalTokens = lastData.totalTokens;
-            let day = history.length;
-
-            for (let i = 1; i <= 15; i++) {
-                const date = new Date(TODAY);
-                date.setDate(date.getDate() + i);
-                
-                const dayOfWeek = date.getDay();
-                let multiplier = 1;
-                if (dayOfWeek === 0 || dayOfWeek === 6) multiplier = 0.7;
-                if (dayOfWeek === 2 || dayOfWeek === 3) multiplier = 1.2;
-                
-                let dailySpend = avgSpend * (0.7 + Math.random() * 0.6) * multiplier;
-                dailySpend = Math.round(dailySpend * 100) / 100;
-                const dailyTokens = calculateTokensFromCost(dailySpend);
-                
-                if (balance - dailySpend < MIN_BALANCE) {
-                    dailySpend = Math.round((balance - MIN_BALANCE) * 100) / 100;
-                    if (dailySpend < 0) dailySpend = 0;
-                    balance = MIN_BALANCE;
-                } else {
-                    balance = Math.round((balance - dailySpend) * 100) / 100;
-                }
-                
-                totalTokens += dailyTokens;
-                
-                const isCritical = balance < MIN_BALANCE + 10;
-                
-                projections.push({
-                    date: date,
-                    spend: dailySpend,
-                    balance: balance,
-                    tokens: dailyTokens,
-                    totalTokens: totalTokens,
-                    day: day + i,
-                    predicted: true,
-                    dayOfWeek: date.toLocaleDateString('en-US', { weekday: 'short' }),
-                    avgUserTokens: users.length > 0 ? Math.round(dailyTokens / users.length) : 0,
-                    userCount: users.length,
-                    isCritical: isCritical,
-                    isToday: false
-                });
-            }
-            
-            return projections;
-        }
-
         // ==============================================
         // INIT
         // ==============================================
         function initDashboard() {
-            users = generateAllUsers(55);
+            users = generateAllUsers(250);
             questions = generateAllQuestions();
-            
-            const history = generateTimelineData();
-            const future = generateFutureData(history);
-            timelineData = [...history, ...future];
+            timelineData = generateTimelineData();
 
             updateDateTime();
             updateStats();
@@ -1399,7 +1308,6 @@
 
             setInterval(() => {
                 updateDateTime();
-                checkForNewDay();
             }, 1000);
         }
 
@@ -1414,80 +1322,26 @@
                 now.toLocaleTimeString('en-US', { hour: '2-digit', minute: '2-digit', second: '2-digit' });
         }
 
-        function checkForNewDay() {
-            const now = new Date();
-            const lastCheck = localStorage.getItem('lastDayCheck');
-            const today = now.toDateString();
-
-            if (lastCheck !== today) {
-                const lastData = timelineData[timelineData.length - 1];
-                if (lastData && !lastData.predicted) {
-                    const avgSpend = timelineData.slice(-30).reduce((sum, d) => sum + d.spend, 0) / 30;
-                    let newSpend = avgSpend * (0.85 + Math.random() * 0.3);
-                    let newBalance = Math.max(MIN_BALANCE, Math.round((lastData.balance - newSpend) * 100) / 100);
-                    if (lastData.balance - newSpend < MIN_BALANCE) {
-                        newSpend = Math.round((lastData.balance - MIN_BALANCE) * 100) / 100;
-                        if (newSpend < 0) newSpend = 0;
-                    }
-                    const newTokens = calculateTokensFromCost(newSpend);
-                    
-                    timelineData.push({
-                        date: now,
-                        spend: Math.round(newSpend * 100) / 100,
-                        balance: newBalance,
-                        tokens: newTokens,
-                        totalTokens: lastData.totalTokens + newTokens,
-                        day: timelineData.length + 1,
-                        predicted: false,
-                        dayOfWeek: now.toLocaleDateString('en-US', { weekday: 'short' }),
-                        avgUserTokens: users.length > 0 ? Math.round(newTokens / users.length) : 0,
-                        userCount: users.length,
-                        isCritical: newBalance < MIN_BALANCE + 10,
-                        isToday: true
-                    });
-
-                    localStorage.setItem('lastDayCheck', today);
-                    renderTimeline();
-                    updateStats();
-                    updateCharts();
-                    showAlert('📅 New day added! Budget updated.', 'success');
-                }
-            }
-        }
-
         function updateStats() {
             const lastData = timelineData[timelineData.length - 1];
-            const currentBalance = lastData ? Math.max(MIN_BALANCE, lastData.balance) : MIN_BALANCE;
-            const totalTokensUsed = lastData ? lastData.totalTokens : 0;
             
-            const recent = timelineData.slice(-30);
-            const avgSpend = recent.reduce((sum, d) => sum + d.spend, 0) / Math.max(1, recent.length);
+            document.getElementById('totalConsumed').textContent = `$${TOTAL_CONSUMED_JULY.toFixed(2)}`;
+            document.getElementById('remainingBalance').textContent = `$${REMAINING_JULY.toFixed(2)}`;
+            document.getElementById('remainingTokens').textContent = `= ${calculateTokensFromCost(REMAINING_JULY).toLocaleString()} tokens`;
+            document.getElementById('augustConsumed').textContent = `$${AUGUST_CONSUMED.toFixed(2)}`;
+            document.getElementById('augustTokens').textContent = calculateTokensFromCost(AUGUST_CONSUMED).toLocaleString();
+            document.getElementById('totalUsers').textContent = TOTAL_USERS;
+            document.getElementById('totalUsersBadge').textContent = TOTAL_USERS;
+            document.getElementById('userCountDisplay').textContent = TOTAL_USERS;
             
-            document.getElementById('totalBudget').textContent = `$${TOTAL_BUDGET.toFixed(2)}`;
-            document.getElementById('remainingBalance').textContent = `$${currentBalance.toFixed(2)}`;
-            document.getElementById('remainingTokens').textContent = `= ${Math.round((currentBalance / TOKEN_COST_PER_MILLION) * 1000000).toLocaleString()} tokens`;
-            document.getElementById('daysRemaining').textContent = Math.max(0, Math.floor((currentBalance - MIN_BALANCE) / avgSpend));
-            
-            document.getElementById('totalTokens').textContent = Math.round(totalTokensUsed).toLocaleString();
-            document.getElementById('totalTokensCost').textContent = `$${calculateCostFromTokens(totalTokensUsed).toFixed(2)}`;
-            
-            document.getElementById('tokenGrowth').textContent = `+${Math.floor(Math.random() * 15) + 8}%`;
-            
-            const activeUsers = users.filter(u => {
-                const diff = Date.now() - u.lastActive.getTime();
-                return diff < 24 * 60 * 60 * 1000;
-            }).length;
-            document.getElementById('activeUsers').textContent = activeUsers;
-            document.getElementById('totalUsersCount').textContent = users.length;
-            document.getElementById('userGrowth').textContent = `+${Math.floor(Math.random() * 12) + 3}`;
+            // Activity stats
+            const activeCount = users.filter(u => u.status === 'active').length;
+            document.getElementById('activeUsers').textContent = activeCount;
+            document.getElementById('userGrowth').textContent = `+${Math.floor(Math.random() * 15) + 5}`;
             
             const totalQuestions = users.reduce((sum, u) => sum + u.questions, 0);
-            document.getElementById('totalQuestions').textContent = totalQuestions.toLocaleString();
-            document.getElementById('dailyQuestions').textContent = Math.floor(totalQuestions / 30);
-            document.getElementById('questionGrowth').textContent = `+${Math.floor(Math.random() * 20) + 5}%`;
-            
-            document.getElementById('userCountDisplay').textContent = users.length;
-            document.getElementById('totalUsersBadge').textContent = users.length;
+            document.getElementById('daysRemaining').textContent = '1';
+            document.getElementById('tokenGrowth').textContent = '+8.2%';
         }
 
         // ==============================================
@@ -1497,52 +1351,39 @@
             const grid = document.getElementById('timelineGrid');
             let data = [...timelineData];
 
-            if (currentTimelineView === 'future') {
-                data = data.filter(d => d.predicted || new Date(d.date) > new Date());
-            } else if (currentTimelineView === 'past') {
-                data = data.filter(d => !d.predicted && new Date(d.date) <= new Date());
+            if (currentTimelineView === 'july') {
+                data = data.filter(d => d.month === 'July');
+            } else if (currentTimelineView === 'august') {
+                data = data.filter(d => d.month === 'August');
             } else if (currentTimelineView === 'critical') {
-                data = data.filter(d => d.isCritical || d.balance < MIN_BALANCE + 10);
+                data = data.filter(d => d.isCritical);
             }
 
             const recentData = data.slice(-45);
 
             grid.innerHTML = recentData.map(d => {
-                const date = new Date(d.date);
-                const isFuture = d.predicted || date > new Date();
-                const isCritical = d.isCritical || d.balance < MIN_BALANCE + 10;
-                const isToday = date.toDateString() === new Date().toDateString();
+                const isCritical = d.isCritical || d.balance < 25;
+                const isToday = d.isToday || false;
                 
                 let statusClass = '';
-                if (isFuture) statusClass = 'predicted';
                 if (isCritical) statusClass = 'critical';
                 
-                const sampleUsers = users
-                    .sort(() => Math.random() - 0.5)
-                    .slice(0, Math.floor(Math.random() * 3) + 3);
-                
-                const userTokensList = sampleUsers.map(u => 
-                    `${u.displayName.split(' ')[0]}: ${(u.dailyTokens || Math.floor(Math.random() * 7500) + 500).toLocaleString()} tokens`
-                ).join(' · ');
-
                 return `
                     <div class="timeline-card ${statusClass}" onclick="showDayDetail(${d.day})">
                         <div class="date">
-                            ${date.toLocaleDateString('en-US', { month: 'short', day: 'numeric' })}
+                            ${d.date.toLocaleDateString('en-US', { month: 'short', day: 'numeric' })}
                             ${isToday ? '⭐ TODAY' : ''}
                             <span style="font-size:9px;color:var(--text-secondary);">${d.dayOfWeek || ''}</span>
                         </div>
-                        <div class="day-name">Day ${d.day}</div>
-                        <div class="amount ${isCritical ? 'negative' : isFuture ? 'warning' : 'positive'}">
+                        <div class="day-name">${d.month || ''} Day ${d.day}</div>
+                        <div class="amount ${isCritical ? 'negative' : 'positive'}">
                             $${d.spend.toFixed(2)}
                         </div>
                         <div class="detail">${Math.round(d.tokens || 0).toLocaleString()} tokens</div>
                         <div class="detail">Balance: $${d.balance.toFixed(2)}</div>
                         <div class="user-detail">
-                            <i class="fas fa-users" style="font-size:8px;"></i> ${d.userCount || users.length} users
-                            <br>${userTokensList}
+                            <i class="fas fa-users" style="font-size:8px;"></i> ${TOTAL_USERS} users
                         </div>
-                        ${isFuture ? '<div class="detail">📊 Projected</div>' : ''}
                         ${isCritical ? '<div class="detail">⚠️ CRITICAL</div>' : ''}
                     </div>
                 `;
@@ -1564,7 +1405,7 @@
             const content = document.getElementById('userDetailContent');
             
             const date = new Date(data.date);
-            const isCritical = data.isCritical || data.balance < MIN_BALANCE + 10;
+            const isCritical = data.isCritical || data.balance < 25;
             const isToday = date.toDateString() === new Date().toDateString();
             
             const topUsers = users
@@ -1573,7 +1414,7 @@
 
             content.innerHTML = `
                 <div style="text-align:center;margin-bottom:16px;">
-                    <h2 style="font-size:24px;font-weight:800;">Day ${day}</h2>
+                    <h2 style="font-size:24px;font-weight:800;">${data.month || ''} Day ${day}</h2>
                     <div style="color:var(--text-secondary);font-size:14px;">
                         ${date.toLocaleDateString('en-US', { weekday: 'long', year: 'numeric', month: 'long', day: 'numeric' })}
                         ${isToday ? ' ⭐ TODAY' : ''}
@@ -1606,8 +1447,17 @@
                 </div>
                 <div style="background:var(--bg-primary);padding:12px 16px;border-radius:10px;border:1px solid rgba(59,130,246,0.15);">
                     <span style="font-size:12px;color:var(--text-secondary);">💰 Token Cost: <strong style="color:var(--accent);">$${TOKEN_COST_PER_MILLION}</strong> per 1M tokens</span>
-                    <span style="font-size:12px;color:var(--text-secondary);margin-left:16px;">📈 Total Users: <strong>${data.userCount || users.length}</strong></span>
+                    <span style="font-size:12px;color:var(--text-secondary);margin-left:16px;">📈 Total Users: <strong>${TOTAL_USERS}</strong></span>
                     ${isCritical ? '<span style="font-size:12px;color:var(--danger);margin-left:16px;">⚠️ CRITICAL BALANCE</span>' : ''}
+                </div>
+                <div style="margin-top:12px;background:var(--bg-primary);padding:12px;border-radius:10px;border:1px solid var(--border);">
+                    <div style="font-weight:600;font-size:12px;color:var(--text-secondary);">📋 Top-up Record Details</div>
+                    <div style="font-size:13px;margin-top:6px;">
+                        <div>Total top-up date: 7/7/2026</div>
+                        <div>Deposit: $260 (7/17/2026)</div>
+                        <div>Remaining from July: $23.1956</div>
+                        <div>Consumed in August: $38.002</div>
+                    </div>
                 </div>
             `;
 
@@ -1704,9 +1554,10 @@
             const sorted = [...data].sort((a, b) => b.tokensUsed - a.tokensUsed);
 
             tbody.innerHTML = sorted.map((user, index) => {
-                const status = user.status || (user.lastActive && (Date.now() - user.lastActive.getTime()) < 86400000 ? 'active' : 'inactive');
-                const statusLabel = status === 'active' ? 'Active' : status === 'premium' ? 'Premium' : 'Inactive';
-                const statusClass = status === 'active' ? 'status-active' : status === 'premium' ? 'status-premium' : 'status-inactive';
+                const statusLabel = user.status === 'active' ? '95-100% Active' : 
+                                   user.status === 'medium' ? '50-75% Active' : '~50% Active';
+                const statusClass = user.status === 'active' ? 'status-active' : 
+                                   user.status === 'medium' ? 'status-premium' : 'status-inactive';
                 const avatar = `https://ui-avatars.com/api/?name=${encodeURIComponent(user.displayName)}&background=3b82f6&color=fff&bold=true&size=32`;
                 
                 let rankClass = '';
@@ -1718,9 +1569,7 @@
 
                 return `
                     <tr>
-                        <td>
-                            <span class="user-rank ${rankClass}">${index + 1}</span>
-                        </td>
+                        <td><span class="user-rank ${rankClass}">${index + 1}</span></td>
                         <td>
                             <div style="display:flex;align-items:center;gap:10px;">
                                 <img src="${avatar}" alt="${user.displayName}" class="user-avatar">
@@ -1765,10 +1614,7 @@
                 const matchSearch = user.displayName?.toLowerCase().includes(search) || 
                                    user.email?.toLowerCase().includes(search);
                 const matchProvider = provider === 'all' || user.provider === provider;
-                const matchStatus = status === 'all' || user.status === status || 
-                                   (status === 'active' && user.status === 'active') ||
-                                   (status === 'inactive' && user.status === 'inactive') ||
-                                   (status === 'premium' && user.status === 'premium');
+                const matchStatus = status === 'all' || user.status === status;
                 return matchSearch && matchProvider && matchStatus;
             });
 
@@ -1783,6 +1629,9 @@
             const rank = users.sort((a, b) => b.tokensUsed - a.tokensUsed).findIndex(u => u.uid === uid) + 1;
             const dailyTokens = user.dailyTokens || Math.floor(Math.random() * 7500) + 500;
             
+            const activityLabel = user.status === 'active' ? '95-100% Active (User C)' : 
+                                 user.status === 'medium' ? '50-75% Active (User B)' : '~50% Active (User A)';
+            
             content.innerHTML = `
                 <div style="display:flex;align-items:center;gap:16px;margin-bottom:16px;">
                     <img src="https://ui-avatars.com/api/?name=${encodeURIComponent(user.displayName)}&background=3b82f6&color=fff&bold=true&size=72" 
@@ -1790,7 +1639,7 @@
                     <div style="flex:1;">
                         <div style="display:flex;align-items:center;gap:8px;">
                             <h3 style="font-size:20px;font-weight:700;">${user.displayName}</h3>
-                            <span class="status-badge ${user.status === 'premium' ? 'status-premium' : 'status-active'}">${user.status || 'Active'}</span>
+                            <span class="status-badge ${user.status === 'active' ? 'status-active' : user.status === 'medium' ? 'status-premium' : 'status-inactive'}">${activityLabel}</span>
                         </div>
                         <div style="color:var(--text-secondary);font-size:13px;">${user.email}</div>
                         <div style="color:var(--text-secondary);font-size:12px;margin-top:2px;">
@@ -1823,13 +1672,9 @@
                         ${user.tokensUsed > 100000 ? '<span style="background:var(--bg-secondary);padding:4px 12px;border-radius:20px;">🌟 100K+ Tokens</span>' : ''}
                         ${user.tokensUsed > 200000 ? '<span style="background:var(--bg-secondary);padding:4px 12px;border-radius:20px;">🏅 200K+ Tokens</span>' : ''}
                         ${user.questions > 50 ? '<span style="background:var(--bg-secondary);padding:4px 12px;border-radius:20px;">💬 50+ Questions</span>' : ''}
-                        ${user.questions > 100 ? '<span style="background:var(--bg-secondary);padding:4px 12px;border-radius:20px;">📚 100+ Questions</span>' : ''}
                         ${rank <= 3 ? '<span style="background:rgba(234,179,8,0.15);padding:4px 12px;border-radius:20px;color:var(--warning);">👑 Top 3 User</span>' : ''}
-                        ${dailyTokens > 5000 ? '<span style="background:rgba(59,130,246,0.12);padding:4px 12px;border-radius:20px;color:var(--accent);">⚡ 5K+ Daily Tokens</span>' : ''}
+                        ${user.status === 'active' ? '<span style="background:rgba(34,197,94,0.12);padding:4px 12px;border-radius:20px;color:var(--success);">⚡ 95-100% Active</span>' : ''}
                     </div>
-                </div>
-                <div style="margin-top:8px;background:var(--bg-primary);padding:8px 12px;border-radius:8px;font-size:11px;color:var(--text-secondary);">
-                    💰 Cost per token: $${(TOKEN_COST_PER_MILLION / 1000000).toFixed(8)}
                 </div>
             `;
 
@@ -1853,26 +1698,28 @@
                 chartInstances.budget = null;
             }
 
-            const data = timelineData.slice(-180);
+            const data = timelineData;
             const labels = data.map(d => {
                 const date = new Date(d.date);
                 return date.toLocaleDateString('en-US', { month: 'short', day: 'numeric' });
             });
 
+            // Group by month for cleaner display
+            const julyData = data.filter(d => d.month === 'July');
+            const augData = data.filter(d => d.month === 'August');
+
             chartInstances.budget = new Chart(ctx, {
-                type: 'line',
+                type: 'bar',
                 data: {
                     labels: labels,
                     datasets: [
                         {
                             label: 'Daily Spend ($)',
                             data: data.map(d => parseFloat(d.spend.toFixed(2))),
-                            borderColor: '#3b82f6',
-                            backgroundColor: 'rgba(59, 130, 246, 0.1)',
-                            fill: true,
-                            tension: 0.4,
-                            pointRadius: 1.5,
-                            borderWidth: 2
+                            backgroundColor: data.map(d => d.month === 'July' ? 'rgba(59,130,246,0.6)' : 'rgba(234,179,8,0.6)'),
+                            borderColor: data.map(d => d.month === 'July' ? '#3b82f6' : '#eab308'),
+                            borderWidth: 1.5,
+                            borderRadius: 4
                         },
                         {
                             label: 'Balance ($)',
@@ -1881,9 +1728,10 @@
                             borderDash: [6, 4],
                             fill: false,
                             tension: 0.4,
-                            yAxisID: 'y1',
-                            pointRadius: 1.5,
-                            borderWidth: 2.5
+                            type: 'line',
+                            pointRadius: 2,
+                            borderWidth: 2.5,
+                            yAxisID: 'y1'
                         }
                     ]
                 },
@@ -1924,21 +1772,18 @@
                 chartInstances.usage = null;
             }
 
-            const categories = Object.keys(QUESTION_CATEGORIES);
-            const counts = categories.map(key => {
-                const q = questions.find(q => q.id === key);
-                return q ? q.count : 0;
-            });
-            const colors = categories.map(key => QUESTION_CATEGORIES[key].color || '#3b82f6');
-            const labels = categories.map(key => QUESTION_CATEGORIES[key].name);
+            // User activity distribution based on image
+            const activeCount = users.filter(u => u.status === 'active').length;
+            const mediumCount = users.filter(u => u.status === 'medium').length;
+            const lowCount = users.filter(u => u.status === 'low').length;
 
             chartInstances.usage = new Chart(ctx, {
                 type: 'doughnut',
                 data: {
-                    labels: labels,
+                    labels: ['User C (95-100% Active)', 'User B (50-75% Active)', 'User A (~50% Active)'],
                     datasets: [{
-                        data: counts,
-                        backgroundColor: colors,
+                        data: [activeCount, mediumCount, lowCount],
+                        backgroundColor: ['#22c55e', '#eab308', '#ef4444'],
                         borderWidth: 0
                     }]
                 },
@@ -1970,56 +1815,40 @@
         }
 
         function simulateDay() {
-            simulatedDay++;
+            showAlert('📆 Simulation: Adding new day to August', 'success');
             const lastData = timelineData[timelineData.length - 1];
-            const avgSpend = timelineData.slice(-30).reduce((sum, d) => sum + d.spend, 0) / Math.max(1, timelineData.slice(-30).length);
+            const newDate = new Date(lastData.date);
+            newDate.setDate(newDate.getDate() + 1);
             
-            let newSpend = avgSpend * (0.85 + Math.random() * 0.3);
-            let newBalance = Math.max(MIN_BALANCE, Math.round((lastData.balance - newSpend) * 100) / 100);
-            
-            if (lastData.balance - newSpend < MIN_BALANCE) {
-                newSpend = Math.round((lastData.balance - MIN_BALANCE) * 100) / 100;
-                if (newSpend < 0) newSpend = 0;
-            }
-            
-            const newTokens = calculateTokensFromCost(newSpend);
-            const newDate = new Date();
-            newDate.setDate(newDate.getDate() + simulatedDay);
-            
-            users.forEach(u => {
-                u.dailyTokens = Math.floor(Math.random() * 7500) + 500;
-            });
+            const avgSpend = timelineData.slice(-7).reduce((sum, d) => sum + d.spend, 0) / 7;
+            let newSpend = avgSpend * (0.7 + Math.random() * 0.6);
+            let newBalance = Math.max(0, lastData.balance - newSpend);
             
             timelineData.push({
                 date: newDate,
                 spend: Math.round(newSpend * 100) / 100,
-                balance: newBalance,
-                tokens: newTokens,
-                totalTokens: lastData.totalTokens + newTokens,
+                balance: Math.round(newBalance * 100) / 100,
+                tokens: calculateTokensFromCost(newSpend),
+                totalTokens: lastData.totalTokens + calculateTokensFromCost(newSpend),
                 day: timelineData.length + 1,
                 predicted: true,
                 dayOfWeek: newDate.toLocaleDateString('en-US', { weekday: 'short' }),
-                avgUserTokens: Math.round(newTokens / users.length),
-                userCount: users.length,
-                isCritical: newBalance < MIN_BALANCE + 10,
+                month: 'August',
+                isCritical: newBalance < 10,
                 isToday: false
             });
 
             renderTimeline();
-            renderUsers();
             updateStats();
             updateCharts();
-            showAlert(`📆 Simulated day ${simulatedDay} added!`, 'success');
+            showAlert('✅ Day simulated successfully!', 'success');
         }
 
         function resetData() {
             if (confirm('Reset all data to initial state?')) {
-                users = generateAllUsers(55);
+                users = generateAllUsers(250);
                 questions = generateAllQuestions();
-                const history = generateTimelineData();
-                const future = generateFutureData(history);
-                timelineData = [...history, ...future];
-                simulatedDay = 0;
+                timelineData = generateTimelineData();
                 renderTimeline();
                 renderQuestions();
                 renderUsers();
@@ -2033,23 +1862,30 @@
             const report = {
                 generated: new Date().toISOString(),
                 tokenCostPerMillion: TOKEN_COST_PER_MILLION,
-                totalBudget: TOTAL_BUDGET,
-                minBalance: MIN_BALANCE,
                 summary: {
-                    totalUsers: users.length,
-                    totalTokens: timelineData[timelineData.length - 1]?.totalTokens || 0,
-                    totalCost: calculateCostFromTokens(timelineData[timelineData.length - 1]?.totalTokens || 0),
-                    remainingBalance: Math.max(MIN_BALANCE, timelineData[timelineData.length - 1]?.balance || MIN_BALANCE)
+                    totalConsumedJuly: TOTAL_CONSUMED_JULY,
+                    remainingJuly: REMAINING_JULY,
+                    augustConsumed: AUGUST_CONSUMED,
+                    totalUsers: TOTAL_USERS,
+                    userActivity: {
+                        userC: '95-100% active',
+                        userB: '50-75% active',
+                        userA: '~50% active'
+                    },
+                    deposit: {
+                        date: DEPOSIT_DATE,
+                        amount: DEPOSIT_AMOUNT
+                    }
                 },
                 users: users.map(u => ({
                     name: u.displayName,
                     email: u.email,
                     provider: u.provider,
-                    dailyTokens: u.dailyTokens || Math.floor(Math.random() * 7500) + 500,
+                    dailyTokens: u.dailyTokens,
                     totalTokens: u.tokensUsed,
                     cost: u.cost,
                     questions: u.questions,
-                    status: u.status
+                    activityLevel: u.status
                 })),
                 questions: questions,
                 timeline: timelineData.map(d => ({
@@ -2057,8 +1893,7 @@
                     spend: d.spend,
                     balance: d.balance,
                     tokens: d.tokens,
-                    totalTokens: d.totalTokens,
-                    day: d.day,
+                    month: d.month,
                     isCritical: d.isCritical || false
                 }))
             };
